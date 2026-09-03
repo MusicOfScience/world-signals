@@ -14,17 +14,18 @@ from world_signals.adapters import (
     CRA_CELEX,
     cellar_representation_diagnostics,
     fetch_cellar_celex_document,
-    fetch_eli_current_document,
+    fetch_cellar_rdf_notice,
     fetch_rba_fsr,
     fetch_suin_rows,
+    normalize_cellar_legal_topology,
     parse_cra_article_71,
-    parse_eli_current_state,
+    parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
+from world_signals.legal_monitor import cellar_legal_topology_review_candidate
 from world_signals.live_monitor import (
     colombia_legal_input_review_candidate,
     cra_legal_rule_review_candidate,
-    eli_legal_state_review_candidate,
     rba_fsr_review_candidates,
 )
 
@@ -65,15 +66,11 @@ def main() -> int:
         "review_candidates":[],
     }
 
-    # RBA FSR: positive publication evidence only. Feed absence never implies cancellation.
     try:
         items,snap=fetch_rba_fsr()
         report["source_health"].append({
-            "adapter_id":"RBA_FSR_RSS",
-            "source_id":"WSSRC-FIN-001",
-            "state":"HEALTHY",
-            "snapshot":snap.as_dict(),
-            "item_count":len(items),
+            "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
+            "state":"HEALTHY","snapshot":snap.as_dict(),"item_count":len(items),
         })
         candidates,observations=rba_fsr_review_candidates(
             registry.get("records",[]),items,configs["RBA_FSR_RSS"]
@@ -81,18 +78,11 @@ def main() -> int:
         report["review_candidates"].extend(candidates)
         report["observations"].extend(observations)
     except AdapterError as exc:
-        message=str(exc)
-        print(f"::warning::RBA FSR source degraded: {message}")
         report["source_health"].append({
-            "adapter_id":"RBA_FSR_RSS",
-            "source_id":"WSSRC-FIN-001",
-            "state":"DEGRADED",
-            "error":message,
-            "canonical_action":"NONE",
+            "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
+            "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
 
-    # Colombia SUIN: typed legal-instrument presence/version sentinel only.
-    # Any change is routed to clause-level manual verification, never directly to the event date.
     try:
         rows,snap=fetch_suin_rows(
             where="tipo='DECRETO' AND n_mero='111' AND a_o='1996'",
@@ -100,11 +90,8 @@ def main() -> int:
             limit=10,
         )
         report["source_health"].append({
-            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996",
-            "source_id":"WSSRC-REG4-001",
-            "state":"HEALTHY",
-            "snapshot":snap.as_dict(),
-            "row_count":len(rows),
+            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":"WSSRC-REG4-001",
+            "state":"HEALTHY","snapshot":snap.as_dict(),"row_count":len(rows),
         })
         candidate,observation=colombia_legal_input_review_candidate(
             rows,configs["COLOMBIA_SUIN_DECREE_111_1996"]
@@ -113,102 +100,59 @@ def main() -> int:
         if candidate:
             report["review_candidates"].append(candidate)
     except AdapterError as exc:
-        message=str(exc)
-        print(f"::warning::Colombia SUIN source degraded: {message}")
         report["source_health"].append({
-            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996",
-            "source_id":"WSSRC-REG4-001",
-            "state":"DEGRADED",
-            "error":message,
-            "canonical_action":"NONE",
+            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":"WSSRC-REG4-001",
+            "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
 
-    # EU CRA uses two deliberately distinct evidence layers:
-    #   1) immutable CELEX enactment -> Article 71 semantic baseline;
-    #   2) unversioned ELI -> current consolidation/modifier topology.
-    # Neither layer is permitted to mutate canonical events.
+    # CRA: immutable semantic baseline + machine-readable Cellar RDF legal topology.
     cra_config=configs["EU_CELLAR_CRA_ARTICLE_71"]
     cra_health={
-        "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
-        "source_id":"WSSRC-TECH-001",
-        "state":"HEALTHY",
-        "layers":{},
+        "adapter_id":"EU_CELLAR_CRA_ARTICLE_71","source_id":"WSSRC-TECH-001",
+        "state":"HEALTHY","layers":{},
     }
     cra_degraded=False
 
     try:
-        baseline_body,baseline_snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
-        baseline_diag=cellar_representation_diagnostics(baseline_body)
-        try:
-            baseline_rule=parse_cra_article_71(baseline_body)
-        except AdapterError as exc:
-            cra_degraded=True
-            cra_health["layers"]["immutable_baseline"]={
-                "state":"DEGRADED",
-                "failure_stage":"BASELINE_PARSE",
-                "snapshot":baseline_snap.as_dict(),
-                "representation_diagnostics":baseline_diag,
-                "error":str(exc),
-                "canonical_action":"NONE",
-            }
-        else:
-            cra_health["layers"]["immutable_baseline"]={
-                "state":"HEALTHY",
-                "snapshot":baseline_snap.as_dict(),
-                "representation_diagnostics":baseline_diag,
-                "rule":baseline_rule.as_dict(),
-            }
-            candidate,observation=cra_legal_rule_review_candidate(baseline_rule,cra_config)
-            report["observations"].append(observation)
-            if candidate:
-                report["review_candidates"].append(candidate)
+        body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
+        diagnostics=cellar_representation_diagnostics(body)
+        rule=parse_cra_article_71(body)
+        cra_health["layers"]["immutable_baseline"]={
+            "state":"HEALTHY","snapshot":snap.as_dict(),"rule":rule.as_dict(),
+        }
+        candidate,observation=cra_legal_rule_review_candidate(rule,cra_config)
+        report["observations"].append(observation)
+        if candidate:
+            report["review_candidates"].append(candidate)
     except AdapterError as exc:
         cra_degraded=True
         cra_health["layers"]["immutable_baseline"]={
-            "state":"DEGRADED",
-            "failure_stage":"BASELINE_FETCH",
-            "error":str(exc),
-            "canonical_action":"NONE",
+            "state":"DEGRADED","failure_stage":"BASELINE_FETCH_OR_PARSE",
+            "error":str(exc),"canonical_action":"NONE",
         }
 
     try:
-        current_body,current_snap=fetch_eli_current_document("reg",2024,2847,language="en")
-        try:
-            current_state=parse_eli_current_state(current_body,base_celex=CRA_CELEX)
-        except AdapterError as exc:
-            cra_degraded=True
-            cra_health["layers"]["current_eli_state"]={
-                "state":"DEGRADED",
-                "failure_stage":"CURRENT_ELI_PARSE",
-                "snapshot":current_snap.as_dict(),
-                "error":str(exc),
-                "canonical_action":"NONE",
-            }
-        else:
-            cra_health["layers"]["current_eli_state"]={
-                "state":"HEALTHY",
-                "snapshot":current_snap.as_dict(),
-                "eli_identifier":(cra_config.get("current_state_identity") or {}).get("eli_identifier"),
-                "legal_state":current_state.as_dict(),
-            }
-            candidate,observation=eli_legal_state_review_candidate(current_state,cra_config)
-            report["observations"].append(observation)
-            if candidate:
-                report["review_candidates"].append(candidate)
+        rdf,snap=fetch_cellar_rdf_notice(CRA_CELEX,inferred=True)
+        relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=CRA_CELEX)
+        topology=normalize_cellar_legal_topology(relations,base_celex=CRA_CELEX)
+        cra_health["layers"]["cellar_rdf_legal_topology"]={
+            "state":"HEALTHY","snapshot":snap.as_dict(),"topology":topology.as_dict(),
+        }
+        candidate,observation=cellar_legal_topology_review_candidate(topology,cra_config)
+        report["observations"].append(observation)
+        if candidate:
+            report["review_candidates"].append(candidate)
     except AdapterError as exc:
         cra_degraded=True
-        cra_health["layers"]["current_eli_state"]={
-            "state":"DEGRADED",
-            "failure_stage":"CURRENT_ELI_FETCH",
-            "error":str(exc),
-            "canonical_action":"NONE",
+        cra_health["layers"]["cellar_rdf_legal_topology"]={
+            "state":"DEGRADED","failure_stage":"RDF_FETCH_PARSE_OR_NORMALIZE",
+            "error":str(exc),"canonical_action":"NONE",
         }
 
     if cra_degraded:
         cra_health["state"]="DEGRADED"
     report["source_health"].append(cra_health)
 
-    # Candidate artefacts are outputs for review. They are not commits.
     candidate_files=[]
     for candidate in report["review_candidates"]:
         cid=candidate["candidate_id"]
@@ -216,9 +160,7 @@ def main() -> int:
         path.write_text(json.dumps(candidate,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
         candidate_files.append(str(path.relative_to(ROOT)))
     MANIFEST.write_text(json.dumps({
-        "generated_at":now,
-        "candidate_count":len(candidate_files),
-        "files":candidate_files,
+        "generated_at":now,"candidate_count":len(candidate_files),"files":candidate_files,
         "automatic_canonical_commit":False,
     },indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 
@@ -229,7 +171,6 @@ def main() -> int:
         "healthy":sum(1 for x in report["source_health"] if x["state"]=="HEALTHY"),
         "degraded":sum(1 for x in report["source_health"] if x["state"]!="HEALTHY"),
     }
-
     if before != after:
         report["status"]="FAIL_CANONICAL_GUARD"
         OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
