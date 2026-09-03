@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-02",
-  "version": "1.46",
+  "version": "1.47",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -5859,31 +5859,68 @@
       "source_timezone": "Europe/Brussels",
       "recommended_verification_cadence": "monthly; weekly near milestone months",
       "activation_status": "ACTIVE",
-      "parser_type": "EURLEX_CBAM_RULE_PLUS_COMMISSION_IMPLEMENTATION_MONITOR",
+      "parser_type": "CELLAR_CBAM_DUAL_RULE_PLUS_LEGAL_TOPOLOGY_MONITOR",
       "known_limitations": [
         "Some operational milestones are month-level rather than day-level."
       ],
       "timezone_scope": "EVENT_LOCAL",
-      "parser_version": "cbam-rule-monitor-0.1",
+      "parser_version": "cbam-cellar-dual-rule-topology-0.2",
       "licence_constraints": "Public official factual/legal/operational metadata.",
       "ingestion_permission": "LEGAL_DOCUMENT_AND_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_COMMISSION_CC_BY_4_AND_EURLEX_LEGAL_ROUTE",
       "automated_retrieval_permission": "PREFER_EURLEX_LEGAL_TEXT_COMMISSION_PAGE_FALLBACK",
       "redistribution_permission": "EU_OWNED_COMMISSION_CONTENT_CC_BY_4; EURLEX_LEGAL_DOCUMENT_REUSE",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "runtime_health_state": "PILOT_EXECUTED_HEALTHY",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 230,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02",
+      "monitoring_readiness_assessed_at": "2026-09-03",
       "rights_evidence_url": "https://commission.europa.eu/legal-notice_en",
       "rights_reviewed_at": "2026-09-02T23:35:00+10:00",
-      "monitoring_activation_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
-      "last_successful_research_verification_at": "2026-09-02T23:35:00+10:00",
-      "endpoint_route_validation_state": "RUNTIME_EXECUTION_BLOCKED",
-      "runtime_environment_health_state": "DNS_NETWORK_BLOCK",
-      "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
-      "endpoint_route_summary": "CBAM monitoring can use EUR-Lex consolidated legal text/CELLAR plus Commission implementation pages. Current law continues to specify certificate sales from 1 Feb 2027; verifier rule remains from 1 Jan 2027.",
-      "runtime_execution_note": "Local container cannot execute the external EUR-Lex transport. Research route is current and healthy."
+      "monitoring_activation_status": "PILOT_WITH_REVIEWED_COMMIT_ONLY",
+      "last_successful_research_verification_at": "2026-09-03T20:01:45+10:00",
+      "endpoint_route_validation_state": "PILOT_VALIDATED_LIVE",
+      "runtime_environment_health_state": "HEALTHY_GITHUB_ACTIONS",
+      "endpoint_route_validated_at": "2026-09-03T20:01:45+10:00",
+      "endpoint_route_summary": "Live GitHub Actions validation passed for two independent CBAM legal sentinels. Verifier-report date uses Cellar XHTML CELEX 32025R2551 plus Cellar RDF legal topology on that act. Certificate-sale date uses Cellar XHTML CELEX 32025R2083 plus Cellar RDF current-law topology on parent Regulation 32023R0956. European Commission CBAM pages remain official implementation cross-check/fallback surfaces, not the primary legal-date parser.",
+      "runtime_execution_note": "Credential-free Publications Office Cellar XHTML and inferred RDF transports are live-validated in GitHub Actions. The earlier local-container DNS/network block is retained as environment-specific historical evidence and no longer defines route readiness.",
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "verifier_semantic_rule",
+          "url": "https://publications.europa.eu/resource/celex/32025R2551",
+          "transport": "CELLAR_XHTML_VIA_CELEX_CONTENT_NEGOTIATION",
+          "completeness_scope": "IMMUTABLE_SECTION_2_17_3_SEMANTIC_BASELINE",
+          "preferred_for_monitoring": true
+        },
+        {
+          "endpoint_role": "verifier_current_law_topology",
+          "url": "https://publications.europa.eu/resource/celex/32025R2551",
+          "transport": "CELLAR_INFERRED_RDF",
+          "completeness_scope": "AMENDMENT_CORRIGENDUM_CONSOLIDATION_REPEAL_RELATIONS",
+          "preferred_for_monitoring": true
+        },
+        {
+          "endpoint_role": "certificate_sale_semantic_rule",
+          "url": "https://publications.europa.eu/resource/celex/32025R2083",
+          "transport": "CELLAR_XHTML_VIA_CELEX_CONTENT_NEGOTIATION",
+          "completeness_scope": "IMMUTABLE_ARTICLE_20_1_REPLACEMENT_SEMANTIC_BASELINE",
+          "preferred_for_monitoring": true
+        },
+        {
+          "endpoint_role": "certificate_sale_parent_current_law_topology",
+          "url": "https://publications.europa.eu/resource/celex/32023R0956",
+          "transport": "CELLAR_INFERRED_RDF",
+          "completeness_scope": "PARENT_ACT_AMENDMENT_CORRIGENDUM_CONSOLIDATION_REPEAL_RELATIONS",
+          "preferred_for_monitoring": true
+        },
+        {
+          "endpoint_role": "commission_cbam_implementation_cross_check",
+          "url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-verification_en",
+          "transport": "HTML",
+          "completeness_scope": "OFFICIAL_IMPLEMENTATION_GUIDANCE_AND_OPERATIONAL_TIMELINE",
+          "preferred_for_monitoring": false
+        }
+      ]
     },
     {
       "source_id": "WSSRC-TRD-006",
