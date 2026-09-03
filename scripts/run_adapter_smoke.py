@@ -18,6 +18,7 @@ from world_signals.adapters import (
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
+    normalize_cellar_legal_topology,
     parse_cra_article_71,
     parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
@@ -136,18 +137,10 @@ def main() -> int:
         relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=CRA_CELEX)
         if not relations:
             raise AdapterError("Cellar inferred RDF exposed no legal relations for CRA")
+        topology=normalize_cellar_legal_topology(relations,base_celex=CRA_CELEX)
 
-        incoming_amendment_targets=_unique(
-            r["target_uri"] for r in relations
-            if r["predicate"] in {"amended_by","resource_legal_amended_by_resource_legal"}
-            and (r.get("subject_uri") or "").endswith("/celex/"+CRA_CELEX)
-        )
-        consolidation_targets=_unique(
-            r["target_uri"] for r in relations
-            if r["predicate"] in {"consolidated_by","resource_legal_consolidated_by_act_consolidated"}
-            and "_" not in r["target_uri"].rsplit("/",1)[-1]
-            and (r.get("subject_uri") or "").endswith("/celex/"+CRA_CELEX)
-        )
+        incoming_amendment_targets=list(topology.amendment_target_uris)
+        consolidation_targets=list(topology.consolidation_target_uris)
         if not incoming_amendment_targets:
             raise AdapterError("CRA Cellar RDF exposed no incoming amendment relation")
         if not consolidation_targets:
@@ -175,8 +168,7 @@ def main() -> int:
             "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
             "snapshot":snap.as_dict(),
             "relation_count":len(relations),
-            "incoming_amendment_targets":incoming_amendment_targets,
-            "consolidation_targets":consolidation_targets,
+            "normalized_topology":topology.as_dict(),
             "resolved_targets":resolved,
         }
     except AdapterError as exc:
