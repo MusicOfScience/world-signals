@@ -8,6 +8,7 @@ from world_signals.adapters import (
     cellar_celex_url,
     eli_current_url,
     eli_current_fetch_url,
+    parse_cbam_annual_declaration_surrender_rule,
     parse_cbam_certificate_sale_rule,
     parse_cbam_verification_report_rule,
     parse_cra_article_71,
@@ -74,20 +75,11 @@ class AdapterParserTests(unittest.TestCase):
         self.assertEqual(len(rule.rule_sha256),64)
 
     def test_cellar_celex_url(self):
-        self.assertEqual(
-            cellar_celex_url("32024R2847"),
-            "https://publications.europa.eu/resource/celex/32024R2847",
-        )
+        self.assertEqual(cellar_celex_url("32024R2847"),"https://publications.europa.eu/resource/celex/32024R2847")
 
     def test_eli_current_identifier_and_operational_url(self):
-        self.assertEqual(
-            eli_current_url("reg",2024,2847),
-            "https://data.europa.eu/eli/reg/2024/2847",
-        )
-        self.assertEqual(
-            eli_current_fetch_url("reg",2024,2847),
-            "https://eur-lex.europa.eu/eli/reg/2024/2847",
-        )
+        self.assertEqual(eli_current_url("reg",2024,2847),"https://data.europa.eu/eli/reg/2024/2847")
+        self.assertEqual(eli_current_fetch_url("reg",2024,2847),"https://eur-lex.europa.eu/eli/reg/2024/2847")
 
     def test_eli_result_list_topology_parser(self):
         html='''<html><body><h1>Search Results</h1><section><p>CELEX number: 32025R0327</p><p>Regulation (EU) 2025/327 amending Regulation (EU) 2024/2847</p></section><section><h2>Consolidated text</h2><p>CELEX number: 02024R2847-20241120</p></section><h2>Search criteria</h2></body></html>'''
@@ -151,6 +143,36 @@ class AdapterParserTests(unittest.TestCase):
         baseline=parse_cbam_certificate_sale_rule(html.replace("3 February","1 February"))
         self.assertEqual(changed.milestone_date,"2027-02-03")
         self.assertNotEqual(changed.rule_sha256,baseline.rule_sha256)
+
+    def test_cbam_annual_deadline_paired_rule_offline_fixture(self):
+        html='''<html><body><h2>Article 6 is amended as follows:</h2><p>By 30 September of each year, and for the first time in 2027 for the year 2026, each authorised CBAM declarant shall use the CBAM registry referred to in Article 14 to submit a CBAM declaration for the preceding calendar year.</p><h2>Article 22 is amended as follows:</h2><p>By 30 September of each year, and for the first time in 2027 for the year 2026, the authorised CBAM declarant shall surrender via the CBAM registry a number of CBAM certificates that corresponds to the embedded emissions.</p></body></html>'''
+        rule=parse_cbam_annual_declaration_surrender_rule(html)
+        self.assertEqual(rule.celex,"32025R2083")
+        self.assertEqual(rule.declaration_month_day,"09-30")
+        self.assertEqual(rule.surrender_month_day,"09-30")
+        self.assertEqual(rule.declaration_first_due_year,2027)
+        self.assertEqual(rule.surrender_first_due_year,2027)
+        self.assertEqual(rule.declaration_first_reference_year,2026)
+        self.assertEqual(rule.surrender_first_reference_year,2026)
+        self.assertEqual(rule.first_deadline_date,"2027-09-30")
+        self.assertTrue(rule.shared_deadline_consistent)
+        self.assertEqual(len(rule.rule_sha256),64)
+
+    def test_cbam_annual_deadline_detects_clause_divergence(self):
+        html='''<html><body><h2>Article 6 is amended as follows:</h2><p>By 30 September of each year, and for the first time in 2027 for the year 2026, each authorised CBAM declarant shall use the CBAM registry referred to in Article 14 to submit a CBAM declaration for the preceding calendar year.</p><h2>Article 22 is amended as follows:</h2><p>By 1 October of each year, and for the first time in 2027 for the year 2026, the authorised CBAM declarant shall surrender via the CBAM registry a number of CBAM certificates.</p></body></html>'''
+        rule=parse_cbam_annual_declaration_surrender_rule(html)
+        self.assertEqual(rule.declaration_month_day,"09-30")
+        self.assertEqual(rule.surrender_month_day,"10-01")
+        self.assertIsNone(rule.first_deadline_date)
+        self.assertFalse(rule.shared_deadline_consistent)
+
+    def test_cbam_annual_deadline_detects_first_year_divergence(self):
+        html='''<html><body><h2>Article 6 is amended as follows:</h2><p>By 30 September of each year, and for the first time in 2027 for the year 2026, each authorised CBAM declarant shall use the CBAM registry referred to in Article 14 to submit a CBAM declaration for the preceding calendar year.</p><h2>Article 22 is amended as follows:</h2><p>By 30 September of each year, and for the first time in 2028 for the year 2027, the authorised CBAM declarant shall surrender via the CBAM registry a number of CBAM certificates.</p></body></html>'''
+        rule=parse_cbam_annual_declaration_surrender_rule(html)
+        self.assertFalse(rule.shared_deadline_consistent)
+        self.assertEqual(rule.surrender_first_due_year,2028)
+        self.assertEqual(rule.surrender_first_reference_year,2027)
+        self.assertIsNone(rule.first_deadline_date)
 
 
 if __name__=="__main__": unittest.main()
