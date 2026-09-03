@@ -22,6 +22,6 @@ jobs:
         with:
           python-version: '3.13'
       - name: Run Regional Correction J transaction in memory only
-        run: python scripts/apply_regional_correction_j.py
+        run: PYTHONPATH=. python scripts/apply_regional_correction_j.py
       - name: Confirm current canonical source-of-truth remains valid
         run: python scripts/validate_registry.py
