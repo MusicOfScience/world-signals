@@ -1,0 +1,45 @@
+name: Preflight WORLD SIGNALS Energy Commodities Correction K
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/apply_energy_commodities_correction_k.py'
+      - 'data/coverage/ENERGY_COMMODITIES_CORRECTION_K_PLAN_v0.1.json'
+      - '.github/workflows/energy-commodities-correction-k-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: world-signals-energy-commodities-correction-k-preflight
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run Correction K transaction in memory only
+        run: PYTHONPATH=. python scripts/apply_energy_commodities_correction_k.py
+      - name: Confirm current canonical source-of-truth remains valid and unchanged
+        run: python scripts/validate_registry.py
+      - name: Assert Correction K remains a read-only preflight
+        shell: bash
+        run: |
+          git diff --exit-code
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          assert reg['version']=='0.18'
+          assert reg['record_count']==662
+          assert src['version']=='1.49'
+          print('Correction K preflight left source-of-truth untouched: PASS')
+          PY
