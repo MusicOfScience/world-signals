@@ -7,17 +7,39 @@ calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(
 let selectedDay = null;
 
 const $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const SEASON_TIMING_TYPES = new Set(['MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW']);
 const today = new Date();
 today.setHours(0,0,0,0);
 
 function localDateKey(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
+function localMonthKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
 function parseCivilDate(raw){
   if(!raw) return null;
   const m = String(raw).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   return m ? new Date(Number(m[1]), Number(m[2])-1, Number(m[3])) : null;
+}
+function parseMonthSortProxy(raw){
+  const m=String(raw??'').match(/^(\d{4})-(\d{2})$/);
+  if(!m) return null;
+  const month=Number(m[2]);
+  if(month<1||month>12) return null;
+  return new Date(Number(m[1]),month-1,1);
+}
+function isSeasonWindow(e){
+  return SEASON_TIMING_TYPES.has(e.timing_type) && Array.isArray(e.season_phases) && e.season_phases.length>0;
+}
+function seasonSortDate(e){
+  if(!isSeasonWindow(e)) return null;
+  return parseMonthSortProxy(e.season_phases[0]?.start_month);
+}
+function seasonLastMonth(e){
+  if(!isSeasonWindow(e)) return null;
+  return e.season_phases[e.season_phases.length-1]?.end_month||null;
 }
 function eventDate(e){
   if(e.start_utc){const d=new Date(e.start_utc);return isNaN(d)?null:d;}
@@ -25,13 +47,32 @@ function eventDate(e){
   if(e.date_earliest && (!e.date_latest || e.date_earliest===e.date_latest)) return parseCivilDate(e.date_earliest);
   return null;
 }
+function eventSortDate(e){
+  return eventDate(e)||seasonSortDate(e);
+}
 function eventDateKey(e){
+  if(isSeasonWindow(e)) return null;
   if(e.start_utc){const d=new Date(e.start_utc);return isNaN(d)?null:localDateKey(d);}
   if(e.start_local) return String(e.start_local).slice(0,10);
   if(e.date_earliest && (!e.date_latest || e.date_earliest===e.date_latest)) return e.date_earliest;
   return null;
 }
+function seasonWindowLabel(e){
+  if(!isSeasonWindow(e)) return '';
+  if(e.source_native_window_label) return String(e.source_native_window_label);
+  return e.season_phases.map(p=>p.source_label).filter(Boolean).join(' · ');
+}
+function windowLabel(e){
+  if(isSeasonWindow(e)) return seasonWindowLabel(e);
+  if(e.date_earliest){
+    return `${e.date_earliest}${e.date_latest&&e.date_latest!==e.date_earliest?` → ${e.date_latest}`:''}`;
+  }
+  return 'TBC';
+}
 function formatWhen(e){
+  if(isSeasonWindow(e)){
+    return `<strong>${esc(seasonWindowLabel(e))}</strong><br><span class="meta">month-bounded seasonal window · no day boundary asserted</span>`;
+  }
   if(e.start_utc){
     const d=new Date(e.start_utc);
     return `<strong>${d.toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})}</strong><br><span class="meta">device time · source ${esc(e.source_timezone)}</span>`;
@@ -48,10 +89,16 @@ function formatWhen(e){
   return '<strong>TBC</strong>';
 }
 function compactWhen(e){
+  if(isSeasonWindow(e)) return '';
   if(e.start_utc){const d=new Date(e.start_utc);return d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});}
   if(e.start_local && e.start_local.includes('T')) return e.start_local.slice(11,16);
   if(e.end_local && String(e.end_local).slice(0,10)!==String(e.start_local).slice(0,10)) return `→ ${String(e.end_local).slice(5,10)}`;
   return '';
+}
+function seasonIsCurrentOrFuture(e){
+  if(!isSeasonWindow(e)) return false;
+  const last=seasonLastMonth(e);
+  return !!last && last>=localMonthKey(today);
 }
 function humanToken(value){return String(value??'').replaceAll('_',' ').toLowerCase();}
 function options(id,values){
@@ -66,15 +113,19 @@ function baseFiltered(){
   const q=$('#search').value.toLowerCase().trim();
   const region=$('#region').value, cat=$('#category').value, cer=$('#certainty').value, vis=$('#visibility').value;
   return DATA.events.filter(e=>{
-    const hay=[e.title,e.canonical_name,e.institution,e.jurisdiction,e.category,e.subcategory].join(' ').toLowerCase();
+    const phaseLabels=(e.season_phases||[]).map(p=>p.source_label).join(' ');
+    const hay=[e.title,e.canonical_name,e.institution,e.jurisdiction,e.category,e.subcategory,e.source_native_window_label,phaseLabels].join(' ').toLowerCase();
     return (!q||hay.includes(q))&&(!region||e.region===region)&&(!cat||e.category===cat)&&(!cer||e.certainty===cer)&&(!vis||e.visibility_tier===vis);
   });
 }
 function indexFiltered(){
   return baseFiltered().filter(e=>{
+    if(!futureOnly) return true;
+    if(e.lifecycle==='ACTIVE') return true;
+    if(isSeasonWindow(e)) return seasonIsCurrentOrFuture(e);
     const d=eventDate(e);
-    return !futureOnly||!d||d>=today||e.lifecycle==='ACTIVE';
-  }).sort((a,b)=>(eventDate(a)?.getTime()??Infinity)-(eventDate(b)?.getTime()??Infinity));
+    return !d||d>=today;
+  }).sort((a,b)=>(eventSortDate(a)?.getTime()??Infinity)-(eventSortDate(b)?.getTime()??Infinity));
 }
 function eventCard(e){
   return `<article class="event" data-id="${esc(e.occurrence_id)}"><div class="when">${formatWhen(e)}</div><div><h2>${esc(e.title)}</h2><div class="meta">${esc(e.institution)} · ${esc(e.jurisdiction)}</div><div class="tags"><span class="tag certainty-${esc(e.certainty)}">${esc(e.certainty)}</span><span class="tag">${esc(e.category)}</span><span class="tag">${esc(e.visibility_tier)}</span></div></div><div class="source"><b>${esc(e.region)}</b><br>${esc(e.source_id)}<br><span class="meta">${esc(e.monitoring_readiness||'route not classified')}</span></div></article>`;
@@ -92,15 +143,19 @@ function renderIndex(){
 function monthBounds(){
   const start=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth(),1);
   const end=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,0);
-  return {start,end,startKey:localDateKey(start),endKey:localDateKey(end)};
+  return {start,end,startKey:localDateKey(start),endKey:localDateKey(end),monthKey:localMonthKey(start)};
 }
-function windowsForMonth(rows,startKey,endKey){
+function seasonOverlapsMonth(e,monthKey){
+  return isSeasonWindow(e) && e.season_phases.some(p=>p.start_month<=monthKey && p.end_month>=monthKey);
+}
+function windowsForMonth(rows,startKey,endKey,monthKey){
   return rows.filter(e=>{
     if(eventDateKey(e)) return false;
+    if(isSeasonWindow(e)) return seasonOverlapsMonth(e,monthKey);
     if(!e.date_earliest && !e.date_latest) return false;
     const a=e.date_earliest||e.date_latest, b=e.date_latest||e.date_earliest;
     return a<=endKey && b>=startKey;
-  }).sort((a,b)=>String(a.date_earliest||'').localeCompare(String(b.date_earliest||'')));
+  }).sort((a,b)=>(eventSortDate(a)?.getTime()??Infinity)-(eventSortDate(b)?.getTime()??Infinity));
 }
 function chooseDefaultDay(byDay){
   const now=new Date();
@@ -119,7 +174,7 @@ function renderDayPanel(byDay){
 }
 function renderCalendar(){
   const rows=baseFiltered();
-  const {start,startKey,endKey}=monthBounds();
+  const {start,startKey,endKey,monthKey}=monthBounds();
   $('#monthLabel').textContent=start.toLocaleDateString(undefined,{month:'long',year:'numeric'});
   const byDay=new Map();
   rows.forEach(e=>{
@@ -151,9 +206,9 @@ function renderCalendar(){
   attachEventClicks($('#calendarGrid'));
   renderDayPanel(byDay);
 
-  const windows=windowsForMonth(rows,startKey,endKey);
+  const windows=windowsForMonth(rows,startKey,endKey,monthKey);
   $('#windowCount').textContent=`${windows.length} window${windows.length===1?'':'s'}`;
-  $('#calendarWindows').innerHTML=windows.length?windows.map(e=>`<button class="window-event" data-event-id="${esc(e.occurrence_id)}"><span>${esc(e.date_earliest||'TBC')}${e.date_latest&&e.date_latest!==e.date_earliest?` → ${esc(e.date_latest)}`:''}</span><strong>${esc(e.title)}</strong><small>${esc(e.certainty)} · ${esc(e.institution)}</small></button>`).join(''):'<p class="empty">No month-precision or expected-window events overlap this month under the current filters.</p>';
+  $('#calendarWindows').innerHTML=windows.length?windows.map(e=>`<button class="window-event" data-event-id="${esc(e.occurrence_id)}"><span>${esc(windowLabel(e))}</span><strong>${esc(e.title)}</strong><small>${esc(e.certainty)} · ${esc(e.institution)}${isSeasonWindow(e)?' · month precision':''}</small></button>`).join(''):'<p class="empty">No month-precision or expected-window events overlap this month under the current filters.</p>';
   attachEventClicks($('#calendarWindows'));
   $('#calendarResultCount').textContent=`${[...byDay.values()].reduce((n,x)=>n+x.length,0)} exact-date events · ${windows.length} windows`;
 }
