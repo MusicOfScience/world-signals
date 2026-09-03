@@ -18,6 +18,29 @@ class WebUXTests(unittest.TestCase):
         self.assertIn('Runtime health is intentionally not claimed here', js)
         self.assertIn('data/monitor_routes.json', js)
 
+    def test_reviewed_change_history_is_a_separate_read_only_view(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        js=(ROOT/"web/history.js").read_text(encoding="utf-8")
+        build=(ROOT/"scripts/build_site.py").read_text(encoding="utf-8")
+        self.assertIn('id="historyTab"', html)
+        self.assertIn('id="historyView"', html)
+        self.assertIn('Reviewed history: visible here', html)
+        self.assertIn('Pending review candidates: GitHub Actions artefacts', html)
+        self.assertIn("fetch('data/changes.json')", js)
+        self.assertIn('old_values', js)
+        self.assertIn('new_values', js)
+        self.assertIn('review_basis', js)
+        self.assertIn('history.js', build)
+        self.assertIn('history.css', build)
+
+    def test_history_module_has_no_write_path(self):
+        js=(ROOT/"web/history.js").read_text(encoding="utf-8")
+        self.assertNotIn('data/canonical/registry.json', js)
+        self.assertNotIn("method:'POST'", js)
+        self.assertNotIn('method:"POST"', js)
+        self.assertNotIn('PUT', js)
+        self.assertNotIn('DELETE', js)
+
     def test_browser_has_no_canonical_write_path(self):
         js=(ROOT/"web/app.js").read_text(encoding="utf-8")
         self.assertNotIn('data/canonical/registry.json', js)
