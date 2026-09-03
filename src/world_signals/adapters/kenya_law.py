@@ -7,7 +7,8 @@ import re
 
 from .base import AdapterError, FetchSnapshot, fetch_bytes
 
-KENYA_PFM_CURRENT = "https://new.kenyalaw.org/akn/ke/act/2012/18/eng@2025-11-04"
+KENYA_PFM_CURRENT = "https://new.kenyalaw.org/akn/ke/act/2012/18/eng"
+KENYA_PFM_BASELINE_2025_11_04 = "https://new.kenyalaw.org/akn/ke/act/2012/18/eng@2025-11-04"
 
 class _TextExtractor(HTMLParser):
     def __init__(self):
@@ -43,14 +44,11 @@ def html_to_text(body: bytes | str) -> str:
 
 def parse_kenya_budget_policy_rule(body: bytes | str) -> KenyaBudgetRule:
     text=html_to_text(body)
-    if "Public Finance Management Act" not in text.upper().title() and "PUBLIC FINANCE MANAGEMENT ACT" not in text:
-        # Keep this deliberately strict enough to reject generic Kenya Law error pages.
-        if "Public Finance Management Act" not in text:
-            raise AdapterError("Kenya Law response did not identify the Public Finance Management Act")
+    if "public finance management act" not in text.lower():
+        raise AdapterError("Kenya Law response did not identify the Public Finance Management Act")
 
-    # We monitor the operative rule, not the whole-page hash. Wording may contain
-    # punctuation/spacing introduced by HTML, so extract the statutory sentence
-    # semantically while retaining the exact normalized clause for review.
+    # Monitor the operative rule, not the whole-page hash. Amendments elsewhere
+    # in the Act may alter the transport hash without altering section 25(2).
     pattern=re.compile(
         r"The National Treasury shall submit the Budget Policy Statement approved in terms of subsection\s*\(1\)\s*to Parliament,?\s*by the\s*15(?:th|\^\{th\})?\s*February in each year\.?",
         re.IGNORECASE,
