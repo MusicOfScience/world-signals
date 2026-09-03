@@ -9,7 +9,9 @@ import re
 from .base import AdapterError, FetchSnapshot, fetch_bytes
 
 CELLAR_CELEX_BASE = "https://publications.europa.eu/resource/celex"
+ELI_BASE = "https://data.europa.eu/eli"
 CRA_CELEX = "32024R2847"
+CRA_ELI_CURRENT = "https://data.europa.eu/eli/reg/2024/2847"
 MONTHS={
     "january":1,"february":2,"march":3,"april":4,"may":5,"june":6,
     "july":7,"august":8,"september":9,"october":10,"november":11,"december":12,
@@ -56,7 +58,18 @@ def cellar_celex_url(celex: str) -> str:
     return f"{CELLAR_CELEX_BASE}/{token}"
 
 
-def _to_text(body: bytes | str) -> str:
+def eli_current_url(typedoc: str, year: int | str, number: int | str) -> str:
+    doc=str(typedoc).strip().lower()
+    if doc not in {"reg","reg_del","reg_impl","dir","dir_del","dir_impl","dec","dec_del","dec_impl"}:
+        raise AdapterError(f"unsupported ELI document type: {typedoc!r}")
+    year_s=str(year).strip()
+    number_s=str(number).strip()
+    if not re.fullmatch(r"\d{4}",year_s) or not re.fullmatch(r"\d+",number_s):
+        raise AdapterError(f"invalid ELI identity: {typedoc!r}/{year!r}/{number!r}")
+    return f"{ELI_BASE}/{doc}/{year_s}/{number_s}"
+
+
+def cellar_document_text(body: bytes | str) -> str:
     raw=body.decode("utf-8",errors="replace") if isinstance(body,bytes) else body
     parser=_TextExtractor()
     parser.feed(raw)
@@ -85,13 +98,11 @@ def _article_71_window(text: str) -> str:
             candidates.append(window)
     if not candidates:
         raise AdapterError("CRA operative Article 71 block was not found")
-    # A table of contents can contain the same article label; the operative block
-    # is normally the final candidate containing all three application clauses.
     return candidates[-1]
 
 
 def cellar_representation_diagnostics(body: bytes | str) -> dict:
-    text=_to_text(body)
+    text=cellar_document_text(body)
     lower=text.lower()
     return {
         "text_chars":len(text),
@@ -105,14 +116,15 @@ def cellar_representation_diagnostics(body: bytes | str) -> dict:
         "contains_11_june_2026":"11 june 2026" in lower,
         "contains_article_14":"article 14" in lower,
         "contains_chapter_iv":"chapter iv" in lower,
+        "looks_like_result_list":"search results" in lower and "document" not in lower[-2000:],
     }
 
 
 def parse_cra_article_71(body: bytes | str, *, celex: str = CRA_CELEX) -> CRAApplicationRule:
-    text=_to_text(body)
+    text=cellar_document_text(body)
     lower=text.lower()
     if "cyber resilience act" not in lower and "cybersecurity requirements for products with digital elements" not in lower:
-        raise AdapterError("Cellar response did not identify the Cyber Resilience Act")
+        raise AdapterError("EU legal-state response did not identify the Cyber Resilience Act")
 
     block=_article_71_window(text)
     general=re.search(
@@ -120,8 +132,6 @@ def parse_cra_article_71(body: bytes | str, *, celex: str = CRA_CELEX) -> CRAApp
         block,re.IGNORECASE,
     )
     if general is None:
-        # Representation wording can omit the pronoun. Select an unlabeled
-        # application clause only when it is not the Article 14 or Chapter IV clause.
         for match in re.finditer(rf"shall\s+apply\s+from\s+{DATE_PATTERN}",block,re.IGNORECASE):
             prefix=block[max(0,match.start()-90):match.start()].lower()
             if "article 14" not in prefix and "chapter iv" not in prefix:
@@ -173,6 +183,30 @@ def fetch_cellar_celex_document(
     )
 
 
+def fetch_eli_current_document(
+    typedoc: str,
+    year: int | str,
+    number: int | str,
+    *,
+    timeout: int = 30,
+    language: str = "eng",
+) -> tuple[bytes, FetchSnapshot]:
+    """Fetch the unversioned ELI current-state route.
+
+    Per EUR-Lex ELI semantics, omitting /oj resolves to the most recent
+    consolidated version when one exists. If fresh modifiers are not yet
+    consolidated the service may return a result list; semantic parsers must
+    fail closed in that case rather than treating an older consolidation as
+    complete current law.
+    """
+    return fetch_bytes(
+        eli_current_url(typedoc,year,number),
+        timeout=timeout,
+        accept="application/xhtml+xml,text/html;q=0.9,application/xml;q=0.8,*/*;q=0.1",
+        headers={"Accept-Language":language},
+    )
+
+
 def fetch_cra_article_71(*, timeout: int = 30) -> tuple[CRAApplicationRule, FetchSnapshot]:
-    body,snapshot=fetch_cellar_celex_document(CRA_CELEX,timeout=timeout,language="eng")
+    body,snapshot=fetch_eli_current_document("reg",2024,2847,timeout=timeout,language="eng")
     return parse_cra_article_71(body),snapshot
