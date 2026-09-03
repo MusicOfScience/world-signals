@@ -13,13 +13,7 @@ def cbam_legal_milestone_review_candidate(
     rule: object,
     config: dict,
 ) -> tuple[dict | None, dict]:
-    """Compare one parsed CBAM legal milestone with its reviewed baseline.
-
-    The immutable legal text supplies semantic provenance. A semantic change is
-    review evidence only: it never mutates the canonical occurrence directly.
-    Current-law amendment/corrigendum/consolidation discovery is handled by the
-    separate Cellar topology sentinel for the relevant act.
-    """
+    """Compare one parsed CBAM legal milestone with its reviewed baseline."""
     current=rule.as_dict() if hasattr(rule,"as_dict") else dict(rule)
     baseline=(config.get("baseline") or {}).get("rule") or {}
     baseline_hash=(config.get("baseline") or {}).get("rule_sha256") or baseline.get("rule_sha256")
@@ -62,6 +56,82 @@ def cbam_legal_milestone_review_candidate(
         "adapter_id":adapter_id,
         "baseline_hash":baseline_hash,
         "current_hash":current_hash,
+    }
+
+
+def cbam_annual_deadline_review_candidate(
+    rule: object,
+    config: dict,
+) -> tuple[dict | None, dict]:
+    """Compare the paired Article 6(1)/22(1) annual CBAM deadline rule.
+
+    Declaration filing and certificate surrender are one canonical deadline in
+    the current model because the operative clauses presently agree. They are
+    nevertheless parsed independently. If the two clauses diverge, that is an
+    explicit legal-consistency review candidate and never an automatic split,
+    reschedule or canonical mutation.
+    """
+    current=rule.as_dict() if hasattr(rule,"as_dict") else dict(rule)
+    baseline=(config.get("baseline") or {}).get("rule") or {}
+    baseline_hash=(config.get("baseline") or {}).get("rule_sha256") or baseline.get("rule_sha256")
+    current_hash=current.get("rule_sha256") or _stable_hash(current)
+    adapter_id=config.get("adapter_id") or "EU_CBAM_ANNUAL_DEADLINE_RULE"
+
+    payload={
+        "celex":current.get("celex"),
+        "rule_id":current.get("rule_id"),
+        "declaration_legal_locator":current.get("declaration_legal_locator"),
+        "surrender_legal_locator":current.get("surrender_legal_locator"),
+        "declaration_month_day":current.get("declaration_month_day"),
+        "surrender_month_day":current.get("surrender_month_day"),
+        "declaration_first_due_year":current.get("declaration_first_due_year"),
+        "surrender_first_due_year":current.get("surrender_first_due_year"),
+        "declaration_first_reference_year":current.get("declaration_first_reference_year"),
+        "surrender_first_reference_year":current.get("surrender_first_reference_year"),
+        "first_deadline_date":current.get("first_deadline_date"),
+        "shared_deadline_consistent":bool(current.get("shared_deadline_consistent")),
+        "rule_sha256":current_hash,
+    }
+
+    if baseline_hash and current_hash == baseline_hash and payload["shared_deadline_consistent"]:
+        return None,{
+            "type":"CBAM_ANNUAL_DEADLINE_NO_CHANGE",
+            "adapter_id":adapter_id,
+            "celex":payload["celex"],
+            "first_deadline_date":payload["first_deadline_date"],
+            "shared_deadline_consistent":True,
+            "rule_sha256":current_hash,
+        }
+
+    diverged=not payload["shared_deadline_consistent"]
+    candidate_hash=_stable_hash({"adapter_id":adapter_id,"payload":payload})
+    candidate={
+        "candidate_id":"WSRC-EU-CBAM-ANNUAL-"+candidate_hash[:16],
+        "candidate_type":(
+            "LEGAL_RULE_CLAUSE_DIVERGENCE" if diverged
+            else "LEGAL_RECURRING_DEADLINE_RULE_CHANGED"
+        ),
+        "adapter_id":adapter_id,
+        "source_id":config.get("source_id"),
+        "occurrence_ids":config.get("canonical_occurrence_ids") or [],
+        "old_value":baseline,
+        "new_value":payload,
+        "review_state":(
+            "PENDING_CBAM_PAIRED_CLAUSE_DIVERGENCE_REVIEW" if diverged
+            else "PENDING_CBAM_ANNUAL_DEADLINE_REVIEW"
+        ),
+        "candidate_origin":"LIVE_READ_ONLY_MONITOR",
+        "automatic_commit_allowed":False,
+    }
+    return candidate,{
+        "type":(
+            "CBAM_ANNUAL_DEADLINE_CLAUSE_DIVERGENCE" if diverged
+            else "CBAM_ANNUAL_DEADLINE_CHANGED"
+        ),
+        "adapter_id":adapter_id,
+        "baseline_hash":baseline_hash,
+        "current_hash":current_hash,
+        "shared_deadline_consistent":payload["shared_deadline_consistent"],
     }
 
 
