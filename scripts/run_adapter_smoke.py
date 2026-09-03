@@ -10,7 +10,8 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
-    fetch_kenya_budget_policy_rule,
+    fetch_kenya_budget_policy_rule_baseline,
+    fetch_kenya_budget_policy_rule_current,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -81,19 +82,41 @@ def main() -> int:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
 
+    # Kenya is deliberately NOT a live production route. The frozen baseline is
+    # reproducible, while the unversioned current endpoint returned 403 from
+    # GitHub Actions on 3 Sep 2026. We retain both facts without making the held
+    # route poison the proven RBA/Colombia adapter gate.
     try:
-        rule,snap=fetch_kenya_budget_policy_rule()
+        rule,snap=fetch_kenya_budget_policy_rule_baseline()
         report["results"].append({
-            "adapter":"KENYA_PFM_BPS_RULE",
-            "status":"PASS",
+            "adapter":"KENYA_PFM_BPS_RULE_BASELINE",
+            "status":"BASELINE_PASS",
             "snapshot":snap.as_dict(),
             "rule":rule.as_dict(),
-            "monitor_role":"SEMANTIC_LEGAL_RULE_SENTINEL",
-            "whole_document_hash_is_not_rule_change":True,
+            "monitor_role":"REPRODUCIBLE_LEGAL_RULE_BASELINE",
+            "live_monitor_promoted":False,
         })
     except AdapterError as exc:
         failures.append(str(exc))
-        report["results"].append({"adapter":"KENYA_PFM_BPS_RULE","status":"FAIL","error":str(exc)})
+        report["results"].append({"adapter":"KENYA_PFM_BPS_RULE_BASELINE","status":"FAIL","error":str(exc)})
+
+    try:
+        rule,snap=fetch_kenya_budget_policy_rule_current()
+        report["results"].append({
+            "adapter":"KENYA_PFM_BPS_RULE_CURRENT_PROBE",
+            "status":"CURRENT_ROUTE_AVAILABLE_NOT_PROMOTED",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+            "live_monitor_promoted":False,
+        })
+    except AdapterError as exc:
+        report["results"].append({
+            "adapter":"KENYA_PFM_BPS_RULE_CURRENT_PROBE",
+            "status":"ROUTE_HOLD",
+            "error":str(exc),
+            "canonical_action":"NONE",
+            "live_monitor_promoted":False,
+        })
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
