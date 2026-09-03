@@ -19,6 +19,7 @@ def base_record() -> dict:
         "lifecycle_status": "PLANNED",
         "timing_type": "MONTH_BOUNDED_SEASON_WINDOW",
         "season_window_model": "MONTH_BOUNDED_SINGLE_PHASE",
+        "publication_time_semantics": "SEASONAL_MONTH_RANGE",
         "start_local": None,
         "end_local": None,
         "start_utc": None,
@@ -57,6 +58,13 @@ class SeasonalWindowValidationTests(unittest.TestCase):
         report = validate(record)
         self.assertFalse(report.ok)
         self.assertTrue(any("season_window_model" in error for error in report.errors))
+
+    def test_month_bounded_window_rejects_day_range_publication_semantics(self):
+        record = base_record()
+        record["publication_time_semantics"] = "SEASONAL_DATE_RANGE"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("SEASONAL_MONTH_RANGE" in error for error in report.errors))
 
     def test_month_bounded_window_rejects_synthetic_day_boundary(self):
         record = base_record()
