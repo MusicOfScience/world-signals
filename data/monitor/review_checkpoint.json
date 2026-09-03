@@ -1,0 +1,17 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "DURABLE_REVIEW_CHECKPOINT",
+  "version": "0.1",
+  "checkpoint_sequence": 0,
+  "generated_at": "2026-09-04T00:00:00+00:00",
+  "covered_through_monitor_run_number": 47,
+  "covered_through_monitor_run_id": "33754900613",
+  "covered_through_monitor_run_at": "2026-09-03T12:23:29.227611+00:00",
+  "previous_checkpoint_sha256": null,
+  "item_count": 0,
+  "state_counts": {},
+  "items": [],
+  "automatic_canonical_commit": false,
+  "google_calendar_write": false,
+  "notes": "Baseline checkpoint at the prospective review-state activation boundary. Run 47 is not retroactively promoted into retained review state."
+}
