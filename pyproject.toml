@@ -1,0 +1,8 @@
+[project]
+name = "world-signals"
+version = "0.1.0"
+description = "Read-only executable thin slice of the WORLD SIGNALS registry, monitor and web UX"
+requires-python = ">=3.12"
+
+[tool.unittest]
+start-directory = "tests"

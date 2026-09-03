@@ -1,0 +1,163 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "CANONICAL_COMMIT_READINESS_AUDIT",
+  "version": "0.5",
+  "reference_date": "2026-09-03",
+  "reviewed_change_type_counts": {
+    "LIFECYCLE_AND_CERTAINTY_UPDATE": 1,
+    "CERTAINTY_CORRECTION_DERIVED_FROM_TENTATIVE_ANCHOR": 8,
+    "CERTAINTY_CORRECTION_SOURCE_NATIVE_WEEKLY_HORIZON": 11,
+    "LIFECYCLE_COMPLETED_BEFORE_STATUTORY_DEADLINE": 1,
+    "TIMING_PRECISION_UPGRADE": 2,
+    "DERIVATION_BASIS_CORRECTION_AND_PRECISION_DOWNGRADE": 1,
+    "LIFECYCLE_COMPLETION": 2,
+    "CERTAINTY_CORRECTION_PLANNED_IMPLEMENTATION_DATE": 1,
+    "LIFECYCLE_COMPLETION_CROSS_SURFACE_VERIFICATION": 1,
+    "RESCHEDULE_RECONCILIATION": 1,
+    "RESCHEDULE_RECONCILIATION_LEGAL_TRIGGER": 2
+  },
+  "reviewed_commit_mode_counts": {
+    "REVIEWED_SINGLE_OCCURRENCE_COMMIT": 3,
+    "REVIEWED_BATCH_COMMIT": 25,
+    "HISTORICAL_PROVENANCE_RECONCILIATION_NO_MUTATION": 3
+  },
+  "real_evidence": {
+    "reviewed_change_count": 31,
+    "reviewed_single_occurrence_commits": 3,
+    "reviewed_batch_commits": 25,
+    "certainty_or_precision_changes": 24,
+    "lifecycle_completions": 5,
+    "real_current_reschedule_commits": 0,
+    "real_current_cancellation_commits": 0,
+    "source_surface_conflicts_observed": [
+      "MoSPI empty-state conflict",
+      "EIA publication-index lag vs live data product"
+    ],
+    "branch_recovery_identity_incident_observed": true,
+    "negative_controls_observed": [
+      "elapsed schedule time did not auto-complete EIA",
+      "window/feed absence did not imply cancellation",
+      "non-commercial rights did not become production permission"
+    ],
+    "real_reschedule_provenance_reconciliations": 3,
+    "real_live_monitor_reschedule_commits": 0,
+    "explicit_noncanonical_cancellation_controls": 2,
+    "real_reschedule_occurrences_reconciled": 3,
+    "real_historical_reschedule_transaction_replay_passed": true,
+    "source_surface_conflicts_resolved": 4,
+    "source_health_incident_count": 3,
+    "real_source_health_recovery_with_mutation_guard_passed": true,
+    "real_source_health_degradation_no_cancellation_inference_passed": true,
+    "controlled_failure_injection_on_enabled_pilot_passed": true,
+    "fault_injection_source": "WSSRC-MAC-006",
+    "fault_injection_target_occurrence": "WSO-MAC-B-0035",
+    "prospective_no_change_sweep_2026_09_03": 9
+  },
+  "commit_gate": {
+    "canonical_commit_gate": "CLOSED",
+    "review_candidate_automation_gate": "OPEN_FOR_PILOT_VALIDATED_ROUTES",
+    "permitted_machine_actions": [
+      "FETCH_PARSE_ASSERT_MATCH_DIFF",
+      "GENERATE_REVIEW_CANDIDATE",
+      "NO_CHANGE_NO_COMMIT"
+    ],
+    "prohibited_machine_actions": [
+      "AUTOMATIC_CANONICAL_COMMIT",
+      "AUTOMATIC_CANCELLATION_FROM_ABSENCE",
+      "AUTOMATIC_IDENTITY_MIGRATION",
+      "AUTOMATIC_DATE_INFERENCE_BEYOND_SOURCE_HORIZON"
+    ],
+    "reasons_auto_commit_closed": [
+      "Controlled failure injection now proves that fetch failure, malformed parser output and syntactically valid false date drift cannot mutate canonical state on a pilot-validated ONS route.",
+      "Real source-health degradation/recovery and historical reschedule transaction replay are proven.",
+      "Prospective official-source sweep on 3 September found no genuine reschedule or cancellation among the selected near-term canonical events.",
+      "No explicit cancellation of an existing canonical occurrence has yet passed REVIEW -> COMMIT.",
+      "No prospective reschedule detected after a prior monitor snapshot has yet passed REVIEW -> COMMIT.",
+      "At least two heterogeneous non-calendar machine transports still need successful executed parser validation."
+    ],
+    "minimum_next_evidence_before_reconsideration": [
+      "one prospective reschedule detected after a prior canonical monitor snapshot and reviewed on the same stable occurrence",
+      "one explicit cancellation of an existing canonical occurrence reviewed without relying on absence",
+      "successful parser execution on at least two heterogeneous non-calendar endpoint types"
+    ]
+  },
+  "recommended_next_endpoint_pilots": [
+    {
+      "source_id": "WSSRC-TECH-001",
+      "institution": "European Union / EUR-Lex",
+      "jurisdiction": "European Union",
+      "domain": "technology_critical_infrastructure",
+      "canonical_dependency_count": 2,
+      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
+      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
+      "licence_review_status": "CLEARED_EURLEX_REUSE_AND_CC_BY_EU_OWNED_CONTENT",
+      "canonical_provenance_use": null,
+      "automated_monitoring_use": null,
+      "automated_retrieval_permission": "PREFER_OFFICIAL_EURLEX_CELLAR_RSS_WEBSERVICE",
+      "parser_type": "EURLEX_CELLAR_RSS_LEGAL_RULE_MONITOR",
+      "runtime_health_state": "PILOT_RESEARCH_VERIFIED"
+    },
+    {
+      "source_id": "WSSRC-FIN-001",
+      "institution": "Reserve Bank of Australia",
+      "jurisdiction": "Australia",
+      "domain": "financial_stability_regulation",
+      "canonical_dependency_count": 1,
+      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
+      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
+      "licence_review_status": "CLEARED_CC_BY_4_GENERAL_RBA_MATERIAL",
+      "canonical_provenance_use": null,
+      "automated_monitoring_use": null,
+      "automated_retrieval_permission": "PREFER_OFFICIAL_RSS_ENDPOINT_TEST",
+      "parser_type": "RSS_PRIMARY_HTML_FALLBACK",
+      "runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED"
+    },
+    {
+      "source_id": "WSSRC-REG4-001",
+      "institution": "Ministry of Justice / SUIN-Juriscol; Colombia Open Data",
+      "jurisdiction": "Colombia",
+      "domain": "fiscal_sovereign_finance",
+      "canonical_dependency_count": 1,
+      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
+      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
+      "licence_review_status": "MIXED_ROUTE_OPEN_DATA_REUSE_CLEARED_LEGAL_HTML_MANUAL",
+      "canonical_provenance_use": null,
+      "automated_monitoring_use": null,
+      "automated_retrieval_permission": "PREFER_COLOMBIA_OPEN_DATA_INVENTORY_FOR_VERSION_MONITOR; LEGAL_TEXT_HTML_MANUAL_VERIFICATION",
+      "parser_type": "OPEN_DATA_INVENTORY_MONITOR_PLUS_MANUAL_LEGAL_TEXT_VERIFICATION",
+      "runtime_health_state": "RESEARCH_VERIFIED_ENDPOINT_TEST_PENDING"
+    },
+    {
+      "source_id": "WSSRC-TRD-005",
+      "institution": "European Commission — Taxation and Customs Union",
+      "jurisdiction": "European Union",
+      "domain": "trade_sanctions_industrial_policy",
+      "canonical_dependency_count": 2,
+      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
+      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
+      "licence_review_status": "CLEARED_COMMISSION_CC_BY_4_AND_EURLEX_LEGAL_ROUTE",
+      "canonical_provenance_use": null,
+      "automated_monitoring_use": null,
+      "automated_retrieval_permission": "PREFER_EURLEX_LEGAL_TEXT_COMMISSION_PAGE_FALLBACK",
+      "parser_type": "EURLEX_CBAM_RULE_PLUS_COMMISSION_IMPLEMENTATION_MONITOR",
+      "runtime_health_state": "PILOT_RESEARCH_VERIFIED"
+    }
+  ],
+  "validation": {
+    "three_fault_cases": true,
+    "all_fault_cases_pass": true,
+    "fetch_failure_created_no_assertion": true,
+    "fetch_failure_created_no_cancellation": true,
+    "malformed_parser_quarantined_before_diff": true,
+    "false_valid_date_reached_review_but_was_rejected": true,
+    "canonical_registry_protected_digest_unchanged": true,
+    "target_protected_digest_unchanged": true,
+    "recovery_assertion_matches_current_ons": true,
+    "prospective_sweep_no_change": true,
+    "canonical_population_649_unchanged": true,
+    "change_ledger_31_unchanged": true,
+    "automatic_commits_zero": true,
+    "google_calendar_writes_zero": true,
+    "all_pass": true
+  }
+}

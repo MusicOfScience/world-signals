@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORLD SIGNALS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">WORLD SIGNALS · EXECUTABLE THIN SLICE</p>
+      <h1>Global political-economic time, without pretending certainty.</h1>
+      <p class="lede">Read-only projection of the canonical registry. Source monitoring and review are separate from the calendar.</p>
+    </div>
+    <div class="safety">
+      <strong>Safety boundary</strong>
+      <span>Automatic canonical commit: OFF</span>
+      <span>Google Calendar writes: OFF</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="stats" class="stats" aria-live="polite"></section>
+    <section class="controls" aria-label="Event filters">
+      <input id="search" type="search" placeholder="Search event, institution, jurisdiction…">
+      <select id="region"><option value="">All regions</option></select>
+      <select id="category"><option value="">All categories</option></select>
+      <select id="certainty"><option value="">All certainty</option></select>
+      <select id="visibility"><option value="">All visibility</option></select>
+    </section>
+    <section class="toolbar">
+      <span id="resultCount"></span>
+      <button id="futureOnly" class="toggle" aria-pressed="true">Future/current only</button>
+    </section>
+    <section id="events" class="events"></section>
+  </main>
+
+  <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "CONTROLLED_FAILURE_INJECTION_HARNESS",
+  "version": "0.1",
+  "reference_date": "2026-09-03",
+  "target_source_id": "WSSRC-MAC-006",
+  "target_occurrence_id": "WSO-MAC-B-0035",
+  "baseline_authoritative_assertion": {
+    "source_id": "WSSRC-MAC-006",
+    "occurrence_id": "WSO-MAC-B-0035",
+    "canonical_name": "UK Monthly GDP — July 2026",
+    "asserted_start_local": "2026-09-11T07:00:00",
+    "asserted_certainty_status": "CONFIRMED",
+    "asserted_lifecycle_status": "PLANNED",
+    "source_page_status": "NOT_YET_PUBLISHED",
+    "source_refs": [
+      "turn502529search0",
+      "turn502529search5"
+    ],
+    "retrieved_at": "2026-09-03T09:05:00+10:00",
+    "assertion_quality": "CURRENT_AUTHORITATIVE_POSITIVE_ASSERTION"
+  },
+  "protected_fields": [
+    "occurrence_id",
+    "series_id",
+    "canonical_name",
+    "category",
+    "subcategory",
+    "jurisdiction",
+    "region",
+    "institution",
+    "event_type",
+    "record_class",
+    "certainty_status",
+    "lifecycle_status",
+    "timing_type",
+    "start_local",
+    "end_local",
+    "source_timezone",
+    "start_utc",
+    "end_utc",
+    "date_earliest",
+    "date_latest",
+    "time_precision",
+    "time_status",
+    "source_id"
+  ],
+  "baseline_target_digest": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+  "baseline_registry_digest": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+  "cases": [
+    {
+      "case_id": "WSFAULT-P-001",
+      "failure_injection_type": "FETCH_TIMEOUT",
+      "target_occurrence_id": "WSO-MAC-B-0035",
+      "injected_transport_result": {
+        "status": "TIMEOUT",
+        "payload": null
+      },
+      "source_health_action": "DEGRADED_QUARANTINE_TRANSPORT",
+      "assertion_created": false,
+      "match_or_diff_executed": false,
+      "fault_candidate_state": "NO_ASSERTION_SOURCE_DEGRADED",
+      "canonical_mutation_attempted": false,
+      "cancellation_inferred": false,
+      "protected_target_digest_before": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_target_digest_after_fault": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_registry_digest_before": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "protected_registry_digest_after_fault": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "recovery_assertion": {
+        "source_id": "WSSRC-MAC-006",
+        "occurrence_id": "WSO-MAC-B-0035",
+        "canonical_name": "UK Monthly GDP — July 2026",
+        "asserted_start_local": "2026-09-11T07:00:00",
+        "asserted_certainty_status": "CONFIRMED",
+        "asserted_lifecycle_status": "PLANNED",
+        "source_page_status": "NOT_YET_PUBLISHED",
+        "source_refs": [
+          "turn502529search0",
+          "turn502529search5"
+        ],
+        "retrieved_at": "2026-09-03T09:05:00+10:00",
+        "assertion_quality": "CURRENT_AUTHORITATIVE_POSITIVE_ASSERTION"
+      },
+      "recovery_result": "NO_CHANGE",
+      "canonical_mutation_after_recovery": false,
+      "pass": true
+    },
+    {
+      "case_id": "WSFAULT-P-002",
+      "failure_injection_type": "MALFORMED_PARSER_OUTPUT",
+      "target_occurrence_id": "WSO-MAC-B-0035",
+      "injected_parser_output": {
+        "title": "GDP monthly estimate, UK: July 2026",
+        "release_datetime": "2026-09-41T07:00:00",
+        "status": "Confirmed",
+        "provenance": "FAULT_INJECTION"
+      },
+      "parser_schema_datetime_valid": false,
+      "source_health_action": "QUARANTINE_PARSER_RESULT",
+      "assertion_created": false,
+      "match_or_diff_executed": false,
+      "fault_candidate_state": "QUARANTINED_BEFORE_DIFF",
+      "canonical_mutation_attempted": false,
+      "protected_target_digest_before": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_target_digest_after_fault": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_registry_digest_before": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "protected_registry_digest_after_fault": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "recovery_assertion": {
+        "source_id": "WSSRC-MAC-006",
+        "occurrence_id": "WSO-MAC-B-0035",
+        "canonical_name": "UK Monthly GDP — July 2026",
+        "asserted_start_local": "2026-09-11T07:00:00",
+        "asserted_certainty_status": "CONFIRMED",
+        "asserted_lifecycle_status": "PLANNED",
+        "source_page_status": "NOT_YET_PUBLISHED",
+        "source_refs": [
+          "turn502529search0",
+          "turn502529search5"
+        ],
+        "retrieved_at": "2026-09-03T09:05:00+10:00",
+        "assertion_quality": "CURRENT_AUTHORITATIVE_POSITIVE_ASSERTION"
+      },
+      "recovery_result": "NO_CHANGE",
+      "canonical_mutation_after_recovery": false,
+      "pass": true
+    },
+    {
+      "case_id": "WSFAULT-P-003",
+      "failure_injection_type": "SYNTACTICALLY_VALID_FALSE_DATE",
+      "target_occurrence_id": "WSO-MAC-B-0035",
+      "injected_assertion": {
+        "source_id": "WSSRC-MAC-006",
+        "occurrence_id": "WSO-MAC-B-0035",
+        "asserted_start_local": "2026-09-12T07:00:00",
+        "asserted_certainty_status": "CONFIRMED",
+        "fault_injection_marker": true,
+        "provenance": "CONTROLLED_FAULT_ONLY"
+      },
+      "match_executed": true,
+      "diff_generated": "DATE_CHANGED",
+      "sandbox_review_candidate": {
+        "candidate_id": "WSFAULTCAND-dda1b0d6edf052",
+        "occurrence_id": "WSO-MAC-B-0035",
+        "old_value": {
+          "start_local": "2026-09-11T07:00:00"
+        },
+        "new_value": {
+          "start_local": "2026-09-12T07:00:00"
+        },
+        "candidate_type": "DATE_CHANGED",
+        "candidate_origin": "FAULT_INJECTION_ONLY",
+        "automatic_commit_allowed": false,
+        "review_state": "REJECTED_CURRENT_AUTHORITATIVE_SOURCE_DISAGREES",
+        "review_basis": [
+          "Current ONS release page says 11 September 2026 at 07:00.",
+          "Current ONS release calendar lists the release as Confirmed on 11 September 2026 at 07:00.",
+          "Injected 12 September value is a controlled synthetic parser corruption."
+        ]
+      },
+      "fault_candidate_state": "SANDBOX_REVIEW_CANDIDATE_REJECTED",
+      "canonical_mutation_attempted": false,
+      "automatic_commit_allowed": false,
+      "protected_target_digest_before": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_target_digest_after_fault": "994e955e9cf7e1bf4a5a8d1302cb7f2cfc618d01347d9bbecf8dc378ad9531c6",
+      "protected_registry_digest_before": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "protected_registry_digest_after_fault": "b139d42a4ec7f71c93945f840c2e90c5cb21c7352dc47c0bf90e8d9c8ce0d5af",
+      "recovery_assertion": {
+        "source_id": "WSSRC-MAC-006",
+        "occurrence_id": "WSO-MAC-B-0035",
+        "canonical_name": "UK Monthly GDP — July 2026",
+        "asserted_start_local": "2026-09-11T07:00:00",
+        "asserted_certainty_status": "CONFIRMED",
+        "asserted_lifecycle_status": "PLANNED",
+        "source_page_status": "NOT_YET_PUBLISHED",
+        "source_refs": [
+          "turn502529search0",
+          "turn502529search5"
+        ],
+        "retrieved_at": "2026-09-03T09:05:00+10:00",
+        "assertion_quality": "CURRENT_AUTHORITATIVE_POSITIVE_ASSERTION"
+      },
+      "recovery_result": "NO_CHANGE",
+      "canonical_mutation_after_recovery": false,
+      "pass": true
+    }
+  ],
+  "validation": {
+    "three_fault_cases": true,
+    "all_fault_cases_pass": true,
+    "fetch_failure_created_no_assertion": true,
+    "fetch_failure_created_no_cancellation": true,
+    "malformed_parser_quarantined_before_diff": true,
+    "false_valid_date_reached_review_but_was_rejected": true,
+    "canonical_registry_protected_digest_unchanged": true,
+    "target_protected_digest_unchanged": true,
+    "recovery_assertion_matches_current_ons": true,
+    "prospective_sweep_no_change": true,
+    "canonical_population_649_unchanged": true,
+    "change_ledger_31_unchanged": true,
+    "automatic_commits_zero": true,
+    "google_calendar_writes_zero": true,
+    "all_pass": true
+  }
+}
