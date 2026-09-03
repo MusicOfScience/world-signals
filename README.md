@@ -1,4 +1,4 @@
-# WORLD SIGNALS — executable thin slice v0.3
+# WORLD SIGNALS — executable thin slice v0.4
 
 This repository is the executable implementation of the WORLD SIGNALS architecture.
 
@@ -42,7 +42,7 @@ This is a projection layer only. It cannot write to the canonical registry.
 
 ## Operational live monitor
 
-`live-monitor.yml` runs a read-only official-source monitor daily and can also be started manually. It currently exercises two deliberately heterogeneous routes:
+`live-monitor.yml` runs a read-only official-source monitor daily and can also be started manually. It currently exercises three deliberately heterogeneous routes:
 
 1. **Reserve Bank of Australia — Financial Stability Review RSS/RDF**
    - positive publication evidence can generate a completion/date review candidate;
@@ -53,9 +53,15 @@ This is a projection layer only. It cannot write to the canonical registry.
    - a change generates a legal-input review candidate;
    - the inventory cannot directly alter the canonical budget deadline: operative clause-level SUIN verification remains required.
 
+3. **European Union Publications Office Cellar — Cyber Resilience Act Article 71**
+   - CELEX `32024R2847` is retrieved through the credential-free Cellar dissemination route as English XHTML;
+   - the monitor extracts Article 71 application dates semantically rather than treating the whole-document hash as the legal rule;
+   - an amended application date generates a `LEGAL_RULE_CHANGED` review candidate against the same stable CRA occurrences;
+   - transport or parser failure affects source health only and cannot alter an event.
+
 Every run hashes `data/canonical/registry.json` before and after. A changed hash fails the monitor. The workflow token has `contents: read` only.
 
-The first operational run completed with **2 healthy routes, 0 degraded routes, 0 review candidates, `NO_CHANGE`, and an identical canonical SHA before/after**.
+The first three-route operational run completed with **3 healthy routes, 0 degraded routes, 0 review candidates, `NO_CHANGE`, and an identical canonical SHA before/after**. Source Registry v1.46 records all three routes as pilot-validated, review-only monitors.
 
 ## Current safety boundary
 
@@ -98,7 +104,7 @@ Neither command edits `data/canonical/registry.json`.
 - `ci.yml` — registry validation, regression tests and static-site build.
 - `pages.yml` — validates, builds and deploys GitHub Pages.
 - `monitor-dry-run.yml` — manual controlled monitor harness.
-- `adapter-smoke.yml` — live transport/parser checks against official RBA and Colombia routes.
+- `adapter-smoke.yml` — live transport/parser checks against official RBA, Colombia and EU Cellar routes.
 - `live-monitor.yml` — scheduled read-only live monitor; uploads source-health report and review-candidate artefacts.
 
 Live source adapters are promoted one source family at a time after rights, endpoint and parser validation. Automatic canonical mutation remains a separate closed gate: working software is not permission to remove review.
