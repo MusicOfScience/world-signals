@@ -55,6 +55,10 @@ def validate_season_window(record: dict) -> TemporalValidation:
         result.errors.append(
             f"{oid}: {timing_type} requires season_window_model={expected_model}"
         )
+    if record.get("publication_time_semantics") != "SEASONAL_MONTH_RANGE":
+        result.errors.append(
+            f"{oid}: month-bounded season requires publication_time_semantics=SEASONAL_MONTH_RANGE"
+        )
 
     if not isinstance(phases, list) or not phases:
         result.errors.append(f"{oid}: {timing_type} requires non-empty season_phases")
