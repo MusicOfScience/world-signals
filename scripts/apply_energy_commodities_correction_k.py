@@ -32,7 +32,8 @@ def assertion_id(item: dict) -> str:
     return "WSA-"+hashlib.sha256(material.encode("utf-8")).hexdigest()[:16]
 
 
-def new_sources() -> list[dict]:
+def source_runtime_fields(source_plan: dict) -> dict:
+    institution=source_plan["institution"]
     common={
         "domain":"energy_commodities",
         "recommended_verification_cadence":"manual weekly; daily inside 14 days of next occurrence",
@@ -45,99 +46,91 @@ def new_sources() -> list[dict]:
         "rights_review_scope":"ENERGY_COMMODITIES_CORRECTION_K_CANONICAL_PROVENANCE_AND_AUTOMATION_SEPARATED",
         "rights_review_note":"Operational governance classification for WORLD SIGNALS; not a legal opinion.",
         "monitoring_readiness_assessed_at":"2026-09-03",
-        "last_successful_research_verification_at":"2026-09-03"
+        "last_successful_research_verification_at":"2026-09-03",
+        "automated_retrieval_permission":"PRODUCTION_AUTOMATION_HOLD"
     }
-    records=[]
-    def add(**kwargs):
-        r=dict(common)
-        r.update(kwargs)
-        records.append(r)
+    if institution.startswith("Joint Organisations Data Initiative"):
+        specific={
+            "endpoint_role":"JODI Oil + Gas World Database first monthly update schedule",
+            "information_supplied":"First monthly JODI-Oil and JODI-Gas World Database update dates; official combined schedule gives noon London time",
+            "future_schedule_horizon":"through December 2026 verified",
+            "typical_advance_notice":"annual schedule",
+            "machine_readable_available":"HTML/PDF",
+            "source_timezone":"Europe/London",
+            "parser_type":"MANUAL_HTML_PDF_PROVENANCE",
+            "known_limitations":[
+                "Calendar identifies the first scheduled update in each month; supplementary updates may occur after additional country submissions.",
+                "JODI website terms reserve intellectual-property rights; no production crawler permission is inferred from public availability."
+            ],
+            "notes":"Canonical occurrence is a SOURCE_BUNDLE containing Oil and Gas data products at the same timestamp.",
+            "licence_constraints":"INTELLECTUAL_PROPERTY_RIGHTS_RESERVED",
+            "ingestion_permission":"CURATED_FACTUAL_METADATA_MANUAL_ONLY",
+            "licence_review_status":"RIGHTS_RESERVED_FACTUAL_METADATA_ONLY",
+            "redistribution_permission":"FACTUAL_METADATA_ONLY_NO_CONTENT_REPRODUCTION_INFERRED",
+            "rights_summary":"JODI terms reserve intellectual-property rights in the website and published material.",
+            "automation_summary":"Manual factual schedule provenance only. Public access and downloadable data do not by themselves establish permission for production automated retrieval.",
+            "monitoring_readiness_status":"MANUAL_ONLY_RIGHTS_HOLD",
+            "monitoring_priority_score":250,
+            "canonical_dependency_count":4
+        }
+    elif institution=="Gas Exporting Countries Forum":
+        specific={
+            "endpoint_role":"8th GECF Summit official announcement",
+            "information_supplied":"8th GECF Summit of Heads of State and Government hosted in Moscow on 27 October 2026",
+            "future_schedule_horizon":"explicit 2026 summit occurrence",
+            "typical_advance_notice":"months",
+            "machine_readable_available":"HTML",
+            "source_timezone":"Europe/Moscow",
+            "parser_type":"MANUAL_HTML_PROVENANCE",
+            "known_limitations":["No production automated retrieval/reuse permission was established in this pass."],
+            "notes":"Manual authoritative factual provenance only; no monitoring promotion in Correction K.",
+            "licence_constraints":"RIGHTS_REVIEW_PENDING",
+            "ingestion_permission":"CURATED_FACTUAL_METADATA_MANUAL_ONLY_PENDING_RIGHTS_REVIEW",
+            "licence_review_status":"RIGHTS_AUDIT_REQUIRED",
+            "redistribution_permission":"NOT_ESTABLISHED",
+            "rights_summary":"Authoritative public event announcement verified; broader reuse rights were not established in this pass.",
+            "automation_summary":"No production automated retrieval permission established; manual provenance only.",
+            "monitoring_readiness_status":"RIGHTS_AUDIT_REQUIRED",
+            "monitoring_priority_score":420,
+            "canonical_dependency_count":1
+        }
+    elif institution=="International Copper Study Group":
+        specific={
+            "endpoint_role":"ICSG next meetings schedule",
+            "information_supplied":"Next ICSG meetings in Lisbon on 13 October 2026",
+            "future_schedule_horizon":"explicit October 2026 meeting occurrence",
+            "typical_advance_notice":"months",
+            "machine_readable_available":"HTML",
+            "source_timezone":"Europe/Lisbon",
+            "parser_type":"MANUAL_HTML_PROVENANCE",
+            "known_limitations":["No production automated retrieval/reuse permission was established in this pass."],
+            "notes":"Manual authoritative factual provenance only; no monitoring promotion in Correction K.",
+            "licence_constraints":"RIGHTS_REVIEW_PENDING",
+            "ingestion_permission":"CURATED_FACTUAL_METADATA_MANUAL_ONLY_PENDING_RIGHTS_REVIEW",
+            "licence_review_status":"RIGHTS_AUDIT_REQUIRED",
+            "redistribution_permission":"NOT_ESTABLISHED",
+            "rights_summary":"Authoritative public meeting schedule verified; broader reuse rights were not established in this pass.",
+            "automation_summary":"No production automated retrieval permission established; manual provenance only.",
+            "monitoring_readiness_status":"RIGHTS_AUDIT_REQUIRED",
+            "monitoring_priority_score":400,
+            "canonical_dependency_count":1
+        }
+    else:
+        raise SystemExit(f"unrecognised Correction K source institution: {institution}")
+    return common|specific
 
-    add(
-        source_id="WSSRC-COM-010",
-        institution="Joint Organisations Data Initiative / International Energy Forum",
-        jurisdiction="Global",
-        endpoint_role="JODI Oil + Gas World Database first monthly update schedule",
-        authoritative_url="https://www.jodidata.org/oil/support/update-calendar.aspx",
-        source_type="official_joint_oil_gas_update_schedule",
-        information_supplied="First monthly JODI-Oil and JODI-Gas World Database update dates; official combined schedule gives noon London time",
-        future_schedule_horizon="through December 2026 verified",
-        typical_advance_notice="annual schedule",
-        machine_readable_available="HTML/PDF",
-        source_timezone="Europe/London",
-        parser_type="MANUAL_HTML_PDF_PROVENANCE",
-        known_limitations=[
-            "Calendar identifies the first scheduled update in each month; supplementary updates may occur after additional country submissions.",
-            "JODI website terms reserve intellectual-property rights; no production crawler permission is inferred from public availability."
-        ],
-        notes="Canonical occurrence is a SOURCE_BUNDLE containing Oil and Gas data products at the same timestamp.",
-        licence_constraints="INTELLECTUAL_PROPERTY_RIGHTS_RESERVED",
-        ingestion_permission="CURATED_FACTUAL_METADATA_MANUAL_ONLY",
-        licence_review_status="RIGHTS_RESERVED_FACTUAL_METADATA_ONLY",
-        automated_retrieval_permission="PRODUCTION_AUTOMATION_HOLD",
-        redistribution_permission="FACTUAL_METADATA_ONLY_NO_CONTENT_REPRODUCTION_INFERRED",
-        rights_evidence_url="https://www.jodidata.org/terms-of-use.aspx",
-        rights_summary="JODI terms reserve intellectual-property rights in the website and published material.",
-        automation_summary="Manual factual schedule provenance only. Public access and downloadable data do not by themselves establish permission for production automated retrieval.",
-        monitoring_readiness_status="MANUAL_ONLY_RIGHTS_HOLD",
-        monitoring_priority_score=250,
-        canonical_dependency_count=4
-    )
-    add(
-        source_id="WSSRC-COM-011",
-        institution="Gas Exporting Countries Forum",
-        jurisdiction="GECF member countries / Global",
-        endpoint_role="8th GECF Summit official announcement",
-        authoritative_url="https://www.gecf.org/Events-Conferences/Events-HH/ArticleID/1689/GECF-Secretary-General-holds-high-level-meetings-on-the-sidelines-of-the-St-Petersburg-International-Economic-Forum-SPIEF-2026",
-        source_type="official_summit_announcement",
-        information_supplied="8th GECF Summit of Heads of State and Government hosted in Moscow on 27 October 2026",
-        future_schedule_horizon="explicit 2026 summit occurrence",
-        typical_advance_notice="months",
-        machine_readable_available="HTML",
-        source_timezone="Europe/Moscow",
-        parser_type="MANUAL_HTML_PROVENANCE",
-        known_limitations=["No production automated retrieval/reuse permission was established in this pass."],
-        notes="Manual authoritative factual provenance only; no monitoring promotion in Correction K.",
-        licence_constraints="RIGHTS_REVIEW_PENDING",
-        ingestion_permission="CURATED_FACTUAL_METADATA_MANUAL_ONLY_PENDING_RIGHTS_REVIEW",
-        licence_review_status="RIGHTS_AUDIT_REQUIRED",
-        automated_retrieval_permission="PRODUCTION_AUTOMATION_HOLD",
-        redistribution_permission="NOT_ESTABLISHED",
-        rights_evidence_url="https://www.gecf.org/",
-        rights_summary="Authoritative public event announcement verified; broader reuse rights were not established in this pass.",
-        automation_summary="No production automated retrieval permission established; manual provenance only.",
-        monitoring_readiness_status="RIGHTS_AUDIT_REQUIRED",
-        monitoring_priority_score=420,
-        canonical_dependency_count=1
-    )
-    add(
-        source_id="WSSRC-COM-012",
-        institution="International Copper Study Group",
-        jurisdiction="Global",
-        endpoint_role="ICSG next meetings schedule",
-        authoritative_url="https://icsg.org/",
-        source_type="official_meeting_schedule",
-        information_supplied="Next ICSG meetings in Lisbon on 13 October 2026",
-        future_schedule_horizon="explicit October 2026 meeting occurrence",
-        typical_advance_notice="months",
-        machine_readable_available="HTML",
-        source_timezone="Europe/Lisbon",
-        parser_type="MANUAL_HTML_PROVENANCE",
-        known_limitations=["No production automated retrieval/reuse permission was established in this pass."],
-        notes="Manual authoritative factual provenance only; no monitoring promotion in Correction K.",
-        licence_constraints="RIGHTS_REVIEW_PENDING",
-        ingestion_permission="CURATED_FACTUAL_METADATA_MANUAL_ONLY_PENDING_RIGHTS_REVIEW",
-        licence_review_status="RIGHTS_AUDIT_REQUIRED",
-        automated_retrieval_permission="PRODUCTION_AUTOMATION_HOLD",
-        redistribution_permission="NOT_ESTABLISHED",
-        rights_evidence_url="https://icsg.org/",
-        rights_summary="Authoritative public meeting schedule verified; broader reuse rights were not established in this pass.",
-        automation_summary="No production automated retrieval permission established; manual provenance only.",
-        monitoring_readiness_status="RIGHTS_AUDIT_REQUIRED",
-        monitoring_priority_score=400,
-        canonical_dependency_count=1
-    )
-    return records
+
+def build_source(source_plan: dict) -> dict:
+    record={
+        "source_id":source_plan["source_id"],
+        "institution":source_plan["institution"],
+        "jurisdiction":source_plan["jurisdiction"],
+        "authoritative_url":source_plan["authoritative_url"],
+        "source_type":source_plan["source_type"],
+        "rights_evidence_url":source_plan.get("rights_evidence_url") or source_plan["authoritative_url"]
+    }
+    record.update(source_runtime_fields(source_plan))
+    return record
 
 
 def preflight(registry: dict, sources: dict, plan: dict) -> None:
@@ -166,23 +159,27 @@ def preflight(registry: dict, sources: dict, plan: dict) -> None:
         if sid in existing_source_ids:
             errors.append(f"planned source id already exists: {sid}")
 
-    for name in (
-        "Joint Organisations Data Initiative / International Energy Forum",
-        "Gas Exporting Countries Forum",
-        "International Copper Study Group",
-    ):
+    for source_plan in plan["source_plan"]:
+        name=source_plan["institution"]
         folded=name.casefold()
         if folded in existing_institutions or folded in source_institutions:
             errors.append(f"institution already present; reconcile identity before migration: {name}")
 
     planned=plan.get("occurrences",[])
     planned_ids=[x["occurrence_id"] for x in planned]
-    if planned_ids != [f"WSO-COM-A-{n:04d}" for n in range(29,35)]:
-        errors.append("planned occurrence ids are not the frozen contiguous 0029-0034 sequence")
+    if planned_ids != p["required_absent_occurrence_ids"]:
+        errors.append("plan occurrence sequence differs from frozen reconciled precondition")
+    if [x["source_id"] for x in plan["source_plan"]] != p["required_absent_source_ids"]:
+        errors.append("plan source sequence differs from frozen reconciled precondition")
     if len(planned) != plan["postconditions"]["new_occurrence_count"]:
         errors.append("plan occurrence count does not match postcondition")
     if len({x["series_id"] for x in planned}) != plan["postconditions"]["new_series_count"]:
         errors.append("plan series count does not match postcondition")
+
+    series_sources={x["series_id"]:x["source_id"] for x in plan["series"]}
+    for item in planned:
+        if series_sources.get(item["series_id"]) != item["source_id"]:
+            errors.append(f"series/source binding mismatch for {item['occurrence_id']}")
 
     # Verify every timed JODI assertion round-trips from source-local Europe/London to frozen UTC.
     for item in planned:
@@ -192,6 +189,8 @@ def preflight(registry: dict, sources: dict, plan: dict) -> None:
         expected=local.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
         if expected != item["start_utc"]:
             errors.append(f"JODI UTC mismatch for {item['occurrence_id']}: {item['start_utc']} != {expected}")
+        if len(item.get("data_products",[])) != 2:
+            errors.append(f"JODI SOURCE_BUNDLE must contain exactly two data products: {item['occurrence_id']}")
 
     if errors:
         raise SystemExit("PRECONDITION FAILED:\n- "+"\n- ".join(errors))
@@ -204,6 +203,8 @@ def build_occurrence(item: dict) -> dict:
     aid=assertion_id(item)
 
     if jodi:
+        institution="Joint Organisations Data Initiative / International Energy Forum"
+        jurisdiction="Global"
         subcategory="energy_data_transparency"
         event_type="INFORMATION_RELEASE"
         intrinsic="HIGH"
@@ -216,6 +217,8 @@ def build_occurrence(item: dict) -> dict:
         rationale="Global producer/consumer oil and gas data update; directly broadens the category beyond oil-only calendars."
         notes="Official combined JODI schedule states the first JODI-Oil and JODI-Gas World Database updates occur together at noon London time. Supplementary later-month updates are not separate canonical occurrences by this series definition."
     elif gecf:
+        institution="Gas Exporting Countries Forum"
+        jurisdiction="GECF member countries / Global"
         subcategory="gas_producer_policy"
         event_type="PRODUCER_POLICY_MEETING"
         intrinsic="HIGH"
@@ -228,6 +231,8 @@ def build_occurrence(item: dict) -> dict:
         rationale="Heads-of-state producer-policy summit with potential implications for global gas cooperation, investment and market governance."
         notes="GECF official announcement states the 8th Summit will be hosted in Moscow on 27 October 2026. No clock time is inferred."
     else:
+        institution="International Copper Study Group"
+        jurisdiction="Global"
         subcategory="industrial_metals_market"
         event_type="INFORMATION_CATALYST_MEETING"
         intrinsic="HIGH"
@@ -249,13 +254,9 @@ def build_occurrence(item: dict) -> dict:
         "short_calendar_title":item["canonical_name"],
         "category":"ENERGY_COMMODITIES",
         "subcategory":subcategory,
-        "jurisdiction":"Global" if not gecf else "GECF member countries / Global",
+        "jurisdiction":jurisdiction,
         "region":"Cross-regional / Global",
-        "institution": (
-            "Joint Organisations Data Initiative / International Energy Forum" if jodi else
-            "Gas Exporting Countries Forum" if gecf else
-            "International Copper Study Group"
-        ),
+        "institution":institution,
         "event_type":event_type,
         "record_class":"OCCURRENCE",
         "certainty_status":"CONFIRMED",
@@ -297,7 +298,7 @@ def build_occurrence(item: dict) -> dict:
         "geopolitical_sensitivity":geopolitical,
         "transmission_channels":["commodities","inflation","trade","currencies","equities","industrial_policy","energy_security","shipping_logistics"],
         "render_policy":"INCLUDE",
-        "visibility_tier":"ESSENTIAL" if not item["series_id"]=="WSER-COM-ICSG-MTG" else "ANALYST",
+        "visibility_tier":"ANALYST" if item["series_id"]=="WSER-COM-ICSG-MTG" else "ESSENTIAL",
         "signal_object_class":signal_class,
         "publication_time_semantics":"EXACT_LOCAL_TIME" if timed else "DATE_ONLY",
         "commodity_scope":commodity_scope,
@@ -322,7 +323,7 @@ def migrate(registry: dict, sources: dict, plan: dict) -> tuple[dict,dict,dict]:
     new_registry=copy.deepcopy(registry)
     new_sources_registry=copy.deepcopy(sources)
 
-    source_records=new_sources()
+    source_records=[build_source(x) for x in plan["source_plan"]]
     if len(source_records) != plan["postconditions"]["new_source_count"]:
         raise SystemExit("new source builder count does not match plan")
     new_sources_registry["sources"].extend(source_records)
@@ -358,7 +359,6 @@ def migrate(registry: dict, sources: dict, plan: dict) -> tuple[dict,dict,dict]:
     if dangling:
         errors.append("new occurrences have dangling source references: "+", ".join(dangling))
 
-    # Correction K must not alter live monitor expectations or create monitoring permission.
     if post.get("scheduled_live_monitor_change") is not False:
         errors.append("plan safety postcondition for scheduled_live_monitor_change must be false")
     if any(s.get("automated_retrieval_permission") != "PRODUCTION_AUTOMATION_HOLD" for s in source_records):
@@ -367,7 +367,6 @@ def migrate(registry: dict, sources: dict, plan: dict) -> tuple[dict,dict,dict]:
     report=validate_registry(new_registry,new_sources_registry)
     if not report.ok:
         errors.extend(report.errors)
-
     if errors:
         raise SystemExit("POSTCONDITION FAILED:\n- "+"\n- ".join(errors))
 
