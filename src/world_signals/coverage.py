@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from dataclasses import dataclass
-from typing import Iterable
+
+
+FOCUS_REGIONS=("Africa","South Asia","Southeast Asia")
+FOCUS_CATEGORIES=("PHYSICAL_CLIMATE_RISK","HEALTH_BIOSECURITY","ENERGY_COMMODITIES")
 
 
 def _clean(value, fallback="UNKNOWN"):
@@ -86,6 +88,26 @@ def _source_readiness_for_records(records: list[dict], source_registry: dict) ->
     }
 
 
+def _focus_inventory(records: list[dict]) -> dict:
+    """Return exact canonical records for bounded qualitative review.
+
+    A record is included once if either its region or category is in the
+    declared focus set. This is an audit projection only: it does not infer
+    undercoverage and does not mutate or normalize the canonical record.
+    """
+    focus=[]
+    for record in records:
+        if record.get("region") in FOCUS_REGIONS or record.get("category") in FOCUS_CATEGORIES:
+            focus.append(dict(record))
+    return {
+        "focus_regions":list(FOCUS_REGIONS),
+        "focus_categories":list(FOCUS_CATEGORIES),
+        "record_count":len(focus),
+        "records":focus,
+        "note":"Exact canonical-record projection for qualitative review only; inclusion is not an undercoverage finding or population quota.",
+    }
+
+
 def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
     records=list(registry.get("records",[]))
     series=_series_summary(records)
@@ -109,7 +131,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
     return {
         "project":"WORLD SIGNALS",
         "dataset":"COVERAGE_BIAS_AUDIT",
-        "version":"0.1",
+        "version":"0.2",
         "canonical_registry_version":registry.get("version"),
         "canonical_reference_date":registry.get("reference_date"),
         "methodology":{
@@ -118,6 +140,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
             "machine_readability_is_not_importance":True,
             "series_identity_is_primary_unit_for_coverage_shape":True,
             "institution_diversity_is_secondary_unit":True,
+            "focus_inventory_is_read_only_projection":True,
         },
         "totals":{
             "occurrence_count":occurrence_total,
@@ -134,6 +157,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
         "region_category_matrix":_region_category_matrix(records),
         "high_frequency_series":series[:40],
         "source_readiness":_source_readiness_for_records(records,source_registry),
+        "focus_inventory":_focus_inventory(records),
         "diagnostic_flags":{
             "regions_with_fewer_than_10_unique_series":sorted([k for k,v in region_series_counts.items() if v<10]),
             "regions_with_fewer_than_8_unique_institutions":sorted([k for k,v in region_institution_counts.items() if v<8]),
