@@ -6,6 +6,7 @@ sys.path.insert(0,str(ROOT/"src"))
 
 from world_signals.adapters import normalize_cellar_legal_topology
 from world_signals.legal_monitor import (
+    cbam_annual_deadline_review_candidate,
     cbam_legal_milestone_review_candidate,
     cellar_legal_topology_review_candidate,
 )
@@ -64,6 +65,30 @@ class LegalMonitorTests(unittest.TestCase):
             "baseline":{
                 "rule":self.cbam_sale_rule.copy(),
                 "rule_sha256":self.cbam_sale_rule["rule_sha256"],
+            },
+        }
+        self.cbam_annual_rule={
+            "celex":"32025R2083",
+            "rule_id":"ANNUAL_DECLARATION_AND_CERTIFICATE_SURRENDER_DEADLINE",
+            "declaration_legal_locator":"Article 6(1) replacement",
+            "surrender_legal_locator":"Article 22(1) replacement",
+            "declaration_month_day":"09-30",
+            "surrender_month_day":"09-30",
+            "declaration_first_due_year":2027,
+            "surrender_first_due_year":2027,
+            "declaration_first_reference_year":2026,
+            "surrender_first_reference_year":2026,
+            "first_deadline_date":"2027-09-30",
+            "shared_deadline_consistent":True,
+            "rule_sha256":"annual-baseline-hash",
+        }
+        self.cbam_annual_config={
+            "adapter_id":"EU_CBAM_ANNUAL_DEADLINE_RULE",
+            "source_id":"WSSRC-TRD-006",
+            "canonical_occurrence_ids":["WSO-TRD-A-0008"],
+            "baseline":{
+                "rule":self.cbam_annual_rule.copy(),
+                "rule_sha256":self.cbam_annual_rule["rule_sha256"],
             },
         }
 
@@ -140,6 +165,46 @@ class LegalMonitorTests(unittest.TestCase):
         self.assertFalse(candidate["automatic_commit_allowed"])
         self.assertEqual(obs["type"],"CBAM_LEGAL_MILESTONE_CHANGED")
         self.assertEqual(self.cbam_sale_rule["milestone_date"],"2027-02-01")
+
+    def test_cbam_annual_deadline_rule_unchanged(self):
+        candidate,obs=cbam_annual_deadline_review_candidate(
+            self.cbam_annual_rule.copy(),self.cbam_annual_config
+        )
+        self.assertIsNone(candidate)
+        self.assertEqual(obs["type"],"CBAM_ANNUAL_DEADLINE_NO_CHANGE")
+        self.assertEqual(obs["adapter_id"],"EU_CBAM_ANNUAL_DEADLINE_RULE")
+        self.assertEqual(obs["first_deadline_date"],"2027-09-30")
+        self.assertTrue(obs["shared_deadline_consistent"])
+
+    def test_cbam_annual_deadline_change_is_review_only(self):
+        changed=self.cbam_annual_rule|{
+            "declaration_month_day":"10-01",
+            "surrender_month_day":"10-01",
+            "first_deadline_date":"2027-10-01",
+            "rule_sha256":"fake-annual-deadline-change",
+        }
+        candidate,obs=cbam_annual_deadline_review_candidate(changed,self.cbam_annual_config)
+        self.assertEqual(candidate["candidate_type"],"LEGAL_RECURRING_DEADLINE_RULE_CHANGED")
+        self.assertEqual(candidate["occurrence_ids"],["WSO-TRD-A-0008"])
+        self.assertEqual(candidate["review_state"],"PENDING_CBAM_ANNUAL_DEADLINE_REVIEW")
+        self.assertFalse(candidate["automatic_commit_allowed"])
+        self.assertEqual(obs["type"],"CBAM_ANNUAL_DEADLINE_CHANGED")
+        self.assertEqual(self.cbam_annual_rule["first_deadline_date"],"2027-09-30")
+
+    def test_cbam_annual_clause_divergence_is_review_only(self):
+        changed=self.cbam_annual_rule|{
+            "surrender_month_day":"10-01",
+            "first_deadline_date":None,
+            "shared_deadline_consistent":False,
+            "rule_sha256":"fake-annual-clause-divergence",
+        }
+        candidate,obs=cbam_annual_deadline_review_candidate(changed,self.cbam_annual_config)
+        self.assertEqual(candidate["candidate_type"],"LEGAL_RULE_CLAUSE_DIVERGENCE")
+        self.assertEqual(candidate["occurrence_ids"],["WSO-TRD-A-0008"])
+        self.assertEqual(candidate["review_state"],"PENDING_CBAM_PAIRED_CLAUSE_DIVERGENCE_REVIEW")
+        self.assertFalse(candidate["automatic_commit_allowed"])
+        self.assertEqual(obs["type"],"CBAM_ANNUAL_DEADLINE_CLAUSE_DIVERGENCE")
+        self.assertFalse(obs["shared_deadline_consistent"])
 
     def test_cbam_empty_topology_is_valid_baseline(self):
         empty=normalize_cellar_legal_topology([],base_celex="32025R2551")
