@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_COMMIT_READINESS_AUDIT",
-  "version": "0.5",
+  "version": "0.6",
   "reference_date": "2026-09-03",
   "reviewed_change_type_counts": {
     "LIFECYCLE_AND_CERTAINTY_UPDATE": 1,
@@ -51,7 +51,22 @@
     "controlled_failure_injection_on_enabled_pilot_passed": true,
     "fault_injection_source": "WSSRC-MAC-006",
     "fault_injection_target_occurrence": "WSO-MAC-B-0035",
-    "prospective_no_change_sweep_2026_09_03": 9
+    "prospective_no_change_sweep_2026_09_03": 9,
+    "executed_heterogeneous_non_calendar_transports": 3,
+    "executed_non_calendar_transport_types": [
+      "RBA_XML_RSS_RDF",
+      "COLOMBIA_SOCRATA_JSON",
+      "EU_PUBLICATIONS_OFFICE_CELLAR_XHTML"
+    ],
+    "executed_live_monitor_source_ids": [
+      "WSSRC-FIN-001",
+      "WSSRC-REG4-001",
+      "WSSRC-TECH-001"
+    ],
+    "three_route_live_monitor_no_change_passed": true,
+    "three_route_live_monitor_healthy_count": 3,
+    "three_route_live_monitor_degraded_count": 0,
+    "cra_semantic_legal_rule_change_negative_control_passed": true
   },
   "commit_gate": {
     "canonical_commit_gate": "CLOSED",
@@ -68,65 +83,19 @@
       "AUTOMATIC_DATE_INFERENCE_BEYOND_SOURCE_HORIZON"
     ],
     "reasons_auto_commit_closed": [
-      "Controlled failure injection now proves that fetch failure, malformed parser output and syntactically valid false date drift cannot mutate canonical state on a pilot-validated ONS route.",
+      "Controlled failure injection proves that fetch failure, malformed parser output and syntactically valid false date drift cannot mutate canonical state on a pilot-validated route.",
       "Real source-health degradation/recovery and historical reschedule transaction replay are proven.",
-      "Prospective official-source sweep on 3 September found no genuine reschedule or cancellation among the selected near-term canonical events.",
+      "Three heterogeneous non-calendar transports now have successful executed parser validation: RBA XML RSS/RDF, Colombia Socrata JSON and EU Cellar XHTML.",
+      "The heterogeneous-transport criterion is satisfied but is not sufficient to open canonical auto-commit.",
       "No explicit cancellation of an existing canonical occurrence has yet passed REVIEW -> COMMIT.",
-      "No prospective reschedule detected after a prior monitor snapshot has yet passed REVIEW -> COMMIT.",
-      "At least two heterogeneous non-calendar machine transports still need successful executed parser validation."
+      "No prospective reschedule detected after a prior monitor snapshot has yet passed REVIEW -> COMMIT."
     ],
     "minimum_next_evidence_before_reconsideration": [
       "one prospective reschedule detected after a prior canonical monitor snapshot and reviewed on the same stable occurrence",
-      "one explicit cancellation of an existing canonical occurrence reviewed without relying on absence",
-      "successful parser execution on at least two heterogeneous non-calendar endpoint types"
+      "one explicit cancellation of an existing canonical occurrence reviewed without relying on absence"
     ]
   },
   "recommended_next_endpoint_pilots": [
-    {
-      "source_id": "WSSRC-TECH-001",
-      "institution": "European Union / EUR-Lex",
-      "jurisdiction": "European Union",
-      "domain": "technology_critical_infrastructure",
-      "canonical_dependency_count": 2,
-      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
-      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
-      "licence_review_status": "CLEARED_EURLEX_REUSE_AND_CC_BY_EU_OWNED_CONTENT",
-      "canonical_provenance_use": null,
-      "automated_monitoring_use": null,
-      "automated_retrieval_permission": "PREFER_OFFICIAL_EURLEX_CELLAR_RSS_WEBSERVICE",
-      "parser_type": "EURLEX_CELLAR_RSS_LEGAL_RULE_MONITOR",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED"
-    },
-    {
-      "source_id": "WSSRC-FIN-001",
-      "institution": "Reserve Bank of Australia",
-      "jurisdiction": "Australia",
-      "domain": "financial_stability_regulation",
-      "canonical_dependency_count": 1,
-      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
-      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
-      "licence_review_status": "CLEARED_CC_BY_4_GENERAL_RBA_MATERIAL",
-      "canonical_provenance_use": null,
-      "automated_monitoring_use": null,
-      "automated_retrieval_permission": "PREFER_OFFICIAL_RSS_ENDPOINT_TEST",
-      "parser_type": "RSS_PRIMARY_HTML_FALLBACK",
-      "runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED"
-    },
-    {
-      "source_id": "WSSRC-REG4-001",
-      "institution": "Ministry of Justice / SUIN-Juriscol; Colombia Open Data",
-      "jurisdiction": "Colombia",
-      "domain": "fiscal_sovereign_finance",
-      "canonical_dependency_count": 1,
-      "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
-      "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
-      "licence_review_status": "MIXED_ROUTE_OPEN_DATA_REUSE_CLEARED_LEGAL_HTML_MANUAL",
-      "canonical_provenance_use": null,
-      "automated_monitoring_use": null,
-      "automated_retrieval_permission": "PREFER_COLOMBIA_OPEN_DATA_INVENTORY_FOR_VERSION_MONITOR; LEGAL_TEXT_HTML_MANUAL_VERIFICATION",
-      "parser_type": "OPEN_DATA_INVENTORY_MONITOR_PLUS_MANUAL_LEGAL_TEXT_VERIFICATION",
-      "runtime_health_state": "RESEARCH_VERIFIED_ENDPOINT_TEST_PENDING"
-    },
     {
       "source_id": "WSSRC-TRD-005",
       "institution": "European Commission — Taxation and Customs Union",
@@ -140,7 +109,8 @@
       "automated_monitoring_use": null,
       "automated_retrieval_permission": "PREFER_EURLEX_LEGAL_TEXT_COMMISSION_PAGE_FALLBACK",
       "parser_type": "EURLEX_CBAM_RULE_PLUS_COMMISSION_IMPLEMENTATION_MONITOR",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED"
+      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+      "selection_note": "Shared Cellar transport is now technically proven by the CRA pilot, but CBAM requires an independently verified legal identity and semantic rule parser; CRA success is not inherited automatically."
     }
   ],
   "validation": {
@@ -154,6 +124,10 @@
     "target_protected_digest_unchanged": true,
     "recovery_assertion_matches_current_ons": true,
     "prospective_sweep_no_change": true,
+    "heterogeneous_non_calendar_transport_requirement_satisfied": true,
+    "three_route_live_monitor_passed": true,
+    "cra_live_cellar_transport_and_semantic_parse_passed": true,
+    "cra_changed_date_review_candidate_negative_control_passed": true,
     "canonical_population_649_unchanged": true,
     "change_ledger_31_unchanged": true,
     "automatic_commits_zero": true,
