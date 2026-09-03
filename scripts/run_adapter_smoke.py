@@ -10,8 +10,13 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
+    CBAM_CERTIFICATE_SALE_AMENDING_CELEX,
+    CBAM_PARENT_CELEX,
+    CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
     cellar_representation_diagnostics,
+    fetch_cbam_certificate_sale_rule,
+    fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
@@ -32,14 +37,6 @@ OUT=ARTIFACT_DIR/"adapter-smoke.json"
 
 def file_hash(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
-
-
-def _unique(values):
-    out=[]
-    for value in values:
-        if value not in out:
-            out.append(value)
-    return out
 
 
 def main() -> int:
@@ -165,7 +162,7 @@ def main() -> int:
 
         cra_result["layers"]["cellar_rdf_relation_probe"]={
             "status":"PASS",
-            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
+            "route_state":"PILOT_VALIDATED_NO_AUTO_COMMIT",
             "snapshot":snap.as_dict(),
             "relation_count":len(relations),
             "normalized_topology":topology.as_dict(),
@@ -176,7 +173,7 @@ def main() -> int:
         failures.append("CRA Cellar RDF relation probe: "+str(exc))
         cra_result["layers"]["cellar_rdf_relation_probe"]={
             "status":"FAIL",
-            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
+            "route_state":"PILOT_VALIDATED_NO_AUTO_COMMIT",
             "error":str(exc),
             "canonical_action":"NONE",
         }
@@ -184,6 +181,97 @@ def main() -> int:
     if cra_failed:
         cra_result["status"]="FAIL"
     report["results"].append(cra_result)
+
+    cbam_verification={
+        "adapter":"EU_CBAM_VERIFICATION_RULE",
+        "status":"PASS",
+        "source_id":"WSSRC-TRD-005",
+        "canonical_occurrence_ids":["WSO-TRD-A-0006"],
+        "automatic_commit_allowed":False,
+        "layers":{},
+    }
+    cbam_verification_failed=False
+    try:
+        rule,snap=fetch_cbam_verification_report_rule()
+        cbam_verification["layers"]["immutable_semantic_baseline"]={
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+        }
+    except AdapterError as exc:
+        cbam_verification_failed=True
+        failures.append("CBAM verification semantic baseline: "+str(exc))
+        cbam_verification["layers"]["immutable_semantic_baseline"]={
+            "status":"FAIL","error":str(exc),"canonical_action":"NONE",
+        }
+    try:
+        rdf,snap=fetch_cellar_rdf_notice(CBAM_VERIFICATION_CELEX,inferred=True)
+        relations=parse_cellar_legal_relation_diagnostics(
+            rdf,base_celex=CBAM_VERIFICATION_CELEX
+        )
+        topology=normalize_cellar_legal_topology(
+            relations,base_celex=CBAM_VERIFICATION_CELEX
+        )
+        cbam_verification["layers"]["cellar_rdf_legal_topology"]={
+            "status":"PASS",
+            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
+            "snapshot":snap.as_dict(),
+            "relation_count":len(relations),
+            "topology":topology.as_dict(),
+        }
+    except AdapterError as exc:
+        cbam_verification_failed=True
+        failures.append("CBAM verification Cellar topology: "+str(exc))
+        cbam_verification["layers"]["cellar_rdf_legal_topology"]={
+            "status":"FAIL","error":str(exc),"canonical_action":"NONE",
+        }
+    if cbam_verification_failed:
+        cbam_verification["status"]="FAIL"
+    report["results"].append(cbam_verification)
+
+    cbam_sale={
+        "adapter":"EU_CBAM_CERTIFICATE_SALE_RULE",
+        "status":"PASS",
+        "source_id":"WSSRC-TRD-005",
+        "canonical_occurrence_ids":["WSO-TRD-A-0007"],
+        "automatic_commit_allowed":False,
+        "layers":{},
+    }
+    cbam_sale_failed=False
+    try:
+        rule,snap=fetch_cbam_certificate_sale_rule()
+        cbam_sale["layers"]["immutable_semantic_baseline"]={
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+        }
+    except AdapterError as exc:
+        cbam_sale_failed=True
+        failures.append("CBAM certificate-sale semantic baseline: "+str(exc))
+        cbam_sale["layers"]["immutable_semantic_baseline"]={
+            "status":"FAIL","error":str(exc),"canonical_action":"NONE",
+        }
+    try:
+        rdf,snap=fetch_cellar_rdf_notice(CBAM_PARENT_CELEX,inferred=True)
+        relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=CBAM_PARENT_CELEX)
+        topology=normalize_cellar_legal_topology(relations,base_celex=CBAM_PARENT_CELEX)
+        cbam_sale["layers"]["parent_cellar_rdf_legal_topology"]={
+            "status":"PASS",
+            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
+            "snapshot":snap.as_dict(),
+            "relation_count":len(relations),
+            "topology":topology.as_dict(),
+            "semantic_baseline_celex":CBAM_CERTIFICATE_SALE_AMENDING_CELEX,
+        }
+    except AdapterError as exc:
+        cbam_sale_failed=True
+        failures.append("CBAM parent Cellar topology: "+str(exc))
+        cbam_sale["layers"]["parent_cellar_rdf_legal_topology"]={
+            "status":"FAIL","error":str(exc),"canonical_action":"NONE",
+        }
+    if cbam_sale_failed:
+        cbam_sale["status"]="FAIL"
+    report["results"].append(cbam_sale)
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
