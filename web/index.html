@@ -13,7 +13,7 @@
     <div>
       <p class="eyebrow">WORLD SIGNALS · EXECUTABLE THIN SLICE</p>
       <h1>Global political-economic time, without pretending certainty.</h1>
-      <p class="lede">A read-only projection of canonical events, source governance and reviewed change history. Monitoring, live intelligence and analysis remain separate layers.</p>
+      <p class="lede">A read-only projection of canonical events, source governance, dated monitor evidence and reviewed change history. Live intelligence and analysis remain separate layers.</p>
     </div>
     <div class="safety">
       <strong>Safety boundary</strong>
@@ -89,7 +89,7 @@
         <div>
           <p class="eyebrow">SOURCE / CHANGE MONITOR</p>
           <h2>Configured live routes</h2>
-          <p>These are executable read-only monitors, not a claim that this static page knows their latest runtime health. Current runs and review candidates live in GitHub Actions artefacts.</p>
+          <p>These are executable read-only monitors, not a claim that this static page knows their latest runtime health. Dated retained run evidence is surfaced separately in Operations.</p>
         </div>
         <div class="monitor-safety"><strong>Machine authority</strong><span>Fetch / parse / compare: ON</span><span>Generate review candidate: ON</span><span>Canonical write: OFF</span></div>
       </section>
@@ -101,13 +101,22 @@
         <div>
           <p class="eyebrow">OPERATIONS / GOVERNANCE</p>
           <h2>What the machinery actually knows</h2>
-          <p>This layer exposes monitor configuration, source-governance classifications and timestamps that are actually recorded in the repository. It does not convert a static build into a live status dashboard.</p>
+          <p>This layer exposes monitor configuration, source-governance classifications and dated evidence that is actually recorded. It does not convert a static build into a live status dashboard.</p>
         </div>
-        <div class="ops-boundary"><strong>Runtime boundary</strong><span>Configuration: visible</span><span>Recorded baseline evidence: visible</span><span>Current source health: not inferred</span><span>Pending review queue: not embedded</span><span>Browser canonical write: impossible</span></div>
+        <div class="ops-boundary"><strong>Runtime boundary</strong><span>Configuration: visible</span><span>Latest retained run: dated snapshot only</span><span>Current source health: not inferred</span><span>Run-generated candidate metadata: visible when present</span><span>Persistent review queue: not inferred</span><span>Browser canonical write: impossible</span></div>
       </section>
 
       <section id="opsStats" class="stats" aria-live="polite"></section>
-      <div class="ops-runtime-note"><strong>Recorded evidence is not current health.</strong>The timestamps below are baselines or observations committed into WORLD SIGNALS configuration. The latest scheduled run remains an external GitHub Actions evidence artefact.</div>
+      <div class="ops-runtime-note"><strong>A recorded run is not current health.</strong>The latest retained monitor artefact can describe what the monitor observed at one timestamp. Age and configuration mismatch remain visible; neither is silently promoted to “now”.</div>
+
+      <section class="ops-section">
+        <div class="section-heading"><div><p class="eyebrow">LATEST RETAINED MONITOR RUN</p><h3>Dated operational evidence</h3></div></div>
+        <div id="opsRuntimeSummary" class="ops-runtime-summary"><p class="empty">Loading latest retained monitor snapshot…</p></div>
+        <div id="opsRuntimeHealth" class="ops-runtime-health"></div>
+        <div class="section-heading ops-candidate-heading"><div><p class="eyebrow">RUN-GENERATED REVIEW EVIDENCE</p><h3>Candidate snapshot</h3></div><span id="opsRuntimeCandidateCount" class="meta"></span></div>
+        <p class="meta">These are candidates generated in that retained run only. They are not a persistent queue and they are not canonical changes.</p>
+        <div id="opsRuntimeCandidates" class="ops-runtime-candidates"></div>
+      </section>
 
       <section class="ops-section">
         <div class="section-heading"><div><p class="eyebrow">GOVERNANCE COVERAGE</p><h3>Source-registry classification</h3></div></div>
@@ -116,7 +125,7 @@
       </section>
 
       <section class="ops-section">
-        <div class="section-heading"><div><p class="eyebrow">RECORDED MONITOR EVIDENCE</p><h3>Configured routes and embedded baselines</h3></div></div>
+        <div class="section-heading"><div><p class="eyebrow">CONFIGURED MONITOR EVIDENCE</p><h3>Routes and embedded baselines</h3></div></div>
         <div id="opsRecordedRoutes" class="ops-routes"></div>
       </section>
 
@@ -142,7 +151,7 @@
           <p>This is the reviewed canonical change ledger: previous values, approved state, review basis and registry-version transition. It is historical provenance, not the live review-candidate queue.</p>
           <p id="historyCount" class="meta"></p>
         </div>
-        <div class="history-safety"><strong>Layer boundary</strong><span>Reviewed history: visible here</span><span>Pending review candidates: GitHub Actions artefacts</span><span>Canonical mutation from browser: impossible</span></div>
+        <div class="history-safety"><strong>Layer boundary</strong><span>Reviewed history: visible here</span><span>Run-generated candidates: Operations snapshot</span><span>Persistent review queue: separate future layer</span><span>Canonical mutation from browser: impossible</span></div>
       </section>
       <section id="historyCards" class="history-cards"></section>
     </section>
