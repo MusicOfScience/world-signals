@@ -1,0 +1,42 @@
+name: Monitor WORLD SIGNALS live sources
+
+on:
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/world_signals/live_monitor.py'
+      - 'src/world_signals/adapters/**'
+      - 'scripts/run_live_monitor.py'
+      - 'data/monitor/expectations.json'
+      - 'tests/test_live_monitor.py'
+      - '.github/workflows/live-monitor.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Monitor regression tests
+        run: python -m unittest tests.test_adapters tests.test_live_monitor -v
+      - name: Run read-only live monitor
+        run: python scripts/run_live_monitor.py
+      - name: Upload live monitor report and review candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-live-monitor
+          path: |
+            artifacts/live-monitor.json
+            review_candidates/live
+          if-no-files-found: error
+          retention-days: 30
