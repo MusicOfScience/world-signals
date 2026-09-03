@@ -11,8 +11,12 @@ sys.path.insert(0,str(ROOT/"src"))
 
 from world_signals.adapters import (
     AdapterError,
+    CBAM_PARENT_CELEX,
+    CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
     cellar_representation_diagnostics,
+    fetch_cbam_certificate_sale_rule,
+    fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
     fetch_cellar_rdf_notice,
     fetch_rba_fsr,
@@ -22,7 +26,10 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
-from world_signals.legal_monitor import cellar_legal_topology_review_candidate
+from world_signals.legal_monitor import (
+    cbam_legal_milestone_review_candidate,
+    cellar_legal_topology_review_candidate,
+)
 from world_signals.live_monitor import (
     colombia_legal_input_review_candidate,
     cra_legal_rule_review_candidate,
@@ -45,6 +52,73 @@ def file_hash(path: Path) -> str:
 
 def config_by_id(expectations: dict) -> dict[str,dict]:
     return {x["adapter_id"]:x for x in expectations.get("adapters",[])}
+
+
+def _append_candidate(report: dict, candidate: dict | None, observation: dict) -> None:
+    report["observations"].append(observation)
+    if candidate:
+        report["review_candidates"].append(candidate)
+
+
+def _run_cbam_monitor(
+    report: dict,
+    *,
+    config: dict,
+    fetch_rule,
+    topology_celex: str,
+    topology_layer_name: str,
+) -> None:
+    adapter_id=config["adapter_id"]
+    source_id=config["source_id"]
+    health={
+        "adapter_id":adapter_id,
+        "source_id":source_id,
+        "state":"HEALTHY",
+        "layers":{},
+    }
+    degraded=False
+
+    try:
+        rule,snap=fetch_rule()
+        health["layers"]["immutable_semantic_baseline"]={
+            "state":"HEALTHY",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+        }
+        candidate,observation=cbam_legal_milestone_review_candidate(rule,config)
+        _append_candidate(report,candidate,observation)
+    except AdapterError as exc:
+        degraded=True
+        health["layers"]["immutable_semantic_baseline"]={
+            "state":"DEGRADED",
+            "failure_stage":"SEMANTIC_BASELINE_FETCH_OR_PARSE",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        }
+
+    try:
+        rdf,snap=fetch_cellar_rdf_notice(topology_celex,inferred=True)
+        relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=topology_celex)
+        topology=normalize_cellar_legal_topology(relations,base_celex=topology_celex)
+        health["layers"][topology_layer_name]={
+            "state":"HEALTHY",
+            "snapshot":snap.as_dict(),
+            "topology":topology.as_dict(),
+        }
+        candidate,observation=cellar_legal_topology_review_candidate(topology,config)
+        _append_candidate(report,candidate,observation)
+    except AdapterError as exc:
+        degraded=True
+        health["layers"][topology_layer_name]={
+            "state":"DEGRADED",
+            "failure_stage":"RDF_FETCH_PARSE_OR_NORMALIZE",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        }
+
+    if degraded:
+        health["state"]="DEGRADED"
+    report["source_health"].append(health)
 
 
 def main() -> int:
@@ -96,9 +170,7 @@ def main() -> int:
         candidate,observation=colombia_legal_input_review_candidate(
             rows,configs["COLOMBIA_SUIN_DECREE_111_1996"]
         )
-        report["observations"].append(observation)
-        if candidate:
-            report["review_candidates"].append(candidate)
+        _append_candidate(report,candidate,observation)
     except AdapterError as exc:
         report["source_health"].append({
             "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":"WSSRC-REG4-001",
@@ -121,9 +193,7 @@ def main() -> int:
             "state":"HEALTHY","snapshot":snap.as_dict(),"rule":rule.as_dict(),
         }
         candidate,observation=cra_legal_rule_review_candidate(rule,cra_config)
-        report["observations"].append(observation)
-        if candidate:
-            report["review_candidates"].append(candidate)
+        _append_candidate(report,candidate,observation)
     except AdapterError as exc:
         cra_degraded=True
         cra_health["layers"]["immutable_baseline"]={
@@ -139,9 +209,7 @@ def main() -> int:
             "state":"HEALTHY","snapshot":snap.as_dict(),"topology":topology.as_dict(),
         }
         candidate,observation=cellar_legal_topology_review_candidate(topology,cra_config)
-        report["observations"].append(observation)
-        if candidate:
-            report["review_candidates"].append(candidate)
+        _append_candidate(report,candidate,observation)
     except AdapterError as exc:
         cra_degraded=True
         cra_health["layers"]["cellar_rdf_legal_topology"]={
@@ -152,6 +220,27 @@ def main() -> int:
     if cra_degraded:
         cra_health["state"]="DEGRADED"
     report["source_health"].append(cra_health)
+
+    # CBAM verifier milestone: semantic rule and current-law topology both live
+    # on Delegated Regulation (EU) 2025/2551.
+    _run_cbam_monitor(
+        report,
+        config=configs["EU_CBAM_VERIFICATION_RULE"],
+        fetch_rule=fetch_cbam_verification_report_rule,
+        topology_celex=CBAM_VERIFICATION_CELEX,
+        topology_layer_name="cellar_rdf_legal_topology",
+    )
+
+    # CBAM certificate sales: semantic baseline is the 2025 amending act, but
+    # current-law topology must watch parent Regulation (EU) 2023/956 because a
+    # future Article 20 change would normally amend the parent act.
+    _run_cbam_monitor(
+        report,
+        config=configs["EU_CBAM_CERTIFICATE_SALE_RULE"],
+        fetch_rule=fetch_cbam_certificate_sale_rule,
+        topology_celex=CBAM_PARENT_CELEX,
+        topology_layer_name="parent_cellar_rdf_legal_topology",
+    )
 
     candidate_files=[]
     for candidate in report["review_candidates"]:
@@ -170,6 +259,7 @@ def main() -> int:
     report["source_health_summary"]={
         "healthy":sum(1 for x in report["source_health"] if x["state"]=="HEALTHY"),
         "degraded":sum(1 for x in report["source_health"] if x["state"]!="HEALTHY"),
+        "unique_source_ids":len({x["source_id"] for x in report["source_health"]}),
     }
     if before != after:
         report["status"]="FAIL_CANONICAL_GUARD"
