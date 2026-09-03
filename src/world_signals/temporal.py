@@ -8,6 +8,10 @@ SEASON_TIMING_TYPES = {
     "MONTH_BOUNDED_SEASON_WINDOW",
     "MULTI_PHASE_SEASON_WINDOW",
 }
+SEASON_WINDOW_MODELS = {
+    "MONTH_BOUNDED_SEASON_WINDOW": "MONTH_BOUNDED_SINGLE_PHASE",
+    "MULTI_PHASE_SEASON_WINDOW": "MONTH_BOUNDED_MULTI_PHASE",
+}
 EXACT_TIMING_FIELDS = (
     "start_local",
     "end_local",
@@ -46,6 +50,12 @@ def validate_season_window(record: dict) -> TemporalValidation:
 
     oid = record.get("occurrence_id", "<missing>")
     phases = record.get("season_phases")
+    expected_model = SEASON_WINDOW_MODELS[timing_type]
+    if record.get("season_window_model") != expected_model:
+        result.errors.append(
+            f"{oid}: {timing_type} requires season_window_model={expected_model}"
+        )
+
     if not isinstance(phases, list) or not phases:
         result.errors.append(f"{oid}: {timing_type} requires non-empty season_phases")
         return result
@@ -57,6 +67,10 @@ def validate_season_window(record: dict) -> TemporalValidation:
 
     if record.get("time_precision") != "MONTH":
         result.errors.append(f"{oid}: month-bounded season requires time_precision=MONTH")
+    if record.get("time_status") not in (None, "NOT_APPLICABLE"):
+        result.errors.append(f"{oid}: month-bounded season requires time_status=NOT_APPLICABLE")
+    if record.get("time_basis") not in (None, "NOT_APPLICABLE"):
+        result.errors.append(f"{oid}: month-bounded season requires time_basis=NOT_APPLICABLE")
 
     for field_name in EXACT_TIMING_FIELDS:
         if record.get(field_name) not in (None, ""):
@@ -64,11 +78,19 @@ def validate_season_window(record: dict) -> TemporalValidation:
                 f"{oid}: month-bounded season must not populate exact/day timing field {field_name}"
             )
 
+    phase_ids: set[str] = set()
     previous_end: int | None = None
     for index, phase in enumerate(phases, start=1):
         if not isinstance(phase, dict):
             result.errors.append(f"{oid}: season phase {index} must be an object")
             continue
+        phase_id = str(phase.get("phase_id") or "")
+        if not phase_id:
+            result.errors.append(f"{oid}: season phase {index} requires phase_id")
+        elif phase_id in phase_ids:
+            result.errors.append(f"{oid}: duplicate season phase_id {phase_id}")
+        phase_ids.add(phase_id)
+
         start = phase.get("start_month")
         end = phase.get("end_month")
         try:
