@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'data/coverage/PHYSICAL_RISK_CORRECTION_L_PLAN_v0.1.json'
+      - 'scripts/check_physical_risk_correction_l.py'
+      - 'tests/test_physical_risk_correction_l.py'
       - '.github/workflows/preflight-physical-risk-correction-l.yml'
   workflow_dispatch:
 
@@ -13,47 +16,19 @@ permissions:
 jobs:
   preflight:
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Inspect current rights and physical-risk contracts
-        run: |
-          python - <<'PY'
-          import json,re
-          from pathlib import Path
-          reg=json.loads(Path('data/canonical/registry.json').read_text())
-          src=json.loads(Path('data/sources/registry.json').read_text())
-          schema=json.loads(Path('data/canonical/schema.json').read_text())
-          cv=schema.get('controlled_vocabularies',{})
-          print('CHECKPOINT',reg.get('version'),reg.get('record_count'),'SCHEMA',schema.get('version'),'SOURCE',src.get('version'),'SOURCE_COUNT',len(src.get('sources',[])))
-          print('CANONICAL_PROVENANCE_USE_VOCAB',cv.get('canonical_provenance_use'))
-          print('AUTOMATED_MONITORING_USE_VOCAB',cv.get('automated_monitoring_use'))
-          print('VERIFICATION_MODE_VOCAB',cv.get('verification_mode'))
-          print('VISIBILITY_VOCAB',cv.get('visibility_tier'))
-          print('LIFECYCLE_VOCAB',cv.get('lifecycle_status'))
-          print('PUBLICATION_SEMANTICS',cv.get('publication_time_semantics'))
-          modern=[s for s in src.get('sources',[]) if s.get('canonical_provenance_use') is not None or s.get('automated_monitoring_use') is not None]
-          print('MODERN_RIGHTS_SOURCE_COUNT',len(modern))
-          fields=('source_id','institution','jurisdiction','domain','source_type','canonical_provenance_use','automated_monitoring_use','verification_mode','ingestion_permission','licence_review_status','automated_retrieval_permission','redistribution_permission','monitoring_readiness_status','licence_constraints','known_limitations','notes')
-          for s in modern[-8:]:
-              print('\nMODERN_SOURCE')
-              for k in fields: print(k,'=',s.get(k))
-          risk=[r for r in reg['records'] if r.get('category')=='PHYSICAL_CLIMATE_RISK']
-          risk_sources=[s for s in src.get('sources',[]) if str(s.get('source_id') or '').startswith('WSSRC-RISK-')]
-          nums=[]
-          for s in risk_sources:
-              m=re.fullmatch(r'WSSRC-RISK-(\d+)',str(s.get('source_id') or ''))
-              if m: nums.append(int(m.group(1)))
-          print('\nIDENTITY')
-          print('RISK_OCCURRENCES',[(r.get('occurrence_id'),r.get('series_id')) for r in risk])
-          print('WSO_RISK_IDS',[r.get('occurrence_id') for r in reg['records'] if str(r.get('occurrence_id') or '').startswith('WSO-RISK-')])
-          print('RISK_SOURCE_IDS',[s.get('source_id') for s in risk_sources])
-          print('NEXT_RISK_SOURCE_NUM',(max(nums)+1 if nums else 1))
-          print('MONTH_SEMANTIC_READY','SEASONAL_MONTH_RANGE' in cv.get('publication_time_semantics',[]))
-          print('TIMING_TYPES_READY',all(x in cv.get('timing_type',[]) for x in ('MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW')))
-          PY
-      - name: Prove read only
+      - name: Build and validate proposed Correction L clone in memory
+        run: PYTHONPATH=. python scripts/check_physical_risk_correction_l.py
+      - name: Run Correction L regression tests
+        run: python -m unittest tests.test_physical_risk_correction_l -v
+      - name: Run temporal-window regression tests
+        run: python -m unittest tests.test_temporal_windows -v
+      - name: Validate current canonical checkpoint
+        run: python scripts/validate_registry.py
+      - name: Prove preflight is read only
         run: git diff --exit-code
