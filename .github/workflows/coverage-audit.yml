@@ -1,0 +1,41 @@
+name: Audit WORLD SIGNALS coverage
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/world_signals/coverage.py'
+      - 'scripts/run_coverage_audit.py'
+      - 'tests/test_coverage.py'
+      - 'data/canonical/registry.json'
+      - 'data/sources/registry.json'
+      - '.github/workflows/coverage-audit.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: world-signals-coverage-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Coverage regression tests
+        run: python -m unittest tests.test_coverage -v
+      - name: Build read-only coverage audit
+        run: python scripts/run_coverage_audit.py
+      - name: Upload coverage audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-coverage-audit-${{ github.run_id }}
+          path: artifacts/coverage
+          if-no-files-found: error
+          retention-days: 90
