@@ -41,6 +41,7 @@ from world_signals.live_monitor import (
 CANONICAL=ROOT/"data/canonical/registry.json"
 SOURCE_REGISTRY=ROOT/"data/sources/registry.json"
 EXPECTATIONS=ROOT/"data/monitor/expectations.json"
+OPERATIONS_POLICY=ROOT/"data/monitor/operations_policy.json"
 ARTIFACT_DIR=ROOT/"artifacts"
 REVIEW_DIR=ROOT/"review_candidates/live"
 ARTIFACT_DIR.mkdir(exist_ok=True)
@@ -141,29 +142,35 @@ def main() -> int:
     canonical_sha=file_hash(CANONICAL)
     source_registry_sha=file_hash(SOURCE_REGISTRY)
     expectations_sha=file_hash(EXPECTATIONS)
+    operations_policy_sha=file_hash(OPERATIONS_POLICY)
     registry=load_json(CANONICAL)
     source_registry=load_json(SOURCE_REGISTRY)
     expectations=load_json(EXPECTATIONS)
+    operations_policy=load_json(OPERATIONS_POLICY)
     configs=config_by_id(expectations)
     expected_adapter_ids=sorted(configs)
     now=datetime.now(timezone.utc).isoformat()
     configuration_fingerprint=sha256(
-        (canonical_sha+"|"+source_registry_sha+"|"+expectations_sha).encode("utf-8")
+        (
+            canonical_sha+"|"+source_registry_sha+"|"+expectations_sha+"|"+operations_policy_sha
+        ).encode("utf-8")
     ).hexdigest()
 
     report={
         "project":"WORLD SIGNALS",
-        "report_schema_version":"0.2",
+        "report_schema_version":"0.3",
         "run_type":"LIVE_READ_ONLY_MONITOR",
         "run_at":now,
         "workflow_context":workflow_context(),
         "canonical_registry_version":registry.get("version"),
         "source_registry_version":source_registry.get("version"),
         "monitor_expectations_version":expectations.get("version"),
+        "monitor_operations_policy_version":operations_policy.get("version"),
         "configuration_fingerprint_sha256":configuration_fingerprint,
         "canonical_sha256_before":canonical_sha,
         "source_registry_sha256":source_registry_sha,
         "monitor_expectations_sha256":expectations_sha,
+        "monitor_operations_policy_sha256":operations_policy_sha,
         "expected_adapter_ids":expected_adapter_ids,
         "automatic_canonical_commit":False,
         "google_calendar_write":False,
@@ -312,6 +319,7 @@ def main() -> int:
         "canonical_registry_version":report["canonical_registry_version"],
         "source_registry_version":report["source_registry_version"],
         "monitor_expectations_version":report["monitor_expectations_version"],
+        "monitor_operations_policy_version":report["monitor_operations_policy_version"],
         "configuration_fingerprint_sha256":configuration_fingerprint,
         "candidate_count":len(candidate_files),
         "files":candidate_files,
