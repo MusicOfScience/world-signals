@@ -22,6 +22,10 @@ from .cellar import (
     parse_cra_article_71,
     parse_eli_current_state,
 )
+from .cellar_metadata import (
+    fetch_cellar_rdf_notice,
+    parse_cellar_legal_relation_diagnostics,
+)
 from .kenya_law import (
     KENYA_PFM_BASELINE_2025_11_04,
     KENYA_PFM_CURRENT,
@@ -58,6 +62,7 @@ __all__ = [
     "cellar_document_text",
     "cellar_representation_diagnostics",
     "fetch_cellar_celex_document",
+    "fetch_cellar_rdf_notice",
     "fetch_eli_current_document",
     "fetch_cra_article_71",
     "fetch_kenya_budget_policy_rule_baseline",
@@ -66,6 +71,7 @@ __all__ = [
     "fetch_suin_metadata",
     "fetch_suin_rows",
     "parse_cra_article_71",
+    "parse_cellar_legal_relation_diagnostics",
     "parse_eli_current_state",
     "parse_kenya_budget_policy_rule",
     "parse_rba_fsr_rss",
