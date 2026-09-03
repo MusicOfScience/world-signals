@@ -103,7 +103,7 @@
           <h2>What the machinery actually knows</h2>
           <p>This layer exposes monitor configuration, source-governance classifications and dated evidence that is actually recorded. It does not convert a static build into a live status dashboard.</p>
         </div>
-        <div class="ops-boundary"><strong>Runtime boundary</strong><span>Configuration: visible</span><span>Latest retained run: dated snapshot only</span><span>Current source health: not inferred</span><span>Run-generated candidate metadata: visible when present</span><span>Persistent review queue: not inferred</span><span>Browser canonical write: impossible</span></div>
+        <div class="ops-boundary"><strong>Runtime boundary</strong><span>Configuration: visible</span><span>Latest retained run: dated snapshot only</span><span>Current source health: not inferred</span><span>Run-generated candidate metadata: visible when present</span><span>Retained review state: visible inside evidence horizon</span><span>Permanent review queue: not yet claimed</span><span>Browser canonical write: impossible</span></div>
       </section>
 
       <section id="opsStats" class="stats" aria-live="polite"></section>
@@ -116,6 +116,13 @@
         <div class="section-heading ops-candidate-heading"><div><p class="eyebrow">RUN-GENERATED REVIEW EVIDENCE</p><h3>Candidate snapshot</h3></div><span id="opsRuntimeCandidateCount" class="meta"></span></div>
         <p class="meta">These are candidates generated in that retained run only. They are not a persistent queue and they are not canonical changes.</p>
         <div id="opsRuntimeCandidates" class="ops-runtime-candidates"></div>
+      </section>
+
+      <section class="ops-section ops-review-section">
+        <div class="section-heading"><div><p class="eyebrow">RETAINED REVIEW STATE</p><h3>Propositions surviving across retained monitor evidence</h3></div><span id="opsReviewCount" class="meta"></span></div>
+        <p class="meta">Identical propositions across post-contract monitor runs collapse into one stable <code>WSRV-*</code> review item. Absence from a later run does not resolve an item. This view is bounded by retained Actions evidence and is not yet a permanent pending-review database.</p>
+        <div id="opsReviewSummary" class="ops-review-summary"><p class="empty">Loading retained review state…</p></div>
+        <div id="opsReviewItems" class="ops-review-items"></div>
       </section>
 
       <section class="ops-section">
@@ -151,7 +158,7 @@
           <p>This is the reviewed canonical change ledger: previous values, approved state, review basis and registry-version transition. It is historical provenance, not the live review-candidate queue.</p>
           <p id="historyCount" class="meta"></p>
         </div>
-        <div class="history-safety"><strong>Layer boundary</strong><span>Reviewed history: visible here</span><span>Run-generated candidates: Operations snapshot</span><span>Persistent review queue: separate future layer</span><span>Canonical mutation from browser: impossible</span></div>
+        <div class="history-safety"><strong>Layer boundary</strong><span>Reviewed history: visible here</span><span>Run-generated candidates: Operations snapshot</span><span>Retained review state: Operations horizon</span><span>Permanent review queue: not yet claimed</span><span>Canonical mutation from browser: impossible</span></div>
       </section>
       <section id="historyCards" class="history-cards"></section>
     </section>
