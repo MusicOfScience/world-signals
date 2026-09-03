@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, asdict
 import json
+from urllib.parse import urlencode
 
 from .base import AdapterError, FetchSnapshot, fetch_bytes
 
@@ -33,6 +34,21 @@ class SocrataMetadata:
 def metadata_url(dataset_id: str = SUIN_DATASET_ID, domain: str = COLOMBIA_DOMAIN) -> str:
     return f"https://{domain}/api/views/{dataset_id}"
 
+def resource_url(
+    *,
+    dataset_id: str = SUIN_DATASET_ID,
+    domain: str = COLOMBIA_DOMAIN,
+    where: str | None = None,
+    select: str | None = None,
+    limit: int = 25,
+) -> str:
+    params={"$limit":str(limit)}
+    if where:
+        params["$where"]=where
+    if select:
+        params["$select"]=select
+    return f"https://{domain}/resource/{dataset_id}.json?{urlencode(params)}"
+
 def parse_socrata_metadata(body: bytes | str, *, expected_id: str | None = None) -> SocrataMetadata:
     raw=body.decode("utf-8") if isinstance(body, bytes) else body
     try:
@@ -63,7 +79,33 @@ def parse_socrata_metadata(body: bytes | str, *, expected_id: str | None = None)
         columns=tuple(columns),
     )
 
+def parse_socrata_rows(body: bytes | str) -> list[dict]:
+    raw=body.decode("utf-8") if isinstance(body, bytes) else body
+    try:
+        data=json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise AdapterError(f"Socrata row JSON parse failed: {exc}") from exc
+    if not isinstance(data,list):
+        raise AdapterError("Socrata resource response was not a JSON array")
+    rows=[]
+    for row in data:
+        if not isinstance(row,dict):
+            raise AdapterError("Socrata resource contained a non-object row")
+        rows.append(row)
+    return rows
+
 def fetch_suin_metadata(*, timeout: int = 30) -> tuple[SocrataMetadata, FetchSnapshot]:
     url=metadata_url()
     body,snapshot=fetch_bytes(url, timeout=timeout, accept="application/json")
     return parse_socrata_metadata(body, expected_id=SUIN_DATASET_ID), snapshot
+
+def fetch_suin_rows(
+    *,
+    where: str | None = None,
+    select: str | None = None,
+    limit: int = 25,
+    timeout: int = 30,
+) -> tuple[list[dict], FetchSnapshot]:
+    url=resource_url(where=where, select=select, limit=limit)
+    body,snapshot=fetch_bytes(url, timeout=timeout, accept="application/json")
+    return parse_socrata_rows(body), snapshot
