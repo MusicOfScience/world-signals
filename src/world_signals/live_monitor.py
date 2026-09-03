@@ -143,11 +143,11 @@ def colombia_legal_input_review_candidate(rows: list[dict], config: dict) -> tup
 
 
 def cra_legal_rule_review_candidate(rule: object, config: dict) -> tuple[dict | None, dict]:
-    """Compare the CRA Article 71 semantic rule against the frozen live baseline.
+    """Compare the CRA Article 71 semantic rule against the frozen baseline.
 
-    Transport/document hash churn is not a legal-rule change. Only the parsed
-    CELEX/article/date tuple is compared. A semantic difference creates a review
-    candidate and never directly mutates either canonical CRA occurrence.
+    The rule is parsed from the immutable enacted text. Its purpose is semantic
+    provenance and regression protection; future amendment discovery is handled
+    separately by the ELI legal-state topology sentinel.
     """
     current=rule.as_dict() if hasattr(rule,"as_dict") else dict(rule)
     baseline=(config.get("baseline") or {}).get("rule") or {}
@@ -175,17 +175,65 @@ def cra_legal_rule_review_candidate(rule: object, config: dict) -> tuple[dict | 
     candidate_hash=stable_hash(candidate_payload)
     candidate={
         "candidate_id":"WSRC-EU-CRA-"+candidate_hash[:16],
-        "candidate_type":"LEGAL_RULE_CHANGED",
+        "candidate_type":"LEGAL_BASELINE_RULE_CHANGED",
         "source_id":config.get("source_id"),
         "occurrence_ids":config.get("canonical_occurrence_ids") or [],
         "old_value":baseline,
         "new_value":candidate_payload,
-        "review_state":"PENDING_EURLEX_ARTICLE_71_REVIEW",
+        "review_state":"PENDING_EURLEX_ARTICLE_71_BASELINE_REVIEW",
         "candidate_origin":"LIVE_READ_ONLY_MONITOR",
         "automatic_commit_allowed":False,
     }
     return candidate,{
-        "type":"CRA_ARTICLE_71_RULE_CHANGED",
+        "type":"CRA_ARTICLE_71_BASELINE_CHANGED",
+        "baseline_hash":baseline_hash,
+        "current_hash":current_hash,
+    }
+
+
+def eli_legal_state_review_candidate(state: object, config: dict) -> tuple[dict | None, dict]:
+    """Compare an unversioned ELI legal topology with its reviewed baseline.
+
+    A topology change means only that the legal state has changed or been
+    re-consolidated. It does not prove that any tracked canonical date changed.
+    Every difference therefore routes to legal review and never mutates events.
+    """
+    current=state.as_dict() if hasattr(state,"as_dict") else dict(state)
+    baseline_block=(config.get("baseline") or {}).get("current_state") or {}
+    baseline_hash=(config.get("baseline") or {}).get("current_state_sha256") or baseline_block.get("state_sha256")
+    current_hash=current.get("state_sha256") or stable_hash(current)
+
+    if baseline_hash and current_hash == baseline_hash:
+        return None,{
+            "type":"ELI_LEGAL_STATE_NO_CHANGE",
+            "base_celex":current.get("base_celex"),
+            "mode":current.get("mode"),
+            "state_sha256":current_hash,
+            "consolidation_celex_ids":current.get("consolidation_celex_ids") or [],
+            "modifier_celex_ids":current.get("modifier_celex_ids") or [],
+        }
+
+    payload={
+        "base_celex":current.get("base_celex"),
+        "mode":current.get("mode"),
+        "consolidation_celex_ids":current.get("consolidation_celex_ids") or [],
+        "modifier_celex_ids":current.get("modifier_celex_ids") or [],
+        "state_sha256":current_hash,
+    }
+    candidate_hash=stable_hash(payload)
+    candidate={
+        "candidate_id":"WSRC-EU-ELI-"+candidate_hash[:16],
+        "candidate_type":"LEGAL_STATE_TOPOLOGY_CHANGED",
+        "source_id":config.get("source_id"),
+        "occurrence_ids":config.get("canonical_occurrence_ids") or [],
+        "old_value":baseline_block,
+        "new_value":payload,
+        "review_state":"PENDING_EURLEX_MODIFIER_AND_CONSOLIDATION_REVIEW",
+        "candidate_origin":"LIVE_READ_ONLY_MONITOR",
+        "automatic_commit_allowed":False,
+    }
+    return candidate,{
+        "type":"ELI_LEGAL_STATE_CHANGED",
         "baseline_hash":baseline_hash,
         "current_hash":current_hash,
     }
