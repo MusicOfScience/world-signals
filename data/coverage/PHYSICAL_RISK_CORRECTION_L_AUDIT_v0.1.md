@@ -1,29 +1,32 @@
 # WORLD SIGNALS — Physical Risk Correction L Audit v0.1
 
 **Reference date:** 2026-09-04  
-**Status:** REVIEWED PREFLIGHT PASS — CANONICAL TRANSACTION NOT YET APPLIED  
-**Canonical checkpoint tested:** v0.19 / 668 occurrences  
-**Source registry checkpoint tested:** v1.50 / 221 sources  
+**Status:** COMPLETE — REVIEWED CANONICAL TRANSACTION APPLIED AND INDEPENDENT CI/PAGES CHECKS PASSED  
+**Canonical checkpoint:** v0.20 / 669 occurrences  
+**Source registry checkpoint:** v1.51 / 222 sources  
 **Schema:** v0.51
 
 ## Purpose
 
-Correction L is the first population test of the source-native month-bounded physical-risk ontology introduced in schema v0.50 and tightened in v0.51. Its purpose is not to maximise the number of cyclone-season records. It tests whether a genuinely useful Pacific structural risk window can enter canonical state without inventing civil-day precision, conflating a season with an actual cyclone, or weakening source-rights discipline.
+Correction L is the first population test of the source-native month-bounded physical-risk ontology introduced in schema v0.50 and tightened in v0.51. Its purpose is not to maximise cyclone-season records. It tests whether a useful Pacific structural risk window can enter canonical state without inventing civil-day precision, conflating a season with an actual cyclone, or weakening source-rights discipline.
 
-## Result
+## Canonical result
 
-The reviewed sample is deliberately narrow:
+Correction L admitted exactly one new occurrence and one new source:
 
-- **one proposed canonical occurrence:** `WSO-RISK-A-0001` — South-West Pacific tropical cyclone season 2026–27;
-- **one proposed new series:** `WSER-RISK-SWP-TC`;
-- **one proposed new source:** `WSSRC-RISK-004` — Fiji Meteorological and Hydrological Services / RSMC Nadi Tropical Cyclone Centre;
-- **one deferred noncanonical candidate:** `WSFR-RISK-NIO-TC` — North Indian Ocean tropical cyclone season / IMD-RSMC New Delhi.
+- `WSO-RISK-A-0001` — South-West Pacific tropical cyclone season 2026–27;
+- `WSER-RISK-SWP-TC` — new recurring risk series;
+- `WSSRC-RISK-004` — Fiji Meteorological and Hydrological Services / RSMC Nadi Tropical Cyclone Centre.
 
-No 2027–28 Fiji occurrence is added merely to mirror the existing two-year NOAA/BoM examples. The current relevant recurring cycle is sufficient to test the repaired ontology.
+One candidate remains deliberately noncanonical:
+
+- `WSFR-RISK-NIO-TC` — North Indian Ocean tropical cyclone season / IMD-RSMC New Delhi — `OFFICIAL_SOURCE_DEFINITION_CONFLICT`.
+
+No 2027–28 Fiji occurrence was added merely to mirror existing two-year NOAA/BoM examples. One current relevant cycle was sufficient to prove the ontology.
 
 ## Fiji / RSMC Nadi — admission rationale
 
-Current official Fiji Meteorological Service / RSMC Nadi material describes the regional tropical-cyclone season as **November–April** and also states that cyclones can occur outside that period.
+Official Fiji Meteorological Service / RSMC Nadi material describes the regional tropical-cyclone season as **November–April** and states that cyclones can occur outside that period.
 
 Primary authoritative reference:
 
@@ -33,9 +36,9 @@ Supporting official reference:
 
 - https://www.met.gov.fj/tropical-cyclone/tropical-cyclone-reports/
 
-The canonical object is therefore a **structural exposure window**, not a forecast that any cyclone will occur.
+The canonical object is therefore a **structural exposure window**, not a forecast that a cyclone will occur.
 
-The proposed timing is preserved at the source's relevant precision:
+Canonical timing preserves source precision:
 
 - `timing_type = MONTH_BOUNDED_SEASON_WINDOW`
 - `season_window_model = MONTH_BOUNDED_SINGLE_PHASE`
@@ -45,13 +48,13 @@ The proposed timing is preserved at the source's relevant precision:
 - `publication_time_semantics = SEASONAL_MONTH_RANGE`
 - no `start_local`, `end_local`, UTC timestamp, `date_earliest`, `date_latest`, or synthetic first/last civil day.
 
-The 2026–27 annual activity outlook was not located in the current official search surface during this review. No forecast cyclone count, probability, or expected activity level is therefore imported into the occurrence. A later seasonal outlook is a separate factual product and must not retrospectively turn the structural season definition into a forecast object.
+No 2026–27 forecast cyclone count or probability was imported. A later seasonal outlook is a separate factual product and must not retrospectively turn the structural season definition into a forecast object.
 
 Actual cyclones continue to route to the Shock / Live Intelligence layer through `ROUTE_ACTUAL_EVENT_TO_SHOCK_REGISTER`.
 
 ## IMD / RSMC New Delhi — deferred source conflict
 
-Canonical population was **rejected for now** because competent official material does not provide one unambiguous first-phase boundary.
+Canonical population was rejected because competent official material does not provide one unambiguous first-phase boundary.
 
 Official assertion A:
 
@@ -63,76 +66,82 @@ Official assertion B:
 - WMO/ESCAP Tropical Cyclone Operational Plan hosted by RSMC New Delhi: **April–May and October–December**
 - https://rsmcnewdelhi.imd.gov.in/download.php?path=uploads%2Freport%2F28%2F28_06dbff_TCP-21_Edition+2021.pdf
 
-WORLD SIGNALS does not resolve this by majority vote, convenience, or by choosing the wording that best fits the new ontology. The candidate remains `OFFICIAL_SOURCE_DEFINITION_CONFLICT` until a competent current operational source resolves the difference or demonstrates that a deliberately coarser canonical representation is more faithful.
+WORLD SIGNALS does not resolve this by majority vote, convenience, or by choosing the wording that best fits the ontology. The candidate remains `OFFICIAL_SOURCE_DEFINITION_CONFLICT` until a competent current operational source resolves the difference or demonstrates that a deliberately coarser representation is more faithful.
 
-The provisional region is **Cross-regional / Global**, not South Asia. The RSMC New Delhi area of responsibility spans the North Indian Ocean and serves countries across more than one WORLD SIGNALS analytical region; forcing the object into South Asia would trade source truth for neat geography.
+Its provisional WORLD SIGNALS region remains **Cross-regional / Global**, not South Asia.
 
 ## Source governance
 
-Fiji and IMD source-governance fitness was assessed separately from factual authority.
-
-For the proposed Fiji source:
+The Fiji source is retained under the modern split between factual provenance fitness and automated-monitor permission:
 
 - `canonical_provenance_use = MANUAL_INFORMATIONAL_REFERENCE_ONLY`
 - `automated_monitoring_use = PROHIBITED_OR_RIGHTS_HOLD`
 - `verification_mode = RIGHTS_HELD_MANUAL_ONLY`
 - `monitoring_readiness_status = RIGHTS_OR_LICENSE_HOLD`
 
-The Fiji Met website surface reviewed states **All Rights Reserved**. Curated factual metadata can support manual authoritative reference, but no production crawler or automated-monitor permission is inferred.
+The reviewed Fiji website surface states **All Rights Reserved**. Curated factual metadata can support manual authoritative reference; no production crawler permission is inferred.
 
-For IMD, the official copyright policy requires permission for reproduction and does not clear the intended production monitoring route. The deferred candidate therefore also remains manual/reference-only with automated monitoring on a rights hold.
-
-Source authority, canonical provenance use and automated monitoring permission remain separate gates.
+IMD also remains manual/reference-only with automated monitoring on a rights hold.
 
 ## Identity decision
 
-The four legacy physical-risk occurrences use `WSO-COM-A-0049` through `0052` even though their series IDs are `WSER-RISK-*`. Those occurrence IDs are immutable historical identities and will not be renamed.
+Legacy physical-risk occurrences retain immutable `WSO-COM-A-0049` through `0052` identities even though their series IDs are `WSER-RISK-*`.
 
-No `WSO-RISK-*` occurrence currently exists. New physical-risk occurrences therefore begin a dedicated namespace with `WSO-RISK-A-0001`. This avoids perpetuating a commodity-era namespace collision while preserving every existing stable identity.
-
-`WSSRC-RISK-003` is already occupied by the Tropical Storm Edouard advisory archive. The next safe source identity is consequently `WSSRC-RISK-004`, not `003`.
+New physical-risk occurrences begin the dedicated `WSO-RISK-*` namespace with `WSO-RISK-A-0001`. `WSSRC-RISK-003` was already occupied by the Tropical Storm Edouard advisory archive, so Fiji correctly entered as `WSSRC-RISK-004`.
 
 ## Executable preflight
 
-The check-only executable `scripts/check_physical_risk_correction_l.py` constructs the proposed post-transaction registry and source registry entirely in memory. It has no write path.
+The check-only executable `scripts/check_physical_risk_correction_l.py` constructed proposed v0.20 / 669 and source v1.51 / 222 clones entirely in memory. It had no write path.
 
-The GitHub Actions preflight passed all of the following:
+Preflight passed:
 
-1. exact checkpoint, schema and identity preconditions;
-2. construction of canonical clone v0.20 / 669;
-3. construction of source clone v1.51 / 222;
-4. Fiji month-native timing invariants;
-5. rejection of all synthetic day/time fields;
-6. Fiji source-rights invariants;
-7. explicit retention of the two conflicting IMD official assertions;
-8. proof that no IMD occurrence/source leaked into canonical state;
-9. full `validate_registry` validation;
-10. Correction-L-specific regression tests;
-11. temporal-window regression tests;
-12. validation of the untouched live 668-record checkpoint;
-13. `git diff --exit-code` proof that preflight produced zero repository mutation.
+1. exact checkpoint/schema/identity preconditions;
+2. Fiji month-native timing invariants;
+3. rejection of synthetic day/time fields;
+4. source-rights invariants;
+5. preservation of both conflicting IMD assertions;
+6. proof no IMD occurrence/source leaked into canonical state;
+7. full registry validation;
+8. Correction-L regression tests;
+9. temporal-window regression tests;
+10. `git diff --exit-code` proof of zero mutation.
 
-The ordinary WORLD SIGNALS CI suite also passed on the same executable-preflight commit, including Python tests, JavaScript syntax validation and static-site build.
+The temporary preflight workflow was removed after success.
 
-## Proposed reviewed transaction
+## Reviewed canonical transaction
 
-If the transaction gate is opened, it is bounded to exactly two source-of-truth files:
+A one-shot write-capable GitHub workflow was then opened for the reviewed transaction. It was bounded to:
 
-- `data/canonical/registry.json`: v0.19 / 668 → v0.20 / 669
-- `data/sources/registry.json`: v1.50 / 221 → v1.51 / 222
+- `data/canonical/registry.json`: v0.19 / 668 → **v0.20 / 669**;
+- `data/sources/registry.json`: v1.50 / 221 → **v1.51 / 222**;
+- `tests/test_registry.py`: checkpoint lock 0.19/668 → **0.20/669**.
 
-Expected additions:
+Before commit it passed:
 
-- one occurrence: `WSO-RISK-A-0001`
-- one source: `WSSRC-RISK-004`
+- the check-only preflight again;
+- exact Correction L postconditions;
+- full registry validation and Python test suite;
+- JavaScript syntax checks;
+- static Pages build at 669 records;
+- proof that the Fiji projection exposes `November–April` without a synthetic day;
+- protected hashes for schema, monitor expectations, monitor operations policy, change ledger, plan and audit;
+- exact changed-file whitelist.
 
-No schema change.  
-No monitor-route change.  
-No automatic canonical commit.  
-No Google Calendar write.  
-No IMD canonical population.  
-No invented second Fiji year.
+Reviewed migration commit: `d398ff464a77c0178743951f255482aa75068010`.
+
+The one-shot write workflow was immediately deleted in commit `ba1e716a5dc5e9422f305411f514e5eb5fb58cd8`.
+
+Because a GitHub Actions token push does not recursively trigger ordinary push workflows, the workflow-deletion commit — immediately on top of the same v0.20 canonical state — supplied the independent post-commit check. Normal WORLD SIGNALS CI passed and the Pages build/deployment also passed.
+
+## Safety result
+
+- Automatic canonical commit: **OFF**.
+- Google Calendar writes: **OFF**.
+- No scheduled monitor route was added for Fiji.
+- No IMD canonical population occurred.
+- No second Fiji year was invented.
+- No write-capable migration workflow remains in the repository.
 
 ## Interpretation
 
-Correction L's most important result is not that one event can be added. It is that three superficially convenient additions were rejected or deferred for defensible reasons. The ontology now allows the registry to preserve the authority's actual temporal precision instead of rewarding sources that happen to publish exact civil-day boundaries.
+Correction L's strongest result is not the addition of one record. It is that the executable system admitted one justified object while rejecting or deferring superficially tidy alternatives. The registry can now preserve a source's real month-level temporal precision rather than rewarding sources that happen to publish exact civil-day boundaries.
