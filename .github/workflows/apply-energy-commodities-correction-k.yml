@@ -1,0 +1,80 @@
+name: Apply WORLD SIGNALS Energy Commodities Correction K once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-energy-commodities-correction-k.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: world-signals-energy-commodities-correction-k-apply
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Re-run fail-closed in-memory preflight
+        run: PYTHONPATH=. python scripts/apply_energy_commodities_correction_k.py
+      - name: Snapshot protected monitor configuration
+        shell: bash
+        run: |
+          sha256sum data/monitor/expectations.json data/monitor/operations_policy.json > /tmp/protected-monitor.sha256
+      - name: Apply reviewed Correction K locally
+        run: PYTHONPATH=. python scripts/apply_energy_commodities_correction_k.py --apply
+      - name: Validate migrated canonical registry
+        run: python scripts/validate_registry.py
+      - name: Run coverage regression tests
+        run: python -m unittest tests.test_coverage -v
+      - name: Assert exact post-migration state and source governance
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          assert reg['version']=='0.19', reg['version']
+          assert reg['record_count']==668, reg['record_count']
+          assert len(reg['records'])==668, len(reg['records'])
+          assert src['version']=='1.50', src['version']
+          ids=[f'WSO-COM-A-{n:04d}' for n in range(53,59)]
+          new=[r for r in reg['records'] if r.get('occurrence_id') in ids]
+          assert len(new)==6, len(new)
+          assert len({r['series_id'] for r in new})==3
+          assert {r['source_id'] for r in new}=={'WSSRC-COM-012','WSSRC-COM-013','WSSRC-COM-014'}
+          jodi=[r for r in new if r['series_id']=='WSER-COM-JODI-WDB']
+          assert len(jodi)==4
+          assert all(r.get('publication_bundle_type')=='SOURCE_BUNDLE' for r in jodi)
+          assert all(len(r.get('data_products',[]))==2 for r in jodi)
+          added_sources=[s for s in src['sources'] if s.get('source_id') in {'WSSRC-COM-012','WSSRC-COM-013','WSSRC-COM-014'}]
+          assert len(added_sources)==3
+          assert all(s.get('automated_retrieval_permission')=='PRODUCTION_AUTOMATION_HOLD' for s in added_sources)
+          print('Correction K exact-state and source-governance assertions: PASS')
+          PY
+      - name: Prove monitor policy and expectations were not mutated
+        run: sha256sum -c /tmp/protected-monitor.sha256
+      - name: Reject unintended file changes
+        shell: bash
+        run: |
+          git diff --check
+          changed="$(git diff --name-only | sort)"
+          expected="$(printf '%s\n' data/canonical/registry.json data/sources/registry.json | sort)"
+          test "$changed" = "$expected" || { echo 'Unexpected changed files:'; printf '%s\n' "$changed"; exit 1; }
+      - name: Commit reviewed registry transaction
+        shell: bash
+        run: |
+          git config user.name 'WORLD SIGNALS reviewed migration'
+          git config user.email '58031940+MusicOfScience@users.noreply.github.com'
+          git add data/canonical/registry.json data/sources/registry.json
+          git commit -m 'Apply Energy Commodities Correction K'
+          git push
