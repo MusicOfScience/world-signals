@@ -11,7 +11,7 @@
     <div>
       <p class="eyebrow">WORLD SIGNALS · EXECUTABLE THIN SLICE</p>
       <h1>Global political-economic time, without pretending certainty.</h1>
-      <p class="lede">Read-only projection of the canonical registry. Source monitoring and review are separate from the calendar.</p>
+      <p class="lede">A read-only calendar projection of the canonical registry. Source monitoring, live intelligence and review remain separate layers.</p>
     </div>
     <div class="safety">
       <strong>Safety boundary</strong>
@@ -22,6 +22,15 @@
 
   <main>
     <section id="stats" class="stats" aria-live="polite"></section>
+
+    <section class="viewbar" aria-label="View selector">
+      <div class="viewtabs">
+        <button data-view="calendar" aria-pressed="true">Calendar</button>
+        <button data-view="index" aria-pressed="false">Event index</button>
+      </div>
+      <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
+    </section>
+
     <section class="controls" aria-label="Event filters">
       <input id="search" type="search" placeholder="Search event, institution, jurisdiction…">
       <select id="region"><option value="">All regions</option></select>
@@ -29,11 +38,46 @@
       <select id="certainty"><option value="">All certainty</option></select>
       <select id="visibility"><option value="">All visibility</option></select>
     </section>
-    <section class="toolbar">
-      <span id="resultCount"></span>
-      <button id="futureOnly" class="toggle" aria-pressed="true">Future/current only</button>
+
+    <section id="calendarView" class="view-panel">
+      <div class="calendar-toolbar">
+        <div class="month-nav" aria-label="Calendar month navigation">
+          <button id="prevMonth" aria-label="Previous month">←</button>
+          <button id="todayMonth">Today</button>
+          <button id="nextMonth" aria-label="Next month">→</button>
+        </div>
+        <div>
+          <h2 id="monthLabel"></h2>
+          <span id="calendarResultCount" class="meta"></span>
+        </div>
+      </div>
+      <div id="calendarGrid" class="calendar-grid" aria-label="Monthly calendar"></div>
+
+      <section class="day-agenda" aria-live="polite">
+        <div class="section-heading">
+          <div><p class="eyebrow">Selected day</p><h3 id="dayAgendaTitle"></h3></div>
+          <span id="dayAgendaCount" class="meta"></span>
+        </div>
+        <div id="dayAgendaBody" class="day-agenda-body"></div>
+      </section>
+
+      <section class="window-lane">
+        <div class="section-heading">
+          <div><p class="eyebrow">Source-native uncertainty</p><h3>Windows and month-precision events</h3></div>
+          <span id="windowCount" class="meta"></span>
+        </div>
+        <p class="window-explainer">These are not pinned to an invented day. They remain windows until the authoritative source supplies more precision.</p>
+        <div id="calendarWindows" class="window-events"></div>
+      </section>
     </section>
-    <section id="events" class="events"></section>
+
+    <section id="indexView" class="view-panel" hidden>
+      <section class="toolbar">
+        <span id="resultCount"></span>
+        <button id="futureOnly" class="toggle" aria-pressed="true">Future/current only</button>
+      </section>
+      <section id="events" class="events"></section>
+    </section>
   </main>
 
   <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
