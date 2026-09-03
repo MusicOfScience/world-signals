@@ -19,9 +19,44 @@ for name in ("index.html","app.js","styles.css"):
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
 dump_json(docs/"data/changes.json", load_json(ROOT/"data/changes/ledger.json"))
+
+source_map={s.get("source_id"):s for s in src.get("sources",[])}
+expectation_path=ROOT/"data/monitor/expectations.json"
+monitor_projection={
+    "metadata":{
+        "projection_type":"CONFIGURED_ROUTES_NOT_RUNTIME_STATUS",
+        "automatic_canonical_commit":False,
+        "google_calendar_write":False,
+        "runtime_status_location":"GitHub Actions artefacts",
+    },
+    "routes":[],
+}
+if expectation_path.exists():
+    expectations=load_json(expectation_path)
+    for route in expectations.get("adapters",[]):
+        source=source_map.get(route.get("source_id"),{})
+        monitor_projection["routes"].append({
+            "adapter_id":route.get("adapter_id"),
+            "source_id":route.get("source_id"),
+            "source_institution":source.get("institution"),
+            "jurisdiction":source.get("jurisdiction"),
+            "domain":source.get("domain"),
+            "monitor_role":route.get("monitor_role"),
+            "cadence":route.get("cadence"),
+            "canonical_occurrence_ids":route.get("canonical_occurrence_ids",[]),
+            "source_failure_policy":route.get("source_failure_policy"),
+            "positive_evidence_policy":route.get("positive_evidence_policy"),
+            "change_policy":route.get("change_policy"),
+            "automatic_commit_allowed":False,
+            "registry_monitoring_readiness":source.get("monitoring_readiness_status"),
+            "registry_automated_monitoring_use":source.get("automated_monitoring_use"),
+        })
+dump_json(docs/"data/monitor_routes.json",monitor_projection)
+
 dump_json(docs/"data/source_summary.json", {
     "source_count": len(src.get("sources",[])),
+    "configured_live_monitor_routes":len(monitor_projection["routes"]),
     "monitoring_tiers": {},
 })
 (docs/".nojekyll").write_text("",encoding="utf-8")
-print(f"Built static site for {projection['metadata']['record_count']} events -> {docs}")
+print(f"Built static site for {projection['metadata']['record_count']} events and {len(monitor_projection['routes'])} configured live monitor routes -> {docs}")
