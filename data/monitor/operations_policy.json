@@ -1,0 +1,153 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "MONITOR_OPERATIONS_POLICY",
+  "version": "0.1",
+  "reference_date": "2026-09-03",
+  "purpose": "Machine-readable operational contract for read-only source monitoring and review-candidate generation.",
+  "architecture_boundary": {
+    "canonical_registry_is_authoritative": true,
+    "calendar_is_derived_output": true,
+    "source_monitor_may_mutate_canonical": false,
+    "browser_may_mutate_canonical": false,
+    "google_calendar_write_allowed": false
+  },
+  "run_status_vocabulary": [
+    "NO_CHANGE",
+    "REVIEW_REQUIRED",
+    "DEGRADED",
+    "FAIL_CANONICAL_GUARD"
+  ],
+  "run_status_precedence": [
+    "FAIL_CANONICAL_GUARD",
+    "REVIEW_REQUIRED",
+    "DEGRADED",
+    "NO_CHANGE"
+  ],
+  "source_health": {
+    "per_run_states": [
+      "HEALTHY",
+      "DEGRADED"
+    ],
+    "incident_lifecycle_states": [
+      "OPEN",
+      "ACKNOWLEDGED",
+      "RECOVERED",
+      "CLOSED"
+    ],
+    "incident_identity_fields": [
+      "source_id",
+      "adapter_id",
+      "layer_or_failure_stage"
+    ],
+    "rules": [
+      "SOURCE_HEALTH_STATE_IS_INDEPENDENT_OF_EVENT_STATE",
+      "FETCH_FAILURE_DOES_NOT_IMPLY_CANCELLATION",
+      "PARSER_FAILURE_DOES_NOT_IMPLY_EVENT_CHANGE",
+      "ABSENCE_DOES_NOT_IMPLY_CANCELLATION_OR_COMPLETION",
+      "RECOVERY_REQUIRES_POSITIVE_SOURCE_OR_ROUTE_EVIDENCE",
+      "ALTERNATE_OFFICIAL_SURFACE_MAY_RECOVER_EVIDENCE_WITHOUT_REWRITING_SOURCE_HISTORY",
+      "SOURCE_HEALTH_CHANGE_CANNOT_AUTOMATICALLY_MUTATE_CANONICAL_DATA"
+    ],
+    "continuity_note": "Each scheduled run is read-only and stateless with respect to previous GitHub artifacts. Per-run reports must emit deterministic incident identity fields. Cross-run incident continuity is reconstructed by an evidence-history reducer or reviewed checkpoint, never inferred by canonical event logic."
+  },
+  "review_candidate_lifecycle": {
+    "states": [
+      "GENERATED",
+      "PENDING_REVIEW",
+      "APPROVED_FOR_REVIEWED_COMMIT",
+      "REJECTED",
+      "SUPERSEDED",
+      "COMMITTED",
+      "ROLLED_BACK"
+    ],
+    "generated_candidate_default_state": "PENDING_REVIEW",
+    "automatic_commit_allowed": false,
+    "candidate_identity_requirements": [
+      "candidate_id",
+      "source_id",
+      "adapter_id_or_monitor_context",
+      "occurrence_id_or_occurrence_ids",
+      "candidate_type",
+      "old_or_baseline_state",
+      "new_or_observed_state",
+      "evidence_or_source_assertion",
+      "automatic_commit_allowed"
+    ],
+    "rules": [
+      "A_REVIEW_CANDIDATE_IS_NOT_A_CANONICAL_CHANGE",
+      "SOURCE_ABSENCE_CANNOT_GENERATE_CANCELLATION_CANDIDATE",
+      "DATE_CHANGE_MUST_PRESERVE_STABLE_OCCURRENCE_IDENTITY",
+      "LEGAL_TOPOLOGY_CHANGE_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
+      "CLAUSE_DIVERGENCE_REQUIRES_REVIEW_BEFORE_SPLIT_OR_RESCHEDULE",
+      "REJECTED_OR_SUPERSEDED_CANDIDATES_REMAIN_AUDITABLE"
+    ]
+  },
+  "evidence": {
+    "artifact_retention_days": 90,
+    "artifact_name_pattern": "world-signals-live-monitor-<github_run_id>",
+    "required_run_identity_fields": [
+      "report_schema_version",
+      "run_at",
+      "workflow_context.github_run_id",
+      "workflow_context.github_sha",
+      "canonical_registry_version",
+      "canonical_sha256_before",
+      "canonical_sha256_after",
+      "source_registry_version",
+      "source_registry_sha256",
+      "monitor_expectations_version",
+      "monitor_expectations_sha256",
+      "monitor_operations_policy_version",
+      "monitor_operations_policy_sha256",
+      "configuration_fingerprint_sha256"
+    ],
+    "required_manifest_fields": [
+      "generated_at",
+      "configuration_fingerprint_sha256",
+      "candidate_count",
+      "files",
+      "automatic_canonical_commit"
+    ],
+    "transport_hash_rule": "A transport or document hash change alone is never sufficient proof of an event or legal-rule change."
+  },
+  "execution": {
+    "github_permissions": {
+      "contents": "read"
+    },
+    "single_monitor_concurrency_group": true,
+    "cancel_in_progress": false,
+    "timeout_minutes": 12,
+    "scheduled_cadence": "DAILY_BASELINE_WITH_SOURCE_SPECIFIC_SEMANTIC_CADENCE_RECORDED_IN_EXPECTATIONS",
+    "required_regression_suites": [
+      "tests.test_adapters",
+      "tests.test_live_monitor",
+      "tests.test_legal_monitor",
+      "tests.test_monitor_operations_policy"
+    ]
+  },
+  "safety_invariants": [
+    "CANONICAL_SHA_BEFORE_EQUALS_CANONICAL_SHA_AFTER_FOR_EVERY_READ_ONLY_MONITOR_RUN",
+    "AUTOMATIC_CANONICAL_COMMIT_FALSE",
+    "GOOGLE_CALENDAR_WRITE_FALSE",
+    "ALL_EXPECTED_ADAPTERS_MUST_BE_ACCOUNTED_FOR_OR_RUN_IS_DEGRADED",
+    "UNEXPECTED_ADAPTER_EXECUTION_DEGRADES_RUN",
+    "SOURCE_FAILURE_CANNOT_CREATE_EVENT_CANCELLATION",
+    "SOURCE_FAILURE_CANNOT_CREATE_EVENT_COMPLETION",
+    "SOURCE_FAILURE_CANNOT_CREATE_EVENT_RESCHEDULE",
+    "REVIEW_CANDIDATES_REQUIRE_HUMAN_OR_EXPLICIT_REVIEWED_TRANSACTION_BEFORE_CANONICAL_COMMIT"
+  ],
+  "promotion_policy": {
+    "pilot_validation_does_not_open_auto_commit": true,
+    "temporary_write_capable_promotion_workflows_must_be_removed_after_success": true,
+    "promotion_requires_live_transport_parse_evidence": true,
+    "promotion_requires_negative_controls_for_material_change_paths": true,
+    "promotion_requires_canonical_sha_guard_pass": true
+  },
+  "canonical_auto_commit_gate": {
+    "state": "CLOSED",
+    "remaining_real_world_evidence": [
+      "ONE_PROSPECTIVE_RESCHEDULE_DETECTED_AFTER_PRIOR_CANONICAL_SNAPSHOT_AND_REVIEWED_ON_SAME_STABLE_OCCURRENCE",
+      "ONE_EXPLICIT_CANCELLATION_OF_EXISTING_CANONICAL_OCCURRENCE_FROM_POSITIVE_AUTHORITATIVE_EVIDENCE"
+    ]
+  }
+}
