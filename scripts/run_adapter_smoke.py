@@ -10,6 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
+    fetch_cra_article_71,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -85,6 +86,21 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
+
+    try:
+        rule,snap=fetch_cra_article_71()
+        report["results"].append({
+            "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+            "monitor_role":"SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
+            "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({"adapter":"EU_CELLAR_CRA_ARTICLE_71","status":"FAIL","error":str(exc)})
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
