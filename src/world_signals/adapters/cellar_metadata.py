@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, asdict
+from hashlib import sha256
+import json
 import re
 from urllib.parse import urlparse
 from xml.etree import ElementTree as ET
@@ -14,18 +17,32 @@ LEGAL_RELATION_TERMS=("amend","consolid","correct","repeal","replace","modify")
 CELEX_TOKEN_RE=re.compile(r"\b(?:0\d{4}[A-Z]\d{4}-\d{8}|3\d{4}[A-Z]\d{4})\b",re.IGNORECASE)
 
 
+@dataclass(frozen=True)
+class CellarLegalTopology:
+    base_celex: str
+    amendment_target_uris: tuple[str,...]
+    correction_target_uris: tuple[str,...]
+    consolidation_target_uris: tuple[str,...]
+    repeal_target_uris: tuple[str,...]
+    topology_sha256: str
+
+    def as_dict(self) -> dict:
+        data=asdict(self)
+        for key in (
+            "amendment_target_uris","correction_target_uris",
+            "consolidation_target_uris","repeal_target_uris",
+        ):
+            data[key]=list(data[key])
+        return data
+
+
 def fetch_cellar_rdf_notice(
     celex: str,
     *,
     timeout: int = 30,
     inferred: bool = True,
 ) -> tuple[bytes, FetchSnapshot]:
-    """Fetch a machine-readable Cellar RDF object notice for a CELEX work.
-
-    The inferred notice is used by default because amendment/consolidation
-    inverse relations may be inferred by Cellar. This is metadata retrieval,
-    not publication-content scraping.
-    """
+    """Fetch a machine-readable Cellar RDF object notice for a CELEX work."""
     accept="application/rdf+xml" if inferred else "application/rdf+xml;notice=non-inferred"
     return fetch_bytes(cellar_celex_url(celex),timeout=timeout,accept=accept)
 
@@ -35,12 +52,7 @@ def fetch_cellar_identifier_notice(
     *,
     timeout: int = 30,
 ) -> tuple[bytes, FetchSnapshot]:
-    """Fetch the official Cellar identifier notice for a known resource URI.
-
-    Identifier notices are used to resolve OJ/consolidation/Cellar resource
-    identifiers to stable synonyms such as CELEX. Only Publications Office
-    resource URIs are accepted; arbitrary URL following is deliberately blocked.
-    """
+    """Fetch the official Cellar identifier notice for a known resource URI."""
     parsed=urlparse(str(resource_uri))
     if parsed.scheme not in {"http","https"} or parsed.hostname != "publications.europa.eu":
         raise AdapterError(f"unsupported Cellar identifier resource URI: {resource_uri!r}")
@@ -54,12 +66,7 @@ def fetch_cellar_identifier_notice(
 
 
 def parse_cellar_identifier_notice(body: bytes | str) -> dict:
-    """Extract CELEX synonyms and other URI identifiers from an identifier notice.
-
-    The notice vocabulary can contain identifiers as element text or resource
-    attributes. We normalize only stable strings we can prove from the payload;
-    no OJ-number-to-CELEX inference is performed.
-    """
+    """Extract CELEX synonyms and other URI identifiers from an identifier notice."""
     raw=body.encode("utf-8") if isinstance(body,str) else body
     try:
         root=ET.fromstring(raw)
@@ -111,13 +118,7 @@ def parse_cellar_legal_relation_diagnostics(
     *,
     base_celex: str | None = None,
 ) -> list[dict]:
-    """Extract legal relations from a Cellar RDF notice.
-
-    When ``base_celex`` is supplied, only predicates attached to RDF subjects
-    identified as that legal work are returned. An inferred Cellar notice is a
-    graph, so relations belonging only to linked resources must not be silently
-    treated as relations of the base act.
-    """
+    """Extract legal relations from a Cellar RDF notice, optionally work-scoped."""
     raw=body.encode("utf-8") if isinstance(body,str) else body
     try:
         root=ET.fromstring(raw)
@@ -153,3 +154,64 @@ def parse_cellar_legal_relation_diagnostics(
             })
     relations.sort(key=lambda x:(x["predicate"],x["target_uri"],x.get("subject_uri") or ""))
     return relations
+
+
+def normalize_cellar_legal_topology(
+    relations: list[dict],
+    *,
+    base_celex: str,
+) -> CellarLegalTopology:
+    """Collapse duplicate CDM relation predicates into a stable legal topology.
+
+    The topology records only incoming relations capable of changing the legal
+    state of the tracked act: amendments, corrigenda/corrections, consolidations
+    and repeal relations. Outgoing ``amends`` relations are intentionally
+    excluded. Consolidation component/fragment URIs are collapsed to the root
+    consolidation resource.
+    """
+    base=str(base_celex).strip().upper()
+    base_uri_suffix="/celex/"+base
+    amendments=set()
+    corrections=set()
+    consolidations=set()
+    repeals=set()
+
+    for rel in relations:
+        subject=(rel.get("subject_uri") or "")
+        if not subject.endswith(base_uri_suffix):
+            continue
+        predicate=(rel.get("predicate") or "").lower()
+        target=rel.get("target_uri")
+        if not target:
+            continue
+
+        if "amended_by" in predicate:
+            amendments.add(target)
+        elif "corrected_by" in predicate:
+            corrections.add(target)
+        elif "consolidated_by" in predicate or "basis_for_act_consolidated" in predicate:
+            # CDM may expose expression/component URIs such as _0000010. The
+            # legal-state identity is the root consolidated act resource.
+            tail=target.rsplit("/",1)[-1]
+            root_tail=re.sub(r"_\d+$","",tail)
+            consolidations.add(target[: -len(tail)] + root_tail)
+        elif "repealed_by" in predicate:
+            repeals.add(target)
+
+    payload={
+        "base_celex":base,
+        "amendment_target_uris":sorted(amendments),
+        "correction_target_uris":sorted(corrections),
+        "consolidation_target_uris":sorted(consolidations),
+        "repeal_target_uris":sorted(repeals),
+    }
+    raw=json.dumps(payload,sort_keys=True,separators=(",",":"),ensure_ascii=False)
+    digest=sha256(raw.encode("utf-8")).hexdigest()
+    return CellarLegalTopology(
+        base_celex=base,
+        amendment_target_uris=tuple(payload["amendment_target_uris"]),
+        correction_target_uris=tuple(payload["correction_target_uris"]),
+        consolidation_target_uris=tuple(payload["consolidation_target_uris"]),
+        repeal_target_uris=tuple(payload["repeal_target_uris"]),
+        topology_sha256=digest,
+    )
