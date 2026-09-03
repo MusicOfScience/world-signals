@@ -1,0 +1,71 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "PUBLIC_RUNTIME_PROJECTION_CONTRACT",
+  "version": "0.1",
+  "reference_date": "2026-09-04",
+  "purpose": "Define the only monitor-runtime fields that may be projected into the public read-only web UX.",
+  "projection_type": "DATED_RECORDED_MONITOR_RUN_NOT_CURRENT_HEALTH",
+  "rules": [
+    "A_PUBLISHED_RUNTIME_SNAPSHOT_IS_A_DATED_RECORDED_RUN_NOT_A_CLAIM_OF_CURRENT_SOURCE_HEALTH",
+    "RAW_SOURCE_SNAPSHOTS_MUST_NOT_ENTER_PAGES",
+    "RAW_FETCH_OR_PARSE_ERROR_TEXT_MUST_NOT_ENTER_PAGES",
+    "RAW_MONITOR_OBSERVATION_PAYLOADS_MUST_NOT_ENTER_PAGES",
+    "CANDIDATE_OLD_VALUE_NEW_VALUE_AND_SOURCE_ASSERTION_PAYLOADS_MUST_NOT_ENTER_PAGES",
+    "REVIEW_CANDIDATE_METADATA_IS_NOT_A_CANONICAL_CHANGE",
+    "RUNTIME_CONFIGURATION_MISMATCH_WITH_CURRENT_SITE_MUST_BE_VISIBLE",
+    "AUTOMATIC_CANONICAL_COMMIT_REMAINS_FALSE",
+    "GOOGLE_CALENDAR_WRITE_REMAINS_FALSE",
+    "BROWSER_CANONICAL_WRITE_REMAINS_IMPOSSIBLE"
+  ],
+  "allowed_runtime_fields": [
+    "availability",
+    "projection_type",
+    "run_at",
+    "status",
+    "github_run_id",
+    "github_sha",
+    "report_schema_version",
+    "canonical_registry_version",
+    "source_registry_version",
+    "monitor_expectations_version",
+    "monitor_operations_policy_version",
+    "configuration_fingerprint_sha256",
+    "canonical_unchanged",
+    "automatic_canonical_commit",
+    "google_calendar_write",
+    "healthy_adapter_count",
+    "degraded_adapter_count",
+    "candidate_count",
+    "all_expected_adapters_observed",
+    "configuration_alignment"
+  ],
+  "allowed_source_health_fields": [
+    "adapter_id",
+    "source_id",
+    "state",
+    "layer_states"
+  ],
+  "allowed_candidate_fields": [
+    "candidate_id",
+    "candidate_type",
+    "source_id",
+    "occurrence_ids",
+    "review_state",
+    "candidate_origin",
+    "changed_fields",
+    "automatic_commit_allowed"
+  ],
+  "prohibited_field_names": [
+    "snapshot",
+    "error",
+    "old_value",
+    "new_value",
+    "source_assertion",
+    "observations",
+    "rule",
+    "topology",
+    "rows",
+    "body",
+    "raw"
+  ]
+}
