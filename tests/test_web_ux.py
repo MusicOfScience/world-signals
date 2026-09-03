@@ -25,13 +25,36 @@ class WebUXTests(unittest.TestCase):
         self.assertIn('id="historyTab"', html)
         self.assertIn('id="historyView"', html)
         self.assertIn('Reviewed history: visible here', html)
-        self.assertIn('Pending review candidates: GitHub Actions artefacts', html)
+        self.assertIn('Run-generated candidates: Operations snapshot', html)
+        self.assertIn('Persistent review queue: separate future layer', html)
         self.assertIn("fetch('data/changes.json')", js)
         self.assertIn('old_values', js)
         self.assertIn('new_values', js)
         self.assertIn('review_basis', js)
         self.assertIn('history.js', build)
         self.assertIn('history.css', build)
+
+    def test_operations_view_exposes_dated_runtime_without_claiming_now(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        js=(ROOT/"web/operations.js").read_text(encoding="utf-8")
+        build=(ROOT/"scripts/build_site.py").read_text(encoding="utf-8")
+        self.assertIn('id="operationsTab"', html)
+        self.assertIn('id="operationsView"', html)
+        self.assertIn('Latest retained run: dated snapshot only', html)
+        self.assertIn('Current source health: not inferred', html)
+        self.assertIn('Persistent review queue: not inferred', html)
+        self.assertIn("fetch('data/runtime.json')", js)
+        self.assertIn('A recorded run is not current health', html)
+        self.assertIn('runtime.json', build)
+
+    def test_operations_module_has_no_write_path(self):
+        js=(ROOT/"web/operations.js").read_text(encoding="utf-8")
+        self.assertNotIn('data/canonical/registry.json', js)
+        self.assertNotIn("method:'POST'", js)
+        self.assertNotIn('method:"POST"', js)
+        self.assertNotIn('PUT', js)
+        self.assertNotIn('DELETE', js)
+        self.assertNotIn('automatic_commit_allowed:true', js.replace(' ',''))
 
     def test_history_module_has_no_write_path(self):
         js=(ROOT/"web/history.js").read_text(encoding="utf-8")
