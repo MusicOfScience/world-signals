@@ -5,6 +5,8 @@ import sys, unittest
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
+    cellar_celex_url,
+    parse_cra_article_71,
     parse_kenya_budget_policy_rule,
     parse_rba_fsr_rss,
     parse_socrata_metadata,
@@ -54,7 +56,6 @@ class AdapterParserTests(unittest.TestCase):
     def test_socrata_resource_url_encodes_query(self):
         url=resource_url(where="n_mero='111' AND a_o='1996'",select="tipo,n_mero,a_o",limit=5)
         self.assertIn("resource/fiev-nid6.json",url)
-        self.assertIn("%24111",url) if False else None
         self.assertIn("%24where=",url)
         self.assertIn("%24select=",url)
         self.assertIn("%24limit=5",url)
@@ -65,6 +66,22 @@ class AdapterParserTests(unittest.TestCase):
         self.assertEqual(rule.section,"25(2)")
         self.assertEqual(rule.deadline_month,2)
         self.assertEqual(rule.deadline_day,15)
+        self.assertEqual(len(rule.rule_sha256),64)
+
+    def test_cellar_celex_url(self):
+        self.assertEqual(
+            cellar_celex_url("32024R2847"),
+            "https://publications.europa.eu/resource/celex/32024R2847",
+        )
+
+    def test_cra_article_71_parser_offline_fixture(self):
+        html='''<html><body><h1>Cyber Resilience Act</h1><h2>Article 71 Entry into force and application</h2><p>This Regulation shall apply from 11 December 2027. However, Article 14 shall apply from 11 September 2026 and Chapter IV (Articles 35 to 51) shall apply from 11 June 2026.</p></body></html>'''
+        rule=parse_cra_article_71(html)
+        self.assertEqual(rule.celex,"32024R2847")
+        self.assertEqual(rule.article,"71")
+        self.assertEqual(rule.article_14_application_date,"2026-09-11")
+        self.assertEqual(rule.general_application_date,"2027-12-11")
+        self.assertEqual(rule.chapter_iv_application_date,"2026-06-11")
         self.assertEqual(len(rule.rule_sha256),64)
 
 
