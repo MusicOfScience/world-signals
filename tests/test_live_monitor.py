@@ -6,9 +6,11 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.live_monitor import (
     colombia_legal_input_review_candidate,
+    cra_legal_rule_review_candidate,
     rba_fsr_review_candidates,
     stable_hash,
 )
+
 
 class LiveMonitorTests(unittest.TestCase):
     def setUp(self):
@@ -29,6 +31,22 @@ class LiveMonitorTests(unittest.TestCase):
             "source_id":"WSSRC-FIN-001",
             "canonical_occurrence_ids":["WSO-FIN-B-0001"],
             "matching":{"nearest_planned_occurrence_max_days":75},
+        }
+        self.cra_baseline={
+            "celex":"32024R2847",
+            "article":"71",
+            "general_application_date":"2027-12-11",
+            "article_14_application_date":"2026-09-11",
+            "chapter_iv_application_date":"2026-06-11",
+            "rule_sha256":"39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f",
+        }
+        self.cra_config={
+            "source_id":"WSSRC-TECH-001",
+            "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
+            "baseline":{
+                "rule":self.cra_baseline.copy(),
+                "rule_sha256":self.cra_baseline["rule_sha256"],
+            },
         }
 
     def test_rba_historical_item_does_not_touch_future_occurrence(self):
@@ -93,5 +111,25 @@ class LiveMonitorTests(unittest.TestCase):
         self.assertEqual(candidate["candidate_type"],"LEGAL_INPUT_CHANGED")
         self.assertEqual(candidate["review_state"],"PENDING_CLAUSE_LEVEL_SUIN_VERIFICATION")
         self.assertFalse(candidate["automatic_commit_allowed"])
+
+    def test_cra_unchanged_semantic_rule(self):
+        candidate,obs=cra_legal_rule_review_candidate(self.cra_baseline.copy(),self.cra_config)
+        self.assertIsNone(candidate)
+        self.assertEqual(obs["type"],"CRA_ARTICLE_71_RULE_NO_CHANGE")
+        self.assertEqual(obs["rule_sha256"],self.cra_baseline["rule_sha256"])
+
+    def test_cra_changed_date_generates_review_candidate_only(self):
+        changed=self.cra_baseline|{
+            "article_14_application_date":"2026-09-12",
+            "rule_sha256":"changed-rule-hash",
+        }
+        candidate,obs=cra_legal_rule_review_candidate(changed,self.cra_config)
+        self.assertEqual(candidate["candidate_type"],"LEGAL_RULE_CHANGED")
+        self.assertEqual(candidate["review_state"],"PENDING_EURLEX_ARTICLE_71_REVIEW")
+        self.assertEqual(candidate["occurrence_ids"],["WSO-TECH-A-0001","WSO-TECH-A-0007"])
+        self.assertFalse(candidate["automatic_commit_allowed"])
+        self.assertEqual(obs["type"],"CRA_ARTICLE_71_RULE_CHANGED")
+        self.assertEqual(self.cra_baseline["article_14_application_date"],"2026-09-11")
+
 
 if __name__=="__main__": unittest.main()
