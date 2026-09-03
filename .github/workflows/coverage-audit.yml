@@ -10,6 +10,7 @@ on:
       - 'tests/test_coverage.py'
       - 'data/canonical/registry.json'
       - 'data/sources/registry.json'
+      - 'data/coverage/**'
       - '.github/workflows/coverage-audit.yml'
 
 permissions:
