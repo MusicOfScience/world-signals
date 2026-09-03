@@ -117,6 +117,49 @@
     candidates.innerHTML=rows.length?rows.map(renderRuntimeCandidate).join(''):'<p class="empty">This retained run generated no review candidates.</p>';
   }
 
+  function renderReviewItem(item){
+    const decision=item.last_decision_state?`${human(item.last_decision_state)} · ${recordedTime(item.decided_at)}`:'none recorded';
+    return `<article class="ops-review-item">
+      <div class="ops-card-head">
+        <div><p class="eyebrow">${esc(human(item.identity_mode||'review proposition'))}</p><h4><code>${esc(item.review_item_id)}</code></h4></div>
+        <span class="ops-review-state ops-review-${esc(String(item.state||'unknown').toLowerCase())}">${esc(human(item.state||'unknown'))}</span>
+      </div>
+      <div class="ops-review-observation"><strong>${esc(item.observation_count||0)} observation${item.observation_count===1?'':'s'}</strong><span>first ${esc(recordedTime(item.first_observed_at))} · last ${esc(recordedTime(item.last_observed_at))}</span></div>
+      <dl class="ops-route-values">
+        <dt>Occurrence scope</dt><dd>${(item.occurrence_ids||[]).map(id=>`<code>${esc(id)}</code>`).join(' ')||'None'}</dd>
+        <dt>Candidate types</dt><dd>${(item.candidate_types||[]).map(value=>`<code>${esc(value)}</code>`).join(' ')||'None'}</dd>
+        <dt>Sources</dt><dd>${(item.source_ids||[]).map(value=>`<code>${esc(value)}</code>`).join(' ')||'Not recorded'}</dd>
+        <dt>Proposed fields</dt><dd>${(item.proposed_change_fields||[]).map(value=>`<code>${esc(value)}</code>`).join(' ')||'None'}</dd>
+        <dt>Canonical alignment</dt><dd>${esc(human(item.canonical_alignment_state||'not evaluated'))}</dd>
+        <dt>Last decision</dt><dd>${esc(decision)}</dd>
+        <dt>Reobserved after decision</dt><dd>${item.reobserved_after_decision?'YES':'NO'}</dd>
+        <dt>Automatic commit</dt><dd>OFF</dd>
+      </dl>
+    </article>`;
+  }
+
+  function renderReviewState(review){
+    const summary=document.querySelector('#opsReviewSummary');
+    const items=document.querySelector('#opsReviewItems');
+    const count=document.querySelector('#opsReviewCount');
+    if(!review||review.availability!=='AVAILABLE_RETAINED_HORIZON'){
+      count.textContent='review horizon unavailable';
+      summary.innerHTML=`<article class="ops-runtime-unavailable"><p class="eyebrow">RETAINED REVIEW STATE UNAVAILABLE</p><h3>No complete retained-horizon projection in this build</h3><p>${esc(human(review?.availability||'review state unavailable'))}.</p><p class="meta">This is not interpreted as an empty review queue.</p></article>`;
+      items.innerHTML='';
+      return;
+    }
+    const stateEntries=Object.entries(review.state_counts||{});
+    count.textContent=`${review.item_count||0} review item${review.item_count===1?'':'s'}`;
+    summary.innerHTML=`<article class="ops-review-horizon">
+      <div class="ops-card-head"><div><p class="eyebrow">EVIDENCE HORIZON</p><h3>${esc(review.retention_days||'?')} retained days · activated after monitor run ${esc(review.activation_after_run_number||'?')}</h3></div><span class="ops-static-badge">NOT PERMANENT</span></div>
+      <div class="ops-runtime-metrics"><span><b>${esc(review.run_count_considered||0)}</b>successful runs reduced</span><span><b>${esc(review.item_count||0)}</b>review items</span><span><b>${esc(review.unsuccessful_run_count||0)}</b>unsuccessful runs</span><span><b>${review.evidence_horizon_complete?'YES':'NO'}</b>horizon complete</span></div>
+      ${stateEntries.length?`<div class="ops-review-state-summary">${stateEntries.map(([state,n])=>`<span><b>${esc(n)}</b>${esc(human(state))}</span>`).join('')}</div>`:'<p class="ops-alignment-ok">No post-contract review proposition has been observed in the retained evidence horizon.</p>'}
+      <p class="meta">A later run with no matching candidate does not resolve an earlier item. Manual decisions are repository-reviewed records; monitor and browser writes remain prohibited.</p>
+    </article>`;
+    const rows=review.items||[];
+    items.innerHTML=rows.length?rows.map(renderReviewItem).join(''):'<p class="empty">No post-contract review items are currently present inside the retained evidence horizon.</p>';
+  }
+
   function render(data){
     DATA=data;
     const m=data.metadata||{};
@@ -151,7 +194,11 @@
     if(loaded) return;
     document.querySelector('#opsRecordedRoutes').innerHTML='<p class="empty">Loading recorded operations state…</p>';
     try{
-      const [operationsResponse,runtimeResponse]=await Promise.all([fetch('data/operations.json'),fetch('data/runtime.json')]);
+      const [operationsResponse,runtimeResponse,reviewResponse]=await Promise.all([
+        fetch('data/operations.json'),
+        fetch('data/runtime.json'),
+        fetch('data/review_state.json'),
+      ]);
       if(!operationsResponse.ok) throw new Error(`operations.json ${operationsResponse.status}`);
       render(await operationsResponse.json());
       if(runtimeResponse.ok){
@@ -159,10 +206,16 @@
       }else{
         renderRuntime({availability:'UNAVAILABLE_AT_BUILD',reason:`runtime.json ${runtimeResponse.status}`});
       }
+      if(reviewResponse.ok){
+        renderReviewState(await reviewResponse.json());
+      }else{
+        renderReviewState({availability:`review_state.json ${reviewResponse.status}`});
+      }
       loaded=true;
     } catch(error){
       document.querySelector('#opsRecordedRoutes').innerHTML=`<p class="empty">Operations data could not be loaded: ${esc(error.message)}</p>`;
       renderRuntime({availability:'UNAVAILABLE_AT_BUILD',reason:'operations data load failed'});
+      renderReviewState({availability:'operations data load failed'});
     }
   }
 
