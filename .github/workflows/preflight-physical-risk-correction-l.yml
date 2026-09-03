@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Inspect canonical/source identity and record contracts
+      - name: Inspect current rights and physical-risk contracts
         run: |
           python - <<'PY'
           import json,re
@@ -27,36 +27,33 @@ jobs:
           reg=json.loads(Path('data/canonical/registry.json').read_text())
           src=json.loads(Path('data/sources/registry.json').read_text())
           schema=json.loads(Path('data/canonical/schema.json').read_text())
+          cv=schema.get('controlled_vocabularies',{})
           print('CHECKPOINT',reg.get('version'),reg.get('record_count'),'SCHEMA',schema.get('version'),'SOURCE',src.get('version'),'SOURCE_COUNT',len(src.get('sources',[])))
+          print('CANONICAL_PROVENANCE_USE_VOCAB',cv.get('canonical_provenance_use'))
+          print('AUTOMATED_MONITORING_USE_VOCAB',cv.get('automated_monitoring_use'))
+          print('VERIFICATION_MODE_VOCAB',cv.get('verification_mode'))
+          print('VISIBILITY_VOCAB',cv.get('visibility_tier'))
+          print('LIFECYCLE_VOCAB',cv.get('lifecycle_status'))
+          print('PUBLICATION_SEMANTICS',cv.get('publication_time_semantics'))
+          modern=[s for s in src.get('sources',[]) if s.get('canonical_provenance_use') is not None or s.get('automated_monitoring_use') is not None]
+          print('MODERN_RIGHTS_SOURCE_COUNT',len(modern))
+          fields=('source_id','institution','jurisdiction','domain','source_type','canonical_provenance_use','automated_monitoring_use','verification_mode','ingestion_permission','licence_review_status','automated_retrieval_permission','redistribution_permission','monitoring_readiness_status','licence_constraints','known_limitations','notes')
+          for s in modern[-8:]:
+              print('\nMODERN_SOURCE')
+              for k in fields: print(k,'=',s.get(k))
           risk=[r for r in reg['records'] if r.get('category')=='PHYSICAL_CLIMATE_RISK']
-          print('RISK_COUNT',len(risk))
-          print('RISK_OCCURRENCES',[(r.get('occurrence_id'),r.get('series_id'),r.get('canonical_name')) for r in risk])
-          print('WSO_RISK_IDS',[r.get('occurrence_id') for r in reg['records'] if str(r.get('occurrence_id') or '').startswith('WSO-RISK-')])
-          print('RISK_SERIES',sorted({r.get('series_id') for r in risk}))
           risk_sources=[s for s in src.get('sources',[]) if str(s.get('source_id') or '').startswith('WSSRC-RISK-')]
-          print('RISK_SOURCE_IDS',[s.get('source_id') for s in risk_sources])
           nums=[]
           for s in risk_sources:
               m=re.fullmatch(r'WSSRC-RISK-(\d+)',str(s.get('source_id') or ''))
               if m: nums.append(int(m.group(1)))
+          print('\nIDENTITY')
+          print('RISK_OCCURRENCES',[(r.get('occurrence_id'),r.get('series_id')) for r in risk])
+          print('WSO_RISK_IDS',[r.get('occurrence_id') for r in reg['records'] if str(r.get('occurrence_id') or '').startswith('WSO-RISK-')])
+          print('RISK_SOURCE_IDS',[s.get('source_id') for s in risk_sources])
           print('NEXT_RISK_SOURCE_NUM',(max(nums)+1 if nums else 1))
-          print('SOURCE_TOP_LEVEL_KEYS',sorted(src.keys()))
-          print('SOURCE_SAMPLE_KEYS',sorted(risk_sources[0].keys()) if risk_sources else [])
-          fields=('source_id','institution','jurisdiction','domain','endpoint_role','authoritative_url','future_schedule_horizon','source_type','information_supplied','publication_cadence','future_schedule_published','typical_advance_notice','machine_readable','known_limitations','canonical_provenance_use','automated_monitoring_use','ingestion_permission','licence_review_status','automated_retrieval_permission','redistribution_permission','rights_evidence_url','rights_summary','automation_summary','monitoring_readiness_status','last_verified')
-          for s in risk_sources:
-              print('\nSOURCE',s.get('source_id'))
-              for k in fields: print(k,'=',s.get(k))
-          print('\nRISK_RECORD_KEYS',sorted(set().union(*(r.keys() for r in risk))))
-          for r in risk:
-              print('\nEVENT',r.get('occurrence_id'))
-              for k in ('series_id','canonical_name','category','subcategory','region','jurisdiction','institution','source_id','certainty_status','lifecycle_status','timing_type','time_precision','time_status','time_basis','activation_mode','signal_object_class','publication_time_semantics','physical_shock_routing','intrinsic_importance','expected_market_sensitivity','visibility_tier','calendar_render_policy','notes','date_first_discovered','date_last_verified','next_verification_date'):
-                  print(k,'=',r.get(k))
-          print('\nVOCAB_CHECKS')
-          cv=schema.get('controlled_vocabularies',{})
-          for key in ('certainty_status','lifecycle_status','activation_mode','signal_object_class','publication_time_semantics','physical_shock_routing','intrinsic_importance','expected_market_sensitivity','visibility_tier','calendar_render_policy','broad_region'):
-              print(key,'=',cv.get(key))
-          print('PRECHECK_SCHEMA_MONTH_SEMANTIC', 'SEASONAL_MONTH_RANGE' in cv.get('publication_time_semantics',[]))
-          print('PRECHECK_NEW_TIMING_TYPES', [x for x in ('MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW') if x in cv.get('timing_type',[])])
+          print('MONTH_SEMANTIC_READY','SEASONAL_MONTH_RANGE' in cv.get('publication_time_semantics',[]))
+          print('TIMING_TYPES_READY',all(x in cv.get('timing_type',[]) for x in ('MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW')))
           PY
       - name: Prove read only
         run: git diff --exit-code
