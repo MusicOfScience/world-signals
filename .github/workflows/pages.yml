@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -26,6 +27,11 @@ jobs:
       - run: node --check web/app.js
       - run: node --check web/history.js
       - run: node --check web/operations.js
+      - name: Build browser-safe latest monitor snapshot
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python scripts/fetch_latest_monitor_snapshot.py
       - run: python scripts/build_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
