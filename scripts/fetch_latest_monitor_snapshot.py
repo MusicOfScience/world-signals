@@ -7,7 +7,7 @@ import os
 from pathlib import Path, PurePosixPath
 import sys
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, build_opener, HTTPRedirectHandler
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -42,19 +42,53 @@ def current_configuration() -> dict:
     }
 
 
-def request(url: str,token: str) -> bytes:
-    req=Request(url,headers={
+def github_headers(token: str) -> dict[str,str]:
+    return {
         "Authorization":f"Bearer {token}",
         "Accept":"application/vnd.github+json",
         "X-GitHub-Api-Version":"2022-11-28",
         "User-Agent":"WORLD-SIGNALS-Pages-runtime-projection",
-    })
+    }
+
+
+def request(url: str,token: str) -> bytes:
+    req=Request(url,headers=github_headers(token))
     with urlopen(req,timeout=30) as response:
         return response.read()
 
 
 def request_json(url: str,token: str) -> dict:
     return json.loads(request(url,token).decode("utf-8"))
+
+
+class _NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self,req,fp,code,msg,headers,newurl):
+        return None
+
+
+def download_artifact(url: str,token: str) -> bytes:
+    """Download a GitHub Actions artifact without forwarding repo credentials.
+
+    GitHub's archive endpoint returns a signed cross-host storage URL. Repository
+    Authorization is valid for the GitHub API request, but must not be carried to
+    the signed storage request. Handle that redirect explicitly.
+    """
+    opener=build_opener(_NoRedirect)
+    try:
+        response=opener.open(Request(url,headers=github_headers(token)),timeout=30)
+    except HTTPError as exc:
+        if exc.code not in (301,302,303,307,308):
+            raise
+        location=exc.headers.get("Location")
+        if not location:
+            raise ValueError("artifact download redirect omitted signed storage location")
+    else:
+        with response:
+            return response.read()
+
+    signed=Request(location,headers={"User-Agent":"WORLD-SIGNALS-Pages-runtime-projection"})
+    with urlopen(signed,timeout=30) as response:
+        return response.read()
 
 
 def safe_candidate_path(raw: str) -> str:
@@ -93,9 +127,11 @@ def sanitize_archive(blob: bytes,current: dict) -> dict:
     return projection
 
 
-def unavailable(reason: str,current: dict) -> int:
+def unavailable(reason: str,current: dict,**metadata) -> int:
     payload=unavailable_runtime_projection(reason,current)
     payload["public_projection_contract_version"]=load_json(CONTRACT).get("version")
+    if metadata:
+        payload["delivery_metadata"]=metadata
     dump(payload)
     print(f"Runtime projection unavailable: {reason}")
     return 0
@@ -117,6 +153,7 @@ def main() -> int:
     except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
         return unavailable("GITHUB_ACTIONS_RUN_INDEX_UNAVAILABLE_AT_BUILD",current)
 
+    saw_successful_run=bool(runs)
     for run in runs:
         run_id=run.get("id")
         if not run_id:
@@ -124,18 +161,30 @@ def main() -> int:
         try:
             artifacts=request_json(base+f"/actions/runs/{run_id}/artifacts?per_page=100",token).get("artifacts",[])
         except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
-            continue
+            return unavailable(
+                "LATEST_SUCCESSFUL_MONITOR_ARTIFACT_INDEX_UNAVAILABLE_AT_BUILD",
+                current,
+                github_run_id=run_id,
+            )
         wanted=f"world-signals-live-monitor-{run_id}"
         artifact=next((item for item in artifacts if item.get("name")==wanted and not item.get("expired")),None)
         if not artifact:
+            # Older successful runs used a generic artefact name. Continue until
+            # the first run that satisfies the current unique-name contract.
             continue
         artifact_id=artifact.get("id")
         if not artifact_id:
-            continue
+            raise ValueError(f"matching monitor artefact for run {run_id} has no artifact id")
         try:
-            blob=request(base+f"/actions/artifacts/{artifact_id}/zip",token)
-        except (HTTPError,URLError,TimeoutError):
-            continue
+            blob=download_artifact(base+f"/actions/artifacts/{artifact_id}/zip",token)
+        except (HTTPError,URLError,TimeoutError,ValueError) as exc:
+            return unavailable(
+                "LATEST_RETAINED_MONITOR_ARTIFACT_DOWNLOAD_UNAVAILABLE_AT_BUILD",
+                current,
+                github_run_id=run_id,
+                artifact_id=artifact_id,
+                failure_class=type(exc).__name__,
+            )
 
         # An artefact that exists but violates the projection contract is a build
         # failure. Silently skipping malformed evidence could publish a misleading
@@ -149,7 +198,12 @@ def main() -> int:
         )
         return 0
 
-    return unavailable("NO_RETAINED_SUCCESSFUL_MONITOR_ARTIFACT_FOUND",current)
+    reason=(
+        "NO_RETAINED_MONITOR_ARTIFACT_MATCHING_CURRENT_NAMING_CONTRACT"
+        if saw_successful_run
+        else "NO_SUCCESSFUL_MONITOR_RUN_FOUND"
+    )
+    return unavailable(reason,current)
 
 
 if __name__=="__main__":
