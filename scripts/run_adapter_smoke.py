@@ -10,8 +10,6 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
-    fetch_kenya_budget_policy_rule_baseline,
-    fetch_kenya_budget_policy_rule_current,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -22,8 +20,10 @@ ARTIFACT_DIR=ROOT/"artifacts"
 ARTIFACT_DIR.mkdir(exist_ok=True)
 OUT=ARTIFACT_DIR/"adapter-smoke.json"
 
+
 def file_hash(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
+
 
 def main() -> int:
     before=file_hash(CANONICAL)
@@ -33,9 +33,13 @@ def main() -> int:
         "run_at":datetime.now(timezone.utc).isoformat(),
         "canonical_sha256_before":before,
         "automatic_canonical_commit":False,
+        "google_calendar_write":False,
+        "scope":"LIVE_ROUTES_ONLY",
+        "held_routes_excluded":["KENYA_PFM_BPS_RULE"],
         "results":[],
     }
     failures=[]
+
     try:
         items,snap=fetch_rba_fsr()
         report["results"].append({
@@ -82,42 +86,6 @@ def main() -> int:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
 
-    # Kenya is deliberately NOT a live production route. The frozen baseline is
-    # reproducible, while the unversioned current endpoint returned 403 from
-    # GitHub Actions on 3 Sep 2026. We retain both facts without making the held
-    # route poison the proven RBA/Colombia adapter gate.
-    try:
-        rule,snap=fetch_kenya_budget_policy_rule_baseline()
-        report["results"].append({
-            "adapter":"KENYA_PFM_BPS_RULE_BASELINE",
-            "status":"BASELINE_PASS",
-            "snapshot":snap.as_dict(),
-            "rule":rule.as_dict(),
-            "monitor_role":"REPRODUCIBLE_LEGAL_RULE_BASELINE",
-            "live_monitor_promoted":False,
-        })
-    except AdapterError as exc:
-        failures.append(str(exc))
-        report["results"].append({"adapter":"KENYA_PFM_BPS_RULE_BASELINE","status":"FAIL","error":str(exc)})
-
-    try:
-        rule,snap=fetch_kenya_budget_policy_rule_current()
-        report["results"].append({
-            "adapter":"KENYA_PFM_BPS_RULE_CURRENT_PROBE",
-            "status":"CURRENT_ROUTE_AVAILABLE_NOT_PROMOTED",
-            "snapshot":snap.as_dict(),
-            "rule":rule.as_dict(),
-            "live_monitor_promoted":False,
-        })
-    except AdapterError as exc:
-        report["results"].append({
-            "adapter":"KENYA_PFM_BPS_RULE_CURRENT_PROBE",
-            "status":"ROUTE_HOLD",
-            "error":str(exc),
-            "canonical_action":"NONE",
-            "live_monitor_promoted":False,
-        })
-
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
     report["canonical_unchanged"]=before==after
@@ -128,6 +96,7 @@ def main() -> int:
     OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2,ensure_ascii=False))
     return 0 if not failures else 1
+
 
 if __name__=="__main__":
     raise SystemExit(main())
