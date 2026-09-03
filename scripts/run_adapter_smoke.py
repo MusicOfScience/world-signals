@@ -10,6 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
+    fetch_kenya_budget_policy_rule,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -79,6 +80,20 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
+
+    try:
+        rule,snap=fetch_kenya_budget_policy_rule()
+        report["results"].append({
+            "adapter":"KENYA_PFM_BPS_RULE",
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "rule":rule.as_dict(),
+            "monitor_role":"SEMANTIC_LEGAL_RULE_SENTINEL",
+            "whole_document_hash_is_not_rule_change":True,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({"adapter":"KENYA_PFM_BPS_RULE","status":"FAIL","error":str(exc)})
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
