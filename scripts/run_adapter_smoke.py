@@ -61,12 +61,12 @@ def main() -> int:
 
     try:
         rows,snap=fetch_suin_rows(
-            where="n_mero='111' AND a_o='1996'",
+            where="tipo='DECRETO' AND n_mero='111' AND a_o='1996'",
             select="tipo,n_mero,a_o,sector,subtipo,vigencia,entidad,materia,art_culos",
             limit=10,
         )
-        if not rows:
-            raise AdapterError("SUIN live inventory query returned no row for Decree 111 of 1996")
+        if len(rows) != 1:
+            raise AdapterError(f"SUIN expected exactly one DECRETO 111/1996 row, found {len(rows)}")
         report["results"].append({
             "adapter":"COLOMBIA_SUIN_DECREE_111_1996",
             "status":"PASS",
