@@ -12,6 +12,8 @@ This is an operational checkpoint, not a replacement for `WORLD_SIGNALS_PROJECT_
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.6.
 - **Monitor operations policy:** v0.1.
+- **Review-candidate state contract:** v0.1 — prospective activation after monitor run 47.
+- **Manual review-decision store:** v0.1 — currently empty, reviewed repository commits only.
 - **Canonical commit readiness audit:** v0.8.
 - **Automatic canonical commit:** **CLOSED / prohibited**.
 - **Google Calendar writes:** **OFF / prohibited**.
@@ -24,9 +26,12 @@ Current visible layers include:
 1. Calendar;
 2. Event index;
 3. configured Monitor routes;
-4. reviewed Change history.
+4. Operations / source governance;
+5. latest retained dated monitor-run evidence;
+6. retained review state inside the Actions evidence horizon;
+7. reviewed Change history.
 
-The next UX milestone is an **Operations** layer exposing browser-safe monitor governance, source readiness and timestamped recorded evidence while refusing to imply unobserved live runtime health.
+The Operations layer deliberately distinguishes a single-run candidate snapshot from retained review state and from reviewed canonical history. It does not claim current source health from a static build and it does not claim that the retained-horizon reducer is a permanent queue.
 
 ## Architectural boundary
 
@@ -60,6 +65,53 @@ Monitor hardening includes:
 - deterministic review-candidate manifest;
 - regression tests inside the monitor workflow;
 - evidence artefacts retained for 90 days.
+
+### Latest retained single-run evidence
+
+Latest retained pre-contract run used by the public runtime projection:
+
+- live-monitor run **47** / GitHub run id `33754900613`;
+- recorded at `2026-09-03T12:23:29.227611+00:00`;
+- **6 healthy / 0 degraded / 0 candidates**;
+- `NO_CHANGE`;
+- canonical unchanged;
+- run configuration: canonical v0.17 / source registry v1.48;
+- therefore correctly labelled `STALE_RELATIVE_TO_CURRENT_SITE` against current v0.20 / v1.51.
+
+Pages follows the latest **completed** monitor run, not merely the latest successful run. A newer failed run cannot be hidden behind an older green snapshot. Runtime artefacts are sanitized before public projection; raw snapshots, parser errors, legal payloads, old/new candidate evidence and observations do not enter Pages.
+
+## Retained review state — IMPLEMENTED WITH RETENTION BOUNDARY
+
+`data/monitor/review_candidate_state_contract.json` v0.1 activates prospectively **after monitor run 47**. Historical monitor experiments are not retroactively promoted.
+
+Identity model:
+
+- `candidate_id` = immutable monitor evidence object;
+- `review_item_id` = stable proposition identity, prefix `WSRV-`;
+- identical propositions aggregate even if candidate IDs differ;
+- materially different propositions remain siblings;
+- later candidate absence does not resolve an item;
+- fetch/source failure does not resolve an item;
+- rejected/deferred items do not reopen merely because they are reobserved.
+
+`src/world_signals/review_state.py` implements the reducer. Canonical field propositions hash occurrence scope + the fields and values actually proposed. Legal/rule/topology propositions are opaque identities: raw rule state may be used transiently to derive a digest but is not exposed publicly.
+
+`data/monitor/review_decisions.json` v0.1 is the reviewed manual-decision store. The monitor and Pages/browser cannot write it.
+
+`scripts/fetch_retained_review_state.py` scans retained successful post-contract monitor artefacts, fails rather than silently omitting a successful run whose artefact is missing, and records unsuccessful runs without interpreting them as candidate absence. The v0.1 reducer has a hard ceiling of 400 retained successful runs.
+
+First real Pages reduction after activation:
+
+- successful post-contract runs considered: **0**;
+- retained review items: **0**;
+- unsuccessful post-contract runs: **0**;
+- evidence horizon: complete for evidence that presently exists.
+
+This is a meaningful prospective empty state, not a statement about pre-contract history.
+
+Current limitation: the state is complete only inside the 90-day retained Actions artefact horizon. **Do not call it a permanent queue.** Before indefinite pending-review persistence can be claimed, design an independently constrained durable checkpoint mechanism without granting the monitor or Pages workflow repository contents-write authority merely to persist state.
+
+Durable audit: `data/monitor/RETAINED_REVIEW_STATE_AUDIT_v0.1.md`.
 
 ## Coverage programme — completed corrections
 
@@ -129,7 +181,7 @@ Fiji/RSMC Nadi, JODI, GECF, ICSG and several other sources may support manually 
 
 ## Canonical auto-commit gate — CLOSED
 
-Do not reopen merely because more parsers or coverage tranches pass tests. The harder real-world evidence remains:
+Do not reopen merely because more parsers, UX features or coverage tranches pass tests. The harder real-world evidence remains:
 
 1. **one prospective reschedule** detected after a prior canonical monitor snapshot and reviewed against the same stable occurrence identity; and
 2. **one explicit cancellation of an existing canonical occurrence** from positive authoritative evidence, not inferred from absence.
@@ -142,12 +194,13 @@ is permitted on validated routes; automatic canonical mutation is not.
 
 ## Exact next work
 
-1. **Web UX Operations layer** — publish browser-safe monitor/source governance and recorded evidence metadata, clearly separating configuration from runtime observation.
-2. **Review-candidate UX contract** — design a static/read-only representation that can consume reviewed or retained candidate manifests without granting browser write authority.
+1. **Durable review persistence architecture** — design a constrained checkpoint beyond the 90-day Actions horizon without turning Actions into a database or granting routine monitor/Pages contents-write authority.
+2. **Observe first post-contract monitor run** — validate retained-state reduction on genuine run 48+ evidence; do not manufacture a candidate merely to demonstrate the UI.
 3. **Cross-domain biosecurity taxonomy** — architecture before population.
 4. **South Asia provenance backlog** — continue source/precision resolution.
-5. Re-run coverage audit only after analytically justified additions.
-6. Continue Live Intelligence v1 and Analysis v1 after the registry/monitor/UX boundaries remain stable.
+5. **Source-governance backfill** — progressively classify older source records whose explicit provenance/automation fields are still `NOT_RECORDED_IN_REGISTRY`; do not treat missing classification as permission.
+6. Re-run coverage audit only after analytically justified additions.
+7. Continue **Live Intelligence v1** and then **Analysis v1** after the registry/monitor/review boundaries remain stable.
 
 ## Recovery rule for future conversation branches
 
@@ -160,8 +213,10 @@ Recover from the repository in this order rather than trusting the last chat sen
 5. `data/sources/registry.json`
 6. `data/monitor/expectations.json`
 7. `data/monitor/operations_policy.json`
-8. `data/changes/ledger.json`
-9. latest relevant `data/coverage/*AUDIT*` / transaction record
-10. latest `main` commits and GitHub Actions runs.
+8. `data/monitor/review_candidate_state_contract.json`
+9. `data/monitor/review_decisions.json`
+10. `data/changes/ledger.json`
+11. latest relevant `data/coverage/*AUDIT*` and `data/monitor/*AUDIT*`
+12. latest `main` commits and GitHub Actions runs.
 
 If chat narrative and repository state disagree, stop and reconcile the discrepancy before new canonical or monitoring changes.
