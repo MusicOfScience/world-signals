@@ -13,12 +13,12 @@ from world_signals.adapters import (
     CRA_CELEX,
     cellar_representation_diagnostics,
     fetch_cellar_celex_document,
-    fetch_eli_current_document,
+    fetch_cellar_rdf_notice,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
     parse_cra_article_71,
-    parse_eli_current_state,
+    parse_cellar_legal_relation_diagnostics,
 )
 
 CANONICAL=ROOT/"data/canonical/registry.json"
@@ -40,8 +40,11 @@ def main() -> int:
         "canonical_sha256_before":before,
         "automatic_canonical_commit":False,
         "google_calendar_write":False,
-        "scope":"LIVE_ROUTES_ONLY",
-        "held_routes_excluded":["KENYA_PFM_BPS_RULE"],
+        "scope":"LIVE_ROUTES_ONLY_PLUS_ENDPOINT_CANDIDATE_PROBES",
+        "held_routes_excluded":[
+            "KENYA_PFM_BPS_RULE",
+            "EU_CRA_CURRENT_ELI_HTML_HTTP_202_ROUTE"
+        ],
         "results":[],
     }
     failures=[]
@@ -93,15 +96,15 @@ def main() -> int:
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
 
     cra_result={
-        "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+        "adapter":"EU_CRA_LEGAL_MONITOR",
         "status":"PASS",
-        "monitor_role":"IMMUTABLE_RULE_BASELINE_PLUS_ELI_LEGAL_STATE_TOPOLOGY_SENTINEL",
         "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
         "automatic_commit_allowed":False,
         "layers":{},
     }
     cra_failed=False
 
+    # Proven immutable semantic baseline.
     try:
         body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
         diagnostics=cellar_representation_diagnostics(body)
@@ -121,20 +124,26 @@ def main() -> int:
             "canonical_action":"NONE",
         }
 
+    # Candidate machine route for amendment/consolidation topology. The direct
+    # EUR-Lex current-ELI HTML route is held after repeat HTTP-202 placeholders.
     try:
-        body,snap=fetch_eli_current_document("reg",2024,2847,language="en")
-        state=parse_eli_current_state(body,base_celex=CRA_CELEX)
-        cra_result["layers"]["current_eli_state"]={
+        rdf,snap=fetch_cellar_rdf_notice(CRA_CELEX,inferred=True)
+        relations=parse_cellar_legal_relation_diagnostics(rdf)
+        if not relations:
+            raise AdapterError("Cellar inferred RDF exposed no amendment/consolidation legal relations for CRA")
+        cra_result["layers"]["cellar_rdf_relation_probe"]={
             "status":"PASS",
+            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
             "snapshot":snap.as_dict(),
-            "eli_identifier":"https://data.europa.eu/eli/reg/2024/2847",
-            "legal_state":state.as_dict(),
+            "relation_count":len(relations),
+            "relations":relations,
         }
     except AdapterError as exc:
         cra_failed=True
-        failures.append("CRA current ELI state: "+str(exc))
-        cra_result["layers"]["current_eli_state"]={
+        failures.append("CRA Cellar RDF relation probe: "+str(exc))
+        cra_result["layers"]["cellar_rdf_relation_probe"]={
             "status":"FAIL",
+            "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
             "error":str(exc),
             "canonical_action":"NONE",
         }
