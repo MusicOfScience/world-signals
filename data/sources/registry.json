@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-02",
-  "version": "1.44",
+  "version": "1.45",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -7721,8 +7721,8 @@
       "source_timezone": "Australia/Sydney",
       "recommended_verification_cadence": "weekly; daily near publication",
       "activation_status": "ACTIVE",
-      "parser_type": "RSS_PRIMARY_HTML_FALLBACK",
-      "parser_version": "rba-fsr-0.1",
+      "parser_type": "RDF_RSS_PRIMARY_HTML_FALLBACK",
+      "parser_version": "rba-fsr-0.2",
       "known_limitations": [
         "Third-party data embedded within an RBA publication may carry separate reuse conditions."
       ],
@@ -7734,13 +7734,23 @@
       "rights_evidence_url": "https://www.rba.gov.au/copyright/",
       "rights_summary": "Most RBA-owned website material is CC BY 4.0, subject to specified excluded and third-party material.",
       "rights_reviewed_at": "2026-09-02T23:55:00+10:00",
-      "runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
-      "endpoint_route_validation_state": "RUNTIME_EXECUTION_BLOCKED",
-      "runtime_environment_health_state": "TOOL_CONTENT_TYPE_UNSUPPORTED",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "endpoint_route_validation_state": "PARSER_VALIDATED",
+      "runtime_environment_health_state": "HEALTHY",
       "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
       "endpoint_route_summary": "RBA FSR page exposes RSS feed https://www.rba.gov.au/rss/rss-cb-fsr.xml and current HTML/calendar/schedule surfaces independently agree on 1 Oct 2026 11:30 AEST.",
-      "runtime_execution_note": "Web retrieval follows the RSS link but cannot render text/xml; local container DNS is also unavailable. Source health remains healthy."
+      "runtime_execution_note": "Web retrieval follows the RSS link but cannot render text/xml; local container DNS is also unavailable. Source health remains healthy.",
+      "monitoring_activation_status": "PILOT_READ_ONLY_LIVE_MONITOR_NO_AUTO_COMMIT",
+      "live_adapter_id": "RBA_FSR_RSS",
+      "live_validation_evidence": {
+        "workflow": "Smoke WORLD SIGNALS live adapters",
+        "successful_run_id": 33713741562,
+        "transport": "official RBA RDF/RSS XML",
+        "result": "HTTP 200; RDF namespace-aware parser PASS",
+        "canonical_mutation": false
+      },
+      "live_validation_reviewed_at": "2026-09-03T04:42:37.675559+00:00"
     },
     {
       "source_id": "WSSRC-FIN-002",
@@ -7850,8 +7860,8 @@
       "source_timezone": "America/Bogota",
       "recommended_verification_cadence": "monthly; weekly during annual budget process; daily near statutory boundary",
       "activation_status": "ACTIVE_GUARDED",
-      "parser_type": "OPEN_DATA_INVENTORY_MONITOR_PLUS_MANUAL_LEGAL_TEXT_VERIFICATION",
-      "parser_version": "colombia-budget-law-0.1",
+      "parser_type": "SOCRATA_METADATA_AND_TYPED_INSTRUMENT_QUERY_PLUS_MANUAL_LEGAL_TEXT_VERIFICATION",
+      "parser_version": "colombia-budget-law-0.2",
       "known_limitations": [
         "Open-data inventory confirms legal instrument presence/status but does not replace manual clause-level verification of Article 59.",
         "Open-data portal licence is not assumed to govern the separate SUIN HTML rendering."
@@ -7864,9 +7874,9 @@
       "rights_evidence_url": "https://herramientas.datos.gov.co/terminos",
       "rights_summary": "Colombia's Open Data Portal permits free use, redistribution, compilation, extraction, modification and commercial/non-commercial exploitation of portal data with source attribution. The SUIN legal-text HTML route is kept as manually verified authoritative provenance rather than inheriting that licence by assumption.",
       "rights_reviewed_at": "2026-09-03T04:05:00+10:00",
-      "runtime_health_state": "RESEARCH_VERIFIED_ENDPOINT_TEST_PENDING",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
-      "monitoring_activation_status": "MANUAL_LEGAL_RULE_PLUS_OPEN_DATA_VERSION_MONITOR_NO_AUTO_COMMIT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "PILOT_READ_ONLY_LEGAL_VERSION_SENTINEL_NO_AUTO_COMMIT",
       "monitor_endpoints": [
         {
           "endpoint_role": "suin_legal_instrument_inventory",
@@ -7885,11 +7895,21 @@
           "notes": "Manual authoritative verification of Article 59."
         }
       ],
-      "endpoint_route_validation_state": "RUNTIME_EXECUTION_BLOCKED",
-      "runtime_environment_health_state": "DNS_NETWORK_BLOCK",
+      "endpoint_route_validation_state": "PARSER_VALIDATED",
+      "runtime_environment_health_state": "HEALTHY",
       "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
       "endpoint_route_summary": "Colombia Open Data explicitly states its live visualisation is connected to SUIN dataset fiev-nid6; national API documentation supports Socrata JSON queries. SUIN Article 59 remains clause-level authority.",
-      "runtime_execution_note": "Local container cannot resolve datos.gov.co, so the Socrata query was not executed in this runtime."
+      "runtime_execution_note": "Local container cannot resolve datos.gov.co, so the Socrata query was not executed in this runtime.",
+      "live_adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
+      "live_validation_evidence": {
+        "workflow": "Smoke WORLD SIGNALS live adapters",
+        "successful_run_id": 33715476979,
+        "transport": "official Datos Abiertos Socrata JSON API",
+        "result": "HTTP 200; metadata + typed DECRETO 111/1996 query PASS",
+        "canonical_mutation": false
+      },
+      "legal_identity_note": "Number/year alone is not unique in SUIN inventory; monitor identity must include instrument type. Current sentinel is DECRETO 111/1996.",
+      "live_validation_reviewed_at": "2026-09-03T04:42:37.675573+00:00"
     },
     {
       "source_id": "WSSRC-REG-011",
