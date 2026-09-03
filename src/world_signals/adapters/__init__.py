@@ -8,6 +8,8 @@ from .cellar import (
     CELLAR_CELEX_BASE,
     CRA_CELEX,
     cellar_celex_url,
+    cellar_representation_diagnostics,
+    fetch_cellar_celex_document,
     fetch_cra_article_71,
     parse_cra_article_71,
 )
@@ -38,6 +40,8 @@ __all__ = [
     "RBA_FSR_RSS",
     "SUIN_DATASET_ID",
     "cellar_celex_url",
+    "cellar_representation_diagnostics",
+    "fetch_cellar_celex_document",
     "fetch_cra_article_71",
     "fetch_kenya_budget_policy_rule_baseline",
     "fetch_kenya_budget_policy_rule_current",
