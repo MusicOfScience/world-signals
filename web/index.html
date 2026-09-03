@@ -27,6 +27,7 @@
       <div class="viewtabs">
         <button data-view="calendar" aria-pressed="true">Calendar</button>
         <button data-view="index" aria-pressed="false">Event index</button>
+        <button data-view="monitors" aria-pressed="false">Monitor routes</button>
       </div>
       <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
     </section>
@@ -77,6 +78,18 @@
         <button id="futureOnly" class="toggle" aria-pressed="true">Future/current only</button>
       </section>
       <section id="events" class="events"></section>
+    </section>
+
+    <section id="monitorsView" class="view-panel" hidden>
+      <section class="monitor-intro">
+        <div>
+          <p class="eyebrow">SOURCE / CHANGE MONITOR</p>
+          <h2>Configured live routes</h2>
+          <p>These are executable read-only monitors, not a claim that this static page knows their latest runtime health. Current runs and review candidates live in GitHub Actions artefacts.</p>
+        </div>
+        <div class="monitor-safety"><strong>Machine authority</strong><span>Fetch / parse / compare: ON</span><span>Generate review candidate: ON</span><span>Canonical write: OFF</span></div>
+      </section>
+      <section id="monitorRoutes" class="monitor-routes"></section>
     </section>
   </main>
 
