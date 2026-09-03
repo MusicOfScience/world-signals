@@ -46,9 +46,6 @@ def parse_kenya_budget_policy_rule(body: bytes | str) -> KenyaBudgetRule:
     text=html_to_text(body)
     if "public finance management act" not in text.lower():
         raise AdapterError("Kenya Law response did not identify the Public Finance Management Act")
-
-    # Monitor the operative rule, not the whole-page hash. Amendments elsewhere
-    # in the Act may alter the transport hash without altering section 25(2).
     pattern=re.compile(
         r"The National Treasury shall submit the Budget Policy Statement approved in terms of subsection\s*\(1\)\s*to Parliament,?\s*by the\s*15(?:th|\^\{th\})?\s*February in each year\.?",
         re.IGNORECASE,
@@ -66,10 +63,23 @@ def parse_kenya_budget_policy_rule(body: bytes | str) -> KenyaBudgetRule:
         rule_sha256=sha256(normalized.encode("utf-8")).hexdigest(),
     )
 
-def fetch_kenya_budget_policy_rule(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
+def _fetch_rule(url: str, *, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
     body,snapshot=fetch_bytes(
-        KENYA_PFM_CURRENT,
+        url,
         timeout=timeout,
         accept="text/html,application/xhtml+xml;q=0.9,*/*;q=0.1",
     )
     return parse_kenya_budget_policy_rule(body),snapshot
+
+def fetch_kenya_budget_policy_rule_baseline(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
+    """Fetch the frozen 4 Nov 2025 version for reproducible provenance tests."""
+    return _fetch_rule(KENYA_PFM_BASELINE_2025_11_04,timeout=timeout)
+
+def fetch_kenya_budget_policy_rule_current(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
+    """Probe the unversioned current route.
+
+    This route is not production-cleared: GitHub Actions returned HTTP 403 on
+    3 Sep 2026. Callers must treat failure as route health only, never as a
+    legal-rule or event-state change.
+    """
+    return _fetch_rule(KENYA_PFM_CURRENT,timeout=timeout)
