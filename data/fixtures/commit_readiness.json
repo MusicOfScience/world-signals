@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_COMMIT_READINESS_AUDIT",
-  "version": "0.6",
+  "version": "0.7",
   "reference_date": "2026-09-03",
   "reviewed_change_type_counts": {
     "LIFECYCLE_AND_CERTAINTY_UPDATE": 1,
@@ -37,7 +37,9 @@
     "negative_controls_observed": [
       "elapsed schedule time did not auto-complete EIA",
       "window/feed absence did not imply cancellation",
-      "non-commercial rights did not become production permission"
+      "non-commercial rights did not become production permission",
+      "duplicate Cellar RDF predicates and consolidation fragments did not create false legal-state change",
+      "synthetic CBAM legal-date drift generated review candidates only"
     ],
     "real_reschedule_provenance_reconciliations": 3,
     "real_live_monitor_reschedule_commits": 0,
@@ -52,21 +54,32 @@
     "fault_injection_source": "WSSRC-MAC-006",
     "fault_injection_target_occurrence": "WSO-MAC-B-0035",
     "prospective_no_change_sweep_2026_09_03": 9,
-    "executed_heterogeneous_non_calendar_transports": 3,
+    "executed_heterogeneous_non_calendar_transports": 4,
     "executed_non_calendar_transport_types": [
       "RBA_XML_RSS_RDF",
       "COLOMBIA_SOCRATA_JSON",
-      "EU_PUBLICATIONS_OFFICE_CELLAR_XHTML"
+      "EU_PUBLICATIONS_OFFICE_CELLAR_XHTML",
+      "EU_PUBLICATIONS_OFFICE_CELLAR_INFERRED_RDF"
     ],
     "executed_live_monitor_source_ids": [
       "WSSRC-FIN-001",
       "WSSRC-REG4-001",
-      "WSSRC-TECH-001"
+      "WSSRC-TECH-001",
+      "WSSRC-TRD-005"
     ],
     "three_route_live_monitor_no_change_passed": true,
     "three_route_live_monitor_healthy_count": 3,
     "three_route_live_monitor_degraded_count": 0,
-    "cra_semantic_legal_rule_change_negative_control_passed": true
+    "five_adapter_four_source_live_monitor_no_change_passed": true,
+    "five_adapter_live_monitor_healthy_count": 5,
+    "five_adapter_live_monitor_degraded_count": 0,
+    "cra_semantic_legal_rule_change_negative_control_passed": true,
+    "cra_cellar_current_law_topology_monitor_passed": true,
+    "cbam_dual_semantic_legal_rule_negative_controls_passed": true,
+    "cbam_verifier_empty_topology_validated_as_healthy": true,
+    "cbam_certificate_sale_parent_act_topology_monitor_passed": true,
+    "cbam_source_promoted_to_pilot_validated": true,
+    "source_registry_version_after_cbam_promotion": "1.47"
   },
   "commit_gate": {
     "canonical_commit_gate": "CLOSED",
@@ -85,8 +98,9 @@
     "reasons_auto_commit_closed": [
       "Controlled failure injection proves that fetch failure, malformed parser output and syntactically valid false date drift cannot mutate canonical state on a pilot-validated route.",
       "Real source-health degradation/recovery and historical reschedule transaction replay are proven.",
-      "Three heterogeneous non-calendar transports now have successful executed parser validation: RBA XML RSS/RDF, Colombia Socrata JSON and EU Cellar XHTML.",
-      "The heterogeneous-transport criterion is satisfied but is not sufficient to open canonical auto-commit.",
+      "Four heterogeneous non-calendar transports now have successful executed parser validation: RBA XML RSS/RDF, Colombia Socrata JSON, EU Cellar XHTML and EU Cellar inferred RDF.",
+      "CRA and two independent CBAM legal sentinels have passed live current-law topology monitoring with semantic-rule negative controls.",
+      "The heterogeneous-transport and legal-topology criteria are satisfied but are not sufficient to open canonical auto-commit.",
       "No explicit cancellation of an existing canonical occurrence has yet passed REVIEW -> COMMIT.",
       "No prospective reschedule detected after a prior monitor snapshot has yet passed REVIEW -> COMMIT."
     ],
@@ -97,20 +111,18 @@
   },
   "recommended_next_endpoint_pilots": [
     {
-      "source_id": "WSSRC-TRD-005",
+      "source_id": "WSSRC-TRD-006",
       "institution": "European Commission — Taxation and Customs Union",
       "jurisdiction": "European Union",
       "domain": "trade_sanctions_industrial_policy",
-      "canonical_dependency_count": 2,
+      "canonical_dependency_count": 1,
       "source_automation_tier": "ENDPOINT_TEST_PRIORITY",
       "monitoring_readiness_status_source_record": "ENDPOINT_TEST_PRIORITY",
       "licence_review_status": "CLEARED_COMMISSION_CC_BY_4_AND_EURLEX_LEGAL_ROUTE",
-      "canonical_provenance_use": null,
-      "automated_monitoring_use": null,
       "automated_retrieval_permission": "PREFER_EURLEX_LEGAL_TEXT_COMMISSION_PAGE_FALLBACK",
       "parser_type": "EURLEX_CBAM_RULE_PLUS_COMMISSION_IMPLEMENTATION_MONITOR",
       "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
-      "selection_note": "Shared Cellar transport is now technically proven by the CRA pilot, but CBAM requires an independently verified legal identity and semantic rule parser; CRA success is not inherited automatically."
+      "selection_note": "Selected independently rather than inheriting WSSRC-TRD-005 validation. It adds a recurring annual statutory deadline model: current consolidated Regulation (EU) 2023/956 Articles 6(1) and 22(1) both set 30 September each year, first in 2027 for 2026 imports. The pilot should prove semantic parsing of both obligations, shared-date consistency, and parent-act Cellar topology without automatically creating or mutating occurrences."
     }
   ],
   "validation": {
@@ -126,8 +138,13 @@
     "prospective_sweep_no_change": true,
     "heterogeneous_non_calendar_transport_requirement_satisfied": true,
     "three_route_live_monitor_passed": true,
+    "five_adapter_four_source_live_monitor_passed": true,
     "cra_live_cellar_transport_and_semantic_parse_passed": true,
     "cra_changed_date_review_candidate_negative_control_passed": true,
+    "cbam_verifier_live_cellar_semantic_and_topology_passed": true,
+    "cbam_certificate_sale_live_cellar_semantic_and_parent_topology_passed": true,
+    "cbam_changed_date_review_candidate_negative_controls_passed": true,
+    "cbam_source_registry_promotion_v147_passed": true,
     "canonical_population_649_unchanged": true,
     "change_ledger_31_unchanged": true,
     "automatic_commits_zero": true,
