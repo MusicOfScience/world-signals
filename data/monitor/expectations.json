@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.1",
+  "version": "0.2",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -47,6 +47,33 @@
       },
       "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
       "change_policy": "GENERATE_LEGAL_INPUT_REVIEW_CANDIDATE_REQUIRE_CLAUSE_LEVEL_SUIN_VERIFICATION",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CELLAR_CRA_ARTICLE_71",
+      "source_id": "WSSRC-TECH-001",
+      "canonical_occurrence_ids": ["WSO-TECH-A-0001", "WSO-TECH-A-0007"],
+      "monitor_role": "SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
+      "cadence": "DAILY_AROUND_APPLICATION_BOUNDARIES_ELSE_MONTHLY",
+      "legal_identity": {
+        "celex": "32024R2847",
+        "article": "71"
+      },
+      "baseline": {
+        "observed_at": "2026-09-03T06:01:11Z",
+        "rule_sha256": "39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f",
+        "rule": {
+          "celex": "32024R2847",
+          "article": "71",
+          "general_application_date": "2027-12-11",
+          "article_14_application_date": "2026-09-11",
+          "chapter_iv_application_date": "2026-06-11",
+          "rule_sha256": "39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f"
+        }
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "change_policy": "GENERATE_LEGAL_RULE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
       "automatic_commit_allowed": false
     }
   ]
