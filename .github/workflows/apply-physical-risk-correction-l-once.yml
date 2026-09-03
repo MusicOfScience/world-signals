@@ -1,0 +1,150 @@
+name: Apply WORLD SIGNALS Physical Risk Correction L once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-physical-risk-correction-l-once.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: world-signals-physical-risk-correction-l-apply
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Re-run check-only Correction L preflight
+        run: PYTHONPATH=. python scripts/check_physical_risk_correction_l.py
+
+      - name: Protect non-transaction source-of-truth state
+        run: |
+          sha256sum \
+            data/canonical/schema.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/changes/ledger.json \
+            data/coverage/PHYSICAL_RISK_CORRECTION_L_PLAN_v0.1.json \
+            data/coverage/PHYSICAL_RISK_CORRECTION_L_AUDIT_v0.1.md \
+            > /tmp/protected.sha256
+
+      - name: Apply reviewed two-registry transaction and checkpoint lock
+        env:
+          PYTHONPATH: .
+        run: |
+          python - <<'PY'
+          import copy,json,runpy
+          from pathlib import Path
+
+          def load(path): return json.loads(Path(path).read_text(encoding='utf-8'))
+          def dump(path,payload): Path(path).write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+
+          reg=load('data/canonical/registry.json')
+          src=load('data/sources/registry.json')
+          plan=load('data/coverage/PHYSICAL_RISK_CORRECTION_L_PLAN_v0.1.json')
+          assert reg['version']=='0.19' and reg['record_count']==668 and len(reg['records'])==668
+          assert src['version']=='1.50' and len(src['sources'])==221
+          assert not any(r.get('occurrence_id')=='WSO-RISK-A-0001' for r in reg['records'])
+          assert not any(s.get('source_id')=='WSSRC-RISK-004' for s in src['sources'])
+
+          ns=runpy.run_path('scripts/check_physical_risk_correction_l.py')
+          occurrence=ns['build_occurrence'](plan['occurrences'][0])
+          source=copy.deepcopy(plan['source_plan'][0])
+
+          reg['records'].append(occurrence)
+          reg['version']='0.20'; reg['record_count']=len(reg['records']); reg['reference_date']='2026-09-04'
+          src['sources'].append(source)
+          src['version']='1.51'; src['reference_date']='2026-09-04'
+          dump('data/canonical/registry.json',reg)
+          dump('data/sources/registry.json',src)
+
+          test=Path('tests/test_registry.py')
+          text=test.read_text(encoding='utf-8')
+          old='self.assertEqual(self.reg["version"],"0.19")\n        self.assertEqual(self.reg["record_count"],668)'
+          new='self.assertEqual(self.reg["version"],"0.20")\n        self.assertEqual(self.reg["record_count"],669)'
+          assert old in text and new not in text
+          test.write_text(text.replace(old,new,1),encoding='utf-8')
+          PY
+
+      - name: Assert exact Correction L postconditions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          schema=json.loads(Path('data/canonical/schema.json').read_text())
+          assert reg['version']=='0.20' and reg['record_count']==669 and len(reg['records'])==669
+          assert src['version']=='1.51' and len(src['sources'])==222
+          assert schema['version']=='0.51'
+          added=[r for r in reg['records'] if r.get('occurrence_id')=='WSO-RISK-A-0001']
+          assert len(added)==1
+          r=added[0]
+          assert r['series_id']=='WSER-RISK-SWP-TC'
+          assert r['timing_type']=='MONTH_BOUNDED_SEASON_WINDOW'
+          assert r['publication_time_semantics']=='SEASONAL_MONTH_RANGE'
+          assert r['source_native_window_label']=='November–April'
+          assert r['season_phases']==[{'phase_id':'PHASE_1','start_month':'2026-11','end_month':'2027-04','boundary_precision':'MONTH','source_label':'November–April'}]
+          assert all(r.get(k) is None for k in ('start_local','end_local','start_utc','end_utc','date_earliest','date_latest','publication_datetime'))
+          assert r['lifecycle_status']=='PLANNED' and r['activation_mode']=='AUTHORITATIVE_RECURRING_RULE'
+          sources=[s for s in src['sources'] if s.get('source_id')=='WSSRC-RISK-004']
+          assert len(sources)==1
+          s=sources[0]
+          assert s['canonical_provenance_use']=='MANUAL_INFORMATIONAL_REFERENCE_ONLY'
+          assert s['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert s['verification_mode']=='RIGHTS_HELD_MANUAL_ONLY'
+          assert not any(x.get('series_id')=='WSER-RISK-NIO-TC' for x in reg['records'])
+          assert not any(x.get('source_id')=='WSSRC-RISK-005' for x in src['sources'])
+          print('Correction L exact postconditions: PASS')
+          PY
+
+      - name: Validate registry and full test suite
+        run: |
+          python scripts/validate_registry.py
+          python -m unittest discover -s tests -v
+          node --check web/app.js
+          node --check web/history.js
+
+      - name: Build and validate Pages projection
+        run: |
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          events=json.loads(Path('docs/data/events.json').read_text())
+          assert events['metadata']['record_count']==669
+          row=[x for x in events['events'] if x.get('occurrence_id')=='WSO-RISK-A-0001']
+          assert len(row)==1
+          assert row[0]['source_native_window_label']=='November–April'
+          assert row[0]['date_earliest'] is None and row[0]['start_local'] is None
+          print('Pages projection exposes Fiji month-native window without synthetic day: PASS')
+          PY
+          git restore docs
+
+      - name: Prove protected state unchanged
+        run: sha256sum -c /tmp/protected.sha256
+
+      - name: Reject unintended file changes
+        run: |
+          git diff --check
+          changed="$(git diff --name-only | sort)"
+          expected="$(printf '%s\n' data/canonical/registry.json data/sources/registry.json tests/test_registry.py | sort)"
+          test "$changed" = "$expected" || { echo 'Unexpected changed files:'; printf '%s\n' "$changed"; exit 1; }
+
+      - name: Commit reviewed Correction L transaction
+        run: |
+          git config user.name 'WORLD SIGNALS reviewed migration'
+          git config user.email '58031940+MusicOfScience@users.noreply.github.com'
+          git add data/canonical/registry.json data/sources/registry.json tests/test_registry.py
+          git commit -m 'Apply Physical Risk Correction L'
+          git push
