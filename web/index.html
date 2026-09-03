@@ -6,13 +6,14 @@
   <title>WORLD SIGNALS</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="history.css">
+  <link rel="stylesheet" href="operations.css">
 </head>
 <body>
   <header class="hero">
     <div>
       <p class="eyebrow">WORLD SIGNALS · EXECUTABLE THIN SLICE</p>
       <h1>Global political-economic time, without pretending certainty.</h1>
-      <p class="lede">A read-only calendar projection of the canonical registry. Source monitoring, live intelligence and review remain separate layers.</p>
+      <p class="lede">A read-only projection of canonical events, source governance and reviewed change history. Monitoring, live intelligence and analysis remain separate layers.</p>
     </div>
     <div class="safety">
       <strong>Safety boundary</strong>
@@ -29,6 +30,7 @@
         <button data-view="calendar" aria-pressed="true">Calendar</button>
         <button data-view="index" aria-pressed="false">Event index</button>
         <button data-view="monitors" aria-pressed="false">Monitor routes</button>
+        <button id="operationsTab" aria-pressed="false">Operations</button>
         <button id="historyTab" aria-pressed="false">Change history</button>
       </div>
       <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
@@ -94,6 +96,44 @@
       <section id="monitorRoutes" class="monitor-routes"></section>
     </section>
 
+    <section id="operationsView" class="view-panel" hidden>
+      <section class="ops-intro">
+        <div>
+          <p class="eyebrow">OPERATIONS / GOVERNANCE</p>
+          <h2>What the machinery actually knows</h2>
+          <p>This layer exposes monitor configuration, source-governance classifications and timestamps that are actually recorded in the repository. It does not convert a static build into a live status dashboard.</p>
+        </div>
+        <div class="ops-boundary"><strong>Runtime boundary</strong><span>Configuration: visible</span><span>Recorded baseline evidence: visible</span><span>Current source health: not inferred</span><span>Pending review queue: not embedded</span><span>Browser canonical write: impossible</span></div>
+      </section>
+
+      <section id="opsStats" class="stats" aria-live="polite"></section>
+      <div class="ops-runtime-note"><strong>Recorded evidence is not current health.</strong>The timestamps below are baselines or observations committed into WORLD SIGNALS configuration. The latest scheduled run remains an external GitHub Actions evidence artefact.</div>
+
+      <section class="ops-section">
+        <div class="section-heading"><div><p class="eyebrow">GOVERNANCE COVERAGE</p><h3>Source-registry classification</h3></div></div>
+        <p class="meta">“Not recorded in registry” is deliberately distinct from cleared, prohibited or rights-held. It marks older source records that still need explicit governance backfill.</p>
+        <div id="opsGovernanceSummary" class="ops-summary-grid"></div>
+      </section>
+
+      <section class="ops-section">
+        <div class="section-heading"><div><p class="eyebrow">RECORDED MONITOR EVIDENCE</p><h3>Configured routes and embedded baselines</h3></div></div>
+        <div id="opsRecordedRoutes" class="ops-routes"></div>
+      </section>
+
+      <section class="ops-section">
+        <div id="opsGate" class="ops-gate"></div>
+      </section>
+
+      <section class="ops-section">
+        <div class="section-heading"><div><p class="eyebrow">SOURCE REGISTRY</p><h3>Governance inventory</h3></div><span id="opsSourceCount" class="meta"></span></div>
+        <div class="ops-source-controls">
+          <input id="opsSourceSearch" type="search" placeholder="Search source, institution, jurisdiction, domain…">
+          <select id="opsAutomationFilter"><option value="">All automation states</option></select>
+        </div>
+        <div id="opsSources" class="ops-sources"></div>
+      </section>
+    </section>
+
     <section id="historyView" class="view-panel" hidden>
       <section class="history-intro">
         <div>
@@ -111,5 +151,6 @@
   <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
   <script src="app.js"></script>
   <script src="history.js"></script>
+  <script src="operations.js"></script>
 </body>
 </html>
