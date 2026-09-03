@@ -4,6 +4,13 @@ Adapters may fetch and parse authoritative sources. They do not mutate canonical
 """
 
 from .base import AdapterError, FetchSnapshot
+from .cellar import (
+    CELLAR_CELEX_BASE,
+    CRA_CELEX,
+    cellar_celex_url,
+    fetch_cra_article_71,
+    parse_cra_article_71,
+)
 from .kenya_law import (
     KENYA_PFM_BASELINE_2025_11_04,
     KENYA_PFM_CURRENT,
@@ -23,16 +30,21 @@ from .socrata import (
 
 __all__ = [
     "AdapterError",
+    "CELLAR_CELEX_BASE",
+    "CRA_CELEX",
     "FetchSnapshot",
     "KENYA_PFM_BASELINE_2025_11_04",
     "KENYA_PFM_CURRENT",
     "RBA_FSR_RSS",
     "SUIN_DATASET_ID",
+    "cellar_celex_url",
+    "fetch_cra_article_71",
     "fetch_kenya_budget_policy_rule_baseline",
     "fetch_kenya_budget_policy_rule_current",
     "fetch_rba_fsr",
     "fetch_suin_metadata",
     "fetch_suin_rows",
+    "parse_cra_article_71",
     "parse_kenya_budget_policy_rule",
     "parse_rba_fsr_rss",
     "parse_socrata_metadata",
