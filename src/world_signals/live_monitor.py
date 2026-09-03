@@ -140,3 +140,52 @@ def colombia_legal_input_review_candidate(rows: list[dict], config: dict) -> tup
         "baseline_hash":baseline_hash,
         "current_hash":current_hash,
     }
+
+
+def cra_legal_rule_review_candidate(rule: object, config: dict) -> tuple[dict | None, dict]:
+    """Compare the CRA Article 71 semantic rule against the frozen live baseline.
+
+    Transport/document hash churn is not a legal-rule change. Only the parsed
+    CELEX/article/date tuple is compared. A semantic difference creates a review
+    candidate and never directly mutates either canonical CRA occurrence.
+    """
+    current=rule.as_dict() if hasattr(rule,"as_dict") else dict(rule)
+    baseline=(config.get("baseline") or {}).get("rule") or {}
+    baseline_hash=(config.get("baseline") or {}).get("rule_sha256") or baseline.get("rule_sha256")
+    current_hash=current.get("rule_sha256") or stable_hash(current)
+
+    if baseline_hash and current_hash == baseline_hash:
+        return None,{
+            "type":"CRA_ARTICLE_71_RULE_NO_CHANGE",
+            "celex":current.get("celex"),
+            "article":current.get("article"),
+            "rule_sha256":current_hash,
+            "general_application_date":current.get("general_application_date"),
+            "article_14_application_date":current.get("article_14_application_date"),
+        }
+
+    candidate_payload={
+        "celex":current.get("celex"),
+        "article":current.get("article"),
+        "general_application_date":current.get("general_application_date"),
+        "article_14_application_date":current.get("article_14_application_date"),
+        "chapter_iv_application_date":current.get("chapter_iv_application_date"),
+        "rule_sha256":current_hash,
+    }
+    candidate_hash=stable_hash(candidate_payload)
+    candidate={
+        "candidate_id":"WSRC-EU-CRA-"+candidate_hash[:16],
+        "candidate_type":"LEGAL_RULE_CHANGED",
+        "source_id":config.get("source_id"),
+        "occurrence_ids":config.get("canonical_occurrence_ids") or [],
+        "old_value":baseline,
+        "new_value":candidate_payload,
+        "review_state":"PENDING_EURLEX_ARTICLE_71_REVIEW",
+        "candidate_origin":"LIVE_READ_ONLY_MONITOR",
+        "automatic_commit_allowed":False,
+    }
+    return candidate,{
+        "type":"CRA_ARTICLE_71_RULE_CHANGED",
+        "baseline_hash":baseline_hash,
+        "current_hash":current_hash,
+    }
