@@ -14,17 +14,19 @@ class CoverageAuditTests(unittest.TestCase):
             "version":"test",
             "reference_date":"2026-09-03",
             "records":[
-                {"series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A1"},
-                {"series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A2"},
-                {"series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A3"},
-                {"series_id":"S2","region":"Region B","category":"FISCAL_SOVEREIGN_FINANCE","institution":"Inst B","source_id":"SRC2","canonical_name":"B1"},
-                {"series_id":"S3","region":"Region B","category":"ELECTIONS_GOVERNANCE","institution":"Inst C","source_id":"SRC3","canonical_name":"B2"},
+                {"occurrence_id":"O1","series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A1"},
+                {"occurrence_id":"O2","series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A2"},
+                {"occurrence_id":"O3","series_id":"S1","region":"Region A","category":"MACROECONOMIC_RELEASE","institution":"Inst A","source_id":"SRC1","canonical_name":"A3"},
+                {"occurrence_id":"O4","series_id":"S2","region":"Region B","category":"FISCAL_SOVEREIGN_FINANCE","institution":"Inst B","source_id":"SRC2","canonical_name":"B1"},
+                {"occurrence_id":"O5","series_id":"S3","region":"Region B","category":"ELECTIONS_GOVERNANCE","institution":"Inst C","source_id":"SRC3","canonical_name":"B2"},
+                {"occurrence_id":"O6","series_id":"S4","region":"Africa","category":"PHYSICAL_CLIMATE_RISK","institution":"Inst D","source_id":"SRC4","canonical_name":"Focus overlap"},
             ],
         }
         self.sources={"sources":[
             {"source_id":"SRC1","monitoring_readiness_status":"PILOT_VALIDATED_NO_AUTO_COMMIT"},
             {"source_id":"SRC2","monitoring_readiness_status":"MANUAL_ONLY_RIGHTS_HOLD"},
             {"source_id":"SRC3","monitoring_readiness_status":"ENDPOINT_REVIEW_REQUIRED"},
+            {"source_id":"SRC4","monitoring_readiness_status":"ENDPOINT_REVIEW_REQUIRED"},
         ]}
 
     def test_occurrence_density_does_not_replace_series_diversity(self):
@@ -52,7 +54,15 @@ class CoverageAuditTests(unittest.TestCase):
     def test_monetary_macro_share_uses_occurrences_but_is_labelled_as_such(self):
         audit=build_coverage_audit(self.registry,self.sources)
         self.assertEqual(audit["totals"]["monetary_plus_macro_occurrence_count"],3)
-        self.assertEqual(audit["totals"]["monetary_plus_macro_occurrence_share"],0.6)
+        self.assertEqual(audit["totals"]["monetary_plus_macro_occurrence_share"],0.5)
+
+    def test_focus_inventory_preserves_exact_record_once_on_overlap(self):
+        audit=build_coverage_audit(self.registry,self.sources)
+        focus=audit["focus_inventory"]
+        self.assertTrue(audit["methodology"]["focus_inventory_is_read_only_projection"])
+        self.assertEqual(focus["record_count"],1)
+        self.assertEqual(focus["records"][0],self.registry["records"][-1])
+        self.assertEqual(focus["records"][0]["occurrence_id"],"O6")
 
 
 if __name__=="__main__":
