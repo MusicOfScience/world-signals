@@ -1,0 +1,46 @@
+name: Promote CBAM source v1.47
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/promote_cbam_cellar_v147.py'
+      - '.github/workflows/promote-cbam-source-v147.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Capture protected canonical digest
+        run: sha256sum data/canonical/registry.json > /tmp/canonical-before.sha256
+      - name: Apply fail-closed source promotion
+        run: python scripts/promote_cbam_cellar_v147.py
+      - name: Validate repository
+        run: |
+          python scripts/validate_registry.py
+          python -m unittest discover -s tests -v
+      - name: Enforce mutation scope
+        run: |
+          sha256sum -c /tmp/canonical-before.sha256
+          changed="$(git diff --name-only)"
+          test "$changed" = "data/sources/registry.json" || {
+            echo "Unexpected changed paths:" >&2
+            printf '%s\n' "$changed" >&2
+            exit 1
+          }
+      - name: Commit source-registry promotion
+        run: |
+          git config user.name "WORLD SIGNALS source promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/sources/registry.json
+          git commit -m "Promote CBAM Cellar monitor to pilot validated"
+          git push
