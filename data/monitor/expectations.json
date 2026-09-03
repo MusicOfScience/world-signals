@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.3",
+  "version": "0.4",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -53,16 +53,19 @@
       "adapter_id": "EU_CELLAR_CRA_ARTICLE_71",
       "source_id": "WSSRC-TECH-001",
       "canonical_occurrence_ids": ["WSO-TECH-A-0001", "WSO-TECH-A-0007"],
-      "monitor_role": "IMMUTABLE_RULE_BASELINE_PLUS_ELI_LEGAL_STATE_TOPOLOGY_SENTINEL",
+      "monitor_role": "IMMUTABLE_RULE_BASELINE_PLUS_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
       "cadence": "DAILY_AROUND_APPLICATION_BOUNDARIES_ELSE_MONTHLY",
       "legal_identity": {
         "celex": "32024R2847",
         "article": "71"
       },
       "current_state_identity": {
-        "eli_identifier": "https://data.europa.eu/eli/reg/2024/2847",
-        "operational_url": "https://eur-lex.europa.eu/eli/reg/2024/2847",
-        "base_celex": "32024R2847"
+        "base_celex": "32024R2847",
+        "rdf_route": "https://publications.europa.eu/resource/celex/32024R2847",
+        "rdf_accept": "application/rdf+xml",
+        "identifier_notice_accept": "application/xml;notice=identifiers",
+        "held_html_eli_identifier": "https://data.europa.eu/eli/reg/2024/2847",
+        "held_html_eli_reason": "HTTP_202_ASYNC_PLACEHOLDER_ON_GITHUB_RUNNER"
       },
       "baseline": {
         "observed_at": "2026-09-03T06:01:11Z",
@@ -75,21 +78,38 @@
           "chapter_iv_application_date": "2026-06-11",
           "rule_sha256": "39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f"
         },
-        "current_state_observed_at": "2026-09-03T07:10:32Z",
-        "current_state_sha256": "30c7a5956a85dfa600de96c68f509b7a293197120ba57611d03b0c82a82c7fd3",
-        "current_state": {
+        "cellar_legal_topology_observed_at": "2026-09-03T07:31:12Z",
+        "cellar_legal_topology_sha256": "ac3919c7a9e340172af6388ecb028b067d86ecb6e1698dadef321c648f2f9633",
+        "cellar_legal_topology": {
           "base_celex": "32024R2847",
-          "mode": "RESULT_LIST_WITH_UNCONSOLIDATED_MODIFIERS",
-          "consolidation_celex_ids": ["02024R2847-20241120"],
-          "modifier_celex_ids": ["32025R0327"],
-          "state_sha256": "30c7a5956a85dfa600de96c68f509b7a293197120ba57611d03b0c82a82c7fd3"
+          "amendment_target_uris": [
+            "http://publications.europa.eu/resource/oj/L_202500327"
+          ],
+          "correction_target_uris": [
+            "http://publications.europa.eu/resource/oj/L_202490780",
+            "http://publications.europa.eu/resource/oj/L_202590555",
+            "http://publications.europa.eu/resource/oj/L_202590768",
+            "http://publications.europa.eu/resource/oj/L_202590828",
+            "http://publications.europa.eu/resource/oj/L_202690148",
+            "http://publications.europa.eu/resource/oj/L_202690243",
+            "http://publications.europa.eu/resource/oj/L_202690667"
+          ],
+          "consolidation_target_uris": [
+            "http://publications.europa.eu/resource/consolidation/2024R2847%2F20241120"
+          ],
+          "repeal_target_uris": [],
+          "topology_sha256": "ac3919c7a9e340172af6388ecb028b067d86ecb6e1698dadef321c648f2f9633"
+        },
+        "resolved_identity_evidence": {
+          "http://publications.europa.eu/resource/oj/L_202500327": ["32025R0327"],
+          "http://publications.europa.eu/resource/consolidation/2024R2847%2F20241120": ["02024R2847-20241120"]
         }
       },
       "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
       "baseline_change_policy": "GENERATE_BASELINE_PROVENANCE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
-      "current_state_change_policy": "GENERATE_MODIFIER_AND_CONSOLIDATION_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "current_state_change_policy": "GENERATE_CELLAR_RELATION_TOPOLOGY_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
       "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
-      "modifier_policy": "NEW_OR_REMOVED_MODIFIER_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
+      "relation_policy": "NEW_OR_REMOVED_AMENDMENT_CORRIGENDUM_CONSOLIDATION_OR_REPEAL_EDGE_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
       "automatic_commit_allowed": false
     }
   ]
