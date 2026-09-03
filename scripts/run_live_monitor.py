@@ -11,9 +11,8 @@ sys.path.insert(0,str(ROOT/"src"))
 
 from world_signals.adapters import (
     AdapterError,
-    CRA_CELEX,
     cellar_representation_diagnostics,
-    fetch_cellar_celex_document,
+    fetch_eli_current_document,
     fetch_rba_fsr,
     fetch_suin_rows,
     parse_cra_article_71,
@@ -120,46 +119,63 @@ def main() -> int:
             "canonical_action":"NONE",
         })
 
-    # EU Cellar / CRA: semantic Article 71 legal-rule sentinel. A transport or
-    # parser failure is source health only; a successfully parsed changed rule
-    # becomes a review candidate against the same stable canonical occurrences.
+    # EU ELI / CRA: the unversioned ELI is the current legal-state sentinel.
+    # The fixed CELEX enactment remains provenance/baseline evidence only.
+    # If EUR-Lex returns a result-list state because recent modifiers have not
+    # yet been consolidated, fail closed: that is an ambiguous current legal
+    # state requiring review, never evidence of no change.
     try:
-        body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
+        body,snap=fetch_eli_current_document("reg",2024,2847,language="eng")
         diagnostics=cellar_representation_diagnostics(body)
-        try:
-            rule=parse_cra_article_71(body)
-        except AdapterError as exc:
-            message=str(exc)
-            print(f"::warning::EU Cellar CRA parser degraded: {message}")
+        if diagnostics.get("looks_like_result_list"):
+            message="EUR-Lex current ELI resolved to a results list with potentially unconsolidated modifiers"
+            print(f"::warning::EU ELI CRA current state ambiguous: {message}")
             report["source_health"].append({
                 "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
                 "source_id":"WSSRC-TECH-001",
                 "state":"DEGRADED",
-                "failure_stage":"PARSE",
+                "failure_stage":"CURRENT_STATE_RESOLUTION",
                 "snapshot":snap.as_dict(),
                 "representation_diagnostics":diagnostics,
                 "error":message,
                 "canonical_action":"NONE",
             })
         else:
-            report["source_health"].append({
-                "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
-                "source_id":"WSSRC-TECH-001",
-                "state":"HEALTHY",
-                "snapshot":snap.as_dict(),
-                "representation_diagnostics":diagnostics,
-                "celex":rule.celex,
-                "article":rule.article,
-            })
-            candidate,observation=cra_legal_rule_review_candidate(
-                rule,configs["EU_CELLAR_CRA_ARTICLE_71"]
-            )
-            report["observations"].append(observation)
-            if candidate:
-                report["review_candidates"].append(candidate)
+            try:
+                rule=parse_cra_article_71(body)
+            except AdapterError as exc:
+                message=str(exc)
+                print(f"::warning::EU ELI CRA parser degraded: {message}")
+                report["source_health"].append({
+                    "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
+                    "source_id":"WSSRC-TECH-001",
+                    "state":"DEGRADED",
+                    "failure_stage":"PARSE",
+                    "snapshot":snap.as_dict(),
+                    "representation_diagnostics":diagnostics,
+                    "error":message,
+                    "canonical_action":"NONE",
+                })
+            else:
+                report["source_health"].append({
+                    "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
+                    "source_id":"WSSRC-TECH-001",
+                    "state":"HEALTHY",
+                    "snapshot":snap.as_dict(),
+                    "representation_diagnostics":diagnostics,
+                    "legal_state_route":"UNVERSIONED_ELI_CURRENT",
+                    "celex":rule.celex,
+                    "article":rule.article,
+                })
+                candidate,observation=cra_legal_rule_review_candidate(
+                    rule,configs["EU_CELLAR_CRA_ARTICLE_71"]
+                )
+                report["observations"].append(observation)
+                if candidate:
+                    report["review_candidates"].append(candidate)
     except AdapterError as exc:
         message=str(exc)
-        print(f"::warning::EU Cellar CRA source degraded: {message}")
+        print(f"::warning::EU ELI CRA source degraded: {message}")
         report["source_health"].append({
             "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
             "source_id":"WSSRC-TECH-001",
