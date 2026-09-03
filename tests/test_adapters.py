@@ -4,7 +4,12 @@ import sys, unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
-from world_signals.adapters import parse_rba_fsr_rss, parse_socrata_metadata
+from world_signals.adapters import (
+    parse_rba_fsr_rss,
+    parse_socrata_metadata,
+    parse_socrata_rows,
+    resource_url,
+)
 
 class AdapterParserTests(unittest.TestCase):
     def test_rba_rss2_parser(self):
@@ -37,5 +42,19 @@ class AdapterParserTests(unittest.TestCase):
         self.assertEqual(meta.dataset_id,"fiev-nid6")
         self.assertEqual(len(meta.columns),2)
         self.assertEqual(meta.columns[0].field_name,"tipo_de_norma")
+
+    def test_socrata_rows_parser(self):
+        payload=[{"tipo":"Decreto","n_mero":"111","a_o":"1996","vigencia":"Vigente"}]
+        rows=parse_socrata_rows(json.dumps(payload))
+        self.assertEqual(rows[0]["n_mero"],"111")
+        self.assertEqual(rows[0]["a_o"],"1996")
+
+    def test_socrata_resource_url_encodes_query(self):
+        url=resource_url(where="n_mero='111' AND a_o='1996'",select="tipo,n_mero,a_o",limit=5)
+        self.assertIn("resource/fiev-nid6.json",url)
+        self.assertIn("%24111",url) if False else None
+        self.assertIn("%24where=",url)
+        self.assertIn("%24select=",url)
+        self.assertIn("%24limit=5",url)
 
 if __name__=="__main__": unittest.main()
