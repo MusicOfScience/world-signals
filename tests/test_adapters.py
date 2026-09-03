@@ -8,6 +8,8 @@ from world_signals.adapters import (
     cellar_celex_url,
     eli_current_url,
     eli_current_fetch_url,
+    parse_cbam_certificate_sale_rule,
+    parse_cbam_verification_report_rule,
     parse_cra_article_71,
     parse_eli_current_state,
     parse_kenya_budget_policy_rule,
@@ -117,6 +119,38 @@ class AdapterParserTests(unittest.TestCase):
         changed=parse_cra_article_71(html)
         self.assertEqual(changed.article_14_application_date,"2026-09-12")
         self.assertNotEqual(changed.rule_sha256,"39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f")
+
+    def test_cbam_verification_report_rule_offline_fixture(self):
+        html='''<html><body><h1>CBAM verification</h1><h2>2.17.3 Issuing the verification report</h2><p>From 1 January 2027, the verifier shall issue the verification report in the CBAM registry.</p></body></html>'''
+        rule=parse_cbam_verification_report_rule(html)
+        self.assertEqual(rule.celex,"32025R2551")
+        self.assertEqual(rule.rule_id,"VERIFICATION_REPORT_REGISTRY_START")
+        self.assertEqual(rule.legal_locator,"Section 2.17.3")
+        self.assertEqual(rule.milestone_date,"2027-01-01")
+        self.assertEqual(len(rule.rule_sha256),64)
+
+    def test_cbam_verification_report_rule_detects_date_change(self):
+        html='''<html><body><h1>CBAM verification</h1><h2>2.17.3 Issuing the verification report</h2><p>From 2 January 2027, the verifier shall issue the verification report in the CBAM registry.</p></body></html>'''
+        changed=parse_cbam_verification_report_rule(html)
+        baseline=parse_cbam_verification_report_rule(html.replace("2 January","1 January"))
+        self.assertEqual(changed.milestone_date,"2027-01-02")
+        self.assertNotEqual(changed.rule_sha256,baseline.rule_sha256)
+
+    def test_cbam_certificate_sale_rule_offline_fixture(self):
+        html='''<html><body><h1>Regulation amending the carbon border adjustment mechanism</h1><p>Article 20 is amended as follows:</p><p>1. From 1 February 2027, a Member State shall sell CBAM certificates on a common central platform to authorised CBAM declarants established in that Member State.</p></body></html>'''
+        rule=parse_cbam_certificate_sale_rule(html)
+        self.assertEqual(rule.celex,"32025R2083")
+        self.assertEqual(rule.rule_id,"CERTIFICATE_SALE_START")
+        self.assertEqual(rule.legal_locator,"Article 20(1) replacement")
+        self.assertEqual(rule.milestone_date,"2027-02-01")
+        self.assertEqual(len(rule.rule_sha256),64)
+
+    def test_cbam_certificate_sale_rule_detects_date_change(self):
+        html='''<html><body><p>Article 20 is amended as follows:</p><p>From 3 February 2027, a Member State shall sell CBAM certificates on a common central platform to authorised CBAM declarants.</p></body></html>'''
+        changed=parse_cbam_certificate_sale_rule(html)
+        baseline=parse_cbam_certificate_sale_rule(html.replace("3 February","1 February"))
+        self.assertEqual(changed.milestone_date,"2027-02-03")
+        self.assertNotEqual(changed.rule_sha256,baseline.rule_sha256)
 
 
 if __name__=="__main__": unittest.main()
