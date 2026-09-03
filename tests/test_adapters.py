@@ -84,5 +84,11 @@ class AdapterParserTests(unittest.TestCase):
         self.assertEqual(rule.chapter_iv_application_date,"2026-06-11")
         self.assertEqual(len(rule.rule_sha256),64)
 
+    def test_cra_article_71_parser_extracts_changed_date(self):
+        html='''<html><body><h1>Cyber Resilience Act</h1><h2>Article 71 Entry into force and application</h2><p>This Regulation shall apply from 11 December 2027. However, Article 14 shall apply from 12 September 2026 and Chapter IV (Articles 35 to 51) shall apply from 11 June 2026.</p></body></html>'''
+        changed=parse_cra_article_71(html)
+        self.assertEqual(changed.article_14_application_date,"2026-09-12")
+        self.assertNotEqual(changed.rule_sha256,"39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f")
+
 
 if __name__=="__main__": unittest.main()
