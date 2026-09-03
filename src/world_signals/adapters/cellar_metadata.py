@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+from urllib.parse import urlparse
 from xml.etree import ElementTree as ET
 
 from .base import AdapterError, FetchSnapshot, fetch_bytes
@@ -9,6 +11,7 @@ RDF_NS="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 RDF_RESOURCE = "{"+RDF_NS+"}resource"
 RDF_ABOUT = "{"+RDF_NS+"}about"
 LEGAL_RELATION_TERMS=("amend","consolid","correct","repeal","replace","modify")
+CELEX_TOKEN_RE=re.compile(r"\b(?:0\d{4}[A-Z]\d{4}-\d{8}|3\d{4}[A-Z]\d{4})\b",re.IGNORECASE)
 
 
 def fetch_cellar_rdf_notice(
@@ -25,6 +28,63 @@ def fetch_cellar_rdf_notice(
     """
     accept="application/rdf+xml" if inferred else "application/rdf+xml;notice=non-inferred"
     return fetch_bytes(cellar_celex_url(celex),timeout=timeout,accept=accept)
+
+
+def fetch_cellar_identifier_notice(
+    resource_uri: str,
+    *,
+    timeout: int = 30,
+) -> tuple[bytes, FetchSnapshot]:
+    """Fetch the official Cellar identifier notice for a known resource URI.
+
+    Identifier notices are used to resolve OJ/consolidation/Cellar resource
+    identifiers to stable synonyms such as CELEX. Only Publications Office
+    resource URIs are accepted; arbitrary URL following is deliberately blocked.
+    """
+    parsed=urlparse(str(resource_uri))
+    if parsed.scheme not in {"http","https"} or parsed.hostname != "publications.europa.eu":
+        raise AdapterError(f"unsupported Cellar identifier resource URI: {resource_uri!r}")
+    if not parsed.path.startswith("/resource/"):
+        raise AdapterError(f"not a Publications Office resource URI: {resource_uri!r}")
+    return fetch_bytes(
+        str(resource_uri),
+        timeout=timeout,
+        accept="application/xml;notice=identifiers",
+    )
+
+
+def parse_cellar_identifier_notice(body: bytes | str) -> dict:
+    """Extract CELEX synonyms and other URI identifiers from an identifier notice.
+
+    The notice vocabulary can contain identifiers as element text or resource
+    attributes. We normalize only stable strings we can prove from the payload;
+    no OJ-number-to-CELEX inference is performed.
+    """
+    raw=body.encode("utf-8") if isinstance(body,str) else body
+    try:
+        root=ET.fromstring(raw)
+    except ET.ParseError as exc:
+        raise AdapterError(f"Cellar identifier notice was not valid XML: {exc}") from exc
+
+    celex=[]
+    uris=[]
+    for element in root.iter():
+        values=[]
+        if element.text and element.text.strip():
+            values.append(element.text.strip())
+        values.extend(v for v in element.attrib.values() if v)
+        for value in values:
+            for match in CELEX_TOKEN_RE.findall(value):
+                token=match.upper()
+                if token not in celex:
+                    celex.append(token)
+            if value.startswith(("http://","https://")) and value not in uris:
+                uris.append(value)
+
+    return {
+        "celex_ids":sorted(celex),
+        "resource_uris":sorted(uris),
+    }
 
 
 def _local_name(tag: str) -> str:
@@ -53,11 +113,10 @@ def parse_cellar_legal_relation_diagnostics(
 ) -> list[dict]:
     """Extract legal relations from a Cellar RDF notice.
 
-    When ``base_celex`` is supplied, only predicates attached to the RDF
-    subject representing that legal work are returned. This is essential:
-    an inferred Cellar object notice is a graph and can also contain metadata
-    about linked resources. Relations on those linked subjects must not be
-    misattributed to the base act.
+    When ``base_celex`` is supplied, only predicates attached to RDF subjects
+    identified as that legal work are returned. An inferred Cellar notice is a
+    graph, so relations belonging only to linked resources must not be silently
+    treated as relations of the base act.
     """
     raw=body.encode("utf-8") if isinstance(body,str) else body
     try:
@@ -83,7 +142,7 @@ def parse_cellar_legal_relation_diagnostics(
             lower=local.lower()
             if not any(term in lower for term in LEGAL_RELATION_TERMS):
                 continue
-            key=(local,target)
+            key=(local,target,subject_uri)
             if key in seen:
                 continue
             seen.add(key)
@@ -92,5 +151,5 @@ def parse_cellar_legal_relation_diagnostics(
                 "target_uri":target,
                 "subject_uri":subject_uri,
             })
-    relations.sort(key=lambda x:(x["predicate"],x["target_uri"]))
+    relations.sort(key=lambda x:(x["predicate"],x["target_uri"],x.get("subject_uri") or ""))
     return relations
