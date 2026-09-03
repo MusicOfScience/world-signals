@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
-  "reference_date": "2026-09-03",
-  "version": "1.50",
+  "reference_date": "2026-09-04",
+  "version": "1.51",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -8448,6 +8448,48 @@
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 400,
       "canonical_dependency_count": 1
+    },
+    {
+      "source_id": "WSSRC-RISK-004",
+      "institution": "Fiji Meteorological and Hydrological Services / RSMC Nadi Tropical Cyclone Centre",
+      "jurisdiction": "South-West Pacific / RSMC Nadi area of responsibility",
+      "domain": "physical_climate_risk",
+      "source_type": "official_tropical_cyclone_season_definition",
+      "endpoint_role": "South-West Pacific tropical cyclone standing season definition and annual outlook reference",
+      "authoritative_url": "https://www.met.gov.fj/climate-services/2025-26-tc-outlook/",
+      "backup_source": "https://www.met.gov.fj/tropical-cyclone/tropical-cyclone-reports/",
+      "rights_evidence_url": "https://www.met.gov.fj/climate-services/",
+      "information_supplied": "Official RSMC Nadi statement that the regional tropical cyclone season is between November and April, with explicit warning that out-of-season cyclones can occur.",
+      "future_schedule_horizon": "standing recurring November-April structural season definition; current 2026-27 seasonal outlook not located as of 2026-09-04",
+      "typical_advance_notice": "standing recurring definition; annual activity outlook is a separate publication",
+      "machine_readable_available": "HTML/PDF",
+      "source_timezone": "Pacific/Fiji",
+      "parser_type": "MANUAL_HTML_PROVENANCE",
+      "recommended_verification_cadence": "manual pre-season recheck; recheck when the 2026-27 seasonal outlook is published",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "licence_constraints": "Fiji Meteorological Services website footer states All Rights Reserved; this record uses only curated factual metadata and does not infer broader reuse rights.",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_MANUAL_REFERENCE_ALLOWED_CONSERVATIVELY",
+      "licence_review_status": "FIJI_MET_SITE_ALL_RIGHTS_RESERVED",
+      "automated_retrieval_permission": "PRODUCTION_HOLD_PERMISSION_OR_SEPARATELY_LICENSED_ROUTE_REQUIRED",
+      "redistribution_permission": "NO_SITE_WIDE_REUSE_GRANT_ESTABLISHED; CURATED_FACTUAL_METADATA_ONLY",
+      "rights_summary": "Official factual season definition is suitable for manual authoritative reference; the site does not supply a production automation licence in the reviewed surface.",
+      "automation_summary": "No production polling. Reverify manually unless Fiji Met provides an authorised/licensed machine route or permission.",
+      "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+      "monitoring_priority_score": 320,
+      "canonical_dependency_count": 1,
+      "rights_reviewed_at": "2026-09-04",
+      "monitoring_readiness_assessed_at": "2026-09-04",
+      "last_successful_research_verification_at": "2026-09-04",
+      "known_limitations": [
+        "The standing season is an exposure window, not a forecast that any cyclone will occur.",
+        "Cyclones can occur outside November-April.",
+        "No 2026-27 annual seasonal outlook was located in the official current search surface as of 2026-09-04; no activity-count forecast is imported into this occurrence."
+      ],
+      "notes": "Operational governance classification for WORLD SIGNALS; not a legal opinion."
     }
   ],
   "activation_backlog": [
