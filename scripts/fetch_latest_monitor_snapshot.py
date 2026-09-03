@@ -52,8 +52,7 @@ def github_headers(token: str) -> dict[str,str]:
 
 
 def request(url: str,token: str) -> bytes:
-    req=Request(url,headers=github_headers(token))
-    with urlopen(req,timeout=30) as response:
+    with urlopen(Request(url,headers=github_headers(token)),timeout=30) as response:
         return response.read()
 
 
@@ -67,11 +66,11 @@ class _NoRedirect(HTTPRedirectHandler):
 
 
 def download_artifact(url: str,token: str) -> bytes:
-    """Download a GitHub Actions artifact without forwarding repo credentials.
+    """Download an Actions artefact without forwarding repo credentials.
 
     GitHub's archive endpoint returns a signed cross-host storage URL. Repository
     Authorization is valid for the GitHub API request, but must not be carried to
-    the signed storage request. Handle that redirect explicitly.
+    the signed storage request.
     """
     opener=build_opener(_NoRedirect)
     try:
@@ -137,6 +136,18 @@ def unavailable(reason: str,current: dict,**metadata) -> int:
     return 0
 
 
+def run_metadata(run: dict) -> dict:
+    return {
+        "github_run_id":run.get("id"),
+        "github_run_number":run.get("run_number"),
+        "event":run.get("event"),
+        "conclusion":run.get("conclusion"),
+        "created_at":run.get("created_at"),
+        "updated_at":run.get("updated_at"),
+        "head_sha":run.get("head_sha"),
+    }
+
+
 def main() -> int:
     current=current_configuration()
     token=os.getenv("GITHUB_TOKEN")
@@ -147,63 +158,59 @@ def main() -> int:
     base=f"https://api.github.com/repos/{repository}"
     try:
         runs=request_json(
-            base+"/actions/workflows/live-monitor.yml/runs?status=success&per_page=10",
+            base+"/actions/workflows/live-monitor.yml/runs?status=completed&per_page=10",
             token,
         ).get("workflow_runs",[])
     except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
         return unavailable("GITHUB_ACTIONS_RUN_INDEX_UNAVAILABLE_AT_BUILD",current)
 
-    saw_successful_run=bool(runs)
-    for run in runs:
-        run_id=run.get("id")
-        if not run_id:
-            continue
-        try:
-            artifacts=request_json(base+f"/actions/runs/{run_id}/artifacts?per_page=100",token).get("artifacts",[])
-        except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
-            return unavailable(
-                "LATEST_SUCCESSFUL_MONITOR_ARTIFACT_INDEX_UNAVAILABLE_AT_BUILD",
-                current,
-                github_run_id=run_id,
-            )
-        wanted=f"world-signals-live-monitor-{run_id}"
-        artifact=next((item for item in artifacts if item.get("name")==wanted and not item.get("expired")),None)
-        if not artifact:
-            # Older successful runs used a generic artefact name. Continue until
-            # the first run that satisfies the current unique-name contract.
-            continue
-        artifact_id=artifact.get("id")
-        if not artifact_id:
-            raise ValueError(f"matching monitor artefact for run {run_id} has no artifact id")
-        try:
-            blob=download_artifact(base+f"/actions/artifacts/{artifact_id}/zip",token)
-        except (HTTPError,URLError,TimeoutError,ValueError) as exc:
-            return unavailable(
-                "LATEST_RETAINED_MONITOR_ARTIFACT_DOWNLOAD_UNAVAILABLE_AT_BUILD",
-                current,
-                github_run_id=run_id,
-                artifact_id=artifact_id,
-                failure_class=type(exc).__name__,
-            )
+    if not runs:
+        return unavailable("NO_COMPLETED_MONITOR_RUN_FOUND",current)
 
-        # An artefact that exists but violates the projection contract is a build
-        # failure. Silently skipping malformed evidence could publish a misleading
-        # older run as though it were the latest valid one.
-        projection=sanitize_archive(blob,current)
-        dump(projection)
-        print(
-            "Sanitized latest retained monitor run "
-            f"{projection.get('github_run_id')} at {projection.get('run_at')} "
-            f"status={projection.get('status')} alignment={projection.get('configuration_alignment',{}).get('state')}"
+    # Never hide a newer failed monitor behind an older green run. The public
+    # Operations layer follows the latest completed run, whether publishable or not.
+    run=runs[0]
+    metadata=run_metadata(run)
+    if run.get("conclusion")!="success":
+        return unavailable("LATEST_MONITOR_RUN_NOT_SUCCESSFUL",current,**metadata)
+
+    run_id=run.get("id")
+    if not run_id:
+        raise ValueError("latest completed successful monitor run has no id")
+    try:
+        artifacts=request_json(base+f"/actions/runs/{run_id}/artifacts?per_page=100",token).get("artifacts",[])
+    except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
+        return unavailable("LATEST_MONITOR_ARTIFACT_INDEX_UNAVAILABLE_AT_BUILD",current,**metadata)
+
+    wanted=f"world-signals-live-monitor-{run_id}"
+    artifact=next((item for item in artifacts if item.get("name")==wanted and not item.get("expired")),None)
+    if not artifact:
+        return unavailable("LATEST_SUCCESSFUL_MONITOR_RUN_HAS_NO_RETAINED_ARTIFACT",current,**metadata)
+
+    artifact_id=artifact.get("id")
+    if not artifact_id:
+        raise ValueError(f"matching monitor artefact for run {run_id} has no artifact id")
+    try:
+        blob=download_artifact(base+f"/actions/artifacts/{artifact_id}/zip",token)
+    except (HTTPError,URLError,TimeoutError,ValueError) as exc:
+        return unavailable(
+            "LATEST_RETAINED_MONITOR_ARTIFACT_DOWNLOAD_UNAVAILABLE_AT_BUILD",
+            current,
+            **metadata,
+            artifact_id=artifact_id,
+            failure_class=type(exc).__name__,
         )
-        return 0
 
-    reason=(
-        "NO_RETAINED_MONITOR_ARTIFACT_MATCHING_CURRENT_NAMING_CONTRACT"
-        if saw_successful_run
-        else "NO_SUCCESSFUL_MONITOR_RUN_FOUND"
+    # An artefact that exists but violates the projection contract is a build
+    # failure. Silently suppressing malformed evidence would make the UX less safe.
+    projection=sanitize_archive(blob,current)
+    dump(projection)
+    print(
+        "Sanitized latest completed monitor run "
+        f"{projection.get('github_run_id')} at {projection.get('run_at')} "
+        f"status={projection.get('status')} alignment={projection.get('configuration_alignment',{}).get('state')}"
     )
-    return unavailable(reason,current)
+    return 0
 
 
 if __name__=="__main__":
