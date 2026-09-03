@@ -1,4 +1,5 @@
 let DATA;
+let MONITORS={metadata:{},routes:[]};
 let futureOnly = true;
 let activeView = 'calendar';
 let calendarCursor = new Date();
@@ -52,13 +53,14 @@ function compactWhen(e){
   if(e.end_local && String(e.end_local).slice(0,10)!==String(e.start_local).slice(0,10)) return `→ ${String(e.end_local).slice(5,10)}`;
   return '';
 }
+function humanToken(value){return String(value??'').replaceAll('_',' ').toLowerCase();}
 function options(id,values){
   const el=$(id);
   [...new Set(values.filter(Boolean))].sort().forEach(v=>el.insertAdjacentHTML('beforeend',`<option>${esc(v)}</option>`));
 }
 function renderStats(){
   const m=DATA.metadata;
-  $('#stats').innerHTML=`<div class="stat"><b>${m.record_count}</b><span>canonical occurrences</span></div><div class="stat"><b>${Object.keys(m.region_counts).length}</b><span>regions</span></div><div class="stat"><b>${Object.keys(m.category_counts).length}</b><span>categories</span></div><div class="stat"><b>0</b><span>automatic commits</span></div>`;
+  $('#stats').innerHTML=`<div class="stat"><b>${m.record_count}</b><span>canonical occurrences</span></div><div class="stat"><b>${Object.keys(m.region_counts).length}</b><span>regions</span></div><div class="stat"><b>${Object.keys(m.category_counts).length}</b><span>categories</span></div><div class="stat"><b>${MONITORS.routes.length}</b><span>configured live monitor routes</span></div>`;
 }
 function baseFiltered(){
   const q=$('#search').value.toLowerCase().trim();
@@ -117,7 +119,7 @@ function renderDayPanel(byDay){
 }
 function renderCalendar(){
   const rows=baseFiltered();
-  const {start,end,startKey,endKey}=monthBounds();
+  const {start,startKey,endKey}=monthBounds();
   $('#monthLabel').textContent=start.toLocaleDateString(undefined,{month:'long',year:'numeric'});
   const byDay=new Map();
   rows.forEach(e=>{
@@ -155,11 +157,20 @@ function renderCalendar(){
   attachEventClicks($('#calendarWindows'));
   $('#calendarResultCount').textContent=`${[...byDay.values()].reduce((n,x)=>n+x.length,0)} exact-date events · ${windows.length} windows`;
 }
+function renderMonitors(){
+  const routes=MONITORS.routes||[];
+  $('#monitorRoutes').innerHTML=routes.length?routes.map(route=>{
+    const policy=route.positive_evidence_policy||route.change_policy||'Review-only source evidence';
+    return `<article class="monitor-route"><div class="monitor-route-head"><div><p class="eyebrow">${esc(route.adapter_id)}</p><h3>${esc(route.source_institution||route.source_id)}</h3><p class="meta">${esc(route.jurisdiction)} · ${esc(route.domain)}</p></div><span class="monitor-mode">READ ONLY</span></div><dl><dt>Role</dt><dd>${esc(humanToken(route.monitor_role))}</dd><dt>Cadence</dt><dd>${esc(humanToken(route.cadence))}</dd><dt>Canonical scope</dt><dd>${(route.canonical_occurrence_ids||[]).map(x=>`<code>${esc(x)}</code>`).join(' ')||'None'}</dd><dt>Positive evidence</dt><dd>${esc(humanToken(policy))}</dd><dt>Source failure</dt><dd>${esc(humanToken(route.source_failure_policy))}</dd><dt>Registry readiness</dt><dd>${esc(humanToken(route.registry_monitoring_readiness||'pending registry promotion'))}</dd></dl><p class="monitor-foot">Runtime health is intentionally not claimed here. The scheduled GitHub Action emits a fresh source-health report and any review candidates as artefacts.</p></article>`;
+  }).join(''):'<p class="empty">No live monitor routes are configured in this build.</p>';
+}
 function setView(view){
   activeView=view;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
   $('#calendarView').hidden=view!=='calendar';
   $('#indexView').hidden=view!=='index';
+  $('#monitorsView').hidden=view!=='monitors';
+  $('.controls').hidden=view==='monitors';
   render();
 }
 function showDetail(id){
@@ -169,10 +180,18 @@ function showDetail(id){
 }
 function render(){
   if(!DATA)return;
-  if(activeView==='calendar') renderCalendar(); else renderIndex();
+  if(activeView==='calendar') renderCalendar();
+  else if(activeView==='index') renderIndex();
+  else renderMonitors();
 }
 async function main(){
-  DATA=await fetch('data/events.json').then(r=>{if(!r.ok)throw new Error(`events.json ${r.status}`);return r.json();});
+  const [eventResponse,monitorResponse]=await Promise.all([
+    fetch('data/events.json'),
+    fetch('data/monitor_routes.json')
+  ]);
+  if(!eventResponse.ok) throw new Error(`events.json ${eventResponse.status}`);
+  DATA=await eventResponse.json();
+  if(monitorResponse.ok) MONITORS=await monitorResponse.json();
   renderStats();
   options('#region',DATA.events.map(x=>x.region));
   options('#category',DATA.events.map(x=>x.category));
