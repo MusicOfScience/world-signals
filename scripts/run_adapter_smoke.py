@@ -10,12 +10,15 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
+    CRA_CELEX,
     cellar_representation_diagnostics,
+    fetch_cellar_celex_document,
     fetch_eli_current_document,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
     parse_cra_article_71,
+    parse_eli_current_state,
 )
 
 CANONICAL=ROOT/"data/canonical/registry.json"
@@ -89,53 +92,56 @@ def main() -> int:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
 
+    cra_result={
+        "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+        "status":"PASS",
+        "monitor_role":"IMMUTABLE_RULE_BASELINE_PLUS_ELI_LEGAL_STATE_TOPOLOGY_SENTINEL",
+        "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
+        "automatic_commit_allowed":False,
+        "layers":{},
+    }
+    cra_failed=False
+
     try:
-        body,snap=fetch_eli_current_document("reg",2024,2847,language="eng")
+        body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
         diagnostics=cellar_representation_diagnostics(body)
-        if diagnostics.get("looks_like_result_list"):
-            message="EUR-Lex current ELI resolved to a results list with potentially unconsolidated modifiers"
-            failures.append(message)
-            report["results"].append({
-                "adapter":"EU_CELLAR_CRA_ARTICLE_71",
-                "status":"CURRENT_STATE_AMBIGUOUS",
-                "snapshot":snap.as_dict(),
-                "representation_diagnostics":diagnostics,
-                "error":message,
-                "canonical_action":"NONE",
-            })
-        else:
-            try:
-                rule=parse_cra_article_71(body)
-            except AdapterError as exc:
-                failures.append(str(exc))
-                report["results"].append({
-                    "adapter":"EU_CELLAR_CRA_ARTICLE_71",
-                    "status":"PARSER_FAIL_TRANSPORT_PASS",
-                    "snapshot":snap.as_dict(),
-                    "representation_diagnostics":diagnostics,
-                    "error":str(exc),
-                    "canonical_action":"NONE",
-                })
-            else:
-                report["results"].append({
-                    "adapter":"EU_CELLAR_CRA_ARTICLE_71",
-                    "status":"PASS",
-                    "snapshot":snap.as_dict(),
-                    "representation_diagnostics":diagnostics,
-                    "rule":rule.as_dict(),
-                    "legal_state_route":"UNVERSIONED_ELI_CURRENT",
-                    "monitor_role":"SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
-                    "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
-                    "automatic_commit_allowed":False,
-                })
+        rule=parse_cra_article_71(body)
+        cra_result["layers"]["immutable_baseline"]={
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "representation_diagnostics":diagnostics,
+            "rule":rule.as_dict(),
+        }
     except AdapterError as exc:
-        failures.append(str(exc))
-        report["results"].append({
-            "adapter":"EU_CELLAR_CRA_ARTICLE_71",
-            "status":"TRANSPORT_FAIL",
+        cra_failed=True
+        failures.append("CRA immutable baseline: "+str(exc))
+        cra_result["layers"]["immutable_baseline"]={
+            "status":"FAIL",
             "error":str(exc),
             "canonical_action":"NONE",
-        })
+        }
+
+    try:
+        body,snap=fetch_eli_current_document("reg",2024,2847,language="en")
+        state=parse_eli_current_state(body,base_celex=CRA_CELEX)
+        cra_result["layers"]["current_eli_state"]={
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "eli_identifier":"https://data.europa.eu/eli/reg/2024/2847",
+            "legal_state":state.as_dict(),
+        }
+    except AdapterError as exc:
+        cra_failed=True
+        failures.append("CRA current ELI state: "+str(exc))
+        cra_result["layers"]["current_eli_state"]={
+            "status":"FAIL",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        }
+
+    if cra_failed:
+        cra_result["status"]="FAIL"
+    report["results"].append(cra_result)
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
