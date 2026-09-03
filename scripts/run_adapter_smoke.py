@@ -8,7 +8,12 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
-from world_signals.adapters import AdapterError, fetch_rba_fsr, fetch_suin_metadata
+from world_signals.adapters import (
+    AdapterError,
+    fetch_rba_fsr,
+    fetch_suin_metadata,
+    fetch_suin_rows,
+)
 
 CANONICAL=ROOT/"data/canonical/registry.json"
 ARTIFACT_DIR=ROOT/"artifacts"
@@ -41,6 +46,7 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
     try:
         meta,snap=fetch_suin_metadata()
         report["results"].append({
@@ -52,6 +58,28 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"COLOMBIA_SUIN_SOCRATA_METADATA","status":"FAIL","error":str(exc)})
+
+    try:
+        rows,snap=fetch_suin_rows(
+            where="n_mero='111' AND a_o='1996'",
+            select="tipo,n_mero,a_o,sector,subtipo,vigencia,entidad,materia,art_culos",
+            limit=10,
+        )
+        if not rows:
+            raise AdapterError("SUIN live inventory query returned no row for Decree 111 of 1996")
+        report["results"].append({
+            "adapter":"COLOMBIA_SUIN_DECREE_111_1996",
+            "status":"PASS",
+            "snapshot":snap.as_dict(),
+            "row_count":len(rows),
+            "rows":rows,
+            "monitor_role":"LEGAL_INSTRUMENT_PRESENCE_VERSION_SENTINEL_ONLY",
+            "clause_level_authority_required":True,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
+
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
     report["canonical_unchanged"]=before==after
