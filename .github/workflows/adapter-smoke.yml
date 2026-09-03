@@ -6,6 +6,7 @@ on:
     paths:
       - 'src/world_signals/adapters/**'
       - 'scripts/run_adapter_smoke.py'
+      - 'scripts/run_cbam_annual_smoke.py'
       - 'tests/test_adapters.py'
       - '.github/workflows/adapter-smoke.yml'
   workflow_dispatch:
@@ -26,10 +27,14 @@ jobs:
         run: python -m unittest tests.test_adapters -v
       - name: Live official adapter smoke
         run: python scripts/run_adapter_smoke.py
-      - name: Upload smoke report
+      - name: CBAM annual deadline live smoke
+        run: python scripts/run_cbam_annual_smoke.py
+      - name: Upload smoke reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: world-signals-adapter-smoke
-          path: artifacts/adapter-smoke.json
+          path: |
+            artifacts/adapter-smoke.json
+            artifacts/cbam-annual-smoke.json
           if-no-files-found: error
