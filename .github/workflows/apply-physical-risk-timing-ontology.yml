@@ -1,0 +1,71 @@
+name: Apply WORLD SIGNALS physical-risk timing ontology once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-physical-risk-timing-ontology.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: world-signals-physical-risk-timing-ontology-apply
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Re-run fail-closed in-memory preflight
+        run: PYTHONPATH=. python scripts/apply_physical_risk_timing_ontology.py
+      - name: Protect canonical registry and monitor configuration
+        shell: bash
+        run: |
+          sha256sum data/canonical/registry.json data/monitor/expectations.json data/monitor/operations_policy.json > /tmp/protected.sha256
+      - name: Apply schema v0.50 locally
+        run: PYTHONPATH=. python scripts/apply_physical_risk_timing_ontology.py --apply
+      - name: Run seasonal timing tests
+        run: python -m unittest tests.test_temporal_windows -v
+      - name: Validate canonical registry
+        run: python scripts/validate_registry.py
+      - name: Assert exact schema postconditions
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          schema=json.loads(Path('data/canonical/schema.json').read_text())
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          assert schema['version']=='0.50'
+          assert schema['reference_date']=='2026-09-04'
+          assert reg['version']=='0.19'
+          assert reg['record_count']==668
+          timing=set(schema['controlled_vocabularies']['timing_type'])
+          assert {'MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW'} <= timing
+          assert schema['controlled_vocabularies']['season_window_model']==['MONTH_BOUNDED_SINGLE_PHASE','MONTH_BOUNDED_MULTI_PHASE']
+          assert schema['season_phase_fields']==['phase_id','start_month','end_month','boundary_precision','source_label']
+          print('Schema v0.50 exact-state assertions: PASS')
+          PY
+      - name: Prove protected state unchanged
+        run: sha256sum -c /tmp/protected.sha256
+      - name: Reject unintended file changes
+        shell: bash
+        run: |
+          git diff --check
+          changed="$(git diff --name-only | sort)"
+          test "$changed" = "data/canonical/schema.json" || { echo 'Unexpected changed files:'; printf '%s\n' "$changed"; exit 1; }
+      - name: Commit reviewed schema transaction
+        shell: bash
+        run: |
+          git config user.name 'WORLD SIGNALS reviewed migration'
+          git config user.email '58031940+MusicOfScience@users.noreply.github.com'
+          git add data/canonical/schema.json
+          git commit -m 'Apply physical-risk timing ontology schema v0.50'
+          git push
