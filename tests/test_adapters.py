@@ -5,11 +5,13 @@ import sys, unittest
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
+    parse_kenya_budget_policy_rule,
     parse_rba_fsr_rss,
     parse_socrata_metadata,
     parse_socrata_rows,
     resource_url,
 )
+
 
 class AdapterParserTests(unittest.TestCase):
     def test_rba_rss2_parser(self):
@@ -56,5 +58,14 @@ class AdapterParserTests(unittest.TestCase):
         self.assertIn("%24where=",url)
         self.assertIn("%24select=",url)
         self.assertIn("%24limit=5",url)
+
+    def test_kenya_budget_rule_parser_offline_fixture(self):
+        html='''<html><body><h1>Public Finance Management Act</h1><p>25. Budget Policy Statement</p><p>The National Treasury shall submit the Budget Policy Statement approved in terms of subsection (1) to Parliament, by the 15th February in each year.</p></body></html>'''
+        rule=parse_kenya_budget_policy_rule(html)
+        self.assertEqual(rule.section,"25(2)")
+        self.assertEqual(rule.deadline_month,2)
+        self.assertEqual(rule.deadline_day,15)
+        self.assertEqual(len(rule.rule_sha256),64)
+
 
 if __name__=="__main__": unittest.main()
