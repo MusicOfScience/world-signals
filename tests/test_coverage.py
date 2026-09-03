@@ -1,6 +1,11 @@
+from pathlib import Path
+import sys
 import unittest
 
-from src.world_signals.coverage import build_coverage_audit
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/"src"))
+
+from world_signals.coverage import build_coverage_audit
 
 
 class CoverageAuditTests(unittest.TestCase):
