@@ -6,7 +6,10 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     cellar_celex_url,
+    eli_current_url,
+    eli_current_fetch_url,
     parse_cra_article_71,
+    parse_eli_current_state,
     parse_kenya_budget_policy_rule,
     parse_rba_fsr_rss,
     parse_socrata_metadata,
@@ -73,6 +76,31 @@ class AdapterParserTests(unittest.TestCase):
             cellar_celex_url("32024R2847"),
             "https://publications.europa.eu/resource/celex/32024R2847",
         )
+
+    def test_eli_current_identifier_and_operational_url(self):
+        self.assertEqual(
+            eli_current_url("reg",2024,2847),
+            "https://data.europa.eu/eli/reg/2024/2847",
+        )
+        self.assertEqual(
+            eli_current_fetch_url("reg",2024,2847),
+            "https://eur-lex.europa.eu/eli/reg/2024/2847",
+        )
+
+    def test_eli_result_list_topology_parser(self):
+        html='''<html><body><h1>Search Results</h1><section><p>CELEX number: 32025R0327</p><p>Regulation (EU) 2025/327 amending Regulation (EU) 2024/2847</p></section><section><h2>Consolidated text</h2><p>CELEX number: 02024R2847-20241120</p></section><h2>Search criteria</h2></body></html>'''
+        state=parse_eli_current_state(html,base_celex="32024R2847")
+        self.assertEqual(state.mode,"RESULT_LIST_WITH_UNCONSOLIDATED_MODIFIERS")
+        self.assertEqual(state.consolidation_celex_ids,("02024R2847-20241120",))
+        self.assertEqual(state.modifier_celex_ids,("32025R0327",))
+        self.assertEqual(state.state_sha256,"30c7a5956a85dfa600de96c68f509b7a293197120ba57611d03b0c82a82c7fd3")
+
+    def test_eli_current_document_topology_parser(self):
+        html='''<html><body><h1>Document 02024R2847-20241120</h1><p>Consolidated text: Cyber Resilience Act</p></body></html>'''
+        state=parse_eli_current_state(html,base_celex="32024R2847")
+        self.assertEqual(state.mode,"CURRENT_DOCUMENT")
+        self.assertEqual(state.consolidation_celex_ids,("02024R2847-20241120",))
+        self.assertEqual(state.modifier_celex_ids,())
 
     def test_cra_article_71_parser_offline_fixture(self):
         html='''<html><body><h1>Cyber Resilience Act</h1><h2>Article 71 Entry into force and application</h2><p>This Regulation shall apply from 11 December 2027. However, Article 14 shall apply from 11 September 2026 and Chapter IV (Articles 35 to 51) shall apply from 11 June 2026.</p></body></html>'''
