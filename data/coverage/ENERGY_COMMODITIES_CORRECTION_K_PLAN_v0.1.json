@@ -1,0 +1,165 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "ENERGY_COMMODITIES_CORRECTION_K_PLAN",
+  "version": "0.1",
+  "reference_date": "2026-09-03",
+  "coverage_program_id": "WSCP-ENERGY-COMMODITIES-CORRECTION-K",
+  "purpose": "Bounded non-monetary correction to reduce oil/institution concentration in ENERGY_COMMODITIES using exact authoritative remaining-2026 JODI Oil+Gas, GECF gas-producer and ICSG copper signals.",
+  "preconditions": {
+    "canonical_registry_version": "0.18",
+    "canonical_record_count": 662,
+    "source_registry_version": "1.49",
+    "required_absent_source_ids": ["WSSRC-COM-010", "WSSRC-COM-011", "WSSRC-COM-012"],
+    "required_absent_occurrence_ids": ["WSO-COM-A-0029", "WSO-COM-A-0030", "WSO-COM-A-0031", "WSO-COM-A-0032", "WSO-COM-A-0033", "WSO-COM-A-0034"],
+    "required_absent_series_ids": ["WSER-COM-JODI-WDB", "WSER-COM-GECF-SUMMIT", "WSER-COM-ICSG-MTG"]
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.19",
+    "canonical_record_count": 668,
+    "source_registry_version": "1.50",
+    "new_occurrence_count": 6,
+    "new_series_count": 3,
+    "new_source_count": 3,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "scheduled_live_monitor_change": false
+  },
+  "source_plan": [
+    {
+      "source_id": "WSSRC-COM-010",
+      "institution": "Joint Organisations Data Initiative / International Energy Forum",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "authoritative_url": "https://www.jodidata.org/oil/support/update-calendar.aspx",
+      "supporting_urls": [
+        "https://www.jodidata.org/_resources/files/downloads/jodi-update-schedule-2026.pdf?v=dates-for-2026",
+        "https://www.ief.org/data/oil-gas-data-review"
+      ],
+      "source_type": "official_joint_oil_gas_update_schedule",
+      "evidence_scope": "First JODI-Oil and JODI-Gas World Database updates each month, with explicit noon London publication time",
+      "rights_classification": "RIGHTS_RESERVED_FACTUAL_METADATA_ONLY",
+      "automation_classification": "PRODUCTION_AUTOMATION_HOLD",
+      "rights_evidence_url": "https://www.jodidata.org/terms-of-use.aspx",
+      "rights_note": "JODI website terms reserve intellectual-property rights. WORLD SIGNALS may retain manually curated factual event metadata/provenance; no production crawling/reproduction permission is inferred."
+    },
+    {
+      "source_id": "WSSRC-COM-011",
+      "institution": "Gas Exporting Countries Forum",
+      "jurisdiction": "GECF member countries / Global",
+      "region": "Cross-regional / Global",
+      "authoritative_url": "https://www.gecf.org/Events-Conferences/Events-HH/ArticleID/1689/GECF-Secretary-General-holds-high-level-meetings-on-the-sidelines-of-the-St-Petersburg-International-Economic-Forum-SPIEF-2026",
+      "source_type": "official_summit_announcement",
+      "evidence_scope": "8th GECF Summit hosted in Moscow on 27 October 2026",
+      "rights_classification": "RIGHTS_AUDIT_REQUIRED",
+      "automation_classification": "PRODUCTION_AUTOMATION_HOLD",
+      "rights_note": "Public authoritative event evidence supports manual factual provenance. No production automation permission was established in this pass."
+    },
+    {
+      "source_id": "WSSRC-COM-012",
+      "institution": "International Copper Study Group",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "authoritative_url": "https://icsg.org/",
+      "source_type": "official_meeting_schedule",
+      "evidence_scope": "Next ICSG meetings in Lisbon on 13 October 2026",
+      "rights_classification": "RIGHTS_AUDIT_REQUIRED",
+      "automation_classification": "PRODUCTION_AUTOMATION_HOLD",
+      "rights_note": "Public authoritative event evidence supports manual factual provenance. No production automation permission was established in this pass."
+    }
+  ],
+  "series": [
+    {
+      "series_id": "WSER-COM-JODI-WDB",
+      "institution": "Joint Organisations Data Initiative / International Energy Forum",
+      "source_id": "WSSRC-COM-010",
+      "event_type": "INFORMATION_RELEASE",
+      "timing_type": "LOCAL_DATETIME",
+      "source_timezone": "Europe/London",
+      "publication_bundle_type": "SOURCE_BUNDLE",
+      "population_horizon_policy": "ALL_REMAINING_CURRENT_YEAR_OCCURRENCES"
+    },
+    {
+      "series_id": "WSER-COM-GECF-SUMMIT",
+      "institution": "Gas Exporting Countries Forum",
+      "source_id": "WSSRC-COM-011",
+      "event_type": "PRODUCER_POLICY_MEETING",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Europe/Moscow",
+      "population_horizon_policy": "EXPLICIT_CURRENT_YEAR_OCCURRENCE_ONLY"
+    },
+    {
+      "series_id": "WSER-COM-ICSG-MTG",
+      "institution": "International Copper Study Group",
+      "source_id": "WSSRC-COM-012",
+      "event_type": "INFORMATION_CATALYST_MEETING",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Europe/Lisbon",
+      "population_horizon_policy": "EXPLICIT_CURRENT_YEAR_OCCURRENCE_ONLY"
+    }
+  ],
+  "occurrences": [
+    {
+      "occurrence_id": "WSO-COM-A-0029",
+      "series_id": "WSER-COM-JODI-WDB",
+      "source_id": "WSSRC-COM-010",
+      "canonical_name": "JODI Oil + Gas World Database update — September 2026",
+      "start_local": "2026-09-22T12:00:00",
+      "start_utc": "2026-09-22T11:00:00Z",
+      "source_timezone": "Europe/London",
+      "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
+    },
+    {
+      "occurrence_id": "WSO-COM-A-0030",
+      "series_id": "WSER-COM-JODI-WDB",
+      "source_id": "WSSRC-COM-010",
+      "canonical_name": "JODI Oil + Gas World Database update — October 2026",
+      "start_local": "2026-10-21T12:00:00",
+      "start_utc": "2026-10-21T11:00:00Z",
+      "source_timezone": "Europe/London",
+      "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
+    },
+    {
+      "occurrence_id": "WSO-COM-A-0031",
+      "series_id": "WSER-COM-JODI-WDB",
+      "source_id": "WSSRC-COM-010",
+      "canonical_name": "JODI Oil + Gas World Database update — November 2026",
+      "start_local": "2026-11-19T12:00:00",
+      "start_utc": "2026-11-19T12:00:00Z",
+      "source_timezone": "Europe/London",
+      "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
+    },
+    {
+      "occurrence_id": "WSO-COM-A-0032",
+      "series_id": "WSER-COM-JODI-WDB",
+      "source_id": "WSSRC-COM-010",
+      "canonical_name": "JODI Oil + Gas World Database update — December 2026",
+      "start_local": "2026-12-21T12:00:00",
+      "start_utc": "2026-12-21T12:00:00Z",
+      "source_timezone": "Europe/London",
+      "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
+    },
+    {
+      "occurrence_id": "WSO-COM-A-0033",
+      "series_id": "WSER-COM-GECF-SUMMIT",
+      "source_id": "WSSRC-COM-011",
+      "canonical_name": "8th GECF Summit of Heads of State and Government — Moscow",
+      "start_local": "2026-10-27",
+      "source_timezone": "Europe/Moscow"
+    },
+    {
+      "occurrence_id": "WSO-COM-A-0034",
+      "series_id": "WSER-COM-ICSG-MTG",
+      "source_id": "WSSRC-COM-012",
+      "canonical_name": "International Copper Study Group meetings — Lisbon",
+      "start_local": "2026-10-13",
+      "source_timezone": "Europe/Lisbon"
+    }
+  ],
+  "safety": {
+    "source_rights_gate_separate_from_factual_provenance": true,
+    "no_automatic_monitor_promotion": true,
+    "no_google_calendar_write": true,
+    "no_auto_commit": true,
+    "transaction_default_mode": "CHECK_ONLY"
+  }
+}
