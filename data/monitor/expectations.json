@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.5",
+  "version": "0.6",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -206,6 +206,71 @@
       },
       "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
       "semantic_change_policy": "GENERATE_CBAM_LEGAL_MILESTONE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "current_state_change_policy": "GENERATE_PARENT_ACT_CELLAR_RELATION_TOPOLOGY_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
+      "relation_policy": "NEW_OR_REMOVED_AMENDMENT_CORRIGENDUM_CONSOLIDATION_OR_REPEAL_EDGE_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CBAM_ANNUAL_DEADLINE_RULE",
+      "source_id": "WSSRC-TRD-006",
+      "canonical_occurrence_ids": ["WSO-TRD-A-0008"],
+      "monitor_role": "PAIRED_RECURRING_DEADLINE_RULE_PLUS_PARENT_ACT_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
+      "cadence": "MONTHLY; WEEKLY_INSIDE_120_DAYS_OF_2027_09_30",
+      "legal_identity": {
+        "semantic_baseline_celex": "32025R2083",
+        "parent_current_law_celex": "32023R0956",
+        "declaration_legal_locator": "Article 6(1) replacement",
+        "surrender_legal_locator": "Article 22(1) replacement",
+        "rule_id": "ANNUAL_DECLARATION_AND_SURRENDER_DEADLINE"
+      },
+      "current_state_identity": {
+        "base_celex": "32023R0956",
+        "rdf_route": "https://publications.europa.eu/resource/celex/32023R0956",
+        "rdf_accept": "application/rdf+xml"
+      },
+      "baseline": {
+        "observed_at": "2026-09-03T10:24:00Z",
+        "rule_sha256": "c7aeba9d2d1b7beec5db95ac41e5d5de1df2840f4e3af19e5380a0307f7b9b80",
+        "rule": {
+          "celex": "32025R2083",
+          "rule_id": "ANNUAL_DECLARATION_AND_SURRENDER_DEADLINE",
+          "declaration_legal_locator": "Article 6(1) replacement",
+          "surrender_legal_locator": "Article 22(1) replacement",
+          "declaration_month_day": "09-30",
+          "surrender_month_day": "09-30",
+          "declaration_first_due_year": 2027,
+          "surrender_first_due_year": 2027,
+          "declaration_first_reference_year": 2026,
+          "surrender_first_reference_year": 2026,
+          "first_deadline_date": "2027-09-30",
+          "shared_deadline_consistent": true,
+          "rule_sha256": "c7aeba9d2d1b7beec5db95ac41e5d5de1df2840f4e3af19e5380a0307f7b9b80"
+        },
+        "cellar_legal_topology_observed_at": "2026-09-03T10:24:00Z",
+        "cellar_legal_topology_sha256": "a1c4344939030c49dff3441b1119ed7d2869e86eadf6251216379ae12bec88b4",
+        "cellar_legal_topology": {
+          "base_celex": "32023R0956",
+          "amendment_target_uris": [
+            "http://publications.europa.eu/resource/oj/L_202502083"
+          ],
+          "correction_target_uris": [
+            "http://publications.europa.eu/resource/oj/JOL_2023_163_R_0009",
+            "http://publications.europa.eu/resource/oj/JOL_2023_233_R_0013",
+            "http://publications.europa.eu/resource/oj/L_202490144",
+            "http://publications.europa.eu/resource/oj/L_202590738"
+          ],
+          "consolidation_target_uris": [
+            "http://publications.europa.eu/resource/consolidation/2023R0956%2F20230516",
+            "http://publications.europa.eu/resource/consolidation/2023R0956%2F20251020"
+          ],
+          "repeal_target_uris": [],
+          "topology_sha256": "a1c4344939030c49dff3441b1119ed7d2869e86eadf6251216379ae12bec88b4"
+        }
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "semantic_change_policy": "GENERATE_CBAM_ANNUAL_DEADLINE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "clause_divergence_policy": "GENERATE_PAIRED_CLAUSE_DIVERGENCE_REVIEW_CANDIDATE_NO_AUTOMATIC_SPLIT_OR_RESCHEDULE",
       "current_state_change_policy": "GENERATE_PARENT_ACT_CELLAR_RELATION_TOPOLOGY_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
       "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
       "relation_policy": "NEW_OR_REMOVED_AMENDMENT_CORRIGENDUM_CONSOLIDATION_OR_REPEAL_EDGE_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
