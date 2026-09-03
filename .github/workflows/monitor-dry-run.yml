@@ -1,0 +1,24 @@
+name: WORLD SIGNALS monitor dry-run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python scripts/run_monitor_dry.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-review-candidates
+          path: review_candidates/
+
+# A scheduled live-source workflow is intentionally NOT enabled in v0.1.
+# It will be added only after source-specific endpoint/parser promotion.
