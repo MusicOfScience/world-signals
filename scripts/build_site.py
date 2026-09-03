@@ -14,7 +14,7 @@ if not report.ok:
 
 docs=ROOT/"docs"
 docs.mkdir(exist_ok=True)
-for name in ("index.html","app.js","styles.css"):
+for name in ("index.html","app.js","styles.css","history.js","history.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
@@ -56,7 +56,8 @@ dump_json(docs/"data/monitor_routes.json",monitor_projection)
 dump_json(docs/"data/source_summary.json", {
     "source_count": len(src.get("sources",[])),
     "configured_live_monitor_routes":len(monitor_projection["routes"]),
+    "reviewed_change_count":len(load_json(ROOT/"data/changes/ledger.json").get("changes",[])),
     "monitoring_tiers": {},
 })
 (docs/".nojekyll").write_text("",encoding="utf-8")
-print(f"Built static site for {projection['metadata']['record_count']} events and {len(monitor_projection['routes'])} configured live monitor routes -> {docs}")
+print(f"Built static site for {projection['metadata']['record_count']} events, {len(monitor_projection['routes'])} configured live monitor routes and reviewed change history -> {docs}")
