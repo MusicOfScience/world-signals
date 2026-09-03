@@ -198,27 +198,30 @@ def main() -> int:
         )
 
     reduced_inputs=[]
-    evidence_gaps=[]
+    missing_successful_artifacts=[]
     for run in successful:
         run_id=run.get("id")
         artifacts=request_json(base+f"/actions/runs/{run_id}/artifacts?per_page=100",token).get("artifacts",[])
         wanted=f"world-signals-live-monitor-{run_id}"
         artifact=next((item for item in artifacts if item.get("name")==wanted and not item.get("expired")),None)
         if not artifact:
-            evidence_gaps.append(f"SUCCESSFUL_RUN_{run_id}_MISSING_RETAINED_ARTIFACT")
+            missing_successful_artifacts.append(f"SUCCESSFUL_RUN_{run_id}_MISSING_RETAINED_ARTIFACT")
             continue
         artifact_id=artifact.get("id")
         if not artifact_id:
-            evidence_gaps.append(f"SUCCESSFUL_RUN_{run_id}_ARTIFACT_ID_MISSING")
+            missing_successful_artifacts.append(f"SUCCESSFUL_RUN_{run_id}_ARTIFACT_ID_MISSING")
             continue
         blob=download_artifact(base+f"/actions/artifacts/{artifact_id}/zip",token)
         reduced_inputs.append(parse_archive(blob,current,run))
 
-    # A supposedly complete retained-horizon queue must not silently omit a
-    # successful run. Unsuccessful runs are different: they are recorded as gaps
-    # but cannot be interpreted as candidate absence.
-    if evidence_gaps:
-        raise ValueError("retained review evidence horizon incomplete: "+"; ".join(evidence_gaps))
+    # A supposedly complete retained-horizon state must not silently omit a
+    # successful run. Missing successful evidence is a build failure rather than
+    # an apparently empty review state.
+    if missing_successful_artifacts:
+        raise ValueError(
+            "retained review evidence horizon missing successful-run artefacts: "
+            +"; ".join(missing_successful_artifacts)
+        )
 
     state=reduce_review_state(
         reduced_inputs,
@@ -228,8 +231,12 @@ def main() -> int:
         contract=contract,
         generated_at=now.isoformat(),
     )
+    unsuccessful_gaps=[
+        f"UNSUCCESSFUL_RUN_{run.get('run_number')}_{run.get('id')}_{run.get('conclusion')}"
+        for run in unsuccessful
+    ]
     state["availability"]="AVAILABLE_RETAINED_HORIZON"
-    state["evidence_horizon_complete"]=True
+    state["evidence_horizon_complete"]=not bool(unsuccessful_gaps)
     state["evidence_horizon_cutoff_at"]=cutoff.isoformat()
     state["successful_run_count"]=len(successful)
     state["unsuccessful_run_count"]=len(unsuccessful)
@@ -242,7 +249,7 @@ def main() -> int:
         }
         for run in unsuccessful
     ]
-    state["evidence_gaps"]=[]
+    state["evidence_gaps"]=unsuccessful_gaps
 
     prohibited=set(contract.get("prohibited_public_fields") or [])
     hits=prohibited_field_hits(state,prohibited)
@@ -253,7 +260,8 @@ def main() -> int:
     print(
         "Reduced retained review state: "
         f"runs={state['run_count_considered']} items={state['item_count']} "
-        f"states={state['state_counts']} unsuccessful_runs={state['unsuccessful_run_count']}"
+        f"states={state['state_counts']} unsuccessful_runs={state['unsuccessful_run_count']} "
+        f"horizon_complete={state['evidence_horizon_complete']}"
     )
     return 0
 
