@@ -58,14 +58,36 @@ def _to_text(body: bytes | str) -> str:
     return re.sub(r"\s+"," ",text).strip()
 
 
+def cellar_representation_diagnostics(body: bytes | str) -> dict:
+    text=_to_text(body)
+    lower=text.lower()
+    return {
+        "text_chars":len(text),
+        "identifies_cra":(
+            "cyber resilience act" in lower
+            or "cybersecurity requirements for products with digital elements" in lower
+        ),
+        "contains_article_71":"article 71" in lower,
+        "contains_11_december_2027":"11 december 2027" in lower,
+        "contains_11_september_2026":"11 september 2026" in lower,
+        "contains_11_june_2026":"11 june 2026" in lower,
+        "contains_article_14":"article 14" in lower,
+        "contains_chapter_iv":"chapter iv" in lower,
+    }
+
+
 def parse_cra_article_71(body: bytes | str, *, celex: str = CRA_CELEX) -> CRAApplicationRule:
     text=_to_text(body)
-    if "Cyber Resilience Act" not in text and "cybersecurity requirements for products with digital elements" not in text.lower():
+    lower=text.lower()
+    if "cyber resilience act" not in lower and "cybersecurity requirements for products with digital elements" not in lower:
         raise AdapterError("Cellar response did not identify the Cyber Resilience Act")
 
-    general=re.search(r"shall apply from\s+11\s+December\s+2027",text,re.IGNORECASE)
-    article14=re.search(r"Article\s+14\s+shall apply from\s+11\s+September\s+2026",text,re.IGNORECASE)
-    chapter4=re.search(r"Chapter\s+IV\s*\(Articles\s+35\s+to\s+51\)\s+shall apply from\s+11\s+June\s+2026",text,re.IGNORECASE)
+    # Match the semantic rule, tolerating punctuation and markup-induced wording
+    # between the operative labels and their dates. The dates themselves remain
+    # exact legal assertions and are never inferred from recurrence.
+    general=re.search(r"shall\s+apply\s+from.{0,80}?11\s+December\s+2027",text,re.IGNORECASE)
+    article14=re.search(r"Article\s+14.{0,120}?11\s+September\s+2026",text,re.IGNORECASE)
+    chapter4=re.search(r"Chapter\s+IV.{0,180}?11\s+June\s+2026",text,re.IGNORECASE)
     if not all((general,article14,chapter4)):
         raise AdapterError("CRA Article 71 application-date rule was not found intact")
 
@@ -86,10 +108,20 @@ def parse_cra_article_71(body: bytes | str, *, celex: str = CRA_CELEX) -> CRAApp
     )
 
 
-def fetch_cra_article_71(*, timeout: int = 30) -> tuple[CRAApplicationRule, FetchSnapshot]:
-    body,snapshot=fetch_bytes(
-        cellar_celex_url(CRA_CELEX),
+def fetch_cellar_celex_document(
+    celex: str,
+    *,
+    timeout: int = 30,
+    language: str = "eng",
+) -> tuple[bytes, FetchSnapshot]:
+    return fetch_bytes(
+        cellar_celex_url(celex),
         timeout=timeout,
         accept="application/xhtml+xml,text/html;q=0.9,application/xml;q=0.8,*/*;q=0.1",
+        headers={"Accept-Language":language},
     )
+
+
+def fetch_cra_article_71(*, timeout: int = 30) -> tuple[CRAApplicationRule, FetchSnapshot]:
+    body,snapshot=fetch_cellar_celex_document(CRA_CELEX,timeout=timeout,language="eng")
     return parse_cra_article_71(body),snapshot
