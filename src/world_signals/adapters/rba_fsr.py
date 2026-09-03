@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
+from datetime import datetime
 from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree as ET
 
@@ -19,12 +20,36 @@ class RssItem:
     def as_dict(self) -> dict:
         return asdict(self)
 
-def _text(node: ET.Element, name: str) -> str | None:
-    child=node.find(name)
-    if child is None or child.text is None:
+def _local_name(tag: str) -> str:
+    return tag.rsplit("}",1)[-1] if "}" in tag else tag
+
+def _child(node: ET.Element, *names: str) -> ET.Element | None:
+    wanted=set(names)
+    for child in list(node):
+        if _local_name(child.tag) in wanted:
+            return child
+    return None
+
+def _text(node: ET.Element, *names: str) -> str | None:
+    child=_child(node,*names)
+    if child is None:
         return None
-    value=child.text.strip()
-    return value or None
+    if child.text and child.text.strip():
+        return child.text.strip()
+    href=child.attrib.get("href")
+    return href.strip() if href else None
+
+def _parse_date(value: str | None) -> str | None:
+    if not value:
+        return None
+    try:
+        return parsedate_to_datetime(value).isoformat()
+    except (TypeError, ValueError, OverflowError):
+        pass
+    try:
+        return datetime.fromisoformat(value.replace("Z","+00:00")).isoformat()
+    except ValueError:
+        return None
 
 def parse_rba_fsr_rss(body: bytes | str) -> list[RssItem]:
     raw=body.encode("utf-8") if isinstance(body, str) else body
@@ -32,27 +57,23 @@ def parse_rba_fsr_rss(body: bytes | str) -> list[RssItem]:
         root=ET.fromstring(raw)
     except ET.ParseError as exc:
         raise AdapterError(f"RBA RSS parse failed: {exc}") from exc
+    entries=[node for node in root.iter() if _local_name(node.tag) in {"item","entry"}]
     items=[]
-    for item in root.findall(".//item"):
+    for item in entries:
         title=_text(item,"title")
         if not title:
             continue
-        pub=_text(item,"pubDate")
-        pub_iso=None
-        if pub:
-            try:
-                pub_iso=parsedate_to_datetime(pub).isoformat()
-            except (TypeError, ValueError, OverflowError):
-                pub_iso=None
+        pub=_text(item,"pubDate","date","published","updated")
         items.append(RssItem(
             title=title,
             link=_text(item,"link"),
-            guid=_text(item,"guid"),
+            guid=_text(item,"guid","id"),
             pub_date=pub,
-            pub_date_iso=pub_iso,
+            pub_date_iso=_parse_date(pub),
         ))
     if not items:
-        raise AdapterError("RBA FSR RSS contained no <item> entries")
+        root_names=sorted({_local_name(node.tag) for node in root.iter()})[:20]
+        raise AdapterError(f"RBA FSR RSS contained no parseable item/entry elements; XML names={root_names}")
     return items
 
 def fetch_rba_fsr(*, timeout: int = 30) -> tuple[list[RssItem], FetchSnapshot]:
