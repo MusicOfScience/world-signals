@@ -1,0 +1,99 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "REVIEW_CANDIDATE_STATE_CONTRACT",
+  "version": "0.1",
+  "reference_date": "2026-09-04",
+  "scope": "RETAINED_ACTIONS_ARTEFACT_HORIZON_PLUS_MANUAL_REVIEW_DECISIONS",
+  "activation": {
+    "workflow": "Monitor WORLD SIGNALS live sources",
+    "activation_after_run_number": 47,
+    "activation_after_run_id": 33754900613,
+    "activation_reason": "Run 47 was verified NO_CHANGE with zero candidates and is the final pre-contract run. Candidate state begins prospectively after it; historical monitor experiments are not retroactively promoted into the queue."
+  },
+  "identity": {
+    "candidate_id_role": "IMMUTABLE_MONITOR_EVIDENCE_OBJECT_ID",
+    "review_item_id_role": "DURABLE_PROPOSITION_ID_WITHIN_RETAINED_EVIDENCE_HORIZON",
+    "review_item_prefix": "WSRV-",
+    "canonical_field_mode": "Hash sorted occurrence scope plus only the canonical fields actually proposed to change and their proposed values.",
+    "opaque_rule_mode": "For legal/rule/topology candidates, hash sorted occurrence scope, candidate type and normalized proposed new rule state.",
+    "merge_rule": "Repeated observations with the same review_item_id aggregate into one review item and never create duplicate pending work.",
+    "sibling_rule": "A materially different proposition receives a different review_item_id and does not automatically supersede an earlier item."
+  },
+  "rules": [
+    "ABSENCE_FROM_A_LATER_RUN_DOES_NOT_RESOLVE_REJECT_OR_SUPERSEDE_A_REVIEW_ITEM",
+    "SOURCE_OR_FETCH_FAILURE_DOES_NOT_RESOLVE_A_REVIEW_ITEM",
+    "REPEATED_IDENTICAL_PROPOSITION_AGGREGATES_OBSERVATIONS",
+    "MATERIALLY_REVISED_PROPOSITION_CREATES_A_SIBLING_REVIEW_ITEM",
+    "CANONICAL_ALIGNMENT_WITHOUT_EXPLICIT_REVIEW_LINK_REQUIRES_RECONCILIATION",
+    "REJECTED_OR_DEFERRED_ITEMS_DO_NOT_AUTOMATICALLY_REOPEN_IF_REOBSERVED",
+    "APPROVED_CANDIDATE_IS_NOT_COMMITTED_UNTIL_A_CHANGE_LEDGER_ENTRY_LINKS_THE_REVIEW_ITEM",
+    "EVERY_CANDIDATE_MUST_EXPLICITLY_PROHIBIT_AUTOMATIC_COMMIT",
+    "PUBLIC_REVIEW_PROJECTION_MUST_NOT_INCLUDE_RAW_OLD_NEW_SOURCE_ASSERTION_RULE_TOPOLOGY_OR_SNAPSHOT_PAYLOADS",
+    "BROWSER_REVIEW_VIEW_IS_READ_ONLY",
+    "GOOGLE_CALENDAR_WRITES_REMAIN_OFF"
+  ],
+  "derived_states": [
+    "PENDING_REVIEW",
+    "DEFERRED",
+    "REJECTED",
+    "APPROVED_FOR_CANONICAL_COMMIT",
+    "COMMITTED",
+    "SUPERSEDED",
+    "CANONICAL_ALIGNMENT_REQUIRES_RECONCILIATION"
+  ],
+  "manual_decision_states": [
+    "DEFERRED",
+    "REJECTED",
+    "APPROVED_FOR_CANONICAL_COMMIT",
+    "SUPERSEDED",
+    "REOPENED"
+  ],
+  "future_change_ledger_linkage": {
+    "required_for_future_candidate_driven_commits": true,
+    "fields": [
+      "origin_review_item_id",
+      "origin_candidate_ids"
+    ],
+    "historical_backfill_required": false
+  },
+  "retention_limit": {
+    "current_monitor_artefact_retention_days": 90,
+    "implication": "This v0.1 reducer is complete only inside the retained Actions evidence horizon. It is not yet a permanent pending-candidate database.",
+    "safety_rule": "Do not grant monitor or Pages workflows repository contents-write authority merely to persist the queue.",
+    "next_gate": "Design an independently constrained durable checkpoint mechanism before claiming indefinite pending-review persistence."
+  },
+  "public_item_fields": [
+    "review_item_id",
+    "identity_mode",
+    "occurrence_ids",
+    "candidate_types",
+    "source_ids",
+    "candidate_ids",
+    "first_observed_at",
+    "last_observed_at",
+    "observation_count",
+    "first_run_number",
+    "last_run_number",
+    "proposed_change_fields",
+    "proposition_digest",
+    "state",
+    "last_decision_state",
+    "decided_at",
+    "canonical_alignment_state",
+    "reobserved_after_decision",
+    "automatic_commit_allowed"
+  ],
+  "prohibited_public_fields": [
+    "old_value",
+    "new_value",
+    "source_assertion",
+    "snapshot",
+    "observations",
+    "rule",
+    "topology",
+    "rows",
+    "body",
+    "raw",
+    "error"
+  ]
+}
