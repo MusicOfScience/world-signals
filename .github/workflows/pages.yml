@@ -23,6 +23,9 @@ jobs:
         with:
           python-version: '3.13'
       - run: python scripts/validate_registry.py
+      - run: node --check web/app.js
+      - run: node --check web/history.js
+      - run: node --check web/operations.js
       - run: python scripts/build_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
