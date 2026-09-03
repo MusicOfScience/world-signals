@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -14,7 +15,6 @@ from world_signals.adapters import (
     CBAM_PARENT_CELEX,
     CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
-    cellar_representation_diagnostics,
     fetch_cbam_annual_declaration_surrender_rule,
     fetch_cbam_certificate_sale_rule,
     fetch_cbam_verification_report_rule,
@@ -39,6 +39,7 @@ from world_signals.live_monitor import (
 )
 
 CANONICAL=ROOT/"data/canonical/registry.json"
+SOURCE_REGISTRY=ROOT/"data/sources/registry.json"
 EXPECTATIONS=ROOT/"data/monitor/expectations.json"
 ARTIFACT_DIR=ROOT/"artifacts"
 REVIEW_DIR=ROOT/"review_candidates/live"
@@ -54,6 +55,18 @@ def file_hash(path: Path) -> str:
 
 def config_by_id(expectations: dict) -> dict[str,dict]:
     return {x["adapter_id"]:x for x in expectations.get("adapters",[])}
+
+
+def workflow_context() -> dict:
+    return {
+        "github_run_id":os.getenv("GITHUB_RUN_ID"),
+        "github_run_number":os.getenv("GITHUB_RUN_NUMBER"),
+        "github_sha":os.getenv("GITHUB_SHA"),
+        "github_event_name":os.getenv("GITHUB_EVENT_NAME"),
+        "github_ref":os.getenv("GITHUB_REF"),
+        "github_workflow":os.getenv("GITHUB_WORKFLOW"),
+        "github_repository":os.getenv("GITHUB_REPOSITORY"),
+    }
 
 
 def _append_candidate(report: dict, candidate: dict | None, observation: dict) -> None:
@@ -125,17 +138,33 @@ def _run_cbam_monitor(
 
 
 def main() -> int:
-    before=file_hash(CANONICAL)
+    canonical_sha=file_hash(CANONICAL)
+    source_registry_sha=file_hash(SOURCE_REGISTRY)
+    expectations_sha=file_hash(EXPECTATIONS)
     registry=load_json(CANONICAL)
+    source_registry=load_json(SOURCE_REGISTRY)
     expectations=load_json(EXPECTATIONS)
     configs=config_by_id(expectations)
+    expected_adapter_ids=sorted(configs)
     now=datetime.now(timezone.utc).isoformat()
+    configuration_fingerprint=sha256(
+        (canonical_sha+"|"+source_registry_sha+"|"+expectations_sha).encode("utf-8")
+    ).hexdigest()
 
     report={
         "project":"WORLD SIGNALS",
+        "report_schema_version":"0.2",
         "run_type":"LIVE_READ_ONLY_MONITOR",
         "run_at":now,
-        "canonical_sha256_before":before,
+        "workflow_context":workflow_context(),
+        "canonical_registry_version":registry.get("version"),
+        "source_registry_version":source_registry.get("version"),
+        "monitor_expectations_version":expectations.get("version"),
+        "configuration_fingerprint_sha256":configuration_fingerprint,
+        "canonical_sha256_before":canonical_sha,
+        "source_registry_sha256":source_registry_sha,
+        "monitor_expectations_sha256":expectations_sha,
+        "expected_adapter_ids":expected_adapter_ids,
         "automatic_canonical_commit":False,
         "google_calendar_write":False,
         "source_health":[],
@@ -180,7 +209,6 @@ def main() -> int:
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
 
-    # CRA: immutable semantic baseline + machine-readable Cellar RDF legal topology.
     cra_config=configs["EU_CELLAR_CRA_ARTICLE_71"]
     cra_health={
         "adapter_id":"EU_CELLAR_CRA_ARTICLE_71","source_id":"WSSRC-TECH-001",
@@ -190,7 +218,6 @@ def main() -> int:
 
     try:
         body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
-        diagnostics=cellar_representation_diagnostics(body)
         rule=parse_cra_article_71(body)
         cra_health["layers"]["immutable_baseline"]={
             "state":"HEALTHY","snapshot":snap.as_dict(),"rule":rule.as_dict(),
@@ -224,8 +251,6 @@ def main() -> int:
         cra_health["state"]="DEGRADED"
     report["source_health"].append(cra_health)
 
-    # CBAM verifier milestone: semantic rule and current-law topology both live
-    # on Delegated Regulation (EU) 2025/2551.
     _run_cbam_monitor(
         report,
         config=configs["EU_CBAM_VERIFICATION_RULE"],
@@ -235,9 +260,6 @@ def main() -> int:
         topology_layer_name="cellar_rdf_legal_topology",
     )
 
-    # CBAM certificate sales: semantic baseline is the 2025 amending act, but
-    # current-law topology must watch parent Regulation (EU) 2023/956 because a
-    # future Article 20 change would normally amend the parent act.
     _run_cbam_monitor(
         report,
         config=configs["EU_CBAM_CERTIFICATE_SALE_RULE"],
@@ -247,11 +269,6 @@ def main() -> int:
         topology_layer_name="parent_cellar_rdf_legal_topology",
     )
 
-    # CBAM annual declaration + certificate surrender: Articles 6(1) and 22(1)
-    # are parsed independently and must remain internally consistent. Their
-    # current-law topology is the same parent Regulation (EU) 2023/956. Any
-    # semantic or topology drift is review evidence only; no split/reschedule
-    # or canonical mutation is automatic.
     _run_cbam_monitor(
         report,
         config=configs["EU_CBAM_ANNUAL_DEADLINE_RULE"],
@@ -267,20 +284,42 @@ def main() -> int:
         path=REVIEW_DIR/f"{cid}.json"
         path.write_text(json.dumps(candidate,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
         candidate_files.append(str(path.relative_to(ROOT)))
-    MANIFEST.write_text(json.dumps({
-        "generated_at":now,"candidate_count":len(candidate_files),"files":candidate_files,
-        "automatic_canonical_commit":False,
-    },indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+
+    observed_adapter_ids=sorted(x["adapter_id"] for x in report["source_health"])
+    missing_expected=sorted(set(expected_adapter_ids)-set(observed_adapter_ids))
+    unexpected_observed=sorted(set(observed_adapter_ids)-set(expected_adapter_ids))
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
-    report["canonical_unchanged"]=before==after
+    report["canonical_unchanged"]=canonical_sha==after
+    report["candidate_count"]=len(candidate_files)
     report["source_health_summary"]={
         "healthy":sum(1 for x in report["source_health"] if x["state"]=="HEALTHY"),
         "degraded":sum(1 for x in report["source_health"] if x["state"]!="HEALTHY"),
+        "adapter_entries":len(report["source_health"]),
+        "expected_adapter_entries":len(expected_adapter_ids),
         "unique_source_ids":len({x["source_id"] for x in report["source_health"]}),
+        "observed_adapter_ids":observed_adapter_ids,
+        "missing_expected_adapters":missing_expected,
+        "unexpected_observed_adapters":unexpected_observed,
+        "all_expected_adapters_observed":not missing_expected and not unexpected_observed,
     }
-    if before != after:
+
+    manifest={
+        "project":"WORLD SIGNALS",
+        "generated_at":now,
+        "workflow_context":report["workflow_context"],
+        "canonical_registry_version":report["canonical_registry_version"],
+        "source_registry_version":report["source_registry_version"],
+        "monitor_expectations_version":report["monitor_expectations_version"],
+        "configuration_fingerprint_sha256":configuration_fingerprint,
+        "candidate_count":len(candidate_files),
+        "files":candidate_files,
+        "automatic_canonical_commit":False,
+    }
+    MANIFEST.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+
+    if canonical_sha != after:
         report["status"]="FAIL_CANONICAL_GUARD"
         OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
         print(json.dumps(report,indent=2,ensure_ascii=False))
@@ -288,7 +327,7 @@ def main() -> int:
 
     report["status"]=(
         "REVIEW_REQUIRED" if report["review_candidates"]
-        else "DEGRADED" if report["source_health_summary"]["degraded"]
+        else "DEGRADED" if report["source_health_summary"]["degraded"] or missing_expected or unexpected_observed
         else "NO_CHANGE"
     )
     OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
