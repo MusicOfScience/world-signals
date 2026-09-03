@@ -1,38 +1,68 @@
-# WORLD SIGNALS — executable thin slice v0.2
+# WORLD SIGNALS — executable thin slice v0.3
 
-This repository is the first executable implementation of the WORLD SIGNALS architecture.
+This repository is the executable implementation of the WORLD SIGNALS architecture.
 
 ## Layer contract
 
 ```text
-data/canonical/registry.json     <-- CANONICAL REGISTRY (authoritative input)
-             |
-             +--> scripts/build_site.py --> docs/ --> GitHub Pages web UX
-             |
-             +--> monitor engine --> review_candidates/ (NO automatic canonical commit)
-             |
-             +--> future live-intelligence + analysis layers
+AUTHORITATIVE SOURCES
+        |
+        v
+read-only source adapters
+FETCH -> SNAPSHOT -> PARSE -> ASSERT
+        |
+        v
+MATCH -> DIFF -> REVIEW CANDIDATE
+        |
+        |  no automatic commit
+        v
+data/canonical/registry.json     <-- CANONICAL REGISTRY
+        |
+        +--> scripts/build_site.py --> docs/ --> GitHub Pages web UX
+        |
+        +--> future calendar exports
+        |
+        +--> future live-intelligence + analysis layers
 ```
 
-The browser is **not** the database. GitHub Pages is **not** the canonical registry.
+The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state.
 
 ## Current web UX
 
-The Pages site now opens on a **read-only month calendar** backed by the canonical registry, with an **Event index** as the second view.
+The Pages site opens on a **read-only month calendar** backed by the canonical registry, with an **Event index** and **Monitor routes** view.
 
 - exact-date events are placed on calendar days;
 - timed events use the browser/device timezone when a canonical UTC timestamp is available, while the native source timezone remains visible;
 - expected windows and month-precision events are rendered separately rather than being pinned to an invented day;
 - filters apply across calendar and index views;
-- clicking an event opens its stable identity, certainty, lifecycle, provenance and monitoring-route details.
+- clicking an event opens its stable identity, certainty, lifecycle, provenance and monitoring-route details;
+- Monitor routes describes what is configured to run and what each adapter is allowed to infer. It deliberately does **not** pretend that a static Pages build contains current runtime health.
 
 This is a projection layer only. It cannot write to the canonical registry.
+
+## Operational live monitor
+
+`live-monitor.yml` runs a read-only official-source monitor daily and can also be started manually. It currently exercises two deliberately heterogeneous routes:
+
+1. **Reserve Bank of Australia — Financial Stability Review RSS/RDF**
+   - positive publication evidence can generate a completion/date review candidate;
+   - absence from the feed cannot cancel or complete an occurrence.
+
+2. **Colombia SUIN / Datos Abiertos — Decree 111 of 1996 sentinel**
+   - the Socrata API watches the typed legal instrument (`DECRETO` + number + year) for presence/version fields;
+   - a change generates a legal-input review candidate;
+   - the inventory cannot directly alter the canonical budget deadline: operative clause-level SUIN verification remains required.
+
+Every run hashes `data/canonical/registry.json` before and after. A changed hash fails the monitor. The workflow token has `contents: read` only.
+
+The first operational run completed with **2 healthy routes, 0 degraded routes, 0 review candidates, `NO_CHANGE`, and an identical canonical SHA before/after**.
 
 ## Current safety boundary
 
 - Canonical records: 649 at the bundled checkpoint.
-- Site: read-only.
-- Monitor: dry-run/fixture-capable, review candidates only.
+- Calendar/site: read-only projection.
+- Live monitor: official-source fetch/parse/compare, review candidates only.
+- Source failure: source-health state only; no event mutation.
 - Automatic canonical commits: prohibited.
 - Google Calendar writes: prohibited.
 
@@ -47,18 +77,28 @@ python -m http.server 8000 --directory docs
 
 Open `http://localhost:8000` **on the same computer that is running the server**. From another device, use that computer's reachable network address or the deployed GitHub Pages site.
 
-## Monitor dry-run
+## Monitor commands
+
+Controlled fixture/dry-run comparison:
 
 ```bash
 python scripts/run_monitor_dry.py
 ```
 
-This compares a controlled source assertion with a canonical occurrence and writes a **review candidate** when a difference exists. It never edits `data/canonical/registry.json`.
+Live official-source review-only monitor:
 
-## GitHub
+```bash
+python scripts/run_live_monitor.py
+```
 
-- `ci.yml`: validates registry invariants and tests on pushes/PRs.
-- `pages.yml`: builds and deploys the static UX to GitHub Pages.
-- `monitor-dry-run.yml`: manually executes the monitor harness and uploads review candidates as a workflow artifact.
+Neither command edits `data/canonical/registry.json`.
 
-Live source adapters are added one source family at a time after endpoint/parser and rights validation. The next executable tranche is adapter promotion and review-candidate generation; canonical mutation remains a separate, closed gate.
+## GitHub workflows
+
+- `ci.yml` — registry validation, regression tests and static-site build.
+- `pages.yml` — validates, builds and deploys GitHub Pages.
+- `monitor-dry-run.yml` — manual controlled monitor harness.
+- `adapter-smoke.yml` — live transport/parser checks against official RBA and Colombia routes.
+- `live-monitor.yml` — scheduled read-only live monitor; uploads source-health report and review-candidate artefacts.
+
+Live source adapters are promoted one source family at a time after rights, endpoint and parser validation. Automatic canonical mutation remains a separate closed gate: working software is not permission to remove review.
