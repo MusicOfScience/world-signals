@@ -39,6 +39,8 @@ jobs:
         run: node --check web/app.js
       - name: Build static site
         run: python scripts/build_site.py
+      - name: Restore disposable generated projection
+        run: git restore docs
       - name: Assert exact schema postconditions
         shell: bash
         run: |
