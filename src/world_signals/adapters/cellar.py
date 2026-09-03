@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
+from datetime import date
 from hashlib import sha256
 from html.parser import HTMLParser
 import re
@@ -9,6 +10,11 @@ from .base import AdapterError, FetchSnapshot, fetch_bytes
 
 CELLAR_CELEX_BASE = "https://publications.europa.eu/resource/celex"
 CRA_CELEX = "32024R2847"
+MONTHS={
+    "january":1,"february":2,"march":3,"april":4,"may":5,"june":6,
+    "july":7,"august":8,"september":9,"october":10,"november":11,"december":12,
+}
+DATE_PATTERN=r"(?P<day>\d{1,2})\s+(?P<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?P<year>\d{4})"
 
 
 class _TextExtractor(HTMLParser):
@@ -58,6 +64,32 @@ def _to_text(body: bytes | str) -> str:
     return re.sub(r"\s+"," ",text).strip()
 
 
+def _match_to_iso(match: re.Match[str]) -> str:
+    try:
+        value=date(
+            int(match.group("year")),
+            MONTHS[match.group("month").lower()],
+            int(match.group("day")),
+        )
+    except (KeyError,ValueError) as exc:
+        raise AdapterError(f"invalid legal application date in CRA Article 71: {match.group(0)!r}") from exc
+    return value.isoformat()
+
+
+def _article_71_window(text: str) -> str:
+    candidates=[]
+    for match in re.finditer(r"\bArticle\s+71\b",text,re.IGNORECASE):
+        window=text[match.start():match.start()+5000]
+        lower=window.lower()
+        if "article 14" in lower and "chapter iv" in lower and "shall apply from" in lower:
+            candidates.append(window)
+    if not candidates:
+        raise AdapterError("CRA operative Article 71 block was not found")
+    # A table of contents can contain the same article label; the operative block
+    # is normally the final candidate containing all three application clauses.
+    return candidates[-1]
+
+
 def cellar_representation_diagnostics(body: bytes | str) -> dict:
     text=_to_text(body)
     lower=text.lower()
@@ -82,28 +114,47 @@ def parse_cra_article_71(body: bytes | str, *, celex: str = CRA_CELEX) -> CRAApp
     if "cyber resilience act" not in lower and "cybersecurity requirements for products with digital elements" not in lower:
         raise AdapterError("Cellar response did not identify the Cyber Resilience Act")
 
-    # Match the semantic rule, tolerating punctuation and markup-induced wording
-    # between the operative labels and their dates. The dates themselves remain
-    # exact legal assertions and are never inferred from recurrence.
-    general=re.search(r"shall\s+apply\s+from.{0,80}?11\s+December\s+2027",text,re.IGNORECASE)
-    article14=re.search(r"Article\s+14.{0,120}?11\s+September\s+2026",text,re.IGNORECASE)
-    chapter4=re.search(r"Chapter\s+IV.{0,180}?11\s+June\s+2026",text,re.IGNORECASE)
-    if not all((general,article14,chapter4)):
-        raise AdapterError("CRA Article 71 application-date rule was not found intact")
+    block=_article_71_window(text)
+    general=re.search(
+        rf"(?:It|This\s+Regulation)\s+shall\s+apply\s+from\s+{DATE_PATTERN}",
+        block,re.IGNORECASE,
+    )
+    if general is None:
+        # Representation wording can omit the pronoun. Select an unlabeled
+        # application clause only when it is not the Article 14 or Chapter IV clause.
+        for match in re.finditer(rf"shall\s+apply\s+from\s+{DATE_PATTERN}",block,re.IGNORECASE):
+            prefix=block[max(0,match.start()-90):match.start()].lower()
+            if "article 14" not in prefix and "chapter iv" not in prefix:
+                general=match
+                break
 
+    article14=re.search(
+        rf"Article\s+14\s+shall\s+apply\s+from\s+{DATE_PATTERN}",
+        block,re.IGNORECASE,
+    )
+    chapter4=re.search(
+        rf"Chapter\s+IV(?:\s*\([^)]*\))?\s+shall\s+apply\s+from\s+{DATE_PATTERN}",
+        block,re.IGNORECASE,
+    )
+    if not all((general,article14,chapter4)):
+        raise AdapterError("CRA Article 71 application-date clauses were not parsed completely")
+
+    general_iso=_match_to_iso(general)
+    article14_iso=_match_to_iso(article14)
+    chapter4_iso=_match_to_iso(chapter4)
     semantic="|".join([
         str(celex),
         "ARTICLE_71",
-        "GENERAL=2027-12-11",
-        "ARTICLE_14=2026-09-11",
-        "CHAPTER_IV=2026-06-11",
+        f"GENERAL={general_iso}",
+        f"ARTICLE_14={article14_iso}",
+        f"CHAPTER_IV={chapter4_iso}",
     ])
     return CRAApplicationRule(
         celex=str(celex),
         article="71",
-        general_application_date="2027-12-11",
-        article_14_application_date="2026-09-11",
-        chapter_iv_application_date="2026-06-11",
+        general_application_date=general_iso,
+        article_14_application_date=article14_iso,
+        chapter_iv_application_date=chapter4_iso,
         rule_sha256=sha256(semantic.encode("utf-8")).hexdigest(),
     )
 
