@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-02",
-  "version": "1.45",
+  "version": "1.46",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -6096,19 +6096,19 @@
       "source_timezone": null,
       "recommended_verification_cadence": "monthly; daily around application boundaries",
       "activation_status": "ACTIVE",
-      "parser_type": "EURLEX_CELLAR_RSS_LEGAL_RULE_MONITOR",
+      "parser_type": "CELLAR_XHTML_CRA_ARTICLE71_SEMANTIC_RULE_MONITOR",
       "known_limitations": [
         "Individual implementing acts/guidance may create additional milestones."
       ],
       "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
-      "parser_version": "eurlex-tech-0.1",
+      "parser_version": "cellar-cra-article71-0.2",
       "licence_constraints": "Public official legal/regulatory factual metadata.",
       "ingestion_permission": "LEGAL_DOCUMENT_AND_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_EURLEX_REUSE_AND_CC_BY_EU_OWNED_CONTENT",
-      "automated_retrieval_permission": "PREFER_OFFICIAL_EURLEX_CELLAR_RSS_WEBSERVICE",
+      "automated_retrieval_permission": "OFFICIAL_CELLAR_REST_CELEX_XHTML_CREDENTIAL_FREE",
       "redistribution_permission": "LEGAL_DOCUMENTS_COMMERCIAL_OR_NONCOMMERCIAL_REUSE; EU_EDITORIAL_AND_CONSOLIDATED_TEXT_CC_BY_4; METADATA_CC0",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "runtime_health_state": "PILOT_EXECUTED_HEALTHY",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 230,
       "canonical_dependency_count": 2,
       "monitoring_readiness_assessed_at": "2026-09-02",
@@ -6131,7 +6131,7 @@
           "completeness_scope": "DOCUMENT_CHANGE_FEED"
         }
       ],
-      "last_successful_research_verification_at": "2026-09-02T23:35:00+10:00",
+      "last_successful_research_verification_at": "2026-09-03T16:05:42+10:00",
       "endpoint_route_validation_state": "RUNTIME_EXECUTION_BLOCKED",
       "runtime_environment_health_state": "DNS_NETWORK_BLOCK",
       "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
