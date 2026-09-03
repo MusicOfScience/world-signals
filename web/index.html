@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WORLD SIGNALS</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="history.css">
 </head>
 <body>
   <header class="hero">
@@ -28,6 +29,7 @@
         <button data-view="calendar" aria-pressed="true">Calendar</button>
         <button data-view="index" aria-pressed="false">Event index</button>
         <button data-view="monitors" aria-pressed="false">Monitor routes</button>
+        <button id="historyTab" aria-pressed="false">Change history</button>
       </div>
       <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
     </section>
@@ -91,9 +93,23 @@
       </section>
       <section id="monitorRoutes" class="monitor-routes"></section>
     </section>
+
+    <section id="historyView" class="view-panel" hidden>
+      <section class="history-intro">
+        <div>
+          <p class="eyebrow">CHANGE HISTORY</p>
+          <h2>What changed, and why</h2>
+          <p>This is the reviewed canonical change ledger: previous values, approved state, review basis and registry-version transition. It is historical provenance, not the live review-candidate queue.</p>
+          <p id="historyCount" class="meta"></p>
+        </div>
+        <div class="history-safety"><strong>Layer boundary</strong><span>Reviewed history: visible here</span><span>Pending review candidates: GitHub Actions artefacts</span><span>Canonical mutation from browser: impossible</span></div>
+      </section>
+      <section id="historyCards" class="history-cards"></section>
+    </section>
   </main>
 
   <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
   <script src="app.js"></script>
+  <script src="history.js"></script>
 </body>
 </html>
