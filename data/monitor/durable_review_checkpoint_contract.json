@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "DURABLE_REVIEW_CHECKPOINT_CONTRACT",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-04",
   "purpose": "Persist review proposition state beyond transient monitor-artifact retention without granting the live monitor or Pages routine repository-write authority.",
   "architecture": {
@@ -44,16 +44,44 @@
     "automatic_canonical_commit",
     "google_calendar_write"
   ],
+  "checkpoint_item_fields": [
+    "review_item_id",
+    "identity_mode",
+    "occurrence_ids",
+    "candidate_types",
+    "source_ids",
+    "candidate_ids",
+    "first_observed_at",
+    "last_observed_at",
+    "observation_count",
+    "first_run_number",
+    "last_run_number",
+    "proposed_change_fields",
+    "proposition_digest",
+    "canonical_proposed_values",
+    "state",
+    "last_decision_state",
+    "decided_at",
+    "canonical_alignment_state",
+    "reobserved_after_decision",
+    "automatic_commit_allowed"
+  ],
+  "private_item_state": {
+    "canonical_proposed_values": "Stored only for CANONICAL_FIELD_PROPOSITION items so later checkpoint proposals can test canonical alignment after original monitor artefacts expire. Values are restricted to the canonical fields named in proposed_change_fields.",
+    "opaque_rule_items": "canonical_proposed_values must be null. Opaque legal/rule/topology identity survives through proposition_digest without persisting the raw rule payload.",
+    "public_projection": "canonical_proposed_values is checkpoint-private operational state and must be stripped from Pages/review-state public output."
+  },
   "merge_rules": [
     "Only monitor evidence strictly after covered_through_monitor_run_number may be added as checkpoint delta evidence.",
     "A checkpoint item persists when absent from a later retained delta.",
     "The same review_item_id updates the existing proposition rather than creating a duplicate.",
     "A materially different proposition remains a sibling review_item_id.",
     "Observation counts may advance only from monitor runs not already covered by the prior checkpoint.",
-    "Manual reviewed decisions are reapplied during checkpoint proposal generation.",
+    "Manual reviewed decisions are reapplied during checkpoint proposal generation, including to checkpoint items not reobserved in the current delta.",
+    "For canonical-field propositions, canonical_proposed_values may be used to re-evaluate alignment with current canonical records.",
     "Canonical alignment without a linked reviewed change-ledger item remains CANONICAL_ALIGNMENT_REQUIRES_RECONCILIATION.",
     "A COMMITTED state requires an explicit origin_review_item_id link in the reviewed canonical change ledger.",
-    "No v0.1 checkpoint item is deleted merely because it is old, absent, rejected, deferred, superseded or committed.",
+    "No v0.2 checkpoint item is deleted merely because it is old, absent, rejected, deferred, superseded or committed.",
     "Raw source snapshots, parser errors, old/new evidence payloads, source assertions, legal rules and topology payloads must never enter the checkpoint."
   ],
   "prohibited_checkpoint_fields": [
@@ -82,7 +110,7 @@
   },
   "retention_safety": {
     "current_monitor_artifact_retention_days": 90,
-    "checkpoint_policy": "Create and review a checkpoint before uncheckpointed evidence approaches artefact expiry. The v0.1 architecture does not yet schedule automatic checkpoint writes.",
+    "checkpoint_policy": "Create and review a checkpoint before uncheckpointed evidence approaches artefact expiry. The v0.2 architecture does not yet schedule automatic checkpoint writes.",
     "failure_rule": "If evidence required to advance the checkpoint has expired or is incomplete, do not infer candidate absence and do not advance covered_through_monitor_run_number across the gap."
   },
   "platform_independence": "The checkpoint is a versioned JSON operational-state dataset. GitHub Actions is the current transport/implementation, not the conceptual persistence model."
