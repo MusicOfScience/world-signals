@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.2",
+  "version": "0.3",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -53,11 +53,16 @@
       "adapter_id": "EU_CELLAR_CRA_ARTICLE_71",
       "source_id": "WSSRC-TECH-001",
       "canonical_occurrence_ids": ["WSO-TECH-A-0001", "WSO-TECH-A-0007"],
-      "monitor_role": "SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
+      "monitor_role": "IMMUTABLE_RULE_BASELINE_PLUS_ELI_LEGAL_STATE_TOPOLOGY_SENTINEL",
       "cadence": "DAILY_AROUND_APPLICATION_BOUNDARIES_ELSE_MONTHLY",
       "legal_identity": {
         "celex": "32024R2847",
         "article": "71"
+      },
+      "current_state_identity": {
+        "eli_identifier": "https://data.europa.eu/eli/reg/2024/2847",
+        "operational_url": "https://eur-lex.europa.eu/eli/reg/2024/2847",
+        "base_celex": "32024R2847"
       },
       "baseline": {
         "observed_at": "2026-09-03T06:01:11Z",
@@ -69,11 +74,22 @@
           "article_14_application_date": "2026-09-11",
           "chapter_iv_application_date": "2026-06-11",
           "rule_sha256": "39f90548d36ac5b3ea301034e07201464edccc5412a026b3777e0f8217a0615f"
+        },
+        "current_state_observed_at": "2026-09-03T07:10:32Z",
+        "current_state_sha256": "30c7a5956a85dfa600de96c68f509b7a293197120ba57611d03b0c82a82c7fd3",
+        "current_state": {
+          "base_celex": "32024R2847",
+          "mode": "RESULT_LIST_WITH_UNCONSOLIDATED_MODIFIERS",
+          "consolidation_celex_ids": ["02024R2847-20241120"],
+          "modifier_celex_ids": ["32025R0327"],
+          "state_sha256": "30c7a5956a85dfa600de96c68f509b7a293197120ba57611d03b0c82a82c7fd3"
         }
       },
       "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
-      "change_policy": "GENERATE_LEGAL_RULE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "baseline_change_policy": "GENERATE_BASELINE_PROVENANCE_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
+      "current_state_change_policy": "GENERATE_MODIFIER_AND_CONSOLIDATION_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
       "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
+      "modifier_policy": "NEW_OR_REMOVED_MODIFIER_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
       "automatic_commit_allowed": false
     }
   ]
