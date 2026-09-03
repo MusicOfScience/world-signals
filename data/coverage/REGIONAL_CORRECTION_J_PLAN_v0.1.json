@@ -1,0 +1,187 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "REGIONAL_CORRECTION_J_PLAN",
+  "version": "0.1",
+  "reference_date": "2026-09-03",
+  "coverage_program_id": "WSCP-REGIONAL-CORRECTION-J",
+  "purpose": "Small, source-led monetary-policy correction for structurally thin South Asia plus selected systemically material Southeast Asia and Africa gaps identified by coverage audit v0.2.",
+  "preconditions": {
+    "canonical_registry_version": "0.17",
+    "canonical_record_count": 649,
+    "source_registry_version": "1.48",
+    "required_existing_source_ids": ["WSSRC-CB-011"],
+    "required_absent_source_ids": ["WSSRC-REGJ-001", "WSSRC-REGJ-002", "WSSRC-REGJ-003", "WSSRC-REGJ-004", "WSSRC-REGJ-005"],
+    "required_absent_occurrence_prefix": "WSO-REG-J-",
+    "required_absent_series_prefix": "WSER-REGJ-"
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.18",
+    "canonical_record_count": 662,
+    "source_registry_version": "1.49",
+    "new_occurrence_count": 13,
+    "new_series_count": 6,
+    "new_source_count": 5,
+    "existing_source_updated_count": 1,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "source_plan": [
+    {
+      "operation": "UPDATE_EXISTING_SOURCE",
+      "source_id": "WSSRC-CB-011",
+      "institution": "Reserve Bank of India",
+      "jurisdiction": "India",
+      "region": "South Asia",
+      "authoritative_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=62422",
+      "evidence_scope": "FY2026-27 MPC meeting windows",
+      "rights_action": "PRESERVE_EXISTING_RIGHTS_CLASSIFICATION",
+      "monitor_action": "MANUAL_PROVENANCE_ROUTE_VERIFIED; NO_AUTOMATION_PROMOTION"
+    },
+    {
+      "operation": "ADD_SOURCE",
+      "source_id": "WSSRC-REGJ-001",
+      "institution": "State Bank of Pakistan",
+      "jurisdiction": "Pakistan",
+      "region": "South Asia",
+      "authoritative_url": "https://www.sbp.org.pk/our-operations/monetary-policy",
+      "source_type": "official_monetary_policy_calendar",
+      "evidence_scope": "FY27 MPC calendar including same-day Monetary Policy Statements",
+      "rights_classification": "RIGHTS_AUDIT_REQUIRED",
+      "automation_classification": "PRODUCTION_AUTOMATION_HOLD"
+    },
+    {
+      "operation": "ADD_SOURCE",
+      "source_id": "WSSRC-REGJ-002",
+      "institution": "Central Bank of Sri Lanka",
+      "jurisdiction": "Sri Lanka",
+      "region": "South Asia",
+      "authoritative_url": "https://www.cbsl.gov.lk/en/monetary-policy/monetary-policy-communication/monetary-policy-advance-release-calendar",
+      "source_type": "official_advance_release_calendar",
+      "evidence_scope": "2026 MPB meeting dates and distinct policy announcement dates",
+      "rights_classification": "RIGHTS_AUDIT_REQUIRED",
+      "automation_classification": "PRODUCTION_AUTOMATION_HOLD"
+    },
+    {
+      "operation": "ADD_SOURCE",
+      "source_id": "WSSRC-REGJ-003",
+      "institution": "Bangko Sentral ng Pilipinas",
+      "jurisdiction": "Philippines",
+      "region": "Southeast Asia",
+      "authoritative_url": "https://www.bsp.gov.ph/Pages/PriceStability/ScheduleOfMeetingsOfTheAdvisoryCommitteeAndMonetaryBoardOnMonetaryPolicy.aspx",
+      "source_type": "official_monetary_policy_calendar",
+      "evidence_scope": "2026 Monetary Board policy meetings and monetary-policy communication calendar",
+      "rights_classification": "CLEARED_REUSE_WITH_ATTRIBUTION",
+      "automation_classification": "ENDPOINT_REVIEW_REQUIRED",
+      "rights_evidence_url": "https://www.bsp.gov.ph/Pages/AboutTheBank/Terms-of-Use.aspx"
+    },
+    {
+      "operation": "ADD_SOURCE",
+      "source_id": "WSSRC-REGJ-004",
+      "institution": "Bank Negara Malaysia",
+      "jurisdiction": "Malaysia",
+      "region": "Southeast Asia",
+      "authoritative_url": "https://www.bnm.gov.my/monetary-stability/mpc-meetings",
+      "source_type": "official_mpc_schedule",
+      "evidence_scope": "2026 MPC decision schedule and same-day 15:00 Monetary Policy Statement time",
+      "rights_classification": "GENERAL_WEB_CONTENT_RESTRICTED",
+      "automation_classification": "MANUAL_ONLY_RIGHTS_HOLD",
+      "rights_evidence_url": "https://www.bnm.gov.my/terms-of-use"
+    },
+    {
+      "operation": "ADD_SOURCE",
+      "source_id": "WSSRC-REGJ-005",
+      "institution": "Central Bank of Egypt",
+      "jurisdiction": "Egypt",
+      "region": "Africa",
+      "authoritative_url": "https://www.cbe.org.eg/en/monetary-policy/mpc-meetings-schedule?verify=false",
+      "source_type": "official_mpc_schedule",
+      "evidence_scope": "2026 MPC meeting/decision dates",
+      "rights_classification": "CLEARED_REUSE_WITH_ATTRIBUTION_ACCURACY",
+      "automation_classification": "ENDPOINT_REVIEW_REQUIRED",
+      "rights_evidence_url": "https://www.cbe.org.eg/en/disclaimer"
+    }
+  ],
+  "series": [
+    {
+      "series_id": "WSER-REGJ-IN-RBI-MPC",
+      "institution": "Reserve Bank of India",
+      "jurisdiction": "India",
+      "region": "South Asia",
+      "source_id": "WSSRC-CB-011",
+      "event_type": "MONETARY_POLICY_DECISION_PROCESS",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "source_timezone": "Asia/Kolkata",
+      "future_schedule_deferred": true
+    },
+    {
+      "series_id": "WSER-REGJ-PK-SBP-MPC",
+      "institution": "State Bank of Pakistan",
+      "jurisdiction": "Pakistan",
+      "region": "South Asia",
+      "source_id": "WSSRC-REGJ-001",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Asia/Karachi",
+      "future_schedule_deferred": true
+    },
+    {
+      "series_id": "WSER-REGJ-LK-CBSL-MPB",
+      "institution": "Central Bank of Sri Lanka",
+      "jurisdiction": "Sri Lanka",
+      "region": "South Asia",
+      "source_id": "WSSRC-REGJ-002",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Asia/Colombo",
+      "future_schedule_deferred": false
+    },
+    {
+      "series_id": "WSER-REGJ-PH-BSP-MB",
+      "institution": "Bangko Sentral ng Pilipinas",
+      "jurisdiction": "Philippines",
+      "region": "Southeast Asia",
+      "source_id": "WSSRC-REGJ-003",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Asia/Manila",
+      "future_schedule_deferred": false
+    },
+    {
+      "series_id": "WSER-REGJ-MY-BNM-MPC",
+      "institution": "Bank Negara Malaysia",
+      "jurisdiction": "Malaysia",
+      "region": "Southeast Asia",
+      "source_id": "WSSRC-REGJ-004",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "timing_type": "LOCAL_DATETIME",
+      "source_timezone": "Asia/Kuala_Lumpur",
+      "future_schedule_deferred": false
+    },
+    {
+      "series_id": "WSER-REGJ-EG-CBE-MPC",
+      "institution": "Central Bank of Egypt",
+      "jurisdiction": "Egypt",
+      "region": "Africa",
+      "source_id": "WSSRC-REGJ-005",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Africa/Cairo",
+      "future_schedule_deferred": false
+    }
+  ],
+  "occurrences": [
+    {"occurrence_id":"WSO-REG-J-0001","series_id":"WSER-REGJ-IN-RBI-MPC","source_id":"WSSRC-CB-011","canonical_name":"Reserve Bank of India MPC meeting — October 2026","jurisdiction":"India","region":"South Asia","institution":"Reserve Bank of India","event_type":"MONETARY_POLICY_DECISION_PROCESS","timing_type":"MULTI_DAY_LOCAL","start_local":"2026-10-05","end_local":"2026-10-07","source_timezone":"Asia/Kolkata","time_precision":"DAY_RANGE","notes":"Primary RBI schedule publishes a three-day MPC meeting window. No separate exact decision publication timestamp is inferred."},
+    {"occurrence_id":"WSO-REG-J-0002","series_id":"WSER-REGJ-IN-RBI-MPC","source_id":"WSSRC-CB-011","canonical_name":"Reserve Bank of India MPC meeting — December 2026","jurisdiction":"India","region":"South Asia","institution":"Reserve Bank of India","event_type":"MONETARY_POLICY_DECISION_PROCESS","timing_type":"MULTI_DAY_LOCAL","start_local":"2026-12-02","end_local":"2026-12-04","source_timezone":"Asia/Kolkata","time_precision":"DAY_RANGE","notes":"Primary RBI schedule publishes a three-day MPC meeting window. No separate exact decision publication timestamp is inferred."},
+    {"occurrence_id":"WSO-REG-J-0003","series_id":"WSER-REGJ-PK-SBP-MPC","source_id":"WSSRC-REGJ-001","canonical_name":"State Bank of Pakistan monetary policy decision — 14 September 2026","jurisdiction":"Pakistan","region":"South Asia","institution":"State Bank of Pakistan","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-09-14","end_local":null,"source_timezone":"Asia/Karachi","time_precision":"DAY","notes":"Official FY27 calendar gives the MPC meeting and Monetary Policy Statement on the same date. No unsupported clock time is added."},
+    {"occurrence_id":"WSO-REG-J-0004","series_id":"WSER-REGJ-PK-SBP-MPC","source_id":"WSSRC-REGJ-001","canonical_name":"State Bank of Pakistan monetary policy decision — 26 October 2026","jurisdiction":"Pakistan","region":"South Asia","institution":"State Bank of Pakistan","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-10-26","end_local":null,"source_timezone":"Asia/Karachi","time_precision":"DAY","notes":"Official FY27 calendar gives the MPC meeting and Monetary Policy Statement on the same date. No unsupported clock time is added."},
+    {"occurrence_id":"WSO-REG-J-0005","series_id":"WSER-REGJ-PK-SBP-MPC","source_id":"WSSRC-REGJ-001","canonical_name":"State Bank of Pakistan monetary policy decision — 14 December 2026","jurisdiction":"Pakistan","region":"South Asia","institution":"State Bank of Pakistan","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-12-14","end_local":null,"source_timezone":"Asia/Karachi","time_precision":"DAY","notes":"Official FY27 calendar gives the MPC meeting and Monetary Policy Statement on the same date. No unsupported clock time is added."},
+    {"occurrence_id":"WSO-REG-J-0006","series_id":"WSER-REGJ-LK-CBSL-MPB","source_id":"WSSRC-REGJ-002","canonical_name":"Central Bank of Sri Lanka monetary policy announcement — 30 September 2026","jurisdiction":"Sri Lanka","region":"South Asia","institution":"Central Bank of Sri Lanka","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-09-30","end_local":null,"source_timezone":"Asia/Colombo","time_precision":"DAY","meeting_date":"2026-09-29","notes":"CBSL separately publishes the MPB meeting date and the next-day announcement date. The canonical occurrence is the public monetary-policy announcement; meeting date is retained as provenance metadata."},
+    {"occurrence_id":"WSO-REG-J-0007","series_id":"WSER-REGJ-LK-CBSL-MPB","source_id":"WSSRC-REGJ-002","canonical_name":"Central Bank of Sri Lanka monetary policy announcement — 20 November 2026","jurisdiction":"Sri Lanka","region":"South Asia","institution":"Central Bank of Sri Lanka","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-11-20","end_local":null,"source_timezone":"Asia/Colombo","time_precision":"DAY","meeting_date":"2026-11-19","notes":"CBSL separately publishes the MPB meeting date and the next-day announcement date. The canonical occurrence is the public monetary-policy announcement; meeting date is retained as provenance metadata."},
+    {"occurrence_id":"WSO-REG-J-0008","series_id":"WSER-REGJ-PH-BSP-MB","source_id":"WSSRC-REGJ-003","canonical_name":"Bangko Sentral ng Pilipinas monetary policy stance decision — 22 October 2026","jurisdiction":"Philippines","region":"Southeast Asia","institution":"Bangko Sentral ng Pilipinas","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-10-22","end_local":null,"source_timezone":"Asia/Manila","time_precision":"DAY","notes":"Official monetary-policy calendar and advance-release schedule align the Monetary Board policy meeting with the monetary-policy stance release date. No unsupported clock time is added."},
+    {"occurrence_id":"WSO-REG-J-0009","series_id":"WSER-REGJ-PH-BSP-MB","source_id":"WSSRC-REGJ-003","canonical_name":"Bangko Sentral ng Pilipinas monetary policy stance decision — 17 December 2026","jurisdiction":"Philippines","region":"Southeast Asia","institution":"Bangko Sentral ng Pilipinas","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-12-17","end_local":null,"source_timezone":"Asia/Manila","time_precision":"DAY","notes":"Official monetary-policy calendar and advance-release schedule align the Monetary Board policy meeting with the monetary-policy stance release date. No unsupported clock time is added."},
+    {"occurrence_id":"WSO-REG-J-0010","series_id":"WSER-REGJ-MY-BNM-MPC","source_id":"WSSRC-REGJ-004","canonical_name":"Bank Negara Malaysia monetary policy statement — 5 November 2026","jurisdiction":"Malaysia","region":"Southeast Asia","institution":"Bank Negara Malaysia","event_type":"MONETARY_POLICY_DECISION","timing_type":"LOCAL_DATETIME","start_local":"2026-11-05T15:00:00","end_local":null,"source_timezone":"Asia/Kuala_Lumpur","start_utc":"2026-11-05T07:00:00Z","time_precision":"MINUTE","publication_datetime":"2026-11-05T15:00:00","notes":"BNM explicitly states the Monetary Policy Statement is released at 3:00 p.m. on the MPC meeting day. This is the public decision/statement time, not an inferred internal vote time."},
+    {"occurrence_id":"WSO-REG-J-0011","series_id":"WSER-REGJ-EG-CBE-MPC","source_id":"WSSRC-REGJ-005","canonical_name":"Central Bank of Egypt MPC decision — 24 September 2026","jurisdiction":"Egypt","region":"Africa","institution":"Central Bank of Egypt","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-09-24","end_local":null,"source_timezone":"Africa/Cairo","time_precision":"DAY","notes":"Official CBE MPC schedule provides the decision date but no clock time; date-only precision is preserved."},
+    {"occurrence_id":"WSO-REG-J-0012","series_id":"WSER-REGJ-EG-CBE-MPC","source_id":"WSSRC-REGJ-005","canonical_name":"Central Bank of Egypt MPC decision — 29 October 2026","jurisdiction":"Egypt","region":"Africa","institution":"Central Bank of Egypt","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-10-29","end_local":null,"source_timezone":"Africa/Cairo","time_precision":"DAY","notes":"Official CBE MPC schedule provides the decision date but no clock time; date-only precision is preserved."},
+    {"occurrence_id":"WSO-REG-J-0013","series_id":"WSER-REGJ-EG-CBE-MPC","source_id":"WSSRC-REGJ-005","canonical_name":"Central Bank of Egypt MPC decision — 17 December 2026","jurisdiction":"Egypt","region":"Africa","institution":"Central Bank of Egypt","event_type":"MONETARY_POLICY_DECISION","timing_type":"CIVIL_DATE","start_local":"2026-12-17","end_local":null,"source_timezone":"Africa/Cairo","time_precision":"DAY","notes":"Official CBE MPC schedule provides the decision date but no clock time; date-only precision is preserved."}
+  ]
+}
