@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_SCHEMA",
-  "version": "0.50",
+  "version": "0.51",
   "reference_date": "2026-09-04",
   "design_decisions": [
     "Source-health state is not stored on event occurrences; source fetch/parser incidents live in a separate monitor ledger.",
@@ -364,7 +364,8 @@
     "A multi-phase seasonal risk window preserves each authoritative non-contiguous phase independently and in order; gaps are not collapsed into a continuous span.",
     "For month-bounded seasonal windows, start_local/end_local, UTC timestamps and date_earliest/date_latest remain empty because those fields would imply day or clock precision the source did not assert.",
     "Calendar/index rendering may derive an internal month-start sort proxy from season_phases[] but that proxy is never canonical timing and must not be displayed, exported or written back as an event date.",
-    "A dynamic annual season outlook is an information assertion about expected timing and remains separate from a stable PHYSICAL_RISK_WINDOW occurrence unless the authority explicitly establishes a canonical bounded window."
+    "A dynamic annual season outlook is an information assertion about expected timing and remains separate from a stable PHYSICAL_RISK_WINDOW occurrence unless the authority explicitly establishes a canonical bounded window.",
+    "Exact civil-day seasonal windows use publication_time_semantics=SEASONAL_DATE_RANGE; source-native month-bounded seasonal windows use SEASONAL_MONTH_RANGE and must not manufacture first/last civil-day boundaries."
   ],
   "controlled_vocabularies": {
     "certainty_status": [
@@ -607,7 +608,8 @@
       "NOT_BEFORE_LOCAL_TIME",
       "NORMAL_RELEASE_WINDOW",
       "DATE_ONLY",
-      "SEASONAL_DATE_RANGE"
+      "SEASONAL_DATE_RANGE",
+      "SEASONAL_MONTH_RANGE"
     ],
     "physical_shock_routing": [
       "NO_SHOCK_IN_THIS_RECORD",
