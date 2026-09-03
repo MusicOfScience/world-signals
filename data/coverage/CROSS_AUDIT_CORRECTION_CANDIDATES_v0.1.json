@@ -1,0 +1,272 @@
+{
+  "project": "WORLD SIGNALS",
+  "artifact": "CROSS_AUDIT_CORRECTION_CANDIDATES",
+  "version": "0.1",
+  "reference_date": "2026-09-03",
+  "canonical_checkpoint": {
+    "version": "0.18",
+    "record_count": 662,
+    "source_registry_version": "1.49"
+  },
+  "scoring": {
+    "scale": "0-5 per dimension; total out of 25",
+    "dimensions": [
+      "marginal_signal_value",
+      "authoritative_timing_precision",
+      "coverage_correction_value",
+      "ontology_readiness",
+      "source_governance_readiness"
+    ],
+    "rule": "Score is decision support only. ADD_NOW additionally requires no unresolved ontology, precision, identity or source-governance blocker. Scores must never be used as population quotas."
+  },
+  "candidates": [
+    {
+      "candidate_id": "CAC-001",
+      "institution": "Joint Organisations Data Initiative / International Energy Forum",
+      "series": "JODI Oil + Gas World Database first monthly update",
+      "category": "ENERGY_COMMODITIES",
+      "region": "Cross-regional / Global",
+      "remaining_occurrences_2026": [
+        "2026-09-22T12:00:00 Europe/London",
+        "2026-10-21T12:00:00 Europe/London",
+        "2026-11-19T12:00:00 Europe/London",
+        "2026-12-21T12:00:00 Europe/London"
+      ],
+      "canonical_shape": "One SOURCE_BUNDLE occurrence per publication date containing Oil and Gas data products; never duplicate separate oil/gas calendar events for the same update timestamp.",
+      "primary_sources": [
+        "https://www.jodidata.org/oil/support/update-calendar.aspx",
+        "https://www.jodidata.org/_resources/files/downloads/jodi-update-schedule-2026.pdf?v=dates-for-2026",
+        "https://www.ief.org/data/oil-gas-data-review"
+      ],
+      "evidence_note": "Official 2026 schedule states first JODI-Oil and JODI-Gas World Database updates occur at noon London time on the listed dates.",
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 5,
+        "source_governance_readiness": 4,
+        "total": 24
+      },
+      "disposition": "ADD_NOW_CANDIDATE",
+      "reason": "Adds dedicated global gas data while preserving oil/gas as one publication occurrence. Exact official timing, excellent fit to existing SOURCE_BUNDLE ontology, and directly corrects the current oil-heavy energy footprint."
+    },
+    {
+      "candidate_id": "CAC-002",
+      "institution": "Gas Exporting Countries Forum",
+      "series": "GECF Summit of Heads of State and Government",
+      "category": "ENERGY_COMMODITIES",
+      "region": "Cross-regional / Global",
+      "remaining_occurrences_2026": ["2026-10-27"],
+      "primary_sources": [
+        "https://www.gecf.org/Events-Conferences/Events-HH/ArticleID/1689/GECF-Secretary-General-holds-high-level-meetings-on-the-sidelines-of-the-St-Petersburg-International-Economic-Forum-SPIEF-2026",
+        "https://www.gecf.org/Events-Conferences/Summits"
+      ],
+      "evidence_note": "GECF states the 8th Summit will be hosted in Moscow on 27 October 2026.",
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 5,
+        "source_governance_readiness": 3,
+        "total": 23
+      },
+      "disposition": "ADD_NOW_CANDIDATE",
+      "reason": "Adds gas-producer policy at heads-of-government level and broadens institutional/geographic energy coverage beyond IEA/EIA/OPEC. Canonical factual provenance is viable; automated monitoring permission remains a separate later gate."
+    },
+    {
+      "candidate_id": "CAC-003",
+      "institution": "International Copper Study Group",
+      "series": "ICSG biannual meetings / copper market forecast meeting",
+      "category": "ENERGY_COMMODITIES",
+      "region": "Cross-regional / Global",
+      "remaining_occurrences_2026": ["2026-10-13"],
+      "primary_sources": ["https://icsg.org/"],
+      "evidence_note": "ICSG states its next meetings will take place in Lisbon on 13 October 2026.",
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 5,
+        "source_governance_readiness": 3,
+        "total": 23
+      },
+      "disposition": "ADD_NOW_CANDIDATE",
+      "reason": "Adds a major industrial/transition-metal signal family to an energy/commodities category currently dominated by oil. Exact official date and straightforward institutional-event semantics."
+    },
+    {
+      "candidate_id": "CAC-004",
+      "institution": "Biological Weapons Convention / UNODA",
+      "series": "BWC Working Group on strengthening the Convention",
+      "category": "CROSS_DOMAIN_SECURITY_GOVERNANCE",
+      "region": "Cross-regional / Global",
+      "remaining_occurrences_2026": ["2026-12-07/2026-12-11"],
+      "primary_sources": ["https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-tenth-session-2026"],
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 4,
+        "ontology_readiness": 3,
+        "source_governance_readiness": 4,
+        "total": 21
+      },
+      "disposition": "HOLD_TAXONOMY_REVIEW",
+      "reason": "Exact, important and authoritative, but should not be misclassified into human HEALTH_BIOSECURITY merely to diversify that category. Requires explicit security/governance taxonomy placement."
+    },
+    {
+      "candidate_id": "CAC-005",
+      "institution": "International Plant Protection Convention / Commission on Phytosanitary Measures",
+      "series": "Commission on Phytosanitary Measures annual session",
+      "category": "AGRICULTURE_FOOD / TRADE_BIOSECURITY",
+      "region": "Cross-regional / Global",
+      "future_occurrences": ["2027-04-05/2027-04-09"],
+      "primary_sources": ["https://www.ippc.int/ru/year/calendar/?day=1&hour=0&minute=0&month=1&second=0&year=2027"],
+      "scores": {
+        "marginal_signal_value": 4,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 4,
+        "ontology_readiness": 3,
+        "source_governance_readiness": 4,
+        "total": 20
+      },
+      "disposition": "DEFER_TAXONOMY_AND_NEXT_HORIZON",
+      "reason": "Strong plant-health/trade-biosecurity signal with exact official timing, but belongs cross-domain rather than as cosmetic diversification of HEALTH_BIOSECURITY. It is also a 2027 schedule-rich series and should enter only through a reviewed next-horizon decision."
+    },
+    {
+      "candidate_id": "CAC-006",
+      "institution": "World Organisation for Animal Health",
+      "series": "WOAH General Session / World Assembly of Delegates",
+      "category": "ANIMAL_ZOONOTIC_HEALTH / TRADE_STANDARDS",
+      "region": "Cross-regional / Global",
+      "future_occurrences": ["2027-05-24/2027-05-28"],
+      "primary_sources": ["https://www.woah.org/app/uploads/2026/06/93gs-2026-final-report-en.pdf"],
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 5,
+        "coverage_correction_value": 4,
+        "ontology_readiness": 3,
+        "source_governance_readiness": 3,
+        "total": 20
+      },
+      "disposition": "DEFER_TAXONOMY_AND_NEXT_HORIZON",
+      "reason": "Substantively important animal/zoonotic-health governance, now with exact 24-28 May 2027 timing, but should not be folded into WHO-style human health solely to repair an institution count."
+    },
+    {
+      "candidate_id": "CAC-007",
+      "institution": "RSMC Nadi / Fiji Meteorological and Hydrological Services",
+      "series": "Southwest Pacific tropical cyclone season",
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "region": "Oceania / Pacific",
+      "timing_claim": "November-April",
+      "primary_sources": ["https://www.met.gov.fj/climate-services/2025-26-tc-outlook/"],
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 3,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 1,
+        "source_governance_readiness": 3,
+        "total": 17
+      },
+      "disposition": "HOLD_ONTOLOGY",
+      "reason": "High-value Pacific risk window, but source-native precision is month-bounded. Converting it to 1 November-30 April would be an unsupported precision upgrade under the current canonical timing model."
+    },
+    {
+      "candidate_id": "CAC-008",
+      "institution": "RSMC New Delhi / India Meteorological Department",
+      "series": "North Indian Ocean tropical cyclone seasons",
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "region": "South Asia",
+      "timing_claim": "Two phases: April-June and October-December",
+      "primary_sources": ["https://rsmcnewdelhi.imd.gov.in/uploads/home/conference/pce.pdf"],
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 3,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 1,
+        "source_governance_readiness": 3,
+        "total": 17
+      },
+      "disposition": "HOLD_ONTOLOGY",
+      "reason": "Excellent South Asian physical-risk correction, but the authoritative source describes two non-contiguous month-bounded seasons. Current schema cannot represent that honestly without inventing civil-day endpoints."
+    },
+    {
+      "candidate_id": "CAC-009",
+      "institution": "Nepal Ministry of Finance",
+      "series": "Federal budget constitutional presentation boundary",
+      "category": "FISCAL_SOVEREIGN",
+      "region": "South Asia",
+      "timing_claim": "15 Jestha annually",
+      "primary_sources": [
+        "https://www.mof.gov.np/content/1741/budget8384/",
+        "https://www.mof.gov.np/category/budget-speech/"
+      ],
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 2,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 3,
+        "source_governance_readiness": 3,
+        "total": 18
+      },
+      "disposition": "HOLD_GREGORIAN_CONVERSION_PROVENANCE",
+      "reason": "The native-calendar legal rule is strong, but no authoritative government conversion surface has yet been found for 15 Jestha 2084 -> Gregorian 2027. Third-party calendar conversion is not acceptable canonical provenance."
+    },
+    {
+      "candidate_id": "CAC-010",
+      "institution": "Bangladesh Ministry of Finance",
+      "series": "National budget presentation",
+      "category": "FISCAL_SOVEREIGN",
+      "region": "South Asia",
+      "primary_sources": [
+        "https://mof.gov.bd/pages/budget-mofs",
+        "https://mof.gov.bd/pages/notices/69e6195de252a315b7e8059d"
+      ],
+      "scores": {
+        "marginal_signal_value": 4,
+        "authoritative_timing_precision": 1,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 5,
+        "source_governance_readiness": 4,
+        "total": 19
+      },
+      "disposition": "HOLD_EXACT_FORWARD_DATE",
+      "reason": "Official FY2027-28 preparation is visible, but no authoritative future national budget presentation date is yet published. Historical custom is not a forward date assertion."
+    },
+    {
+      "candidate_id": "CAC-011",
+      "institution": "Australian Department of Industry / Resources portfolio",
+      "series": "Resources and Energy Quarterly",
+      "category": "ENERGY_COMMODITIES",
+      "region": "Oceania / Pacific",
+      "scores": {
+        "marginal_signal_value": 5,
+        "authoritative_timing_precision": 1,
+        "coverage_correction_value": 5,
+        "ontology_readiness": 5,
+        "source_governance_readiness": 4,
+        "total": 20
+      },
+      "disposition": "MONITOR_ONLY_HOLD_FORWARD_DATE",
+      "reason": "Strategically excellent Australian minerals/energy source, but no authoritative exact next release date was established in this pass. Do not extrapolate quarterly timing from historical cadence."
+    }
+  ],
+  "recommended_next_tranche": {
+    "name": "ENERGY_COMMODITIES_BREADTH_CORRECTION",
+    "candidate_ids": ["CAC-001", "CAC-002", "CAC-003"],
+    "planned_occurrence_count": 6,
+    "planned_new_series_count": 3,
+    "planned_institution_count": 3,
+    "rationale": "Only these candidates presently combine exact authoritative forward timing, high marginal informational value, ready canonical ontology and no unresolved identity/precision blocker. The tranche directly counters the current 82.1% oil-specific ENERGY_COMMODITIES occurrence footprint with a gas-data source bundle, gas-producer summit and copper-market institution.",
+    "preconditions_before_population": [
+      "search canonical registry and source registry again for hidden identity collisions",
+      "freeze exact stable occurrence and series IDs",
+      "complete source-rights/automation classification without conflating factual reuse and crawling permission",
+      "run fail-closed in-memory transaction against v0.18 / 662 and source registry v1.49",
+      "re-audit category/institution concentration after any reviewed migration"
+    ]
+  },
+  "safety": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "quota_population": false
+  }
+}
