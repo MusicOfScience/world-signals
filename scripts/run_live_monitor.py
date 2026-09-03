@@ -15,6 +15,7 @@ from world_signals.adapters import (
     CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
     cellar_representation_diagnostics,
+    fetch_cbam_annual_declaration_surrender_rule,
     fetch_cbam_certificate_sale_rule,
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
@@ -27,6 +28,7 @@ from world_signals.adapters import (
 )
 from world_signals.io import load_json
 from world_signals.legal_monitor import (
+    cbam_annual_deadline_review_candidate,
     cbam_legal_milestone_review_candidate,
     cellar_legal_topology_review_candidate,
 )
@@ -65,6 +67,7 @@ def _run_cbam_monitor(
     *,
     config: dict,
     fetch_rule,
+    compare_rule,
     topology_celex: str,
     topology_layer_name: str,
 ) -> None:
@@ -85,7 +88,7 @@ def _run_cbam_monitor(
             "snapshot":snap.as_dict(),
             "rule":rule.as_dict(),
         }
-        candidate,observation=cbam_legal_milestone_review_candidate(rule,config)
+        candidate,observation=compare_rule(rule,config)
         _append_candidate(report,candidate,observation)
     except AdapterError as exc:
         degraded=True
@@ -227,6 +230,7 @@ def main() -> int:
         report,
         config=configs["EU_CBAM_VERIFICATION_RULE"],
         fetch_rule=fetch_cbam_verification_report_rule,
+        compare_rule=cbam_legal_milestone_review_candidate,
         topology_celex=CBAM_VERIFICATION_CELEX,
         topology_layer_name="cellar_rdf_legal_topology",
     )
@@ -238,6 +242,21 @@ def main() -> int:
         report,
         config=configs["EU_CBAM_CERTIFICATE_SALE_RULE"],
         fetch_rule=fetch_cbam_certificate_sale_rule,
+        compare_rule=cbam_legal_milestone_review_candidate,
+        topology_celex=CBAM_PARENT_CELEX,
+        topology_layer_name="parent_cellar_rdf_legal_topology",
+    )
+
+    # CBAM annual declaration + certificate surrender: Articles 6(1) and 22(1)
+    # are parsed independently and must remain internally consistent. Their
+    # current-law topology is the same parent Regulation (EU) 2023/956. Any
+    # semantic or topology drift is review evidence only; no split/reschedule
+    # or canonical mutation is automatic.
+    _run_cbam_monitor(
+        report,
+        config=configs["EU_CBAM_ANNUAL_DEADLINE_RULE"],
+        fetch_rule=fetch_cbam_annual_declaration_surrender_rule,
+        compare_rule=cbam_annual_deadline_review_candidate,
         topology_celex=CBAM_PARENT_CELEX,
         topology_layer_name="parent_cellar_rdf_legal_topology",
     )
