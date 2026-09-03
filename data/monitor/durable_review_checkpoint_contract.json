@@ -1,0 +1,89 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "DURABLE_REVIEW_CHECKPOINT_CONTRACT",
+  "version": "0.1",
+  "reference_date": "2026-09-04",
+  "purpose": "Persist review proposition state beyond transient monitor-artifact retention without granting the live monitor or Pages routine repository-write authority.",
+  "architecture": {
+    "checkpoint_is_canonical_registry": false,
+    "checkpoint_is_change_ledger": false,
+    "checkpoint_is_monitor_artifact": false,
+    "checkpoint_is_review_operational_state": true,
+    "checkpoint_path": "data/monitor/review_checkpoint.json",
+    "retained_delta_source": "post-checkpoint retained monitor artefacts reduced through review_candidate_state_contract.json",
+    "manual_decision_source": "data/monitor/review_decisions.json",
+    "reviewed_canonical_history_source": "data/changes/ledger.json"
+  },
+  "authority_boundary": {
+    "live_monitor_can_write_checkpoint": false,
+    "pages_can_write_checkpoint": false,
+    "browser_can_write_checkpoint": false,
+    "checkpoint_proposal_can_write_checkpoint": false,
+    "reviewed_checkpoint_transaction_required": true,
+    "automatic_canonical_commit_allowed": false,
+    "google_calendar_write": false
+  },
+  "identity": {
+    "primary_key": "review_item_id",
+    "prefix": "WSRV-",
+    "rule": "Use the proposition identity defined by review_candidate_state_contract.json; checkpointing must never generate a second identity for the same proposition."
+  },
+  "checkpoint_required_fields": [
+    "project",
+    "dataset",
+    "version",
+    "checkpoint_sequence",
+    "generated_at",
+    "covered_through_monitor_run_number",
+    "covered_through_monitor_run_id",
+    "covered_through_monitor_run_at",
+    "previous_checkpoint_sha256",
+    "item_count",
+    "state_counts",
+    "items",
+    "automatic_canonical_commit",
+    "google_calendar_write"
+  ],
+  "merge_rules": [
+    "Only monitor evidence strictly after covered_through_monitor_run_number may be added as checkpoint delta evidence.",
+    "A checkpoint item persists when absent from a later retained delta.",
+    "The same review_item_id updates the existing proposition rather than creating a duplicate.",
+    "A materially different proposition remains a sibling review_item_id.",
+    "Observation counts may advance only from monitor runs not already covered by the prior checkpoint.",
+    "Manual reviewed decisions are reapplied during checkpoint proposal generation.",
+    "Canonical alignment without a linked reviewed change-ledger item remains CANONICAL_ALIGNMENT_REQUIRES_RECONCILIATION.",
+    "A COMMITTED state requires an explicit origin_review_item_id link in the reviewed canonical change ledger.",
+    "No v0.1 checkpoint item is deleted merely because it is old, absent, rejected, deferred, superseded or committed.",
+    "Raw source snapshots, parser errors, old/new evidence payloads, source assertions, legal rules and topology payloads must never enter the checkpoint."
+  ],
+  "prohibited_checkpoint_fields": [
+    "old_value",
+    "new_value",
+    "source_assertion",
+    "snapshot",
+    "observations",
+    "rule",
+    "topology",
+    "rows",
+    "body",
+    "raw",
+    "error"
+  ],
+  "reviewed_transaction_gate": {
+    "required_preconditions": [
+      "Exact prior review_checkpoint.json SHA-256 matches the reviewed proposal precondition.",
+      "Canonical registry, source registry, schema, monitor expectations, monitor operations policy and change ledger are hash-protected during the checkpoint transaction.",
+      "Proposed checkpoint validates against this contract and contains no prohibited fields.",
+      "Only data/monitor/review_checkpoint.json may change in the checkpoint transaction.",
+      "Full WORLD SIGNALS CI passes before commit."
+    ],
+    "write_capability": "EPHEMERAL_REVIEWED_CHECKPOINT_TRANSACTION_ONLY",
+    "routine_scheduled_write": false
+  },
+  "retention_safety": {
+    "current_monitor_artifact_retention_days": 90,
+    "checkpoint_policy": "Create and review a checkpoint before uncheckpointed evidence approaches artefact expiry. The v0.1 architecture does not yet schedule automatic checkpoint writes.",
+    "failure_rule": "If evidence required to advance the checkpoint has expired or is incomplete, do not infer candidate absence and do not advance covered_through_monitor_run_number across the gap."
+  },
+  "platform_independence": "The checkpoint is a versioned JSON operational-state dataset. GitHub Actions is the current transport/implementation, not the conceptual persistence model."
+}
