@@ -23,8 +23,10 @@ from .cellar import (
     parse_eli_current_state,
 )
 from .cellar_metadata import (
+    CellarLegalTopology,
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
+    normalize_cellar_legal_topology,
     parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
 )
@@ -53,6 +55,7 @@ __all__ = [
     "CRA_CELEX",
     "CRA_ELI_CURRENT",
     "ELILegalState",
+    "CellarLegalTopology",
     "FetchSnapshot",
     "KENYA_PFM_BASELINE_2025_11_04",
     "KENYA_PFM_CURRENT",
@@ -73,6 +76,7 @@ __all__ = [
     "fetch_rba_fsr",
     "fetch_suin_metadata",
     "fetch_suin_rows",
+    "normalize_cellar_legal_topology",
     "parse_cra_article_71",
     "parse_cellar_identifier_notice",
     "parse_cellar_legal_relation_diagnostics",
