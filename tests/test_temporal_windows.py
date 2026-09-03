@@ -18,6 +18,7 @@ def base_record() -> dict:
         "certainty_status": "CONFIRMED",
         "lifecycle_status": "PLANNED",
         "timing_type": "MONTH_BOUNDED_SEASON_WINDOW",
+        "season_window_model": "MONTH_BOUNDED_SINGLE_PHASE",
         "start_local": None,
         "end_local": None,
         "start_utc": None,
@@ -26,6 +27,8 @@ def base_record() -> dict:
         "date_latest": None,
         "publication_datetime": None,
         "time_precision": "MONTH",
+        "time_status": "NOT_APPLICABLE",
+        "time_basis": "NOT_APPLICABLE",
         "source_native_window_label": "November–April",
         "season_phases": [
             {
@@ -48,12 +51,28 @@ class SeasonalWindowValidationTests(unittest.TestCase):
         report = validate(base_record())
         self.assertTrue(report.ok, report.errors)
 
+    def test_month_bounded_window_rejects_wrong_window_model(self):
+        record = base_record()
+        record["season_window_model"] = "MONTH_BOUNDED_MULTI_PHASE"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("season_window_model" in error for error in report.errors))
+
     def test_month_bounded_window_rejects_synthetic_day_boundary(self):
         record = base_record()
         record["date_earliest"] = "2026-11-01"
         report = validate(record)
         self.assertFalse(report.ok)
         self.assertTrue(any("date_earliest" in error for error in report.errors))
+
+    def test_month_bounded_window_rejects_clock_time_semantics(self):
+        record = base_record()
+        record["time_status"] = "CONFIRMED"
+        record["time_basis"] = "EXPLICIT_SCHEDULE_TIME"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("time_status=NOT_APPLICABLE" in error for error in report.errors))
+        self.assertTrue(any("time_basis=NOT_APPLICABLE" in error for error in report.errors))
 
     def test_month_bounded_window_rejects_malformed_month_token(self):
         record = base_record()
@@ -65,6 +84,7 @@ class SeasonalWindowValidationTests(unittest.TestCase):
     def test_multi_phase_window_preserves_noncontiguous_phases(self):
         record = base_record()
         record["timing_type"] = "MULTI_PHASE_SEASON_WINDOW"
+        record["season_window_model"] = "MONTH_BOUNDED_MULTI_PHASE"
         record["region"] = "South Asia"
         record["source_native_window_label"] = "April–June and October–December"
         record["season_phases"] = [
@@ -89,6 +109,7 @@ class SeasonalWindowValidationTests(unittest.TestCase):
     def test_multi_phase_window_rejects_overlap(self):
         record = base_record()
         record["timing_type"] = "MULTI_PHASE_SEASON_WINDOW"
+        record["season_window_model"] = "MONTH_BOUNDED_MULTI_PHASE"
         record["season_phases"] = [
             {
                 "phase_id": "PHASE_1",
@@ -112,6 +133,7 @@ class SeasonalWindowValidationTests(unittest.TestCase):
     def test_multi_phase_window_rejects_adjacent_phases(self):
         record = base_record()
         record["timing_type"] = "MULTI_PHASE_SEASON_WINDOW"
+        record["season_window_model"] = "MONTH_BOUNDED_MULTI_PHASE"
         record["season_phases"] = [
             {
                 "phase_id": "PHASE_1",
@@ -137,6 +159,7 @@ class SeasonalWindowValidationTests(unittest.TestCase):
         registry = {"version": "test", "reference_date": "2026-09-04", "records": [copy.deepcopy(record)]}
         projected = public_projection(registry, {"sources": []})["events"][0]
         self.assertEqual(projected["season_phases"], record["season_phases"])
+        self.assertEqual(projected["season_window_model"], "MONTH_BOUNDED_SINGLE_PHASE")
         self.assertEqual(projected["source_native_window_label"], "November–April")
         self.assertIsNone(projected["date_earliest"])
         self.assertIsNone(projected["start_local"])
