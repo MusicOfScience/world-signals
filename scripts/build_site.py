@@ -15,6 +15,7 @@ src=load_json(ROOT/"data/sources/registry.json")
 changes=load_json(ROOT/"data/changes/ledger.json")
 expectations=load_json(ROOT/"data/monitor/expectations.json")
 operations_policy=load_json(ROOT/"data/monitor/operations_policy.json")
+review_contract=load_json(ROOT/"data/monitor/review_candidate_state_contract.json")
 
 report=validate_registry(reg,src)
 if not report.ok:
@@ -77,18 +78,44 @@ else:
     )
 dump_json(docs/"data/runtime.json",runtime_projection)
 
+review_path=ROOT/"artifacts/retained-review-public.json"
+if review_path.exists():
+    review_projection=load_json(review_path)
+else:
+    review_projection={
+        "project":"WORLD SIGNALS",
+        "dataset":"RETAINED_REVIEW_CANDIDATE_STATE",
+        "version":review_contract.get("version"),
+        "availability":"UNAVAILABLE_NO_RETAINED_REVIEW_FETCH",
+        "scope":"RETAINED_ACTIONS_ARTEFACT_HORIZON_NOT_PERMANENT_QUEUE",
+        "activation_after_run_number":(review_contract.get("activation") or {}).get("activation_after_run_number"),
+        "retention_days":(review_contract.get("retention_limit") or {}).get("current_monitor_artefact_retention_days"),
+        "run_count_considered":0,
+        "item_count":0,
+        "state_counts":{},
+        "items":[],
+        "evidence_horizon_complete":False,
+        "evidence_gaps":["NO_RETAINED_REVIEW_FETCH_PERFORMED_FOR_THIS_BUILD"],
+        "automatic_canonical_commit":False,
+        "google_calendar_write":False,
+    }
+dump_json(docs/"data/review_state.json",review_projection)
+
 dump_json(docs/"data/source_summary.json", {
     "source_count": len(src.get("sources",[])),
     "configured_live_monitor_routes":len(monitor_projection["routes"]),
     "reviewed_change_count":len(changes.get("changes",[])),
     "monitoring_tiers":ops_projection["source_governance_summary"]["monitoring_readiness_status"],
     "runtime_snapshot_availability":runtime_projection.get("availability"),
+    "retained_review_state_availability":review_projection.get("availability"),
+    "retained_review_item_count":review_projection.get("item_count",0),
 })
 
 (docs/".nojekyll").write_text("",encoding="utf-8")
 print(
     f"Built static site for {projection['metadata']['record_count']} events, "
     f"{len(monitor_projection['routes'])} configured live monitor routes, "
-    f"{len(src.get('sources',[]))} governed sources, reviewed change history and "
-    f"runtime={runtime_projection.get('availability')} -> {docs}"
+    f"{len(src.get('sources',[]))} governed sources, reviewed change history, "
+    f"runtime={runtime_projection.get('availability')} and "
+    f"retained_review={review_projection.get('availability')}({review_projection.get('item_count',0)}) -> {docs}"
 )
