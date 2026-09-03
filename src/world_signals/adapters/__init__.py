@@ -4,6 +4,16 @@ Adapters may fetch and parse authoritative sources. They do not mutate canonical
 """
 
 from .base import AdapterError, FetchSnapshot
+from .cbam import (
+    CBAM_CERTIFICATE_SALE_AMENDING_CELEX,
+    CBAM_PARENT_CELEX,
+    CBAM_VERIFICATION_CELEX,
+    CBAMMilestoneRule,
+    fetch_cbam_certificate_sale_rule,
+    fetch_cbam_verification_report_rule,
+    parse_cbam_certificate_sale_rule,
+    parse_cbam_verification_report_rule,
+)
 from .cellar import (
     CELLAR_CELEX_BASE,
     ELI_IDENTIFIER_BASE,
@@ -49,6 +59,10 @@ from .socrata import (
 
 __all__ = [
     "AdapterError",
+    "CBAM_CERTIFICATE_SALE_AMENDING_CELEX",
+    "CBAM_PARENT_CELEX",
+    "CBAM_VERIFICATION_CELEX",
+    "CBAMMilestoneRule",
     "CELLAR_CELEX_BASE",
     "ELI_IDENTIFIER_BASE",
     "EURLEX_ELI_FETCH_BASE",
@@ -66,6 +80,8 @@ __all__ = [
     "eli_current_fetch_url",
     "cellar_document_text",
     "cellar_representation_diagnostics",
+    "fetch_cbam_certificate_sale_rule",
+    "fetch_cbam_verification_report_rule",
     "fetch_cellar_celex_document",
     "fetch_cellar_identifier_notice",
     "fetch_cellar_rdf_notice",
@@ -77,6 +93,8 @@ __all__ = [
     "fetch_suin_metadata",
     "fetch_suin_rows",
     "normalize_cellar_legal_topology",
+    "parse_cbam_certificate_sale_rule",
+    "parse_cbam_verification_report_rule",
     "parse_cra_article_71",
     "parse_cellar_identifier_notice",
     "parse_cellar_legal_relation_diagnostics",
