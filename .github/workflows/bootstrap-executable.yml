@@ -24,12 +24,11 @@ jobs:
           rm -rf .bootstrap
           mkdir -p .bootstrap
           unzip -q WORLD_SIGNALS_EXECUTABLE_THIN_SLICE_v0.1.zip -d .bootstrap
-          rsync -a .bootstrap/world-signals-executable-v0.1/ ./
+          rsync -a --exclude='.github/workflows/' .bootstrap/world-signals-executable-v0.1/ ./
           find . -type d -name '__pycache__' -prune -exec rm -rf {} +
           find . -type f -name '*.pyc' -delete
           rm -rf .bootstrap
           rm -f WORLD_SIGNALS_EXECUTABLE_THIN_SLICE_v0.1.zip
-          rm -f .github/workflows/bootstrap-executable.yml
 
       - name: Validate before committing
         shell: bash
@@ -40,7 +39,7 @@ jobs:
           python scripts/build_site.py
           python scripts/run_monitor_dry.py
 
-      - name: Commit executable repository
+      - name: Commit executable repository files
         shell: bash
         run: |
           set -euo pipefail
