@@ -128,7 +128,7 @@ def main() -> int:
     # EUR-Lex current-ELI HTML route is held after repeat HTTP-202 placeholders.
     try:
         rdf,snap=fetch_cellar_rdf_notice(CRA_CELEX,inferred=True)
-        relations=parse_cellar_legal_relation_diagnostics(rdf)
+        relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=CRA_CELEX)
         if not relations:
             raise AdapterError("Cellar inferred RDF exposed no amendment/consolidation legal relations for CRA")
         cra_result["layers"]["cellar_rdf_relation_probe"]={
