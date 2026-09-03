@@ -13,11 +13,13 @@ from world_signals.adapters import (
     CRA_CELEX,
     cellar_representation_diagnostics,
     fetch_cellar_celex_document,
+    fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
     parse_cra_article_71,
+    parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
 )
 
@@ -29,6 +31,14 @@ OUT=ARTIFACT_DIR/"adapter-smoke.json"
 
 def file_hash(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
+
+
+def _unique(values):
+    out=[]
+    for value in values:
+        if value not in out:
+            out.append(value)
+    return out
 
 
 def main() -> int:
@@ -104,7 +114,6 @@ def main() -> int:
     }
     cra_failed=False
 
-    # Proven immutable semantic baseline.
     try:
         body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
         diagnostics=cellar_representation_diagnostics(body)
@@ -119,24 +128,56 @@ def main() -> int:
         cra_failed=True
         failures.append("CRA immutable baseline: "+str(exc))
         cra_result["layers"]["immutable_baseline"]={
-            "status":"FAIL",
-            "error":str(exc),
-            "canonical_action":"NONE",
+            "status":"FAIL","error":str(exc),"canonical_action":"NONE",
         }
 
-    # Candidate machine route for amendment/consolidation topology. The direct
-    # EUR-Lex current-ELI HTML route is held after repeat HTTP-202 placeholders.
     try:
         rdf,snap=fetch_cellar_rdf_notice(CRA_CELEX,inferred=True)
         relations=parse_cellar_legal_relation_diagnostics(rdf,base_celex=CRA_CELEX)
         if not relations:
-            raise AdapterError("Cellar inferred RDF exposed no amendment/consolidation legal relations for CRA")
+            raise AdapterError("Cellar inferred RDF exposed no legal relations for CRA")
+
+        incoming_amendment_targets=_unique(
+            r["target_uri"] for r in relations
+            if r["predicate"] in {"amended_by","resource_legal_amended_by_resource_legal"}
+            and (r.get("subject_uri") or "").endswith("/celex/"+CRA_CELEX)
+        )
+        consolidation_targets=_unique(
+            r["target_uri"] for r in relations
+            if r["predicate"] in {"consolidated_by","resource_legal_consolidated_by_act_consolidated"}
+            and "_" not in r["target_uri"].rsplit("/",1)[-1]
+            and (r.get("subject_uri") or "").endswith("/celex/"+CRA_CELEX)
+        )
+        if not incoming_amendment_targets:
+            raise AdapterError("CRA Cellar RDF exposed no incoming amendment relation")
+        if not consolidation_targets:
+            raise AdapterError("CRA Cellar RDF exposed no root consolidation relation")
+
+        resolved=[]
+        for role,targets in (
+            ("incoming_amendment",incoming_amendment_targets),
+            ("consolidation",consolidation_targets),
+        ):
+            for target in targets:
+                notice,notice_snap=fetch_cellar_identifier_notice(target)
+                identifiers=parse_cellar_identifier_notice(notice)
+                if not identifiers["celex_ids"]:
+                    raise AdapterError(f"Cellar identifier notice exposed no CELEX synonym for {target}")
+                resolved.append({
+                    "role":role,
+                    "target_uri":target,
+                    "identifier_snapshot":notice_snap.as_dict(),
+                    "identifiers":identifiers,
+                })
+
         cra_result["layers"]["cellar_rdf_relation_probe"]={
             "status":"PASS",
             "route_state":"ENDPOINT_CANDIDATE_NOT_YET_PROMOTED",
             "snapshot":snap.as_dict(),
             "relation_count":len(relations),
-            "relations":relations,
+            "incoming_amendment_targets":incoming_amendment_targets,
+            "consolidation_targets":consolidation_targets,
+            "resolved_targets":resolved,
         }
     except AdapterError as exc:
         cra_failed=True
