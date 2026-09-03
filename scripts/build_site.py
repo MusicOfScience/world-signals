@@ -8,6 +8,7 @@ from world_signals.io import load_json, dump_json
 from world_signals.validation import validate_registry
 from world_signals.projection import public_projection
 from world_signals.operations import operations_projection
+from world_signals.runtime_projection import unavailable_runtime_projection
 
 reg=load_json(ROOT/"data/canonical/registry.json")
 src=load_json(ROOT/"data/sources/registry.json")
@@ -61,16 +62,33 @@ dump_json(docs/"data/monitor_routes.json",monitor_projection)
 ops_projection=operations_projection(reg,src,expectations,operations_policy,changes)
 dump_json(docs/"data/operations.json",ops_projection)
 
+runtime_path=ROOT/"artifacts/latest-monitor-public.json"
+if runtime_path.exists():
+    runtime_projection=load_json(runtime_path)
+else:
+    runtime_projection=unavailable_runtime_projection(
+        "NO_RUNTIME_ARTIFACT_FETCH_PERFORMED_FOR_THIS_BUILD",
+        {
+            "canonical_registry_version":reg.get("version"),
+            "source_registry_version":src.get("version"),
+            "monitor_expectations_version":expectations.get("version"),
+            "monitor_operations_policy_version":operations_policy.get("version"),
+        },
+    )
+dump_json(docs/"data/runtime.json",runtime_projection)
+
 dump_json(docs/"data/source_summary.json", {
     "source_count": len(src.get("sources",[])),
     "configured_live_monitor_routes":len(monitor_projection["routes"]),
     "reviewed_change_count":len(changes.get("changes",[])),
     "monitoring_tiers":ops_projection["source_governance_summary"]["monitoring_readiness_status"],
+    "runtime_snapshot_availability":runtime_projection.get("availability"),
 })
 
 (docs/".nojekyll").write_text("",encoding="utf-8")
 print(
     f"Built static site for {projection['metadata']['record_count']} events, "
     f"{len(monitor_projection['routes'])} configured live monitor routes, "
-    f"{len(src.get('sources',[]))} governed sources and reviewed change history -> {docs}"
+    f"{len(src.get('sources',[]))} governed sources, reviewed change history and "
+    f"runtime={runtime_projection.get('availability')} -> {docs}"
 )
