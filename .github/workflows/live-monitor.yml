@@ -8,35 +8,70 @@ on:
     branches: [main]
     paths:
       - 'src/world_signals/live_monitor.py'
+      - 'src/world_signals/legal_monitor.py'
       - 'src/world_signals/adapters/**'
       - 'scripts/run_live_monitor.py'
       - 'data/monitor/expectations.json'
+      - 'data/sources/registry.json'
       - 'tests/test_live_monitor.py'
+      - 'tests/test_legal_monitor.py'
       - '.github/workflows/live-monitor.yml'
 
 permissions:
   contents: read
 
+concurrency:
+  group: world-signals-live-monitor
+  cancel-in-progress: false
+
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
       - name: Monitor regression tests
-        run: python -m unittest tests.test_adapters tests.test_live_monitor -v
+        run: python -m unittest tests.test_adapters tests.test_live_monitor tests.test_legal_monitor -v
       - name: Run read-only live monitor
         run: python scripts/run_live_monitor.py
+      - name: Write monitor summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f artifacts/live-monitor.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          report=json.loads(Path('artifacts/live-monitor.json').read_text())
+          health=report.get('source_health_summary') or {}
+          print('## WORLD SIGNALS live monitor')
+          print()
+          print(f"- Status: **{report.get('status','UNKNOWN')}**")
+          print(f"- Run: `{(report.get('workflow_context') or {}).get('github_run_id')}`")
+          print(f"- Canonical registry: `{report.get('canonical_registry_version')}`")
+          print(f"- Source registry: `{report.get('source_registry_version')}`")
+          print(f"- Monitor expectations: `{report.get('monitor_expectations_version')}`")
+          print(f"- Healthy adapters: **{health.get('healthy',0)}**")
+          print(f"- Degraded adapters: **{health.get('degraded',0)}**")
+          print(f"- Review candidates: **{report.get('candidate_count',0)}**")
+          print(f"- Canonical unchanged: **{report.get('canonical_unchanged')}**")
+          print(f"- Configuration fingerprint: `{report.get('configuration_fingerprint_sha256')}`")
+          PY
+          else
+            echo '## WORLD SIGNALS live monitor' >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo '**No live-monitor report was produced. Inspect job logs.**' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload live monitor report and review candidates
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: world-signals-live-monitor
+          name: world-signals-live-monitor-${{ github.run_id }}
           path: |
             artifacts/live-monitor.json
             review_candidates/live
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90
