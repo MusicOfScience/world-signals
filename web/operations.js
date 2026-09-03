@@ -21,7 +21,7 @@
 
   function renderRoute(route){
     const evidence=route.last_recorded_evidence_at
-      ? `<strong>${esc(recordedTime(route.last_recorded_evidence_at))}</strong><span>latest timestamp embedded in the repository baseline/configuration</span>`
+      ? `<strong>${esc(recordedTime(route.last_recorded_evidence_at))}</strong><span>latest timestamp embedded in repository baseline/configuration</span>`
       : `<strong>No embedded timestamp</strong><span>configuration exists, but this static projection carries no baseline observation time</span>`;
     return `<article class="ops-route-card">
       <div class="ops-card-head">
@@ -66,6 +66,57 @@
     document.querySelector('#opsSources').innerHTML=rows.length?rows.map(sourceCard).join(''):'<p class="empty">No sources match the current filter.</p>';
   }
 
+  function renderRuntimeHealth(health){
+    return `<article class="ops-runtime-health-card">
+      <div><p class="eyebrow">${esc(health.adapter_id||'adapter')}</p><h4>${esc(health.source_id||'source not recorded')}</h4></div>
+      <span class="ops-health-state ops-health-${esc(String(health.state||'UNKNOWN').toLowerCase())}">${esc(human(health.state||'UNKNOWN'))}</span>
+      ${(health.layer_states||[]).length?`<div class="ops-layer-list">${health.layer_states.map(layer=>`<span><b>${esc(human(layer.layer))}</b>${esc(human(layer.state||'unknown'))}${layer.failure_stage?` · ${esc(human(layer.failure_stage))}`:''}</span>`).join('')}</div>`:''}
+    </article>`;
+  }
+
+  function renderRuntimeCandidate(candidate){
+    return `<article class="ops-runtime-candidate">
+      <div class="ops-card-head"><div><p class="eyebrow">${esc(human(candidate.candidate_type||'review candidate'))}</p><h4><code>${esc(candidate.candidate_id)}</code></h4></div><span class="ops-static-badge">REVIEW ONLY</span></div>
+      <dl class="ops-route-values">
+        <dt>Source</dt><dd><code>${esc(candidate.source_id||'not recorded')}</code></dd>
+        <dt>Occurrence scope</dt><dd>${(candidate.occurrence_ids||[]).map(id=>`<code>${esc(id)}</code>`).join(' ')||'None'}</dd>
+        <dt>Review state</dt><dd>${esc(human(candidate.review_state||'pending review'))}</dd>
+        <dt>Changed fields</dt><dd>${(candidate.changed_fields||[]).map(field=>`<code>${esc(field)}</code>`).join(' ')||'Not represented as field diff'}</dd>
+        <dt>Automatic commit</dt><dd>OFF</dd>
+      </dl>
+    </article>`;
+  }
+
+  function renderRuntime(runtime){
+    const summary=document.querySelector('#opsRuntimeSummary');
+    const health=document.querySelector('#opsRuntimeHealth');
+    const candidates=document.querySelector('#opsRuntimeCandidates');
+    const candidateCount=document.querySelector('#opsRuntimeCandidateCount');
+
+    if(!runtime||runtime.availability!=='AVAILABLE'){
+      summary.innerHTML=`<article class="ops-runtime-unavailable"><p class="eyebrow">NO RETAINED SNAPSHOT EMBEDDED</p><h3>Runtime evidence unavailable in this build</h3><p>${esc(human(runtime?.reason||'runtime projection unavailable'))}.</p><p class="meta">This does not imply source failure, monitor failure or event change.</p></article>`;
+      health.innerHTML='';
+      candidates.innerHTML='<p class="empty">No run-generated candidate snapshot is embedded.</p>';
+      candidateCount.textContent='0 embedded candidates';
+      return;
+    }
+
+    const alignment=runtime.configuration_alignment||{};
+    const fields=Object.entries(alignment.fields||{});
+    const mismatches=fields.filter(([,value])=>!value.matches);
+    summary.innerHTML=`<article class="ops-runtime-run">
+      <div class="ops-card-head"><div><p class="eyebrow">${esc(human(runtime.status||'unknown'))}</p><h3>${esc(recordedTime(runtime.run_at))}</h3><p class="meta">GitHub run <code>${esc(runtime.github_run_id||'not recorded')}</code> · report schema ${esc(runtime.report_schema_version||'?')}</p></div><span class="ops-runtime-status">${esc(human(alignment.state||'alignment unknown'))}</span></div>
+      <div class="ops-runtime-metrics"><span><b>${esc(runtime.healthy_adapter_count)}</b>healthy adapters</span><span><b>${esc(runtime.degraded_adapter_count)}</b>degraded adapters</span><span><b>${esc(runtime.candidate_count)}</b>review candidates</span><span><b>${runtime.canonical_unchanged?'YES':'NO'}</b>canonical unchanged</span></div>
+      ${mismatches.length?`<div class="ops-alignment-warning"><strong>This retained run used an older configuration than the current site.</strong>${mismatches.map(([key,value])=>`<span>${esc(human(key))}: run ${esc(value.run)} · current ${esc(value.current)}</span>`).join('')}</div>`:'<p class="ops-alignment-ok">Run configuration matches the current canonical/source/monitor contract versions.</p>'}
+      <p class="meta">This is a dated observation snapshot. It is not a claim that the sources remain in these states now.</p>
+    </article>`;
+
+    health.innerHTML=(runtime.source_health||[]).length?runtime.source_health.map(renderRuntimeHealth).join(''):'<p class="empty">No source-health summary was published for this run.</p>';
+    const rows=runtime.candidates||[];
+    candidateCount.textContent=`${rows.length} candidate${rows.length===1?'':'s'} in this run`;
+    candidates.innerHTML=rows.length?rows.map(renderRuntimeCandidate).join(''):'<p class="empty">This retained run generated no review candidates.</p>';
+  }
+
   function render(data){
     DATA=data;
     const m=data.metadata||{};
@@ -100,12 +151,18 @@
     if(loaded) return;
     document.querySelector('#opsRecordedRoutes').innerHTML='<p class="empty">Loading recorded operations state…</p>';
     try{
-      const response=await fetch('data/operations.json');
-      if(!response.ok) throw new Error(`operations.json ${response.status}`);
-      render(await response.json());
+      const [operationsResponse,runtimeResponse]=await Promise.all([fetch('data/operations.json'),fetch('data/runtime.json')]);
+      if(!operationsResponse.ok) throw new Error(`operations.json ${operationsResponse.status}`);
+      render(await operationsResponse.json());
+      if(runtimeResponse.ok){
+        renderRuntime(await runtimeResponse.json());
+      }else{
+        renderRuntime({availability:'UNAVAILABLE_AT_BUILD',reason:`runtime.json ${runtimeResponse.status}`});
+      }
       loaded=true;
     } catch(error){
       document.querySelector('#opsRecordedRoutes').innerHTML=`<p class="empty">Operations data could not be loaded: ${esc(error.message)}</p>`;
+      renderRuntime({availability:'UNAVAILABLE_AT_BUILD',reason:'operations data load failed'});
     }
   }
 
