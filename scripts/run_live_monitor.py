@@ -9,10 +9,19 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 
-from world_signals.adapters import AdapterError, fetch_rba_fsr, fetch_suin_rows
+from world_signals.adapters import (
+    AdapterError,
+    CRA_CELEX,
+    cellar_representation_diagnostics,
+    fetch_cellar_celex_document,
+    fetch_rba_fsr,
+    fetch_suin_rows,
+    parse_cra_article_71,
+)
 from world_signals.io import load_json
 from world_signals.live_monitor import (
     colombia_legal_input_review_candidate,
+    cra_legal_rule_review_candidate,
     rba_fsr_review_candidates,
 )
 
@@ -25,11 +34,14 @@ REVIEW_DIR.mkdir(parents=True,exist_ok=True)
 OUT=ARTIFACT_DIR/"live-monitor.json"
 MANIFEST=REVIEW_DIR/"manifest.json"
 
+
 def file_hash(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
+
 def config_by_id(expectations: dict) -> dict[str,dict]:
     return {x["adapter_id"]:x for x in expectations.get("adapters",[])}
+
 
 def main() -> int:
     before=file_hash(CANONICAL)
@@ -108,6 +120,55 @@ def main() -> int:
             "canonical_action":"NONE",
         })
 
+    # EU Cellar / CRA: semantic Article 71 legal-rule sentinel. A transport or
+    # parser failure is source health only; a successfully parsed changed rule
+    # becomes a review candidate against the same stable canonical occurrences.
+    try:
+        body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
+        diagnostics=cellar_representation_diagnostics(body)
+        try:
+            rule=parse_cra_article_71(body)
+        except AdapterError as exc:
+            message=str(exc)
+            print(f"::warning::EU Cellar CRA parser degraded: {message}")
+            report["source_health"].append({
+                "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
+                "source_id":"WSSRC-TECH-001",
+                "state":"DEGRADED",
+                "failure_stage":"PARSE",
+                "snapshot":snap.as_dict(),
+                "representation_diagnostics":diagnostics,
+                "error":message,
+                "canonical_action":"NONE",
+            })
+        else:
+            report["source_health"].append({
+                "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
+                "source_id":"WSSRC-TECH-001",
+                "state":"HEALTHY",
+                "snapshot":snap.as_dict(),
+                "representation_diagnostics":diagnostics,
+                "celex":rule.celex,
+                "article":rule.article,
+            })
+            candidate,observation=cra_legal_rule_review_candidate(
+                rule,configs["EU_CELLAR_CRA_ARTICLE_71"]
+            )
+            report["observations"].append(observation)
+            if candidate:
+                report["review_candidates"].append(candidate)
+    except AdapterError as exc:
+        message=str(exc)
+        print(f"::warning::EU Cellar CRA source degraded: {message}")
+        report["source_health"].append({
+            "adapter_id":"EU_CELLAR_CRA_ARTICLE_71",
+            "source_id":"WSSRC-TECH-001",
+            "state":"DEGRADED",
+            "failure_stage":"FETCH",
+            "error":message,
+            "canonical_action":"NONE",
+        })
+
     # Candidate artefacts are outputs for review. They are not commits.
     candidate_files=[]
     for candidate in report["review_candidates"]:
@@ -144,6 +205,7 @@ def main() -> int:
     OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2,ensure_ascii=False))
     return 0
+
 
 if __name__=="__main__":
     raise SystemExit(main())
