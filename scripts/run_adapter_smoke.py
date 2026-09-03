@@ -10,10 +10,13 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from world_signals.adapters import (
     AdapterError,
-    fetch_cra_article_71,
+    CRA_CELEX,
+    cellar_representation_diagnostics,
+    fetch_cellar_celex_document,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
+    parse_cra_article_71,
 )
 
 CANONICAL=ROOT/"data/canonical/registry.json"
@@ -88,19 +91,39 @@ def main() -> int:
         report["results"].append({"adapter":"COLOMBIA_SUIN_DECREE_111_1996","status":"FAIL","error":str(exc)})
 
     try:
-        rule,snap=fetch_cra_article_71()
-        report["results"].append({
-            "adapter":"EU_CELLAR_CRA_ARTICLE_71",
-            "status":"PASS",
-            "snapshot":snap.as_dict(),
-            "rule":rule.as_dict(),
-            "monitor_role":"SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
-            "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
-            "automatic_commit_allowed":False,
-        })
+        body,snap=fetch_cellar_celex_document(CRA_CELEX,language="eng")
+        diagnostics=cellar_representation_diagnostics(body)
+        try:
+            rule=parse_cra_article_71(body)
+        except AdapterError as exc:
+            failures.append(str(exc))
+            report["results"].append({
+                "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+                "status":"PARSER_FAIL_TRANSPORT_PASS",
+                "snapshot":snap.as_dict(),
+                "representation_diagnostics":diagnostics,
+                "error":str(exc),
+                "canonical_action":"NONE",
+            })
+        else:
+            report["results"].append({
+                "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+                "status":"PASS",
+                "snapshot":snap.as_dict(),
+                "representation_diagnostics":diagnostics,
+                "rule":rule.as_dict(),
+                "monitor_role":"SEMANTIC_LEGAL_APPLICATION_RULE_SENTINEL",
+                "canonical_occurrence_ids":["WSO-TECH-A-0001","WSO-TECH-A-0007"],
+                "automatic_commit_allowed":False,
+            })
     except AdapterError as exc:
         failures.append(str(exc))
-        report["results"].append({"adapter":"EU_CELLAR_CRA_ARTICLE_71","status":"FAIL","error":str(exc)})
+        report["results"].append({
+            "adapter":"EU_CELLAR_CRA_ARTICLE_71",
+            "status":"TRANSPORT_FAIL",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     after=file_hash(CANONICAL)
     report["canonical_sha256_after"]=after
