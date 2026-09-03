@@ -5,12 +5,18 @@
   "reference_date": "2026-09-03",
   "coverage_program_id": "WSCP-ENERGY-COMMODITIES-CORRECTION-K",
   "purpose": "Bounded non-monetary correction to reduce oil/institution concentration in ENERGY_COMMODITIES using exact authoritative remaining-2026 JODI Oil+Gas, GECF gas-producer and ICSG copper signals.",
+  "identity_reconciliation": {
+    "status": "RECONCILED_AFTER_FAIL_CLOSED_PREFLIGHT",
+    "diagnostic_run_id": 33765743527,
+    "finding": "WSO-COM-A-0029 through 0052 were already occupied by USDA/ABARES/FAO/AMIS and physical-risk records; WSSRC-COM-010 and WSSRC-COM-011 were already allocated to FAO/AMIS. No JODI, GECF or ICSG canonical/source identity existed.",
+    "action": "Preserve all existing identities and allocate next free occurrence block 0053-0058 plus source IDs 012-014. Series identities remain unchanged because they were verified absent."
+  },
   "preconditions": {
     "canonical_registry_version": "0.18",
     "canonical_record_count": 662,
     "source_registry_version": "1.49",
-    "required_absent_source_ids": ["WSSRC-COM-010", "WSSRC-COM-011", "WSSRC-COM-012"],
-    "required_absent_occurrence_ids": ["WSO-COM-A-0029", "WSO-COM-A-0030", "WSO-COM-A-0031", "WSO-COM-A-0032", "WSO-COM-A-0033", "WSO-COM-A-0034"],
+    "required_absent_source_ids": ["WSSRC-COM-012", "WSSRC-COM-013", "WSSRC-COM-014"],
+    "required_absent_occurrence_ids": ["WSO-COM-A-0053", "WSO-COM-A-0054", "WSO-COM-A-0055", "WSO-COM-A-0056", "WSO-COM-A-0057", "WSO-COM-A-0058"],
     "required_absent_series_ids": ["WSER-COM-JODI-WDB", "WSER-COM-GECF-SUMMIT", "WSER-COM-ICSG-MTG"]
   },
   "postconditions": {
@@ -26,7 +32,7 @@
   },
   "source_plan": [
     {
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "institution": "Joint Organisations Data Initiative / International Energy Forum",
       "jurisdiction": "Global",
       "region": "Cross-regional / Global",
@@ -43,7 +49,7 @@
       "rights_note": "JODI website terms reserve intellectual-property rights. WORLD SIGNALS may retain manually curated factual event metadata/provenance; no production crawling/reproduction permission is inferred."
     },
     {
-      "source_id": "WSSRC-COM-011",
+      "source_id": "WSSRC-COM-013",
       "institution": "Gas Exporting Countries Forum",
       "jurisdiction": "GECF member countries / Global",
       "region": "Cross-regional / Global",
@@ -55,7 +61,7 @@
       "rights_note": "Public authoritative event evidence supports manual factual provenance. No production automation permission was established in this pass."
     },
     {
-      "source_id": "WSSRC-COM-012",
+      "source_id": "WSSRC-COM-014",
       "institution": "International Copper Study Group",
       "jurisdiction": "Global",
       "region": "Cross-regional / Global",
@@ -71,7 +77,7 @@
     {
       "series_id": "WSER-COM-JODI-WDB",
       "institution": "Joint Organisations Data Initiative / International Energy Forum",
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "event_type": "INFORMATION_RELEASE",
       "timing_type": "LOCAL_DATETIME",
       "source_timezone": "Europe/London",
@@ -81,7 +87,7 @@
     {
       "series_id": "WSER-COM-GECF-SUMMIT",
       "institution": "Gas Exporting Countries Forum",
-      "source_id": "WSSRC-COM-011",
+      "source_id": "WSSRC-COM-013",
       "event_type": "PRODUCER_POLICY_MEETING",
       "timing_type": "CIVIL_DATE",
       "source_timezone": "Europe/Moscow",
@@ -90,7 +96,7 @@
     {
       "series_id": "WSER-COM-ICSG-MTG",
       "institution": "International Copper Study Group",
-      "source_id": "WSSRC-COM-012",
+      "source_id": "WSSRC-COM-014",
       "event_type": "INFORMATION_CATALYST_MEETING",
       "timing_type": "CIVIL_DATE",
       "source_timezone": "Europe/Lisbon",
@@ -99,9 +105,9 @@
   ],
   "occurrences": [
     {
-      "occurrence_id": "WSO-COM-A-0029",
+      "occurrence_id": "WSO-COM-A-0053",
       "series_id": "WSER-COM-JODI-WDB",
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "canonical_name": "JODI Oil + Gas World Database update — September 2026",
       "start_local": "2026-09-22T12:00:00",
       "start_utc": "2026-09-22T11:00:00Z",
@@ -109,9 +115,9 @@
       "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
     },
     {
-      "occurrence_id": "WSO-COM-A-0030",
+      "occurrence_id": "WSO-COM-A-0054",
       "series_id": "WSER-COM-JODI-WDB",
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "canonical_name": "JODI Oil + Gas World Database update — October 2026",
       "start_local": "2026-10-21T12:00:00",
       "start_utc": "2026-10-21T11:00:00Z",
@@ -119,9 +125,9 @@
       "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
     },
     {
-      "occurrence_id": "WSO-COM-A-0031",
+      "occurrence_id": "WSO-COM-A-0055",
       "series_id": "WSER-COM-JODI-WDB",
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "canonical_name": "JODI Oil + Gas World Database update — November 2026",
       "start_local": "2026-11-19T12:00:00",
       "start_utc": "2026-11-19T12:00:00Z",
@@ -129,9 +135,9 @@
       "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
     },
     {
-      "occurrence_id": "WSO-COM-A-0032",
+      "occurrence_id": "WSO-COM-A-0056",
       "series_id": "WSER-COM-JODI-WDB",
-      "source_id": "WSSRC-COM-010",
+      "source_id": "WSSRC-COM-012",
       "canonical_name": "JODI Oil + Gas World Database update — December 2026",
       "start_local": "2026-12-21T12:00:00",
       "start_utc": "2026-12-21T12:00:00Z",
@@ -139,17 +145,17 @@
       "data_products": ["JODI-Oil World Database update", "JODI-Gas World Database update"]
     },
     {
-      "occurrence_id": "WSO-COM-A-0033",
+      "occurrence_id": "WSO-COM-A-0057",
       "series_id": "WSER-COM-GECF-SUMMIT",
-      "source_id": "WSSRC-COM-011",
+      "source_id": "WSSRC-COM-013",
       "canonical_name": "8th GECF Summit of Heads of State and Government — Moscow",
       "start_local": "2026-10-27",
       "source_timezone": "Europe/Moscow"
     },
     {
-      "occurrence_id": "WSO-COM-A-0034",
+      "occurrence_id": "WSO-COM-A-0058",
       "series_id": "WSER-COM-ICSG-MTG",
-      "source_id": "WSSRC-COM-012",
+      "source_id": "WSSRC-COM-014",
       "canonical_name": "International Copper Study Group meetings — Lisbon",
       "start_local": "2026-10-13",
       "source_timezone": "Europe/Lisbon"
