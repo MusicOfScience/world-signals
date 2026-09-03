@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import io
+import json
+import os
+from pathlib import Path, PurePosixPath
+import sys
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+import zipfile
+
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/"src"))
+
+from world_signals.io import load_json
+from world_signals.runtime_projection import (
+    prohibited_field_hits,
+    public_runtime_projection,
+    unavailable_runtime_projection,
+)
+
+OUT=ROOT/"artifacts/latest-monitor-public.json"
+CONTRACT=ROOT/"data/monitor/public_runtime_projection_contract.json"
+
+
+def dump(payload: dict) -> None:
+    OUT.parent.mkdir(exist_ok=True)
+    OUT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+
+
+def current_configuration() -> dict:
+    registry=load_json(ROOT/"data/canonical/registry.json")
+    sources=load_json(ROOT/"data/sources/registry.json")
+    expectations=load_json(ROOT/"data/monitor/expectations.json")
+    policy=load_json(ROOT/"data/monitor/operations_policy.json")
+    return {
+        "canonical_registry_version":registry.get("version"),
+        "source_registry_version":sources.get("version"),
+        "monitor_expectations_version":expectations.get("version"),
+        "monitor_operations_policy_version":policy.get("version"),
+    }
+
+
+def request(url: str,token: str) -> bytes:
+    req=Request(url,headers={
+        "Authorization":f"Bearer {token}",
+        "Accept":"application/vnd.github+json",
+        "X-GitHub-Api-Version":"2022-11-28",
+        "User-Agent":"WORLD-SIGNALS-Pages-runtime-projection",
+    })
+    with urlopen(req,timeout=30) as response:
+        return response.read()
+
+
+def request_json(url: str,token: str) -> dict:
+    return json.loads(request(url,token).decode("utf-8"))
+
+
+def safe_candidate_path(raw: str) -> str:
+    path=PurePosixPath(raw)
+    if path.is_absolute() or ".." in path.parts:
+        raise ValueError(f"unsafe candidate path in monitor manifest: {raw}")
+    value=str(path)
+    if not value.startswith("review_candidates/live/") or not value.endswith(".json"):
+        raise ValueError(f"candidate path outside expected runtime directory: {raw}")
+    return value
+
+
+def sanitize_archive(blob: bytes,current: dict) -> dict:
+    contract=load_json(CONTRACT)
+    with zipfile.ZipFile(io.BytesIO(blob)) as archive:
+        names=set(archive.namelist())
+        report_path="artifacts/live-monitor.json"
+        manifest_path="review_candidates/live/manifest.json"
+        if report_path not in names or manifest_path not in names:
+            raise ValueError("monitor artefact missing report or candidate manifest")
+        report=json.loads(archive.read(report_path).decode("utf-8"))
+        manifest=json.loads(archive.read(manifest_path).decode("utf-8"))
+        candidates=[]
+        for raw_path in manifest.get("files") or []:
+            candidate_path=safe_candidate_path(raw_path)
+            if candidate_path not in names:
+                raise ValueError(f"candidate listed in manifest but missing from artefact: {candidate_path}")
+            candidates.append(json.loads(archive.read(candidate_path).decode("utf-8")))
+
+    projection=public_runtime_projection(report,manifest,candidates,current)
+    prohibited=set(contract.get("prohibited_field_names") or [])
+    hits=prohibited_field_hits(projection,prohibited)
+    if hits:
+        raise ValueError("public runtime projection contains prohibited fields: "+", ".join(hits))
+    projection["public_projection_contract_version"]=contract.get("version")
+    return projection
+
+
+def unavailable(reason: str,current: dict) -> int:
+    payload=unavailable_runtime_projection(reason,current)
+    payload["public_projection_contract_version"]=load_json(CONTRACT).get("version")
+    dump(payload)
+    print(f"Runtime projection unavailable: {reason}")
+    return 0
+
+
+def main() -> int:
+    current=current_configuration()
+    token=os.getenv("GITHUB_TOKEN")
+    repository=os.getenv("GITHUB_REPOSITORY")
+    if not token or not repository:
+        return unavailable("NO_GITHUB_ACTIONS_ARTIFACT_CONTEXT",current)
+
+    base=f"https://api.github.com/repos/{repository}"
+    try:
+        runs=request_json(
+            base+"/actions/workflows/live-monitor.yml/runs?status=success&per_page=10",
+            token,
+        ).get("workflow_runs",[])
+    except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
+        return unavailable("GITHUB_ACTIONS_RUN_INDEX_UNAVAILABLE_AT_BUILD",current)
+
+    for run in runs:
+        run_id=run.get("id")
+        if not run_id:
+            continue
+        try:
+            artifacts=request_json(base+f"/actions/runs/{run_id}/artifacts?per_page=100",token).get("artifacts",[])
+        except (HTTPError,URLError,TimeoutError,ValueError,json.JSONDecodeError):
+            continue
+        wanted=f"world-signals-live-monitor-{run_id}"
+        artifact=next((item for item in artifacts if item.get("name")==wanted and not item.get("expired")),None)
+        if not artifact:
+            continue
+        artifact_id=artifact.get("id")
+        if not artifact_id:
+            continue
+        try:
+            blob=request(base+f"/actions/artifacts/{artifact_id}/zip",token)
+        except (HTTPError,URLError,TimeoutError):
+            continue
+
+        # An artefact that exists but violates the projection contract is a build
+        # failure. Silently skipping malformed evidence could publish a misleading
+        # older run as though it were the latest valid one.
+        projection=sanitize_archive(blob,current)
+        dump(projection)
+        print(
+            "Sanitized latest retained monitor run "
+            f"{projection.get('github_run_id')} at {projection.get('run_at')} "
+            f"status={projection.get('status')} alignment={projection.get('configuration_alignment',{}).get('state')}"
+        )
+        return 0
+
+    return unavailable("NO_RETAINED_SUCCESSFUL_MONITOR_ARTIFACT_FOUND",current)
+
+
+if __name__=="__main__":
+    raise SystemExit(main())
