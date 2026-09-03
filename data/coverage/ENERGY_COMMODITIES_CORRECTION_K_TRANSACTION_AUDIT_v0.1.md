@@ -100,15 +100,43 @@ The successful one-shot write run required all of the following to pass:
 
 The temporary write-capable workflow was removed immediately after successful migration. The read-only preflight workflow was subsequently removed as completed machinery. Plan and transaction script remain as inert reproducibility evidence.
 
-## Re-audit requirement
+## Measured post-migration re-audit — PASS
 
-Do not infer success merely from six new rows. The v0.19 coverage audit must measure whether the correction actually improves series/institution diversity and reduces oil-specific concentration without materially worsening overall schedule-rich-category dominance.
+The independent read-only coverage audit ran against canonical **v0.19 / 668** in GitHub Actions run `33766568987` and completed successfully.
 
-Expected mechanical direction, to be verified by the read-only audit:
+Measured change from v0.18 → v0.19:
 
-- ENERGY_COMMODITIES occurrences: 28 → 34;
-- unique series: 6 → 9;
-- unique institutions: 3 → 6;
-- explicitly oil-specific legacy occurrences remain 23, while new JODI is a combined oil+gas bundle rather than an oil-only series.
+| Metric | v0.18 | v0.19 | Change |
+|---|---:|---:|---:|
+| Total occurrences | 662 | 668 | +6 |
+| Unique series | 191 | 194 | +3 |
+| Unique institutions | 116 | 119 | +3 |
+| Unique canonical source IDs used | 147 | 150 | +3 |
+| ENERGY_COMMODITIES occurrences | 28 | 34 | +6 |
+| ENERGY_COMMODITIES unique series | 6 | 9 | +3 |
+| ENERGY_COMMODITIES unique institutions | 3 | 6 | +3 |
+| ENERGY_COMMODITIES unique source IDs | 4 | 7 | +3 |
+| ENERGY_COMMODITIES occurrences / series | 4.67 | 3.78 | -0.89 |
+| Monetary + macro occurrence share | 66.01% | 65.42% | -0.59 pp |
 
-The measured post-audit result should determine the next action; no further energy population follows automatically from this transaction.
+The correction therefore **doubled institutional breadth** in ENERGY_COMMODITIES (3 → 6 institutions) while adding only six canonical occurrences.
+
+The 23 pre-existing explicitly oil-specific occurrences remain 23. Relative to the enlarged 34-occurrence category, that legacy oil-specific footprint falls mechanically from **82.1% to 67.6%**. This is not a claim that the remaining 32.4% is "non-oil": the four JODI occurrences are deliberately mixed Oil+Gas `SOURCE_BUNDLE` records and retain both product identities.
+
+The audit's remaining mechanical prompts are now:
+
+- South Asia remains below 10 unique series and below 8 unique institutions;
+- `PHYSICAL_CLIMATE_RISK` remains below 5 unique series.
+
+No additional ENERGY_COMMODITIES population follows automatically from this successful correction. Australia Resources and Energy Quarterly remains a high-value monitor-only candidate until an authoritative exact next release date appears.
+
+## Decision
+
+**Correction K is CLOSED / SUCCESSFUL.**
+
+The next work should address held ontology/taxonomy/source-precision problems rather than continue adding energy rows:
+
+1. physical-risk timing ontology for month-bounded and multi-phase seasons;
+2. cross-domain biosecurity taxonomy/coverage model;
+3. South Asia non-monetary source/precision holds;
+4. only then consider another bounded population tranche.
