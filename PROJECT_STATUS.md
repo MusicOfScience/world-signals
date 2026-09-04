@@ -8,7 +8,7 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.54 — **223 sources**.
+- **Tier-1 source registry:** v1.55 — **223 sources**.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -74,7 +74,7 @@ Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+0
 - 0 review candidates;
 - `NO_CHANGE`;
 - canonical unchanged;
-- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.54.
+- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.55.
 
 Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
 
@@ -235,6 +235,28 @@ P1-C research is now frozen for Eurostat, Bank of Canada, Japan MOF auctions, El
 Durable P1-B audit: `data/coverage/SOURCE_GOVERNANCE_P1B_BACKFILL_AUDIT_v0.1.md`.
 P1-C research/plan: `data/coverage/SOURCE_GOVERNANCE_P1C_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_PLAN_v0.1.json`.
 
+### P1-C international / cross-domain tranche — COMPLETE
+
+P1-C backfilled Eurostat, Bank of Canada, Japan MOF JGB auctions, Electoral Commission New Zealand, PBoC financial-statistics publication rule and UN General Assembly mandated events. Source registry advanced **v1.54 → v1.55 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**.
+
+Guarded transaction run `33858563869` passed all migration, one-file, validation and test gates. PR #9 merged as `7848b394d47b0a960200ca1077034ddc45847c2e`. Independent post-P1-C audit run `33859470953` measured:
+
+- **25** fully explicit governance sources;
+- **198** sources still missing at least one governance field;
+- **0 P0** configured-monitor dependencies;
+- **127 P1** canonical dependencies;
+- **71 P2** registry-only sources;
+- missing `canonical_provenance_use`: **188**;
+- missing `automated_monitoring_use`: **188**;
+- missing `verification_mode`: **198**.
+
+P1-D research is frozen for RBA release scheduling, U.S. BEA, Statistics Bureau of Japan, Bank Indonesia, INDEC Argentina and Kenya Law / Constitution — **40 canonical dependencies** across Australia, the United States, Japan, Indonesia, Argentina and Kenya. Bank Indonesia remains manual/rights-held because no source-specific reuse/automation clearance was identified.
+
+Brazil TSE and Swiss National Bank remain excluded for provenance-scope repair. SNB's registered decisions/history URL still does not directly support the forward assessment schedule; Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.
+
+Durable P1-C audit: `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_AUDIT_v0.1.md`.
+P1-D research/plan: `data/coverage/SOURCE_GOVERNANCE_P1D_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1D_BACKFILL_PLAN_v0.1.json`.
+
 ## Held / unresolved nodes
 
 ### Biosecurity candidate admission
@@ -250,7 +272,7 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 
 ### Source-governance P1/P2 backlog
 
-**133 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
+**127 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
 ## Canonical auto-commit gate — CLOSED
 
@@ -265,7 +287,7 @@ No source failure may satisfy either gate.
 
 1. **Observe first genuine post-contract live-monitor run 48+** against source v1.53 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.
 2. **Validate the migrated Colombia adapter operationally** — machine health should report `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual verification authority only.
-3. **Source-governance P1-C transaction gate** — after review/merge of the frozen P1-C infrastructure, reconcile merged source v1.54 and run the guarded read-only preflight before any registry-only v1.55 transaction; SNB remains excluded pending source-scope repair.
+3. **Source-governance P1-D transaction gate** — review/merge the frozen P1-D infrastructure, reconcile merged source v1.55 and run the guarded read-only preflight before any registry-only v1.56 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
 4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
 5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
 6. Re-run coverage audit after analytically justified canonical additions only.
