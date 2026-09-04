@@ -1,0 +1,33 @@
+name: TEMP P1-E governance preflight
+
+on:
+  push:
+    branches: [source-governance-p1e-research]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Read-only P1-E preflight
+        run: python scripts/apply_source_governance_p1e.py
+      - name: Validate registry
+        run: python scripts/validate_registry.py
+      - name: Run full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        run: python -m py_compile scripts/*.py src/world_signals/*.py
+      - name: Check browser JavaScript
+        run: |
+          for file in web/*.js; do node --check "$file"; done
+      - name: Build derived site
+        run: python scripts/build_site.py
+      - name: Confirm validation is read-only
+        run: git diff --exit-code
