@@ -1,0 +1,39 @@
+name: TEMP P1 held scope diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-held-scope-diagnostic.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print held source records and canonical dependencies
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ids = ['WSSRC-REG2-005','WSSRC-REG-005','WSSRC-INT-021','WSSRC-FIS-023']
+          src = json.loads(Path('data/sources/registry.json').read_text())
+          can = json.loads(Path('data/canonical/registry.json').read_text())
+          print('=== SOURCE RECORDS ===')
+          for sid in ids:
+              row = next((x for x in src.get('sources',[]) if x.get('source_id') == sid), None)
+              print('SOURCE', sid)
+              print(json.dumps(row, ensure_ascii=False, indent=2, sort_keys=True))
+          print('=== CANONICAL OCCURRENCES ===')
+          seen=set()
+          def walk(x):
+              if isinstance(x, dict):
+                  oid=x.get('occurrence_id')
+                  if oid and oid not in seen and any(sid in json.dumps(x, ensure_ascii=False) for sid in ids):
+                      seen.add(oid)
+                      print('OCCURRENCE', oid)
+                      print(json.dumps(x, ensure_ascii=False, indent=2, sort_keys=True))
+                  for v in x.values(): walk(v)
+              elif isinstance(x, list):
+                  for v in x: walk(v)
+          walk(can)
+          PY
