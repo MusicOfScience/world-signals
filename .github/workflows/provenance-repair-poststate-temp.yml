@@ -1,0 +1,29 @@
+name: TEMP provenance repair post-state tests
+
+on:
+  push:
+    branches:
+      - provenance-scope-repair-research
+
+permissions:
+  contents: read
+
+jobs:
+  poststate:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Pre-repair read-only guard
+        run: python scripts/apply_provenance_scope_repair_a.py
+      - name: Materialise repaired post-state in ephemeral working tree
+        env:
+          WORLD_SIGNALS_ALLOW_PROVENANCE_REPAIR_A_APPLY: YES
+        run: python scripts/apply_provenance_scope_repair_a.py --apply
+      - name: Validate repaired registry
+        run: python scripts/validate_registry.py
+      - name: Full suite against repaired post-state
+        run: python -m unittest discover -s tests -v
