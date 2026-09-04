@@ -27,7 +27,9 @@ jobs:
           Path('scripts/apply_source_governance_p1d.py').write_text(out,encoding='utf-8')
           PY
       - name: Verify only migration script created
-        run: test "$(git diff --name-only)" = "scripts/apply_source_governance_p1d.py"
+        run: |
+          test -f scripts/apply_source_governance_p1d.py
+          test "$(git status --porcelain --untracked-files=all | sed 's/^?? //' | sed 's/^...//' | sort)" = "scripts/apply_source_governance_p1d.py"
       - name: Compile new migration
         run: python -m py_compile scripts/apply_source_governance_p1d.py
       - name: Commit migration scaffold
