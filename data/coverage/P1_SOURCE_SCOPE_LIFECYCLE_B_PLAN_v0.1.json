@@ -189,7 +189,7 @@
         "time_status": "PROVISIONAL",
         "time_basis": "EXPLICIT_AUTHORITATIVE_MONTH",
         "render_policy": "INCLUDE_WITH_TBC_MARKER",
-        "schedule_authority_scope": "HOST_FORECAST_MONTH",
+        "schedule_authority_scope": "EVENT_SPECIFIC",
         "notes": "Singapore MFA's current 2027 high-level-meeting forecast places the 50th ASEAN Summit in May 2027 with an estimated five-day duration. The month is authoritative forecast evidence; no exact start/end dates are inferred from duration or older logistics windows.",
         "last_verified_at": "2026-09-05"
       },
@@ -205,7 +205,7 @@
         "time_status": "PROVISIONAL",
         "time_basis": "EXPLICIT_AUTHORITATIVE_MONTH",
         "render_policy": "INCLUDE_WITH_TBC_MARKER",
-        "schedule_authority_scope": "HOST_FORECAST_MONTH",
+        "schedule_authority_scope": "EVENT_SPECIFIC",
         "notes": "Singapore MFA's current 2027 high-level-meeting forecast places the 51st ASEAN Summit and Related Summits in November 2027 with an estimated six-day duration. The month is authoritative forecast evidence; no exact start/end dates are inferred from duration or older logistics windows.",
         "last_verified_at": "2026-09-05"
       },
