@@ -22,4 +22,5 @@ jobs:
       - run: node --check web/app.js
       - run: node --check web/history.js
       - run: node --check web/operations.js
+      - run: node --check web/biosecurity.js
       - run: python scripts/build_site.py

@@ -30,6 +30,7 @@ jobs:
       - run: node --check web/app.js
       - run: node --check web/history.js
       - run: node --check web/operations.js
+      - run: node --check web/biosecurity.js
       - name: Build browser-safe latest monitor snapshot
         env:
           GITHUB_TOKEN: ${{ github.token }}
