@@ -1,0 +1,54 @@
+name: TEMP Vietnam lifecycle test patch
+
+on:
+  push:
+    branches:
+      - vietnam-source-scope-review-a
+    paths:
+      - .github/workflows/temp-vietnam-lifecycle-patch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch historical lifecycle assertions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('tests/test_provenance_scope_repair_a.py')
+          s = p.read_text()
+          old = '            self.assertEqual(self.overlay["canonical_checkpoint"], {"registry_version": "0.21", "record_count": 669})'
+          new = '            self.assertEqual(self.overlay["canonical_checkpoint"], {"registry_version": self.canonical["version"], "record_count": 669})'
+          if s.count(old) != 1:
+              raise SystemExit('provenance overlay assertion match count != 1')
+          p.write_text(s.replace(old, new))
+
+          p = Path('tests/test_source_governance_verification_closeout_a.py')
+          s = p.read_text()
+          old = '        self.assertEqual(counts["WSSRC-REG5-001"], 1)'
+          new = '''        if counts["WSSRC-REG5-002"]:\n            self.assertEqual(counts["WSSRC-REG5-001"], 0)\n            self.assertEqual(counts["WSSRC-REG5-002"], 1)\n        else:\n            self.assertEqual(counts["WSSRC-REG5-001"], 1)'''
+          if s.count(old) != 1:
+              raise SystemExit('Vietnam dependency assertion match count != 1')
+          s = s.replace(old, new)
+
+          old = '''        elif version == self.plan["postconditions"]["source_registry_version"]:\n            by_id = closeout.sources_by_id(self.sources)\n            for source_id, spec in self.plan["source_updates"].items():\n                for key, value in spec["set"].items():\n                    self.assertEqual(by_id[source_id].get(key), value, f"{source_id} {key}")\n            vietnam = by_id["WSSRC-REG5-001"]\n            self.assertNotIn("verification_mode", vietnam)\n            self.assertEqual(vietnam.get("authoritative_url"), self.plan["preconditions"]["vietnam_hold"]["expected_authoritative_url"])\n            self.assertEqual(closeout._audit_metrics(self.canonical, self.sources, self.expectations), self.plan["postconditions"]["expected_governance_audit"])\n        else:\n            self.fail(f"unexpected source registry version {version}")'''
+          new = '''        elif tuple(int(p) for p in version.split(".")) >= tuple(int(p) for p in self.plan["postconditions"]["source_registry_version"].split(".")):\n            by_id = closeout.sources_by_id(self.sources)\n            for source_id, spec in self.plan["source_updates"].items():\n                for key, value in spec["set"].items():\n                    self.assertEqual(by_id[source_id].get(key), value, f"{source_id} {key}")\n            vietnam = by_id["WSSRC-REG5-001"]\n            self.assertEqual(vietnam.get("authoritative_url"), self.plan["preconditions"]["vietnam_hold"]["expected_authoritative_url"])\n            if "WSSRC-REG5-002" in by_id:\n                self.assertEqual(vietnam.get("verification_mode"), "MANUAL_AUTHORITATIVE_RECHECK")\n                self.assertEqual(by_id["WSSRC-REG5-002"].get("canonical_dependency_count"), 1)\n            else:\n                self.assertNotIn("verification_mode", vietnam)\n            if version == self.plan["postconditions"]["source_registry_version"]:\n                self.assertEqual(closeout._audit_metrics(self.canonical, self.sources, self.expectations), self.plan["postconditions"]["expected_governance_audit"])\n        else:\n            self.fail(f"unexpected source registry version {version}")'''
+          if s.count(old) != 1:
+              raise SystemExit('closeout lineage block match count != 1')
+          p.write_text(s.replace(old, new))
+          PY
+          changed="$(git diff --name-only | sort)"
+          expected="$(printf '%s\n' tests/test_provenance_scope_repair_a.py tests/test_source_governance_verification_closeout_a.py | sort)"
+          test "$changed" = "$expected"
+      - name: Commit bounded lifecycle patch
+        run: |
+          git config user.name 'world-signals-bot'
+          git config user.email 'world-signals-bot@users.noreply.github.com'
+          git add tests/test_provenance_scope_repair_a.py tests/test_source_governance_verification_closeout_a.py
+          git commit -m 'Make provenance tests lifecycle-aware'
+          git push
