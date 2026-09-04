@@ -1,0 +1,35 @@
+name: TEMP legal-basis examples
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-legal-basis-examples.yml'
+permissions:
+  contents: read
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print legal basis examples and source namespace
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          out=[]
+          def walk(x):
+              if isinstance(x,dict):
+                  if x.get('occurrence_id') and x.get('legal_basis_source_id'):
+                      out.append(x)
+                  for v in x.values(): walk(v)
+              elif isinstance(x,list):
+                  for v in x: walk(v)
+          walk(can)
+          print('LEGAL_BASIS_COUNT',len(out))
+          for x in out[:20]:
+              print(json.dumps({k:x.get(k) for k in ['occurrence_id','canonical_name','source_id','legal_basis_source_id','governing_instrument','record_class','start_local','certainty_status']},ensure_ascii=False))
+          for prefix in ['WSSRC-REG-','WSSRC-REG2-','WSSRC-FIS-']:
+              ids=sorted([x.get('source_id') for x in src.get('sources',[]) if str(x.get('source_id','')).startswith(prefix)])
+              print(prefix, ids)
+          PY
