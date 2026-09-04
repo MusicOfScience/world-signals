@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-05",
-  "version": "1.62",
+  "version": "1.63",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -8323,7 +8323,10 @@
       "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
       "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
-      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_PENDING_ENDPOINT_REVIEW"
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_PENDING_ENDPOINT_REVIEW",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The Government Electronic Newspaper remains an official attributed secondary report of the preliminary Second Session programme, but direct National Assembly portal evidence is now the primary canonical provenance. Retain this source for manual corroboration; automated endpoint use remains separately unresolved."
     },
     {
       "source_id": "WSSRC-REG6-001",
@@ -8908,6 +8911,53 @@
       "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
       "governance_backfill_reviewed_at": "2026-09-04",
       "governance_backfill_basis": "Constitution art. 82, as amended by EC 111/2021, directly establishes 5 January as presidential mandate commencement in the year after election. Portal da Legislação reuse terms permit factual reuse, while automated retrieval remains separately unreviewed."
+    },
+    {
+      "source_id": "WSSRC-REG5-002",
+      "institution": "National Assembly of Vietnam / National Assembly Electronic Portal",
+      "jurisdiction": "Vietnam",
+      "domain": "elections_governance",
+      "endpoint_role": "Direct National Assembly reporting of Second Session programme and opening date",
+      "authoritative_url": "https://quochoi.vn/tintuc/Pages/tin-hoat-dong-cua-quoc-hoi.aspx?ItemID=99777",
+      "source_type": "official_legislative_portal_session_programme",
+      "information_supplied": "First-order National Assembly statement that the 16th National Assembly Second Session was expected to open on 20 October 2026, with preliminary two-block programme context",
+      "future_schedule_horizon": "current/next National Assembly regular session programme",
+      "typical_advance_notice": "months",
+      "machine_readable_available": "HTML",
+      "source_timezone": "Asia/Ho_Chi_Minh",
+      "recommended_verification_cadence": "weekly; daily in final 10 days; recheck when final session programme is issued",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_PORTAL_VERIFICATION",
+      "known_limitations": [
+        "The 11 May 2026 National Assembly article describes a preliminary/expected programme; certainty must remain PROVISIONAL until a later programme decision or convening notice confirms it.",
+        "No specific general reuse licence or automated retrieval grant for the National Assembly portal was identified in the 2026-09-05 review."
+      ],
+      "backup_source": "https://baochinhphu.vn/chuan-bi-ky-luong-tu-som-ky-hop-thu-2-quoc-hoi-khoa-xvi-102260511145333161.htm",
+      "notes": "Created solely to repair primary provenance for WSO-REG-G-0001; no new canonical occurrence or date change is authorised.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "licence_constraints": "NO_SPECIFIC_GENERAL_REUSE_OR_AUTOMATION_GRANT_IDENTIFIED_FOR_QUOCHOI_VN; MINIMAL_FACTUAL_METADATA_MANUAL_REFERENCE_ONLY",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "RIGHTS_AUDIT_REQUIRED_NO_GENERAL_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "PUBLIC_FACTUAL_METADATA_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
+      "rights_evidence_url": "https://quochoi.vn/",
+      "rights_summary": "The National Assembly Electronic Portal identifies the National Assembly of the Socialist Republic of Vietnam as its governing authority. No specific general reuse licence was identified in this review; WORLD SIGNALS therefore retains only minimal factual schedule metadata and the authoritative reference URL.",
+      "automation_summary": "Public accessibility and first-order authority do not establish crawler or production polling permission. Monitoring remains manual unless a specific authorised endpoint or permission is later established.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "VIETNAM_SOURCE_SCOPE_REPAIR_A_AUTHORITY_REUSE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
+      "monitoring_priority_score": 140,
+      "canonical_dependency_count": 1,
+      "monitoring_readiness_assessed_at": "2026-09-05",
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The National Assembly portal is the first-order institutional source for the provisional 20 October 2026 Second Session opening. Because no general reuse/automation grant was identified, the page is retained only as a manual authoritative factual reference; no production polling route is authorised."
     }
   ],
   "activation_backlog": [
