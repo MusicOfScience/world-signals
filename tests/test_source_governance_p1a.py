@@ -39,6 +39,20 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
         cls.canonical = json.loads(CANONICAL_PATH.read_text(encoding="utf-8"))
         cls.sources = json.loads(SOURCES_PATH.read_text(encoding="utf-8"))
         cls.expectations = json.loads(EXPECTATIONS_PATH.read_text(encoding="utf-8"))
+        cls.source_version = str(cls.sources.get("version"))
+        cls.pre_version = str(cls.plan["preconditions"]["source_registry_version"])
+        cls.post_version = str(cls.plan["postconditions"]["source_registry_version"])
+
+    def _assert_completed_source_state(self, source_registry: dict) -> None:
+        self.assertEqual(str(source_registry.get("version")), self.post_version)
+        self.assertEqual(len(source_registry.get("sources", [])), 223)
+        by_id = MIGRATION._sources_by_id(source_registry)
+        for source_id, spec in self.plan["source_updates"].items():
+            for field, value in spec["set"].items():
+                self.assertEqual(by_id[source_id].get(field), value)
+        held = by_id[HELD]
+        for field in self.plan["preconditions"]["required_missing_governance_fields"]:
+            self.assertIn(held.get(field), (None, ""))
 
     def test_plan_is_exactly_six_sources_and_excludes_tse(self):
         self.assertEqual(set(self.plan["source_updates"]), APPROVED)
@@ -96,38 +110,52 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
             self.assertEqual(row["automated_monitoring_use"], values[1])
             self.assertEqual(row["verification_mode"], values[2])
 
-    def test_repository_preflight_passes_at_verified_checkpoint(self):
-        MIGRATION.preflight(
-            self.canonical,
-            self.sources,
-            self.expectations,
-            self.plan,
-        )
+    def test_repository_state_is_valid_before_or_after_transaction(self):
+        self.assertIn(self.source_version, {self.pre_version, self.post_version})
+        if self.source_version == self.pre_version:
+            MIGRATION.preflight(
+                self.canonical,
+                self.sources,
+                self.expectations,
+                self.plan,
+            )
+        else:
+            self._assert_completed_source_state(self.sources)
+            with self.assertRaises(SystemExit):
+                MIGRATION.preflight(
+                    self.canonical,
+                    self.sources,
+                    self.expectations,
+                    self.plan,
+                )
 
-    def test_simulated_post_state_changes_only_six_source_records(self):
+    def test_transition_or_completed_state_preserves_exact_six_source_scope(self):
         canonical_before = copy.deepcopy(self.canonical)
-        sources_before = copy.deepcopy(self.sources)
         expectations_before = copy.deepcopy(self.expectations)
         held_before = copy.deepcopy(MIGRATION._sources_by_id(self.sources)[HELD])
 
-        post_sources, report = MIGRATION.build_post_state(
-            self.canonical,
-            self.sources,
-            self.expectations,
-            self.plan,
-        )
+        if self.source_version == self.pre_version:
+            sources_before = copy.deepcopy(self.sources)
+            post_sources, report = MIGRATION.build_post_state(
+                self.canonical,
+                self.sources,
+                self.expectations,
+                self.plan,
+            )
+            self.assertEqual(self.sources, sources_before)
+            self.assertEqual(set(report["changed_source_ids"]), APPROVED)
+            self._assert_completed_source_state(post_sources)
+            self.assertEqual(MIGRATION._sources_by_id(post_sources)[HELD], held_before)
+            self.assertTrue(report["held_source_unchanged"])
+            self.assertEqual(report["brazil_inauguration_start_local"], "2027-01-05")
+            self.assertFalse(report["automatic_canonical_commit"])
+            self.assertFalse(report["google_calendar_write"])
+        else:
+            self._assert_completed_source_state(self.sources)
 
         self.assertEqual(self.canonical, canonical_before)
-        self.assertEqual(self.sources, sources_before)
         self.assertEqual(self.expectations, expectations_before)
-        self.assertEqual(set(report["changed_source_ids"]), APPROVED)
-        self.assertEqual(post_sources["version"], "1.53")
-        self.assertEqual(len(post_sources["sources"]), 223)
-        self.assertEqual(MIGRATION._sources_by_id(post_sources)[HELD], held_before)
-        self.assertTrue(report["held_source_unchanged"])
-        self.assertEqual(report["brazil_inauguration_start_local"], "2027-01-05")
-        self.assertFalse(report["automatic_canonical_commit"])
-        self.assertFalse(report["google_calendar_write"])
+        self.assertEqual(MIGRATION._sources_by_id(self.sources)[HELD], held_before)
 
     def test_brazil_inauguration_guard_is_exact_and_constitutional_date_is_preserved(self):
         guard = self.plan["preconditions"]["brazil_inauguration_guard"]
@@ -152,7 +180,7 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
         self.assertIn("--apply", result.stdout)
         self.assertIn(MIGRATION.APPLY_ENV, result.stdout)
 
-    def test_default_cli_is_read_only(self):
+    def test_default_cli_is_read_only_or_blocks_replay_after_completion(self):
         before = SOURCES_PATH.read_bytes()
         result = subprocess.run(
             [sys.executable, str(MODULE_PATH)],
@@ -162,13 +190,18 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
             check=False,
         )
         after = SOURCES_PATH.read_bytes()
-        self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(after, before)
-        report = json.loads(result.stdout)
-        self.assertEqual(report["mode"], "READ_ONLY_PREFLIGHT")
-        self.assertEqual(set(report["changed_source_ids"]), APPROVED)
 
-    def test_apply_fails_closed_without_explicit_environment_gate(self):
+        if self.source_version == self.pre_version:
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            self.assertEqual(report["mode"], "READ_ONLY_PREFLIGHT")
+            self.assertEqual(set(report["changed_source_ids"]), APPROVED)
+        else:
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("P1-A GOVERNANCE PRECONDITION FAILED", result.stderr + result.stdout)
+
+    def test_apply_without_environment_gate_never_writes(self):
         before = SOURCES_PATH.read_bytes()
         env = dict(os.environ)
         env.pop(MIGRATION.APPLY_ENV, None)
@@ -182,8 +215,12 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
         )
         after = SOURCES_PATH.read_bytes()
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("P1-A APPLY REFUSED", result.stderr + result.stdout)
         self.assertEqual(after, before)
+        combined = result.stderr + result.stdout
+        if self.source_version == self.pre_version:
+            self.assertIn("P1-A APPLY REFUSED", combined)
+        else:
+            self.assertIn("P1-A GOVERNANCE PRECONDITION FAILED", combined)
 
 
 if __name__ == "__main__":
