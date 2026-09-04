@@ -7,9 +7,9 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 
 ## Current source of truth
 
-- **Canonical occurrence registry:** v0.21 — **669 occurrences**.
-- **Tier-1 source registry:** v1.62 — **224 sources**.
-- **Reviewed change ledger:** v0.10.
+- **Canonical occurrence registry:** v0.22 — **669 occurrences**.
+- **Tier-1 source registry:** v1.63 — **225 sources**.
+- **Reviewed change ledger:** v0.11.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -69,9 +69,9 @@ All configured **primary monitor sources now have explicit modern source-governa
 
 ### Latest observed post-contract evidence
 
-Run **57** / GitHub run id `33886954803`, recorded `2026-09-04T15:00:11.702848+00:00`, ran automatically after Provenance Scope Repair A merged on exact main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`:
+Run **59** / GitHub run id `33911315209`, recorded `2026-09-04T19:28:18.141283+00:00`, ran automatically after Vietnam Source-Scope Repair A merged on exact main commit `1c05406f810caebbb004ccad339d034a3aaa4cc0`:
 
-- configuration canonical **v0.21 / 669** / source **v1.61 / 224** / expectations **v0.7** / operations policy **v0.1**;
+- configuration canonical **v0.22 / 669** / source **v1.63 / 225** / expectations **v0.7** / operations policy **v0.1**;
 - **6 healthy / 0 degraded** source adapters;
 - all **6 expected adapters observed**, with no missing or unexpected adapters;
 - **0 review candidates**;
@@ -79,9 +79,13 @@ Run **57** / GitHub run id `33886954803`, recorded `2026-09-04T15:00:11.702848+0
 - canonical hash unchanged before/after;
 - automatic canonical commit **false**;
 - Google Calendar write **false**;
-- configuration fingerprint `f1f17a75b2525d2cae44a29e21b451074a08debf033281e4c879b936ca199c5a`.
+- configuration fingerprint `44f3e3cffd6b2596f2a396ca35790ef24e4df552abeb838f2322e4c0c3066ff4`.
 
-This is the first live-monitor observation on the repaired canonical/source checkpoint. It closes the post-repair configuration-alignment observation; no synthetic or replayed evidence was required. Pages deployment `33886992355` subsequently succeeded after run 57, so the public derived runtime could consume the aligned evidence.
+This is the first live-monitor observation on the Vietnam-repaired canonical/source checkpoint. It closes configuration alignment on v0.22/v1.63. The initial push-triggered Pages run `33911315259` was cancelled by concurrency when the monitor-completion deployment superseded it; successor Pages run `33911351490` completed successfully on the same main commit. This is normal workflow supersession, not a deployment incident.
+
+### Vietnam Source-Scope Repair A — COMPLETE
+
+`WSO-REG-G-0001` remains the same **PROVISIONAL** occurrence on **20 October 2026**. Canonical provenance now points to first-order National Assembly source `WSSRC-REG5-002`; Government Electronic Newspaper source `WSSRC-REG5-001` remains historical/secondary official evidence. No canonical timing field changed. Governance state after the repair is **67 fully explicit / 158 incomplete / 87 P1 / 71 P2**. Durable closeout: `data/coverage/VIETNAM_SOURCE_SCOPE_REPAIR_A_AUDIT_v0.1.md`.
 
 The review-state contract activated prospectively after run 47 and has now been exercised on genuine later evidence. Pages workflow-run deployment `33876115556` reduced **8 retained monitor runs** to **0 review items**, with **0 unsuccessful-run evidence gaps** and `horizon_complete=True`; runtime is `AVAILABLE_RETAINED_HORIZON(0)` at that retained checkpoint. The earlier observation gate is therefore CLOSED. Do not manufacture a candidate merely to test non-zero persistence; await natural future evidence.
 
