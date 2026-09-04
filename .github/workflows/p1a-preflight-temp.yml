@@ -1,0 +1,21 @@
+name: TEMP P1-A source-governance preflight
+
+on:
+  push:
+    branches: [source-governance-p1a-preflight]
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run guarded P1-A read-only preflight
+        run: python scripts/apply_source_governance_p1a.py
+      - name: Confirm clean working tree
+        run: git diff --exit-code && git status --porcelain=v1 | test -z "$(cat)"
