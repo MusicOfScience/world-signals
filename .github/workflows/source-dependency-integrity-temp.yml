@@ -1,0 +1,50 @@
+name: TEMP source dependency integrity diagnostic
+
+on:
+  push:
+    branches:
+      - source-governance-p1-selection-diagnostic
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Compare stored and derived source dependency counts
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          actual=Counter(r.get('source_id') for r in reg.get('records',[]) if r.get('source_id'))
+          mismatches=[]
+          absent=[]
+          for s in src.get('sources',[]):
+              sid=s.get('source_id')
+              derived=actual.get(sid,0)
+              if 'canonical_dependency_count' not in s:
+                  absent.append((sid,s.get('institution'),derived))
+                  continue
+              stored=s.get('canonical_dependency_count')
+              if stored != derived:
+                  mismatches.append((sid,s.get('institution'),stored,derived))
+          orphan=[(sid,count) for sid,count in actual.items() if sid not in {s.get('source_id') for s in src.get('sources',[])}]
+          print('SOURCE_COUNT',len(src.get('sources',[])))
+          print('CANONICAL_SOURCE_IDS',len(actual))
+          print('MISMATCH_COUNT',len(mismatches))
+          for row in sorted(mismatches): print('MISMATCH',json.dumps(row,ensure_ascii=False))
+          print('ABSENT_FIELD_COUNT',len(absent))
+          for row in sorted(absent): print('ABSENT',json.dumps(row,ensure_ascii=False))
+          print('ORPHAN_CANONICAL_SOURCE_IDS',len(orphan))
+          for row in sorted(orphan): print('ORPHAN',json.dumps(row,ensure_ascii=False))
+          PY
