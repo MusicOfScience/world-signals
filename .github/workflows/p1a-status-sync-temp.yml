@@ -20,53 +20,7 @@ jobs:
           python-version: '3.13'
       - name: Patch durable recovery checkpoint
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('PROJECT_STATUS.md')
-          s=p.read_text(encoding='utf-8')
-          replacements={
-            '- **Tier-1 source registry:** v1.52 — **223 sources**.':'- **Tier-1 source registry:** v1.53 — **223 sources**.',
-            'therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.52.':'therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.53.',
-            '**145 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.':'**139 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.',
-            '1. **Observe first genuine post-contract live-monitor run 48+** against source v1.52 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.':'1. **Observe first genuine post-contract live-monitor run 48+** against source v1.53 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.',
-            '3. **Source-governance P1 tranche design** — choose a small bounded set from the 145 canonical-dependent records using active analytical relevance/dependency, then perform source-specific rights research before any backfill.':'3. **Source-governance P1-B research** — select a small bounded set from the measured 139-record P1 queue using dependency + active analytical horizon + regional/institutional balance; perform direct source-specific rights/provenance research before freezing any backfill plan.'
-          }
-          for old,new in replacements.items():
-              if old not in s:
-                  raise SystemExit(f'missing expected status text: {old}')
-              s=s.replace(old,new,1)
-          marker='Durable record: `data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_AUDIT_v0.1.md`.\n\n## Held / unresolved nodes'
-          if marker not in s:
-              raise SystemExit('missing P0 durable-record insertion marker')
-          insert='''Durable record: `data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_AUDIT_v0.1.md`.
-
-### P1-A high-dependency tranche — COMPLETE
-
-P1-A backfilled explicit modern governance for exactly six canonical-dependent sources after direct source-specific research: China NBS (`WSSRC-MAC-007`), India MoSPI (`WSSRC-MAC-017`), U.S. EIA (`WSSRC-COM-003`), FAO (`WSSRC-COM-010`), WHO (`WSSRC-HEALTH-001`) and UNFCCC (`WSSRC-CLIM-001`). Factual-provenance fitness remained separate from automation permission throughout.
-
-Brazil TSE `WSSRC-EL-BR-001` was deliberately excluded: Resolution 23.760 was amended by Resolution 23.771, while the 5 January 2027 presidential inauguration is constitutionally grounded rather than properly evidenced by the electoral-calendar source relationship. No Brazilian canonical date changed.
-
-Read-only preflight run `33841251291` passed. An initial guarded apply run `33841284146` exposed a pre/post lifecycle-test defect and stopped before commit. After the lifecycle tests were repaired separately, guarded apply run `33842268368` passed all protections and committed only `data/sources/registry.json` (`bea051539ac92ada06043e6ddaa9322ae8ff53a7`). PR #3 merged as `6e25a024f964e070821910cac1148f10ca955e5c`.
-
-Independent post-P1-A audit run `33843249249` measured source **v1.53 / 223**:
-
-- **13** fully explicit governance sources;
-- **210** sources still missing at least one governance field;
-- **0 P0** configured-monitor dependencies;
-- **139 P1** canonical dependencies;
-- **71 P2** registry-only sources;
-- missing `canonical_provenance_use`: **200**;
-- missing `automated_monitoring_use`: **200**;
-- missing `verification_mode`: **210**.
-
-The next P1 research queue is led by Fed/FOMC and BoJ (44 canonical dependencies each), RBA (33), ECB (22), ONS (19) and SNB (18), but the next bounded tranche must also guard against mechanical U.S./European weighting by considering active horizon and regional/institutional balance. No next-tranche classification is authorised yet.
-
-Durable record: `data/coverage/SOURCE_GOVERNANCE_P1A_BACKFILL_AUDIT_v0.1.md`.
-
-## Held / unresolved nodes'''
-          s=s.replace(marker,insert,1)
-          p.write_text(s,encoding='utf-8')
-          PY
+          python -c "import base64; exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApwPVBhdGgoIlBST0pFQ1RfU1RBVFVTLm1kIikKcz1wLnJlYWRfdGV4dChlbmNvZGluZz0idXRmLTgiKQpyZXBsYWNlbWVudHM9ewoiLSAqKlRpZXItMSBzb3VyY2UgcmVnaXN0cnk6KiogdjEuNTIg4oCUICoqMjIzIHNvdXJjZXMqKi4iOiItICoqVGllci0xIHNvdXJjZSByZWdpc3RyeToqKiB2MS41MyDigJQgKioyMjMgc291cmNlcyoqLiIsCiJ0aGVyZWZvcmUgcHVibGljIHJ1bnRpbWUgcHJvamVjdGlvbiBjb3JyZWN0bHkgbGFiZWxzIGl0IHN0YWxlIHJlbGF0aXZlIHRvIGN1cnJlbnQgdjAuMjAgLyB2MS41Mi4iOiJ0aGVyZWZvcmUgcHVibGljIHJ1bnRpbWUgcHJvamVjdGlvbiBjb3JyZWN0bHkgbGFiZWxzIGl0IHN0YWxlIHJlbGF0aXZlIHRvIGN1cnJlbnQgdjAuMjAgLyB2MS41My4iLAoiKioxNDUgUDEgY2Fub25pY2FsLWRlcGVuZGVudCoqIGFuZCAqKjcxIFAyIHJlZ2lzdHJ5LW9ubHkqKiBzb3VyY2UgcmVjb3JkcyBzdGlsbCBuZWVkIGJvdW5kZWQsIGV2aWRlbmNlLXNwZWNpZmljIGdvdmVybmFuY2UgcmVzZWFyY2guIjoiKioxMzkgUDEgY2Fub25pY2FsLWRlcGVuZGVudCoqIGFuZCAqKjcxIFAyIHJlZ2lzdHJ5LW9ubHkqKiBzb3VyY2UgcmVjb3JkcyBzdGlsbCBuZWVkIGJvdW5kZWQsIGV2aWRlbmNlLXNwZWNpZmljIGdvdmVybmFuY2UgcmVzZWFyY2guIiwKIjEuICoqT2JzZXJ2ZSBmaXJzdCBnZW51aW5lIHBvc3QtY29udHJhY3QgbGl2ZS1tb25pdG9yIHJ1biA0OCsqKiBhZ2FpbnN0IHNvdXJjZSB2MS41MiAvIGV4cGVjdGF0aW9ucyB2MC43IGFuZCB2YWxpZGF0ZSByZXRhaW5lZC1yZXZpZXcgcmVkdWN0aW9uIGFnYWluc3QgcmVhbCBldmlkZW5jZTsgZG8gbm90IG1hbnVmYWN0dXJlIGEgY2FuZGlkYXRlLiI6IjEuICoqT2JzZXJ2ZSBmaXJzdCBnZW51aW5lIHBvc3QtY29udHJhY3QgbGl2ZS1tb25pdG9yIHJ1biA0OCsqKiBhZ2FpbnN0IHNvdXJjZSB2MS41MyAvIGV4cGVjdGF0aW9ucyB2MC43IGFuZCB2YWxpZGF0ZSByZXRhaW5lZC1yZXZpZXcgcmVkdWN0aW9uIGFnYWluc3QgcmVhbCBldmlkZW5jZTsgZG8gbm90IG1hbnVmYWN0dXJlIGEgY2FuZGlkYXRlLiIsCiIzLiAqKlNvdXJjZS1nb3Zlcm5hbmNlIFAxIHRyYW5jaGUgZGVzaWduKiog4oCUIGNob29zZSBhIHNtYWxsIGJvdW5kZWQgc2V0IGZyb20gdGhlIDE0NSBjYW5vbmljYWwtZGVwZW5kZW50IHJlY29yZHMgdXNpbmcgYWN0aXZlIGFuYWx5dGljYWwgcmVsZXZhbmNlL2RlcGVuZGVuY3ksIHRoZW4gcGVyZm9ybSBzb3VyY2Utc3BlY2lmaWMgcmlnaHRzIHJlc2VhcmNoIGJlZm9yZSBhbnkgYmFja2ZpbGwuIjoiMy4gKipTb3VyY2UtZ292ZXJuYW5jZSBQMS1CIHJlc2VhcmNoKiog4oCUIHNlbGVjdCBhIHNtYWxsIGJvdW5kZWQgc2V0IGZyb20gdGhlIG1lYXN1cmVkIDEzOS1yZWNvcmQgUDEgcXVldWUgdXNpbmcgZGVwZW5kZW5jeSArIGFjdGl2ZSBhbmFseXRpY2FsIGhvcml6b24gKyByZWdpb25hbC9pbnN0aXR1dGlvbmFsIGJhbGFuY2U7IHBlcmZvcm0gZGlyZWN0IHNvdXJjZS1zcGVjaWZpYyByaWdodHMvcHJvdmVuYW5jZSByZXNlYXJjaCBiZWZvcmUgZnJlZXppbmcgYW55IGJhY2tmaWxsIHBsYW4uIgp9CmZvciBvbGQsbmV3IGluIHJlcGxhY2VtZW50cy5pdGVtcygpOgogICAgaWYgb2xkIG5vdCBpbiBzOgogICAgICAgIHJhaXNlIFN5c3RlbUV4aXQoZiJtaXNzaW5nIGV4cGVjdGVkIHN0YXR1cyB0ZXh0OiB7b2xkfSIpCiAgICBzPXMucmVwbGFjZShvbGQsbmV3LDEpCm1hcmtlcj0iRHVyYWJsZSByZWNvcmQ6IGBkYXRhL2NvdmVyYWdlL1NPVVJDRV9HT1ZFUk5BTkNFX1AwX0JBQ0tGSUxMX0FVRElUX3YwLjEubWRgLlxuXG4jIyBIZWxkIC8gdW5yZXNvbHZlZCBub2RlcyIKaWYgbWFya2VyIG5vdCBpbiBzOgogICAgcmFpc2UgU3lzdGVtRXhpdCgibWlzc2luZyBQMCBkdXJhYmxlLXJlY29yZCBpbnNlcnRpb24gbWFya2VyIikKaW5zZXJ0PSIiIkR1cmFibGUgcmVjb3JkOiBgZGF0YS9jb3ZlcmFnZS9TT1VSQ0VfR09WRVJOQU5DRV9QMF9CQUNLRklMTF9BVURJVF92MC4xLm1kYC4KCiMjIyBQMS1BIGhpZ2gtZGVwZW5kZW5jeSB0cmFuY2hlIOKAlCBDT01QTEVURQoKUDEtQSBiYWNrZmlsbGVkIGV4cGxpY2l0IG1vZGVybiBnb3Zlcm5hbmNlIGZvciBleGFjdGx5IHNpeCBjYW5vbmljYWwtZGVwZW5kZW50IHNvdXJjZXMgYWZ0ZXIgZGlyZWN0IHNvdXJjZS1zcGVjaWZpYyByZXNlYXJjaDogQ2hpbmEgTkJTIChgV1NTUkMtTUFDLTAwN2ApLCBJbmRpYSBNb1NQSSAoYFdTU1JDLU1BQy0wMTdgKSwgVS5TLiBFSUEgKGBXU1NSQy1DT00tMDAzYCksIEZBTyAoYFdTU1JDLUNPTS0wMTBgKSwgV0hPIChgV1NTUkMtSEVBTFRILTAwMWApIGFuZCBVTkZDQ0MgKGBXU1NSQy1DTElNLTAwMWApLiBGYWN0dWFsLXByb3ZlbmFuY2UgZml0bmVzcyByZW1haW5lZCBzZXBhcmF0ZSBmcm9tIGF1dG9tYXRpb24gcGVybWlzc2lvbiB0aHJvdWdob3V0LgoKQnJhemlsIFRTRSBgV1NTUkMtRUwtQlItMDAxYCB3YXMgZGVsaWJlcmF0ZWx5IGV4Y2x1ZGVkOiBSZXNvbHV0aW9uIDIzLjc2MCB3YXMgYW1lbmRlZCBieSBSZXNvbHV0aW9uIDIzLjc3MSwgd2hpbGUgdGhlIDUgSmFudWFyeSAyMDI3IHByZXNpZGVudGlhbCBpbmF1Z3VyYXRpb24gaXMgY29uc3RpdHV0aW9uYWxseSBncm91bmRlZCByYXRoZXIgdGhhbiBwcm9wZXJseSBldmlkZW5jZWQgYnkgdGhlIGVsZWN0b3JhbC1jYWxlbmRhciBzb3VyY2UgcmVsYXRpb25zaGlwLiBObyBCcmF6aWxpYW4gY2Fub25pY2FsIGRhdGUgY2hhbmdlZC4KClJlYWQtb25seSBwcmVmbGlnaHQgcnVuIGAzMzg0MTI1MTI5MWAgcGFzc2VkLiBBbiBpbml0aWFsIGd1YXJkZWQgYXBwbHkgcnVuIGAzMzg0MTI4NDE0NmAgZXhwb3NlZCBhIHByZS9wb3N0IGxpZmVjeWNsZS10ZXN0IGRlZmVjdCBhbmQgc3RvcHBlZCBiZWZvcmUgY29tbWl0LiBBZnRlciB0aGUgbGlmZWN5Y2xlIHRlc3RzIHdlcmUgcmVwYWlyZWQgc2VwYXJhdGVseSwgZ3VhcmRlZCBhcHBseSBydW4gYDMzODQyMjY4MzY4YCBwYXNzZWQgYWxsIHByb3RlY3Rpb25zIGFuZCBjb21taXR0ZWQgb25seSBgZGF0YS9zb3VyY2VzL3JlZ2lzdHJ5Lmpzb25gIChgYmVhMDUxNTM5YWM5MmFkYTA2MDQzZTZkZGFhOTMyMmFlOGZmNTNhN2ApLiBQUiAjMyBtZXJnZWQgYXMgYDZlMjVhMDI0Zjk2NGUwNzA4MjE5MTBjYWMxMTQ4ZjEwY2E5NTVlNWNgLgoKSW5kZXBlbmRlbnQgcG9zdC1QMS1BIGF1ZGl0IHJ1biBgMzM4NDMyNDkyNDlgIG1lYXN1cmVkIHNvdXJjZSAqKnYxLjUzIC8gMjIzKio6CgotICoqMTMqKiBmdWxseSBleHBsaWNpdCBnb3Zlcm5hbmNlIHNvdXJjZXM7Ci0gKioyMTAqKiBzb3VyY2VzIHN0aWxsIG1pc3NpbmcgYXQgbGVhc3Qgb25lIGdvdmVybmFuY2UgZmllbGQ7Ci0gKiowIFAwKiogY29uZmlndXJlZC1tb25pdG9yIGRlcGVuZGVuY2llczsKLSAqKjEzOSBQMSoqIGNhbm9uaWNhbCBkZXBlbmRlbmNpZXM7Ci0gKio3MSBQMioqIHJlZ2lzdHJ5LW9ubHkgc291cmNlczsKLSBtaXNzaW5nIGBjYW5vbmljYWxfcHJvdmVuYW5jZV91c2VgOiAqKjIwMCoqOwotIG1pc3NpbmcgYGF1dG9tYXRlZF9tb25pdG9yaW5nX3VzZWA6ICoqMjAwKio7Ci0gbWlzc2luZyBgdmVyaWZpY2F0aW9uX21vZGVgOiAqKjIxMCoqLgoKVGhlIG5leHQgUDEgcmVzZWFyY2ggcXVldWUgaXMgbGVkIGJ5IEZlZC9GT01DIGFuZCBCb0ogKDQ0IGNhbm9uaWNhbCBkZXBlbmRlbmNpZXMgZWFjaCksIFJCQSAoMzMpLCBFQ0IgKDIyKSwgT05TICgxOSkgYW5kIFNOQiAoMTgpLCBidXQgdGhlIG5leHQgYm91bmRlZCB0cmFuY2hlIG11c3QgYWxzbyBndWFyZCBhZ2FpbnN0IG1lY2hhbmljYWwgVS5TLi9FdXJvcGVhbiB3ZWlnaHRpbmcgYnkgY29uc2lkZXJpbmcgYWN0aXZlIGhvcml6b24gYW5kIHJlZ2lvbmFsL2luc3RpdHV0aW9uYWwgYmFsYW5jZS4gTm8gbmV4dC10cmFuY2hlIGNsYXNzaWZpY2F0aW9uIGlzIGF1dGhvcmlzZWQgeWV0LgoKRHVyYWJsZSByZWNvcmQ6IGBkYXRhL2NvdmVyYWdlL1NPVVJDRV9HT1ZFUk5BTkNFX1AxQV9CQUNLRklMTF9BVURJVF92MC4xLm1kYC4KCiMjIEhlbGQgLyB1bnJlc29sdmVkIG5vZGVzIiIiCnM9cy5yZXBsYWNlKG1hcmtlcixpbnNlcnQsMSkKcC53cml0ZV90ZXh0KHMsZW5jb2Rpbmc9InV0Zi04IikK'))"
       - name: Verify documentation-only diff
         run: |
           test "$(git diff --name-only)" = "PROJECT_STATUS.md"
