@@ -1,0 +1,213 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "PROVENANCE_SCOPE_REPAIR_A",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Repair the two standing Brazil TSE and SNB source-scope defects before any further ordinary source-governance tranche.",
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.60",
+    "source_count": 223,
+    "change_ledger_version": "0.9",
+    "monitor_expectations_version": "0.7",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "required_absent_source_ids": [
+      "WSSRC-EL-BR-002"
+    ],
+    "brazil_tse": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_authoritative_url": "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-760-de-2-de-marco-de-2026",
+      "expected_canonical_dependency_count": 4
+    },
+    "brazil_inauguration": {
+      "occurrence_id": "WSO-EL-A-0004",
+      "series_id": "WSER-EL-BR-GEN",
+      "expected_source_id": "WSSRC-EL-BR-001",
+      "expected_institution": "Tribunal Superior Eleitoral",
+      "expected_election_date_basis": "EXPLICIT_ELECTORAL_AUTHORITY_SCHEDULE",
+      "expected_start_local": "2027-01-05",
+      "expected_primary_source_assertion_id": "WSA-024b7ec125f413d8",
+      "expected_last_successful_assertion_id": "WSA-024b7ec125f413d8"
+    },
+    "snb": {
+      "source_id": "WSSRC-CB-009",
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "expected_canonical_dependency_count": 18
+    }
+  },
+  "canonical_update": {
+    "occurrence_id": "WSO-EL-A-0004",
+    "set": {
+      "source_id": "WSSRC-EL-BR-002",
+      "institution": "Presidency of the Republic of Brazil",
+      "election_date_basis": "CONSTITUTIONAL_RULE_DERIVED",
+      "primary_source_assertion_id": "WSA-66b042250a27801e",
+      "last_successful_assertion_id": "WSA-66b042250a27801e",
+      "last_verified_at": "2026-09-04"
+    },
+    "must_preserve": {
+      "series_id": "WSER-EL-BR-GEN",
+      "start_local": "2027-01-05",
+      "timing_type": "CIVIL_DATE",
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "certainty_status": "CONFIRMED",
+      "lifecycle_status": "PLANNED",
+      "activation_mode": "CONDITIONAL",
+      "condition_state": "PENDING_DEPENDENCY",
+      "result_dependency_occurrence_id": "WSO-EL-A-0001",
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "election_process_id": "WSEP-BR-2026"
+    }
+  },
+  "source_updates": {
+    "WSSRC-EL-BR-001": {
+      "expected": {
+        "institution": "Tribunal Superior Eleitoral",
+        "endpoint_role": "2026 electoral calendar resolution",
+        "authoritative_url": "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-760-de-2-de-marco-de-2026",
+        "canonical_dependency_count": 4
+      },
+      "set": {
+        "canonical_dependency_count": 3,
+        "licence_constraints": "BRAZIL_COPYRIGHT_LAW_ART_8_OFFICIAL_ACTS_AND_COMMON_USE_CALENDAR_FACTS_EXCLUDED_FROM_COPYRIGHT; AUTOMATION_SEPARATE",
+        "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+        "licence_review_status": "CLEARED_OFFICIAL_ACTS_FACTUAL_METADATA",
+        "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+        "redistribution_permission": "OFFICIAL_ACTS_AND_COMMON_USE_FACTS_REUSABLE; SOURCE_ATTRIBUTION_PREFERRED",
+        "rights_evidence_url": "https://www.planalto.gov.br/ccivil_03/leis/l9610.htm",
+        "rights_summary": "Brazil Copyright Law 9.610/1998 art. 8 excludes official acts such as regulations and common-use information such as calendars/agendas from copyright protection.",
+        "automation_summary": "Copyright status of official electoral-calendar facts does not itself establish unrestricted automated access to the TSE website; endpoint review remains required.",
+        "rights_reviewed_at": "2026-09-04",
+        "rights_review_scope": "PROVENANCE_SCOPE_REPAIR_A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
+        "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+        "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+        "monitoring_readiness_assessed_at": "2026-09-04",
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "TSE Resolution 23.760, as amended for the 2026 cycle, is the proper electoral-calendar provenance for first-round, conditional second-round and diplomation-deadline facts. Brazil Copyright Law art. 8 supports curated factual reuse of official acts/common-use calendar information; automated website retrieval remains a separate endpoint review."
+      }
+    },
+    "WSSRC-CB-009": {
+      "expected": {
+        "institution": "Swiss National Bank",
+        "authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+        "canonical_dependency_count": 18
+      },
+      "set": {
+        "endpoint_role": "Forward event schedule — monetary policy assessments, news conferences and summaries",
+        "authoritative_url": "https://www.snb.ch/en/services-events/digital-services/event-schedule",
+        "information_supplied": "Exact forward publication dates/times for monetary policy assessment press releases, associated news conferences and summaries of monetary policy discussion",
+        "future_schedule_horizon": "through 13 January 2028 verified",
+        "backup_source": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+        "known_limitations": [
+          "Dedicated event schedule is the forward timing authority; the decisions page is supporting context/history rather than the forward schedule.",
+          "SNB cadence and publication model is not Fed-like; assessment press release, news conference and later summary remain distinct linked series."
+        ],
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "The SNB dedicated event schedule directly supports all 18 existing forward assessment/news-conference/summary occurrences through 13 January 2028. SNB non-commercial factual reuse terms support curated provenance, but automated access is not expressly granted and remains endpoint-review-required."
+      }
+    }
+  },
+  "new_sources": [
+    {
+      "source_id": "WSSRC-EL-BR-002",
+      "institution": "Presidency of the Republic / Portal da Legislação",
+      "jurisdiction": "Brazil",
+      "domain": "elections",
+      "endpoint_role": "Constitution art. 82 presidential term commencement rule",
+      "authoritative_url": "https://www4.planalto.gov.br/legislacao/portal-legis/legislacao-1/constituicao",
+      "source_type": "official_constitutional_text",
+      "information_supplied": "Constitutional rule that the four-year presidential mandate begins on 5 January in the year following the election",
+      "future_schedule_horizon": "recurring constitutional rule",
+      "typical_advance_notice": "standing constitutional rule",
+      "machine_readable_available": "HTML",
+      "source_timezone": "America/Sao_Paulo",
+      "recommended_verification_cadence": "manual annual/current-law recheck around election-cycle population and after constitutional amendment",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "HTML",
+      "known_limitations": [
+        "Portal da Legislação content is informational and does not replace Diário Oficial da União publication; verify constitutional amendments through authoritative legal text.",
+        "Article 82 establishes the mandate commencement rule; it is not an electoral-administration schedule and must remain distinct from TSE calendar milestones."
+      ],
+      "backup_source": "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc111.htm",
+      "notes": "Created solely to repair the provenance of WSO-EL-A-0004; no new canonical occurrence is authorised.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+      "licence_constraints": "PORTARIA_130_2021_FREE_REUSE_WITH_SOURCE_ATTRIBUTION_FOR_DERIVATIVE_USE; OFFICIAL_LEGAL_ACTS_NOT_COPYRIGHT_PROTECTED",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "CLEARED_REUSE_WITH_ATTRIBUTION",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "ALLOWED_WITH_OR_WITHOUT_PROFIT_SUBJECT_TO_PORTAL_SOURCE_ATTRIBUTION_AND_INFORMATIONAL_STATUS_CAVEAT",
+      "rights_evidence_url": "https://www4.planalto.gov.br/legislacao/servicos/pesquisa-de-legislacao",
+      "rights_summary": "Portaria 130/2021 permits Portal da Legislação content to be used, reproduced and shared with or without profit; derivative use requires source information and the portal is informational rather than a substitute for Diário Oficial da União.",
+      "automation_summary": "Content-reuse permission does not itself establish unrestricted automated retrieval behaviour; endpoint review remains required.",
+      "rights_reviewed_at": "2026-09-04",
+      "rights_review_scope": "PROVENANCE_SCOPE_REPAIR_A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+      "monitoring_priority_score": 300,
+      "canonical_dependency_count": 1,
+      "monitoring_readiness_assessed_at": "2026-09-04",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Constitution art. 82, as amended by EC 111/2021, directly establishes 5 January as presidential mandate commencement in the year after election. Portal da Legislação reuse terms permit factual reuse, while automated retrieval remains separately unreviewed."
+    }
+  ],
+  "change_ledger_entry": {
+    "change_id": "WSCHANGE-cd76320ef1531227e2",
+    "occurrence_id": "WSO-EL-A-0004",
+    "change_type": "PROVENANCE_SCOPE_REPAIR",
+    "old_values": {
+      "source_id": "WSSRC-EL-BR-001",
+      "institution": "Tribunal Superior Eleitoral",
+      "election_date_basis": "EXPLICIT_ELECTORAL_AUTHORITY_SCHEDULE",
+      "primary_source_assertion_id": "WSA-024b7ec125f413d8",
+      "last_successful_assertion_id": "WSA-024b7ec125f413d8"
+    },
+    "new_values": {
+      "source_id": "WSSRC-EL-BR-002",
+      "institution": "Presidency of the Republic of Brazil",
+      "election_date_basis": "CONSTITUTIONAL_RULE_DERIVED",
+      "primary_source_assertion_id": "WSA-66b042250a27801e",
+      "last_successful_assertion_id": "WSA-66b042250a27801e"
+    },
+    "source_assertion_id": "WSA-66b042250a27801e",
+    "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+    "reviewed_at": "2026-09-05T00:08:00+10:00",
+    "review_basis": [
+      "TSE Resolution 23.760 is authoritative for the 2026 electoral calendar but does not establish the 5 January presidential term-start rule.",
+      "Brazil Constitution art. 82, as amended by Constitutional Amendment 111/2021, establishes that the presidential mandate begins on 5 January in the year following the election.",
+      "The canonical 5 January 2027 date and stable occurrence identity are unchanged; only provenance-semantic fields are corrected."
+    ],
+    "commit_mode": "REVIEWED_PROVENANCE_SCOPE_REPAIR",
+    "committed_at": "2026-09-05T00:08:00+10:00",
+    "registry_version_before": "0.20",
+    "registry_version_after": "0.21",
+    "canonical_mutation_committed": true
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.21",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.61",
+    "source_count": 224,
+    "change_ledger_version": "0.10",
+    "monitor_expectations_version": "0.7",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "brazil_tse_canonical_dependency_count": 3,
+    "brazil_constitution_canonical_dependency_count": 1,
+    "snb_canonical_dependency_count": 18,
+    "brazil_inauguration_start_local": "2027-01-05"
+  }
+}
