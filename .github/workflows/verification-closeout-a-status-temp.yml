@@ -1,0 +1,56 @@
+name: "TEMP Verification Closeout A status checkpoint"
+
+"on":
+  push:
+    branches:
+      - verification-closeout-a-checkpoint
+    paths:
+      - ".github/workflows/verification-closeout-a-status-temp.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - name: Patch project status fail-closed
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('PROJECT_STATUS.md')
+          text = p.read_text(encoding='utf-8')
+
+          old_top = '**Tier-1 source registry:** v1.61 — **224 sources**.'
+          new_top = '**Tier-1 source registry:** v1.62 — **224 sources**.'
+          if text.count(old_top) != 1:
+              raise SystemExit(f'expected exactly one old source-version line, found {text.count(old_top)}')
+          text = text.replace(old_top, new_top, 1)
+
+          marker = '## Exact next work\n'
+          if text.count(marker) != 1:
+              raise SystemExit(f'expected exactly one Exact next work marker, found {text.count(marker)}')
+
+          section = '''## Verification Closeout A — COMPLETE\n\nFresh post-repair selection rejected mechanical dependency-only ranking and identified exactly eight future-active P1 sources for which `verification_mode` was the sole missing modern governance field. Vietnam `WSSRC-REG5-001` was held out for source-scope review because direct National Assembly provenance is better scoped than the registered government-news source.\n\nSeven-source Verification Closeout A merged in PR #26 at signed main commit `849d4ef6a4b4814ec57235f08189e7a9eaf995c2`. Source registry advanced **v1.61 / 224 → v1.62 / 224**; canonical remains **v0.21 / 669**, ledger **v0.10**, expectations **v0.7**. APEC's one present stale dependency helper was corrected 0→1; there are now zero present `canonical_dependency_count` mismatches and eight legacy omissions remain deliberately unfilled.\n\nMeasured post-state governance audit: **65 fully explicit / 159 missing-any / 88 P1 / 71 P2**; missing provenance **156**, automation **156**, verification **159**.\n\nPost-merge live-monitor run **58** / `33908223252` observed exact canonical **v0.21** / source **v1.62** configuration with **6 healthy / 0 degraded**, all 6 expected adapters observed, **0 candidates**, `NO_CHANGE`, canonical unchanged, auto canonical false and Calendar false. Follow-on Pages deployment `33908266777` succeeded.\n\nDurable audit: `data/coverage/SOURCE_GOVERNANCE_VERIFICATION_CLOSEOUT_A_AUDIT_v0.1.md`.\n\n**Next integrity-led source-governance work:** Vietnam `WSSRC-REG5-001` source-scope review before ordinary selection from the remaining 88-P1 queue.\n\n'''
+          text = text.replace(marker, section + marker, 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' PROJECT_STATUS.md > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+      - name: Commit status checkpoint
+        shell: bash
+        run: |
+          git config user.name world-signals-checkpoint
+          git config user.email actions@users.noreply.github.com
+          git add PROJECT_STATUS.md
+          git diff --cached --name-only | sort > /tmp/staged
+          printf '%s\n' PROJECT_STATUS.md > /tmp/expected
+          diff -u /tmp/expected /tmp/staged
+          git commit -m 'Record Verification Closeout A checkpoint'
+          git push origin HEAD:verification-closeout-a-checkpoint
