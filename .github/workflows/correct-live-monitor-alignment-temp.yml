@@ -24,49 +24,49 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
           status = Path('PROJECT_STATUS.md')
           t = status.read_text(encoding='utf-8')
           a = t.index('### Latest observed post-contract evidence')
           b = t.index('\nThe review-state contract activated prospectively after run 47', a)
-          current = '''### Latest observed post-contract evidence
-
-Run **57** / GitHub run id `33886954803`, recorded `2026-09-04T15:00:11.702848+00:00`, ran automatically after Provenance Scope Repair A merged on exact main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`:
-
-- configuration canonical **v0.21 / 669** / source **v1.61 / 224** / expectations **v0.7** / operations policy **v0.1**;
-- **6 healthy / 0 degraded** source adapters;
-- all **6 expected adapters observed**, with no missing or unexpected adapters;
-- **0 review candidates**;
-- `NO_CHANGE`;
-- canonical hash unchanged before/after;
-- automatic canonical commit **false**;
-- Google Calendar write **false**;
-- configuration fingerprint `f1f17a75b2525d2cae44a29e21b451074a08debf033281e4c879b936ca199c5a`.
-
-This is the first live-monitor observation on the repaired canonical/source checkpoint. It closes the post-repair configuration-alignment observation; no synthetic or replayed evidence was required. Pages deployment `33886992355` subsequently succeeded after run 57, so the public derived runtime could consume the aligned evidence.
-'''
+          current = '\n'.join([
+              '### Latest observed post-contract evidence',
+              '',
+              'Run **57** / GitHub run id `33886954803`, recorded `2026-09-04T15:00:11.702848+00:00`, ran automatically after Provenance Scope Repair A merged on exact main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`:',
+              '',
+              '- configuration canonical **v0.21 / 669** / source **v1.61 / 224** / expectations **v0.7** / operations policy **v0.1**;',
+              '- **6 healthy / 0 degraded** source adapters;',
+              '- all **6 expected adapters observed**, with no missing or unexpected adapters;',
+              '- **0 review candidates**;',
+              '- `NO_CHANGE`;',
+              '- canonical hash unchanged before/after;',
+              '- automatic canonical commit **false**;',
+              '- Google Calendar write **false**;',
+              '- configuration fingerprint `f1f17a75b2525d2cae44a29e21b451074a08debf033281e4c879b936ca199c5a`.',
+              '',
+              'This is the first live-monitor observation on the repaired canonical/source checkpoint. It closes the post-repair configuration-alignment observation; no synthetic or replayed evidence was required. Pages deployment `33886992355` subsequently succeeded after run 57, so the public derived runtime could consume the aligned evidence.',
+              ''
+          ])
           t = t[:a] + current + t[b:]
-
           stale = '**Checkpoint note after Provenance Scope Repair A:** the latest retained live-monitor observation still predates canonical v0.21 / source v1.61. Merged-main CI and Pages are green, but runtime evidence must be treated as configuration-stale until the next genuine live-monitor run observes the repaired checkpoint. This is not an event-state failure and must not be rewritten as one.\n\n'
           if t.count(stale) != 1:
               raise SystemExit(f'stale checkpoint note count={t.count(stale)}')
           t = t.replace(stale, '')
-
           a = t.index('## Exact next work')
           b = t.index('\n## Recovery rule', a)
-          next_work = '''## Exact next work
-
-1. **Next P1 selection diagnostic** — reassess the remaining **95 P1** sources by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and analytical relevance. Do not mechanically invent a P1-I six-source conveyor belt.
-2. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
-3. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
-4. Re-run coverage audit after analytically justified canonical additions only.
-5. Continue **Live Intelligence v1** from aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
-6. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
-7. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
-'''
+          next_work = '\n'.join([
+              '## Exact next work',
+              '',
+              '1. **Next P1 selection diagnostic** — reassess the remaining **95 P1** sources by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and analytical relevance. Do not mechanically invent a P1-I six-source conveyor belt.',
+              '2. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.',
+              '3. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.',
+              '4. Re-run coverage audit after analytically justified canonical additions only.',
+              '5. Continue **Live Intelligence v1** from aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.',
+              '6. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.',
+              '7. Continue **Analysis v1** once the live-intelligence evidence contract is stable.',
+              ''
+          ])
           t = t[:a] + next_work + t[b:]
           status.write_text(t, encoding='utf-8')
-
           audit = Path('data/coverage/PROVENANCE_SCOPE_REPAIR_A_AUDIT_v0.1.md')
           u = audit.read_text(encoding='utf-8')
           old = '**Merged-main Pages:** `33886992355` — SUCCESS\n'
@@ -76,15 +76,17 @@ This is the first live-monitor observation on the repaired canonical/source chec
           marker = '## Measured source-governance queue after repair\n'
           if u.count(marker) != 1:
               raise SystemExit(f'audit marker count={u.count(marker)}')
-          live = '''## Post-repair live-monitor alignment
-
-The source-registry change in PR #22 matched the permanent live-monitor workflow's `push` path trigger, so the repair merge itself automatically produced a genuine post-repair observation rather than requiring a later scheduled or synthetic run.
-
-Live-monitor run **57** / GitHub run id `33886954803` executed on exact repaired main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be` and completed successfully. It recorded canonical **v0.21**, source **v1.61**, expectations **v0.7**, operations policy **v0.1**, **6 healthy / 0 degraded** adapters, all **6 expected adapters observed**, **0 review candidates**, `NO_CHANGE`, canonical hash unchanged, automatic canonical commit **false**, and Google Calendar write **false**.
-
-Pages deployment `33886992355` completed successfully after run 57. The post-repair live-monitor configuration-alignment observation is therefore **CLOSED**. The earlier checkpoint statement that runtime evidence still predated v0.21/v1.61 was a documentation error, not a monitor or event-state failure.
-
-'''
+          live = '\n'.join([
+              '## Post-repair live-monitor alignment',
+              '',
+              "The source-registry change in PR #22 matched the permanent live-monitor workflow's `push` path trigger, so the repair merge itself automatically produced a genuine post-repair observation rather than requiring a later scheduled or synthetic run.",
+              '',
+              'Live-monitor run **57** / GitHub run id `33886954803` executed on exact repaired main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be` and completed successfully. It recorded canonical **v0.21**, source **v1.61**, expectations **v0.7**, operations policy **v0.1**, **6 healthy / 0 degraded** adapters, all **6 expected adapters observed**, **0 review candidates**, `NO_CHANGE`, canonical hash unchanged, automatic canonical commit **false**, and Google Calendar write **false**.',
+              '',
+              'Pages deployment `33886992355` completed successfully after run 57. The post-repair live-monitor configuration-alignment observation is therefore **CLOSED**. The earlier checkpoint statement that runtime evidence still predated v0.21/v1.61 was a documentation error, not a monitor or event-state failure.',
+              '',
+              ''
+          ])
           u = u.replace(marker, live + marker)
           audit.write_text(u, encoding='utf-8')
           PY
