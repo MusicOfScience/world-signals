@@ -23,11 +23,15 @@ jobs:
         run: |
           git diff --name-only | sort > /tmp/actual
           printf '%s\n' PROJECT_STATUS.md data/coverage/PROVENANCE_SCOPE_REPAIR_A_RESEARCH_v0.1.md | sort > /tmp/expected
+          echo 'ACTUAL:'
+          cat /tmp/actual
+          echo 'EXPECTED:'
+          cat /tmp/expected
           diff -u /tmp/expected /tmp/actual
-          grep -q 'Tier-1 source registry:** v1.60' PROJECT_STATUS.md
-          grep -q 'P1-H geographically corrective / mixed-rights tranche — COMPLETE' PROJECT_STATUS.md
-          grep -q 'Provenance Scope Repair A transaction gate' PROJECT_STATUS.md
-          grep -q 'biosecurity_overlay.json' data/coverage/PROVENANCE_SCOPE_REPAIR_A_RESEARCH_v0.1.md
+          grep -Fq 'Tier-1 source registry:** v1.60' PROJECT_STATUS.md
+          grep -Fq 'P1-H geographically corrective / mixed-rights tranche — COMPLETE' PROJECT_STATUS.md
+          grep -Fq 'Provenance Scope Repair A transaction gate' PROJECT_STATUS.md
+          grep -Fq 'biosecurity_overlay.json' data/coverage/PROVENANCE_SCOPE_REPAIR_A_RESEARCH_v0.1.md
           git config user.name world-signals-checkpoint
           git config user.email actions@users.noreply.github.com
           git add PROJECT_STATUS.md data/coverage/PROVENANCE_SCOPE_REPAIR_A_RESEARCH_v0.1.md
