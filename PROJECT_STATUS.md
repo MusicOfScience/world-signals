@@ -8,9 +8,9 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.51 — **222 sources**.
+- **Tier-1 source registry:** v1.52 — **223 sources**.
 - **Canonical schema:** v0.51.
-- **Live monitor expectations:** v0.6.
+- **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
 - **Review-candidate state contract:** v0.1 — prospective activation after monitor run 47.
 - **Manual review-decision store:** v0.1 — currently empty; reviewed repository changes only.
@@ -26,7 +26,7 @@ Live UX: `https://musicofscience.github.io/world-signals/`
 
 GitHub Pages **Source is GitHub Actions**. `web/` + `scripts/build_site.py` are the application/build path.
 
-Generated `docs/` output is now ignored and not tracked. The stale v0.17/649 committed snapshot was removed in commit `954c3b0d6200cf322fa91220c56f3fdc4f80a7b0` so it cannot act as a competing publication surface.
+Generated `docs/` output is ignored and not tracked. The stale v0.17/649 committed snapshot was removed in commit `954c3b0d6200cf322fa91220c56f3fdc4f80a7b0` so it cannot act as a competing publication surface.
 
 The 2026-09-04 Pages-source incident is CLOSED. A fresh full Actions build/deploy (`33819680572`) succeeded after the source change and the user confirmed the public endpoint displayed the current tabbed application. Durable incident record: `data/monitor/PAGES_SOURCE_INCIDENT_2026-09-04.md`.
 
@@ -58,13 +58,13 @@ Calendar/Pages, monitoring, review state, Live Intelligence and Analysis remain 
 Configured routes:
 
 - RBA Financial Stability Review RSS;
-- Colombia SUIN Decree 111/1996 legal sentinel;
+- Colombia Decree 111/1996 legal sentinel — **machine inventory `WSSRC-REG4-002`; required manual SUIN clause verification `WSSRC-REG4-001`**;
 - EU Cyber Resilience Act Article 71 / Cellar sentinel;
 - EU CBAM verifier-report milestone;
 - EU CBAM certificate-sale milestone;
 - EU CBAM annual declaration / certificate-surrender milestone.
 
-Monitor hardening includes non-overlap concurrency, configuration fingerprints, expected/observed adapter completeness, source-health/event-state separation, deterministic candidate manifests and 90-day artefact retention.
+All configured **primary monitor sources now have explicit modern source-governance classifications**. Monitor hardening includes non-overlap concurrency, configuration fingerprints, expected/observed adapter completeness, source-health/event-state separation, deterministic candidate manifests and 90-day artefact retention.
 
 ### Latest retained pre-contract evidence
 
@@ -74,7 +74,7 @@ Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+0
 - 0 review candidates;
 - `NO_CHANGE`;
 - canonical unchanged;
-- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.51.
+- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.52.
 
 Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
 
@@ -140,21 +140,53 @@ Mechanical diagnostic at v0.20 found `HEALTH_BIOSECURITY` genuinely WHO-only: **
 
 `ONE_HEALTH` is a cross-cutting relationship, not a forced primary category.
 
-Only the five existing WHO series are canonical memberships. Four noncanonical research nodes are represented without canonical IDs:
-
-- WOAH;
-- IPPC/CPM;
-- BWC/UNODA;
-- Africa CDC.
+Only the five existing WHO series are canonical memberships. Four noncanonical research nodes are represented without canonical IDs: WOAH; IPPC/CPM; BWC/UNODA; Africa CDC.
 
 Executable validation fails if mapped series/category/institution diverge from canonical truth or if a candidate masquerades as canonical. The overlay grants **zero canonical mutation / zero event-population authority**.
 
-Operations now exposes a browser-safe **Biosecurity system map**, visibly separating the 5 WHO canonical series from the four noncanonical candidate nodes. CI passed on the overlay and public projection; Pages run `33821356707` deployed the visible map successfully.
+Operations exposes a browser-safe **Biosecurity system map**, visibly separating the 5 WHO canonical series from the four noncanonical candidate nodes. CI passed on the overlay and public projection; Pages run `33821356707` deployed the visible map successfully.
 
 Durable records:
 
 - `data/coverage/BIOSECURITY_TAXONOMY_DIAGNOSTIC_v0.1.md`
 - `data/coverage/BIOSECURITY_CROSS_DOMAIN_OVERLAY_AUDIT_v0.1.md`
+
+## Source-governance backfill
+
+### P0 configured-monitor tranche — COMPLETE
+
+Initial completeness audit at source v1.51 / 222 found:
+
+- **1** fully explicit modern-governance source;
+- **221** sources missing at least one modern governance field;
+- **5 P0** configured-monitor dependencies;
+- **145 P1** canonical dependencies;
+- **71 P2** registry-only sources.
+
+P0 research separated factual provenance from automated use. The Colombia composite identity was decomposed rather than assigned one misleading blanket rights status:
+
+- `WSSRC-REG4-001` remains the stable **SUIN manual legal-authority source** and remains the canonical source for `WSO-REG-D-0001`;
+- new `WSSRC-REG4-002` is the **Colombia Open Data / Socrata machine sentinel**;
+- monitor expectations explicitly require `WSSRC-REG4-001` clause-level verification after a machine-sentinel change.
+
+Guarded transaction commit: **`20511a565d2ef690cbd3be0b10ab5dcaeeb98f82`**. Result: source **v1.51 / 222 → v1.52 / 223**; expectations **v0.6 → v0.7**; canonical remains **v0.20 / 669**.
+
+Corrected live check-only preflight run `33833022931` passed with a clean working tree and canonical hash unchanged. Apply run `33833235253` changed exactly source registry, monitor expectations and live-monitor runner. Temporary write/preflight workflows were removed immediately.
+
+Independent post-P0 audit run `33833361986` measured:
+
+- **7** fully explicit governance sources;
+- **216** sources still missing at least one governance field;
+- **0 P0** configured-monitor dependencies remaining;
+- **145 P1** canonical dependencies;
+- **71 P2** registry-only sources;
+- missing `canonical_provenance_use`: **206**;
+- missing `automated_monitoring_use`: **206**;
+- missing `verification_mode`: **216**.
+
+All configured primary monitor sources are therefore governance-explicit, while the large P1/P2 backlog remains deliberately unresolved. No bulk backfill is authorised. `NOT_RECORDED_IN_REGISTRY` remains unresolved governance, never implicit permission.
+
+Durable record: `data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_AUDIT_v0.1.md`.
 
 ## Held / unresolved nodes
 
@@ -169,13 +201,13 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 - BIMSTEC high-level future schedule;
 - North Indian Ocean cyclone-season definition conflict.
 
-### Source-governance backfill
+### Source-governance P1/P2 backlog
 
-Many older source records predate explicit `canonical_provenance_use` / `automated_monitoring_use` fields. `NOT_RECORDED_IN_REGISTRY` is an unresolved governance state, never implicit permission.
+**145 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
 ## Canonical auto-commit gate — CLOSED
 
-Do not reopen because parsers, coverage, UX or review-state engineering pass tests. Remaining genuine real-world evidence:
+Do not reopen because parsers, coverage, UX, source-governance or review-state engineering pass tests. Remaining genuine real-world evidence:
 
 1. one **prospective reschedule** detected after a prior canonical monitor snapshot and reviewed against the same stable occurrence; and
 2. one **explicit cancellation** of an already-canonical occurrence from positive authoritative evidence.
@@ -184,13 +216,14 @@ No source failure may satisfy either gate.
 
 ## Exact next work
 
-1. **Observe first genuine post-contract live-monitor run 48+** and validate retained-review reduction against real evidence; do not manufacture a candidate.
-2. **Source-governance backfill methodology** — classify older `NOT_RECORDED_IN_REGISTRY` records in bounded, rights-aware tranches without interpreting public access as automation permission.
-3. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorize population.
-4. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
-5. Re-run coverage audit after analytically justified canonical additions only.
-6. Continue **Live Intelligence v1**: explicit WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER structure fed by canonical + monitor evidence, not post-hoc storytelling.
-7. Then continue **Analysis v1** once the live-intelligence evidence contract is stable.
+1. **Observe first genuine post-contract live-monitor run 48+** against source v1.52 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.
+2. **Validate the migrated Colombia adapter operationally** — machine health should report `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual verification authority only.
+3. **Source-governance P1 tranche design** — choose a small bounded set from the 145 canonical-dependent records using active analytical relevance/dependency, then perform source-specific rights research before any backfill.
+4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
+5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
+6. Re-run coverage audit after analytically justified canonical additions only.
+7. Continue **Live Intelligence v1**: explicit WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER structure fed by canonical + monitor evidence, not post-hoc storytelling.
+8. Then continue **Analysis v1** once the live-intelligence evidence contract is stable.
 
 ## Recovery rule
 
