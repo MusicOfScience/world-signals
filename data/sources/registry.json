@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.56",
+  "version": "1.57",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -209,7 +209,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 320,
       "canonical_dependency_count": 11,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ECB permits factual reuse from its website with source citation, accuracy and modification conditions, but those terms do not expressly grant unrestricted automated retrieval. Monetary-policy decisions and later accounts remain distinct publication occurrences."
     },
     {
       "source_id": "WSSRC-CB-005",
@@ -249,7 +254,12 @@
       "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
       "monitoring_priority_score": 120,
       "canonical_dependency_count": 11,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The Bank of England's general website Resources are limited to personal or internal organisational non-commercial use absent further authorisation; the separately licensed statistical Database does not clear the MPC schedule page. Confirmed and provisional future dates must remain distinct."
     },
     {
       "source_id": "WSSRC-CB-006",
@@ -2280,7 +2290,12 @@
       "automation_summary": "Because the two statements differ in scope, production monitoring of the COP webpage is held until a specific official-document/feed route is defined.",
       "rights_reviewed_at": "2026-09-02T20:51:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_C_HIGH_VALUE_MIXED_REGIME_REVIEW",
-      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "CBD's copyright notice is permissive for official texts, data and documents, but its general website terms are materially more restrictive. The COP event webpage remains a mixed-regime manual informational surface until a more specific authorised route is defined; no synthetic event clock times are inferred."
     },
     {
       "source_id": "WSSRC-RISK-001",
@@ -2581,7 +2596,12 @@
           "transport": "HTML",
           "completeness_scope": "SINGLE_RELEASE"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ABS general website material is CC BY 4.0 and the registered release-calendar parser has pilot evidence, but the licence does not itself authorise unrestricted polling. CPI 11:30 local release times must retain the source's Australia/Sydney timezone and date-specific AEST/AEDT offset."
     },
     {
       "source_id": "WSSRC-MAC-012",
@@ -3348,7 +3368,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Japan Customs / MOF content is reusable under Public Data License 1.0 and the registered trade-calendar parser has pilot evidence. The licence does not independently define crawler behaviour; provisional status and the 08:50/09:30 JST release-stage distinctions must be preserved."
     },
     {
       "source_id": "WSSRC-MAC-026",
@@ -8463,7 +8488,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 600,
       "canonical_dependency_count": 3,
-      "last_successful_research_verification_at": "2026-09-03"
+      "last_successful_research_verification_at": "2026-09-03",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "CBE permits direct website information to be used with accurate reproduction, source citation and disclosure of transformations. That clears curated factual provenance but does not independently clear unrestricted automated retrieval; date-only schedule precision is preserved where no clock time is published."
     },
     {
       "source_id": "WSSRC-COM-012",
