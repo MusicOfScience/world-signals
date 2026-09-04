@@ -7,10 +7,12 @@ import hashlib
 import json
 import os
 from pathlib import Path
-
-from src.world_signals.validation import validate_registry
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from world_signals.validation import validate_registry
 PLAN_PATH = ROOT / "data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_PLAN_v0.1.json"
 CANONICAL_PATH = ROOT / "data/canonical/registry.json"
 SOURCES_PATH = ROOT / "data/sources/registry.json"

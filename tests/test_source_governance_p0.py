@@ -4,6 +4,8 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -98,6 +100,17 @@ class P0GovernanceMigrationTests(unittest.TestCase):
             "sources": sources,
         }
         return canonical, source_registry, expectations, runtime_text
+
+    def test_script_executes_as_cli_from_repository_root(self):
+        result = subprocess.run(
+            [sys.executable, str(MODULE_PATH), "--help"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--apply", result.stdout)
 
     def test_plan_splits_colombia_without_reassigning_canonical_source(self):
         plan = self.plan
