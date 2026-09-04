@@ -1,4 +1,4 @@
-name: TEMP P1 verification-only diagnostic
+name: TEMP P1 selected metadata diagnostic
 
 on:
   push:
@@ -16,45 +16,20 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Enumerate verification-only P1 sources
+      - name: Inspect selected source metadata
         shell: bash
         run: |
           python - <<'PY'
           import json
-          from collections import defaultdict
-          from datetime import date
           from pathlib import Path
-          from src.world_signals.source_governance_audit import build_source_governance_audit
-
-          registry=json.loads(Path('data/canonical/registry.json').read_text())
-          sources=json.loads(Path('data/sources/registry.json').read_text())
-          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
-          audit=build_source_governance_audit(registry,sources,expectations)
-          recs=defaultdict(list)
-          for r in registry.get('records',[]):
-              if r.get('source_id'): recs[r['source_id']].append(r)
-          by={s.get('source_id'):s for s in sources.get('sources',[])}
-          today=date(2026,9,5)
-          def d(r):
-              v=r.get('start_local')
-              if isinstance(v,str) and len(v)>=10:
-                  try:return date.fromisoformat(v[:10])
-                  except:pass
-          rows=[]
-          for q in audit['backfill_research_queue']:
-              if q['research_priority']!='P1_CANONICAL_DEPENDENCY' or q['missing_governance_fields']!=['verification_mode']:
-                  continue
-              dates=[x for x in (d(r) for r in recs[q['source_id']]) if x and x>=today]
-              s=by[q['source_id']]
-              rows.append({
-                'source_id':q['source_id'],'institution':q['institution'],'jurisdiction':q['jurisdiction'],'domain':q['domain'],
-                'deps':q['canonical_occurrence_dependency_count'],'future':len(dates),'first_future':min(dates).isoformat() if dates else None,
-                'canonical_provenance_use':s.get('canonical_provenance_use'),'automated_monitoring_use':s.get('automated_monitoring_use'),
-                'monitoring_readiness_status':s.get('monitoring_readiness_status'),'monitoring_activation_status':s.get('monitoring_activation_status'),
-                'stored_dependency_count':s.get('canonical_dependency_count','ABSENT')
-              })
-          rows.sort(key=lambda x:(x['first_future'] is None,x['first_future'] or '9999',-x['deps'],x['source_id']))
-          print('VERIFICATION_ONLY_P1_COUNT',len(rows))
-          print('WITH_FUTURE_DATED_DEPENDENCY',sum(bool(x['future']) for x in rows))
-          for x in rows: print(json.dumps(x,ensure_ascii=False,sort_keys=True))
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          ids={'WSSRC-INT-010','WSSRC-INT-017','WSSRC-REG2-002','WSSRC-REG6-002','WSSRC-REG-011','WSSRC-INT-026','WSSRC-REG6-001','WSSRC-REG5-001'}
+          for s in src.get('sources',[]):
+              if s.get('source_id') in ids:
+                  keep={k:s.get(k,'__ABSENT__') for k in [
+                    'source_id','institution','jurisdiction','domain','authoritative_url','backup_authoritative_source',
+                    'canonical_dependency_count','canonical_provenance_use','automated_monitoring_use','verification_mode',
+                    'monitoring_readiness_status','monitoring_activation_status','governance_backfill_reviewed_at','governance_backfill_basis'
+                  ]}
+                  print(json.dumps(keep,ensure_ascii=False,sort_keys=True))
           PY
