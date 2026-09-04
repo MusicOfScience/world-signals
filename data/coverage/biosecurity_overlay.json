@@ -1,0 +1,140 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
+  "version": "0.1",
+  "layer": "ANALYTICAL_COVERAGE_OVERLAY_NONCANONICAL",
+  "canonical_checkpoint": {
+    "registry_version": "0.20",
+    "record_count": 669
+  },
+  "principles": {
+    "non_exclusive": true,
+    "canonical_primary_category_unchanged": true,
+    "canonical_timing_unchanged": true,
+    "canonical_lifecycle_unchanged": true,
+    "candidate_nodes_are_not_canonical": true,
+    "candidate_nodes_may_not_carry_canonical_ids": true,
+    "overlay_is_not_population_authority": true,
+    "one_health_is_cross_cutting_relationship_not_primary_bucket": true
+  },
+  "systems": [
+    {
+      "system_id": "BIO-HUMAN-HEALTH-GOVERNANCE",
+      "label": "Human health governance",
+      "description": "Scheduled governance, preparedness, treaty, budget and regional public-health processes whose primary institutional function is human health."
+    },
+    {
+      "system_id": "BIO-ANIMAL-ZOONOTIC-HEALTH",
+      "label": "Animal and zoonotic health",
+      "description": "Animal-health governance, surveillance, standards and disease-control systems, including zoonotic interfaces."
+    },
+    {
+      "system_id": "BIO-PLANT-PHYTOSANITARY-SECURITY",
+      "label": "Plant and phytosanitary security",
+      "description": "Plant-health governance, phytosanitary standards, pest prevention and related safe-trade systems."
+    },
+    {
+      "system_id": "BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL",
+      "label": "Biological security and arms control",
+      "description": "Governance addressing biological and toxin weapons, deliberate biological-agent misuse and associated disarmament obligations."
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "ONE_HEALTH",
+      "label": "One Health",
+      "relationship_type": "CROSS_CUTTING",
+      "connects_system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE",
+        "BIO-ANIMAL-ZOONOTIC-HEALTH",
+        "BIO-PLANT-PHYTOSANITARY-SECURITY"
+      ],
+      "note": "A cross-system analytical relationship. It does not replace an event's natural primary category or force every member of the connected systems to be labelled One Health."
+    }
+  ],
+  "canonical_series_memberships": [
+    {
+      "series_id": "WSER-HEALTH-WHA",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "canonical_primary_category": "HEALTH_BIOSECURITY",
+      "canonical_institution": "World Health Organization",
+      "basis": "Existing canonical global health-governance series."
+    },
+    {
+      "series_id": "WSER-HEALTH-WHO-EB",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "canonical_primary_category": "HEALTH_BIOSECURITY",
+      "canonical_institution": "World Health Organization",
+      "basis": "Existing canonical global health-governance series."
+    },
+    {
+      "series_id": "WSER-HEALTH-WHO-IGWG",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "canonical_primary_category": "HEALTH_BIOSECURITY",
+      "canonical_institution": "World Health Organization",
+      "basis": "Existing canonical pandemic-governance / PABS negotiation series."
+    },
+    {
+      "series_id": "WSER-HEALTH-WHO-PBAC",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "canonical_primary_category": "HEALTH_BIOSECURITY",
+      "canonical_institution": "World Health Organization",
+      "basis": "Existing canonical health-budget-governance series."
+    },
+    {
+      "series_id": "WSER-HEALTH-WHO-RC",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "canonical_primary_category": "HEALTH_BIOSECURITY",
+      "canonical_institution": "World Health Organization",
+      "basis": "Existing canonical regional health-governance series."
+    }
+  ],
+  "candidate_nodes": [
+    {
+      "candidate_node_id": "BIO-CAND-WOAH",
+      "institution": "World Organisation for Animal Health",
+      "system_ids": ["BIO-ANIMAL-ZOONOTIC-HEALTH"],
+      "relationship_ids": ["ONE_HEALTH"],
+      "canonical_status": "NOT_CANONICAL_AT_V0.20",
+      "authority_basis": "WOAH describes itself as the global authority on animal health and operates international animal-disease information and standards systems.",
+      "authority_url": "https://www.woah.org/en/who-we-are/",
+      "next_gate": "Separate source/timing/rights/canonical-admission review."
+    },
+    {
+      "candidate_node_id": "BIO-CAND-IPPC-CPM",
+      "institution": "International Plant Protection Convention / Commission on Phytosanitary Measures",
+      "system_ids": ["BIO-PLANT-PHYTOSANITARY-SECURITY"],
+      "relationship_ids": ["ONE_HEALTH"],
+      "canonical_status": "NOT_CANONICAL_AT_V0.20",
+      "authority_basis": "IPPC is the international plant-health treaty; CPM is its governing body and adopts international phytosanitary standards.",
+      "authority_url": "https://www.ippc.int/en/about/overview/",
+      "next_gate": "Separate source/timing/rights/canonical-admission review."
+    },
+    {
+      "candidate_node_id": "BIO-CAND-BWC",
+      "institution": "Biological Weapons Convention / UNODA",
+      "system_ids": ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"],
+      "relationship_ids": [],
+      "canonical_status": "NOT_CANONICAL_AT_V0.20",
+      "authority_basis": "The BWC prohibits biological and toxin weapons and is a multilateral disarmament / WMD governance system supported by UNODA.",
+      "authority_url": "https://disarmament.unoda.org/en/our-work/weapons-mass-destruction/biological-weapons/biological-weapons-convention",
+      "next_gate": "Separate source/timing/rights/canonical-admission review."
+    },
+    {
+      "candidate_node_id": "BIO-CAND-AFRICA-CDC",
+      "institution": "Africa Centres for Disease Control and Prevention",
+      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "relationship_ids": ["ONE_HEALTH"],
+      "canonical_status": "NOT_CANONICAL_AT_V0.20",
+      "authority_basis": "Africa CDC is an autonomous African Union health agency mandated to strengthen prevention, detection and response to public-health threats; its current institutional aspiration explicitly invokes One Health.",
+      "authority_url": "https://africacdc.org/about-us/",
+      "next_gate": "Resolve authoritative event-date conflicts before any canonical admission."
+    }
+  ],
+  "notes": [
+    "The overlay describes cross-domain analytical relationships; it does not change canonical event categories.",
+    "Only series already present in canonical v0.20 are mapped as canonical memberships.",
+    "Candidate nodes are research backlog objects only and intentionally carry no series_id or occurrence_id.",
+    "No event population is authorized by this dataset."
+  ]
+}
