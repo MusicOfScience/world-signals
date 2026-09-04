@@ -1,0 +1,197 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1C_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected after the measured P1-B audit, while preserving canonical, monitor and held-source state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "official_subscription_route_may_support_bounded_automation_clearance": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_native_precision_must_be_preserved": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active horizon, governance information value, regional/institutional breadth and domain diversity; not mechanical top-N",
+    "selected_source_ids": [
+      "WSSRC-CB-008",
+      "WSSRC-CN-013",
+      "WSSRC-EL-NZ-001",
+      "WSSRC-FIS-007",
+      "WSSRC-INT-027",
+      "WSSRC-MAC-005"
+    ],
+    "regional_mix": {
+      "EUROPEAN_UNION": 1,
+      "CANADA": 1,
+      "JAPAN": 1,
+      "NEW_ZEALAND": 1,
+      "CHINA": 1,
+      "GLOBAL": 1
+    }
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.54",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-MAC-005": 12,
+      "WSSRC-CB-008": 11,
+      "WSSRC-FIS-007": 10,
+      "WSSRC-EL-NZ-001": 6,
+      "WSSRC-CN-013": 5,
+      "WSSRC-INT-027": 5
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_canonical_dependency_count": 4,
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    },
+    "snb_scope_guard": {
+      "source_id": "WSSRC-CB-009",
+      "expected_canonical_dependency_count": 18,
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "repair_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.55",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CB-008",
+      "WSSRC-CN-013",
+      "WSSRC-EL-NZ-001",
+      "WSSRC-FIS-007",
+      "WSSRC-INT-027",
+      "WSSRC-MAC-005"
+    ],
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "eurostat": {
+      "schedule_url": "https://ec.europa.eu/eurostat/news/euro-indicators/release-calendar",
+      "automation_url": "https://ec.europa.eu/eurostat/subscribe/ics.format",
+      "rights_url": "https://ec.europa.eu/eurostat/help/copyright-notice",
+      "finding": "Eurostat licenses editorial content under CC BY 4.0 and allows reuse of statistical data/metadata with source acknowledgement. Eurostat expressly offers an internet-calendar subscription that automatically receives release-calendar updates. Automation clearance is bounded to the official subscription/feed route, not arbitrary HTML crawling."
+    },
+    "bank_of_canada": {
+      "schedule_url": "https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/",
+      "rights_url": "https://www.bankofcanada.ca/terms/",
+      "finding": "Bank content may be used/copied/distributed/transmitted subject to attribution and stated conditions. Terms prohibit circumventing request-frequency limits or overburdening the site, so HTML schedule automation remains endpoint-review-required despite existing pilot evidence."
+    },
+    "japan_mof": {
+      "schedule_url": "https://www.mof.go.jp/english/policy/jgbs/auction/calendar/index.htm",
+      "rights_url": "https://www.mof.go.jp/english/about_mof/notice/index.html",
+      "finding": "MOF website content is generally under Public Data License v1.0 subject to exceptions. The auction calendar may be altered and later announcement/result surfaces remain distinct. The content licence does not itself establish unrestricted crawler permission."
+    },
+    "new_zealand_electoral_commission": {
+      "schedule_url": "https://elections.nz/media-and-news/2026/key-dates-for-2026-general-election",
+      "finding": "The Electoral Commission confirms the 2026 General Election timetable and supplies authoritative factual milestones. No general website reuse licence or express bot/crawler permission was located in the reviewed official-site material, so classification is limited to curated factual metadata and manual authoritative verification."
+    },
+    "pboc": {
+      "rule_url": "https://www.pbc.gov.cn/en/3688253/3689009/3788456/2025092319414130565/index.html",
+      "finding": "Article 21 states that monthly national financial statistics including money supply, credit flow and assets/liabilities are released within 20 days after month-end. This is a source-native expected window, not an exact date. No automation permission is inferred from the HTML rule surface."
+    },
+    "un_general_assembly": {
+      "schedule_url": "https://www.un.org/pga/80/mandated-events-80th-session/",
+      "rights_url": "https://www.un.org/en/about-us/terms-of-use",
+      "finding": "UNGA mandated-events pages provide authoritative factual event metadata, but general UN website terms permit downloading/copying for personal non-commercial use without redistribution/derivative rights. The route remains manual informational provenance with automation rights held."
+    }
+  },
+  "source_updates": {
+    "WSSRC-MAC-005": {
+      "expected_canonical_dependency_count": 12,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "CLEARED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Eurostat permits attributed reuse and expressly provides an internet-calendar subscription that automatically receives calendar updates; automated clearance is bounded to the official ICS/feed route and source-native provisional/confirmed status must be preserved."
+      }
+    },
+    "WSSRC-CB-008": {
+      "expected_canonical_dependency_count": 11,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Bank of Canada schedule content is reusable subject to stated conditions and existing runtime evidence supports pilot verification, while request-frequency/overburdening terms require endpoint-specific operational review before production polling."
+      }
+    },
+    "WSSRC-FIS-007": {
+      "expected_canonical_dependency_count": 10,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Japan MOF applies Public Data License v1.0 to general website content and WORLD SIGNALS has pilot parser evidence; the licence does not itself grant unrestricted polling and auction-calendar alterations must remain distinct reviewed changes."
+      }
+    },
+    "WSSRC-EL-NZ-001": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "The Electoral Commission directly confirms the 2026 General Election timetable. Classification is limited to factual milestone metadata; no general website automation permission was identified and government formation is not inferred as a Commission milestone."
+      }
+    },
+    "WSSRC-CN-013": {
+      "expected_canonical_dependency_count": 5,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "PBoC Article 21 is authoritative factual provenance for a monthly latest-publication window within 20 days after month-end; no exact day/time or automated retrieval permission is inferred from the rule page."
+      }
+    },
+    "WSSRC-INT-027": {
+      "expected_canonical_dependency_count": 5,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "UNGA mandated-events pages are authoritative informational references, but general UN website terms limit copying to personal non-commercial use without redistribution/derivative rights; automation remains held absent a specifically authorised route."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date."
+    },
+    "WSSRC-CB-009": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The current registered SNB decisions/history URL does not directly support the forward monetary-policy assessment schedule described by the source record; repair source scope before governance backfill."
+    }
+  }
+}
