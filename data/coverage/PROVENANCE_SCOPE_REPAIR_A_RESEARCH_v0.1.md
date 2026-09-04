@@ -157,8 +157,9 @@ A later guarded transaction, and only that transaction, may alter:
 
 1. `data/canonical/registry.json` — one occurrence's provenance-semantic fields; count unchanged;
 2. `data/sources/registry.json` — repaired TSE row, repaired SNB row, one new constitutional source, registry version/count metadata;
-3. `data/changes/ledger.json` — one reviewed provenance-repair entry and ledger version/reference metadata.
+3. `data/changes/ledger.json` — one reviewed provenance-repair entry and ledger version/reference metadata; `committed_at` is generated at apply time and is not pre-declared by research;
+4. `data/coverage/biosecurity_overlay.json` — advance only its canonical checkpoint pointer from v0.20 / 669 to v0.21 / 669 because the overlay validator intentionally pins the exact canonical checkpoint it was audited against.
 
-It must leave monitor expectations and live-monitor code byte-identical, keep automatic canonical commit false, keep Google Calendar writes false, preserve all 669 occurrence IDs, and preserve every canonical date/time.
+The overlay's systems, memberships, candidates and analytical content must remain byte-semantically unchanged. The transaction must also leave monitor expectations and live-monitor code byte-identical, keep automatic canonical commit false, keep Google Calendar writes false, preserve all 669 occurrence IDs, and preserve every canonical date/time.
 
 The source registry post-state is **v1.61 / 224**. No P1-I tranche is authorised by this repair.
