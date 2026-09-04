@@ -1,0 +1,201 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1E_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected after the measured P1-D audit, while preserving canonical, monitor and held-source state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_native_precision_must_be_preserved": true,
+    "institution_native_event_semantics_must_be_preserved": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active horizon, source-scope integrity, regional breadth, domain diversity and governance-information value; not mechanical top-N",
+    "selected_source_ids": [
+      "WSSRC-CB-004",
+      "WSSRC-CB-005",
+      "WSSRC-CLIM-003",
+      "WSSRC-MAC-011",
+      "WSSRC-MAC-025",
+      "WSSRC-REGJ-005"
+    ],
+    "canonical_dependency_total": 43,
+    "regional_mix": {
+      "EURO_AREA": 1,
+      "UNITED_KINGDOM": 1,
+      "JAPAN": 1,
+      "AUSTRALIA": 1,
+      "GLOBAL": 1,
+      "EGYPT": 1
+    }
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.56",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-CB-004": 11,
+      "WSSRC-CB-005": 11,
+      "WSSRC-MAC-025": 8,
+      "WSSRC-MAC-011": 6,
+      "WSSRC-CLIM-003": 4,
+      "WSSRC-REGJ-005": 3
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_canonical_dependency_count": 4,
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    },
+    "snb_scope_guard": {
+      "source_id": "WSSRC-CB-009",
+      "expected_canonical_dependency_count": 18,
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "repair_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.57",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CB-004",
+      "WSSRC-CB-005",
+      "WSSRC-CLIM-003",
+      "WSSRC-MAC-011",
+      "WSSRC-MAC-025",
+      "WSSRC-REGJ-005"
+    ],
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "ecb_publication_surface": {
+      "publication_url": "https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html",
+      "rights_url": "https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html",
+      "finding": "ECB permits free use of information obtained directly from its website subject to source citation, accuracy and modification conditions, with exceptions such as authored papers. The monetary-policy decision and later account are separate publication occurrences. Reuse terms do not expressly grant unrestricted automated retrieval."
+    },
+    "bank_of_england": {
+      "schedule_url": "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates",
+      "rights_url": "https://www.bankofengland.co.uk/legal",
+      "finding": "The Bank's general website Resources may be downloaded, displayed or printed for personal or internal organisational non-commercial use; broader reuse requires authorisation. The separately licensed statistical Database does not extend those terms to the general MPC schedule page. Confirmed and provisional dates must remain distinct."
+    },
+    "japan_customs": {
+      "schedule_url": "https://www.customs.go.jp/toukei/calendar/calend_e.htm",
+      "rights_url": "https://www.customs.go.jp/copyright_e.htm",
+      "finding": "Japan Customs / Ministry of Finance content is subject to Public Data License 1.0 unless otherwise indicated. The calendar marks dates provisional and distinguishes preliminary 08:50 JST from detailed/revised/fixed 09:30 JST stages. The licence does not itself define production polling limits; an existing parser/pilot supports bounded automated verification only."
+    },
+    "abs_cpi": {
+      "schedule_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+      "calendar_url": "https://www.abs.gov.au/release-calendar/future-releases",
+      "rights_url": "https://www.abs.gov.au/website-privacy-copyright-and-disclaimer",
+      "finding": "ABS general website material is CC BY 4.0 subject to stated exclusions. CPI future releases include explicit 11:30 local publication times whose AEST/AEDT offset changes by release date. Existing release-calendar parser evidence supports automated pilot verification, but content licensing does not itself clear unrestricted polling."
+    },
+    "cbd_cop": {
+      "event_url": "https://www.cbd.int/cop",
+      "copyright_url": "https://www.cbd.int/copyright",
+      "terms_url": "https://www.cbd.int/terms",
+      "finding": "CBD's legal regime is mixed: official texts, data and documents are described as public domain with acknowledgement, while general website Materials are subject to personal/non-commercial-use restrictions and redistribution limits. The COP event webpage is therefore retained as a manual informational/rights-held surface unless a more specific official-document or authorised feed route is defined."
+    },
+    "central_bank_of_egypt": {
+      "schedule_url": "https://www.cbe.org.eg/en/monetary-policy/mpc-meetings-schedule?verify=false",
+      "rights_url": "https://www.cbe.org.eg/en/disclaimer",
+      "finding": "CBE permits use of information obtained directly from its website subject to accurate reproduction, source citation and disclosure of transformations. The MPC schedule supports curated factual provenance, but no unrestricted automated-access permission is inferred. Future schedule precision remains date-only where no clock time is published."
+    }
+  },
+  "source_updates": {
+    "WSSRC-CB-004": {
+      "expected_canonical_dependency_count": 11,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ECB permits factual reuse from its website with source citation, accuracy and modification conditions, but those terms do not expressly grant unrestricted automated retrieval. Monetary-policy decisions and later accounts remain distinct publication occurrences."
+      }
+    },
+    "WSSRC-CB-005": {
+      "expected_canonical_dependency_count": 11,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "The Bank of England's general website Resources are limited to personal or internal organisational non-commercial use absent further authorisation; the separately licensed statistical Database does not clear the MPC schedule page. Confirmed and provisional future dates must remain distinct."
+      }
+    },
+    "WSSRC-MAC-025": {
+      "expected_canonical_dependency_count": 8,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Japan Customs / MOF content is reusable under Public Data License 1.0 and the registered trade-calendar parser has pilot evidence. The licence does not independently define crawler behaviour; provisional status and the 08:50/09:30 JST release-stage distinctions must be preserved."
+      }
+    },
+    "WSSRC-MAC-011": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ABS general website material is CC BY 4.0 and the registered release-calendar parser has pilot evidence, but the licence does not itself authorise unrestricted polling. CPI 11:30 local release times must retain the source's Australia/Sydney timezone and date-specific AEST/AEDT offset."
+      }
+    },
+    "WSSRC-CLIM-003": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "CBD's copyright notice is permissive for official texts, data and documents, but its general website terms are materially more restrictive. The COP event webpage remains a mixed-regime manual informational surface until a more specific authorised route is defined; no synthetic event clock times are inferred."
+      }
+    },
+    "WSSRC-REGJ-005": {
+      "expected_canonical_dependency_count": 3,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "CBE permits direct website information to be used with accurate reproduction, source citation and disclosure of transformations. That clears curated factual provenance but does not independently clear unrestricted automated retrieval; date-only schedule precision is preserved where no clock time is published."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date."
+    },
+    "WSSRC-CB-009": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The registered SNB decisions/history URL does not directly support the forward monetary-policy assessment schedule described by the source record; repair source scope before governance backfill."
+    }
+  }
+}
