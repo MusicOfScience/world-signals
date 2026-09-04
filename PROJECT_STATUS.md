@@ -8,7 +8,7 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.56 — **223 sources**.
+- **Tier-1 source registry:** v1.57 — **223 sources**.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -74,7 +74,7 @@ Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+0
 - 0 review candidates;
 - `NO_CHANGE`;
 - canonical unchanged;
-- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.56.
+- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.57.
 
 Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
 
@@ -265,12 +265,27 @@ Guarded transaction run `33865020762` passed preflight, exact one-file enforceme
 - missing `automated_monitoring_use`: **182**;
 - missing `verification_mode`: **192**.
 
-P1-E research is frozen for ECB monetary-policy publications, Bank of England MPC dates, Japan Customs/MOF trade statistics, ABS CPI, Convention on Biological Diversity COP and Central Bank of Egypt — **43 canonical dependencies**. BoE and CBD remain rights-held/manual; Japan Customs and ABS retain automated-pilot verification without inferring production polling permission.
+### P1-E mixed-rights / cross-domain tranche — COMPLETE
+
+P1-E backfilled ECB monetary-policy publications, Bank of England MPC dates, Japan Customs/MOF trade statistics, ABS CPI, Convention on Biological Diversity COP and Central Bank of Egypt — **43 canonical dependencies**. Source registry advanced **v1.56 → v1.57 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**.
+
+Guarded transaction run `33868568393` passed preflight, exact one-file enforcement, registry validation, full unit suite, Python compilation, browser JavaScript checks and site build. PR #13 merged as `bd348a18d0b67d2b973ec7b61d0e8ede2e35cb9d`. Independent post-P1-E audit run `33869947061` measured:
+
+- **37** fully explicit governance sources;
+- **186** sources still missing at least one governance field;
+- **0 P0** configured-monitor dependencies;
+- **115 P1** canonical dependencies;
+- **71 P2** registry-only sources;
+- missing `canonical_provenance_use`: **176**;
+- missing `automated_monitoring_use`: **176**;
+- missing `verification_mode`: **186**.
+
+P1-F research is frozen for Statistics Bureau of Japan CPI, ABS Labour Force, CME E-mini S&P 500 expiry rules, IEA Oil Market Report schedule, ChinaMoney/NIFC LPR rules and Nigeria INEC — **29 canonical dependencies**. Japan CPI and ABS retain bounded automated-pilot verification; CME, IEA OMR and ChinaMoney are explicit rights-held/manual negative controls; INEC remains manual-authoritative because its detailed revision endpoint is operationally fragile.
 
 Brazil TSE and Swiss National Bank remain excluded for provenance-scope repair. SNB's registered decisions/history URL still does not directly support the forward assessment schedule; Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.
 
-Durable P1-D audit: `data/coverage/SOURCE_GOVERNANCE_P1D_BACKFILL_AUDIT_v0.1.md`.
-P1-E research/plan: `data/coverage/SOURCE_GOVERNANCE_P1E_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1E_BACKFILL_PLAN_v0.1.json`.
+Durable P1-E audit: `data/coverage/SOURCE_GOVERNANCE_P1E_BACKFILL_AUDIT_v0.1.md`.
+P1-F research/plan: `data/coverage/SOURCE_GOVERNANCE_P1F_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1F_BACKFILL_PLAN_v0.1.json`.
 
 ## Held / unresolved nodes
 
@@ -287,7 +302,7 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 
 ### Source-governance P1/P2 backlog
 
-**121 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
+**115 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
 ## Canonical auto-commit gate — CLOSED
 
@@ -302,7 +317,7 @@ No source failure may satisfy either gate.
 
 1. **Observe first genuine post-contract live-monitor run 48+** against source v1.53 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.
 2. **Validate the migrated Colombia adapter operationally** — machine health should report `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual verification authority only.
-3. **Source-governance P1-E transaction gate** — review/merge the frozen P1-E infrastructure, reconcile merged source v1.56 and run the guarded read-only preflight before any registry-only v1.57 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
+3. **Source-governance P1-F transaction gate** — review/merge the frozen P1-F infrastructure, reconcile merged source v1.57 and run the guarded read-only preflight before any registry-only v1.58 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
 4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
 5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
 6. Re-run coverage audit after analytically justified canonical additions only.

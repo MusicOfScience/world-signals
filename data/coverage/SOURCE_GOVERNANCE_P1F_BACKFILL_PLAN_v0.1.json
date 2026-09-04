@@ -1,0 +1,208 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1F_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected after the measured P1-E audit, while preserving canonical, monitor and held-source state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_native_precision_must_be_preserved": true,
+    "institution_native_event_semantics_must_be_preserved": true,
+    "explicit_restrictive_terms_override_automation_inference": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active horizon, source-scope integrity, regional breadth, domain diversity and governance-information value; deliberately not mechanical top-N",
+    "selected_source_ids": [
+      "WSSRC-CN-012",
+      "WSSRC-COM-002",
+      "WSSRC-EL-NG-001",
+      "WSSRC-MAC-012",
+      "WSSRC-MAC-014",
+      "WSSRC-MKT-010"
+    ],
+    "canonical_dependency_total": 29,
+    "regional_mix": {
+      "JAPAN": 1,
+      "AUSTRALIA": 1,
+      "UNITED_STATES_GLOBAL_MARKETS": 1,
+      "GLOBAL": 1,
+      "CHINA": 1,
+      "NIGERIA": 1
+    },
+    "governance_information_mix": {
+      "AUTOMATED_PILOT": 2,
+      "RIGHTS_HELD_MANUAL_ONLY": 3,
+      "MANUAL_AUTHORITATIVE_RECHECK": 1
+    }
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.57",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-MAC-014": 7,
+      "WSSRC-MAC-012": 6,
+      "WSSRC-MKT-010": 6,
+      "WSSRC-COM-002": 4,
+      "WSSRC-CN-012": 4,
+      "WSSRC-EL-NG-001": 2
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_canonical_dependency_count": 4,
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    },
+    "snb_scope_guard": {
+      "source_id": "WSSRC-CB-009",
+      "expected_canonical_dependency_count": 18,
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "repair_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.58",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CN-012",
+      "WSSRC-COM-002",
+      "WSSRC-EL-NG-001",
+      "WSSRC-MAC-012",
+      "WSSRC-MAC-014",
+      "WSSRC-MKT-010"
+    ],
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "statistics_bureau_japan_cpi": {
+      "schedule_url": "https://www.stat.go.jp/english/data/cpi/1582.html",
+      "time_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+      "rights_url": "https://www.stat.go.jp/english/info/riyou.html",
+      "finding": "The CPI schedule supplies dates through March 2027 while a separate official CPI rule supplies the 08:30 JST publication time. Statistics Bureau content is generally reusable under Public Data License 1.0, but those content-use terms do not independently define production crawler behaviour. Existing parser/pilot evidence supports bounded automated verification."
+    },
+    "abs_labour_force": {
+      "product_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "calendar_url": "https://www.abs.gov.au/release-calendar/future-releases",
+      "rights_url": "https://www.abs.gov.au/website-privacy-copyright-and-disclaimer",
+      "finding": "ABS general website material is CC BY 4.0 subject to exclusions. Labour Force future releases carry explicit 11:30 Canberra-local times and date-specific AEST/AEDT offsets; release dates may change. Existing release-calendar pilot evidence supports automated verification, but the content licence does not itself clear unrestricted polling."
+    },
+    "cme_e_mini_expiry_rule": {
+      "rule_url": "https://www.cmegroup.com/trading/equity-index/eminifaq.html",
+      "terms_url": "https://www.cmegroup.com/tools-information/cme-website-terms-of-use.html",
+      "automation_notice_url": "https://www.cmegroup.com/notices/stp/2024/01/20240104.html",
+      "finding": "CME's FAQ provides the standing 08:30 Chicago-time third-Friday quarterly expiry/last-trading rule. CME website/data terms expressly restrict data mining and automated navigation/access/retrieval using scripts, spiders, robots, crawlers or similar mechanisms absent permission. The source therefore remains manual and rights-held; proprietary market-price data are excluded."
+    },
+    "iea_oil_market_report": {
+      "schedule_url": "https://www.iea.org/data-and-statistics/data-product/oil-market-report-omr",
+      "rights_url": "https://www.iea.org/terms",
+      "finding": "The OMR page publishes monthly release dates and a 10:00 Paris-time release rule. IEA explicitly excludes the Oil Market Report from its general CC BY 4.0 Open Use Terms and identifies it as Non-CC/licensed material. Public schedule facts remain manual informational metadata unless an appropriate licensed or authorised route is established."
+    },
+    "chinamoney_lpr": {
+      "rule_url": "https://www.chinamoney.com.cn/chinese/bklpr/",
+      "legal_url": "https://www.chinamoney.org.cn/chinese/legaldeclaration/",
+      "finding": "The official LPR rule is 09:00 on the 20th of each month with holiday postponement. ChinaMoney's legal statement says that without written authorisation institutions or individuals may not reproduce, distribute or obtain site content through hard-copy or electronic retrieval/scraping systems. The source is therefore manual/rights-held and the recurring rule must retain holiday-postponement semantics."
+    },
+    "inec_nigeria": {
+      "current_state_url": "https://www.inecnigeria.org/upcoming-elections/",
+      "revision_identity_url": "https://www.inecnigeria.org/revised-timetable-and-schedule-of-activities-for-the-2027-general-elections-and-rescheduling-of-osun-state-governorship-election/",
+      "finding": "INEC's current-state surface lists 16 January 2027 for the Presidential/House of Assembly election and 6 February 2027 for the Governorship/State House of Assembly election. Existing source-specific research clears official electoral facts for curated provenance, but the revision endpoint is operationally fragile and no general production bot permission was established; use manual authoritative recheck and preserve superseded timetable history."
+    }
+  },
+  "source_updates": {
+    "WSSRC-MAC-014": {
+      "expected_canonical_dependency_count": 7,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Statistics Bureau CPI content is reusable under Public Data License 1.0 and the registered CPI schedule parser has pilot evidence, but content-use terms do not independently define production crawler behaviour. The schedule supplies dates and the separate official CPI publication rule supplies the 08:30 JST time."
+      }
+    },
+    "WSSRC-MAC-012": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ABS general website material is CC BY 4.0 and the registered release-calendar parser has pilot evidence, but the licence does not itself authorise unrestricted polling. Labour Force 11:30 local releases must retain Australia/Sydney source time and date-specific AEST/AEDT offsets; published dates may change."
+      }
+    },
+    "WSSRC-MKT-010": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "CME's official FAQ is authoritative for the standing third-Friday 08:30 Chicago-time E-mini S&P 500 expiry/last-trading rule, but CME's website/data terms expressly restrict automated navigation, retrieval and data mining absent permission. Use manual factual verification only; proprietary market-price data remain excluded."
+      }
+    },
+    "WSSRC-COM-002": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "IEA's public OMR product page supplies monthly schedule facts and the 10:00 Paris-time release rule, but the Oil Market Report is explicitly excluded from IEA's CC BY 4.0 Open Use Terms and is Non-CC/licensed material. Retain manual schedule reference only unless an authorised/licensed route is established."
+      }
+    },
+    "WSSRC-CN-012": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ChinaMoney's official LPR page supplies the recurring 09:00-on-the-20th rule with holiday postponement, but the site's legal statement expressly restricts copying, distribution and electronic retrieval/scraping without written authorisation. Retain manual authoritative reference only and recalculate future derived occurrences if the rule changes."
+      }
+    },
+    "WSSRC-EL-NG-001": {
+      "expected_canonical_dependency_count": 2,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "INEC's current-state election surface directly supports the operative 16 January and 6 February 2027 election dates, while the detailed revision endpoint remains operationally fragile. Existing research clears official electoral facts for curated provenance, but no production automated-access permission is established; preserve superseded timetable history and verify manually."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date."
+    },
+    "WSSRC-CB-009": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The registered SNB decisions/history URL does not directly support the forward monetary-policy assessment schedule described by the source record; repair source scope before governance backfill."
+    }
+  }
+}
