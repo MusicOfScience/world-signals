@@ -8,7 +8,7 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.58 — **223 sources**.
+- **Tier-1 source registry:** v1.59 — **223 sources**.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -66,17 +66,21 @@ Configured routes:
 
 All configured **primary monitor sources now have explicit modern source-governance classifications**. Monitor hardening includes non-overlap concurrency, configuration fingerprints, expected/observed adapter completeness, source-health/event-state separation, deterministic candidate manifests and 90-day artefact retention.
 
-### Latest retained pre-contract evidence
+### Latest observed post-contract evidence
 
-Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+00:00`:
+Run **55** / GitHub run id `33876083123`, recorded `2026-09-04T13:04:57.341065+00:00`, ran against merged main `29363b2f7b2c387bf983350939d7e56d9d045cc7`:
 
 - 6 healthy / 0 degraded;
+- all 6 expected adapters observed;
 - 0 review candidates;
 - `NO_CHANGE`;
-- canonical unchanged;
-- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.58.
+- canonical hash unchanged;
+- configuration canonical v0.20 / source v1.59 / expectations v0.7;
+- automatic canonical commit false;
+- Google Calendar write false;
+- Colombia machine health correctly reports `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual SUIN legal-verification authority.
 
-Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
+The review-state contract activated prospectively after run 47 and has now been exercised on genuine later evidence. Pages workflow-run deployment `33876115556` reduced **8 retained monitor runs** to **0 review items**, with **0 unsuccessful-run evidence gaps** and `horizon_complete=True`; runtime is `AVAILABLE` and aligned with the current site, and retained review state is `AVAILABLE_RETAINED_HORIZON(0)`. The earlier observation gate is therefore CLOSED. Do not manufacture a candidate merely to test non-zero persistence; await natural future evidence.
 
 Pages follows the latest completed run, not merely the latest successful one. Newer failure cannot be hidden by an older green snapshot. Public runtime projection strips source snapshots, parser/error payloads, legal bodies/rules, old/new evidence values and observations.
 
@@ -295,12 +299,28 @@ Guarded transaction run `33871313942` passed preflight, exact one-file enforceme
 - missing `automated_monitoring_use`: **170**;
 - missing `verification_mode`: **180**.
 
-P1-G research is frozen for Statistics Bureau of Japan Labour Force Survey, ASX SPI 200 expiry rules, Bank of Canada / Department of Finance Canada bond auctions, JODI Oil + Gas World Database updates, WTO reform checkpoints and State Bank of Pakistan FY27 MPC dates — **28 canonical dependencies**. Japan and Canada retain bounded automated-pilot verification; WTO remains manual-authoritative with endpoint review; ASX, JODI and SBP remain explicit rights-held/manual controls.
+### P1-G mixed-rights / cross-domain tranche — COMPLETE
 
-Brazil TSE and Swiss National Bank remain excluded for provenance-scope repair. SNB's registered decisions/history URL still does not directly support the forward assessment schedule; Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.
+P1-G backfilled Statistics Bureau of Japan Labour Force Survey, ASX SPI 200 expiry rules, Bank of Canada / Department of Finance Canada bond auctions, JODI Oil + Gas World Database updates, WTO reform checkpoints and State Bank of Pakistan FY27 MPC dates — **28 canonical dependencies**. Source registry advanced **v1.58 → v1.59 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**.
+
+Guarded transaction run `33875500751` passed preflight, explicit apply gate, exact one-file enforcement, registry validation, **217 tests**, Python compilation, browser JavaScript checks and site build. Transaction commit `d43291bd352d28ae302fc3bdc1a5273d63705698` changed only `data/sources/registry.json`. PR #17 merged as `29363b2f7b2c387bf983350939d7e56d9d045cc7`.
+
+Independent post-P1-G audit run `33875701696` measured:
+
+- **49** fully explicit governance sources;
+- **174** sources still missing at least one governance field;
+- **0 P0** configured-monitor dependencies;
+- **103 P1** canonical dependencies;
+- **71 P2** registry-only sources;
+- missing `canonical_provenance_use`: **164**;
+- missing `automated_monitoring_use`: **164**;
+- missing `verification_mode`: **174**.
+
+Japan and Canada retain bounded automated-pilot verification; WTO remains manual-authoritative with endpoint review; ASX, JODI and SBP remain explicit rights-held/manual controls. Brazil TSE and Swiss National Bank remain excluded for provenance-scope repair. Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.
 
 Durable P1-F audit: `data/coverage/SOURCE_GOVERNANCE_P1F_BACKFILL_AUDIT_v0.1.md`.
 P1-G research/plan: `data/coverage/SOURCE_GOVERNANCE_P1G_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1G_BACKFILL_PLAN_v0.1.json`.
+Durable P1-G audit: `data/coverage/SOURCE_GOVERNANCE_P1G_BACKFILL_AUDIT_v0.1.md`.
 
 ## Held / unresolved nodes
 
@@ -317,7 +337,7 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 
 ### Source-governance P1/P2 backlog
 
-**109 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
+**103 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
 ## Canonical auto-commit gate — CLOSED
 
@@ -330,14 +350,14 @@ No source failure may satisfy either gate.
 
 ## Exact next work
 
-1. **Observe first genuine post-contract live-monitor run 48+** against source v1.53 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.
-2. **Validate the migrated Colombia adapter operationally** — machine health should report `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual verification authority only.
-3. **Source-governance P1-G transaction gate** — review/merge the frozen P1-G infrastructure, reconcile merged source v1.58 and run the guarded read-only preflight before any registry-only v1.59 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
-4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
-5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
-6. Re-run coverage audit after analytically justified canonical additions only.
-7. Continue **Live Intelligence v1**: explicit WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER structure fed by canonical + monitor evidence, not post-hoc storytelling.
-8. Then continue **Analysis v1** once the live-intelligence evidence contract is stable.
+1. **Source-governance P1-H selection diagnostic** — re-run/inspect the current 103-source P1 queue and choose any next bounded research cohort by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and governance-information value. Do not mechanically roll into another six-source tranche.
+2. **Held provenance-scope repairs** — treat Brazil TSE `WSSRC-EL-BR-001` and SNB `WSSRC-CB-009` separately; neither may receive governance backfill until the provenance relationship/source scope is repaired and reviewed.
+3. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
+4. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
+5. Re-run coverage audit after analytically justified canonical additions only.
+6. Continue **Live Intelligence v1** using aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
+7. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
+8. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
 
 ## Recovery rule
 
