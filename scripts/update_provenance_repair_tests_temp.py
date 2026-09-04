@@ -43,7 +43,7 @@ for path in files:
     )
 
     pattern = re.compile(
-        r"    def (test_brazil_inauguration_guard[^\(]*)\(self\):\n.*?(?=    def test_script_executes_as_cli)",
+        r"    def (test_brazil_inauguration_guard[^\(]*)\(self\):\n.*?(?=    def (?:test_script_executes_as_cli|test_script_help_is_available))",
         re.S,
     )
     match = pattern.search(text)
