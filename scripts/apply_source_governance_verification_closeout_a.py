@@ -137,15 +137,17 @@ def changed_source_ids(before: dict, after: dict) -> list[str]:
 
 def _audit_metrics(canonical: dict, sources: dict, expectations: dict) -> dict:
     audit = build_source_governance_audit(canonical, sources, expectations)
-    s = audit["summary"]
+    totals = audit["totals"]
+    priorities = totals["backfill_research_priority_counts"]
+    missing = totals["missing_field_counts"]
     return {
-        "fully_explicit_governance_sources": s["fully_explicit_governance_sources"],
-        "sources_missing_any_governance_field": s["sources_missing_any_governance_field"],
-        "p1_canonical_dependent": s["p1_canonical_dependent"],
-        "p2_registry_only": s["p2_registry_only"],
-        "missing_canonical_provenance_use": s["missing_canonical_provenance_use"],
-        "missing_automated_monitoring_use": s["missing_automated_monitoring_use"],
-        "missing_verification_mode": s["missing_verification_mode"],
+        "fully_explicit_governance_sources": totals["fully_explicit_governance_source_count"],
+        "sources_missing_any_governance_field": totals["source_records_with_one_or_more_missing_governance_fields"],
+        "p1_canonical_dependent": priorities.get("P1_CANONICAL_DEPENDENCY", 0),
+        "p2_registry_only": priorities.get("P2_REGISTRY_ONLY", 0),
+        "missing_canonical_provenance_use": missing.get("canonical_provenance_use", 0),
+        "missing_automated_monitoring_use": missing.get("automated_monitoring_use", 0),
+        "missing_verification_mode": missing.get("verification_mode", 0),
     }
 
 
