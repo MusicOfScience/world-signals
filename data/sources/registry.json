@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.54",
+  "version": "1.55",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -379,7 +379,12 @@
       "canonical_dependency_count": 11,
       "monitoring_readiness_assessed_at": "2026-09-02",
       "last_successful_research_verification_at": "2026-09-03T03:50:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Bank of Canada schedule content is reusable subject to stated conditions and existing runtime evidence supports pilot verification, while request-frequency/overburdening terms require endpoint-specific operational review before production polling."
     },
     {
       "source_id": "WSSRC-CB-009",
@@ -721,7 +726,12 @@
           "preferred_for_monitoring": false,
           "completeness_scope": "FULL_PUBLISHED_EURO_INDICATOR_CALENDAR"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Eurostat permits attributed reuse and expressly provides an internet-calendar subscription that automatically receives calendar updates; automated clearance is bounded to the official ICS/feed route and source-native provisional/confirmed status must be preserved."
     },
     {
       "source_id": "WSSRC-MAC-006",
@@ -3610,7 +3620,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Japan MOF applies Public Data License v1.0 to general website content and WORLD SIGNALS has pilot parser evidence; the licence does not itself grant unrestricted polling and auction-calendar alterations must remain distinct reviewed changes."
     },
     {
       "source_id": "WSSRC-FIS-008",
@@ -4645,7 +4660,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 260,
       "canonical_dependency_count": 5,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "UNGA mandated-events pages are authoritative informational references, but general UN website terms limit copying to personal non-commercial use without redistribution/derivative rights; automation remains held absent a specifically authorised route."
     },
     {
       "source_id": "WSSRC-INT-028",
@@ -5031,7 +5051,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 260,
       "canonical_dependency_count": 5,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "PBoC Article 21 is authoritative factual provenance for a monthly latest-publication window within 20 days after month-end; no exact day/time or automated retrieval permission is inferred from the rule page."
     },
     {
       "source_id": "WSSRC-CN-014",
@@ -5192,7 +5217,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 270,
       "canonical_dependency_count": 6,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The Electoral Commission directly confirms the 2026 General Election timetable. Classification is limited to factual milestone metadata; no general website automation permission was identified and government formation is not inferred as a Commission milestone."
     },
     {
       "source_id": "WSSRC-EL-ZA-001",
