@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.59",
+  "version": "1.60",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -503,7 +503,12 @@
       "monitoring_priority_score": 10,
       "canonical_dependency_count": 2,
       "monitoring_readiness_assessed_at": "2026-09-02",
-      "last_successful_research_verification_at": "2026-09-03"
+      "last_successful_research_verification_at": "2026-09-03",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "RBI's official press release supports FY2026-27 multi-day MPC meeting windows, including 5-7 October and 2-4 December 2026, but does not supply a separate decision-release clock time. RBI website policy restricts unauthorised reproduction/distribution/commercial use and reserves access controls, so automation remains held."
     },
     {
       "source_id": "WSSRC-CB-012",
@@ -1267,7 +1272,12 @@
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 30,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "UNGA's official 81st-session pages support the session opening and provisional High-level Week schedule, but general UN website terms limit copying to personal non-commercial use without redistribution/compilation/derivative rights; automation remains held and provisional status must be preserved."
     },
     {
       "source_id": "WSSRC-INT-002",
@@ -1906,7 +1916,12 @@
       "automation_summary": "OPEC meeting dates can remain manually curated authoritative facts, but direct OPEC website ingestion cannot be a WORLD SIGNALS production database/monitor dependency without written authorisation.",
       "rights_reviewed_at": "2026-09-02T21:45:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_D_HIGH_VALUE_GOVERNMENT_AND_INSTITUTIONAL",
-      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "OPEC press releases are authoritative informational references, but OPEC terms restrict reproduction/distribution and storage in shared electronic archives or databases without written authorisation; occasional attributed internal/research use is not production automation permission."
     },
     {
       "source_id": "WSSRC-COM-002",
@@ -2885,7 +2900,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ESRI's official GDP schedule supplies exact source-native release dates and 08:50 JST times and warns dates may change; Cabinet Office reuse terms support attributed factual reuse, while production polling remains endpoint-review-required despite existing pilot evidence."
     },
     {
       "source_id": "WSSRC-MAC-017",
@@ -7178,7 +7198,12 @@
       "automation_summary": "The MPC webcast/calendar remains authoritative manual provenance but is not cleared as a production ingestion route.",
       "rights_reviewed_at": "2026-09-02T22:35:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_E_ASIA_GLOBAL_SOUTH_CORRECTIVE_SOURCES",
-      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "SARB's official MPC webcast page supplies 2026 announcement dates and 15:00 presentation times, but its disclaimer prohibits copying/reproduction/adaptation/publication/distribution without prior written consent and reserves access controls; verification remains rights-held manual only."
     },
     {
       "source_id": "WSSRC-REG-007",
@@ -7308,7 +7333,12 @@
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 30,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The Cámara's current constitutional text is authoritative for the 8 September budget-submission and 15 November approval deadlines; Mexican Federal Copyright Law Article 14(VIII) excludes legislative texts from copyright protection, but no automated retrieval permission is inferred from that legal status."
     },
     {
       "source_id": "WSSRC-CORP-001",
