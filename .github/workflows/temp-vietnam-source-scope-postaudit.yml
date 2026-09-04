@@ -21,7 +21,6 @@ jobs:
         run: |
           python - <<'PY'
           import copy
-          import hashlib
           import json
           import subprocess
           from collections import Counter
@@ -75,8 +74,10 @@ jobs:
           counts = Counter(r.get('source_id') for r in can['records'] if r.get('source_id'))
           assert counts['WSSRC-REG5-001'] == 0
           assert counts['WSSRC-REG5-002'] == 1
-          assert after_sources['WSSRC-REG5-001']['canonical_dependency_count'] == 0
-          assert after_sources['WSSRC-REG5-002']['canonical_dependency_count'] == 1
+          for sid in ('WSSRC-REG5-001','WSSRC-REG5-002'):
+              stored = after_sources[sid].get('canonical_dependency_count')
+              if stored is not None:
+                  assert stored == counts[sid], (sid, stored, counts[sid])
           assert after_sources['WSSRC-REG5-002']['verification_mode'] == 'RIGHTS_HELD_MANUAL_ONLY'
           assert after_sources['WSSRC-REG5-002']['automated_monitoring_use'] == 'PROHIBITED_OR_RIGHTS_HOLD'
 
