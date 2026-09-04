@@ -107,7 +107,7 @@ class ProvenanceScopeRepairATests(unittest.TestCase):
         else:
             assert_source_registry_compatible(self, self.sources)
             assert_brazil_inauguration_compatible(self, self.canonical)
-            self.assertEqual(self.overlay["canonical_checkpoint"], {"registry_version": "0.21", "record_count": 669})
+            self.assertEqual(self.overlay["canonical_checkpoint"], {"registry_version": self.canonical["version"], "record_count": 669})
             entry = next(c for c in self.ledger["changes"] if c.get("change_id") == self.plan["change_ledger_entry"]["change_id"])
             self.assertTrue(entry.get("committed_at"))
             planned = copy.deepcopy(entry)
