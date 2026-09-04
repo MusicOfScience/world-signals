@@ -1,0 +1,81 @@
+name: Diagnose WORLD SIGNALS P1-A source records
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-p1a-source-records.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Extract exact P1-A source records
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          ids=[
+            'WSSRC-MAC-007',
+            'WSSRC-MAC-017',
+            'WSSRC-COM-003',
+            'WSSRC-COM-010',
+            'WSSRC-HEALTH-001',
+            'WSSRC-EL-BR-001',
+            'WSSRC-CLIM-001',
+          ]
+          sources=json.loads(Path('data/sources/registry.json').read_text(encoding='utf-8'))
+          canonical=json.loads(Path('data/canonical/registry.json').read_text(encoding='utf-8'))
+          by_id={s.get('source_id'):s for s in sources.get('sources',[])}
+          missing=[sid for sid in ids if sid not in by_id]
+          if missing:
+              raise SystemExit(f'missing source IDs: {missing}')
+          counts=Counter(r.get('source_id') for r in canonical.get('records',[]) if r.get('source_id'))
+          rows=[]
+          for sid in ids:
+              rec=dict(by_id[sid])
+              rec['_canonical_dependency_count_derived']=counts.get(sid,0)
+              rows.append(rec)
+          out={
+            'project':'WORLD SIGNALS',
+            'dataset':'P1A_EXACT_SOURCE_RECORD_DIAGNOSTIC',
+            'canonical_registry_version':canonical.get('version'),
+            'source_registry_version':sources.get('version'),
+            'source_ids':ids,
+            'records':rows,
+          }
+          Path('artifacts').mkdir(exist_ok=True)
+          Path('artifacts/p1a-source-records.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps({
+            'canonical_registry_version':out['canonical_registry_version'],
+            'source_registry_version':out['source_registry_version'],
+            'sources':[
+              {
+                'source_id':r['source_id'],
+                'institution':r.get('institution'),
+                'endpoint_role':r.get('endpoint_role'),
+                'authoritative_url':r.get('authoritative_url'),
+                'source_type':r.get('source_type'),
+                'machine_readable_available':r.get('machine_readable_available'),
+                'monitoring_readiness_status':r.get('monitoring_readiness_status'),
+                'canonical_dependencies':r['_canonical_dependency_count_derived'],
+              } for r in rows
+            ],
+          },indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-p1a-source-records
+          path: artifacts/p1a-source-records.json
+          retention-days: 30
+      - name: Read-only guard
+        run: git diff --exit-code
