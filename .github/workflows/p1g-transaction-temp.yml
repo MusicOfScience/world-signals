@@ -1,0 +1,51 @@
+name: TEMP P1-G governance transaction
+
+on:
+  push:
+    branches: [source-governance-p1g-transaction]
+
+permissions:
+  contents: write
+
+jobs:
+  transact:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Read-only P1-G preflight
+        run: python scripts/apply_source_governance_p1g.py
+      - name: Apply guarded P1-G transaction
+        env:
+          WORLD_SIGNALS_ALLOW_P1G_GOVERNANCE_APPLY: YES
+        run: python scripts/apply_source_governance_p1g.py --apply
+      - name: Enforce registry-only diff
+        run: |
+          test "$(git diff --name-only)" = "data/sources/registry.json"
+      - name: Validate registry
+        run: python scripts/validate_registry.py
+      - name: Run full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        run: python -m py_compile scripts/*.py src/world_signals/*.py
+      - name: Check browser JavaScript
+        run: |
+          for file in web/*.js; do node --check "$file"; done
+      - name: Build derived site
+        run: python scripts/build_site.py
+      - name: Reconfirm protected diff
+        run: |
+          test "$(git diff --name-only)" = "data/sources/registry.json"
+      - name: Commit registry transaction
+        run: |
+          git config user.name "world-signals-governance"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/sources/registry.json
+          test "$(git diff --cached --name-only)" = "data/sources/registry.json"
+          git commit -m "Apply P1-G source-governance backfill"
+          git push origin HEAD:source-governance-p1g-transaction
