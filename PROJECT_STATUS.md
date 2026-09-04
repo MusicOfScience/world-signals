@@ -1,9 +1,9 @@
 # WORLD SIGNALS — project status / branch-recovery checkpoint
 
 **Updated:** 2026-09-04  
-**Purpose:** durable continuation point after conversation-length or branch interruptions.
+**Purpose:** durable continuation point after conversation-length, branch or deployment interruptions.
 
-This is an operational checkpoint, not a replacement for `WORLD_SIGNALS_PROJECT_CHARTER.md`, the canonical registries, monitor contracts, change ledger, coverage audits or source-rights evidence.
+This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains the authoritative architecture specification; canonical/source registries, monitor contracts, change ledger and audits remain primary evidence.
 
 ## Current source of truth
 
@@ -13,15 +13,26 @@ This is an operational checkpoint, not a replacement for `WORLD_SIGNALS_PROJECT_
 - **Live monitor expectations:** v0.6.
 - **Monitor operations policy:** v0.1.
 - **Review-candidate state contract:** v0.1 — prospective activation after monitor run 47.
-- **Manual review-decision store:** v0.1 — currently empty, reviewed repository commits only.
+- **Manual review-decision store:** v0.1 — currently empty; reviewed repository changes only.
+- **Durable review checkpoint architecture:** implemented/tested as a noncanonical layer; no routine monitor/Pages contents-write authority.
 - **Canonical commit readiness audit:** v0.8.
 - **Automatic canonical commit:** **CLOSED / prohibited**.
 - **Google Calendar writes:** **OFF / prohibited**.
 - **Browser / GitHub Pages:** derived read-only projection, never canonical state.
 
-Live Pages UX: `https://musicofscience.github.io/world-signals/`
+Live UX: `https://musicofscience.github.io/world-signals/`
 
-Current visible layers include:
+## Publishing path — GitHub Actions only
+
+GitHub Pages **Source is GitHub Actions**. `web/` + `scripts/build_site.py` are the application/build path.
+
+Generated `docs/` output is now ignored and not tracked. The stale v0.17/649 committed snapshot was removed in commit `954c3b0d6200cf322fa91220c56f3fdc4f80a7b0` so it cannot act as a competing publication surface.
+
+The 2026-09-04 Pages-source incident is CLOSED. A fresh full Actions build/deploy (`33819680572`) succeeded after the source change and the user confirmed the public endpoint displayed the current tabbed application. Durable incident record: `data/monitor/PAGES_SOURCE_INCIDENT_2026-09-04.md`.
+
+Current permanent workflows: exactly six — CI, Pages, coverage audit, monitor dry run, adapter smoke, live monitor. No temporary write-capable migration/diagnostic workflow should remain.
+
+## Current visible Pages layers
 
 1. Calendar;
 2. Event index;
@@ -29,194 +40,170 @@ Current visible layers include:
 4. Operations / source governance;
 5. latest retained dated monitor-run evidence;
 6. retained review state inside the Actions evidence horizon;
-7. reviewed Change history.
+7. **cross-domain Biosecurity system map** inside Operations;
+8. reviewed Change history.
 
-The Operations layer deliberately distinguishes a single-run candidate snapshot from retained review state and from reviewed canonical history. It does not claim current source health from a static build and it does not claim that the retained-horizon reducer is a permanent queue.
+The UI distinguishes canonical events, configured monitoring, dated runtime evidence, transient run candidates, retained review state, analytical coverage overlays and reviewed history. It does not collapse these into one apparent “live” database.
 
 ## Architectural boundary
 
-The executable architecture remains:
+`AUTHORITATIVE SOURCE → FETCH → SNAPSHOT → PARSE → ASSERT → MATCH → DIFF → REVIEW CANDIDATE → REVIEW → REVIEWED TRANSACTION → CANONICAL REGISTRY → DERIVED OUTPUTS`
 
-`AUTHORITATIVE SOURCE → FETCH → SNAPSHOT → PARSE → ASSERT → MATCH → DIFF → REVIEW CANDIDATE → REVIEWED TRANSACTION → CANONICAL REGISTRY → DERIVED OUTPUTS`
+Calendar/Pages, monitoring, review state, Live Intelligence and Analysis remain separate layers. Source absence/failure cannot itself cancel, complete or reschedule an event.
 
-Calendar/Pages, monitoring, Live Intelligence and Analysis remain separate layers. A source failure or missing item cannot itself cancel, complete or reschedule an event.
+## Scheduled read-only monitor cohort
 
-## Current scheduled read-only monitor cohort
+`.github/workflows/live-monitor.yml` currently runs on cron **`23 5 * * *` (daily at 05:23 UTC)** and can also be dispatched manually. It has `contents: read` only.
 
-`live-monitor.yml` runs with `contents: read` and produces timestamped reports/review candidates only.
-
-Configured routes include:
+Configured routes:
 
 - RBA Financial Stability Review RSS;
 - Colombia SUIN Decree 111/1996 legal sentinel;
-- EU CRA Article 71 / Cellar legal-topology sentinel;
+- EU Cyber Resilience Act Article 71 / Cellar sentinel;
 - EU CBAM verifier-report milestone;
 - EU CBAM certificate-sale milestone;
-- EU CBAM annual declaration / certificate-surrender deadline.
+- EU CBAM annual declaration / certificate-surrender milestone.
 
-Monitor hardening includes:
+Monitor hardening includes non-overlap concurrency, configuration fingerprints, expected/observed adapter completeness, source-health/event-state separation, deterministic candidate manifests and 90-day artefact retention.
 
-- read-only GitHub permissions;
-- non-overlapping concurrency;
-- execution-context and configuration fingerprinting;
-- canonical/source/expectation/policy version + SHA capture;
-- expected/observed adapter completeness checks;
-- source-health state separated from event state;
-- deterministic review-candidate manifest;
-- regression tests inside the monitor workflow;
-- evidence artefacts retained for 90 days.
+### Latest retained pre-contract evidence
 
-### Latest retained single-run evidence
+Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+00:00`:
 
-Latest retained pre-contract run used by the public runtime projection:
-
-- live-monitor run **47** / GitHub run id `33754900613`;
-- recorded at `2026-09-03T12:23:29.227611+00:00`;
-- **6 healthy / 0 degraded / 0 candidates**;
+- 6 healthy / 0 degraded;
+- 0 review candidates;
 - `NO_CHANGE`;
 - canonical unchanged;
-- run configuration: canonical v0.17 / source registry v1.48;
-- therefore correctly labelled `STALE_RELATIVE_TO_CURRENT_SITE` against current v0.20 / v1.51.
+- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.51.
 
-Pages follows the latest **completed** monitor run, not merely the latest successful run. A newer failed run cannot be hidden behind an older green snapshot. Runtime artefacts are sanitized before public projection; raw snapshots, parser errors, legal payloads, old/new candidate evidence and observations do not enter Pages.
+Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
 
-## Retained review state — IMPLEMENTED WITH RETENTION BOUNDARY
+Pages follows the latest completed run, not merely the latest successful one. Newer failure cannot be hidden by an older green snapshot. Public runtime projection strips source snapshots, parser/error payloads, legal bodies/rules, old/new evidence values and observations.
 
-`data/monitor/review_candidate_state_contract.json` v0.1 activates prospectively **after monitor run 47**. Historical monitor experiments are not retroactively promoted.
+## Review state / persistence
 
-Identity model:
+Stable identity model:
 
-- `candidate_id` = immutable monitor evidence object;
-- `review_item_id` = stable proposition identity, prefix `WSRV-`;
-- identical propositions aggregate even if candidate IDs differ;
+- `candidate_id` = immutable one-run evidence object;
+- `review_item_id` = stable `WSRV-*` proposition;
+- equivalent propositions aggregate across runs;
 - materially different propositions remain siblings;
-- later candidate absence does not resolve an item;
-- fetch/source failure does not resolve an item;
-- rejected/deferred items do not reopen merely because they are reobserved.
+- later absence or fetch failure does not resolve an item;
+- rejected/deferred items do not reopen merely through re-observation;
+- canonical alignment without reviewed change-ledger linkage requires reconciliation rather than silent completion.
 
-`src/world_signals/review_state.py` implements the reducer. Canonical field propositions hash occurrence scope + the fields and values actually proposed. Legal/rule/topology propositions are opaque identities: raw rule state may be used transiently to derive a digest but is not exposed publicly.
+`data/monitor/review_decisions.json` is reviewed/manual and cannot be written by monitor or Pages.
 
-`data/monitor/review_decisions.json` v0.1 is the reviewed manual-decision store. The monitor and Pages/browser cannot write it.
+Retained-horizon reducer is bounded by **90-day Actions artefact retention** and fails closed on missing successful-run evidence. Unsuccessful runs are evidence gaps, not “no candidate”.
 
-`scripts/fetch_retained_review_state.py` scans retained successful post-contract monitor artefacts, fails rather than silently omitting a successful run whose artefact is missing, and records unsuccessful runs without interpreting them as candidate absence. The v0.1 reducer has a hard ceiling of 400 retained successful runs.
+A platform-neutral durable noncanonical review checkpoint/merge layer has also been implemented and tested so pending propositions can eventually survive source artefact expiry without turning Actions into a database. Checkpoint-private canonical proposed values may be retained only where needed for future reconciliation; opaque legal/topology raw payloads remain excluded. No routine checkpoint-writing workflow has been authorised.
 
-First real Pages reduction after activation:
+Older audit language referring to a six-hour monitor cadence is historical/planning text; the **current executable workflow is daily at 05:23 UTC**. The 90-day retention limit, not the reducer's 400-run defensive ceiling, is the present evidence-horizon constraint.
 
-- successful post-contract runs considered: **0**;
-- retained review items: **0**;
-- unsuccessful post-contract runs: **0**;
-- evidence horizon: complete for evidence that presently exists.
-
-This is a meaningful prospective empty state, not a statement about pre-contract history.
-
-Current limitation: the state is complete only inside the 90-day retained Actions artefact horizon. **Do not call it a permanent queue.** Before indefinite pending-review persistence can be claimed, design an independently constrained durable checkpoint mechanism without granting the monitor or Pages workflow repository contents-write authority merely to persist state.
-
-Durable audit: `data/monitor/RETAINED_REVIEW_STATE_AUDIT_v0.1.md`.
-
-## Coverage programme — completed corrections
+## Coverage corrections completed
 
 ### Regional Correction J — COMPLETE
 
-Added 13 remaining-2026 monetary-policy occurrences across six previously missing series:
+13 remaining-2026 monetary-policy occurrences across RBI, SBP, CBSL, BSP, BNM and CBE.
 
-- Reserve Bank of India;
-- State Bank of Pakistan;
-- Central Bank of Sri Lanka;
-- Bangko Sentral ng Pilipinas;
-- Bank Negara Malaysia;
-- Central Bank of Egypt.
-
-Result: v0.17 / 649 → v0.18 / 662; source registry v1.48 → v1.49.
+Result: v0.17 / 649 → v0.18 / 662; source v1.48 → v1.49.
 
 ### Energy / Commodities Correction K — COMPLETE
 
-Admitted only three high-value families after cross-audit:
+JODI Oil+Gas updates (four source-bundle occurrences), GECF Heads-of-State Summit and International Copper Study Group meeting.
 
-- JODI Oil + Gas World Database first monthly updates — four remaining-2026 source-bundle occurrences;
-- GECF 8th Heads-of-State Summit — 27 Oct 2026;
-- International Copper Study Group meetings — 13 Oct 2026.
-
-Result: v0.18 / 662 → v0.19 / 668; source registry v1.49 → v1.50. New sources remain manual provenance / production-automation holds.
+Result: v0.18 / 662 → v0.19 / 668; source v1.49 → v1.50. The correction doubled ENERGY_COMMODITIES institutional breadth while reducing its oil-specific occurrence share; new sources remain manual provenance / automation holds.
 
 ### Physical Risk Correction L — COMPLETE
 
-Schema v0.50/v0.51 introduced month-native seasonal timing so authorities need not be forced into invented civil days.
-
-Correction L admitted exactly one occurrence:
+Schema v0.50/v0.51 added source-native month-bounded seasonal timing. One occurrence admitted:
 
 - `WSO-RISK-A-0001` / `WSER-RISK-SWP-TC` — South-West Pacific tropical cyclone season 2026–27;
-- source-native window: **November–April**;
-- `MONTH_BOUNDED_SEASON_WINDOW`;
-- no synthetic first/last day or timestamp;
-- Fiji/RSMC Nadi source remains manual authoritative provenance with automated-monitoring rights hold.
+- native window November–April;
+- no synthetic civil-day endpoints/timestamps;
+- Fiji/RSMC Nadi source remains manual authoritative provenance / automation-rights hold.
 
-Result: v0.19 / 668 → **v0.20 / 669**; source registry v1.50 / 221 → **v1.51 / 222**.
+Result: v0.19 / 668 → **v0.20 / 669**; source v1.50 / 221 → **v1.51 / 222**.
 
-Reviewed migration commit: `d398ff464a77c0178743951f255482aa75068010`.
-One-shot write workflow removed in `ba1e716a5dc5e9422f305411f514e5eb5fb58cd8`.
-Normal CI and Pages deployment passed on the resulting state.
+IMD/RSMC New Delhi North Indian Ocean season remains noncanonical because competent official material conflicts on first phase April–June vs April–May.
 
-The proposed IMD/RSMC New Delhi North Indian Ocean season remains noncanonical because competent official material conflicts on the first phase: **April–June** versus **April–May**. WORLD SIGNALS did not choose a convenient winner.
+## Biosecurity cross-domain architecture — IMPLEMENTED / NO POPULATION
 
-Durable audit: `data/coverage/PHYSICAL_RISK_CORRECTION_L_AUDIT_v0.1.md`.
+Mechanical diagnostic at v0.20 found `HEALTH_BIOSECURITY` genuinely WHO-only: **10 occurrences / 5 series / 1 institution**. No canonical WOAH, IPPC/CPM, BWC/UNODA, Africa CDC or One Health holdings were found.
 
-## Held / unresolved coverage nodes
+`data/coverage/biosecurity_overlay.json` v0.1 defines a nonexclusive analytical/coverage overlay with four systems:
 
-### Health / biosecurity — taxonomy hold
+- human-health governance;
+- animal/zoonotic health;
+- plant/phytosanitary security;
+- biological-security/arms-control governance.
 
-Broad biosecurity must not be repaired by putting unlike institutions into one bucket. Current held nodes include BWC governance, IPPC/CPM, WOAH and Africa CDC. Human health, animal/zoonotic health, plant health/trade and biological-security governance require linked but distinct taxonomy.
+`ONE_HEALTH` is a cross-cutting relationship, not a forced primary category.
 
-### South Asia — precision / provenance backlog
+Only the five existing WHO series are canonical memberships. Four noncanonical research nodes are represented without canonical IDs:
 
-Important held nodes include:
+- WOAH;
+- IPPC/CPM;
+- BWC/UNODA;
+- Africa CDC.
 
-- Nepal federal budget native-calendar conversion provenance;
-- Bangladesh FY2027-28 budget exact future presentation date;
-- BIMSTEC high-level future scheduling;
+Executable validation fails if mapped series/category/institution diverge from canonical truth or if a candidate masquerades as canonical. The overlay grants **zero canonical mutation / zero event-population authority**.
+
+Operations now exposes a browser-safe **Biosecurity system map**, visibly separating the 5 WHO canonical series from the four noncanonical candidate nodes. CI passed on the overlay and public projection; Pages run `33821356707` deployed the visible map successfully.
+
+Durable records:
+
+- `data/coverage/BIOSECURITY_TAXONOMY_DIAGNOSTIC_v0.1.md`
+- `data/coverage/BIOSECURITY_CROSS_DOMAIN_OVERLAY_AUDIT_v0.1.md`
+
+## Held / unresolved nodes
+
+### Biosecurity candidate admission
+
+WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing/rights/admission review. Do not bulk-populate merely because the analytical overlay now exists. Africa CDC date conflict remains unresolved.
+
+### South Asia provenance backlog
+
+- Nepal federal-budget native-calendar conversion provenance;
+- Bangladesh FY2027–28 exact budget-presentation date;
+- BIMSTEC high-level future schedule;
 - North Indian Ocean cyclone-season definition conflict.
 
-### Source-rights holds
+### Source-governance backfill
 
-Fiji/RSMC Nadi, JODI, GECF, ICSG and several other sources may support manually curated factual provenance without thereby becoming production automated-monitor dependencies. Public accessibility and machine-readable transport never substitute for a rights/permission gate.
+Many older source records predate explicit `canonical_provenance_use` / `automated_monitoring_use` fields. `NOT_RECORDED_IN_REGISTRY` is an unresolved governance state, never implicit permission.
 
 ## Canonical auto-commit gate — CLOSED
 
-Do not reopen merely because more parsers, UX features or coverage tranches pass tests. The harder real-world evidence remains:
+Do not reopen because parsers, coverage, UX or review-state engineering pass tests. Remaining genuine real-world evidence:
 
-1. **one prospective reschedule** detected after a prior canonical monitor snapshot and reviewed against the same stable occurrence identity; and
-2. **one explicit cancellation of an existing canonical occurrence** from positive authoritative evidence, not inferred from absence.
+1. one **prospective reschedule** detected after a prior canonical monitor snapshot and reviewed against the same stable occurrence; and
+2. one **explicit cancellation** of an already-canonical occurrence from positive authoritative evidence.
 
-Until then:
-
-`FETCH → PARSE → ASSERT → MATCH → DIFF → REVIEW CANDIDATE`
-
-is permitted on validated routes; automatic canonical mutation is not.
+No source failure may satisfy either gate.
 
 ## Exact next work
 
-1. **Durable review persistence architecture** — design a constrained checkpoint beyond the 90-day Actions horizon without turning Actions into a database or granting routine monitor/Pages contents-write authority.
-2. **Observe first post-contract monitor run** — validate retained-state reduction on genuine run 48+ evidence; do not manufacture a candidate merely to demonstrate the UI.
-3. **Cross-domain biosecurity taxonomy** — architecture before population.
-4. **South Asia provenance backlog** — continue source/precision resolution.
-5. **Source-governance backfill** — progressively classify older source records whose explicit provenance/automation fields are still `NOT_RECORDED_IN_REGISTRY`; do not treat missing classification as permission.
-6. Re-run coverage audit only after analytically justified additions.
-7. Continue **Live Intelligence v1** and then **Analysis v1** after the registry/monitor/review boundaries remain stable.
+1. **Observe first genuine post-contract live-monitor run 48+** and validate retained-review reduction against real evidence; do not manufacture a candidate.
+2. **Source-governance backfill methodology** — classify older `NOT_RECORDED_IN_REGISTRY` records in bounded, rights-aware tranches without interpreting public access as automation permission.
+3. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorize population.
+4. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
+5. Re-run coverage audit after analytically justified canonical additions only.
+6. Continue **Live Intelligence v1**: explicit WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER structure fed by canonical + monitor evidence, not post-hoc storytelling.
+7. Then continue **Analysis v1** once the live-intelligence evidence contract is stable.
 
-## Recovery rule for future conversation branches
+## Recovery rule
 
-Recover from the repository in this order rather than trusting the last chat sentence:
+Recover from repository state, not the last chat sentence:
 
 1. `WORLD_SIGNALS_PROJECT_CHARTER.md`
 2. `PROJECT_STATUS.md`
 3. `data/canonical/registry.json`
 4. `data/canonical/schema.json`
 5. `data/sources/registry.json`
-6. `data/monitor/expectations.json`
-7. `data/monitor/operations_policy.json`
-8. `data/monitor/review_candidate_state_contract.json`
-9. `data/monitor/review_decisions.json`
-10. `data/changes/ledger.json`
-11. latest relevant `data/coverage/*AUDIT*` and `data/monitor/*AUDIT*`
-12. latest `main` commits and GitHub Actions runs.
+6. monitor expectations/policy/review contracts/decisions/checkpoint
+7. `data/changes/ledger.json`
+8. latest relevant coverage/monitor audits
+9. current `main` commits + Actions runs
 
-If chat narrative and repository state disagree, stop and reconcile the discrepancy before new canonical or monitoring changes.
+If chat and repository state disagree, stop and reconcile before new canonical or monitoring changes.
