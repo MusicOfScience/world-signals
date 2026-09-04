@@ -1,0 +1,39 @@
+name: Audit WORLD SIGNALS source governance once
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/source-governance-audit-once.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Source governance audit tests
+        run: python -m unittest tests.test_source_governance_audit -v
+      - name: Build read-only source governance audit
+        run: python scripts/run_source_governance_audit.py
+      - name: Print bounded priority preview
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('artifacts/source-governance-audit.json'))
+          print('TOTALS',json.dumps(a['totals'],sort_keys=True))
+          for row in a['backfill_research_queue'][:25]:
+              print('QUEUE',row['research_priority'],row['source_id'],'|',row.get('institution'),'| canonical=',row['canonical_occurrence_dependency_count'],'monitor=',row['configured_monitor_route_count'],'| missing=',','.join(row['missing_governance_fields']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-source-governance-audit-${{ github.run_id }}
+          path: artifacts/source-governance-audit.json
+          if-no-files-found: error
+          retention-days: 30
