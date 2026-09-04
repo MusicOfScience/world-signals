@@ -1,0 +1,66 @@
+name: TEMP verification closeout A transaction
+
+on:
+  push:
+    branches:
+      - verification-closeout-a-transaction
+    paths:
+      - '.github/workflows/verification-closeout-a-transaction-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  transact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Guarded read-only preflight
+        run: python scripts/apply_source_governance_verification_closeout_a.py
+      - name: Apply reviewed source-only closeout
+        env:
+          WORLD_SIGNALS_ALLOW_VERIFICATION_CLOSEOUT_A_APPLY: YES
+        run: python scripts/apply_source_governance_verification_closeout_a.py --apply
+      - name: Enforce exact mutation surface
+        shell: bash
+        run: |
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' data/sources/registry.json > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+      - name: Validate registry
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m py_compile scripts/apply_source_governance_verification_closeout_a.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
+      - name: Browser JavaScript checks
+        shell: bash
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Re-enforce exact mutation surface
+        shell: bash
+        run: |
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' data/sources/registry.json > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+      - name: Commit reviewed transaction
+        shell: bash
+        run: |
+          git config user.name world-signals-transaction
+          git config user.email actions@users.noreply.github.com
+          git add data/sources/registry.json
+          git diff --cached --name-only | sort > /tmp/staged
+          printf '%s\n' data/sources/registry.json > /tmp/expected
+          diff -u /tmp/expected /tmp/staged
+          git commit -m 'Apply verification-mode source governance closeout A'
+          git push origin HEAD:verification-closeout-a-transaction
