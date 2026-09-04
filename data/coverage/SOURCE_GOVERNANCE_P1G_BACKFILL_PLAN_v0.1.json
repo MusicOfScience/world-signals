@@ -1,0 +1,199 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1G_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected after the measured P1-F audit, while preserving canonical, monitor and held-source state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_native_precision_must_be_preserved": true,
+    "institution_native_event_semantics_must_be_preserved": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active horizon, source-scope integrity, regional breadth, domain diversity and governance-information value; not mechanical top-N",
+    "selected_source_ids": [
+      "WSSRC-COM-012",
+      "WSSRC-FIS-008",
+      "WSSRC-INT-029",
+      "WSSRC-MAC-015",
+      "WSSRC-MKT-011",
+      "WSSRC-REGJ-001"
+    ],
+    "canonical_dependency_total": 28,
+    "regional_mix": {
+      "JAPAN": 1,
+      "AUSTRALIA": 1,
+      "CANADA": 1,
+      "GLOBAL_ENERGY": 1,
+      "GLOBAL_TRADE_GOVERNANCE": 1,
+      "PAKISTAN": 1
+    }
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.58",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-MAC-015": 7,
+      "WSSRC-MKT-011": 6,
+      "WSSRC-FIS-008": 5,
+      "WSSRC-COM-012": 4,
+      "WSSRC-INT-029": 3,
+      "WSSRC-REGJ-001": 3
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_canonical_dependency_count": 4,
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    },
+    "snb_scope_guard": {
+      "source_id": "WSSRC-CB-009",
+      "expected_canonical_dependency_count": 18,
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "repair_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.59",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-COM-012",
+      "WSSRC-FIS-008",
+      "WSSRC-INT-029",
+      "WSSRC-MAC-015",
+      "WSSRC-MKT-011",
+      "WSSRC-REGJ-001"
+    ],
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "japan_labour_force": {
+      "schedule_url": "https://www.stat.go.jp/english/data/roudou/1543.html",
+      "results_url": "https://www.stat.go.jp/english/data/roudou/result.html",
+      "finding": "Statistics Bureau / Government of Japan content is governed by Public Data License 1.0 subject to exceptions. The official English schedule supports date-only Labour Force Survey releases; no clock time or unrestricted production polling permission is inferred. Existing validated parser/pilot evidence supports bounded automated verification."
+    },
+    "asx_spi200": {
+      "specification_url": "https://www2.asx.com.au/content/dam/asx/participants/derivatives-market/ird/asx24-contract-specifications.pdf",
+      "finding": "The current ASX 24 specification states that SPI 200 expiring contracts cease trading at 12.00pm on the third Thursday of the settlement month, with AEST/AEDT applying. ASX terms prohibit unauthorised spider/scraper/robot monitoring and copying; the route remains rights-held/manual."
+    },
+    "canada_bond_auctions": {
+      "schedule_url": "https://www.bankofcanada.ca/markets/government-securities-auctions/calls-for-tenders-and-results/bond-auction-schedule/",
+      "rights_url": "https://www.bankofcanada.ca/terms/",
+      "finding": "Bank of Canada auction data is available through structured formats and is reusable subject to stated conditions. Request-frequency and service-overburdening restrictions require endpoint-specific review. Existing parser/pilot evidence supports bounded automated verification; provisional schedule status and selectively explicit bidding times must be preserved."
+    },
+    "jodi": {
+      "schedule_url": "https://www.jodidata.org/oil/support/update-calendar.aspx",
+      "combined_schedule_url": "https://www.jodidata.org/_resources/files/downloads/jodi-update-schedule-2026.pdf?v=dates-for-2026",
+      "terms_url": "https://www.jodidata.org/terms-of-use.aspx",
+      "finding": "The official combined 2026 Oil + Gas schedule gives the first monthly World Database updates at noon London time and notes supplementary updates. JODI reserves intellectual-property rights; public schedule availability does not clear systematic automated monitoring."
+    },
+    "wto": {
+      "workplan_url": "https://www.wto.org/english/news_e/news26_e/gc_26jun26_432_e.htm",
+      "rights_url": "https://www.wto.org/english/info_e/copyrights_permissions_e.htm",
+      "finding": "The WTO workplan supports December 2026 and February 2027 General Council checkpoints plus a 2027 ministerial review without exact future dates. WTO permits broad dissemination under differentiated terms, but the web/news route does not expressly clear unrestricted automated access. Factual timing metadata may be curated while canonical month/year precision is preserved."
+    },
+    "state_bank_pakistan": {
+      "schedule_url": "https://www.sbp.org.pk/our-operations/monetary-policy",
+      "fallback_url": "https://www.sbp.org.pk/m_policy/About.asp",
+      "finding": "SBP's FY27 advance calendar confirms MPC / Monetary Policy Statement dates including 14 September, 26 October and 14 December 2026 and warns that unforeseen events can cause changes. The main website carries an All Rights Reserved notice and no permissive general automation/reuse licence was located; systematic monitoring remains rights-held/manual."
+    }
+  },
+  "source_updates": {
+    "WSSRC-MAC-015": {
+      "expected_canonical_dependency_count": 7,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Statistics Bureau / Government of Japan Public Data License 1.0 supports attributed factual reuse and the registered schedule parser has pilot evidence. The official English Labour Force Survey schedule supplies dates but no clock time; source-time remains unspecified and production polling still requires endpoint review."
+      }
+    },
+    "WSSRC-MKT-011": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "The ASX 24 specification directly supports the SPI 200 third-Thursday 12.00pm expiry rule in Australian Eastern local time, but ASX terms prohibit unauthorised automated monitoring/copying and also restrict unauthorised manual monitoring. Retain only bounded authoritative informational verification under a rights hold; the event remains a mechanical market-structure occurrence with no predictive claim."
+      }
+    },
+    "WSSRC-FIS-008": {
+      "expected_canonical_dependency_count": 5,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Bank of Canada auction schedule/data reuse is permitted subject to stated conditions and structured endpoints plus existing parser evidence support a bounded automated pilot. Request-frequency/overburdening terms still require endpoint-specific production review; provisional schedule status and exact bidding times are retained only where explicitly published."
+      }
+    },
+    "WSSRC-COM-012": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "JODI's official combined 2026 schedule confirms first monthly Oil + Gas World Database updates at noon London time and notes supplementary updates, but JODI reserves intellectual-property rights. The source remains manual informational / rights-held; supplementary data loads are not promoted to separate canonical occurrences by this series definition."
+      }
+    },
+    "WSSRC-INT-029": {
+      "expected_canonical_dependency_count": 3,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "The WTO reform workplan is authoritative factual provenance for December 2026 and February 2027 month-level checkpoints and a 2027 mid-term ministerial review. WTO reuse terms support curated factual metadata but do not expressly clear unrestricted automated access; exact dates must await later official calendar/convening evidence."
+      }
+    },
+    "WSSRC-REGJ-001": {
+      "expected_canonical_dependency_count": 3,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "SBP's FY27 advance calendar confirms the remaining 2026 MPC / Monetary Policy Statement dates but publishes no clock time for those canonical occurrences. The main SBP website states All Rights Reserved and no permissive general automation/reuse licence was found; the route is retained as a bounded authoritative informational reference under a rights hold."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date."
+    },
+    "WSSRC-CB-009": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The registered SNB decisions/history URL does not directly support the forward monetary-policy assessment schedule described by the source record; repair source scope before governance backfill."
+    }
+  }
+}
