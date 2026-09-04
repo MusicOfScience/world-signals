@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.57",
+  "version": "1.58",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -1944,7 +1944,12 @@
       "automation_summary": "WORLD SIGNALS may preserve public release-schedule facts as curated metadata, but production ingestion/derived use of OMR content or data requires the appropriate IEA route/licence.",
       "rights_reviewed_at": "2026-09-02T20:51:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_C_HIGH_VALUE_MIXED_REGIME_REVIEW",
-      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "IEA's public OMR product page supplies monthly schedule facts and the 10:00 Paris-time release rule, but the Oil Market Report is explicitly excluded from IEA's CC BY 4.0 Open Use Terms and is Non-CC/licensed material. Retain manual schedule reference only unless an authorised/licensed route is established."
     },
     {
       "source_id": "WSSRC-COM-003",
@@ -2657,7 +2662,12 @@
           "transport": "HTML",
           "completeness_scope": "SINGLE_RELEASE"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ABS general website material is CC BY 4.0 and the registered release-calendar parser has pilot evidence, but the licence does not itself authorise unrestricted polling. Labour Force 11:30 local releases must retain Australia/Sydney source time and date-specific AEST/AEDT offsets; published dates may change."
     },
     {
       "source_id": "WSSRC-MAC-013",
@@ -2765,7 +2775,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Statistics Bureau CPI content is reusable under Public Data License 1.0 and the registered CPI schedule parser has pilot evidence, but content-use terms do not independently define production crawler behaviour. The schedule supplies dates and the separate official CPI publication rule supplies the 08:30 JST time."
     },
     {
       "source_id": "WSSRC-MAC-015",
@@ -4290,7 +4305,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 270,
       "canonical_dependency_count": 6,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "CME's official FAQ is authoritative for the standing third-Friday 08:30 Chicago-time E-mini S&P 500 expiry/last-trading rule, but CME's website/data terms expressly restrict automated navigation, retrieval and data mining absent permission. Use manual factual verification only; proprietary market-price data remain excluded."
     },
     {
       "source_id": "WSSRC-MKT-011",
@@ -5058,7 +5078,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 250,
       "canonical_dependency_count": 4,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ChinaMoney's official LPR page supplies the recurring 09:00-on-the-20th rule with holiday postponement, but the site's legal statement expressly restricts copying, distribution and electronic retrieval/scraping without written authorisation. Retain manual authoritative reference only and recalculate future derived occurrences if the rule changes."
     },
     {
       "source_id": "WSSRC-CN-013",
@@ -5449,7 +5474,12 @@
           "use": "Historical 20 Feb / 6 Mar schedule only; never current-state authority after revision."
         }
       ],
-      "notes": "Current INEC surface lists 16 Jan / 6 Feb 2027. Formal 13 Feb announcement preserved as superseded history. Later revision was reported as following repeal of Electoral Act 2022 and enactment of Electoral Act 2026."
+      "notes": "Current INEC surface lists 16 Jan / 6 Feb 2027. Formal 13 Feb announcement preserved as superseded history. Later revision was reported as following repeal of Electoral Act 2022 and enactment of Electoral Act 2026.",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "INEC's current-state election surface directly supports the operative 16 January and 6 February 2027 election dates, while the detailed revision endpoint remains operationally fragile. Existing research clears official electoral facts for curated provenance, but no production automated-access permission is established; preserve superseded timetable history and verify manually."
     },
     {
       "source_id": "WSSRC-EL-NG-002",
