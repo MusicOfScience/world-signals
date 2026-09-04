@@ -69,21 +69,21 @@ All configured **primary monitor sources now have explicit modern source-governa
 
 ### Latest observed post-contract evidence
 
-Run **55** / GitHub run id `33876083123`, recorded `2026-09-04T13:04:57.341065+00:00`, ran against merged main `29363b2f7b2c387bf983350939d7e56d9d045cc7`:
+Run **57** / GitHub run id `33886954803`, recorded `2026-09-04T15:00:11.702848+00:00`, ran automatically after Provenance Scope Repair A merged on exact main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`:
 
-- 6 healthy / 0 degraded;
-- all 6 expected adapters observed;
-- 0 review candidates;
+- configuration canonical **v0.21 / 669** / source **v1.61 / 224** / expectations **v0.7** / operations policy **v0.1**;
+- **6 healthy / 0 degraded** source adapters;
+- all **6 expected adapters observed**, with no missing or unexpected adapters;
+- **0 review candidates**;
 - `NO_CHANGE`;
-- canonical hash unchanged;
-- configuration canonical v0.20 / source v1.59 / expectations v0.7;
-- automatic canonical commit false;
-- Google Calendar write false;
-- Colombia machine health correctly reports `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual SUIN legal-verification authority.
+- canonical hash unchanged before/after;
+- automatic canonical commit **false**;
+- Google Calendar write **false**;
+- configuration fingerprint `f1f17a75b2525d2cae44a29e21b451074a08debf033281e4c879b936ca199c5a`.
+
+This is the first live-monitor observation on the repaired canonical/source checkpoint. It closes the post-repair configuration-alignment observation; no synthetic or replayed evidence was required. Pages deployment `33886992355` subsequently succeeded after run 57, so the public derived runtime could consume the aligned evidence.
 
 The review-state contract activated prospectively after run 47 and has now been exercised on genuine later evidence. Pages workflow-run deployment `33876115556` reduced **8 retained monitor runs** to **0 review items**, with **0 unsuccessful-run evidence gaps** and `horizon_complete=True`; runtime is `AVAILABLE_RETAINED_HORIZON(0)` at that retained checkpoint. The earlier observation gate is therefore CLOSED. Do not manufacture a candidate merely to test non-zero persistence; await natural future evidence.
-
-**Checkpoint note after Provenance Scope Repair A:** the latest retained live-monitor observation still predates canonical v0.21 / source v1.61. Merged-main CI and Pages are green, but runtime evidence must be treated as configuration-stale until the next genuine live-monitor run observes the repaired checkpoint. This is not an event-state failure and must not be rewritten as one.
 
 Pages follows the latest completed run, not merely the latest successful one. Newer failure cannot be hidden by an older green snapshot. Public runtime projection strips source snapshots, parser/error payloads, legal bodies/rules, old/new evidence values and observations.
 
@@ -382,14 +382,13 @@ No source failure may satisfy either gate.
 
 ## Exact next work
 
-1. **Post-repair live-monitor alignment observation** — wait for the next genuine live-monitor execution against canonical v0.21 / source v1.61 and verify configuration identity, source health, candidate handling and retained-review projection. Do not replay or fabricate evidence merely to clear this observation.
-2. **Next P1 selection diagnostic** — reassess the remaining **95 P1** sources by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and analytical relevance. Do not mechanically invent a P1-I six-source conveyor belt.
-3. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
-4. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
-5. Re-run coverage audit after analytically justified canonical additions only.
-6. Continue **Live Intelligence v1** only from aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
-7. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
-8. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
+1. **Next P1 selection diagnostic** — reassess the remaining **95 P1** sources by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and analytical relevance. Do not mechanically invent a P1-I six-source conveyor belt.
+2. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
+3. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
+4. Re-run coverage audit after analytically justified canonical additions only.
+5. Continue **Live Intelligence v1** from aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
+6. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
+7. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
 
 ## Recovery rule
 
