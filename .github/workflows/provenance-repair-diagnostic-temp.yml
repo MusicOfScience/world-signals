@@ -1,0 +1,58 @@
+name: TEMP provenance-scope repair diagnostic
+
+on:
+  push:
+    branches:
+      - provenance-scope-repair-research
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Inventory held-source relationships
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path.cwd()
+          canonical = json.loads((root/'data/canonical/registry.json').read_text())
+          sources = json.loads((root/'data/sources/registry.json').read_text())
+          ledger = json.loads((root/'data/changes/ledger.json').read_text())
+          by_id = {s['source_id']: s for s in sources['sources']}
+          held = ['WSSRC-EL-BR-001','WSSRC-CB-009']
+          print('VERSIONS', {'canonical': canonical['version'], 'canonical_count': canonical['record_count'], 'sources': sources['version'], 'source_count': len(sources['sources'])})
+          for sid in held:
+              row = by_id[sid]
+              keep = ['source_id','institution','jurisdiction','domain','endpoint_role','authoritative_url','source_type','information_supplied','future_schedule_horizon','source_timezone','activation_status','known_limitations','ingestion_permission','licence_review_status','automated_retrieval_permission','redistribution_permission','rights_evidence_url','rights_summary','automation_summary','monitoring_readiness_status','canonical_dependency_count']
+              print('SOURCE', json.dumps({k: row.get(k) for k in keep}, ensure_ascii=False, sort_keys=True))
+              deps = [r for r in canonical['records'] if r.get('source_id') == sid]
+              print('DEPENDENCY_COUNT', sid, len(deps))
+              for r in deps:
+                  keys = ['occurrence_id','series_id','title','jurisdiction','category','status','start_local','end_local','timezone','timing_precision','election_milestone_type','source_id','source_url','notes']
+                  print('DEP', json.dumps({k:r.get(k) for k in keys if k in r}, ensure_ascii=False, sort_keys=True))
+          date_matches = [r for r in canonical['records'] if r.get('start_local') == '2027-01-05']
+          print('DATE_2027_01_05', json.dumps(date_matches, ensure_ascii=False, sort_keys=True))
+          text = json.dumps(ledger, ensure_ascii=False)
+          for token in held:
+              print('LEDGER_MENTIONS', token, text.count(token))
+          for r in date_matches:
+              oid = r.get('occurrence_id')
+              if oid:
+                  print('LEDGER_OCCURRENCE_MENTIONS', oid, text.count(oid))
+          print('TEST_REFERENCES')
+          for p in sorted((root/'tests').glob('test_source_governance_p1*.py')):
+              t = p.read_text()
+              hits=[]
+              for token in ['WSSRC-EL-BR-001','WSSRC-CB-009','2027-01-05']:
+                  if token in t: hits.append(token)
+              if hits: print(p.name, hits)
+          PY
+      - name: Confirm diagnostic is read-only
+        run: git diff --exit-code
