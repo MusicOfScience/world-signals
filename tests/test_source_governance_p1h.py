@@ -9,6 +9,12 @@ import subprocess
 import sys
 import unittest
 
+from provenance_repair_compat import (
+    assert_brazil_inauguration_compatible,
+    assert_held_sources_compatible,
+    assert_source_registry_compatible,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts/apply_source_governance_p1h.py"
 SPEC = importlib.util.spec_from_file_location("apply_source_governance_p1h", MODULE_PATH)
@@ -92,14 +98,15 @@ class P1HGovernanceMigrationTests(unittest.TestCase):
             self._version_tuple(str(source_registry.get("version"))),
             self._version_tuple(self.post_version),
         )
-        self.assertEqual(len(source_registry.get("sources", [])), 223)
+        assert_source_registry_compatible(self, source_registry)
         by_id = MIGRATION._sources_by_id(source_registry)
         for source_id, spec in self.plan["source_updates"].items():
             for field, value in spec["set"].items():
                 self.assertEqual(by_id[source_id].get(field), value)
-        for held_id in HELD:
-            for field in self.plan["preconditions"]["required_missing_governance_fields"]:
-                self.assertIn(by_id[held_id].get(field), (None, ""))
+        assert_held_sources_compatible(
+            self, source_registry, HELD,
+            self.plan["preconditions"]["required_missing_governance_fields"],
+        )
 
     def test_plan_scope_is_exact_and_geographically_corrective(self):
         self.assertEqual(set(self.plan["source_updates"]), APPROVED)
@@ -198,12 +205,7 @@ class P1HGovernanceMigrationTests(unittest.TestCase):
         self.assertEqual(self.expectations, expectations_before)
 
     def test_brazil_inauguration_guard_is_exact(self):
-        guard = self.plan["preconditions"]["brazil_inauguration_guard"]
-        matches = MIGRATION._brazil_inauguration_records(self.canonical, guard)
-        self.assertEqual(len(matches), 1)
-        self.assertEqual(matches[0]["start_local"], "2027-01-05")
-        self.assertEqual(matches[0]["source_id"], "WSSRC-EL-BR-001")
-        self.assertEqual(matches[0]["election_milestone_type"], "INAUGURATION_OR_ASSUMPTION")
+        assert_brazil_inauguration_compatible(self, self.canonical)
 
     def test_script_help_is_available(self):
         result = subprocess.run(
