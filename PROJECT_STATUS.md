@@ -8,7 +8,7 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.21 — **669 occurrences**.
-- **Tier-1 source registry:** v1.61 — **224 sources**.
+- **Tier-1 source registry:** v1.62 — **224 sources**.
 - **Reviewed change ledger:** v0.10.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
@@ -379,6 +379,20 @@ Do not reopen because parsers, coverage, UX, source-governance or review-state e
 2. one **explicit cancellation** of an already-canonical occurrence from positive authoritative evidence.
 
 No source failure may satisfy either gate.
+
+## Verification Closeout A — COMPLETE
+
+Fresh post-repair selection rejected mechanical dependency-only ranking and identified exactly eight future-active P1 sources for which `verification_mode` was the sole missing modern governance field. Vietnam `WSSRC-REG5-001` was held out for source-scope review because direct National Assembly provenance is better scoped than the registered government-news source.
+
+Seven-source Verification Closeout A merged in PR #26 at signed main commit `849d4ef6a4b4814ec57235f08189e7a9eaf995c2`. Source registry advanced **v1.61 / 224 → v1.62 / 224**; canonical remains **v0.21 / 669**, ledger **v0.10**, expectations **v0.7**. APEC's one present stale dependency helper was corrected 0→1; there are now zero present `canonical_dependency_count` mismatches and eight legacy omissions remain deliberately unfilled.
+
+Measured post-state governance audit: **65 fully explicit / 159 missing-any / 88 P1 / 71 P2**; missing provenance **156**, automation **156**, verification **159**.
+
+Post-merge live-monitor run **58** / `33908223252` observed exact canonical **v0.21** / source **v1.62** configuration with **6 healthy / 0 degraded**, all 6 expected adapters observed, **0 candidates**, `NO_CHANGE`, canonical unchanged, auto canonical false and Calendar false. Follow-on Pages deployment `33908266777` succeeded.
+
+Durable audit: `data/coverage/SOURCE_GOVERNANCE_VERIFICATION_CLOSEOUT_A_AUDIT_v0.1.md`.
+
+**Next integrity-led source-governance work:** Vietnam `WSSRC-REG5-001` source-scope review before ordinary selection from the remaining 88-P1 queue.
 
 ## Exact next work
 
