@@ -1,4 +1,4 @@
-name: TEMP P1 selection diagnostic
+name: TEMP P1 verification-only diagnostic
 
 on:
   push:
@@ -16,107 +16,45 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Run P1 selection diagnostic
+      - name: Enumerate verification-only P1 sources
         shell: bash
         run: |
           python - <<'PY'
           import json
-          from collections import Counter, defaultdict
-          from datetime import date, datetime
+          from collections import defaultdict
+          from datetime import date
           from pathlib import Path
           from src.world_signals.source_governance_audit import build_source_governance_audit
 
-          registry = json.loads(Path('data/canonical/registry.json').read_text())
-          sources = json.loads(Path('data/sources/registry.json').read_text())
-          expectations = json.loads(Path('data/monitor/expectations.json').read_text())
-          audit = build_source_governance_audit(registry, sources, expectations)
-          p1 = [r for r in audit['backfill_research_queue'] if r['research_priority'] == 'P1_CANONICAL_DEPENDENCY']
-          source_by_id = {s.get('source_id'): s for s in sources.get('sources', [])}
-          recs_by_source = defaultdict(list)
-          for rec in registry.get('records', []):
-              sid = rec.get('source_id')
-              if sid:
-                  recs_by_source[sid].append(rec)
-
-          TODAY = date(2026, 9, 5)
-          def civil_date(rec):
-              candidates = [rec.get('start_local'), rec.get('date'), rec.get('start_date')]
-              for v in candidates:
-                  if isinstance(v, str) and len(v) >= 10:
-                      try:
-                          return date.fromisoformat(v[:10])
-                      except Exception:
-                          pass
-              return None
-
+          registry=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          audit=build_source_governance_audit(registry,sources,expectations)
+          recs=defaultdict(list)
+          for r in registry.get('records',[]):
+              if r.get('source_id'): recs[r['source_id']].append(r)
+          by={s.get('source_id'):s for s in sources.get('sources',[])}
+          today=date(2026,9,5)
+          def d(r):
+              v=r.get('start_local')
+              if isinstance(v,str) and len(v)>=10:
+                  try:return date.fromisoformat(v[:10])
+                  except:pass
           rows=[]
-          for r in p1:
-              sid=r['source_id']
-              rs=recs_by_source.get(sid, [])
-              dates=[d for d in (civil_date(x) for x in rs) if d]
-              future=[d for d in dates if d >= TODAY]
-              future_180=[d for d in future if (d-TODAY).days <= 180]
-              future_365=[d for d in future if (d-TODAY).days <= 365]
-              s=source_by_id.get(sid,{})
+          for q in audit['backfill_research_queue']:
+              if q['research_priority']!='P1_CANONICAL_DEPENDENCY' or q['missing_governance_fields']!=['verification_mode']:
+                  continue
+              dates=[x for x in (d(r) for r in recs[q['source_id']]) if x and x>=today]
+              s=by[q['source_id']]
               rows.append({
-                  **r,
-                  'future_dated_dependencies': len(future),
-                  'future_180d_dependencies': len(future_180),
-                  'future_365d_dependencies': len(future_365),
-                  'first_future_date': min(future).isoformat() if future else None,
-                  'last_future_date': max(future).isoformat() if future else None,
-                  'future_schedule_published': s.get('future_schedule_published'),
-                  'information_supplied': s.get('information_supplied'),
-                  'authoritative_url': s.get('authoritative_url'),
-                  'backup_authoritative_source': s.get('backup_authoritative_source'),
+                'source_id':q['source_id'],'institution':q['institution'],'jurisdiction':q['jurisdiction'],'domain':q['domain'],
+                'deps':q['canonical_occurrence_dependency_count'],'future':len(dates),'first_future':min(dates).isoformat() if dates else None,
+                'canonical_provenance_use':s.get('canonical_provenance_use'),'automated_monitoring_use':s.get('automated_monitoring_use'),
+                'monitoring_readiness_status':s.get('monitoring_readiness_status'),'monitoring_activation_status':s.get('monitoring_activation_status'),
+                'stored_dependency_count':s.get('canonical_dependency_count','ABSENT')
               })
-
-          def key(x):
-              return (-x['future_180d_dependencies'], -x['future_365d_dependencies'], -x['future_dated_dependencies'], -x['canonical_occurrence_dependency_count'], str(x['source_id']))
-          rows.sort(key=key)
-
-          print('P1_COUNT', len(rows))
-          print('TOP_BY_ACTIVE_HORIZON')
-          for i,x in enumerate(rows[:40],1):
-              print(json.dumps({
-                  'rank': i,
-                  'source_id': x['source_id'],
-                  'institution': x['institution'],
-                  'jurisdiction': x['jurisdiction'],
-                  'domain': x['domain'],
-                  'deps': x['canonical_occurrence_dependency_count'],
-                  'future': x['future_dated_dependencies'],
-                  'future_180': x['future_180d_dependencies'],
-                  'future_365': x['future_365d_dependencies'],
-                  'first_future': x['first_future_date'],
-                  'last_future': x['last_future_date'],
-                  'missing': x['missing_governance_fields'],
-                  'source_type': x['source_type'],
-                  'machine': x['machine_readable_available'],
-                  'readiness': x['existing_monitoring_readiness_status'],
-              }, ensure_ascii=False))
-
-          print('JURISDICTION_COUNTS')
-          print(json.dumps(Counter(str(x.get('jurisdiction')) for x in rows), sort_keys=True))
-          print('DOMAIN_COUNTS')
-          print(json.dumps(Counter(str(x.get('domain')) for x in rows), sort_keys=True))
-          print('JURISDICTION_FUTURE180_DEPENDENCIES')
-          c=Counter()
-          for x in rows:
-              c[str(x.get('jurisdiction'))]+=x['future_180d_dependencies']
-          print(json.dumps(c, sort_keys=True))
-          print('DOMAIN_FUTURE180_DEPENDENCIES')
-          c=Counter()
-          for x in rows:
-              c[str(x.get('domain'))]+=x['future_180d_dependencies']
-          print(json.dumps(c, sort_keys=True))
-
-          print('ALL_P1_COMPACT')
-          for x in rows:
-              print('|'.join([
-                  str(x['source_id']), str(x['institution']), str(x['jurisdiction']), str(x['domain']),
-                  str(x['canonical_occurrence_dependency_count']), str(x['future_dated_dependencies']),
-                  str(x['future_180d_dependencies']), str(x['future_365d_dependencies']),
-                  str(x['first_future_date']), ','.join(x['missing_governance_fields'])
-              ]))
+          rows.sort(key=lambda x:(x['first_future'] is None,x['first_future'] or '9999',-x['deps'],x['source_id']))
+          print('VERIFICATION_ONLY_P1_COUNT',len(rows))
+          print('WITH_FUTURE_DATED_DEPENDENCY',sum(bool(x['future']) for x in rows))
+          for x in rows: print(json.dumps(x,ensure_ascii=False,sort_keys=True))
           PY
