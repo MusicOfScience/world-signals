@@ -1,3 +1,4 @@
+# Retriggered after canonical dependency precondition was corrected to derive from canonical truth.
 name: Preflight WORLD SIGNALS P0 source governance
 
 on:
