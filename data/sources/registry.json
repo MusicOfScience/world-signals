@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.53",
+  "version": "1.54",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -60,7 +60,12 @@
           "completeness_scope": "MONTHLY_OPERATIONAL_CALENDAR",
           "preferred_for_monitoring": true
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Federal Reserve factual website content is public domain unless otherwise indicated and the FOMC parser has pilot evidence, but unrestricted automated calendar polling is not inferred from public-domain status."
     },
     {
       "source_id": "WSSRC-CB-002",
@@ -116,7 +121,12 @@
           "transport": "HTML",
           "completeness_scope": "FULL_TOPIC_CALENDAR"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Most RBA factual website content is CC BY 4.0 and the existing calendar parser has pilot evidence; automated production retrieval remains a separate endpoint review. The multi-day Board meeting and separately timed decision release must remain distinct."
     },
     {
       "source_id": "WSSRC-CB-003",
@@ -156,7 +166,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 430,
       "canonical_dependency_count": 22,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ECB factual schedule information is reusable with source/accuracy conditions, but the reviewed terms do not expressly clear automated retrieval and the route has no live polling evidence."
     },
     {
       "source_id": "WSSRC-CB-004",
@@ -272,7 +287,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 650,
       "canonical_dependency_count": 44,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "BoJ permits attributed non-commercial reproduction of factual material subject to exclusions, while automated retrieval is not expressly granted and no production pilot is established."
     },
     {
       "source_id": "WSSRC-CB-007",
@@ -314,7 +334,12 @@
       "canonical_dependency_count": 11,
       "monitoring_readiness_assessed_at": "2026-09-02",
       "last_successful_research_verification_at": "2026-09-03T03:50:00+10:00",
-      "monitoring_activation_status": "MANUAL_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "MANUAL_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "RBNZ permits attributed accurate factual reuse but expressly prohibits automated access without an applicable exception or prior written permission; no WORLD SIGNALS written permission is recorded."
     },
     {
       "source_id": "WSSRC-CB-008",
@@ -759,7 +784,12 @@
       "monitoring_readiness_assessed_at": "2026-09-02",
       "controlled_failure_injection_status": "PASS",
       "controlled_failure_injection_last_tested_at": "2026-09-03T09:05:00+10:00",
-      "controlled_failure_injection_target": "WSO-MAC-B-0035"
+      "controlled_failure_injection_target": "WSO-MAC-B-0035",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "ONS combines OGL reuse, explicit bot/crawler fair-use guidance and official release-query/feed routes; the existing fault-contained release-calendar parser supports automated pilot monitoring under those published controls."
     },
     {
       "source_id": "WSSRC-MAC-007",
