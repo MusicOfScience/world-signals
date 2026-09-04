@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.10",
-  "reference_date": "2026-09-04",
+  "version": "0.11",
+  "reference_date": "2026-09-05",
   "changes": [
     {
       "change_id": "WSCHANGE-b5a5e064f7f9e408b8",
@@ -819,6 +819,34 @@
       "registry_version_after": "0.21",
       "canonical_mutation_committed": true,
       "committed_at": "2026-09-05T00:56:03+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-49ebecdf2a63060ef6",
+      "occurrence_id": "WSO-REG-G-0001",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "old_values": {
+        "source_id": "WSSRC-REG5-001",
+        "primary_source_assertion_id": "WSA-edffdbb284fcbfd9",
+        "last_successful_assertion_id": "WSA-edffdbb284fcbfd9"
+      },
+      "new_values": {
+        "source_id": "WSSRC-REG5-002",
+        "primary_source_assertion_id": "WSA-6b2aa27a0df846dc",
+        "last_successful_assertion_id": "WSA-6b2aa27a0df846dc"
+      },
+      "source_assertion_id": "WSA-6b2aa27a0df846dc",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T05:06:00+10:00",
+      "review_basis": [
+        "The existing Government Electronic Newspaper item is an official secondary report, while the National Assembly's own portal directly reports the same provisional 20 October 2026 opening date.",
+        "Stable source identity requires a new National Assembly source rather than repurposing WSSRC-REG5-001 across institutions.",
+        "The canonical date, provisional status, lifecycle, phase windows and stable occurrence identity are unchanged; only provenance identity/assertion metadata are corrected."
+      ],
+      "commit_mode": "REVIEWED_PROVENANCE_SCOPE_REPAIR",
+      "registry_version_before": "0.21",
+      "registry_version_after": "0.22",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T05:21:24+10:00"
     }
   ]
 }

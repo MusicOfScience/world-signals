@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.21",
-  "reference_date": "2026-09-04",
+  "version": "0.22",
+  "reference_date": "2026-09-05",
   "record_count": 669,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
@@ -52835,9 +52835,9 @@
       "publication_datetime": null,
       "time_status": "PROVISIONAL",
       "time_basis": "PROVISIONAL_OFFICIAL_PROGRAMME",
-      "source_id": "WSSRC-REG5-001",
-      "primary_source_assertion_id": "WSA-edffdbb284fcbfd9",
-      "last_successful_assertion_id": "WSA-edffdbb284fcbfd9",
+      "source_id": "WSSRC-REG5-002",
+      "primary_source_assertion_id": "WSA-6b2aa27a0df846dc",
+      "last_successful_assertion_id": "WSA-6b2aa27a0df846dc",
       "status_history": [
         {
           "as_of": "2026-09-03",
@@ -52846,7 +52846,7 @@
         }
       ],
       "first_discovered_at": "2026-09-03",
-      "last_verified_at": "2026-09-03",
+      "last_verified_at": "2026-09-05",
       "next_verification_due": "2026-09-15",
       "intrinsic_importance": "HIGH",
       "expected_market_sensitivity": "MEDIUM",
