@@ -1,14 +1,15 @@
 # WORLD SIGNALS — project status / branch-recovery checkpoint
 
-**Updated:** 2026-09-04  
+**Updated:** 2026-09-05  
 **Purpose:** durable continuation point after conversation-length, branch or deployment interruptions.
 
 This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains the authoritative architecture specification; canonical/source registries, monitor contracts, change ledger and audits remain primary evidence.
 
 ## Current source of truth
 
-- **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.60 — **223 sources**.
+- **Canonical occurrence registry:** v0.21 — **669 occurrences**.
+- **Tier-1 source registry:** v1.61 — **224 sources**.
+- **Reviewed change ledger:** v0.10.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -80,7 +81,9 @@ Run **55** / GitHub run id `33876083123`, recorded `2026-09-04T13:04:57.341065+0
 - Google Calendar write false;
 - Colombia machine health correctly reports `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual SUIN legal-verification authority.
 
-The review-state contract activated prospectively after run 47 and has now been exercised on genuine later evidence. Pages workflow-run deployment `33876115556` reduced **8 retained monitor runs** to **0 review items**, with **0 unsuccessful-run evidence gaps** and `horizon_complete=True`; runtime is `AVAILABLE` and aligned with the current site, and retained review state is `AVAILABLE_RETAINED_HORIZON(0)`. The earlier observation gate is therefore CLOSED. Do not manufacture a candidate merely to test non-zero persistence; await natural future evidence.
+The review-state contract activated prospectively after run 47 and has now been exercised on genuine later evidence. Pages workflow-run deployment `33876115556` reduced **8 retained monitor runs** to **0 review items**, with **0 unsuccessful-run evidence gaps** and `horizon_complete=True`; runtime is `AVAILABLE_RETAINED_HORIZON(0)` at that retained checkpoint. The earlier observation gate is therefore CLOSED. Do not manufacture a candidate merely to test non-zero persistence; await natural future evidence.
+
+**Checkpoint note after Provenance Scope Repair A:** the latest retained live-monitor observation still predates canonical v0.21 / source v1.61. Merged-main CI and Pages are green, but runtime evidence must be treated as configuration-stale until the next genuine live-monitor run observes the repaired checkpoint. This is not an event-state failure and must not be rewritten as one.
 
 Pages follows the latest completed run, not merely the latest successful one. Newer failure cannot be hidden by an older green snapshot. Public runtime projection strips source snapshots, parser/error payloads, legal bodies/rules, old/new evidence values and observations.
 
@@ -339,7 +342,15 @@ Independent post-P1-H audit run `33882199612` measured:
 - missing `automated_monitoring_use`: **158**;
 - missing `verification_mode`: **168**.
 
-Brazil TSE and SNB remained intentionally excluded from P1-H because their defect was source scope/provenance rather than an ordinary missing-governance backfill.
+Brazil TSE and SNB remained intentionally excluded from P1-H because their defect was source scope/provenance rather than an ordinary missing-governance backfill. Those holds were subsequently closed by Provenance Scope Repair A.
+
+### Provenance Scope Repair A — COMPLETE
+
+PR #22 merged as `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`. Canonical advanced **v0.20 → v0.21 / 669** solely for reviewed provenance semantics; source registry advanced **v1.60 / 223 → v1.61 / 224**; change ledger advanced **v0.9 → v0.10**. Brazil inauguration `WSO-EL-A-0004` remains exactly **2027-01-05** and now uses dedicated constitutional provenance `WSSRC-EL-BR-002`; TSE `WSSRC-EL-BR-001` retains its three genuine electoral-calendar dependencies. SNB `WSSRC-CB-009` now points to the dedicated forward event schedule while all **18** canonical SNB occurrences remain unchanged.
+
+Independent post-transaction audit run `33886673758` measured **58 fully explicit**, **166 missing-any**, **95 P1** and **71 P2** sources. Automatic canonical commit remains false and Calendar write remains false. Merged-main CI `33886955012` and Pages `33886992355` both succeeded.
+
+Durable audit: `data/coverage/PROVENANCE_SCOPE_REPAIR_A_AUDIT_v0.1.md`.
 
 ## Held / unresolved nodes
 
@@ -356,11 +367,9 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 
 ### Source-governance P1/P2 backlog
 
-**97 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research after P1-H. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
+**95 P1 canonical-dependent** and **71 P2 registry-only** source records remain after the completed provenance repair. Prioritise bounded research by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and live analytical relevance as separate constraints; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
-The two long-standing provenance-scope holds are now researched and frozen as **Provenance Scope Repair A** rather than being rolled into P1-I. Brazil TSE `WSSRC-EL-BR-001` remains the electoral-calendar authority for three genuine dependencies; new `WSSRC-EL-BR-002` is planned for Constitution art. 82 and the unchanged 5 January 2027 inauguration provenance. SNB `WSSRC-CB-009` retains its stable identity but is planned to move to the dedicated forward event schedule, which directly supports all 18 existing assessment/news-conference/summary occurrences. No repair data mutation is included in the research branch.
-
-Frozen guarded post-state: canonical **v0.21 / 669**, source **v1.61 / 224**, change ledger **v0.10**, and the noncanonical biosecurity overlay checkpoint advanced only from canonical v0.20 / 669 to v0.21 / 669. Every canonical date/time and occurrence ID must remain unchanged; the Brazil change is provenance-semantic, not a reschedule.
+Brazil TSE and SNB are no longer held nodes: Provenance Scope Repair A is merged and independently audited. Do not mechanically label the next work P1-I until a fresh selection diagnostic has tested the remaining queue.
 
 ## Canonical auto-commit gate — CLOSED
 
@@ -373,15 +382,14 @@ No source failure may satisfy either gate.
 
 ## Exact next work
 
-1. **Provenance Scope Repair A transaction gate** — review/merge the frozen Brazil TSE / Constitution and SNB research/infrastructure, reconcile merged canonical v0.20 / source v1.60, then run the guarded read-only preflight before the four-file reviewed transaction. It may change only `WSO-EL-A-0004` provenance-semantic fields, TSE/SNB source scope, append `WSSRC-EL-BR-002`, append one reviewed ledger entry, and advance only the biosecurity overlay's canonical checkpoint pointer.
-2. **Independent post-repair audit** — prove canonical v0.21 / 669, source v1.61 / 224, ledger v0.10, exact 5 January 2027 preservation, unchanged SNB occurrences, updated governance queue metrics, overlay validity, automatic canonical commit false and Calendar write false before considering the repair complete.
-3. **Next P1 selection diagnostic** — only after the provenance repair is merged/audited, reassess the remaining P1 queue by active horizon, dependency, source-scope integrity, regional breadth and domain diversity. Do not mechanically invent a P1-I six-source conveyor belt.
-4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
-5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
-6. Re-run coverage audit after analytically justified canonical additions only.
-7. Continue **Live Intelligence v1** using aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
-8. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
-9. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
+1. **Post-repair live-monitor alignment observation** — wait for the next genuine live-monitor execution against canonical v0.21 / source v1.61 and verify configuration identity, source health, candidate handling and retained-review projection. Do not replay or fabricate evidence merely to clear this observation.
+2. **Next P1 selection diagnostic** — reassess the remaining **95 P1** sources by active horizon, canonical dependency, source-scope integrity, regional breadth, domain diversity and analytical relevance. Do not mechanically invent a P1-I six-source conveyor belt.
+3. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
+4. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
+5. Re-run coverage audit after analytically justified canonical additions only.
+6. Continue **Live Intelligence v1** only from aligned canonical + monitor + retained-review evidence: WHAT HAPPENED / EXPECTED / SURPRISED / MOVED / CONNECTIONS / NOISE / ALTERNATIVES / SECOND-ORDER; do not infer causality from temporal coincidence.
+7. Keep the **canonical auto-commit gate CLOSED** until genuine prospective reschedule and explicit cancellation evidence satisfy the existing real-world gates; healthy monitoring is not mutation authority.
+8. Continue **Analysis v1** once the live-intelligence evidence contract is stable.
 
 ## Recovery rule
 
