@@ -1,0 +1,81 @@
+name: TEMP P1-E governance apply
+
+on:
+  push:
+    branches: [source-governance-p1e-transaction]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Confirm clean transaction start
+        run: |
+          test -z "$(git status --porcelain --untracked-files=all)"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          e=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert str(s['version']) == '1.56' and len(s['sources']) == 223
+          assert str(c['version']) == '0.20' and c['record_count'] == 669
+          assert str(e['version']) == '0.7'
+          assert e['automatic_canonical_commit'] is False
+          assert e['google_calendar_write'] is False
+          PY
+      - name: Read-only P1-E preflight
+        run: python scripts/apply_source_governance_p1e.py
+      - name: Apply reviewed P1-E governance backfill
+        env:
+          WORLD_SIGNALS_ALLOW_P1E_GOVERNANCE_APPLY: 'YES'
+        run: python scripts/apply_source_governance_p1e.py --apply
+      - name: Enforce exact one-file transaction
+        run: |
+          test "$(git diff --name-only)" = "data/sources/registry.json"
+          test -z "$(git status --porcelain --untracked-files=all | grep -v '^ M data/sources/registry.json$')"
+      - name: Validate registry
+        run: python scripts/validate_registry.py
+      - name: Run full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        run: python -m py_compile scripts/*.py src/world_signals/*.py
+      - name: Check browser JavaScript
+        run: |
+          for file in web/*.js; do node --check "$file"; done
+      - name: Build derived site
+        run: python scripts/build_site.py
+      - name: Reconfirm exact transaction surface
+        run: |
+          test "$(git diff --name-only)" = "data/sources/registry.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          assert str(s['version']) == '1.57'
+          assert len(s['sources']) == 223
+          approved={'WSSRC-CB-004','WSSRC-CB-005','WSSRC-MAC-025','WSSRC-MAC-011','WSSRC-CLIM-003','WSSRC-REGJ-005'}
+          by={r['source_id']:r for r in s['sources']}
+          for sid in approved:
+              for field in ('canonical_provenance_use','automated_monitoring_use','verification_mode'):
+                  assert by[sid].get(field)
+          for sid in ('WSSRC-EL-BR-001','WSSRC-CB-009'):
+              for field in ('canonical_provenance_use','automated_monitoring_use','verification_mode'):
+                  assert by[sid].get(field) in (None,'')
+          PY
+      - name: Commit registry only
+        run: |
+          git config user.name "world-signals-governance"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/sources/registry.json
+          git commit -m "Apply P1-E source governance backfill"
+          git push origin HEAD:source-governance-p1e-transaction
