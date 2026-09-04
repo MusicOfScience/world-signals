@@ -1,15 +1,16 @@
-name: TEMP correct live-monitor alignment checkpoint
+name: Correct live monitor checkpoint
 
 on:
   push:
-    branches: [correct-live-monitor-alignment-checkpoint]
+    branches:
+      - correct-live-monitor-alignment-checkpoint
 
 permissions:
   contents: write
 
 jobs:
   correct:
-    if: ${{ github.actor != 'github-actions[bot]' }}
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -18,14 +19,14 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Correct durable checkpoint evidence
+      - name: Correct checkpoint
+        shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
 
           status = Path('PROJECT_STATUS.md')
           t = status.read_text(encoding='utf-8')
-
           a = t.index('### Latest observed post-contract evidence')
           b = t.index('\nThe review-state contract activated prospectively after run 47', a)
           current = '''### Latest observed post-contract evidence
@@ -46,7 +47,7 @@ This is the first live-monitor observation on the repaired canonical/source chec
 '''
           t = t[:a] + current + t[b:]
 
-          stale = '''**Checkpoint note after Provenance Scope Repair A:** the latest retained live-monitor observation still predates canonical v0.21 / source v1.61. Merged-main CI and Pages are green, but runtime evidence must be treated as configuration-stale until the next genuine live-monitor run observes the repaired checkpoint. This is not an event-state failure and must not be rewritten as one.\n\n'''
+          stale = '**Checkpoint note after Provenance Scope Repair A:** the latest retained live-monitor observation still predates canonical v0.21 / source v1.61. Merged-main CI and Pages are green, but runtime evidence must be treated as configuration-stale until the next genuine live-monitor run observes the repaired checkpoint. This is not an event-state failure and must not be rewritten as one.\n\n'
           if t.count(stale) != 1:
               raise SystemExit(f'stale checkpoint note count={t.count(stale)}')
           t = t.replace(stale, '')
@@ -69,43 +70,29 @@ This is the first live-monitor observation on the repaired canonical/source chec
           audit = Path('data/coverage/PROVENANCE_SCOPE_REPAIR_A_AUDIT_v0.1.md')
           u = audit.read_text(encoding='utf-8')
           old = '**Merged-main Pages:** `33886992355` — SUCCESS\n'
-          new = old + '**Post-repair live monitor:** `33886954803` (run 57) — SUCCESS\n'
           if u.count(old) != 1:
               raise SystemExit(f'audit header insertion count={u.count(old)}')
-          u = u.replace(old, new)
-
+          u = u.replace(old, old + '**Post-repair live monitor:** `33886954803` (run 57) — SUCCESS\n')
           marker = '## Measured source-governance queue after repair\n'
           if u.count(marker) != 1:
-              raise SystemExit(f'audit section marker count={u.count(marker)}')
+              raise SystemExit(f'audit marker count={u.count(marker)}')
           live = '''## Post-repair live-monitor alignment
 
 The source-registry change in PR #22 matched the permanent live-monitor workflow's `push` path trigger, so the repair merge itself automatically produced a genuine post-repair observation rather than requiring a later scheduled or synthetic run.
 
-Live-monitor run **57** / GitHub run id `33886954803` executed on exact repaired main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be` and completed successfully. It recorded:
+Live-monitor run **57** / GitHub run id `33886954803` executed on exact repaired main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be` and completed successfully. It recorded canonical **v0.21**, source **v1.61**, expectations **v0.7**, operations policy **v0.1**, **6 healthy / 0 degraded** adapters, all **6 expected adapters observed**, **0 review candidates**, `NO_CHANGE`, canonical hash unchanged, automatic canonical commit **false**, and Google Calendar write **false**.
 
-- canonical registry **v0.21**;
-- source registry **v1.61**;
-- monitor expectations **v0.7**;
-- operations policy **v0.1**;
-- **6 healthy / 0 degraded** adapters;
-- all **6 expected adapters observed**;
-- **0 review candidates**;
-- `NO_CHANGE`;
-- canonical hash unchanged;
-- automatic canonical commit **false**;
-- Google Calendar write **false**.
-
-Pages deployment `33886992355` completed successfully after run 57. The post-repair live-monitor configuration-alignment observation is therefore **CLOSED**. An earlier checkpoint statement that runtime evidence still predated v0.21/v1.61 was a documentation error, not a monitor or event-state failure.
+Pages deployment `33886992355` completed successfully after run 57. The post-repair live-monitor configuration-alignment observation is therefore **CLOSED**. The earlier checkpoint statement that runtime evidence still predated v0.21/v1.61 was a documentation error, not a monitor or event-state failure.
 
 '''
           u = u.replace(marker, live + marker)
           audit.write_text(u, encoding='utf-8')
           PY
-          git diff -- PROJECT_STATUS.md data/coverage/PROVENANCE_SCOPE_REPAIR_A_AUDIT_v0.1.md
           git diff --name-only | sort > /tmp/actual
           printf '%s\n' PROJECT_STATUS.md data/coverage/PROVENANCE_SCOPE_REPAIR_A_AUDIT_v0.1.md | sort > /tmp/expected
           diff -u /tmp/expected /tmp/actual
       - name: Commit correction
+        shell: bash
         run: |
           git config user.name world-signals-checkpoint
           git config user.email actions@users.noreply.github.com
