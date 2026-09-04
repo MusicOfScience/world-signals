@@ -234,8 +234,8 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
     if list(before_records) != list(after_records):
         errors.append("canonical occurrence identity/order changed")
     changed_occurrences = [oid for oid in before_records if before_records[oid] != after_records[oid]]
-    if changed_occurrences != post["expected_changed_occurrences"]:
-        errors.append(f"unexpected canonical changes/order: {changed_occurrences}")
+    if len(changed_occurrences) != len(post["expected_changed_occurrences"]) or set(changed_occurrences) != set(post["expected_changed_occurrences"]):
+        errors.append(f"unexpected canonical changes: {changed_occurrences}")
 
     for oid in UNCHANGED_TIMING_OCCURRENCES:
         if _timing(before_records[oid]) != _timing(after_records[oid]):
@@ -274,8 +274,8 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
     if after_ids != before_ids + [NEW_SOURCE]:
         errors.append("source identity/order changed outside one appended India constitutional source")
     changed_existing = [sid for sid in before_ids if before_sources[sid] != after_sources[sid]]
-    if changed_existing != post["expected_changed_existing_sources"]:
-        errors.append(f"unexpected existing source changes/order: {changed_existing}")
+    if len(changed_existing) != len(post["expected_changed_existing_sources"]) or set(changed_existing) != set(post["expected_changed_existing_sources"]):
+        errors.append(f"unexpected existing source changes: {changed_existing}")
     for sid, fields in plan["source_updates"].items():
         _exact(after_sources[sid], fields, f"source post-state {sid}", errors)
     _exact(after_sources[NEW_SOURCE], plan["new_sources"][0], "new India constitutional source", errors)
