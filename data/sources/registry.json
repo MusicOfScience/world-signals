@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.55",
+  "version": "1.56",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -635,7 +635,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 310,
       "canonical_dependency_count": 10,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "BEA factual website information is public domain unless otherwise stated, but unrestricted automated polling is not inferred from public-domain status and this schedule route has no established live pilot. Release-vintage semantics must be retained."
     },
     {
       "source_id": "WSSRC-MAC-004",
@@ -2399,7 +2404,12 @@
           "transport": "HTML",
           "completeness_scope": "FULL_TOPIC_CALENDAR"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Most RBA website material is CC BY 4.0 and the registered release/calendar route has pilot parser evidence, but content licensing does not itself clear production polling. Board meeting windows, decision releases, media conferences and later minutes remain distinct source-native occurrences."
     },
     {
       "source_id": "WSSRC-MAC-009",
@@ -3282,7 +3292,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Statistics Bureau content is reusable under Japan Public Data License 1.0 and the schedule parser has pilot evidence; the content licence does not itself define crawler/request behaviour. Dates remain date-only where the source provides no clock time."
     },
     {
       "source_id": "WSSRC-MAC-025",
@@ -5318,7 +5333,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 240,
       "canonical_dependency_count": 3,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Kenya Law's constitutional text is public-domain legal authority for fixed election-date and transition rules. No separate production crawler permission is inferred, and presidential inauguration timing remains conditional on result declaration and petition status rather than being fabricated as a fixed date."
     },
     {
       "source_id": "WSSRC-EL-KE-002",
@@ -7004,7 +7024,12 @@
       "automation_summary": "No inference from government/central-bank status. Production schedule monitoring remains held pending explicit BI terms, an authorised API/feed, or permission.",
       "rights_reviewed_at": "2026-09-02T22:35:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_E_ASIA_GLOBAL_SOUTH_CORRECTIVE_SOURCES",
-      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Bank Indonesia's official schedule is authoritative for manual factual verification, but current source-specific reuse and automation terms remain unresolved. No broader permission is inferred from central-bank status; the two meeting days form one integrated forum with policy determination on day two."
     },
     {
       "source_id": "WSSRC-REG-005",
@@ -7846,7 +7871,12 @@
       "automation_summary": "Reuse permission does not independently establish automated calendar-fetch limits.",
       "rights_reviewed_at": "2026-09-02T21:45:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_D_HIGH_VALUE_GOVERNMENT_AND_INSTITUTIONAL",
-      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice.",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "INDEC permits Creative Commons copying and redistribution with source citation and modification notice, but no separate automated-calendar retrieval clearance was identified. The audited calendar supplies dates without a clock time, so none is inferred."
     },
     {
       "source_id": "WSSRC-REG2-007",
