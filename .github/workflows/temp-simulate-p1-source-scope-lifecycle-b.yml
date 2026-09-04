@@ -85,3 +85,4 @@ jobs:
           assert exp['google_calendar_write'] is False
           print('INDEPENDENT_POST_STATE PASS')
           PY
+      # rerun after future-safe Vietnam overlay regression repair
