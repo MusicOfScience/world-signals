@@ -18,8 +18,8 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
 
     def test_public_projection_preserves_boundary(self):
         metadata=self.public["metadata"]
-        self.assertEqual(metadata["canonical_registry_version"],"0.20")
-        self.assertEqual(metadata["canonical_record_count"],669)
+        self.assertEqual(metadata["canonical_registry_version"],self.registry["version"])
+        self.assertEqual(metadata["canonical_record_count"],len(self.registry["records"]))
         self.assertEqual(metadata["mapped_canonical_series_count"],5)
         self.assertEqual(metadata["mapped_canonical_occurrence_count"],10)
         self.assertEqual(metadata["candidate_node_count"],4)
