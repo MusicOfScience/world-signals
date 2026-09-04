@@ -1,6 +1,22 @@
-# WORLD SIGNALS — executable thin slice v0.4
+# WORLD SIGNALS
 
-This repository is the executable implementation of the WORLD SIGNALS architecture.
+WORLD SIGNALS is a platform-independent political-economic intelligence system for tracking scheduled events, authoritative-source changes, review candidates and their interactions across economics, politics, geopolitics, markets, trade, commodities, climate and institutions.
+
+**Live read-only interface:** https://musicofscience.github.io/world-signals/
+
+The repository is the operational implementation. `WORLD_SIGNALS_PROJECT_CHARTER.md` is the authoritative architectural specification; `PROJECT_STATUS.md` is the durable recovery checkpoint.
+
+## Current checkpoint
+
+- Canonical registry: **v0.20 — 669 occurrences**
+- Source registry: **v1.51 — 222 sources**
+- Canonical schema: **v0.51**
+- Live monitor expectations: **v0.6**
+- Monitor operations policy: **v0.1**
+- Automatic canonical commits: **OFF / gate closed**
+- Google Calendar writes: **OFF**
+
+These numbers are a checkpoint, not a substitute for the registry itself. When this README and `PROJECT_STATUS.md` disagree, recover from the latter and then verify the canonical files.
 
 ## Layer contract
 
@@ -14,63 +30,44 @@ FETCH -> SNAPSHOT -> PARSE -> ASSERT
         v
 MATCH -> DIFF -> REVIEW CANDIDATE
         |
-        |  no automatic commit
         v
-data/canonical/registry.json     <-- CANONICAL REGISTRY
+REVIEW / REVIEW STATE / CHANGE LEDGER
         |
-        +--> scripts/build_site.py --> docs/ --> GitHub Pages web UX
+        |  no automatic canonical commit
+        v
+data/canonical/registry.json      <-- CANONICAL REGISTRY
         |
+        +--> scripts/build_site.py --> GitHub Pages web UX
         +--> future calendar exports
-        |
-        +--> future live-intelligence + analysis layers
+        +--> Live Intelligence
+        +--> Analysis
 ```
 
-The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state.
+The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state. A missing or failed source observation cannot itself cancel, complete or reschedule an event.
 
-## Current web UX
+## Web UX
 
-The Pages site opens on a **read-only month calendar** backed by the canonical registry, with an **Event index** and **Monitor routes** view.
+The Pages application is a read-only projection built from `web/` and repository data by `.github/workflows/pages.yml`. GitHub Actions is the sole Pages publishing path; generated `docs/` output is build-time material and is not tracked.
 
-- exact-date events are placed on calendar days;
-- timed events use the browser/device timezone when a canonical UTC timestamp is available, while the native source timezone remains visible;
-- expected windows and month-precision events are rendered separately rather than being pinned to an invented day;
-- filters apply across calendar and index views;
-- clicking an event opens its stable identity, certainty, lifecycle, provenance and monitoring-route details;
-- Monitor routes describes what is configured to run and what each adapter is allowed to infer. It deliberately does **not** pretend that a static Pages build contains current runtime health.
+Current visible layers include:
 
-This is a projection layer only. It cannot write to the canonical registry.
+- **Calendar** — exact-date events on civil days; timed events display in device timezone when canonical UTC exists while preserving native source timezone; uncertain/month-native windows are not pinned to invented days.
+- **Event index** — searchable/filterable canonical event inventory.
+- **Monitor routes** — configured read-only source/change routes, explicitly not current runtime health.
+- **Operations** — source governance, dated retained monitor evidence, single-run candidate evidence and retained review state.
+- **Change history** — reviewed canonical ledger showing what changed and why.
 
-## Operational live monitor
+The Operations view deliberately distinguishes a dated monitor observation from current health, and retained review state from a permanent queue.
 
-`live-monitor.yml` runs a read-only official-source monitor daily and can also be started manually. It currently exercises three deliberately heterogeneous routes:
+## Monitoring and review state
 
-1. **Reserve Bank of Australia — Financial Stability Review RSS/RDF**
-   - positive publication evidence can generate a completion/date review candidate;
-   - absence from the feed cannot cancel or complete an occurrence.
+The scheduled live monitor currently exercises six heterogeneous read-only routes, including RBA, Colombia SUIN, EU Cyber Resilience Act and EU CBAM milestones. It can fetch, parse, compare and generate review candidates; it cannot mutate canonical state.
 
-2. **Colombia SUIN / Datos Abiertos — Decree 111 of 1996 sentinel**
-   - the Socrata API watches the typed legal instrument (`DECRETO` + number + year) for presence/version fields;
-   - a change generates a legal-input review candidate;
-   - the inventory cannot directly alter the canonical budget deadline: operative clause-level SUIN verification remains required.
+Review-candidate identity is separate from monitor-run identity. Stable `WSRV-*` review propositions can aggregate repeated equivalent observations while preserving materially different proposals as siblings. Retained Actions evidence is explicitly bounded by its retention horizon; durable checkpoint architecture exists separately and remains noncanonical.
 
-3. **European Union Publications Office Cellar — Cyber Resilience Act Article 71**
-   - CELEX `32024R2847` is retrieved through the credential-free Cellar dissemination route as English XHTML;
-   - the monitor extracts Article 71 application dates semantically rather than treating the whole-document hash as the legal rule;
-   - an amended application date generates a `LEGAL_RULE_CHANGED` review candidate against the same stable CRA occurrences;
-   - transport or parser failure affects source health only and cannot alter an event.
+## Time and uncertainty
 
-Every run hashes `data/canonical/registry.json` before and after. A changed hash fails the monitor. The workflow token has `contents: read` only.
-
-The first three-route operational run completed with **3 healthy routes, 0 degraded routes, 0 review candidates, `NO_CHANGE`, and an identical canonical SHA before/after**. Source Registry v1.46 records all three routes as pilot-validated, review-only monitors.
-
-## Current safety boundary
-
-- Canonical records: 649 at the bundled checkpoint.
-- Calendar/site: read-only projection.
-- Live monitor: official-source fetch/parse/compare, review candidates only.
-- Source failure: source-health state only; no event mutation.
-- Automatic canonical commits: prohibited.
-- Google Calendar writes: prohibited.
+Canonical event time preserves the source's native IANA timezone and UTC timestamp where available. Australia/Melbourne is a default reference/display context, never canonical storage time. The schema also supports source-native date/month windows without manufacturing false civil-day precision.
 
 ## Run locally
 
@@ -78,33 +75,18 @@ The first three-route operational run completed with **3 healthy routes, 0 degra
 python scripts/validate_registry.py
 python -m unittest discover -s tests -v
 python scripts/build_site.py
-python -m http.server 8000 --directory docs
 ```
 
-Open `http://localhost:8000` **on the same computer that is running the server**. From another device, use that computer's reachable network address or the deployed GitHub Pages site.
+`python scripts/build_site.py` generates `docs/` locally. The directory is intentionally ignored; Pages builds a fresh projection in GitHub Actions.
 
-## Monitor commands
+## Recovery
 
-Controlled fixture/dry-run comparison:
+For continuation after a chat/thread interruption, read in this order:
 
-```bash
-python scripts/run_monitor_dry.py
-```
+1. `WORLD_SIGNALS_PROJECT_CHARTER.md`
+2. `PROJECT_STATUS.md`
+3. canonical/source/monitor registries and contracts referenced there
+4. latest relevant audits
+5. current `main` commits and Actions runs
 
-Live official-source review-only monitor:
-
-```bash
-python scripts/run_live_monitor.py
-```
-
-Neither command edits `data/canonical/registry.json`.
-
-## GitHub workflows
-
-- `ci.yml` — registry validation, regression tests and static-site build.
-- `pages.yml` — validates, builds and deploys GitHub Pages.
-- `monitor-dry-run.yml` — manual controlled monitor harness.
-- `adapter-smoke.yml` — live transport/parser checks against official RBA, Colombia and EU Cellar routes.
-- `live-monitor.yml` — scheduled read-only live monitor; uploads source-health report and review-candidate artefacts.
-
-Live source adapters are promoted one source family at a time after rights, endpoint and parser validation. Automatic canonical mutation remains a separate closed gate: working software is not permission to remove review.
+Do not reconstruct operational truth from this README or from conversation history alone.

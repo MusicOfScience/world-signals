@@ -1,6 +1,4 @@
 __pycache__/
 *.pyc
-.venv/
-build/
 .DS_Store
-review_candidates/*.generated.json
+/docs/
