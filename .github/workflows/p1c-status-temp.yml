@@ -1,0 +1,52 @@
+name: TEMP P1-C status refresh
+
+on:
+  push:
+    branches: [source-governance-p1c-research]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Refresh project checkpoint
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('PROJECT_STATUS.md')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('**Tier-1 source registry:** v1.53 — **223 sources**.', '**Tier-1 source registry:** v1.54 — **223 sources**.', 1)
+          s=s.replace('public runtime projection correctly labels it stale relative to current v0.20 / v1.53.', 'public runtime projection correctly labels it stale relative to current v0.20 / v1.54.', 1)
+          s=s.replace('**139 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.', '**133 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.', 1)
+          old='''Durable record: `data/coverage/SOURCE_GOVERNANCE_P1A_BACKFILL_AUDIT_v0.1.md`.\n\n## Held / unresolved nodes\n'''
+          new='''Durable record: `data/coverage/SOURCE_GOVERNANCE_P1A_BACKFILL_AUDIT_v0.1.md`.\n\n### P1-B high-dependency / balanced tranche — COMPLETE\n\nP1-B backfilled six reviewed canonical-dependent sources: Fed/FOMC, Bank of Japan, Reserve Bank of Australia, European Central Bank schedule, UK Office for National Statistics and Reserve Bank of New Zealand. The cohort deliberately combined dependency with regional and governance-information balance rather than mechanical top-N selection.\n\nSource registry advanced **v1.53 → v1.54 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**. ONS received bounded automated-monitoring clearance under its explicit bot/fair-use controls; RBNZ remains automation-rights-held. RBA meeting-window and separately timed decision-release semantics remain distinct.\n\nAn initial transaction exposed a historical migration-test lifecycle defect and committed nothing. A test-only repair made completed migration assertions forward-compatible while preserving exact frozen-field integrity. Guarded transaction run `33855888392` then passed all gates and PR #7 merged as `f9f9a5a3f77bd724e6e02cbc1e47e1ee8ac5a358`.\n\nIndependent post-P1-B audit run `33856544804` measured:\n\n- **19** fully explicit governance sources;\n- **204** sources still missing at least one governance field;\n- **0 P0** configured-monitor dependencies;\n- **133 P1** canonical dependencies;\n- **71 P2** registry-only sources;\n- missing `canonical_provenance_use`: **194**;\n- missing `automated_monitoring_use`: **194**;\n- missing `verification_mode`: **204**.\n\nP1-C research is now frozen for Eurostat, Bank of Canada, Japan MOF auctions, Electoral Commission NZ, PBoC financial-statistics publication rule and UN General Assembly mandated events. `WSSRC-CB-009` Swiss National Bank is held out despite 18 dependencies because the registered decisions/history URL does not directly support the forward schedule; repair source scope before governance backfill.\n\nDurable P1-B audit: `data/coverage/SOURCE_GOVERNANCE_P1B_BACKFILL_AUDIT_v0.1.md`.\nP1-C research/plan: `data/coverage/SOURCE_GOVERNANCE_P1C_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_PLAN_v0.1.json`.\n\n## Held / unresolved nodes\n'''
+          if old not in s:
+              raise SystemExit('P1-A insertion anchor not found')
+          s=s.replace(old,new,1)
+          old2='''3. **Source-governance P1-B research** — select a small bounded set from the measured 139-record P1 queue using dependency + active analytical horizon + regional/institutional balance; perform direct source-specific rights/provenance research before freezing any backfill plan.\n4. **Biosecurity candidate-node research**'''
+          new2='''3. **Source-governance P1-C transaction gate** — after review/merge of the frozen P1-C infrastructure, reconcile merged source v1.54 and run the guarded read-only preflight before any registry-only v1.55 transaction; SNB remains excluded pending source-scope repair.\n4. **Biosecurity candidate-node research**'''
+          if old2 not in s:
+              raise SystemExit('next-work anchor not found')
+          s=s.replace(old2,new2,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify status-only working diff
+        run: test "$(git diff --name-only)" = "PROJECT_STATUS.md"
+      - name: Run full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Commit status refresh
+        run: |
+          git config user.name "world-signals-status"
+          git config user.email "actions@users.noreply.github.com"
+          git add PROJECT_STATUS.md
+          git commit -m "Refresh checkpoint after P1-B"
+          git push origin HEAD:source-governance-p1c-research
