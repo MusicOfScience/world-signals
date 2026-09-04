@@ -1,0 +1,199 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1D_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected after the measured P1-C audit, while preserving canonical, monitor and held-source state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_native_precision_must_be_preserved": true,
+    "institution_native_event_semantics_must_be_preserved": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active horizon, source-scope integrity, regional breadth and domain diversity; not mechanical top-N",
+    "selected_source_ids": [
+      "WSSRC-CB-013",
+      "WSSRC-EL-KE-001",
+      "WSSRC-MAC-003",
+      "WSSRC-MAC-024",
+      "WSSRC-REG-004",
+      "WSSRC-REG2-006"
+    ],
+    "canonical_dependency_total": 40,
+    "regional_mix": {
+      "AUSTRALIA": 1,
+      "UNITED_STATES": 1,
+      "JAPAN": 1,
+      "INDONESIA": 1,
+      "ARGENTINA": 1,
+      "KENYA": 1
+    }
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.55",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-CB-013": 11,
+      "WSSRC-MAC-003": 10,
+      "WSSRC-MAC-024": 8,
+      "WSSRC-REG-004": 4,
+      "WSSRC-REG2-006": 4,
+      "WSSRC-EL-KE-001": 3
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "expected_canonical_dependency_count": 4,
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    },
+    "snb_scope_guard": {
+      "source_id": "WSSRC-CB-009",
+      "expected_canonical_dependency_count": 18,
+      "expected_authoritative_url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions",
+      "repair_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.56",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CB-013",
+      "WSSRC-EL-KE-001",
+      "WSSRC-MAC-003",
+      "WSSRC-MAC-024",
+      "WSSRC-REG-004",
+      "WSSRC-REG2-006"
+    ],
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "reserve_bank_of_australia_release_schedule": {
+      "schedule_url": "https://www.rba.gov.au/schedules-events/schedule.html",
+      "calendar_url": "https://www.rba.gov.au/schedules-events/calendar.html?topics=monetary-policy-board",
+      "rights_url": "https://www.rba.gov.au/copyright/",
+      "finding": "Most RBA website material is CC BY 4.0 subject to exclusions. The source already has a pilot calendar monitor. Content permission is kept separate from production polling permission, and meeting, decision-release, media-conference and minutes occurrences remain distinct."
+    },
+    "bea": {
+      "schedule_url": "https://www.bea.gov/news/schedule",
+      "rights_url": "https://www.bea.gov/help/faq/147",
+      "finding": "BEA website information is public domain unless otherwise stated and may be reproduced without specific permission. Public-domain status does not by itself grant unrestricted automated polling of the release schedule, and no live pilot is established for this route."
+    },
+    "statistics_bureau_japan": {
+      "schedule_url": "https://www.stat.go.jp/english/data/kakei/1562.htm",
+      "rights_url": "https://www.stat.go.jp/english/info/riyou.html",
+      "finding": "Covered Statistics Bureau content may be freely used under Japan Public Data License 1.0, including commercial reuse subject to attribution, change disclosure and exceptions. The existing schedule parser has pilot evidence; the licence does not independently specify crawler/request behaviour. No clock time is inferred where the schedule supplies only a date."
+    },
+    "bank_indonesia": {
+      "schedule_url": "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2730825.aspx",
+      "calendar_url": "https://www.bi.go.id/en/publikasi/kalender/default.aspx",
+      "finding": "Bank Indonesia directly confirms the 2026 two-day Board of Governors schedule, but targeted current review did not identify a source-specific website reuse/automation licence or authorised feed sufficient to clear production monitoring. The two days are one integrated forum and policy determination occurs on day two."
+    },
+    "indec": {
+      "schedule_url": "https://www.indec.gob.ar/ftp/cuadros/publicaciones/calendario_2sem2026.pdf",
+      "rights_url": "https://www.indec.gob.ar/ftp/cuadros/publicaciones/politica_difusion_indec_ingles.pdf",
+      "finding": "INDEC's dissemination policy permits copying and redistribution of covered website material under Creative Commons with primary-source citation and modification notice. No separate automation clearance was identified for polling the calendar PDF/site, and no release time is inferred where the calendar gives only dates."
+    },
+    "kenya_law": {
+      "authority_url": "https://new.kenyalaw.org/akn/ke/act/2010/constitution/eng@2010-09-03",
+      "finding": "Kenya Law states that, except for specifically licensed material, site contents are public domain and free of copyright restrictions. The Constitution is the correct legal authority for fixed election-date and transition rules. No production crawler grant is inferred, and presidential inauguration timing remains conditional on result declaration and petition status."
+    }
+  },
+  "source_updates": {
+    "WSSRC-CB-013": {
+      "expected_canonical_dependency_count": 11,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Most RBA website material is CC BY 4.0 and the registered release/calendar route has pilot parser evidence, but content licensing does not itself clear production polling. Board meeting windows, decision releases, media conferences and later minutes remain distinct source-native occurrences."
+      }
+    },
+    "WSSRC-MAC-003": {
+      "expected_canonical_dependency_count": 10,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "BEA factual website information is public domain unless otherwise stated, but unrestricted automated polling is not inferred from public-domain status and this schedule route has no established live pilot. Release-vintage semantics must be retained."
+      }
+    },
+    "WSSRC-MAC-024": {
+      "expected_canonical_dependency_count": 8,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Statistics Bureau content is reusable under Japan Public Data License 1.0 and the schedule parser has pilot evidence; the content licence does not itself define crawler/request behaviour. Dates remain date-only where the source provides no clock time."
+      }
+    },
+    "WSSRC-REG-004": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Bank Indonesia's official schedule is authoritative for manual factual verification, but current source-specific reuse and automation terms remain unresolved. No broader permission is inferred from central-bank status; the two meeting days form one integrated forum with policy determination on day two."
+      }
+    },
+    "WSSRC-REG2-006": {
+      "expected_canonical_dependency_count": 4,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "INDEC permits Creative Commons copying and redistribution with source citation and modification notice, but no separate automated-calendar retrieval clearance was identified. The audited calendar supplies dates without a clock time, so none is inferred."
+      }
+    },
+    "WSSRC-EL-KE-001": {
+      "expected_canonical_dependency_count": 3,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Kenya Law's constitutional text is public-domain legal authority for fixed election-date and transition rules. No separate production crawler permission is inferred, and presidential inauguration timing remains conditional on result declaration and petition status rather than being fabricated as a fixed date."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date."
+    },
+    "WSSRC-CB-009": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The registered SNB decisions/history URL does not directly support the forward monetary-policy assessment schedule described by the source record; repair source scope before governance backfill."
+    }
+  }
+}
