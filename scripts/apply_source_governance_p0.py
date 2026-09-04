@@ -122,6 +122,17 @@ def preflight(
             errors,
         )
 
+    colombia_canonical_count = sum(
+        1
+        for record in canonical.get("records", [])
+        if record.get("source_id") == OLD_COLOMBIA_SOURCE_ID
+    )
+    if colombia_canonical_count != p["colombia_canonical_dependency_count"]:
+        errors.append(
+            "Colombia canonical dependency count derived from registry: "
+            f"{colombia_canonical_count} != {p['colombia_canonical_dependency_count']}"
+        )
+
     configs = _configs_by_id(expectations)
     adapter = configs.get(p["colombia_adapter_id"])
     if adapter is None:

@@ -62,7 +62,7 @@ class P0GovernanceMigrationTests(unittest.TestCase):
                 "region": "Synthetic",
                 "timing_type": "DATE_ONLY",
                 "certainty_status": "CONFIRMED",
-                "source_id": "WSSRC-REG4-001",
+                "source_id": "WSSRC-REG4-001" if i == 0 else "WSSRC-FIN-001",
             }
             for i in range(p["canonical_record_count"])
         ]

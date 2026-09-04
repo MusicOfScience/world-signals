@@ -26,9 +26,12 @@
       "WSSRC-TRD-005",
       "WSSRC-TRD-006"
     ],
-    "required_absent_source_ids": ["WSSRC-REG4-002"],
+    "required_absent_source_ids": [
+      "WSSRC-REG4-002"
+    ],
     "colombia_adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
-    "colombia_adapter_source_id": "WSSRC-REG4-001"
+    "colombia_adapter_source_id": "WSSRC-REG4-001",
+    "colombia_canonical_dependency_count": 1
   },
   "postconditions": {
     "canonical_registry_version": "0.20",
@@ -37,7 +40,9 @@
     "source_count": 223,
     "monitor_expectations_version": "0.7",
     "colombia_machine_sentinel_source_id": "WSSRC-REG4-002",
-    "colombia_required_manual_verification_source_ids": ["WSSRC-REG4-001"],
+    "colombia_required_manual_verification_source_ids": [
+      "WSSRC-REG4-001"
+    ],
     "configured_monitor_adapter_count": 6,
     "configured_monitor_primary_source_count": 5,
     "configured_monitor_sources_with_missing_modern_governance": 0,
@@ -128,8 +133,7 @@
       "expected": {
         "licence_review_status": "MIXED_ROUTE_OPEN_DATA_REUSE_CLEARED_LEGAL_HTML_MANUAL",
         "automated_retrieval_permission": "PREFER_COLOMBIA_OPEN_DATA_INVENTORY_FOR_VERSION_MONITOR; LEGAL_TEXT_HTML_MANUAL_VERIFICATION",
-        "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
-        "canonical_dependency_count": 1
+        "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT"
       },
       "set": {
         "institution": "Ministry of Justice and Law — SUIN-Juriscol",
@@ -154,7 +158,10 @@
         "rights_reviewed_at": "2026-09-04",
         "governance_backfill_reviewed_at": "2026-09-04",
         "governance_backfill_basis": "The prior source identity combined a reuse-cleared Open Data inventory with a separately governed SUIN legal-text page. The canonical source ID is retained for SUIN legal authority while machine monitoring moves to WSSRC-REG4-002.",
-        "related_source_ids": ["WSSRC-REG4-002"]
+        "related_source_ids": [
+          "WSSRC-REG4-002"
+        ],
+        "canonical_dependency_count": 1
       },
       "replace_monitor_endpoints": [
         {
@@ -166,7 +173,13 @@
           "notes": "Manual authoritative verification of Article 59; no automated monitor route asserted."
         }
       ],
-      "drop_current_live_fields": ["live_adapter_id", "live_validation_evidence", "live_validation_reviewed_at", "endpoint_route_validation_state", "runtime_environment_health_state"]
+      "drop_current_live_fields": [
+        "live_adapter_id",
+        "live_validation_evidence",
+        "live_validation_reviewed_at",
+        "endpoint_route_validation_state",
+        "runtime_environment_health_state"
+      ]
     }
   },
   "new_sources": [
@@ -210,8 +223,12 @@
       "monitoring_readiness_assessed_at": "2026-09-04",
       "governance_backfill_reviewed_at": "2026-09-04",
       "governance_backfill_basis": "Distinct reuse-cleared machine sentinel split from the prior composite WSSRC-REG4-001 source identity.",
-      "required_authoritative_verification_source_ids": ["WSSRC-REG4-001"],
-      "related_source_ids": ["WSSRC-REG4-001"],
+      "required_authoritative_verification_source_ids": [
+        "WSSRC-REG4-001"
+      ],
+      "related_source_ids": [
+        "WSSRC-REG4-001"
+      ],
       "monitor_endpoints": [
         {
           "endpoint_role": "suin_legal_instrument_inventory",
@@ -235,7 +252,9 @@
   "monitor_expectation_update": {
     "adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
     "set_source_id": "WSSRC-REG4-002",
-    "required_manual_verification_source_ids": ["WSSRC-REG4-001"],
+    "required_manual_verification_source_ids": [
+      "WSSRC-REG4-001"
+    ],
     "source_role_contract": {
       "machine_sentinel_source_id": "WSSRC-REG4-002",
       "manual_clause_verification_source_id": "WSSRC-REG4-001"
