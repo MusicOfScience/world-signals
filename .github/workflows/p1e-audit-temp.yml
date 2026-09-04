@@ -1,0 +1,38 @@
+name: TEMP P1-E governance audit
+
+on:
+  push:
+    branches: [source-governance-p1e-research]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run source-governance audit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, 'src')
+          from world_signals.source_governance_audit import build_source_governance_audit
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          audit=build_source_governance_audit(canonical,sources,expectations)
+          print('AUDIT_TOTALS')
+          print(json.dumps(audit['totals'], indent=2, sort_keys=True))
+          print('TOP_P1')
+          p1=[r for r in audit['backfill_research_queue'] if r['research_priority']=='P1_CANONICAL_DEPENDENCY']
+          print(json.dumps(p1[:50], indent=2, sort_keys=True))
+          PY
+      - name: Confirm repository remains clean
+        run: git diff --exit-code
