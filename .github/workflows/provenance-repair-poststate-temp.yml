@@ -25,5 +25,15 @@ jobs:
         run: python scripts/apply_provenance_scope_repair_a.py --apply
       - name: Validate repaired registry
         run: python scripts/validate_registry.py
-      - name: Full suite against repaired post-state
+      - name: Full unit suite against repaired post-state
         run: python -m unittest discover -s tests -v
+      - name: Compile monitor projection helpers
+        run: python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/apply_provenance_scope_repair_a.py
+      - name: Browser JavaScript checks
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Build public site against repaired post-state
+        run: python scripts/build_site.py
