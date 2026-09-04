@@ -4,7 +4,7 @@
   "version": "0.1",
   "layer": "ANALYTICAL_COVERAGE_OVERLAY_NONCANONICAL",
   "canonical_checkpoint": {
-    "registry_version": "0.20",
+    "registry_version": "0.21",
     "record_count": 669
   },
   "principles": {
@@ -55,35 +55,45 @@
   "canonical_series_memberships": [
     {
       "series_id": "WSER-HEALTH-WHA",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
       "canonical_primary_category": "HEALTH_BIOSECURITY",
       "canonical_institution": "World Health Organization",
       "basis": "Existing canonical global health-governance series."
     },
     {
       "series_id": "WSER-HEALTH-WHO-EB",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
       "canonical_primary_category": "HEALTH_BIOSECURITY",
       "canonical_institution": "World Health Organization",
       "basis": "Existing canonical global health-governance series."
     },
     {
       "series_id": "WSER-HEALTH-WHO-IGWG",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
       "canonical_primary_category": "HEALTH_BIOSECURITY",
       "canonical_institution": "World Health Organization",
       "basis": "Existing canonical pandemic-governance / PABS negotiation series."
     },
     {
       "series_id": "WSER-HEALTH-WHO-PBAC",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
       "canonical_primary_category": "HEALTH_BIOSECURITY",
       "canonical_institution": "World Health Organization",
       "basis": "Existing canonical health-budget-governance series."
     },
     {
       "series_id": "WSER-HEALTH-WHO-RC",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
       "canonical_primary_category": "HEALTH_BIOSECURITY",
       "canonical_institution": "World Health Organization",
       "basis": "Existing canonical regional health-governance series."
@@ -93,8 +103,12 @@
     {
       "candidate_node_id": "BIO-CAND-WOAH",
       "institution": "World Organisation for Animal Health",
-      "system_ids": ["BIO-ANIMAL-ZOONOTIC-HEALTH"],
-      "relationship_ids": ["ONE_HEALTH"],
+      "system_ids": [
+        "BIO-ANIMAL-ZOONOTIC-HEALTH"
+      ],
+      "relationship_ids": [
+        "ONE_HEALTH"
+      ],
       "canonical_status": "NOT_CANONICAL_AT_V0.20",
       "authority_basis": "WOAH describes itself as the global authority on animal health and operates international animal-disease information and standards systems.",
       "authority_url": "https://www.woah.org/en/who-we-are/",
@@ -103,8 +117,12 @@
     {
       "candidate_node_id": "BIO-CAND-IPPC-CPM",
       "institution": "International Plant Protection Convention / Commission on Phytosanitary Measures",
-      "system_ids": ["BIO-PLANT-PHYTOSANITARY-SECURITY"],
-      "relationship_ids": ["ONE_HEALTH"],
+      "system_ids": [
+        "BIO-PLANT-PHYTOSANITARY-SECURITY"
+      ],
+      "relationship_ids": [
+        "ONE_HEALTH"
+      ],
       "canonical_status": "NOT_CANONICAL_AT_V0.20",
       "authority_basis": "IPPC is the international plant-health treaty; CPM is its governing body and adopts international phytosanitary standards.",
       "authority_url": "https://www.ippc.int/en/about/overview/",
@@ -113,7 +131,9 @@
     {
       "candidate_node_id": "BIO-CAND-BWC",
       "institution": "Biological Weapons Convention / UNODA",
-      "system_ids": ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"],
+      "system_ids": [
+        "BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"
+      ],
       "relationship_ids": [],
       "canonical_status": "NOT_CANONICAL_AT_V0.20",
       "authority_basis": "The BWC prohibits biological and toxin weapons and is a multilateral disarmament / WMD governance system supported by UNODA.",
@@ -123,8 +143,12 @@
     {
       "candidate_node_id": "BIO-CAND-AFRICA-CDC",
       "institution": "Africa Centres for Disease Control and Prevention",
-      "system_ids": ["BIO-HUMAN-HEALTH-GOVERNANCE"],
-      "relationship_ids": ["ONE_HEALTH"],
+      "system_ids": [
+        "BIO-HUMAN-HEALTH-GOVERNANCE"
+      ],
+      "relationship_ids": [
+        "ONE_HEALTH"
+      ],
       "canonical_status": "NOT_CANONICAL_AT_V0.20",
       "authority_basis": "Africa CDC is an autonomous African Union health agency mandated to strengthen prevention, detection and response to public-health threats; its current institutional aspiration explicitly invokes One Health.",
       "authority_url": "https://africacdc.org/about-us/",
