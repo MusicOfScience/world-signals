@@ -4,6 +4,7 @@
   "version": "0.1",
   "review_date": "2026-09-04",
   "purpose": "Repair the two standing Brazil TSE and SNB source-scope defects before any further ordinary source-governance tranche.",
+  "ledger_commit_timestamp_policy": "SET_AT_APPLY_TIME_IN_AUSTRALIA_MELBOURNE; reviewed_at is frozen research/review evidence and committed_at must not be pre-declared.",
   "preconditions": {
     "canonical_registry_version": "0.20",
     "canonical_record_count": 669,
@@ -13,6 +14,12 @@
     "monitor_expectations_version": "0.7",
     "automatic_canonical_commit": false,
     "google_calendar_write": false,
+    "biosecurity_overlay": {
+      "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
+      "version": "0.1",
+      "canonical_checkpoint_registry_version": "0.20",
+      "canonical_checkpoint_record_count": 669
+    },
     "required_absent_source_ids": [
       "WSSRC-EL-BR-002"
     ],
@@ -191,7 +198,6 @@
       "The canonical 5 January 2027 date and stable occurrence identity are unchanged; only provenance-semantic fields are corrected."
     ],
     "commit_mode": "REVIEWED_PROVENANCE_SCOPE_REPAIR",
-    "committed_at": "2026-09-05T00:08:00+10:00",
     "registry_version_before": "0.20",
     "registry_version_after": "0.21",
     "canonical_mutation_committed": true
@@ -205,6 +211,12 @@
     "monitor_expectations_version": "0.7",
     "automatic_canonical_commit": false,
     "google_calendar_write": false,
+    "biosecurity_overlay": {
+      "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
+      "version": "0.1",
+      "canonical_checkpoint_registry_version": "0.21",
+      "canonical_checkpoint_record_count": 669
+    },
     "brazil_tse_canonical_dependency_count": 3,
     "brazil_constitution_canonical_dependency_count": 1,
     "snb_canonical_dependency_count": 18,
