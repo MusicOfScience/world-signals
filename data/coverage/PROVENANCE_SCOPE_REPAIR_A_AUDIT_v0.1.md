@@ -7,6 +7,7 @@
 **Independent audit run:** `33886673758`  
 **Merged-main CI:** `33886955012` — SUCCESS  
 **Merged-main Pages:** `33886992355` — SUCCESS
+**Post-repair live monitor:** `33886954803` (run 57) — SUCCESS
 
 ## Purpose
 
@@ -83,6 +84,14 @@ Independent post-transaction audit run `33886673758` separately confirmed:
 - **238 tests PASS**.
 
 After PR #22 merged, merged-main CI run `33886955012` and Pages deployment run `33886992355` both completed successfully on exact main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be`.
+
+## Post-repair live-monitor alignment
+
+The source-registry change in PR #22 matched the permanent live-monitor workflow's `push` path trigger, so the repair merge itself automatically produced a genuine post-repair observation rather than requiring a later scheduled or synthetic run.
+
+Live-monitor run **57** / GitHub run id `33886954803` executed on exact repaired main commit `5adb07eb12ccd2fab1a51704d8dd5e9413e2d4be` and completed successfully. It recorded canonical **v0.21**, source **v1.61**, expectations **v0.7**, operations policy **v0.1**, **6 healthy / 0 degraded** adapters, all **6 expected adapters observed**, **0 review candidates**, `NO_CHANGE`, canonical hash unchanged, automatic canonical commit **false**, and Google Calendar write **false**.
+
+Pages deployment `33886992355` completed successfully after run 57. The post-repair live-monitor configuration-alignment observation is therefore **CLOSED**. The earlier checkpoint statement that runtime evidence still predated v0.21/v1.61 was a documentation error, not a monitor or event-state failure.
 
 ## Measured source-governance queue after repair
 
