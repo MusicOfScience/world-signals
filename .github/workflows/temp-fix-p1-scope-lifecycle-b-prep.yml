@@ -1,0 +1,45 @@
+name: TEMP fix P1 scope lifecycle B prep
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-fix-p1-scope-lifecycle-b-prep.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: p1-source-scope-lifecycle-b-prep
+      - name: Patch frozen plan and helper guards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('data/coverage/P1_SOURCE_SCOPE_LIFECYCLE_B_PLAN_v0.1.json')
+          s=p.read_text()
+          old='"canonical_dependency_count": 1,\n      "monitoring_readiness_assessed_at": "2026-09-05"'
+          new='"canonical_dependency_count": 0,\n      "monitoring_readiness_assessed_at": "2026-09-05"'
+          if old not in s:
+              raise SystemExit('India canonical_dependency_count target not found')
+          p.write_text(s.replace(old,new,1))
+
+          h=Path('scripts/apply_p1_source_scope_lifecycle_b.py')
+          s=h.read_text()
+          old='if changed_occurrences != post["expected_changed_occurrences"]:\n        errors.append(f"unexpected canonical changes/order: {changed_occurrences}")'
+          new='if len(changed_occurrences) != len(post["expected_changed_occurrences"]) or set(changed_occurrences) != set(post["expected_changed_occurrences"]):\n        errors.append(f"unexpected canonical changes: {changed_occurrences}")'
+          if old not in s:
+              raise SystemExit('changed occurrence guard target not found')
+          s=s.replace(old,new,1)
+          old='if changed_existing != post["expected_changed_existing_sources"]:\n        errors.append(f"unexpected existing source changes/order: {changed_existing}")'
+          new='if len(changed_existing) != len(post["expected_changed_existing_sources"]) or set(changed_existing) != set(post["expected_changed_existing_sources"]):\n        errors.append(f"unexpected existing source changes: {changed_existing}")'
+          if old not in s:
+              raise SystemExit('changed source guard target not found')
+          h.write_text(s.replace(old,new,1))
+          PY
+          git config user.name 'world-signals-bot'
+          git config user.email 'world-signals-bot@users.noreply.github.com'
+          git add data/coverage/P1_SOURCE_SCOPE_LIFECYCLE_B_PLAN_v0.1.json scripts/apply_p1_source_scope_lifecycle_b.py
+          git diff --cached --check
+          git commit -m 'Tighten P1 scope lifecycle B guards'
+          git push origin HEAD:p1-source-scope-lifecycle-b-prep
