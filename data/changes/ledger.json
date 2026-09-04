@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.9",
-  "reference_date": "2026-09-03",
+  "version": "0.10",
+  "reference_date": "2026-09-04",
   "changes": [
     {
       "change_id": "WSCHANGE-b5a5e064f7f9e408b8",
@@ -787,6 +787,38 @@
       "canonical_mutation_committed": false,
       "reschedule_evidence_class": "HISTORICAL_PROVENANCE_RECONCILED",
       "reschedule_trigger": "ELECTORAL_ACT_2026_TIMELINE_CHANGE"
+    },
+    {
+      "change_id": "WSCHANGE-cd76320ef1531227e2",
+      "occurrence_id": "WSO-EL-A-0004",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "old_values": {
+        "source_id": "WSSRC-EL-BR-001",
+        "institution": "Tribunal Superior Eleitoral",
+        "election_date_basis": "EXPLICIT_ELECTORAL_AUTHORITY_SCHEDULE",
+        "primary_source_assertion_id": "WSA-024b7ec125f413d8",
+        "last_successful_assertion_id": "WSA-024b7ec125f413d8"
+      },
+      "new_values": {
+        "source_id": "WSSRC-EL-BR-002",
+        "institution": "Presidency of the Republic of Brazil",
+        "election_date_basis": "CONSTITUTIONAL_RULE_DERIVED",
+        "primary_source_assertion_id": "WSA-66b042250a27801e",
+        "last_successful_assertion_id": "WSA-66b042250a27801e"
+      },
+      "source_assertion_id": "WSA-66b042250a27801e",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T00:08:00+10:00",
+      "review_basis": [
+        "TSE Resolution 23.760 is authoritative for the 2026 electoral calendar but does not establish the 5 January presidential term-start rule.",
+        "Brazil Constitution art. 82, as amended by Constitutional Amendment 111/2021, establishes that the presidential mandate begins on 5 January in the year following the election.",
+        "The canonical 5 January 2027 date and stable occurrence identity are unchanged; only provenance-semantic fields are corrected."
+      ],
+      "commit_mode": "REVIEWED_PROVENANCE_SCOPE_REPAIR",
+      "registry_version_before": "0.20",
+      "registry_version_after": "0.21",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T00:56:03+10:00"
     }
   ]
 }
