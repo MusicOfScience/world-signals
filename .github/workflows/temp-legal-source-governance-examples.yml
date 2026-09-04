@@ -1,0 +1,25 @@
+name: TEMP legal source governance examples
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-legal-source-governance-examples.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print legal source governance rows
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          wanted=['WSSRC-EL-BR-002','WSSRC-REG-010','WSSRC-REG2-007','WSSRC-TECH-001','WSSRC-FIS-012']
+          keys=['source_id','institution','authoritative_url','source_type','ingestion_permission','licence_review_status','automated_retrieval_permission','redistribution_permission','rights_evidence_url','rights_summary','automation_summary','canonical_provenance_use','automated_monitoring_use','verification_mode','governance_backfill_basis']
+          for sid in wanted:
+              row=next((r for r in src.get('sources',[]) if r.get('source_id')==sid),None)
+              print('SOURCE',sid)
+              print(json.dumps({k:row.get(k) for k in keys},ensure_ascii=False,indent=2))
+          PY
