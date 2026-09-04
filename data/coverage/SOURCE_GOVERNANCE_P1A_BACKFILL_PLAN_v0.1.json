@@ -1,0 +1,168 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1A_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six high-dependency P1 canonical sources while holding Brazil TSE outside the tranche until its provenance scope is repaired.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.52",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-MAC-007": 36,
+      "WSSRC-MAC-017": 17,
+      "WSSRC-COM-003": 16,
+      "WSSRC-COM-010": 9,
+      "WSSRC-HEALTH-001": 6,
+      "WSSRC-CLIM-001": 3
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "held_source_id": "WSSRC-EL-BR-001",
+    "held_source_canonical_dependency_count": 4,
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.53",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CLIM-001",
+      "WSSRC-COM-003",
+      "WSSRC-COM-010",
+      "WSSRC-HEALTH-001",
+      "WSSRC-MAC-007",
+      "WSSRC-MAC-017"
+    ],
+    "held_source_id": "WSSRC-EL-BR-001",
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "china_nbs": {
+      "url": "https://www.stats.gov.cn/english/nbs/200701/t20070104_59236.html",
+      "finding": "NBS expressly permits download and use of statistical data and reasonable attributed quotation/reprint, but does not expressly grant crawler or scraper access."
+    },
+    "india_mospi": {
+      "url": "https://mospi.gov.in/faq",
+      "finding": "MoSPI GSDD 2026 treats Category A aggregated/analyzed information and publications as open-access without registration, including commercial use; website automation remains a separate endpoint question."
+    },
+    "us_eia": {
+      "url": "https://www.eia.gov/about/copyrights_reuse.php",
+      "finding": "EIA U.S. Government publications are public domain subject to third-party exceptions; schedule-page polling remains an endpoint/operational review matter."
+    },
+    "fao": {
+      "url": "https://www.fao.org/contact-us/terms/en/",
+      "finding": "FAO distinguishes general website content from separately licensed publications and statistical databases. The release-calendar HTML is governed conservatively as general web content unless a separately reviewed route applies."
+    },
+    "who": {
+      "url": "https://www.who.int/about/policies/terms-of-use",
+      "finding": "WHO general website terms support research/private-study excerpts but require authorization for substantial or other uses; no production automation grant is inferred for governance-calendar pages or user-facing calendar exports."
+    },
+    "unfccc": {
+      "url": "https://unfccc.int/this-site/disclaimer",
+      "finding": "UNFCCC official texts, data and documents are public domain with acknowledgement, but that scope is not projected onto arbitrary automated polling of the COP event webpage."
+    },
+    "brazil_tse_amendment": {
+      "url": "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-771-de-3-de-agosto-de-2026",
+      "finding": "Resolution 23.771 of 3 August 2026 amends the 2026 electoral calendar in Resolution 23.760."
+    },
+    "brazil_constitution": {
+      "url": "https://www4.planalto.gov.br/legislacao/portal-legis/legislacao-1/constituicao",
+      "finding": "Constitution art. 82, as amended by EC 111/2021, provides that the presidential term begins on 5 January of the year following the election; this is the proper basis for the 2027 inauguration/start-date fact."
+    }
+  },
+  "source_updates": {
+    "WSSRC-MAC-007": {
+      "expected_canonical_dependency_count": 36,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "NBS permits use of statistical data and attributed factual content, but its terms do not expressly clear crawler/scraper access to the release-calendar surface."
+      }
+    },
+    "WSSRC-MAC-017": {
+      "expected_canonical_dependency_count": 17,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "MoSPI Category A statistical publications are open-access, while website automation remains separately unresolved and the dynamic calendar is currently inconsistent with the authoritative ARC PDF."
+      }
+    },
+    "WSSRC-COM-003": {
+      "expected_canonical_dependency_count": 16,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "EIA factual/public-domain content supports curated provenance; existing read-only WPSR pilot use does not itself clear unrestricted schedule-page polling."
+      }
+    },
+    "WSSRC-COM-010": {
+      "expected_canonical_dependency_count": 9,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "FAO general website terms support attributed non-commercial informational use; the separate statistical-database licensing regime is not projected onto the release-calendar HTML endpoint."
+      }
+    },
+    "WSSRC-HEALTH-001": {
+      "expected_canonical_dependency_count": 6,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "WHO general website terms support limited research/private-study use but do not clear production automation; user-facing calendar export transport is not treated as permission."
+      }
+    },
+    "WSSRC-CLIM-001": {
+      "expected_canonical_dependency_count": 3,
+      "set": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "UNFCCC official schedule facts remain authoritative, but the public-domain status of official texts/data/documents is not projected into a production automation licence for the COP event webpage."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source correctly supports election-cycle milestones but is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date. Governance backfill is held until that source relationship is repaired."
+    }
+  }
+}
