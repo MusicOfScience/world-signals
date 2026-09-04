@@ -1,0 +1,209 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "VIETNAM_SOURCE_SCOPE_REPAIR_A",
+  "version": "0.1",
+  "review_date": "2026-09-05",
+  "purpose": "Replace secondary Government Electronic Newspaper provenance for the 16th National Assembly Second Session opening with a distinct first-order National Assembly source while preserving the event date, provisional status and stable occurrence identity.",
+  "ledger_commit_timestamp_policy": "SET_AT_APPLY_TIME_IN_AUSTRALIA_MELBOURNE; reviewed_at is frozen research/review evidence and committed_at must not be pre-declared.",
+  "preconditions": {
+    "canonical_registry_version": "0.21",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.62",
+    "source_count": 224,
+    "change_ledger_version": "0.10",
+    "monitor_expectations_version": "0.7",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "biosecurity_overlay": {
+      "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
+      "version": "0.1",
+      "canonical_checkpoint_registry_version": "0.21",
+      "canonical_checkpoint_record_count": 669
+    },
+    "required_absent_source_ids": [
+      "WSSRC-REG5-002"
+    ],
+    "existing_government_news_source": {
+      "source_id": "WSSRC-REG5-001",
+      "institution": "Government Information and Communication Department / Government Electronic Newspaper",
+      "authoritative_url": "https://baochinhphu.vn/chuan-bi-ky-luong-tu-som-ky-hop-thu-2-quoc-hoi-khoa-xvi-102260511145333161.htm",
+      "source_type": "official_government_news_report_of_legislative_programme",
+      "verification_mode": null,
+      "derived_canonical_dependency_count": 1
+    },
+    "occurrence": {
+      "occurrence_id": "WSO-REG-G-0001",
+      "series_id": "WSER-REG5-VN-NA-SESSION",
+      "source_id": "WSSRC-REG5-001",
+      "institution": "National Assembly of Vietnam",
+      "canonical_name": "Vietnam 16th National Assembly — Second Session opening",
+      "start_local": "2026-10-20",
+      "source_timezone": "Asia/Ho_Chi_Minh",
+      "certainty_status": "PROVISIONAL",
+      "activation_mode": "PROVISIONAL_OFFICIAL_PROGRAMME",
+      "lifecycle_status": "PLANNED",
+      "time_status": "PROVISIONAL",
+      "time_basis": "PROVISIONAL_OFFICIAL_PROGRAMME",
+      "primary_source_assertion_id": "WSA-edffdbb284fcbfd9",
+      "last_successful_assertion_id": "WSA-edffdbb284fcbfd9"
+    }
+  },
+  "canonical_update": {
+    "occurrence_id": "WSO-REG-G-0001",
+    "set": {
+      "source_id": "WSSRC-REG5-002",
+      "primary_source_assertion_id": "WSA-6b2aa27a0df846dc",
+      "last_successful_assertion_id": "WSA-6b2aa27a0df846dc",
+      "last_verified_at": "2026-09-05"
+    },
+    "must_preserve": {
+      "series_id": "WSER-REG5-VN-NA-SESSION",
+      "canonical_name": "Vietnam 16th National Assembly — Second Session opening",
+      "short_calendar_title": "Vietnam National Assembly — Second Session opens",
+      "institution": "National Assembly of Vietnam",
+      "start_local": "2026-10-20",
+      "timing_type": "CIVIL_DATE",
+      "source_timezone": "Asia/Ho_Chi_Minh",
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "certainty_status": "PROVISIONAL",
+      "activation_mode": "PROVISIONAL_OFFICIAL_PROGRAMME",
+      "lifecycle_status": "PLANNED",
+      "time_status": "PROVISIONAL",
+      "time_basis": "PROVISIONAL_OFFICIAL_PROGRAMME",
+      "event_admission_source_route": "MANUAL_AUTHORITATIVE_PRIMARY_SOURCE",
+      "population_horizon_policy": "NEXT_OFFICIALLY_PROGRAMMED_SESSION_ONLY"
+    },
+    "must_preserve_session_phases": [
+      {
+        "phase": 1,
+        "date_earliest": "2026-10-20",
+        "date_latest": "2026-11-13",
+        "status": "PROVISIONAL"
+      },
+      {
+        "phase": 2,
+        "date_earliest": "2026-11-25",
+        "date_latest": "2026-12-05",
+        "status": "PROVISIONAL"
+      }
+    ]
+  },
+  "source_updates": {
+    "WSSRC-REG5-001": {
+      "expected": {
+        "institution": "Government Information and Communication Department / Government Electronic Newspaper",
+        "authoritative_url": "https://baochinhphu.vn/chuan-bi-ky-luong-tu-som-ky-hop-thu-2-quoc-hoi-khoa-xvi-102260511145333161.htm",
+        "source_type": "official_government_news_report_of_legislative_programme",
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED"
+      },
+      "set": {
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "The Government Electronic Newspaper remains an official attributed secondary report of the preliminary Second Session programme, but direct National Assembly portal evidence is now the primary canonical provenance. Retain this source for manual corroboration; automated endpoint use remains separately unresolved."
+      }
+    }
+  },
+  "new_sources": [
+    {
+      "source_id": "WSSRC-REG5-002",
+      "institution": "National Assembly of Vietnam / National Assembly Electronic Portal",
+      "jurisdiction": "Vietnam",
+      "domain": "elections_governance",
+      "endpoint_role": "Direct National Assembly reporting of Second Session programme and opening date",
+      "authoritative_url": "https://quochoi.vn/tintuc/Pages/tin-hoat-dong-cua-quoc-hoi.aspx?ItemID=99777",
+      "source_type": "official_legislative_portal_session_programme",
+      "information_supplied": "First-order National Assembly statement that the 16th National Assembly Second Session was expected to open on 20 October 2026, with preliminary two-block programme context",
+      "future_schedule_horizon": "current/next National Assembly regular session programme",
+      "typical_advance_notice": "months",
+      "machine_readable_available": "HTML",
+      "source_timezone": "Asia/Ho_Chi_Minh",
+      "recommended_verification_cadence": "weekly; daily in final 10 days; recheck when final session programme is issued",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_PORTAL_VERIFICATION",
+      "known_limitations": [
+        "The 11 May 2026 National Assembly article describes a preliminary/expected programme; certainty must remain PROVISIONAL until a later programme decision or convening notice confirms it.",
+        "No specific general reuse licence or automated retrieval grant for the National Assembly portal was identified in the 2026-09-05 review."
+      ],
+      "backup_source": "https://baochinhphu.vn/chuan-bi-ky-luong-tu-som-ky-hop-thu-2-quoc-hoi-khoa-xvi-102260511145333161.htm",
+      "notes": "Created solely to repair primary provenance for WSO-REG-G-0001; no new canonical occurrence or date change is authorised.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "licence_constraints": "NO_SPECIFIC_GENERAL_REUSE_OR_AUTOMATION_GRANT_IDENTIFIED_FOR_QUOCHOI_VN; MINIMAL_FACTUAL_METADATA_MANUAL_REFERENCE_ONLY",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "RIGHTS_AUDIT_REQUIRED_NO_GENERAL_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "PUBLIC_FACTUAL_METADATA_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
+      "rights_evidence_url": "https://quochoi.vn/",
+      "rights_summary": "The National Assembly Electronic Portal identifies the National Assembly of the Socialist Republic of Vietnam as its governing authority. No specific general reuse licence was identified in this review; WORLD SIGNALS therefore retains only minimal factual schedule metadata and the authoritative reference URL.",
+      "automation_summary": "Public accessibility and first-order authority do not establish crawler or production polling permission. Monitoring remains manual unless a specific authorised endpoint or permission is later established.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "VIETNAM_SOURCE_SCOPE_REPAIR_A_AUTHORITY_REUSE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
+      "monitoring_priority_score": 140,
+      "canonical_dependency_count": 1,
+      "monitoring_readiness_assessed_at": "2026-09-05",
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The National Assembly portal is the first-order institutional source for the provisional 20 October 2026 Second Session opening. Because no general reuse/automation grant was identified, the page is retained only as a manual authoritative factual reference; no production polling route is authorised."
+    }
+  ],
+  "change_ledger_entry": {
+    "change_id": "WSCHANGE-49ebecdf2a63060ef6",
+    "occurrence_id": "WSO-REG-G-0001",
+    "change_type": "PROVENANCE_SCOPE_REPAIR",
+    "old_values": {
+      "source_id": "WSSRC-REG5-001",
+      "primary_source_assertion_id": "WSA-edffdbb284fcbfd9",
+      "last_successful_assertion_id": "WSA-edffdbb284fcbfd9"
+    },
+    "new_values": {
+      "source_id": "WSSRC-REG5-002",
+      "primary_source_assertion_id": "WSA-6b2aa27a0df846dc",
+      "last_successful_assertion_id": "WSA-6b2aa27a0df846dc"
+    },
+    "source_assertion_id": "WSA-6b2aa27a0df846dc",
+    "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+    "reviewed_at": "2026-09-05T05:06:00+10:00",
+    "review_basis": [
+      "The existing Government Electronic Newspaper item is an official secondary report, while the National Assembly's own portal directly reports the same provisional 20 October 2026 opening date.",
+      "Stable source identity requires a new National Assembly source rather than repurposing WSSRC-REG5-001 across institutions.",
+      "The canonical date, provisional status, lifecycle, phase windows and stable occurrence identity are unchanged; only provenance identity/assertion metadata are corrected."
+    ],
+    "commit_mode": "REVIEWED_PROVENANCE_SCOPE_REPAIR",
+    "registry_version_before": "0.21",
+    "registry_version_after": "0.22",
+    "canonical_mutation_committed": true
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.22",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.63",
+    "source_count": 225,
+    "change_ledger_version": "0.11",
+    "monitor_expectations_version": "0.7",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "biosecurity_overlay": {
+      "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
+      "version": "0.1",
+      "canonical_checkpoint_registry_version": "0.22",
+      "canonical_checkpoint_record_count": 669
+    },
+    "old_government_news_derived_dependency_count": 0,
+    "new_national_assembly_derived_dependency_count": 1,
+    "occurrence_start_local": "2026-10-20",
+    "governance_expected": {
+      "fully_explicit": 67,
+      "missing_any": 158,
+      "p1_canonical_dependent": 87,
+      "p2_registry_only": 71
+    }
+  }
+}

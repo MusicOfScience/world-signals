@@ -11,13 +11,19 @@ class RegistryTests(unittest.TestCase):
         cls.reg=load_json(ROOT/"data/canonical/registry.json")
         cls.src=load_json(ROOT/"data/sources/registry.json")
     def test_checkpoint_count(self):
-        self.assertIn(self.reg["version"], {"0.20", "0.21"})
+        version=tuple(int(p) for p in str(self.reg["version"]).split("."))
+        self.assertGreaterEqual(version,(0,20))
         self.assertEqual(self.reg["record_count"],669)
-        if self.reg["version"] == "0.21":
+        if version >= (0,21):
             row=next(r for r in self.reg["records"] if r["occurrence_id"]=="WSO-EL-A-0004")
             self.assertEqual(row["source_id"], "WSSRC-EL-BR-002")
             self.assertEqual(row["start_local"], "2027-01-05")
             self.assertEqual(row["election_date_basis"], "CONSTITUTIONAL_RULE_DERIVED")
+        if version >= (0,22):
+            row=next(r for r in self.reg["records"] if r["occurrence_id"]=="WSO-REG-G-0001")
+            self.assertEqual(row["source_id"], "WSSRC-REG5-002")
+            self.assertEqual(row["start_local"], "2026-10-20")
+            self.assertEqual(row["certainty_status"], "PROVISIONAL")
     def test_registry_validates(self):
         report=validate_registry(self.reg,self.src)
         self.assertTrue(report.ok, report.errors)

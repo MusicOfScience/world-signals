@@ -35,7 +35,11 @@ class VerificationCloseoutATests(unittest.TestCase):
         for source_id in self.plan["selection"]["selected_source_ids"]:
             self.assertEqual(counts[source_id], 1)
         self.assertEqual(sum(counts[s] for s in self.plan["selection"]["selected_source_ids"]), 7)
-        self.assertEqual(counts["WSSRC-REG5-001"], 1)
+        if counts["WSSRC-REG5-002"]:
+            self.assertEqual(counts["WSSRC-REG5-001"], 0)
+            self.assertEqual(counts["WSSRC-REG5-002"], 1)
+        else:
+            self.assertEqual(counts["WSSRC-REG5-001"], 1)
 
     def test_pre_or_post_closeout_state_is_exact(self):
         version = str(self.sources.get("version"))
@@ -49,15 +53,20 @@ class VerificationCloseoutATests(unittest.TestCase):
             after = closeout.sources_by_id(post)
             self.assertEqual(after["WSSRC-REG5-001"], before["WSSRC-REG5-001"])
             self.assertEqual(after["WSSRC-INT-010"]["canonical_dependency_count"], 1)
-        elif version == self.plan["postconditions"]["source_registry_version"]:
+        elif tuple(int(p) for p in version.split(".")) >= tuple(int(p) for p in self.plan["postconditions"]["source_registry_version"].split(".")):
             by_id = closeout.sources_by_id(self.sources)
             for source_id, spec in self.plan["source_updates"].items():
                 for key, value in spec["set"].items():
                     self.assertEqual(by_id[source_id].get(key), value, f"{source_id} {key}")
             vietnam = by_id["WSSRC-REG5-001"]
-            self.assertNotIn("verification_mode", vietnam)
             self.assertEqual(vietnam.get("authoritative_url"), self.plan["preconditions"]["vietnam_hold"]["expected_authoritative_url"])
-            self.assertEqual(closeout._audit_metrics(self.canonical, self.sources, self.expectations), self.plan["postconditions"]["expected_governance_audit"])
+            if "WSSRC-REG5-002" in by_id:
+                self.assertEqual(vietnam.get("verification_mode"), "MANUAL_AUTHORITATIVE_RECHECK")
+                self.assertEqual(by_id["WSSRC-REG5-002"].get("canonical_dependency_count"), 1)
+            else:
+                self.assertNotIn("verification_mode", vietnam)
+            if version == self.plan["postconditions"]["source_registry_version"]:
+                self.assertEqual(closeout._audit_metrics(self.canonical, self.sources, self.expectations), self.plan["postconditions"]["expected_governance_audit"])
         else:
             self.fail(f"unexpected source registry version {version}")
 
