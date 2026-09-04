@@ -1,0 +1,41 @@
+name: Audit WORLD SIGNALS source governance after P0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/source-governance-post-p0-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run source-governance audit
+        run: python scripts/run_source_governance_audit.py
+      - name: Assert migrated checkpoint
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('artifacts/source-governance-audit.json').read_text())
+          assert a['canonical_registry_version']=='0.20'
+          assert a['source_registry_version']=='1.52'
+          assert a['monitor_expectations_version']=='0.7'
+          assert a['totals']['source_count']==223
+          assert a['totals']['backfill_research_priority_counts'].get('P0_CONFIGURED_MONITOR_DEPENDENCY',0)==0
+          print(json.dumps(a['totals'],indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-source-governance-post-p0
+          path: artifacts/source-governance-audit.json
+          retention-days: 90
+      - name: Read-only guard
+        run: git diff --exit-code
