@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.51",
+  "version": "1.52",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -5921,7 +5921,12 @@
           "completeness_scope": "OFFICIAL_IMPLEMENTATION_GUIDANCE_AND_OPERATIONAL_TIMELINE",
           "preferred_for_monitoring": false
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Primary automated CBAM legal monitoring uses documented EUR-Lex/Cellar machine routes; Commission CBAM HTML is an official non-primary cross-check under the Commission reuse policy."
     },
     {
       "source_id": "WSSRC-TRD-006",
@@ -5987,7 +5992,12 @@
           "completeness_scope": "OFFICIAL_IMPLEMENTATION_GUIDANCE_AND_OPERATIONAL_TIMELINE",
           "preferred_for_monitoring": false
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Primary automated annual CBAM monitoring uses documented EUR-Lex/Cellar machine routes; Commission CBAM HTML is an official non-primary cross-check under the Commission reuse policy."
     },
     {
       "source_id": "WSSRC-TRD-007",
@@ -6204,7 +6214,12 @@
       "runtime_environment_health_state": "DNS_NETWORK_BLOCK",
       "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
       "endpoint_route_summary": "EUR-Lex SOAP search service is officially documented; CELLAR REST document/metadata retrieval is openly accessible without registration. Current CRA consolidated text remains authoritative.",
-      "runtime_execution_note": "Current local container cannot resolve eur-lex.europa.eu. This is an execution-environment fault, not source health."
+      "runtime_execution_note": "Current local container cannot resolve eur-lex.europa.eu. This is an execution-environment fault, not source health.",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "EUR-Lex reuse guidance expressly provides machine access routes including Cellar REST/SPARQL and the current CRA Cellar route is live-validated."
     },
     {
       "source_id": "WSSRC-TECH-002",
@@ -7818,7 +7833,12 @@
         "result": "HTTP 200; RDF namespace-aware parser PASS",
         "canonical_mutation": false
       },
-      "live_validation_reviewed_at": "2026-09-03T04:42:37.675559+00:00"
+      "live_validation_reviewed_at": "2026-09-03T04:42:37.675559+00:00",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "RBA-owned FSR publication metadata is reuse-cleared under the general CC BY 4.0 notice; the official RSS transport remains a live pilot but no broader automation permission is inferred from copyright terms alone."
     },
     {
       "source_id": "WSSRC-FIN-002",
@@ -7915,69 +7935,69 @@
     },
     {
       "source_id": "WSSRC-REG4-001",
-      "institution": "Ministry of Justice / SUIN-Juriscol; Colombia Open Data",
+      "institution": "Ministry of Justice and Law — SUIN-Juriscol",
       "jurisdiction": "Colombia",
       "domain": "fiscal_sovereign_finance",
-      "endpoint_role": "Organic Budget Statute legal rule and legal-instrument version/presence monitoring",
+      "endpoint_role": "Decree 111/1996 operative legal text and Article 59 clause verification",
       "authoritative_url": "https://www.suin-juriscol.gov.co/viewDocument.asp?ruta=Decretos%2F1024830",
-      "source_type": "official_legal_text_plus_open_data_inventory",
-      "information_supplied": "Decree 111/1996 Article 59 budget enactment boundary; legal instrument presence/status metadata",
+      "source_type": "official_legal_text",
+      "information_supplied": "Authoritative operative legal text for Decree 111/1996 Article 59 and manual clause-level verification after inventory change evidence.",
       "future_schedule_horizon": "standing legal rule",
       "typical_advance_notice": "statutory",
-      "machine_readable_available": "Colombia Open Data SUIN-Juriscol inventory dataset",
+      "machine_readable_available": "HTML",
       "source_timezone": "America/Bogota",
       "recommended_verification_cadence": "monthly; weekly during annual budget process; daily near statutory boundary",
       "activation_status": "ACTIVE_GUARDED",
-      "parser_type": "SOCRATA_METADATA_AND_TYPED_INSTRUMENT_QUERY_PLUS_MANUAL_LEGAL_TEXT_VERIFICATION",
-      "parser_version": "colombia-budget-law-0.2",
+      "parser_type": "MANUAL_LEGAL_TEXT_VERIFICATION",
+      "parser_version": null,
       "known_limitations": [
         "Open-data inventory confirms legal instrument presence/status but does not replace manual clause-level verification of Article 59.",
         "Open-data portal licence is not assumed to govern the separate SUIN HTML rendering."
       ],
       "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
-      "licence_review_status": "MIXED_ROUTE_OPEN_DATA_REUSE_CLEARED_LEGAL_HTML_MANUAL",
-      "ingestion_permission": "OPEN_DATA_INVENTORY_REUSE_ALLOWED; CURATED_LEGAL_FACT_METADATA_MANUAL_VERIFICATION",
-      "automated_retrieval_permission": "PREFER_COLOMBIA_OPEN_DATA_INVENTORY_FOR_VERSION_MONITOR; LEGAL_TEXT_HTML_MANUAL_VERIFICATION",
-      "redistribution_permission": "OPEN_DATA_PORTAL_ALLOWS_FREE_COMMERCIAL_AND_NONCOMMERCIAL_REUSE_WITH_ATTRIBUTION; LEGAL_HTML_REUSE_NOT_SEPARATELY_ASSUMED",
-      "rights_evidence_url": "https://herramientas.datos.gov.co/terminos",
-      "rights_summary": "Colombia's Open Data Portal permits free use, redistribution, compilation, extraction, modification and commercial/non-commercial exploitation of portal data with source attribution. The SUIN legal-text HTML route is kept as manually verified authoritative provenance rather than inheriting that licence by assumption.",
-      "rights_reviewed_at": "2026-09-03T04:05:00+10:00",
-      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS",
-      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
-      "monitoring_activation_status": "PILOT_READ_ONLY_LEGAL_VERSION_SENTINEL_NO_AUTO_COMMIT",
+      "licence_review_status": "SUIN_TERMS_MANUAL_AUTHORITATIVE_USE_WITH_ATTRIBUTION",
+      "ingestion_permission": "CURATED_LEGAL_FACT_METADATA_MANUAL_VERIFICATION",
+      "automated_retrieval_permission": "NO_ACTIVE_AUTOMATED_ROUTE_ENDPOINT_REVIEW_REQUIRED",
+      "redistribution_permission": "NO_BROAD_REUSE_ASSUMED; SOURCE_CITATION_REQUIRED",
+      "rights_evidence_url": "https://www.suin-juriscol.gov.co/otrosinformacion/Politicayprivacidad.pdf",
+      "rights_summary": "SUIN requires correct, lawful and diligent use, source citation and preservation of rights notices and prohibits portal-overloading uses; WORLD SIGNALS retains this route for manual authoritative clause verification.",
+      "rights_reviewed_at": "2026-09-04",
+      "runtime_health_state": "NOT_LIVE_POLLED_AFTER_SOURCE_DECOMPOSITION",
+      "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+      "monitoring_activation_status": "MANUAL_CLAUSE_VERIFICATION_ONLY",
       "monitor_endpoints": [
-        {
-          "endpoint_role": "suin_legal_instrument_inventory",
-          "url": "https://www.datos.gov.co/Justicia-y-Derecho/Lista-de-normas-cargadas-en-el-Sistema-nico-de-Inf/fiev-nid6",
-          "transport": "SOCRATA_OPEN_DATA",
-          "preferred_for_monitoring": true,
-          "completeness_scope": "LEGAL_INSTRUMENT_INVENTORY",
-          "notes": "Use for presence/version/status change detection; not clause-text substitution."
-        },
         {
           "endpoint_role": "operative_legal_text",
           "url": "https://www.suin-juriscol.gov.co/viewDocument.asp?ruta=Decretos%2F1024830",
           "transport": "HTML_MANUAL_VERIFICATION",
           "preferred_for_monitoring": false,
           "completeness_scope": "CURRENT_LEGAL_TEXT",
-          "notes": "Manual authoritative verification of Article 59."
+          "notes": "Manual authoritative verification of Article 59; no automated monitor route asserted."
         }
       ],
-      "endpoint_route_validation_state": "PARSER_VALIDATED",
-      "runtime_environment_health_state": "HEALTHY",
       "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
       "endpoint_route_summary": "Colombia Open Data explicitly states its live visualisation is connected to SUIN dataset fiev-nid6; national API documentation supports Socrata JSON queries. SUIN Article 59 remains clause-level authority.",
       "runtime_execution_note": "Local container cannot resolve datos.gov.co, so the Socrata query was not executed in this runtime.",
-      "live_adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
-      "live_validation_evidence": {
-        "workflow": "Smoke WORLD SIGNALS live adapters",
-        "successful_run_id": 33715476979,
-        "transport": "official Datos Abiertos Socrata JSON API",
-        "result": "HTTP 200; metadata + typed DECRETO 111/1996 query PASS",
-        "canonical_mutation": false
-      },
       "legal_identity_note": "Number/year alone is not unique in SUIN inventory; monitor identity must include instrument type. Current sentinel is DECRETO 111/1996.",
-      "live_validation_reviewed_at": "2026-09-03T04:42:37.675573+00:00"
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The prior source identity combined a reuse-cleared Open Data inventory with a separately governed SUIN legal-text page. The canonical source ID is retained for SUIN legal authority while machine monitoring moves to WSSRC-REG4-002.",
+      "related_source_ids": [
+        "WSSRC-REG4-002"
+      ],
+      "canonical_dependency_count": 1,
+      "source_identity_history": [
+        {
+          "effective_date": "2026-09-04",
+          "change_type": "COMPOSITE_SOURCE_DECOMPOSITION",
+          "prior_scope": "SUIN operative legal text plus Colombia Open Data/Socrata legal-instrument inventory",
+          "retained_scope": "SUIN operative legal text and manual clause verification",
+          "new_machine_source_id": "WSSRC-REG4-002",
+          "reason": "The two endpoint roles have materially different reuse/access terms. One source-level automation classification would obscure that distinction."
+        }
+      ]
     },
     {
       "source_id": "WSSRC-REG-011",
@@ -8490,6 +8510,80 @@
         "No 2026-27 annual seasonal outlook was located in the official current search surface as of 2026-09-04; no activity-count forecast is imported into this occurrence."
       ],
       "notes": "Operational governance classification for WORLD SIGNALS; not a legal opinion."
+    },
+    {
+      "source_id": "WSSRC-REG4-002",
+      "institution": "Colombia Open Data / Ministry of Justice and Law",
+      "jurisdiction": "Colombia",
+      "domain": "fiscal_sovereign_finance",
+      "endpoint_role": "SUIN-Juriscol legal-instrument inventory sentinel",
+      "authoritative_url": "https://www.datos.gov.co/Justicia-y-Derecho/Lista-de-normas-cargadas-en-el-Sistema-nico-de-Inf/fiev-nid6",
+      "source_type": "official_open_data_legal_instrument_inventory",
+      "information_supplied": "Typed legal-instrument presence, status and metadata for DECRETO 111/1996; change evidence only, not clause-text substitution.",
+      "future_schedule_horizon": "standing legal instrument inventory",
+      "typical_advance_notice": "not applicable; current-state sentinel",
+      "machine_readable_available": "Socrata JSON API",
+      "source_timezone": "America/Bogota",
+      "recommended_verification_cadence": "monthly; weekly during annual budget process; daily near statutory boundary",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "SOCRATA_TYPED_INSTRUMENT_QUERY",
+      "parser_version": "colombia-budget-law-0.2",
+      "known_limitations": [
+        "Inventory confirms legal-instrument presence/status but does not replace clause-level verification of Article 59.",
+        "Any material inventory change must be reviewed against WSSRC-REG4-001 before a derived budget rule can change."
+      ],
+      "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
+      "licence_constraints": "Open Data Portal terms require source attribution and preservation of applicable metadata/conditions.",
+      "ingestion_permission": "OPEN_DATA_INVENTORY_REUSE_ALLOWED",
+      "licence_review_status": "CLEARED_COLOMBIA_OPEN_DATA_REUSE",
+      "automated_retrieval_permission": "OFFICIAL_SOCRATA_OPEN_DATA_API",
+      "redistribution_permission": "FREE_COMMERCIAL_AND_NONCOMMERCIAL_REUSE_WITH_ATTRIBUTION",
+      "rights_evidence_url": "https://herramientas.datos.gov.co/terminos",
+      "rights_summary": "Colombia's Open Data Portal permits free use, redistribution, compilation, extraction, modification and commercial/non-commercial use of portal data with attribution.",
+      "rights_reviewed_at": "2026-09-04",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "PILOT_READ_ONLY_LEGAL_VERSION_SENTINEL_NO_AUTO_COMMIT",
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-04",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Distinct reuse-cleared machine sentinel split from the prior composite WSSRC-REG4-001 source identity.",
+      "required_authoritative_verification_source_ids": [
+        "WSSRC-REG4-001"
+      ],
+      "related_source_ids": [
+        "WSSRC-REG4-001"
+      ],
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "suin_legal_instrument_inventory",
+          "url": "https://www.datos.gov.co/Justicia-y-Derecho/Lista-de-normas-cargadas-en-el-Sistema-nico-de-Inf/fiev-nid6",
+          "transport": "SOCRATA_OPEN_DATA",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "LEGAL_INSTRUMENT_INVENTORY",
+          "notes": "Use for typed presence/version/status change detection only."
+        }
+      ],
+      "live_adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
+      "live_validation_evidence": {
+        "workflow": "Smoke WORLD SIGNALS live adapters",
+        "successful_run_id": 33715476979,
+        "transport": "official Datos Abiertos Socrata JSON API",
+        "result": "HTTP 200; metadata + typed DECRETO 111/1996 query PASS",
+        "canonical_mutation": false
+      },
+      "live_validation_reviewed_at": "2026-09-03T04:42:37.675573+00:00",
+      "endpoint_route_validation_state": "PARSER_VALIDATED",
+      "runtime_environment_health_state": "HEALTHY",
+      "endpoint_route_validated_at": "2026-09-03T08:35:00+10:00",
+      "source_identity_origin": {
+        "split_from_source_id": "WSSRC-REG4-001",
+        "effective_date": "2026-09-04",
+        "reason": "The two endpoint roles have materially different reuse/access terms. One source-level automation classification would obscure that distinction."
+      }
     }
   ],
   "activation_backlog": [

@@ -203,7 +203,7 @@ def main() -> int:
             limit=10,
         )
         report["source_health"].append({
-            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":"WSSRC-REG4-001",
+            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":configs["COLOMBIA_SUIN_DECREE_111_1996"]["source_id"],
             "state":"HEALTHY","snapshot":snap.as_dict(),"row_count":len(rows),
         })
         candidate,observation=colombia_legal_input_review_candidate(
@@ -212,7 +212,7 @@ def main() -> int:
         _append_candidate(report,candidate,observation)
     except AdapterError as exc:
         report["source_health"].append({
-            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":"WSSRC-REG4-001",
+            "adapter_id":"COLOMBIA_SUIN_DECREE_111_1996","source_id":configs["COLOMBIA_SUIN_DECREE_111_1996"]["source_id"],
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
 
