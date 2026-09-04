@@ -1,0 +1,187 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_P1B_BACKFILL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-04",
+  "purpose": "Backfill explicit modern source-governance fields for six bounded P1 canonical-dependent sources selected by dependency, active analytical horizon and regional/institutional balance, while preserving all canonical and monitor state.",
+  "principles": {
+    "canonical_provenance_and_automation_are_separate": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "robots_policy_is_operational_signal_not_licence_grant": true,
+    "successful_fetch_does_not_imply_automation_permission": true,
+    "source_registry_only_transaction": true,
+    "rba_meeting_window_and_decision_release_remain_distinct": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "bounded P1 cohort using canonical dependency, active forward analytical horizon, source-governance information value and regional/institutional balance; not a mechanical top-N",
+    "regional_mix": {
+      "INDO_PACIFIC": 3,
+      "EUROPE": 2,
+      "UNITED_STATES": 1
+    },
+    "selected_source_ids": [
+      "WSSRC-CB-001",
+      "WSSRC-CB-002",
+      "WSSRC-CB-003",
+      "WSSRC-CB-006",
+      "WSSRC-CB-007",
+      "WSSRC-MAC-006"
+    ]
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.53",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "approved_source_dependency_counts": {
+      "WSSRC-CB-001": 44,
+      "WSSRC-CB-006": 44,
+      "WSSRC-CB-002": 33,
+      "WSSRC-CB-003": 22,
+      "WSSRC-MAC-006": 19,
+      "WSSRC-CB-007": 11
+    },
+    "required_missing_governance_fields": [
+      "canonical_provenance_use",
+      "automated_monitoring_use",
+      "verification_mode"
+    ],
+    "held_source_id": "WSSRC-EL-BR-001",
+    "held_source_canonical_dependency_count": 4,
+    "brazil_inauguration_guard": {
+      "source_id": "WSSRC-EL-BR-001",
+      "election_milestone_type": "INAUGURATION_OR_ASSUMPTION",
+      "expected_start_local": "2027-01-05"
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.20",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.54",
+    "source_count": 223,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-CB-001",
+      "WSSRC-CB-002",
+      "WSSRC-CB-003",
+      "WSSRC-CB-006",
+      "WSSRC-CB-007",
+      "WSSRC-MAC-006"
+    ],
+    "held_source_id": "WSSRC-EL-BR-001",
+    "brazil_inauguration_start_local": "2027-01-05",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "rights_evidence": {
+    "federal_reserve": {
+      "schedule_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "rights_url": "https://www.federalreserve.gov/disclaimer.htm",
+      "finding": "Board website information is public domain unless otherwise indicated and may be copied/distributed with Board citation requested; third-party material and seals/logos are excluded. No unrestricted crawler/scraper grant is inferred for the FOMC calendar."
+    },
+    "bank_of_japan": {
+      "schedule_url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/",
+      "rights_url": "https://www.boj.or.jp/en/copyright.htm",
+      "finding": "BoJ permits copying/reproduction with source attribution except commercial use, specially restricted content and images/graphics; commercial or restricted reproduction requires permission. Automated schedule retrieval is not expressly granted."
+    },
+    "reserve_bank_of_australia": {
+      "schedule_url": "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html",
+      "decision_timing_url": "https://www.rba.gov.au/media-releases/2025/mr-25-02.html",
+      "rights_url": "https://www.rba.gov.au/copyright/",
+      "finding": "Most RBA website material is CC BY 4.0 subject to exclusions. For 2026 the RBA directly states that the policy outcome is released at 2.30 pm on the second meeting day and the Governor's media conference is at 3.30 pm. Copyright and robots signals do not by themselves grant production polling permission."
+    },
+    "european_central_bank": {
+      "schedule_url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+      "rights_url": "https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html",
+      "finding": "ECB information obtained directly from its website may be reused subject to source, accuracy and modification conditions, with authored-document exceptions. The schedule mixes monetary and non-monetary meetings and must be filtered; automated retrieval remains an endpoint review matter."
+    },
+    "ons": {
+      "schedule_url": "https://www.ons.gov.uk/releasecalendar",
+      "rights_url": "https://www.ons.gov.uk/help/terms-conditions",
+      "automation_url": "https://www.ons.gov.uk/help/fair-use-policy",
+      "developer_url": "https://developer.ons.gov.uk/search/search-releases/",
+      "finding": "Most ONS content is under OGL v3.0. ONS expressly governs bots/crawlers/scrapers, requiring published technical guidance and identifiable user-agent/contact, and provides official release-search/feed routes. Existing WORLD SIGNALS parser and fault-containment evidence supports automated pilot use under those controls."
+    },
+    "rbnz": {
+      "schedule_url": "https://www.rbnz.govt.nz/news-and-events/how-we-release-information/ocr-decision-dates-and-financial-stability-report-dates-to-feb-2028",
+      "rights_url": "https://www.rbnz.govt.nz/about-our-site/terms-of-use",
+      "finding": "RBNZ permits attributed accurate reproduction/use of its own material subject to third-party rights, but expressly prohibits automated access such as robots, botnets or scrapers unless covered by the public-search-engine exception or prior written RBNZ permission. WORLD SIGNALS has no recorded written permission."
+    }
+  },
+  "source_updates": {
+    "WSSRC-CB-001": {
+      "expected_canonical_dependency_count": 44,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Federal Reserve factual website content is public domain unless otherwise indicated and the FOMC parser has pilot evidence, but unrestricted automated calendar polling is not inferred from public-domain status."
+      }
+    },
+    "WSSRC-CB-006": {
+      "expected_canonical_dependency_count": 44,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "BoJ permits attributed non-commercial reproduction of factual material subject to exclusions, while automated retrieval is not expressly granted and no production pilot is established."
+      }
+    },
+    "WSSRC-CB-002": {
+      "expected_canonical_dependency_count": 33,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "Most RBA factual website content is CC BY 4.0 and the existing calendar parser has pilot evidence; automated production retrieval remains a separate endpoint review. The multi-day Board meeting and separately timed decision release must remain distinct."
+      }
+    },
+    "WSSRC-CB-003": {
+      "expected_canonical_dependency_count": 22,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ECB factual schedule information is reusable with source/accuracy conditions, but the reviewed terms do not expressly clear automated retrieval and the route has no live polling evidence."
+      }
+    },
+    "WSSRC-MAC-006": {
+      "expected_canonical_dependency_count": 19,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "CLEARED",
+        "verification_mode": "AUTOMATED_PILOT",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "ONS combines OGL reuse, explicit bot/crawler fair-use guidance and official release-query/feed routes; the existing fault-contained release-calendar parser supports automated pilot monitoring under those published controls."
+      }
+    },
+    "WSSRC-CB-007": {
+      "expected_canonical_dependency_count": 11,
+      "set": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-04",
+        "governance_backfill_basis": "RBNZ permits attributed accurate factual reuse but expressly prohibits automated access without an applicable exception or prior written permission; no WORLD SIGNALS written permission is recorded."
+      }
+    }
+  },
+  "held_source_controls": {
+    "WSSRC-EL-BR-001": {
+      "transaction_status": "EXCLUDED_PROVENANCE_SCOPE_REPAIR_REQUIRED",
+      "must_remain_byte_identical": true,
+      "must_not_gain_governance_fields": true,
+      "canonical_date_correction_required": false,
+      "reason": "The TSE electoral-calendar source correctly supports election-cycle milestones but is not the proper provenance basis for the constitutionally grounded 5 January 2027 presidential inauguration/start date. Governance backfill remains held until that source relationship is repaired."
+    }
+  }
+}
