@@ -1,0 +1,33 @@
+name: TEMP P1-C candidate records
+
+on:
+  push:
+    branches: [source-governance-p1c-research]
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Print candidate source records
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ids={
+            'WSSRC-CB-009','WSSRC-MAC-005','WSSRC-CB-008',
+            'WSSRC-FIS-007','WSSRC-CN-013','WSSRC-INT-027'
+          }
+          reg=json.loads(Path('data/sources/registry.json').read_text())
+          rows={r['source_id']:r for r in reg['sources'] if r.get('source_id') in ids}
+          print(json.dumps(rows, indent=2, sort_keys=True))
+          PY
+      - name: Confirm repository remains clean
+        run: git diff --exit-code
