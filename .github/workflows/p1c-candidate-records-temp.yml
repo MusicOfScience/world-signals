@@ -23,7 +23,8 @@ jobs:
           from pathlib import Path
           ids={
             'WSSRC-CB-009','WSSRC-MAC-005','WSSRC-CB-008',
-            'WSSRC-FIS-007','WSSRC-CN-013','WSSRC-INT-027'
+            'WSSRC-FIS-007','WSSRC-CN-013','WSSRC-INT-027',
+            'WSSRC-EL-NZ-001','WSSRC-MAC-011'
           }
           reg=json.loads(Path('data/sources/registry.json').read_text())
           rows={r['source_id']:r for r in reg['sources'] if r.get('source_id') in ids}
