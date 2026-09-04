@@ -1,0 +1,23 @@
+name: TEMP P1 87 selection diagnostic
+
+on:
+  push:
+    branches:
+      - source-governance-p1-selection-87
+    paths:
+      - scripts/temp_p1_87_diagnostic.py
+      - .github/workflows/temp-p1-87-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run read-only P1 diagnostic
+        run: python scripts/temp_p1_87_diagnostic.py
