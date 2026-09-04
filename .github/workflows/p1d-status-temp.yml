@@ -1,0 +1,52 @@
+name: TEMP P1-D status refresh
+
+on:
+  push:
+    branches: [source-governance-p1d-research]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Refresh project checkpoint
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('PROJECT_STATUS.md')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('**Tier-1 source registry:** v1.54 — **223 sources**.', '**Tier-1 source registry:** v1.55 — **223 sources**.', 1)
+          s=s.replace('stale relative to current v0.20 / v1.54.', 'stale relative to current v0.20 / v1.55.', 1)
+          s=s.replace('**133 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.', '**127 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research.', 1)
+          anchor='''Durable P1-B audit: `data/coverage/SOURCE_GOVERNANCE_P1B_BACKFILL_AUDIT_v0.1.md`.\nP1-C research/plan: `data/coverage/SOURCE_GOVERNANCE_P1C_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_PLAN_v0.1.json`.\n\n## Held / unresolved nodes\n'''
+          addition='''Durable P1-B audit: `data/coverage/SOURCE_GOVERNANCE_P1B_BACKFILL_AUDIT_v0.1.md`.\nP1-C research/plan: `data/coverage/SOURCE_GOVERNANCE_P1C_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_PLAN_v0.1.json`.\n\n### P1-C international / cross-domain tranche — COMPLETE\n\nP1-C backfilled Eurostat, Bank of Canada, Japan MOF JGB auctions, Electoral Commission New Zealand, PBoC financial-statistics publication rule and UN General Assembly mandated events. Source registry advanced **v1.54 → v1.55 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**.\n\nGuarded transaction run `33858563869` passed all migration, one-file, validation and test gates. PR #9 merged as `7848b394d47b0a960200ca1077034ddc45847c2e`. Independent post-P1-C audit run `33859470953` measured:\n\n- **25** fully explicit governance sources;\n- **198** sources still missing at least one governance field;\n- **0 P0** configured-monitor dependencies;\n- **127 P1** canonical dependencies;\n- **71 P2** registry-only sources;\n- missing `canonical_provenance_use`: **188**;\n- missing `automated_monitoring_use`: **188**;\n- missing `verification_mode`: **198**.\n\nP1-D research is frozen for RBA release scheduling, U.S. BEA, Statistics Bureau of Japan, Bank Indonesia, INDEC Argentina and Kenya Law / Constitution — **40 canonical dependencies** across Australia, the United States, Japan, Indonesia, Argentina and Kenya. Bank Indonesia remains manual/rights-held because no source-specific reuse/automation clearance was identified.\n\nBrazil TSE and Swiss National Bank remain excluded for provenance-scope repair. SNB's registered decisions/history URL still does not directly support the forward assessment schedule; Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.\n\nDurable P1-C audit: `data/coverage/SOURCE_GOVERNANCE_P1C_BACKFILL_AUDIT_v0.1.md`.\nP1-D research/plan: `data/coverage/SOURCE_GOVERNANCE_P1D_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1D_BACKFILL_PLAN_v0.1.json`.\n\n## Held / unresolved nodes\n'''
+          if anchor not in s:
+              raise SystemExit('P1-C insertion anchor not found')
+          s=s.replace(anchor,addition,1)
+          old='''3. **Source-governance P1-C transaction gate** — after review/merge of the frozen P1-C infrastructure, reconcile merged source v1.54 and run the guarded read-only preflight before any registry-only v1.55 transaction; SNB remains excluded pending source-scope repair.\n'''
+          new='''3. **Source-governance P1-D transaction gate** — review/merge the frozen P1-D infrastructure, reconcile merged source v1.55 and run the guarded read-only preflight before any registry-only v1.56 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.\n'''
+          if old not in s:
+              raise SystemExit('next-work anchor not found')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify status-only working diff
+        run: test "$(git diff --name-only)" = "PROJECT_STATUS.md"
+      - name: Run full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Commit status refresh
+        run: |
+          git config user.name "world-signals-status"
+          git config user.email "actions@users.noreply.github.com"
+          git add PROJECT_STATUS.md
+          git commit -m "Refresh checkpoint after P1-C"
+          git push origin HEAD:source-governance-p1d-research
