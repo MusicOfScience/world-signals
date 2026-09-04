@@ -1,0 +1,61 @@
+name: Verify WORLD SIGNALS P0 monitor route
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-p0-monitor-route.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Monitor regression tests
+        run: python -m unittest tests.test_adapters tests.test_live_monitor tests.test_legal_monitor tests.test_monitor_operations_policy -v
+      - name: Execute current read-only monitor code
+        run: python scripts/run_live_monitor.py
+      - name: Assert migrated Colombia route and invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('artifacts/live-monitor.json').read_text(encoding='utf-8'))
+          assert r['canonical_registry_version']=='0.20'
+          assert r['source_registry_version']=='1.52'
+          assert r['monitor_expectations_version']=='0.7'
+          assert r['canonical_unchanged'] is True
+          assert r['automatic_canonical_commit'] is False
+          assert r['google_calendar_write'] is False
+          h=r['source_health_summary']
+          assert h['adapter_entries']==6
+          assert h['all_expected_adapters_observed'] is True
+          c=[x for x in r['source_health'] if x['adapter_id']=='COLOMBIA_SUIN_DECREE_111_1996']
+          assert len(c)==1
+          assert c[0]['source_id']=='WSSRC-REG4-002', c[0]
+          assert not any(x['source_id']=='WSSRC-REG4-001' for x in r['source_health'])
+          print(json.dumps({
+            'status':r['status'],
+            'healthy':h['healthy'],
+            'degraded':h['degraded'],
+            'candidate_count':r['candidate_count'],
+            'colombia_machine_source_id':c[0]['source_id'],
+            'canonical_unchanged':r['canonical_unchanged'],
+          },indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-signals-p0-route-verification
+          path: |
+            artifacts/live-monitor.json
+            review_candidates/live
+          if-no-files-found: error
+          retention-days: 30
