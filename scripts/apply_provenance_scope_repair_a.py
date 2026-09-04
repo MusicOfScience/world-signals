@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import argparse
 import copy
+from datetime import datetime
 import hashlib
 import json
 import os
 from pathlib import Path
 import sys
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -18,6 +20,7 @@ PLAN_PATH = ROOT / "data/coverage/PROVENANCE_SCOPE_REPAIR_A_PLAN_v0.1.json"
 CANONICAL_PATH = ROOT / "data/canonical/registry.json"
 SOURCES_PATH = ROOT / "data/sources/registry.json"
 LEDGER_PATH = ROOT / "data/changes/ledger.json"
+BIOSECURITY_OVERLAY_PATH = ROOT / "data/coverage/biosecurity_overlay.json"
 EXPECTATIONS_PATH = ROOT / "data/monitor/expectations.json"
 LIVE_RUNNER_PATH = ROOT / "scripts/run_live_monitor.py"
 
@@ -88,7 +91,26 @@ def _exact_fields(row: dict, expected: dict, label: str, errors: list[str]) -> N
             errors.append(f"{label} {key}: expected {value!r}, found {row.get(key)!r}")
 
 
-def preflight(canonical: dict, sources: dict, ledger: dict, expectations: dict, plan: dict) -> None:
+def _check_overlay(overlay: dict, expected: dict, label: str, errors: list[str]) -> None:
+    checkpoint = overlay.get("canonical_checkpoint") or {}
+    if overlay.get("dataset") != expected["dataset"]:
+        errors.append(f"{label} dataset mismatch")
+    if overlay.get("version") != expected["version"]:
+        errors.append(f"{label} version mismatch")
+    if checkpoint.get("registry_version") != expected["canonical_checkpoint_registry_version"]:
+        errors.append(f"{label} canonical checkpoint version mismatch")
+    if checkpoint.get("record_count") != expected["canonical_checkpoint_record_count"]:
+        errors.append(f"{label} canonical checkpoint count mismatch")
+
+
+def preflight(
+    canonical: dict,
+    sources: dict,
+    ledger: dict,
+    overlay: dict,
+    expectations: dict,
+    plan: dict,
+) -> None:
     p = plan["preconditions"]
     errors: list[str] = []
 
@@ -108,6 +130,7 @@ def preflight(canonical: dict, sources: dict, ledger: dict, expectations: dict, 
         errors.append("automatic_canonical_commit must remain false")
     if expectations.get("google_calendar_write") is not False:
         errors.append("google_calendar_write must remain false")
+    _check_overlay(overlay, p["biosecurity_overlay"], "biosecurity overlay precondition", errors)
 
     by_source = _sources_by_id(sources)
     for source_id in (BRAZIL_TSE, SNB):
@@ -151,12 +174,22 @@ def preflight(canonical: dict, sources: dict, ledger: dict, expectations: dict, 
         raise SystemExit("PROVENANCE REPAIR A PRECONDITION FAILED:\n- " + "\n- ".join(errors))
 
 
-def build_post_state(canonical: dict, sources: dict, ledger: dict, expectations: dict, plan: dict) -> tuple[dict, dict, dict, dict]:
-    preflight(canonical, sources, ledger, expectations, plan)
+def build_post_state(
+    canonical: dict,
+    sources: dict,
+    ledger: dict,
+    overlay: dict,
+    expectations: dict,
+    plan: dict,
+    *,
+    committed_at: str,
+) -> tuple[dict, dict, dict, dict, dict]:
+    preflight(canonical, sources, ledger, overlay, expectations, plan)
 
     canonical_out = copy.deepcopy(canonical)
     sources_out = copy.deepcopy(sources)
     ledger_out = copy.deepcopy(ledger)
+    overlay_out = copy.deepcopy(overlay)
 
     records = _records_by_id(canonical_out)
     occurrence = records[BRAZIL_OCCURRENCE]
@@ -181,15 +214,44 @@ def build_post_state(canonical: dict, sources: dict, ledger: dict, expectations:
     sources_out["version"] = plan["postconditions"]["source_registry_version"]
     sources_out["reference_date"] = plan["review_date"]
 
-    ledger_out["changes"].append(copy.deepcopy(plan["change_ledger_entry"]))
+    change_entry = copy.deepcopy(plan["change_ledger_entry"])
+    if "committed_at" in change_entry:
+        raise ValueError("committed_at must not be frozen in the research plan")
+    change_entry["committed_at"] = committed_at
+    ledger_out["changes"].append(change_entry)
     ledger_out["version"] = plan["postconditions"]["change_ledger_version"]
     ledger_out["reference_date"] = plan["review_date"]
 
-    report = validate_post_state(canonical, sources, ledger, canonical_out, sources_out, ledger_out, expectations, plan)
-    return canonical_out, sources_out, ledger_out, report
+    overlay_out["canonical_checkpoint"]["registry_version"] = plan["postconditions"]["canonical_registry_version"]
+    overlay_out["canonical_checkpoint"]["record_count"] = plan["postconditions"]["canonical_record_count"]
+
+    report = validate_post_state(
+        canonical,
+        sources,
+        ledger,
+        overlay,
+        canonical_out,
+        sources_out,
+        ledger_out,
+        overlay_out,
+        expectations,
+        plan,
+    )
+    return canonical_out, sources_out, ledger_out, overlay_out, report
 
 
-def validate_post_state(canonical_before: dict, sources_before: dict, ledger_before: dict, canonical_after: dict, sources_after: dict, ledger_after: dict, expectations: dict, plan: dict) -> dict:
+def validate_post_state(
+    canonical_before: dict,
+    sources_before: dict,
+    ledger_before: dict,
+    overlay_before: dict,
+    canonical_after: dict,
+    sources_after: dict,
+    ledger_after: dict,
+    overlay_after: dict,
+    expectations: dict,
+    plan: dict,
+) -> dict:
     post = plan["postconditions"]
     errors: list[str] = []
 
@@ -201,6 +263,13 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
         errors.append("source post-state mismatch")
     if ledger_after.get("version") != post["change_ledger_version"]:
         errors.append("ledger post-version mismatch")
+    _check_overlay(overlay_after, post["biosecurity_overlay"], "biosecurity overlay postcondition", errors)
+
+    overlay_expected = copy.deepcopy(overlay_before)
+    overlay_expected["canonical_checkpoint"]["registry_version"] = post["canonical_registry_version"]
+    overlay_expected["canonical_checkpoint"]["record_count"] = post["canonical_record_count"]
+    if overlay_after != overlay_expected:
+        errors.append("biosecurity overlay changed outside canonical checkpoint advancement")
 
     before_records = _records_by_id(canonical_before)
     after_records = _records_by_id(canonical_after)
@@ -259,8 +328,13 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
         errors.append("ledger must gain exactly one entry")
     elif ledger_after["changes"][:-1] != ledger_before.get("changes", []):
         errors.append("historical ledger entries changed")
-    elif ledger_after["changes"][-1] != plan["change_ledger_entry"]:
-        errors.append("ledger repair entry differs from frozen plan")
+    else:
+        actual_change = copy.deepcopy(ledger_after["changes"][-1])
+        committed_at = actual_change.pop("committed_at", None)
+        if not committed_at:
+            errors.append("ledger repair entry must receive committed_at at transaction time")
+        if actual_change != plan["change_ledger_entry"]:
+            errors.append("ledger repair entry differs from frozen plan apart from committed_at")
 
     validation = validate_registry(canonical_after, sources_after)
     errors.extend(validation.errors)
@@ -285,6 +359,8 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
         "source_count_after": len(sources_after.get("sources", [])),
         "change_ledger_version_before": ledger_before.get("version"),
         "change_ledger_version_after": ledger_after.get("version"),
+        "biosecurity_overlay_checkpoint_before": (overlay_before.get("canonical_checkpoint") or {}).get("registry_version"),
+        "biosecurity_overlay_checkpoint_after": (overlay_after.get("canonical_checkpoint") or {}).get("registry_version"),
         "changed_occurrence_ids": changed_occurrences,
         "changed_existing_source_ids": changed_existing_sources,
         "new_source_ids": [BRAZIL_CONSTITUTION],
@@ -297,27 +373,43 @@ def validate_post_state(canonical_before: dict, sources_before: dict, ledger_bef
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Guarded WORLD SIGNALS provenance-scope repair A")
-    parser.add_argument("--apply", action="store_true", help=f"write the frozen three-file transaction; requires {APPLY_ENV}={APPLY_VALUE}")
+    parser.add_argument("--apply", action="store_true", help=f"write the frozen four-file transaction; requires {APPLY_ENV}={APPLY_VALUE}")
     args = parser.parse_args()
 
     canonical_raw = CANONICAL_PATH.read_bytes()
     sources_raw = SOURCES_PATH.read_bytes()
     ledger_raw = LEDGER_PATH.read_bytes()
+    overlay_raw = BIOSECURITY_OVERLAY_PATH.read_bytes()
     expectations_raw = EXPECTATIONS_PATH.read_bytes()
     runner_raw = LIVE_RUNNER_PATH.read_bytes()
 
     canonical = json.loads(canonical_raw)
     sources = json.loads(sources_raw)
     ledger = json.loads(ledger_raw)
+    overlay = json.loads(overlay_raw)
     expectations = json.loads(expectations_raw)
     plan = load(PLAN_PATH)
 
-    canonical_out, sources_out, ledger_out, report = build_post_state(canonical, sources, ledger, expectations, plan)
+    committed_at = (
+        datetime.now(ZoneInfo("Australia/Melbourne")).isoformat(timespec="seconds")
+        if args.apply
+        else plan["change_ledger_entry"]["reviewed_at"]
+    )
+    canonical_out, sources_out, ledger_out, overlay_out, report = build_post_state(
+        canonical,
+        sources,
+        ledger,
+        overlay,
+        expectations,
+        plan,
+        committed_at=committed_at,
+    )
     report.update({
         "mode": "APPLY" if args.apply else "READ_ONLY_PREFLIGHT",
         "canonical_sha256_before": sha256(canonical_raw),
         "source_sha256_before": sha256(sources_raw),
         "ledger_sha256_before": sha256(ledger_raw),
+        "biosecurity_overlay_sha256_before": sha256(overlay_raw),
         "monitor_expectations_sha256_before": sha256(expectations_raw),
         "live_monitor_runner_sha256_before": sha256(runner_raw),
     })
@@ -332,6 +424,7 @@ def main() -> None:
     dump(CANONICAL_PATH, canonical_out)
     dump(SOURCES_PATH, sources_out)
     dump(LEDGER_PATH, ledger_out)
+    dump(BIOSECURITY_OVERLAY_PATH, overlay_out)
 
     if EXPECTATIONS_PATH.read_bytes() != expectations_raw:
         raise SystemExit("monitor expectations changed during provenance repair")
@@ -342,6 +435,8 @@ def main() -> None:
         "canonical_sha256_after": sha256(CANONICAL_PATH.read_bytes()),
         "source_sha256_after": sha256(SOURCES_PATH.read_bytes()),
         "ledger_sha256_after": sha256(LEDGER_PATH.read_bytes()),
+        "biosecurity_overlay_sha256_after": sha256(BIOSECURITY_OVERLAY_PATH.read_bytes()),
+        "committed_at": committed_at,
     })
     print(json.dumps(report, indent=2, sort_keys=True))
 
