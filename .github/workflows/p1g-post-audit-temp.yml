@@ -1,0 +1,81 @@
+name: TEMP P1-G independent post-audit
+
+on:
+  push:
+    branches: [source-governance-p1g-transaction]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Run independent source-governance completeness audit
+        run: python scripts/run_source_governance_audit.py
+      - name: Independently assert P1-G post-state
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          canonical = json.loads((root/'data/canonical/registry.json').read_text())
+          sources = json.loads((root/'data/sources/registry.json').read_text())
+          expectations = json.loads((root/'data/monitor/expectations.json').read_text())
+          plan = json.loads((root/'data/coverage/SOURCE_GOVERNANCE_P1G_BACKFILL_PLAN_v0.1.json').read_text())
+          audit = json.loads((root/'artifacts/source-governance-audit.json').read_text())
+
+          assert str(canonical['version']) == '0.20'
+          assert canonical['record_count'] == 669
+          assert len(canonical['records']) == 669
+          assert str(sources['version']) == '1.59'
+          assert len(sources['sources']) == 223
+          assert str(expectations['version']) == '0.7'
+          assert expectations['automatic_canonical_commit'] is False
+          assert expectations['google_calendar_write'] is False
+
+          by_id = {row['source_id']: row for row in sources['sources']}
+          expected_ids = set(plan['postconditions']['changed_source_ids'])
+          assert expected_ids == set(plan['source_updates'])
+          assert len(expected_ids) == 6
+          for source_id, spec in plan['source_updates'].items():
+              row = by_id[source_id]
+              for field, expected in spec['set'].items():
+                  assert row.get(field) == expected, (source_id, field, row.get(field), expected)
+
+          for held in ('WSSRC-EL-BR-001', 'WSSRC-CB-009'):
+              row = by_id[held]
+              assert row.get('governance_backfill_reviewed_at') in (None, '')
+              for field in ('canonical_provenance_use','automated_monitoring_use','verification_mode'):
+                  assert row.get(field) in (None, '')
+
+          brazil = [r for r in canonical['records'] if r.get('source_id') == 'WSSRC-EL-BR-001' and r.get('election_milestone_type') == 'INAUGURATION_OR_ASSUMPTION']
+          assert len(brazil) == 1
+          assert brazil[0].get('start_local') == '2027-01-05'
+
+          totals = audit['totals']
+          print(json.dumps({
+              'canonical_registry_version': canonical['version'],
+              'canonical_record_count': canonical['record_count'],
+              'source_registry_version': sources['version'],
+              'source_count': len(sources['sources']),
+              'monitor_expectations_version': expectations['version'],
+              'automatic_canonical_commit': expectations['automatic_canonical_commit'],
+              'google_calendar_write': expectations['google_calendar_write'],
+              'fully_explicit_governance_source_count': totals['fully_explicit_governance_source_count'],
+              'source_records_with_one_or_more_missing_governance_fields': totals['source_records_with_one_or_more_missing_governance_fields'],
+              'missing_field_counts': totals['missing_field_counts'],
+              'backfill_research_priority_counts': totals['backfill_research_priority_counts'],
+              'held_sources_unchanged_by_p1g': True,
+              'brazil_inauguration_start_local': brazil[0]['start_local'],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Validate registry independently
+        run: python scripts/validate_registry.py
+      - name: Confirm audit is read-only
+        run: test -z "$(git status --porcelain --untracked-files=no)"
