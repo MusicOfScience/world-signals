@@ -1,0 +1,199 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SOURCE_GOVERNANCE_VERIFICATION_CLOSEOUT_A_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-05",
+  "purpose": "Complete verification_mode for the seven future-active P1 sources that survive source-scope review, while repairing one stale APEC dependency helper and preserving all canonical and monitoring state.",
+  "principles": {
+    "canonical_dependency_counts_are_derived_from_canonical_truth": true,
+    "stored_dependency_helper_absence_is_allowed": true,
+    "stored_dependency_helper_if_present_must_match_canonical_truth_after_transaction": true,
+    "public_access_does_not_imply_automation_permission": true,
+    "public_domain_status_does_not_imply_automation_permission": true,
+    "official_status_does_not_imply_automation_permission": true,
+    "machine_readability_does_not_imply_automation_permission": true,
+    "source_scope_precedes_governance_completeness": true,
+    "source_registry_only_transaction": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "method": "Fresh 95-P1 diagnostic followed by verification-only completeness sweep and source-scope review; not mechanical top-N and not automatic P1-I.",
+    "selected_source_ids": [
+      "WSSRC-INT-010",
+      "WSSRC-INT-017",
+      "WSSRC-INT-026",
+      "WSSRC-REG-011",
+      "WSSRC-REG2-002",
+      "WSSRC-REG6-001",
+      "WSSRC-REG6-002"
+    ],
+    "canonical_dependency_total": 7,
+    "verification_mode_mix": {
+      "RIGHTS_HELD_MANUAL_ONLY": 4,
+      "MANUAL_AUTHORITATIVE_RECHECK": 3
+    },
+    "held_source_ids": [
+      "WSSRC-REG5-001"
+    ]
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.21",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.61",
+    "source_count": 224,
+    "monitor_expectations_version": "0.7",
+    "selected_actual_canonical_dependency_counts": {
+      "WSSRC-INT-010": 1,
+      "WSSRC-INT-017": 1,
+      "WSSRC-INT-026": 1,
+      "WSSRC-REG-011": 1,
+      "WSSRC-REG2-002": 1,
+      "WSSRC-REG6-001": 1,
+      "WSSRC-REG6-002": 1
+    },
+    "selected_existing_governance": {
+      "WSSRC-INT-010": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+        "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+        "stored_canonical_dependency_count": 0
+      },
+      "WSSRC-INT-017": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+        "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+        "stored_canonical_dependency_count": 1
+      },
+      "WSSRC-INT-026": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+        "monitoring_activation_status": null,
+        "stored_canonical_dependency_count": 1
+      },
+      "WSSRC-REG-011": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+        "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+        "stored_canonical_dependency_count": "ABSENT"
+      },
+      "WSSRC-REG2-002": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+        "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+        "stored_canonical_dependency_count": 1
+      },
+      "WSSRC-REG6-001": {
+        "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+        "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+        "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+        "monitoring_activation_status": "MANUAL_LEGAL_RULE_RECHECK_NO_AUTO_COMMIT",
+        "stored_canonical_dependency_count": "ABSENT"
+      },
+      "WSSRC-REG6-002": {
+        "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+        "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+        "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+        "stored_canonical_dependency_count": "ABSENT"
+      }
+    },
+    "selected_fields_must_be_absent": [
+      "verification_mode",
+      "governance_backfill_reviewed_at",
+      "governance_backfill_basis"
+    ],
+    "vietnam_hold": {
+      "source_id": "WSSRC-REG5-001",
+      "expected_authoritative_url": "https://baochinhphu.vn/chuan-bi-ky-luong-tu-som-ky-hop-thu-2-quoc-hoi-khoa-xvi-102260511145333161.htm",
+      "expected_actual_canonical_dependency_count": 1,
+      "must_remain_byte_semantically_identical": true,
+      "reason": "Direct National Assembly provenance is now available and materially better scoped; review source identity before governance completion."
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.21",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.62",
+    "source_count": 224,
+    "monitor_expectations_version": "0.7",
+    "changed_source_ids": [
+      "WSSRC-INT-010",
+      "WSSRC-INT-017",
+      "WSSRC-INT-026",
+      "WSSRC-REG-011",
+      "WSSRC-REG2-002",
+      "WSSRC-REG6-001",
+      "WSSRC-REG6-002"
+    ],
+    "vietnam_unchanged": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "expected_governance_audit": {
+      "fully_explicit_governance_sources": 65,
+      "sources_missing_any_governance_field": 159,
+      "p1_canonical_dependent": 88,
+      "p2_registry_only": 71,
+      "missing_canonical_provenance_use": 156,
+      "missing_automated_monitoring_use": 156,
+      "missing_verification_mode": 159
+    }
+  },
+  "source_updates": {
+    "WSSRC-INT-010": {
+      "set": {
+        "canonical_dependency_count": 1,
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "APEC current event material supports the 10-11 September 2026 Energy Ministers Meeting; APEC website terms do not establish production polling permission, so the existing rights hold resolves to manual-only verification. Stored dependency helper corrected from 0 to canonical-derived truth 1."
+      }
+    },
+    "WSSRC-INT-017": {
+      "set": {
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "AIIB currently schedules the 2026 Annual Meeting for 28-29 September in Doha while retaining contingency/final-decision language; existing rights hold remains and verification is manual only."
+      }
+    },
+    "WSSRC-REG2-002": {
+      "set": {
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "Royal Thai Government FY2027 budget guidance supports 1 October 2026; Secretariat website policy expressly prohibits automated/scripted access except through provided channels or with explicit authorisation, so verification remains manual only."
+      }
+    },
+    "WSSRC-REG6-002": {
+      "set": {
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "Morocco MEF official budget-process material fixes annual Finance Bill deposit at 20 October and current 2027 preparation material is live; existing automation rights hold is preserved, so verification remains manual only."
+      }
+    },
+    "WSSRC-REG-011": {
+      "set": {
+        "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "South Africa Parliament's official 2026 programme framework lists the Medium-Term Budget Policy Statement and Adjustments Budget on 28 October 2026; Parliament permits informational/non-commercial use but no production polling grant is inferred, so verification remains manual only."
+      }
+    },
+    "WSSRC-INT-026": {
+      "set": {
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "Recent Philippines PCO material confirms the 49th ASEAN Summit and Related Meetings for 13-15 November 2026. PCO public-domain status supports factual reuse but does not itself authorise endpoint polling; endpoint review remains separate and current verification is manual authoritative recheck."
+      }
+    },
+    "WSSRC-REG6-001": {
+      "set": {
+        "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+        "governance_backfill_reviewed_at": "2026-09-05",
+        "governance_backfill_basis": "Kenya Public Finance Management Act requires the Budget Policy Statement by 15 February each year. Written-law copyright status supports factual legal provenance but does not authorise unrestricted polling of Kenya Law infrastructure; endpoint review remains separate and verification is manual authoritative recheck."
+      }
+    }
+  }
+}
