@@ -1,0 +1,109 @@
+name: Apply WORLD SIGNALS P0 source governance once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-source-governance-p0-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Snapshot protected non-target state
+        run: |
+          sha256sum \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/changes/ledger.json \
+            data/monitor/operations_policy.json \
+            data/monitor/review_candidate_state_contract.json \
+            data/monitor/review_decisions.json \
+            data/monitor/review_checkpoint.json \
+            data/monitor/durable_review_checkpoint_contract.json \
+            data/fixtures/commit_readiness.json \
+            data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_PLAN_v0.1.json \
+            > /tmp/protected.sha
+
+      - name: Repeat check-only preflight
+        run: |
+          python -m unittest tests.test_source_governance_p0 -v
+          python scripts/apply_source_governance_p0.py
+          git diff --exit-code
+
+      - name: Apply reviewed P0 transaction
+        env:
+          WORLD_SIGNALS_ALLOW_P0_GOVERNANCE_APPLY: YES
+        run: python scripts/apply_source_governance_p0.py --apply
+
+      - name: Verify exact post-state
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=json.loads(Path('data/sources/registry.json').read_text(encoding='utf-8'))
+          exp=json.loads(Path('data/monitor/expectations.json').read_text(encoding='utf-8'))
+          can=json.loads(Path('data/canonical/registry.json').read_text(encoding='utf-8'))
+          assert can['version']=='0.20' and can['record_count']==669
+          assert src['version']=='1.52' and len(src['sources'])==223
+          assert exp['version']=='0.7' and len(exp['adapters'])==6
+          sources={x['source_id']:x for x in src['sources']}
+          assert 'WSSRC-REG4-001' in sources and 'WSSRC-REG4-002' in sources
+          assert sum(1 for r in can['records'] if r.get('source_id')=='WSSRC-REG4-001')==1
+          assert sum(1 for r in can['records'] if r.get('source_id')=='WSSRC-REG4-002')==0
+          cfg=next(x for x in exp['adapters'] if x['adapter_id']=='COLOMBIA_SUIN_DECREE_111_1996')
+          assert cfg['source_id']=='WSSRC-REG4-002'
+          assert cfg['required_manual_verification_source_ids']==['WSSRC-REG4-001']
+          fields=('canonical_provenance_use','automated_monitoring_use','verification_mode','monitoring_readiness_status')
+          for sid in {x['source_id'] for x in exp['adapters']}:
+              assert all(sources[sid].get(k) for k in fields), (sid,{k:sources[sid].get(k) for k in fields})
+          assert exp.get('automatic_canonical_commit') is False
+          assert exp.get('google_calendar_write') is False
+          runner=Path('scripts/run_live_monitor.py').read_text(encoding='utf-8')
+          needle='configs["COLOMBIA_SUIN_DECREE_111_1996"]["source_id"]'
+          assert runner.count(needle)==2
+          print('Exact P0 post-state PASS')
+          PY
+
+      - name: Validate full project
+        run: |
+          python scripts/validate_registry.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/run_live_monitor.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          python scripts/build_site.py
+
+      - name: Verify protected non-target state unchanged
+        run: sha256sum -c /tmp/protected.sha
+
+      - name: Restrict transaction diff to three files
+        run: |
+          mapfile -t changed < <(git diff --name-only)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 3
+          printf '%s\n' "${changed[@]}" | sort > /tmp/changed.txt
+          printf '%s\n' \
+            data/sources/registry.json \
+            data/monitor/expectations.json \
+            scripts/run_live_monitor.py \
+            | sort > /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - name: Commit reviewed P0 governance transaction
+        run: |
+          git config user.name 'world-signals-guarded-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py
+          git commit -m 'Apply P0 source-governance backfill'
+          git push origin HEAD:main
