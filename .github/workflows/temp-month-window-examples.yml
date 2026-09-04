@@ -1,0 +1,32 @@
+name: TEMP month-window canonical examples
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-month-window-examples.yml'
+permissions:
+  contents: read
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print month precision non-physical examples
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          out=[]
+          def walk(x):
+              if isinstance(x,dict):
+                  if x.get('occurrence_id') and (x.get('time_precision')=='MONTH' or x.get('certainty_status')=='EXPECTED_WINDOW'):
+                      if x.get('category')!='PHYSICAL_CLIMATE_RISK': out.append(x)
+                  for v in x.values(): walk(v)
+              elif isinstance(x,list):
+                  for v in x: walk(v)
+          walk(can)
+          print('COUNT',len(out))
+          for x in out[:30]:
+              keys=['occurrence_id','canonical_name','category','certainty_status','timing_type','time_precision','time_status','time_basis','temporal_basis','start_local','end_local','date_earliest','date_latest','source_native_window_label','season_phases','render_policy','activation_mode']
+              print(json.dumps({k:x.get(k) for k in keys if k in x},ensure_ascii=False,indent=2))
+          PY
