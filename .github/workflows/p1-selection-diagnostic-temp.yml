@@ -1,4 +1,4 @@
-name: TEMP P1 selected metadata diagnostic
+name: TEMP verification closeout post-state
 
 on:
   push:
@@ -9,27 +9,43 @@ permissions:
   contents: read
 
 jobs:
-  diagnostic:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Inspect selected source metadata
+      - name: Read-only guarded preflight
+        run: python scripts/apply_source_governance_verification_closeout_a.py
+      - name: Materialise reviewed post-state ephemerally
+        env:
+          WORLD_SIGNALS_ALLOW_VERIFICATION_CLOSEOUT_A_APPLY: YES
+        run: python scripts/apply_source_governance_verification_closeout_a.py --apply
+      - name: Enforce exact one-file mutation surface
         shell: bash
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          src=json.loads(Path('data/sources/registry.json').read_text())
-          ids={'WSSRC-INT-010','WSSRC-INT-017','WSSRC-REG2-002','WSSRC-REG6-002','WSSRC-REG-011','WSSRC-INT-026','WSSRC-REG6-001','WSSRC-REG5-001'}
-          for s in src.get('sources',[]):
-              if s.get('source_id') in ids:
-                  keep={k:s.get(k,'__ABSENT__') for k in [
-                    'source_id','institution','jurisdiction','domain','authoritative_url','backup_authoritative_source',
-                    'canonical_dependency_count','canonical_provenance_use','automated_monitoring_use','verification_mode',
-                    'monitoring_readiness_status','monitoring_activation_status','governance_backfill_reviewed_at','governance_backfill_basis'
-                  ]}
-                  print(json.dumps(keep,ensure_ascii=False,sort_keys=True))
-          PY
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' data/sources/registry.json > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+      - name: Validate registry
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m py_compile scripts/apply_source_governance_verification_closeout_a.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
+      - name: Browser JavaScript checks
+        shell: bash
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Verify source-only diff remains exact
+        shell: bash
+        run: |
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' data/sources/registry.json > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
