@@ -1,0 +1,49 @@
+name: TEMP Vietnam source scope diagnostic
+
+on:
+  push:
+    branches:
+      - vietnam-source-scope-review-a
+    paths:
+      - .github/workflows/temp-vietnam-source-scope-diag.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect registered source and canonical dependencies
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          sid = 'WSSRC-REG5-001'
+          src = json.loads(Path('data/sources/registry.json').read_text())
+          rec = next(x for x in src['sources'] if x['source_id'] == sid)
+          print('SOURCE_RECORD')
+          print(json.dumps(rec, ensure_ascii=False, indent=2))
+
+          can = json.loads(Path('data/canonical/registry.json').read_text())
+          hits = []
+          def walk(obj, path=()):
+              if isinstance(obj, dict):
+                  if sid in json.dumps(obj, ensure_ascii=False):
+                      if any(k in obj for k in ('occurrence_id','event_id','series_id','title','name')):
+                          hits.append((path, obj))
+                      else:
+                          for k, v in obj.items():
+                              walk(v, path + (str(k),))
+                  return
+              if isinstance(obj, list):
+                  for i, v in enumerate(obj):
+                      walk(v, path + (str(i),))
+          walk(can)
+          print('DEPENDENCY_HITS', len(hits))
+          for p, obj in hits:
+              print('PATH', '/'.join(p))
+              print(json.dumps(obj, ensure_ascii=False, indent=2))
+          PY
