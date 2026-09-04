@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.58",
+  "version": "1.59",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -2830,7 +2830,12 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT"
+      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Statistics Bureau / Government of Japan Public Data License 1.0 supports attributed factual reuse and the registered schedule parser has pilot evidence. The official English Labour Force Survey schedule supplies dates but no clock time; source-time remains unspecified and production polling still requires endpoint review."
     },
     {
       "source_id": "WSSRC-MAC-016",
@@ -3720,7 +3725,12 @@
       "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
       "monitoring_priority_score": 560,
       "canonical_dependency_count": 5,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "Bank of Canada auction schedule/data reuse is permitted subject to stated conditions and structured endpoints plus existing parser evidence support a bounded automated pilot. Request-frequency/overburdening terms still require endpoint-specific production review; provisional schedule status and exact bidding times are retained only where explicitly published."
     },
     {
       "source_id": "WSSRC-FIS-009",
@@ -4346,7 +4356,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 270,
       "canonical_dependency_count": 6,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The ASX 24 specification directly supports the SPI 200 third-Thursday 12.00pm expiry rule in Australian Eastern local time, but ASX terms prohibit unauthorised automated monitoring/copying and also restrict unauthorised manual monitoring. Retain only bounded authoritative informational verification under a rights hold; the event remains a mechanical market-structure occurrence with no predictive claim."
     },
     {
       "source_id": "WSSRC-MKT-012",
@@ -4789,7 +4804,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 240,
       "canonical_dependency_count": 3,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "The WTO reform workplan is authoritative factual provenance for December 2026 and February 2027 month-level checkpoints and a 2027 mid-term ministerial review. WTO reuse terms support curated factual metadata but do not expressly clear unrestricted automated access; exact dates must await later official calendar/convening evidence."
     },
     {
       "source_id": "WSSRC-INT-030",
@@ -8353,7 +8373,12 @@
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 650,
       "canonical_dependency_count": 3,
-      "last_successful_research_verification_at": "2026-09-03"
+      "last_successful_research_verification_at": "2026-09-03",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "SBP's FY27 advance calendar confirms the remaining 2026 MPC / Monetary Policy Statement dates but publishes no clock time for those canonical occurrences. The main SBP website states All Rights Reserved and no permissive general automation/reuse licence was found; the route is retained as a bounded authoritative informational reference under a rights hold."
     },
     {
       "domain": "monetary_policy",
@@ -8565,7 +8590,12 @@
       "automation_summary": "Manual factual schedule provenance only. Public access and downloadable data do not by themselves establish permission for production automated retrieval.",
       "monitoring_readiness_status": "MANUAL_ONLY_RIGHTS_HOLD",
       "monitoring_priority_score": 250,
-      "canonical_dependency_count": 4
+      "canonical_dependency_count": 4,
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "JODI's official combined 2026 schedule confirms first monthly Oil + Gas World Database updates at noon London time and notes supplementary updates, but JODI reserves intellectual-property rights. The source remains manual informational / rights-held; supplementary data loads are not promoted to separate canonical occurrences by this series definition."
     },
     {
       "source_id": "WSSRC-COM-013",
