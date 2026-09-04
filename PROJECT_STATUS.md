@@ -8,7 +8,7 @@ This is an operational checkpoint. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains th
 ## Current source of truth
 
 - **Canonical occurrence registry:** v0.20 — **669 occurrences**.
-- **Tier-1 source registry:** v1.57 — **223 sources**.
+- **Tier-1 source registry:** v1.58 — **223 sources**.
 - **Canonical schema:** v0.51.
 - **Live monitor expectations:** v0.7.
 - **Monitor operations policy:** v0.1.
@@ -74,7 +74,7 @@ Run **47** / GitHub run id `33754900613`, recorded `2026-09-03T12:23:29.227611+0
 - 0 review candidates;
 - `NO_CHANGE`;
 - canonical unchanged;
-- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.57.
+- run configuration canonical v0.17 / source v1.48, therefore public runtime projection correctly labels it stale relative to current v0.20 / v1.58.
 
 Review-state contract activates prospectively **after run 47**. Do not manufacture a candidate or replay historical evidence merely to populate the UI. At this checkpoint the first genuine post-contract run 48+ remains an observation gate.
 
@@ -280,12 +280,27 @@ Guarded transaction run `33868568393` passed preflight, exact one-file enforceme
 - missing `automated_monitoring_use`: **176**;
 - missing `verification_mode`: **186**.
 
-P1-F research is frozen for Statistics Bureau of Japan CPI, ABS Labour Force, CME E-mini S&P 500 expiry rules, IEA Oil Market Report schedule, ChinaMoney/NIFC LPR rules and Nigeria INEC — **29 canonical dependencies**. Japan CPI and ABS retain bounded automated-pilot verification; CME, IEA OMR and ChinaMoney are explicit rights-held/manual negative controls; INEC remains manual-authoritative because its detailed revision endpoint is operationally fragile.
+### P1-F mixed-rights / cross-domain tranche — COMPLETE
+
+P1-F backfilled Statistics Bureau of Japan CPI, ABS Labour Force, CME E-mini S&P 500 expiry rules, IEA Oil Market Report schedule, ChinaMoney/NIFC LPR rules and Nigeria INEC — **29 canonical dependencies**. Source registry advanced **v1.57 → v1.58 / 223**; canonical remains **v0.20 / 669** and monitor expectations **v0.7**.
+
+Guarded transaction run `33871313942` passed preflight, exact one-file enforcement, registry validation, full unit suite, Python compilation, browser JavaScript checks and site build. PR #15 merged as `21665ddce58cf9c7c7e868727ad4c2e19e6dce62`. Independent post-P1-F audit run `33872209871` measured:
+
+- **43** fully explicit governance sources;
+- **180** sources still missing at least one governance field;
+- **0 P0** configured-monitor dependencies;
+- **109 P1** canonical dependencies;
+- **71 P2** registry-only sources;
+- missing `canonical_provenance_use`: **170**;
+- missing `automated_monitoring_use`: **170**;
+- missing `verification_mode`: **180**.
+
+P1-G research is frozen for Statistics Bureau of Japan Labour Force Survey, ASX SPI 200 expiry rules, Bank of Canada / Department of Finance Canada bond auctions, JODI Oil + Gas World Database updates, WTO reform checkpoints and State Bank of Pakistan FY27 MPC dates — **28 canonical dependencies**. Japan and Canada retain bounded automated-pilot verification; WTO remains manual-authoritative with endpoint review; ASX, JODI and SBP remain explicit rights-held/manual controls.
 
 Brazil TSE and Swiss National Bank remain excluded for provenance-scope repair. SNB's registered decisions/history URL still does not directly support the forward assessment schedule; Brazil's `2027-01-05` inauguration remains constitutionally grounded rather than an electoral-calendar date.
 
-Durable P1-E audit: `data/coverage/SOURCE_GOVERNANCE_P1E_BACKFILL_AUDIT_v0.1.md`.
-P1-F research/plan: `data/coverage/SOURCE_GOVERNANCE_P1F_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1F_BACKFILL_PLAN_v0.1.json`.
+Durable P1-F audit: `data/coverage/SOURCE_GOVERNANCE_P1F_BACKFILL_AUDIT_v0.1.md`.
+P1-G research/plan: `data/coverage/SOURCE_GOVERNANCE_P1G_RESEARCH_v0.1.md` and `data/coverage/SOURCE_GOVERNANCE_P1G_BACKFILL_PLAN_v0.1.json`.
 
 ## Held / unresolved nodes
 
@@ -302,7 +317,7 @@ WOAH, IPPC/CPM, BWC/UNODA and Africa CDC require normal importance/source/timing
 
 ### Source-governance P1/P2 backlog
 
-**115 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
+**109 P1 canonical-dependent** and **71 P2 registry-only** source records still need bounded, evidence-specific governance research. Prioritise small tranches by live analytical relevance, dependency and active horizon; never infer rights from public accessibility, official status, machine readability or successful parsing.
 
 ## Canonical auto-commit gate — CLOSED
 
@@ -317,7 +332,7 @@ No source failure may satisfy either gate.
 
 1. **Observe first genuine post-contract live-monitor run 48+** against source v1.53 / expectations v0.7 and validate retained-review reduction against real evidence; do not manufacture a candidate.
 2. **Validate the migrated Colombia adapter operationally** — machine health should report `WSSRC-REG4-002`; `WSSRC-REG4-001` remains manual verification authority only.
-3. **Source-governance P1-F transaction gate** — review/merge the frozen P1-F infrastructure, reconcile merged source v1.57 and run the guarded read-only preflight before any registry-only v1.58 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
+3. **Source-governance P1-G transaction gate** — review/merge the frozen P1-G infrastructure, reconcile merged source v1.58 and run the guarded read-only preflight before any registry-only v1.59 transaction; Brazil TSE and SNB remain excluded pending source-scope repair.
 4. **Biosecurity candidate-node research** — assess marginal analytical value + authoritative timing + rights one institution/system at a time; architecture does not authorise population.
 5. **South Asia provenance resolution** — continue precise authoritative-date/native-calendar work.
 6. Re-run coverage audit after analytically justified canonical additions only.
