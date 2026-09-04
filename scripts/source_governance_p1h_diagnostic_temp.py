@@ -2,13 +2,16 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections import Counter, defaultdict
 from datetime import date, datetime
 from pathlib import Path
 
-from src.world_signals.source_governance_audit import build_source_governance_audit
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'src'))
+
+from world_signals.source_governance_audit import build_source_governance_audit
+
 registry = json.loads((ROOT / 'data/canonical/registry.json').read_text())
 sources = json.loads((ROOT / 'data/sources/registry.json').read_text())
 expectations = json.loads((ROOT / 'data/monitor/expectations.json').read_text())
@@ -68,6 +71,12 @@ rows.sort(key=lambda r: (
     str(r['source_id']),
 ))
 
+region_totals = Counter()
+category_totals = Counter()
+for row in rows:
+    region_totals.update(row['canonical_regions'])
+    category_totals.update(row['canonical_categories'])
+
 out = {
     'project': 'WORLD SIGNALS',
     'diagnostic': 'P1_H_SELECTION_DIAGNOSTIC',
@@ -81,7 +90,7 @@ out = {
     },
     'selection_rule': 'Diagnostic ranking only: active 90-day horizon, then active noncompleted dependencies, then total dependency. Final cohort must also consider source-scope integrity, regional/domain balance and governance-information value; no permission inference.',
     'top_40': rows[:40],
-    'p1_region_dependency_totals': dict(Counter(region for r in rows for region, n in r['canonical_regions'].items() for _ in range(n))),
-    'p1_category_dependency_totals': dict(Counter(category for r in rows for category, n in r['canonical_categories'].items() for _ in range(n))),
+    'p1_region_dependency_totals': dict(region_totals),
+    'p1_category_dependency_totals': dict(category_totals),
 }
 print(json.dumps(out, indent=2, sort_keys=True))
