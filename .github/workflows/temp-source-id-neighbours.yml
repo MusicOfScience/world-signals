@@ -1,0 +1,23 @@
+name: TEMP source ID neighbours
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-source-id-neighbours.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print neighbouring source rows
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          ids={'WSSRC-FIS-024','WSSRC-REG-006','WSSRC-REG-007','WSSRC-REG-008','WSSRC-REG-009','WSSRC-REG-010','WSSRC-REG-011','WSSRC-REG2-006','WSSRC-REG2-007'}
+          for row in src.get('sources',[]):
+              if row.get('source_id') in ids:
+                  print(json.dumps({k:row.get(k) for k in ['source_id','institution','jurisdiction','domain','endpoint_role','authoritative_url','source_type']},ensure_ascii=False))
+          PY
