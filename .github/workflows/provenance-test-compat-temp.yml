@@ -1,0 +1,32 @@
+name: TEMP provenance test compatibility
+
+on:
+  push:
+    branches: [provenance-scope-repair-research]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python scripts/update_provenance_repair_tests_temp.py
+      - name: Verify bounded test-only patch and commit
+        run: |
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' tests/test_registry.py tests/test_source_governance_p1a.py tests/test_source_governance_p1b.py tests/test_source_governance_p1c.py tests/test_source_governance_p1d.py tests/test_source_governance_p1e.py tests/test_source_governance_p1f.py tests/test_source_governance_p1g.py tests/test_source_governance_p1h.py | sort > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          python -m py_compile tests/provenance_repair_compat.py tests/test_registry.py tests/test_source_governance_p1{a,b,c,d,e,f,g,h}.py
+          git config user.name world-signals-checkpoint
+          git config user.email actions@users.noreply.github.com
+          git add tests/test_registry.py tests/test_source_governance_p1{a,b,c,d,e,f,g,h}.py
+          git commit -m 'Make historical governance tests provenance-repair aware'
+          git push origin HEAD:provenance-scope-repair-research
