@@ -46,3 +46,5 @@ jobs:
           node --check web/operations.js
       - name: Build site
         run: python scripts/build_site.py
+
+# rerun after lifecycle compatibility patches
