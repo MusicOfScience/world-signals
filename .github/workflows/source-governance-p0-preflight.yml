@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/source-governance-p0-preflight.yml'
+      - 'scripts/apply_source_governance_p0.py'
+      - 'tests/test_source_governance_p0.py'
+      - 'data/coverage/SOURCE_GOVERNANCE_P0_BACKFILL_PLAN_v0.1.json'
 
 permissions:
   contents: read
