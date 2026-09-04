@@ -1,0 +1,35 @@
+name: TEMP P1-G checkpoint update
+
+on:
+  push:
+    branches:
+      - p1g-durable-checkpoint
+
+permissions:
+  contents: write
+
+jobs:
+  checkpoint:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply checkpoint update
+        run: python scripts/update_p1g_checkpoint_temp.py
+      - name: Verify and commit
+        run: |
+          test "$(git diff --name-only)" = "PROJECT_STATUS.md"
+          grep -q 'v1.59 — \*\*223 sources\*\*' PROJECT_STATUS.md
+          grep -q 'P1-G mixed-rights / cross-domain tranche — COMPLETE' PROJECT_STATUS.md
+          grep -q '103 P1 canonical-dependent' PROJECT_STATUS.md
+          git config user.name world-signals-checkpoint
+          git config user.email actions@users.noreply.github.com
+          git add PROJECT_STATUS.md
+          test "$(git diff --cached --name-only)" = "PROJECT_STATUS.md"
+          git commit -m 'Update durable checkpoint after P1-G'
+          git push origin HEAD:p1g-durable-checkpoint
