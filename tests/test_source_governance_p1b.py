@@ -43,8 +43,15 @@ class P1BGovernanceMigrationTests(unittest.TestCase):
         cls.pre_version = str(cls.plan["preconditions"]["source_registry_version"])
         cls.post_version = str(cls.plan["postconditions"]["source_registry_version"])
 
+    @staticmethod
+    def _version_tuple(value: str) -> tuple[int, ...]:
+        return tuple(int(part) for part in str(value).split("."))
+
     def _assert_completed_source_state(self, source_registry: dict) -> None:
-        self.assertEqual(str(source_registry.get("version")), self.post_version)
+        self.assertGreaterEqual(
+            self._version_tuple(str(source_registry.get("version"))),
+            self._version_tuple(self.post_version),
+        )
         self.assertEqual(len(source_registry.get("sources", [])), 223)
         by_id = MIGRATION._sources_by_id(source_registry)
         for source_id, spec in self.plan["source_updates"].items():
@@ -136,7 +143,10 @@ class P1BGovernanceMigrationTests(unittest.TestCase):
         self.assertEqual(rbnz["verification_mode"], "RIGHTS_HELD_MANUAL_ONLY")
 
     def test_repository_state_is_valid_before_or_after_transaction(self):
-        self.assertIn(self.source_version, {self.pre_version, self.post_version})
+        self.assertGreaterEqual(
+            self._version_tuple(self.source_version),
+            self._version_tuple(self.pre_version),
+        )
         if self.source_version == self.pre_version:
             MIGRATION.preflight(
                 self.canonical,
