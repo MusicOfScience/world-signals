@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-04",
-  "version": "1.52",
+  "version": "1.53",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -799,7 +799,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 570,
       "canonical_dependency_count": 36,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "NBS permits use of statistical data and attributed factual content, but its terms do not expressly clear crawler/scraper access to the release-calendar surface."
     },
     {
       "source_id": "WSSRC-MAC-008",
@@ -1966,7 +1971,12 @@
       "source_surface_relationship": "INDEX_LAGS_DATA_PRODUCT",
       "source_health_incident_state": "RECOVERED_WITH_ALTERNATE_OFFICIAL_SURFACE",
       "source_health_primary_surface": "UNDERLYING_DATA_PRODUCT",
-      "source_health_degraded_surface": "PUBLICATION_INDEX"
+      "source_health_degraded_surface": "PUBLICATION_INDEX",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "EIA factual/public-domain content supports curated provenance; existing read-only WPSR pilot use does not itself clear unrestricted schedule-page polling."
     },
     {
       "source_id": "WSSRC-COM-004",
@@ -2142,7 +2152,12 @@
       "automation_summary": "COP schedule facts remain authoritative; production monitoring should route through an official schedule/document/feed whose status falls clearly within the public-domain official-material category.",
       "rights_reviewed_at": "2026-09-02T21:45:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_D_HIGH_VALUE_GOVERNMENT_AND_INSTITUTIONAL",
-      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "UNFCCC official schedule facts remain authoritative, but the public-domain status of official texts/data/documents is not projected into a production automation licence for the COP event webpage."
     },
     {
       "source_id": "WSSRC-CLIM-002",
@@ -2846,7 +2861,12 @@
       "last_successful_research_verification_at": "2026-09-02T23:10:00+10:00",
       "source_health_incident_state": "OPEN",
       "source_health_primary_surface": "ADVANCE_RELEASE_CALENDAR_PDF",
-      "source_health_degraded_surface": "DYNAMIC_RELEASE_CALENDAR_HTML"
+      "source_health_degraded_surface": "DYNAMIC_RELEASE_CALENDAR_HTML",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "MoSPI Category A statistical publications are open-access, while website automation remains separately unresolved and the dynamic calendar is currently inconsistent with the authoritative ARC PDF."
     },
     {
       "source_id": "WSSRC-MAC-018",
@@ -5580,7 +5600,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 300,
       "canonical_dependency_count": 9,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "FAO general website terms support attributed non-commercial informational use; the separate statistical-database licensing regime is not projected onto the release-calendar HTML endpoint."
     },
     {
       "source_id": "WSSRC-COM-011",
@@ -6556,7 +6581,12 @@
           "completeness_scope": "EVENT_OR_GOVERNANCE_PAGE",
           "notes": "Observed WHO event publishing stack offers iCal/Outlook/Google Calendar exports. Do not treat export transport as production permission or a stable subscription feed."
         }
-      ]
+      ],
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-04",
+      "governance_backfill_basis": "WHO general website terms support limited research/private-study use but do not clear production automation; user-facing calendar export transport is not treated as permission."
     },
     {
       "source_id": "WSSRC-HEALTH-002",
