@@ -39,6 +39,15 @@ def candidate_date(record):
                 pass
     return None
 
+
+def jurisdiction_values(record):
+    value = record.get('jurisdiction')
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [str(item) for item in value if item]
+    return []
+
 rows = []
 for row in audit['backfill_research_queue']:
     if row['research_priority'] != 'P1_CANONICAL_DEPENDENCY':
@@ -50,7 +59,7 @@ for row in audit['backfill_research_queue']:
     within_90 = [d for d in active_dates if (d - reference).days <= 90]
     regions = Counter(str(r.get('region') or 'UNRECORDED') for r in recs)
     categories = Counter(str(r.get('category') or 'UNRECORDED') for r in recs)
-    jurisdictions = Counter(j for r in recs for j in (r.get('jurisdiction') or []))
+    jurisdictions = Counter(j for r in recs for j in jurisdiction_values(r))
     visibility = Counter(str(r.get('visibility_tier') or 'UNRECORDED') for r in recs)
     rows.append({
         **row,
