@@ -165,8 +165,11 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         evidence["evidence"][0]["canonical_provenance_effect"] = "REPLACE_CANONICAL_SOURCE"
         self.assertTrue(any("cannot alter canonical provenance" in e for e in self.validate(evidence=evidence).errors))
 
-    def test_second_order_none_is_explicit_for_all_current_samples(self):
-        self.assertTrue(all(row["second_order_effects"]["status"] == "NOT_ESTABLISHED" for row in self.reviews["reviews"]))
+    def test_foundation_second_order_status_survives_descendants(self):
+        self.assertEqual(self.review("WSAN-AU-GDP-2026Q2-001")["second_order_effects"]["status"], "NOT_ESTABLISHED")
+        self.assertEqual(self.review("WSAN-NZ-OCR-20260902-001")["second_order_effects"]["status"], "NOT_ESTABLISHED")
+        allowed = set(self.schema["controlled_vocabularies"]["second_order_status"])
+        self.assertTrue(all(row["second_order_effects"]["status"] in allowed for row in self.reviews["reviews"]))
 
     def test_population_readiness_preserves_foundation_through_descendants(self):
         readiness = analysis_population_readiness(self.schema, self.reviews, self.canonical)
