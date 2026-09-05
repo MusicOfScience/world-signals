@@ -8,7 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / "data/canonical/registry.json"
 SOURCES = ROOT / "data/sources/registry.json"
+LEDGER = ROOT / "data/changes/ledger.json"
 REFERENCE_DATE = "2026-09-06"
+TARGET_IDS = ("WSO-FIS-A-0015", "WSO-MAC-B-0041")
 
 
 def load(path: Path):
@@ -48,13 +50,16 @@ def slim(row):
         "category": row.get("category"),
         "event_type": row.get("event_type"),
         "lifecycle_status": row.get("lifecycle_status"),
+        "certainty_status": row.get("certainty_status"),
+        "time_status": row.get("time_status"),
         "date_status": row.get("date_status"),
         "date": date,
         "date_field": date_field,
         "start_local": row.get("start_local"),
         "end_local": row.get("end_local"),
-        "timezone": row.get("timezone") or row.get("iana_timezone") or row.get("native_timezone"),
+        "source_timezone": row.get("source_timezone"),
         "start_utc": row.get("start_utc"),
+        "source_id": row.get("source_id"),
         "source_ids": sorted(collect_source_ids(row)),
     }
 
@@ -62,7 +67,9 @@ def slim(row):
 def main():
     canonical = load(CANONICAL)
     sources = load(SOURCES)
+    ledger = load(LEDGER)
     records = canonical.get("records", [])
+    by_id = {r.get("occurrence_id"): r for r in records}
     east = [r for r in records if r.get("region") == "East Asia"]
 
     past = []
@@ -108,8 +115,19 @@ def main():
         "project": "WORLD SIGNALS",
         "probe": "EAST_ASIA_ANCHOR_Z_LIFECYCLE",
         "reference_date": REFERENCE_DATE,
-        "canonical": {"version": canonical.get("version"), "count": len(records)},
+        "canonical": {
+            "version": canonical.get("version"),
+            "count": len(records),
+            "record_count_field": canonical.get("record_count"),
+            "reference_date": canonical.get("reference_date"),
+        },
         "sources": {"version": sources.get("version"), "count": len(sources.get("sources", []))},
+        "ledger": {
+            "version": ledger.get("version"),
+            "count": len(ledger.get("changes", [])),
+            "reference_date": ledger.get("reference_date"),
+            "tail": ledger.get("changes", [])[-3:],
+        },
         "east_asia": {
             "occurrence_count": len(east),
             "lifecycle_distribution": dict(sorted(Counter(str(r.get("lifecycle_status")) for r in east).items())),
@@ -120,6 +138,7 @@ def main():
             "past_2026_not_completed_count": len(past_2026_not_completed),
         },
         "past_2026_not_completed": [slim(r) for r in sorted(past_2026_not_completed, key=lambda r: (date_prefix(r)[0] or "", str(r.get("occurrence_id"))))],
+        "target_full_records": {oid: by_id.get(oid) for oid in TARGET_IDS},
         "electionish": [slim(r) for r in sorted(electionish, key=lambda r: ((date_prefix(r)[0] or "9999"), str(r.get("occurrence_id"))))],
         "relevant_sources": relevant_sources,
     }
