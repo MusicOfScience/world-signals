@@ -1,4 +1,4 @@
-name: TEMP Institutional Analysis W full simulation
+name: TEMP Institutional Analysis W full simulation rerun
 
 on:
   push:
