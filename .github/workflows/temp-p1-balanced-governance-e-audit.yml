@@ -20,12 +20,12 @@ jobs:
         run: |
           git fetch origin main
           test "$(git rev-parse origin/main)" = "7c1af4f074aa846ff462c3551573cd4b7b233f36"
-          test "$(git merge-base 00e5e509a0de3ee3fa6f9132057b976c9a67a8ef origin/main)" = "7c1af4f074aa846ff462c3551573cd4b7b233f36"
+          test "$(git merge-base 2e09af524f3a07df389e08e7848b92def7609428 origin/main)" = "7c1af4f074aa846ff462c3551573cd4b7b233f36"
           python - <<'PY'
           import subprocess
           expected={'data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json'}
-          actual=set(subprocess.check_output(['git','diff','--name-only','origin/main...00e5e509a0de3ee3fa6f9132057b976c9a67a8ef'],text=True).splitlines())
-          print('DURABLE_DIFF',sorted(actual))
+          actual=set(subprocess.check_output(['git','diff','--name-only','origin/main...2e09af524f3a07df389e08e7848b92def7609428'],text=True).splitlines())
+          print('CLEANED_DURABLE_DIFF',sorted(actual))
           assert actual==expected,(actual,expected)
           PY
       - name: Independent committed-state audit
@@ -62,8 +62,7 @@ jobs:
           assert n['host_confirmed'] is True and n['host_jurisdiction']=='India'
           assert sm['WSSRC-INT-011']['canonical_dependency_count']==0
           assert sm['WSSRC-INT-031']['canonical_dependency_count']==1
-          changes=led['changes']
-          last=changes[-4:]
+          last=led['changes'][-4:]
           assert len(last)==4
           assert all(x.get('committed_at')=='2026-09-05T18:35:03+10:00' for x in last)
           audit=build_source_governance_audit(can,src,exp)['totals']
