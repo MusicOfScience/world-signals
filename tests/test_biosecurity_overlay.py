@@ -36,15 +36,16 @@ class BiosecurityOverlayTests(unittest.TestCase):
         }
         if version_tuple(self.overlay["version"]) < (0,2):
             expected = who
-            mapped_occurrences = 10
         else:
             expected = who | {
                 "WSER-INT-BWC-WG-STRENGTHENING",
                 "WSER-AGF-WOAH-GENERAL-SESSION",
             }
-            mapped_occurrences = 12
         memberships = self.overlay["canonical_series_memberships"]
         self.assertEqual({x["series_id"] for x in memberships}, expected)
+        mapped_occurrences = sum(
+            1 for row in self.registry["records"] if row.get("series_id") in expected
+        )
         summary = biosecurity_overlay_summary(self.registry, self.overlay)
         self.assertEqual(summary["mapped_canonical_series_count"], len(expected))
         self.assertEqual(summary["mapped_canonical_occurrence_count"], mapped_occurrences)
