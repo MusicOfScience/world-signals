@@ -1,0 +1,30 @@
+name: TEMP BoM window baseline
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-bom-window-baseline.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-prep
+      - name: Print BoM seasonal records and validator vocabulary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          by={r['occurrence_id']:r for r in can['records']}
+          for oid in ('WSO-COM-A-0051','WSO-COM-A-0052'):
+              print('OCCURRENCE',oid)
+              print(json.dumps(by[oid],indent=2,ensure_ascii=False,sort_keys=True))
+          print('TEMPORAL TEST REFERENCES')
+          for p in Path('tests').glob('test_temporal_windows.py'):
+              for i,line in enumerate(p.read_text().splitlines(),1):
+                  if any(x in line for x in ('MONTH_BOUNDED','source_native','season_phases','window_model','date_earliest','date_latest')):
+                      print(f'{i}: {line}')
+          PY
