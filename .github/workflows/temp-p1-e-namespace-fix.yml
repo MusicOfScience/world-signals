@@ -1,0 +1,41 @@
+name: TEMP P1 E namespace fix
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-e-namespace-fix.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-e-prep
+      - name: Replace collided APEC source identity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          paths=[
+            Path('data/coverage/P1_BALANCED_GOVERNANCE_E_RESEARCH_v0.1.md'),
+            Path('data/coverage/P1_BALANCED_GOVERNANCE_E_PLAN_v0.1.json'),
+            Path('scripts/apply_p1_balanced_governance_e.py'),
+            Path('tests/test_p1_balanced_governance_e.py'),
+          ]
+          for p in paths:
+              text=p.read_text()
+              text=text.replace('WSSRC-INT-030','WSSRC-INT-031')
+              text=text.replace('WSA-2da49d940b9d5802','WSA-070677934abbc0f0')
+              p.write_text(text)
+          PY
+      - name: Verify replacement scope
+        run: |
+          grep -R -n 'WSSRC-INT-031' data/coverage/P1_BALANCED_GOVERNANCE_E_RESEARCH_v0.1.md data/coverage/P1_BALANCED_GOVERNANCE_E_PLAN_v0.1.json scripts/apply_p1_balanced_governance_e.py tests/test_p1_balanced_governance_e.py
+          ! grep -R -n 'WSSRC-INT-030\|WSA-2da49d940b9d5802' data/coverage/P1_BALANCED_GOVERNANCE_E_RESEARCH_v0.1.md data/coverage/P1_BALANCED_GOVERNANCE_E_PLAN_v0.1.json scripts/apply_p1_balanced_governance_e.py tests/test_p1_balanced_governance_e.py
+      - name: Commit durable correction
+        run: |
+          git config user.name 'world-signals-guarded-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/coverage/P1_BALANCED_GOVERNANCE_E_RESEARCH_v0.1.md data/coverage/P1_BALANCED_GOVERNANCE_E_PLAN_v0.1.json scripts/apply_p1_balanced_governance_e.py tests/test_p1_balanced_governance_e.py
+          git commit -m 'Correct cohort E APEC source namespace'
+          git push origin HEAD:p1-balanced-governance-e-prep
