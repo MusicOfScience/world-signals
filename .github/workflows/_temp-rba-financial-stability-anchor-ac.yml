@@ -1,0 +1,99 @@
+name: Temporary RBA financial stability historical anchor AC
+
+on:
+  push:
+    branches:
+      - feature/missing-domain-recon-ac
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-57 merge base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "09433d3a6ed0aca957271be49777eab33f08ee72"
+
+      - name: Fail-closed AC check-only transform
+        run: python scripts/apply_rba_financial_stability_anchor_ac.py
+
+      - name: AC-specific tests before apply
+        run: python -m unittest tests.test_rba_financial_stability_anchor_ac -v
+
+      - name: Reviewed AC apply
+        env:
+          WORLD_SIGNALS_APPLY_RBA_FSR_ANCHOR_AC: REVIEWED_APPLY
+        run: python scripts/apply_rba_financial_stability_anchor_ac.py --apply
+
+      - name: Validate canonical registry
+        run: python scripts/validate_registry.py
+
+      - name: Validate Analysis
+        run: python scripts/validate_analysis.py
+
+      - name: Full repository tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Python compile
+        run: |
+          python -m py_compile \
+            scripts/apply_rba_financial_stability_anchor_ac.py \
+            scripts/probe_missing_domain_candidates_ac.py \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_analysis.py \
+            src/world_signals/analysis.py
+
+      - name: Browser JavaScript checks
+        run: |
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Static site build
+        run: python scripts/build_site.py
+
+      - name: Prove AC mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain | sed -E 's/^.. //' | sort)
+          printf '%s\n' "${changed[@]}"
+          expected=(
+            "data/canonical/registry.json"
+            "data/changes/ledger.json"
+            "data/coverage/RBA_FINANCIAL_STABILITY_HISTORICAL_ANCHOR_AC_TRANSACTION_AUDIT_v0.1.md"
+            "data/coverage/biosecurity_overlay.json"
+          )
+          mapfile -t expected_sorted < <(printf '%s\n' "${expected[@]}" | sort)
+          test "${#changed[@]}" -eq "${#expected_sorted[@]}"
+          diff -u <(printf '%s\n' "${expected_sorted[@]}") <(printf '%s\n' "${changed[@]}")
+
+      - name: Commit reviewed AC transaction and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "world-signals-transaction-bot"
+          git config user.email "world-signals-transaction-bot@users.noreply.github.com"
+          git add \
+            data/canonical/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/coverage/RBA_FINANCIAL_STABILITY_HISTORICAL_ANCHOR_AC_TRANSACTION_AUDIT_v0.1.md
+          git rm .github/workflows/_temp-rba-financial-stability-anchor-ac.yml
+          git commit -m "Apply RBA financial stability historical anchor AC transaction"
+          git push origin HEAD:feature/missing-domain-recon-ac
