@@ -22,7 +22,6 @@ TERMINAL = {"COMPLETED", "CANCELLED"}
 records = REGISTRY["records"]
 sources = SOURCES.get("sources", [])
 by_source = {row.get("source_id"): row for row in sources}
-reviewed_ids = {row.get("occurrence_id") for row in REVIEWS.get("reviews", []) if row.get("occurrence_id")}
 
 print("POST_AE_CHECKPOINT", json.dumps({
     "canonical_version": REGISTRY.get("version"),
@@ -47,30 +46,7 @@ for category in TARGET_CATEGORIES:
         "institutions": sorted({row.get("institution") for row in subset if row.get("institution")}),
         "lifecycle": dict(sorted(Counter(row.get("lifecycle_status") for row in subset).items())),
         "completed_count": len(completed),
-        "reviewed_completed_count": sum(1 for row in completed if row.get("occurrence_id") in reviewed_ids),
     }, sort_keys=True, ensure_ascii=False))
-
-    for row in sorted(subset, key=lambda x: ((x.get("start_local") or "9999"), x.get("occurrence_id") or "")):
-        print("ROW", json.dumps({
-            "category": category,
-            "occurrence_id": row.get("occurrence_id"),
-            "series_id": row.get("series_id"),
-            "canonical_name": row.get("canonical_name"),
-            "institution": row.get("institution"),
-            "jurisdiction": row.get("jurisdiction"),
-            "region": row.get("region"),
-            "event_type": row.get("event_type"),
-            "certainty_status": row.get("certainty_status"),
-            "lifecycle_status": row.get("lifecycle_status"),
-            "timing_type": row.get("timing_type"),
-            "start_local": row.get("start_local"),
-            "end_local": row.get("end_local"),
-            "source_timezone": row.get("source_timezone"),
-            "time_precision": row.get("time_precision"),
-            "source_id": row.get("source_id"),
-            "intrinsic_importance": row.get("intrinsic_importance"),
-            "expected_market_sensitivity": row.get("expected_market_sensitivity"),
-        }, sort_keys=True, ensure_ascii=False))
 
 for row in records:
     if row.get("category") not in TARGET_CATEGORIES:
@@ -96,30 +72,22 @@ source_deps = defaultdict(list)
 for row in records:
     if row.get("category") in TARGET_CATEGORIES and row.get("source_id"):
         source_deps[row["source_id"]].append(row.get("occurrence_id"))
-
 for source_id in sorted(source_deps):
     src = by_source.get(source_id, {})
     print("SOURCE", json.dumps({
         "source_id": source_id,
-        "source_name": src.get("source_name") or src.get("name"),
         "institution": src.get("institution"),
-        "primary_url": src.get("primary_url") or src.get("url"),
         "source_type": src.get("source_type"),
         "canonical_dependency_count_helper": src.get("canonical_dependency_count"),
         "actual_target_dependencies": len(source_deps[source_id]),
         "target_occurrence_ids": sorted(source_deps[source_id]),
-        "monitoring_mode": src.get("monitoring_mode"),
-        "automation_permission": src.get("automation_permission"),
     }, sort_keys=True, ensure_ascii=False))
 
-eligible = [
-    row for row in records
-    if row.get("lifecycle_status") == "COMPLETED"
-    and row.get("record_class") == "OCCURRENCE"
-    and row.get("render_policy") != "EXCLUDE"
-]
-print("COMPLETED_FRONTIER_SUMMARY", json.dumps({
-    "eligible_completed_occurrence_count": len(eligible),
-    "reviewed_completed_occurrence_count": sum(1 for row in eligible if row.get("occurrence_id") in reviewed_ids),
-    "unreviewed_completed_ids": sorted(row.get("occurrence_id") for row in eligible if row.get("occurrence_id") not in reviewed_ids),
-}, sort_keys=True, ensure_ascii=False))
+print("AU_TC_SOURCE_FULL", json.dumps(by_source.get("WSSRC-RISK-001"), sort_keys=True, ensure_ascii=False))
+for row in records:
+    if row.get("series_id") == "WSER-RISK-AU-TC":
+        print("AU_TC_ROW_FULL", json.dumps(row, sort_keys=True, ensure_ascii=False))
+
+existing_ids = {row.get("occurrence_id") for row in records}
+for candidate_id in ["WSO-RISK-AU-TC-2025-26", "WSO-RISK-AU-TC-202526", "WSO-COM-A-0053"]:
+    print("CANDIDATE_ID", json.dumps({"occurrence_id": candidate_id, "collision": candidate_id in existing_ids}, sort_keys=True))
