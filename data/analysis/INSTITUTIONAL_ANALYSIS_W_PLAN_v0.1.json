@@ -1,0 +1,87 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "INSTITUTIONAL_ANALYSIS_W",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "cfa55b4aa6c7e907613c349557c64276e9c6498e",
+  "purpose": "Review two completed institutional-governance anchors that stress procedural-versus-substantive outcome discipline and importance-without-market-movement, while leaving the remaining central-bank backlog item deliberately unreviewed.",
+  "pre_state": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.5",
+    "analysis_review_count": 9,
+    "analysis_evidence_version": "0.5",
+    "analysis_evidence_count": 28,
+    "analysis_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 9,
+    "reviewed_event_type_diversity": 8,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "admit_occurrence_ids": [
+    "WSO-BWC-WG-2026-S08",
+    "WSO-WOAH-GS-093"
+  ],
+  "hold_occurrence_ids": [
+    "WSO-ddb70f8ff05a58fb"
+  ],
+  "new_analysis_ids": [
+    "WSAN-BWC-WG8-20260213-001",
+    "WSAN-WOAH-GS93-20260522-001"
+  ],
+  "new_evidence_ids": [
+    "WSEV-BWC-WG-MANDATE-UNODA",
+    "WSEV-BWC-WG8-UNODA-PROC-20260213",
+    "WSEV-WOAH-GS93-OUTCOMES-20260522",
+    "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+    "WSEV-WOAH-GS93-FINAL-REPORT-2026"
+  ],
+  "selection_rationale": {
+    "WSO-BWC-WG-2026-S08": "Exercises treaty-governance analysis where procedural consensus, revised negotiating text and final substantive agreement must remain distinct and no market reaction is required.",
+    "WSO-WOAH-GS-093": "Exercises international standards governance and prospective implementation while preserving AGRICULTURE_FOOD as the primary canonical category despite cross-domain One Health, biosecurity, food-security and trade relevance.",
+    "WSO-ddb70f8ff05a58fb": "Held despite eligibility because W prioritises new analytical contract pressure rather than completing the remaining central-bank backlog item."
+  },
+  "post_state": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.6",
+    "analysis_review_count": 11,
+    "analysis_evidence_version": "0.6",
+    "analysis_evidence_count": 33,
+    "analysis_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 11,
+    "reviewed_event_type_diversity": 10,
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "canonical_schema_mutation": false,
+    "source_registry_mutation": false,
+    "monitor_configuration_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "backlog_completion_is_population_objective": false,
+    "procedural_consensus_equals_substantive_treaty_consensus": false,
+    "revised_negotiating_text_equals_final_agreement": false,
+    "market_reaction_required_for_high_importance_institutional_event": false,
+    "realised_output_count_without_forecast_is_directional_surprise": false,
+    "one_health_context_changes_woah_primary_category": false,
+    "prospective_implementation_is_observed_second_order_effect": false,
+    "temporal_sequence_establishes_causality": false
+  }
+}
