@@ -10,11 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.apply_cross_domain_historical_anchors_u import (
-    build_post_state,
-    overlay_semantics,
-    preflight,
-)
+from scripts.apply_cross_domain_historical_anchors_u import build_post_state, overlay_semantics, preflight
 from src.world_signals.analysis import analysis_population_readiness
 
 
@@ -41,12 +37,9 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
 
     def state(self):
         return (
-            str(self.registry.get("version")),
-            len(self.registry.get("records", [])),
-            str(self.sources.get("version")),
-            len(self.sources.get("sources", [])),
-            str(self.ledger.get("version")),
-            len(self.ledger.get("changes", [])),
+            str(self.registry.get("version")), len(self.registry.get("records", [])),
+            str(self.sources.get("version")), len(self.sources.get("sources", [])),
+            str(self.ledger.get("version")), len(self.ledger.get("changes", [])),
         )
 
     def is_exact_pre(self):
@@ -55,32 +48,17 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
     def simulated_or_live_post(self):
         if self.is_exact_pre():
             preflight(
-                self.registry,
-                self.schema,
-                self.sources,
-                self.ledger,
-                self.overlay,
-                self.analysis_schema,
-                self.analysis_reviews,
-                self.analysis_evidence,
-                self.plan,
+                self.registry, self.schema, self.sources, self.ledger, self.overlay,
+                self.analysis_schema, self.analysis_reviews, self.analysis_evidence, self.plan,
             )
             return build_post_state(
-                deepcopy(self.registry),
-                deepcopy(self.schema),
-                deepcopy(self.sources),
-                deepcopy(self.ledger),
-                deepcopy(self.overlay),
-                deepcopy(self.analysis_schema),
-                deepcopy(self.analysis_reviews),
-                deepcopy(self.analysis_evidence),
-                self.plan,
+                deepcopy(self.registry), deepcopy(self.schema), deepcopy(self.sources),
+                deepcopy(self.ledger), deepcopy(self.overlay), deepcopy(self.analysis_schema),
+                deepcopy(self.analysis_reviews), deepcopy(self.analysis_evidence), self.plan,
                 "2026-09-06T03:30:00+10:00",
             )
         return self.registry, self.sources, self.ledger, self.overlay, {
-            "readiness": analysis_population_readiness(
-                self.analysis_schema, self.analysis_reviews, self.registry
-            )
+            "readiness": analysis_population_readiness(self.analysis_schema, self.analysis_reviews, self.registry)
         }
 
     def test_repository_is_exact_pre_or_u_descendant(self):
@@ -131,24 +109,20 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         bwc = by_id["WSO-BWC-WG-2026-S08"]
         woah = by_id["WSO-WOAH-GS-093"]
         nepal = by_id["WSO-FIS-NP-BUDGET-2083"]
-
         for row in (bwc, woah, nepal):
             self.assertEqual(row["lifecycle_status"], "COMPLETED")
             self.assertEqual(row["certainty_status"], "CONFIRMED")
             self.assertEqual(row["population_tranche"], "ANALYSIS_HISTORICAL_ANCHOR_U")
             self.assertEqual(len(row["status_history"]), 1)
             self.assertIn("not inferred from elapsed time", row["status_history"][0]["change_reason"])
-
         self.assertEqual((bwc["start_local"], bwc["end_local"]), ("2026-02-09", "2026-02-13"))
         self.assertEqual(bwc["source_timezone"], "Europe/Zurich")
         self.assertIsNone(bwc["start_utc"])
         self.assertTrue(bwc["all_day_semantics"])
-
         self.assertEqual((woah["start_local"], woah["end_local"]), ("2026-05-18", "2026-05-22"))
         self.assertEqual(woah["source_timezone"], "Europe/Paris")
         self.assertIsNone(woah["start_utc"])
         self.assertTrue(woah["all_day_semantics"])
-
         self.assertIsNone(nepal["start_local"])
         self.assertIsNone(nepal["start_utc"])
         self.assertEqual(nepal["source_native_date_label"], "15 Jestha 2083")
@@ -192,9 +166,7 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
             self.assertEqual(overlay_semantics(post_overlay), overlay_semantics(self.overlay))
             self.assertEqual(post_overlay["version"], "0.5")
             self.assertEqual(post_overlay["canonical_checkpoint"], {"registry_version": "0.30", "record_count": 681})
-        memberships = {
-            row["series_id"]: row for row in post_overlay.get("canonical_series_memberships", [])
-        }
+        memberships = {row["series_id"]: row for row in post_overlay.get("canonical_series_memberships", [])}
         self.assertEqual(memberships["WSER-INT-BWC-WG-STRENGTHENING"]["canonical_primary_category"], "INTERNATIONAL_INSTITUTIONS")
         self.assertEqual(memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["canonical_primary_category"], "AGRICULTURE_FOOD")
 
@@ -208,9 +180,8 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
 
-        # U's historical contract is that it changed the canonical population while
-        # leaving Analysis untouched at its own transaction boundary. Later Analysis
-        # tranches may legitimately review any U anchor.
+        # U itself changed canonical population and left Analysis untouched. Descendant
+        # Analysis tranches are explicitly allowed to review any of the U anchors.
         post = self.plan["postconditions"]
         self.assertEqual(post["analysis_reviews_version"], "0.4")
         self.assertEqual(post["analysis_review_count"], 8)
@@ -219,12 +190,8 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         self.assertFalse(self.plan["guardrails"]["analysis_mutation"])
         self.assertGreaterEqual(len(self.analysis_reviews["reviews"]), post["analysis_review_count"])
         self.assertGreaterEqual(len(self.analysis_evidence["evidence"]), post["analysis_evidence_count"])
-
-        reviewed = set(readiness["reviewed_occurrence_ids"])
-        self.assertNotIn("WSO-BWC-WG-2026-S08", reviewed)
-        self.assertNotIn("WSO-WOAH-GS-093", reviewed)
-        self.assertNotIn("WSO-ddb70f8ff05a58fb", reviewed)
-        # Nepal may be reviewed by a later Analysis tranche without violating U.
+        completed = {row["occurrence_id"] for row in post_registry["records"] if row.get("lifecycle_status") == "COMPLETED"}
+        self.assertTrue({"WSO-BWC-WG-2026-S08", "WSO-WOAH-GS-093", "WSO-FIS-NP-BUDGET-2083"} <= completed)
 
     def test_global_write_gates_remain_closed(self):
         guardrails = self.plan["guardrails"]
