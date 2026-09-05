@@ -23,6 +23,10 @@ def digest(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+def version_tuple(raw):
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -197,14 +201,14 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertEqual((pre["canonical_registry_version"], pre["canonical_record_count"]), ("0.30", 681))
         self.assertEqual((pre["source_registry_version"], pre["source_record_count"]), ("1.72", 237))
         self.assertEqual((pre["change_ledger_version"], pre["change_ledger_count"]), ("0.17", 51))
-        self.assertGreaterEqual(float(self.canonical["version"]), 0.30)
+        self.assertGreaterEqual(version_tuple(self.canonical["version"]), version_tuple("0.30"))
         self.assertGreaterEqual(len(self.canonical["records"]), 681)
-        self.assertGreaterEqual(float(self.sources["version"]), 1.72)
+        self.assertGreaterEqual(version_tuple(self.sources["version"]), version_tuple("1.72"))
         self.assertGreaterEqual(len(self.sources["sources"]), 237)
-        self.assertGreaterEqual(float(self.ledger["version"]), 0.17)
+        self.assertGreaterEqual(version_tuple(self.ledger["version"]), version_tuple("0.17"))
         self.assertGreaterEqual(len(self.ledger["changes"]), 51)
-        self.assertGreaterEqual(float(self.overlay["version"]), 0.5)
-        self.assertGreaterEqual(float(self.overlay["canonical_checkpoint"]["registry_version"]), 0.30)
+        self.assertGreaterEqual(version_tuple(self.overlay["version"]), version_tuple("0.5"))
+        self.assertGreaterEqual(version_tuple(self.overlay["canonical_checkpoint"]["registry_version"]), version_tuple("0.30"))
         self.assertGreaterEqual(self.overlay["canonical_checkpoint"]["record_count"], 681)
 
 
