@@ -1,0 +1,135 @@
+name: TEMP Institutional Analysis W full simulation
+
+on:
+  push:
+    branches:
+      - feature/institutional-analysis-w
+    paths:
+      - .github/workflows/_temp-analysis-w-sim.yml
+
+permissions:
+  contents: read
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact main and protected pre-state
+        run: |
+          set -euo pipefail
+          BASE=cfa55b4aa6c7e907613c349557c64276e9c6498e
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git diff --exit-code "$BASE" HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert s['version']=='0.3'
+          assert (r['version'],len(r['reviews']))==('0.5',9)
+          assert (e['version'],len(e['evidence']))==('0.5',28)
+          assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
+          PY
+      - name: Check-only W transaction
+        run: python scripts/apply_institutional_analysis_w.py
+      - name: Apply only inside disposable runner
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_W: YES
+        run: python scripts/apply_institutional_analysis_w.py --apply
+      - name: Assert exact simulated mutation boundary
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/analysis/INSTITUTIONAL_ANALYSIS_W_TRANSACTION_AUDIT_v0.1.md
+            data/analysis/event_reviews.json
+            data/analysis/evidence_registry.json
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+      - name: Validate canonical and Analysis
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        run: python -m py_compile scripts/apply_institutional_analysis_w.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_institutional_analysis_w.py
+      - name: Check browser JavaScript
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and assert W post-state
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          a=json.loads(Path('docs/data/analysis.json').read_text())
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert s['version']=='0.3'
+          assert (r['version'],len(r['reviews']))==('0.6',11)
+          assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
+          assert (e['version'],len(e['evidence']))==('0.6',33)
+          assert a['metadata']['review_count']==11
+          assert a['metadata']['canonical_mutation_allowed'] is False
+          assert a['metadata']['google_calendar_write'] is False
+          readiness=a['readiness']
+          assert readiness['eligible_completed_occurrence_count']==12
+          assert readiness['reviewed_occurrence_count']==11
+          assert readiness['reviewed_event_type_diversity']==10
+          assert readiness['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          assert 'WSO-ddb70f8ff05a58fb' not in set(readiness['reviewed_occurrence_ids'])
+          by={row['analysis_id']:row for row in a['reviews']}
+          bwc=by['WSAN-BWC-WG8-20260213-001']
+          woah=by['WSAN-WOAH-GS93-20260522-001']
+          assert bwc['what_moved']==[] and woah['what_moved']==[]
+          assert bwc['what_surprised']['status']=='NOT_ESTABLISHED'
+          assert bwc['second_order_effects']['status']=='NOT_ESTABLISHED'
+          assert (bwc['canonical']['start_local'],bwc['canonical']['end_local'])==('2026-02-09','2026-02-13')
+          assert woah['what_surprised']['status']=='NO_CLEAR_SURPRISE'
+          assert woah['second_order_effects']['status']=='PLAUSIBLE_WATCH_ITEM'
+          assert woah['canonical']['category']=='AGRICULTURE_FOOD'
+          assert (woah['canonical']['start_local'],woah['canonical']['end_local'])==('2026-05-18','2026-05-22')
+          PY
