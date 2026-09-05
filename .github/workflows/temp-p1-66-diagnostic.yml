@@ -1,0 +1,95 @@
+name: TEMP P1 66 diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-66-diagnostic.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Print exact remaining P1 topology
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from datetime import date, datetime
+          from pathlib import Path
+
+          REF=date(2026,9,5)
+          GOV=('canonical_provenance_use','automated_monitoring_use','verification_mode')
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          records=can['records']; sources=src['sources']
+          by_source=defaultdict(list)
+          for r in records:
+              if r.get('source_id'):
+                  by_source[r['source_id']].append(r)
+
+          def dateish(r):
+              vals=[]
+              for k in ('publication_datetime','start_local','date_earliest','date_latest'):
+                  v=r.get(k)
+                  if isinstance(v,str) and len(v)>=10:
+                      try: vals.append(date.fromisoformat(v[:10]))
+                      except: pass
+              for ph in (r.get('season_phases') or []):
+                  for k in ('start_local','end_local','date_earliest','date_latest'):
+                      v=ph.get(k)
+                      if isinstance(v,str) and len(v)>=10:
+                          try: vals.append(date.fromisoformat(v[:10]))
+                          except: pass
+              return min(vals) if vals else None
+
+          def is_forward(r):
+              if r.get('lifecycle_status') in ('CANCELLED','COMPLETED'):
+                  return False
+              d=dateish(r)
+              return d is None or d>=REF
+
+          rows=[]
+          for s in sources:
+              sid=s.get('source_id'); deps=by_source.get(sid,[])
+              missing=[k for k in GOV if s.get(k) is None]
+              if deps and missing:
+                  fwd=[r for r in deps if is_forward(r)]
+                  dates=[dateish(r) for r in fwd if dateish(r)]
+                  nextd=min(dates) if dates else None
+                  days=(nextd-REF).days if nextd else None
+                  cats=sorted({r.get('category') for r in deps if r.get('category')})
+                  regs=sorted({str(r.get('region') or r.get('jurisdiction') or '') for r in deps if (r.get('region') or r.get('jurisdiction'))})
+                  score=len(deps)*5+len(fwd)*3
+                  if days is not None:
+                      if days<=30: score+=15
+                      elif days<=90: score+=10
+                      elif days<=180: score+=5
+                  rows.append({
+                    'source_id':sid,'institution':s.get('institution'),'jurisdiction':s.get('jurisdiction'),'domain':s.get('domain'),
+                    'source_type':s.get('source_type'),'dependency_count':len(deps),'forward_dependency_count':len(fwd),
+                    'next_date':str(nextd) if nextd else None,'days_to_next':days,'categories':cats,'regions':regs,
+                    'missing':missing,'score':score,'authoritative_url':s.get('authoritative_url'),
+                    'ingestion_permission':s.get('ingestion_permission'),'licence_review_status':s.get('licence_review_status'),
+                    'automated_retrieval_permission':s.get('automated_retrieval_permission'),'parser_version':s.get('parser_version'),
+                    'runtime_health_state':s.get('runtime_health_state'),'activation_status':s.get('activation_status')
+                  })
+
+          print('VERSIONS',json.dumps({'canonical':can['version'],'canonical_count':len(records),'sources':src['version'],'source_count':len(sources)}))
+          print('P1_TOTAL',len(rows))
+          print('P1_FORWARD_ACTIVE',sum(bool(r['forward_dependency_count']) for r in rows))
+          print('P1_NO_FORWARD',sum(not r['forward_dependency_count'] for r in rows))
+          print('MISSING_PATTERNS',Counter(tuple(r['missing']) for r in rows))
+          print('JURISDICTIONS',Counter(r['jurisdiction'] for r in rows))
+          print('DOMAINS',Counter(r['domain'] for r in rows))
+          print('CATEGORIES',Counter(c for r in rows for c in r['categories']))
+          print('NO_FORWARD_ROWS')
+          for r in sorted((x for x in rows if not x['forward_dependency_count']), key=lambda x:x['source_id']):
+              print(json.dumps(r,ensure_ascii=False,sort_keys=True))
+          print('RANKED_ROWS')
+          for r in sorted(rows,key=lambda x:(-x['score'],x['days_to_next'] if x['days_to_next'] is not None else 99999,-x['dependency_count'],x['source_id'])):
+              print(json.dumps(r,ensure_ascii=False,sort_keys=True))
+          PY
