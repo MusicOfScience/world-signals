@@ -1,0 +1,118 @@
+{
+  "project": "WORLD SIGNALS",
+  "plan": "RBA_FINANCIAL_STABILITY_HISTORICAL_ANCHOR_AC",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "09433d3a6ed0aca957271be49777eab33f08ee72",
+  "architecture_position": "CANONICAL_HISTORICAL_ANCHOR",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.31",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.73",
+    "source_record_count": 239,
+    "change_ledger_version": "0.18",
+    "change_ledger_count": 53,
+    "biosecurity_overlay_version": "0.6",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.31",
+      "record_count": 681
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-FIN-B-0004"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-40fbe6cb581b404e10"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-FIN-B-0001",
+      "series_id": "WSER-FIN-AU-RBA-FSR",
+      "source_id": "WSSRC-FIN-001",
+      "institution": "Reserve Bank of Australia",
+      "jurisdiction": "Australia",
+      "region": "Oceania / Pacific",
+      "category": "FINANCIAL_STABILITY_REGULATION",
+      "event_type": "FINANCIAL_STABILITY_REPORT",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM"
+    }
+  },
+  "anchor": {
+    "occurrence_id": "WSO-FIN-B-0004",
+    "template_occurrence_id": "WSO-FIN-B-0001",
+    "series_id": "WSER-FIN-AU-RBA-FSR",
+    "source_id": "WSSRC-FIN-001",
+    "canonical_name": "RBA Financial Stability Review — March 2026",
+    "short_calendar_title": "RBA Financial Stability Review — March 2026",
+    "timing": {
+      "timing_type": "TIMED_EVENT",
+      "start_local": "2026-03-19T11:30:00",
+      "end_local": null,
+      "source_timezone": "Australia/Sydney",
+      "start_utc": "2026-03-19T00:30:00Z",
+      "end_utc": null,
+      "time_precision": "MINUTE",
+      "all_day_semantics": false,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_timezone_label": "AEDT"
+    },
+    "lifecycle_status": "COMPLETED",
+    "certainty_status": "CONFIRMED",
+    "primary_source_assertion_id": "WSA-AC-37459211c4047865",
+    "completion_source_assertion_id": "WSA-AC-fdbc15d8c3cd2325",
+    "change_id": "WSCHANGE-40fbe6cb581b404e10",
+    "publication_url": "https://www.rba.gov.au/publications/fsr/2026/mar/",
+    "series_url": "https://www.rba.gov.au/publications/fsr/",
+    "completion_media_release_url": "https://www.rba.gov.au/media-releases/2026/mr-26-09.html",
+    "authoritative_time_url": "https://www.rba.gov.au/news/",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "RBA first-party publication and media-release evidence establishes that the March 2026 Financial Stability Review was released on 19 March 2026; the RBA News archive records the publication at 11:30 am AEDT. Completion is not inferred from elapsed time."
+  },
+  "mutation_policy": {
+    "canonical_registry": true,
+    "source_registry": false,
+    "change_ledger": true,
+    "biosecurity_overlay_checkpoint_only": true,
+    "monitor_configuration": false,
+    "analysis_schema": false,
+    "analysis_reviews": false,
+    "analysis_evidence": false,
+    "calendar": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.32",
+    "canonical_record_count": 682,
+    "source_registry_version": "1.73",
+    "source_record_count": 239,
+    "change_ledger_version": "0.19",
+    "change_ledger_count": 54,
+    "biosecurity_overlay_version": "0.7",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.32",
+      "record_count": 682
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "eligible_completed_occurrence_count": 15,
+    "reviewed_occurrence_count": 12,
+    "financial_stability_completed_anchor_present": true,
+    "financial_stability_report_completed_event_type_present": true
+  },
+  "selection_discipline": {
+    "queue_completion_is_objective": false,
+    "elapsed_time_is_completion_evidence": false,
+    "new_series_created": false,
+    "new_source_created": false,
+    "source_registry_rewritten_for_legacy_dependency_counter": false,
+    "analysis_write_in_same_transaction": false
+  }
+}
