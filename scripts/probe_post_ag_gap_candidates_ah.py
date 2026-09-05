@@ -86,5 +86,8 @@ for cid in ["WSO-CLIM-UNFCCC-SB64-202606", "WSO-MKT-MSCI-20260512", "WSO-MKT-ASX
     print("ID_COLLISION", cid, any(r.get("occurrence_id") == cid for r in records))
 for sid in ["WSER-CLIM-UNFCCC-SB", "WSER-MKT-MSCI-INDEX-REVIEW", "WSER-MKT-ASX-INDEX-DERIVATIVE-EXPIRY"]:
     print("SERIES_COLLISION", sid, any(r.get("series_id") == sid for r in records))
-for sid in ["WSSRC-CLIM-002", "WSSRC-MKT-MSCI-001"]:
+for sid in ["WSSRC-CLIM-004", "WSSRC-MKT-MSCI-001"]:
     print("SOURCE_COLLISION", sid, sid in by_source)
+
+print("FULL_TEMPLATE", json.dumps(next(r for r in records if r.get("occurrence_id") == "WSO-CLIM-A-0001"), sort_keys=True, ensure_ascii=False))
+print("FULL_CLIMATE_SOURCE", json.dumps(by_source["WSSRC-CLIM-001"], sort_keys=True, ensure_ascii=False))
