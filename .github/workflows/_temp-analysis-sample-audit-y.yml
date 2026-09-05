@@ -1,0 +1,61 @@
+name: Temporary Analysis sample audit Y
+
+on:
+  push:
+    branches:
+      - feature/analysis-sample-audit-y
+
+permissions:
+  contents: write
+
+jobs:
+  audit-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-53 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "f05b9623f973aed84a420354d273e039a4b61f8e"
+      - name: Y-specific tests
+        run: python -m unittest tests.test_analysis_sample_audit_y -v
+      - name: Generate Y audit
+        run: python scripts/audit_analysis_sample_y.py
+      - name: Validate canonical registry
+        run: python scripts/validate_registry.py
+      - name: Validate Analysis
+        run: python scripts/validate_analysis.py
+      - name: Full repository tests
+        run: python -m unittest discover -s tests -v
+      - name: Python compile
+        run: python -m py_compile scripts/audit_analysis_sample_y.py scripts/validate_analysis.py src/world_signals/analysis.py
+      - name: Browser JavaScript checks
+        run: |
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Static site build
+        run: python scripts/build_site.py
+      - name: Prove audit-only write boundary
+        run: |
+          git diff --exit-code -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          changed="$(git status --short | awk '{print $2}' | sort)"
+          expected="$(printf '%s\n' data/analysis/ANALYSIS_SAMPLE_AUDIT_Y_v0.1.json data/analysis/ANALYSIS_SAMPLE_AUDIT_Y_v0.1.md | sort)"
+          test "$changed" = "$expected"
+      - name: Commit audit checkpoint and self-remove workflow
+        run: |
+          git config user.name "world-signals-transaction-bot"
+          git config user.email "world-signals-transaction-bot@users.noreply.github.com"
+          git add data/analysis/ANALYSIS_SAMPLE_AUDIT_Y_v0.1.json data/analysis/ANALYSIS_SAMPLE_AUDIT_Y_v0.1.md
+          git rm .github/workflows/_temp-analysis-sample-audit-y.yml
+          git commit -m "Generate Analysis sample audit Y checkpoint"
+          git push origin HEAD:feature/analysis-sample-audit-y
