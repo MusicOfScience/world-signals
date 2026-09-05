@@ -48,11 +48,19 @@ class PostAAPressureAuditABTests(unittest.TestCase):
         live_ids = {
             row["occurrence_id"] for row in self.report["frontier_ranked_by_sample_novelty"]
         }
-        self.assertTrue(frozen_ids.issubset(live_ids))
+        reviewed_ids = set(self.report["readiness"]["reviewed_occurrence_ids"])
+        # AB is a frozen historical frontier, not a permanent backlog. A
+        # descendant may remove an item from the live frontier only by reviewing
+        # it; it must not simply disappear from both states.
+        self.assertTrue(frozen_ids.issubset(live_ids | reviewed_ids))
+        self.assertFalse(bool(live_ids & reviewed_ids))
         self.assertTrue(self.report["selection_discipline"]["frontier_is_not_backlog"])
 
-    def test_boc_has_more_sample_novelty_than_household_spending(self):
-        frontier = {row["occurrence_id"]: row for row in self.report["frontier_ranked_by_sample_novelty"]}
+    def test_boc_had_more_sample_novelty_than_household_spending_at_ab(self):
+        frontier = {
+            row["occurrence_id"]: row
+            for row in self.frozen["frontier_ranked_by_sample_novelty"]
+        }
         self.assertGreater(
             frontier["WSO-ddb70f8ff05a58fb"]["novel_dimension_count"],
             frontier["WSO-MAC-B-0041"]["novel_dimension_count"],
