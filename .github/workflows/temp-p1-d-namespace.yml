@@ -1,0 +1,24 @@
+name: TEMP P1 D namespace
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-d-namespace.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Print trade source namespace and governance totals
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+          src=json.loads(Path('data/sources/registry.json').read_text()); can=json.loads(Path('data/canonical/registry.json').read_text()); exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          for r in src['sources']:
+              if r['source_id'].startswith('WSSRC-TRD-'):
+                  print(json.dumps({k:r.get(k) for k in ['source_id','institution','endpoint_role','authoritative_url','source_type','canonical_dependency_count']},ensure_ascii=False,sort_keys=True))
+          print('TOTALS',json.dumps(build_source_governance_audit(can,src,exp)['totals'],sort_keys=True))
+          PY
