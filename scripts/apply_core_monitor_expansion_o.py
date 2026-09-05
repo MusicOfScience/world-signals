@@ -92,7 +92,7 @@ def preflight(canonical: dict, sources: dict, expectations: dict) -> None:
     for label, source in (("ONS", ons), ("Eurostat", eurostat)):
         if source.get("automated_monitoring_use") != "CLEARED":
             raise RuntimeError(f"{label} automated monitoring permission is no longer CLEARED")
-    endpoints = eurostat.get("monitored_endpoints") or []
+    endpoints = eurostat.get("monitor_endpoints") or []
     bad = [e for e in endpoints if e.get("url") == "https://ec.europa.eu/eurostat/en/news/release-calendar"]
     if len(bad) != 1:
         raise RuntimeError("expected exactly one Eurostat misclassified release-calendar endpoint")
@@ -126,7 +126,7 @@ def transform_sources(sources: dict) -> dict:
         },
     })
 
-    endpoints = eurostat.get("monitored_endpoints") or []
+    endpoints = eurostat.get("monitor_endpoints") or []
     for endpoint in endpoints:
         if endpoint.get("url") == "https://ec.europa.eu/eurostat/en/news/release-calendar":
             endpoint.update({
