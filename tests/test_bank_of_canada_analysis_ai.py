@@ -139,7 +139,8 @@ class BankOfCanadaAnalysisAITests(unittest.TestCase):
         self.assertTrue(validation.ok, validation.errors)
         readiness = analysis_population_readiness(self.schema, reviews, self.canonical)
         self.assertEqual(readiness["eligible_completed_occurrence_count"], 20)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 13)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 13)
+        self.assertIn("WSO-ddb70f8ff05a58fb", set(readiness["reviewed_occurrence_ids"]))
         self.assertEqual(readiness["reviewed_by_region"].get("North America"), 1)
         self.assertEqual(exact_timestamp_series_rows(reviews), 0)
 

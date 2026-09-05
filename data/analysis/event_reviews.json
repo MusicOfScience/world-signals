@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.9",
+  "version": "0.10",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
     "registry_version": "0.37",
@@ -1944,6 +1944,180 @@
         "If an independently licensed exact timestamp market series becomes available, AI's measurement-precision classification may be upgraded only from that evidence; the canonical 09:45 timestamp alone is insufficient."
       ],
       "analytical_conclusion": "The Bank of Canada's 2 September hold at 2.25% was fully anticipated, but the communication around inflation risks and the possible need for multiple future hikes was more hawkish than the pre-event economist path. Markets subsequently shifted toward earlier tightening, and the Canadian dollar strengthened on the session. The evidence supports a medium-confidence observed association between the communication and repricing, while global rates, US-dollar, energy and geopolitical conditions remain material alternatives. Crucially, an exact 09:45 canonical event timestamp does not turn source-reported same-session market observations into an exact timestamp series.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-AU-TCSEASON-2025-26-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T23:35:00Z",
+      "canonical_occurrence_id": "WSO-RISK-AU-TC-2025-26",
+      "canonical_series_id": "WSER-RISK-AU-TC",
+      "canonical_event_type": "PHYSICAL_RISK_WINDOW",
+      "canonical_institution": "Australian Bureau of Meteorology",
+      "canonical_release_utc": null,
+      "scope": "Australian tropical cyclone season 2025-26 as a completed seasonal physical-risk window: realised cyclone activity versus official climatological planning context, with no promotion of aggregate hazard counts into forecast error, named-shock identity, damage, market response or climate attribution",
+      "what_happened": {
+        "summary": "The Bureau of Meteorology's post-season material records 11 tropical cyclones forming in or moving into the Australian region during the 2025-26 season. Seven reached severe intensity (Category 3 or greater), including two Category 5 systems. Four cyclones made mainland landfall at tropical-cyclone strength and two additional systems crossed the mainland at tropical-low strength. The Bureau described the raw cyclone count as slightly above, or close to, the all-season average of 10.",
+        "actuals": [
+          {
+            "metric": "australian_region_tropical_cyclone_count",
+            "value": 11,
+            "unit": "cyclones",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+            ]
+          },
+          {
+            "metric": "severe_tropical_cyclone_count",
+            "value": 7,
+            "unit": "cyclones_category_3_or_greater",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+            ]
+          },
+          {
+            "metric": "mainland_landfall_count_at_tropical_cyclone_strength",
+            "value": 4,
+            "unit": "cyclones",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+            ]
+          },
+          {
+            "metric": "mainland_crossing_count_at_tropical_low_strength",
+            "value": 2,
+            "unit": "systems",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+          "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The reviewed Bureau pre-season material supplies planning climatology and risk framing rather than a season-specific numerical point forecast. The Bureau planning surface states that the Australian region averages about 10 tropical cyclones per season, with 3-4 typically making landfall, and stresses substantial year-to-year variability. The 14 October 2025 Tropical Climate Update frames November-April as the period of heightened cyclone risk and warns that one cyclone can be enough to cause major impacts. AJ treats these as climatological and official-prior-guidance benchmarks, not as a 2025-26 consensus forecast.",
+        "benchmarks": [
+          {
+            "metric": "climatological_australian_region_tropical_cyclone_count",
+            "value": 10,
+            "unit": "cyclones_per_season_average_since_1980_81",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-PLANNING-202510"
+            ]
+          },
+          {
+            "metric": "typical_mainland_landfalls",
+            "value": "3-4",
+            "unit": "cyclones_per_season_typical",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-SEASON-PLANNING-202510"
+            ]
+          },
+          {
+            "metric": "seasonal_risk_window_guidance",
+            "value": "Cyclone risk increases from November to April; a single cyclone can significantly affect communities and tropical lows or offshore systems can also create impacts.",
+            "unit": "qualitative_official_risk_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "The realised count of 11 cyclones is one above the Bureau's climatological average of 10, and four cyclone-strength mainland landfalls sit within the typical 3-4 planning range. Those comparisons do not establish a forecast surprise because the reviewed pre-season first-party material does not supply a season-specific numerical probability or point forecast. Seven severe cyclones represent a high realised severity share, but AJ has not established a pre-season severe-count benchmark against which to classify that outcome directionally. Climatology is therefore not converted into forecast error.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+          "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "COMMON_DRIVER_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The Bureau's season material places the cyclone activity within a broader climate context that included very warm sea-surface temperatures around northern Australia and in the Coral Sea, while its planning material emphasises substantial year-to-year variability in cyclone activity. These conditions are relevant common-driver context for interpreting the season, but AJ does not attribute the 11-cyclone count, the seven severe systems or any individual landfall to climate change, warm SSTs, ENSO or another single driver.",
+        "evidence_refs": [
+          "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+          "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Using 11 versus a climatological mean of 10 as if it were a one-cyclone positive forecast error would confuse a historical average with a season-specific forecast and ignore the Bureau's stated large year-to-year variability.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ]
+        },
+        {
+          "summary": "A region-wide cyclone count is not a mainland impact index. Cyclones can remain offshore, weaken before crossing land, affect remote islands or create rainfall, surge and wave impacts without a cyclone-strength mainland landfall.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ]
+        },
+        {
+          "summary": "Seven severe cyclones is a hazard-intensity observation, not an economic-loss metric. AJ does not infer insured loss, supply disruption, commodity effects or GDP consequences from cyclone category counts.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ]
+        },
+        {
+          "summary": "The northern wet-season rainfall anomaly and warm SST records are broader seasonal climate observations. Treating them as outcomes caused by tropical cyclones alone would reverse the direction of explanation and conflate overlapping weather processes.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+            "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "The Bureau emphasises large year-to-year variability in cyclone activity. The realised count and severity distribution can reflect interacting oceanic and atmospheric conditions plus internal weather variability; AJ does not assign a dominant causal share from the aggregate season record.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ]
+        },
+        {
+          "summary": "Different metrics answer different questions: cyclone frequency, severe-cyclone share, mainland landfall count, rainfall and local damage need not move together. A conclusion based on one metric may therefore be misleading when transferred to another.",
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+            "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "AJ does not establish an aggregate economic, insurance, commodity, supply-chain or market consequence for the six-month season window. Material second-order effects, where they exist, should be assessed against separately specified named-cyclone or physical-shock objects with location, exposure, damage and measurement evidence rather than attributed to the background seasonal window.",
+        "evidence_refs": [
+          "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+          "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+        ]
+      },
+      "falsifiers": [
+        "If an authoritative Bureau archive establishes a specific 2025-26 Australian-region cyclone-count, severe-cyclone-count or landfall forecast with a probability or point estimate that AJ has omitted, the NOT_ESTABLISHED surprise classification must be re-evaluated against that actual pre-season forecast.",
+        "If the Bureau revises the official 2025-26 counts for Australian-region tropical cyclones, severe cyclones or mainland crossings, AJ's factual actuals must be updated without changing the canonical seasonal window identity.",
+        "If authoritative evidence establishes that a named cyclone currently represented only inside the aggregate season requires a separate canonical physical-shock occurrence, that shock should be added upstream rather than changing the identity of the seasonal risk window.",
+        "If robust event-level exposure and economic data establish a measurable second-order effect for one or more named cyclones, the relevant shock analysis may change while AJ's aggregate-season second-order status remains separate.",
+        "If a competent attribution study quantifies the contribution of anthropogenic climate change or a specific climate driver to the 2025-26 Australian cyclone season, AJ's current NOT_A_CAUSAL_CLAIM context may be revisited only with that evidence."
+      ],
+      "analytical_conclusion": "The 2025-26 Australian tropical cyclone season was active: 11 Australian-region cyclones, seven severe systems and four cyclone-strength mainland landfalls. Yet the reviewed Bureau pre-season material supplies climatology and risk guidance, not a season-specific numerical forecast, so 11 versus an average of 10 is not promoted into a directional surprise. The season is analytically important as a physical-risk window, but its cyclone counts do not themselves establish damage, market movement or climate attribution. Those claims require separately specified shock, exposure and causal evidence.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }

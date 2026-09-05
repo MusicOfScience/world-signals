@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.9",
+  "version": "0.10",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1003,6 +1003,90 @@
         "This establishes material pre-existing FX and rates volatility ahead of the Bank decision and limits monocausal interpretation of 2 September moves."
       ],
       "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Bureau of Meteorology",
+      "host_or_distribution": "Bureau of Meteorology",
+      "title": "Australian tropical cyclone season monitoring and planning",
+      "url": "https://www.bom.gov.au/climate/cyclones/australia/",
+      "published_at": null,
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The official Australian-region tropical cyclone season runs from 1 November to 30 April.",
+        "The Bureau planning climatology states that on average there are about 10 tropical cyclones in the Australian region each season, with 3-4 making landfall, based on seasons since 1980-81.",
+        "The Bureau states that tropical cyclone activity varies substantially from year to year; the climatological values are planning context rather than a season-specific point forecast.",
+        "The page identifies that cyclones, tropical lows and offshore systems can produce damaging winds, rainfall, flooding, waves, storm surge and coastal impacts."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Bureau of Meteorology",
+      "host_or_distribution": "Bureau of Meteorology Tropical Climate Update archive",
+      "title": "Tropical Climate Update — 14 October 2025",
+      "url": "https://www.bom.gov.au/climate/tropical-note/archive/20251014.archive.shtml",
+      "published_at": "2025-10-14",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Bureau said tropical cyclone risk increases from November to April, the official season in the Australian region.",
+        "The Bureau directed users to its updated tropical cyclone season outlook/planning material and stressed that one cyclone can significantly impact communities.",
+        "The update states that tropical lows and cyclones that remain offshore can also cause substantial impacts.",
+        "The reviewed archived update does not provide a numerical 2025-26 Australian-region count forecast suitable for a directional forecast-error calculation."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Bureau of Meteorology",
+      "host_or_distribution": "Bureau of Meteorology climate summary",
+      "title": "2025-26 northern wet season",
+      "url": "https://www.bom.gov.au/climate/current/season/tropics/summary.shtml",
+      "published_at": "2026-05-14",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Eleven tropical cyclones formed in or moved into the Australian region during the 2025-26 season, compared with an average of 10 over seasons since 1980-81.",
+        "Seven tropical cyclones reached severe intensity, Category 3 or greater, including two Category 5 systems.",
+        "Four tropical cyclones made mainland landfall at tropical-cyclone strength and two additional systems crossed at tropical-low strength.",
+        "The summary records very warm sea-surface temperatures and above-average northern wet-season rainfall as broader climate context; it does not establish a single-driver causal attribution for the cyclone season."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-TC-BOM-SEASON-NEWS-20260514",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Bureau of Meteorology",
+      "host_or_distribution": "Bureau of Meteorology news and media",
+      "title": "Northern Australia's 2025-26 wet season summary now available",
+      "url": "https://www.bom.gov.au/news-and-media/northern-australias-2025-26-wet-season-summary-now-available",
+      "published_at": "2026-05-14",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Bureau described 11 tropical cyclones as close to the average of 10.",
+        "The Bureau reported six land crossings across cyclone-strength and tropical-low systems and seven severe tropical cyclones.",
+        "Sea-surface temperatures around northern Australia were the fourth warmest on record, while the Coral Sea was the warmest on record for the second consecutive wet season.",
+        "These contextual climate observations are not themselves a quantified attribution of the season's cyclone activity or impacts."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
       "canonical_provenance_effect": "NONE"
     }
   ]
