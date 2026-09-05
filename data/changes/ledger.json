@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.20",
+  "version": "0.21",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1629,6 +1629,42 @@
       "committed_at": "2026-09-06T07:08:35+10:00",
       "registry_version_before": "0.32",
       "registry_version_after": "0.33",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-836bc8b100cf5fb3c6",
+      "occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-TRD-EU-RU-SANC",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-06-25",
+        "source_timezone": "Europe/Brussels",
+        "start_utc": null,
+        "time_precision": "DAY",
+        "trade_policy_temporal_role": "LEGAL_ADOPTION",
+        "trade_measure_state": "IN_FORCE"
+      },
+      "source_assertion_id": "WSA-AE-a3963c3c12c807f2",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T07:27:23+10:00",
+      "review_basis": [
+        "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/",
+        "Council of the European Union first-party notice dated 25 June 2026 states that the Council renewed the restrictive measures that day for a further twelve months until 31 July 2027. The page's 19:45 timestamp is treated only as press-release publication time, not as the decision time.",
+        "The Council source already serves the existing forward renewal-boundary series and is competent first-party evidence for the 25 June 2026 renewal decision.",
+        "The page's 19:45 timestamp is publication time and is not promoted to canonical decision time.",
+        "Legal adoption, future expiry/renewal boundary, observed market response and causal attribution remain distinct."
+      ],
+      "commit_mode": "REVIEWED_EU_RUSSIA_SANCTIONS_RENEWAL_HISTORICAL_ANCHOR_AE",
+      "committed_at": "2026-09-06T07:27:23+10:00",
+      "registry_version_before": "0.33",
+      "registry_version_after": "0.34",
       "canonical_mutation_committed": true
     }
   ]

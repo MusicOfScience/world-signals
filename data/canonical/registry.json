@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.33",
+  "version": "0.34",
   "reference_date": "2026-09-06",
-  "record_count": 683,
+  "record_count": 684,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56100,6 +56100,102 @@
       "derivation_sources": [
         "WSSRC-HEALTH-001",
         "WSSRC-HEALTH-006"
+      ]
+    },
+    {
+      "occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+      "series_id": "WSER-TRD-EU-RU-SANC",
+      "external_source_id": null,
+      "canonical_name": "EU economic sanctions on Russia — 2026 renewal decision",
+      "short_calendar_title": "EU Russia economic sanctions — 2026 renewal",
+      "category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+      "subcategory": "sanctions",
+      "jurisdiction": "European Union / Russia",
+      "region": "Europe",
+      "institution": "Council of the European Union",
+      "event_type": "SANCTIONS_PROCESS",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-06-25",
+      "end_local": null,
+      "source_timezone": "Europe/Brussels",
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": null,
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-TRD-004",
+      "primary_source_assertion_id": "WSA-AE-df523b565d3c7a2b",
+      "last_successful_assertion_id": "WSA-AE-a3963c3c12c807f2",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical renewal decision admitted after competent first-party post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AE-a3963c3c12c807f2",
+          "basis": "Council of the European Union first-party notice dated 25 June 2026 states that the Council renewed the restrictive measures that day for a further twelve months until 31 July 2027. The page's 19:45 timestamp is treated only as press-release publication time, not as the decision time."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-TRD-004",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/"
+        }
+      ],
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM_HIGH",
+      "geopolitical_sensitivity": "HIGH",
+      "transmission_channels": [
+        "trade",
+        "tariffs",
+        "supply_chains",
+        "industrial_policy",
+        "energy",
+        "shipping",
+        "currencies",
+        "equities",
+        "inflation"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ESSENTIAL",
+      "trade_policy_temporal_role": "LEGAL_ADOPTION",
+      "trade_measure_state": "IN_FORCE",
+      "legal_instrument_or_process": "EU economic sanctions on Russia",
+      "economic_effective_time": null,
+      "customs_application_scope": null,
+      "review_or_renewal_required": true,
+      "expiry_does_not_imply_termination": false,
+      "procedural_eligibility_only": false,
+      "publication_bundle_type": "SINGLE_RELEASE",
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE",
+      "notes": "Council of the European Union first-party notice dated 25 June 2026 states that the Council renewed the restrictive measures that day for a further twelve months until 31 July 2027. The page's 19:45 timestamp is treated only as press-release publication time, not as the decision time. This legal-adoption occurrence is distinct from the 31 July 2027 expiry/renewal boundary and does not encode a market reaction.",
+      "population_tranche": "EU_RUSSIA_SANCTIONS_RENEWAL_HISTORICAL_ANCHOR_AE",
+      "derivation_sources": [
+        "WSSRC-TRD-004"
       ]
     }
   ]

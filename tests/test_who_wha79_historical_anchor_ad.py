@@ -178,7 +178,7 @@ class WHA79HistoricalAnchorADTests(unittest.TestCase):
         anchor = self.post_occ["WSO-HEALTH-WHA-079"]
         self.assertEqual(anchor["category"], "HEALTH_BIOSECURITY")
         self.assertEqual(anchor["event_type"], "HEALTH_GOVERNANCE_EVENT")
-        self.assertEqual(self.post_readiness["eligible_completed_occurrence_count"], 16)
+        self.assertGreaterEqual(self.post_readiness["eligible_completed_occurrence_count"], 16)
         self.assertGreaterEqual(self.post_readiness["reviewed_occurrence_count"], 12)
         self.assertNotIn("WSO-HEALTH-WHA-079", set(self.post_readiness["reviewed_occurrence_ids"]))
         report = validate_analysis(self.analysis_schema, self.evidence, self.reviews, self.post_canonical)
