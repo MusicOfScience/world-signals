@@ -13,6 +13,10 @@ from world_signals.analytical_overlays import (
 )
 
 
+def version_tuple(value):
+    return tuple(int(p) for p in str(value).split("."))
+
+
 class BiosecurityOverlayTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -30,11 +34,10 @@ class BiosecurityOverlayTests(unittest.TestCase):
             "WSER-HEALTH-WHO-PBAC",
             "WSER-HEALTH-WHO-RC",
         }
-        if self.overlay["version"] == "0.1":
+        if version_tuple(self.overlay["version"]) < (0,2):
             expected = who
             mapped_occurrences = 10
         else:
-            self.assertEqual(self.overlay["version"], "0.2")
             expected = who | {
                 "WSER-INT-BWC-WG-STRENGTHENING",
                 "WSER-AGF-WOAH-GENERAL-SESSION",
@@ -49,7 +52,7 @@ class BiosecurityOverlayTests(unittest.TestCase):
     def test_candidate_nodes_are_explicitly_noncanonical_and_have_no_canonical_ids(self):
         expected = (
             {"BIO-CAND-WOAH", "BIO-CAND-IPPC-CPM", "BIO-CAND-BWC", "BIO-CAND-AFRICA-CDC"}
-            if self.overlay["version"] == "0.1"
+            if version_tuple(self.overlay["version"]) < (0,2)
             else {"BIO-CAND-IPPC-CPM", "BIO-CAND-AFRICA-CDC"}
         )
         nodes = self.overlay["candidate_nodes"]
@@ -60,7 +63,7 @@ class BiosecurityOverlayTests(unittest.TestCase):
             self.assertNotIn("occurrence_id", node)
 
     def test_correction_m_graduates_bwc_and_woah_without_primary_category_distortion(self):
-        if self.overlay["version"] != "0.2":
+        if version_tuple(self.overlay["version"]) < (0,2):
             self.skipTest("Correction M graduation assertion applies to overlay v0.2+")
         memberships={x["series_id"]:x for x in self.overlay["canonical_series_memberships"]}
         self.assertEqual(
