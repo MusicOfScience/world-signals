@@ -1,0 +1,26 @@
+name: TEMP AH post-AG gap reconnaissance
+
+on:
+  push:
+    branches:
+      - feature/post-ag-gap-recon-ah
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-62 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "0d55a9dcd877736886dd9ee3e8fcaa8a93a869d1"
+      - name: Probe remaining completed-anchor gaps
+        run: python scripts/probe_post_ag_gap_candidates_ah.py
