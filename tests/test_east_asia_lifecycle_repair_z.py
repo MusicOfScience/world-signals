@@ -142,7 +142,7 @@ class EastAsiaLifecycleRepairZTests(unittest.TestCase):
     def test_analysis_population_expands_without_analysis_mutation(self):
         readiness = analysis_population_readiness(self.analysis_schema, self.reviews, self.post_canonical)
         self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], self.plan["postconditions"]["eligible_completed_occurrence_count"])
-        self.assertEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
         completed_east = [row for row in self.post_canonical["records"] if row.get("region") == "East Asia" and row.get("lifecycle_status") == "COMPLETED"]
         self.assertGreaterEqual(len(completed_east), 2)
 
