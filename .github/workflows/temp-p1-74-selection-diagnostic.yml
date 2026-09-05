@@ -18,7 +18,7 @@ jobs:
           python - <<'PY'
           import json
           from collections import Counter
-          from datetime import date, datetime
+          from datetime import date
           from pathlib import Path
 
           REF=date(2026,9,5)
@@ -33,7 +33,7 @@ jobs:
                   v=r.get(k)
                   if isinstance(v,str) and len(v)>=10:
                       try: return date.fromisoformat(v[:10])
-                      except: pass
+                      except ValueError: pass
               return None
 
           by_source={}
@@ -47,32 +47,30 @@ jobs:
               missing=[k for k in GOV if s.get(k) is None]
               if not deps or not missing: continue
               fwd=[r for r in deps if (event_date(r) is None or event_date(r)>=REF) and r.get('lifecycle_status') not in ('CANCELLED','COMPLETED')]
-              if not fwd: continue
+              basis=fwd if fwd else deps
               ds=sorted([d for d in (event_date(r) for r in fwd) if d])
               nextd=ds[0].isoformat() if ds else None
-              regions=sorted(set(r.get('region') for r in fwd if r.get('region')))
-              cats=sorted(set(r.get('category') for r in fwd if r.get('category')))
+              regions=sorted(set(r.get('region') for r in basis if r.get('region')))
+              cats=sorted(set(r.get('category') for r in basis if r.get('category')))
               series=sorted(set(r.get('series_id') for r in fwd if r.get('series_id')))
-              corrective=0
-              flags=[]
+              corrective=0; flags=[]
               if 'South Asia' in regions: corrective+=7; flags.append('SOUTH_ASIA_DEFICIT')
               if 'PHYSICAL_CLIMATE_RISK' in cats: corrective+=7; flags.append('PHYSICAL_RISK_DEFICIT')
               if any(c not in ('MONETARY_FINANCIAL_POLICY','MACROECONOMIC_RELEASE') for c in cats): corrective+=2; flags.append('NON_MONETARY_MACRO')
-              # Urgency: bounded, so a giant high-frequency source cannot swamp corrective diversity.
               urgency=0
               if nextd:
                   days=(date.fromisoformat(nextd)-REF).days
                   urgency=5 if days<=30 else 4 if days<=90 else 3 if days<=180 else 2 if days<=365 else 1
               leverage=min(len(fwd),6)
-              score=corrective+urgency+leverage
+              score=(corrective+urgency+leverage) if fwd else -1
               examples=[]
-              for r in sorted(fwd,key=lambda x:(event_date(x) or date.max,x.get('occurrence_id','')))[:6]:
+              for r in sorted(basis,key=lambda x:(event_date(x) or date.max,x.get('occurrence_id','')))[:6]:
                   examples.append({
                     'occurrence_id':r.get('occurrence_id'),'name':r.get('canonical_name'),
                     'date':(event_date(r).isoformat() if event_date(r) else None),
                     'category':r.get('category'),'region':r.get('region'),'series_id':r.get('series_id'),
-                    'certainty':r.get('certainty_status'),'timing_type':r.get('timing_type'),
-                    'population_horizon_policy':r.get('population_horizon_policy')
+                    'certainty':r.get('certainty_status'),'lifecycle':r.get('lifecycle_status'),
+                    'timing_type':r.get('timing_type'),'population_horizon_policy':r.get('population_horizon_policy')
                   })
               rows.append({
                 'source_id':sid,'institution':s.get('institution'),'jurisdiction':s.get('jurisdiction'),
@@ -83,25 +81,33 @@ jobs:
                 'automated_retrieval_permission':s.get('automated_retrieval_permission'),
                 'monitoring_readiness_status':s.get('monitoring_readiness_status'),
                 'monitoring_activation_status':s.get('monitoring_activation_status'),
-                'missing_governance':missing,'primary_dependency_count':len(deps),'forward_dependency_count':len(fwd),
-                'forward_series_count':len(series),'next_forward_date':nextd,'regions':regions,'categories':cats,
+                'missing_governance':missing,'primary_dependency_count':len(deps),'forward_active':bool(fwd),
+                'forward_dependency_count':len(fwd),'forward_series_count':len(series),
+                'next_forward_date':nextd,'regions':regions,'categories':cats,
                 'corrective_flags':flags,'score':score,'examples':examples
               })
 
-          print('UNRESOLVED_P1',len(rows))
+          print('P1_CANONICAL_DEPENDENT_TOTAL',len(rows))
           assert len(rows)==74,len(rows)
-          print('REGIONS',json.dumps(Counter(x for r in rows for x in r['regions']),sort_keys=True))
-          print('CATEGORIES',json.dumps(Counter(x for r in rows for x in r['categories']),sort_keys=True))
-          print('TOP_30')
-          for r in sorted(rows,key=lambda x:(-x['score'],x['next_forward_date'] or '9999',-x['forward_dependency_count'],x['source_id']))[:30]:
+          active=[r for r in rows if r['forward_active']]
+          inactive=[r for r in rows if not r['forward_active']]
+          print('FORWARD_ACTIVE',len(active))
+          print('NO_FORWARD_ACTIVE_DEPENDENCY',len(inactive))
+          assert len(active)==70 and len(inactive)==4,(len(active),len(inactive))
+          print('INACTIVE_P1_DETAIL')
+          for r in sorted(inactive,key=lambda x:x['source_id']): print(json.dumps(r,ensure_ascii=False,sort_keys=True))
+          print('ACTIVE_REGIONS',json.dumps(Counter(x for r in active for x in r['regions']),sort_keys=True))
+          print('ACTIVE_CATEGORIES',json.dumps(Counter(x for r in active for x in r['categories']),sort_keys=True))
+          print('TOP_30_ACTIVE')
+          for r in sorted(active,key=lambda x:(-x['score'],x['next_forward_date'] or '9999',-x['forward_dependency_count'],x['source_id']))[:30]:
               print(json.dumps(r,ensure_ascii=False,sort_keys=True))
-          print('SOUTH_ASIA_ALL')
-          for r in sorted([x for x in rows if 'South Asia' in x['regions']],key=lambda x:(x['next_forward_date'] or '9999',x['source_id'])):
+          print('SOUTH_ASIA_ACTIVE')
+          for r in sorted([x for x in active if 'South Asia' in x['regions']],key=lambda x:(x['next_forward_date'] or '9999',x['source_id'])):
               print(json.dumps(r,ensure_ascii=False,sort_keys=True))
-          print('PHYSICAL_RISK_ALL')
-          for r in sorted([x for x in rows if 'PHYSICAL_CLIMATE_RISK' in x['categories']],key=lambda x:(x['next_forward_date'] or '9999',x['source_id'])):
+          print('PHYSICAL_RISK_ACTIVE')
+          for r in sorted([x for x in active if 'PHYSICAL_CLIMATE_RISK' in x['categories']],key=lambda x:(x['next_forward_date'] or '9999',x['source_id'])):
               print(json.dumps(r,ensure_ascii=False,sort_keys=True))
           print('NON_MONETARY_MACRO_NEAR_TERM')
-          for r in sorted([x for x in rows if any(c not in ('MONETARY_FINANCIAL_POLICY','MACROECONOMIC_RELEASE') for c in x['categories'])],key=lambda x:(x['next_forward_date'] or '9999',-x['forward_dependency_count'],x['source_id']))[:35]:
+          for r in sorted([x for x in active if any(c not in ('MONETARY_FINANCIAL_POLICY','MACROECONOMIC_RELEASE') for c in x['categories'])],key=lambda x:(x['next_forward_date'] or '9999',-x['forward_dependency_count'],x['source_id']))[:35]:
               print(json.dumps(r,ensure_ascii=False,sort_keys=True))
           PY
