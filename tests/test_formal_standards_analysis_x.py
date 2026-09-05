@@ -71,7 +71,8 @@ class FormalStandardsAnalysisXTests(unittest.TestCase):
         text = connection["summary"].lower()
         self.assertIn("animal-welfare", text)
         self.assertIn("not recognised", text)
-        self.assertIn("not automatic", text)
+        self.assertIn("automatic domestic legal changes", text)
+        self.assertIn("rather than treating all 51 standards", text)
 
     def test_one_health_relationship_does_not_change_primary_ontology(self):
         target = next(row for row in self.canonical["records"] if row.get("occurrence_id") == "WSO-WOAH-GS-093")
