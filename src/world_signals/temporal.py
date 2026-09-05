@@ -12,6 +12,7 @@ SEASON_WINDOW_MODELS = {
     "MONTH_BOUNDED_SEASON_WINDOW": "MONTH_BOUNDED_SINGLE_PHASE",
     "MULTI_PHASE_SEASON_WINDOW": "MONTH_BOUNDED_MULTI_PHASE",
 }
+NATIVE_CALENDAR_TIMING_TYPE = "SOURCE_NATIVE_CALENDAR_DATE"
 EXACT_TIMING_FIELDS = (
     "start_local",
     "end_local",
@@ -35,6 +36,57 @@ def month_ordinal(token: str) -> int:
     year = int(match.group(1))
     month = int(match.group(2))
     return year * 12 + month - 1
+
+
+def validate_source_native_calendar_date(record: dict) -> TemporalValidation:
+    """Validate an authoritative date that is exact only in the source calendar.
+
+    The object deliberately carries no Gregorian civil date until a competent
+    source supplies an authoritative mapping.  It can therefore be canonical
+    and CONFIRMED without being schedulable in the Gregorian calendar layer.
+    """
+    result = TemporalValidation()
+    if record.get("timing_type") != NATIVE_CALENDAR_TIMING_TYPE:
+        return result
+
+    oid = record.get("occurrence_id", "<missing>")
+    required_text = (
+        "native_calendar_system",
+        "native_calendar_month",
+        "source_native_date_label",
+    )
+    for field_name in required_text:
+        if not str(record.get(field_name) or "").strip():
+            result.errors.append(f"{oid}: source-native calendar date requires {field_name}")
+
+    native_year = record.get("native_calendar_year")
+    if not isinstance(native_year, int) or native_year <= 0:
+        result.errors.append(f"{oid}: source-native calendar date requires positive integer native_calendar_year")
+    native_day = record.get("native_calendar_day")
+    if not isinstance(native_day, int) or not 1 <= native_day <= 31:
+        result.errors.append(f"{oid}: source-native calendar date requires native_calendar_day in 1..31")
+
+    if record.get("gregorian_resolution_status") != "UNRESOLVED_AUTHORITATIVE_CONVERSION":
+        result.errors.append(
+            f"{oid}: SOURCE_NATIVE_CALENDAR_DATE requires gregorian_resolution_status=UNRESOLVED_AUTHORITATIVE_CONVERSION"
+        )
+    if record.get("publication_time_semantics") != "SOURCE_NATIVE_DATE_ONLY":
+        result.errors.append(
+            f"{oid}: SOURCE_NATIVE_CALENDAR_DATE requires publication_time_semantics=SOURCE_NATIVE_DATE_ONLY"
+        )
+    if record.get("time_precision") != "DAY":
+        result.errors.append(f"{oid}: SOURCE_NATIVE_CALENDAR_DATE requires time_precision=DAY")
+    if record.get("time_status") not in (None, "NOT_APPLICABLE"):
+        result.errors.append(f"{oid}: SOURCE_NATIVE_CALENDAR_DATE requires time_status=NOT_APPLICABLE")
+    if record.get("time_basis") not in (None, "NOT_APPLICABLE"):
+        result.errors.append(f"{oid}: SOURCE_NATIVE_CALENDAR_DATE requires time_basis=NOT_APPLICABLE")
+
+    for field_name in EXACT_TIMING_FIELDS:
+        if record.get(field_name) not in (None, ""):
+            result.errors.append(
+                f"{oid}: unresolved source-native calendar date must not populate Gregorian timing field {field_name}"
+            )
+    return result
 
 
 def validate_season_window(record: dict) -> TemporalValidation:
