@@ -1,0 +1,50 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-AU-GDP-ABS-20260902",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Bureau of Statistics",
+      "host_or_distribution": "Australian Bureau of Statistics",
+      "title": "Australian economy grew 0.4% in the June quarter",
+      "url": "https://www.abs.gov.au/media-centre/media-releases/australian-economy-grew-04-june-quarter",
+      "published_at": "2026-09-02T11:30:00+10:00",
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "June-quarter 2026 real GDP rose 0.4% quarter-on-quarter.",
+        "Real GDP was 2.1% higher than the June quarter of 2025.",
+        "The ABS characterised growth as subdued and household behaviour as cautious."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-GDP-REUTERS-20260902",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "RTÉ syndication",
+      "title": "Australia economy slows in Q2 but not by enough to fend off another rate hike",
+      "url": "https://www.rte.ie/news/business/2026/0902/1590042-australia-gdp-figures/",
+      "published_at": "2026-09-02T09:46:00Z",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "MARKET_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Market forecasts were 0.3% quarter-on-quarter and 1.8% year-on-year GDP growth.",
+        "Near-term RBA September-hike pricing rose to 57% from 48% after the release.",
+        "Australian ten-year yields were also being pushed by renewed US-Iran fighting, higher oil prices and inflation concerns."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "The linked RTÉ page identifies Reuters as its source. WORLD SIGNALS does not treat this syndication page as authority for canonical event timing."
+    }
+  ]
+}
