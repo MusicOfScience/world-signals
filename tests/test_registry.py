@@ -13,7 +13,11 @@ class RegistryTests(unittest.TestCase):
     def test_checkpoint_count(self):
         version=tuple(int(p) for p in str(self.reg["version"]).split("."))
         self.assertGreaterEqual(version,(0,20))
-        self.assertEqual(self.reg["record_count"],673 if version >= (0,27) else 669)
+        expected_counts={"0.26":669,"0.27":673,"0.28":674}
+        if self.reg["version"] in expected_counts:
+            self.assertEqual(self.reg["record_count"],expected_counts[self.reg["version"]])
+        else:
+            self.assertEqual(self.reg["record_count"],len(self.reg["records"]),"unknown checkpoint must remain internally consistent")
         if version >= (0,21):
             row=next(r for r in self.reg["records"] if r["occurrence_id"]=="WSO-EL-A-0004")
             self.assertEqual(row["source_id"], "WSSRC-EL-BR-002")
@@ -27,6 +31,12 @@ class RegistryTests(unittest.TestCase):
         if version >= (0,27):
             ids={r["occurrence_id"] for r in self.reg["records"]}
             self.assertTrue({"WSO-CBN-MPC-307","WSO-CBN-MPC-308","WSO-BWC-WG-2026-S10","WSO-WOAH-GS-094"}.issubset(ids))
+        if version >= (0,28):
+            row=next(r for r in self.reg["records"] if r["occurrence_id"]=="WSO-FIS-NP-BUDGET-2084")
+            self.assertEqual(row["source_native_date_label"],"15 Jestha 2084")
+            self.assertEqual(row["gregorian_resolution_status"],"UNRESOLVED_AUTHORITATIVE_CONVERSION")
+            self.assertIsNone(row["start_local"])
+            self.assertIsNone(row["date_earliest"])
     def test_registry_validates(self):
         report=validate_registry(self.reg,self.src)
         self.assertTrue(report.ok, report.errors)

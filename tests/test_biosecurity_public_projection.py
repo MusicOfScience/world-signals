@@ -9,6 +9,10 @@ sys.path.insert(0,str(ROOT/"src"))
 from world_signals.biosecurity_projection import public_biosecurity_projection
 
 
+def version_tuple(value):
+    return tuple(int(p) for p in str(value).split("."))
+
+
 class BiosecurityPublicProjectionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -20,12 +24,11 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
         metadata=self.public["metadata"]
         self.assertEqual(metadata["canonical_registry_version"],self.registry["version"])
         self.assertEqual(metadata["canonical_record_count"],len(self.registry["records"]))
-        if self.overlay["version"] == "0.1":
+        if version_tuple(self.overlay["version"]) < (0,2):
             self.assertEqual(metadata["mapped_canonical_series_count"],5)
             self.assertEqual(metadata["mapped_canonical_occurrence_count"],10)
             self.assertEqual(metadata["candidate_node_count"],4)
         else:
-            self.assertEqual(self.overlay["version"],"0.2")
             self.assertEqual(metadata["mapped_canonical_series_count"],7)
             self.assertEqual(metadata["mapped_canonical_occurrence_count"],12)
             self.assertEqual(metadata["candidate_node_count"],2)
@@ -46,7 +49,7 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
         self.assertEqual(human["canonical_series_count"],5)
         self.assertEqual(human["canonical_occurrence_count"],10)
         self.assertEqual(human["candidate_node_count"],1)
-        if self.overlay["version"] == "0.1":
+        if version_tuple(self.overlay["version"]) < (0,2):
             self.assertEqual(systems["BIO-ANIMAL-ZOONOTIC-HEALTH"]["canonical_series_count"],0)
             self.assertEqual(systems["BIO-ANIMAL-ZOONOTIC-HEALTH"]["candidate_node_count"],1)
             self.assertEqual(systems["BIO-PLANT-PHYTOSANITARY-SECURITY"]["canonical_series_count"],0)

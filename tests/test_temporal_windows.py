@@ -43,6 +43,37 @@ def base_record() -> dict:
     }
 
 
+def native_date_record() -> dict:
+    return {
+        "occurrence_id": "WSO-TEST-NATIVE-0001",
+        "series_id": "WSER-TEST-NATIVE",
+        "canonical_name": "Test source-native calendar date",
+        "category": "FISCAL_SOVEREIGN_FINANCE",
+        "region": "South Asia",
+        "institution": "Test Authority",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "PLANNED",
+        "timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+        "publication_time_semantics": "SOURCE_NATIVE_DATE_ONLY",
+        "native_calendar_system": "BIKRAM_SAMBAT_NEPAL",
+        "native_calendar_year": 2084,
+        "native_calendar_month": "JESTHA",
+        "native_calendar_day": 15,
+        "source_native_date_label": "15 Jestha 2084",
+        "gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION",
+        "start_local": None,
+        "end_local": None,
+        "start_utc": None,
+        "end_utc": None,
+        "date_earliest": None,
+        "date_latest": None,
+        "publication_datetime": None,
+        "time_precision": "DAY",
+        "time_status": "NOT_APPLICABLE",
+        "time_basis": "NOT_APPLICABLE",
+    }
+
+
 def validate(record: dict):
     return validate_registry({"record_count": 1, "records": [record]})
 
@@ -171,6 +202,40 @@ class SeasonalWindowValidationTests(unittest.TestCase):
         self.assertEqual(projected["source_native_window_label"], "November–April")
         self.assertIsNone(projected["date_earliest"])
         self.assertIsNone(projected["start_local"])
+
+
+class SourceNativeCalendarValidationTests(unittest.TestCase):
+    def test_unresolved_source_native_date_is_valid_without_gregorian_fields(self):
+        report = validate(native_date_record())
+        self.assertTrue(report.ok, report.errors)
+
+    def test_source_native_date_rejects_synthetic_gregorian_date(self):
+        record = native_date_record()
+        record["start_local"] = "2027-05-29"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("must not populate Gregorian timing field start_local" in error for error in report.errors))
+
+    def test_source_native_date_requires_complete_native_components(self):
+        record = native_date_record()
+        record["native_calendar_month"] = None
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("native_calendar_month" in error for error in report.errors))
+
+    def test_source_native_date_requires_unresolved_conversion_state(self):
+        record = native_date_record()
+        record["gregorian_resolution_status"] = "RESOLVED"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("UNRESOLVED_AUTHORITATIVE_CONVERSION" in error for error in report.errors))
+
+    def test_source_native_date_requires_source_native_date_semantics(self):
+        record = native_date_record()
+        record["publication_time_semantics"] = "DATE_ONLY"
+        report = validate(record)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("SOURCE_NATIVE_DATE_ONLY" in error for error in report.errors))
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@
   <title>WORLD SIGNALS</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="horizon.css">
+  <link rel="stylesheet" href="native-calendar.css">
   <link rel="stylesheet" href="history.css">
   <link rel="stylesheet" href="operations.css">
 </head>
@@ -67,6 +68,18 @@
           <p>Expected ranges and month-bounded risk windows overlapping the next 30 days.</p>
         </div>
         <div id="horizonWindows" class="horizon-windows"></div>
+      </section>
+
+      <section class="native-date-shell" aria-labelledby="nativeCalendarTitle">
+        <div class="native-date-head">
+          <div>
+            <p class="eyebrow">SOURCE-NATIVE DATES</p>
+            <h3 id="nativeCalendarTitle">Exact there; not yet Gregorian here</h3>
+            <p>Canonical dates stated exactly in a competent jurisdiction's calendar, but not yet backed by an authoritative Gregorian conversion. They are deliberately excluded from NOW/NEXT and the civil-date calendar until that mapping exists.</p>
+          </div>
+          <div id="nativeCalendarSummary" class="native-date-summary" aria-live="polite">Loading source-native dates…</div>
+        </div>
+        <div id="nativeCalendarDates" class="native-date-list"></div>
       </section>
     </section>
 
@@ -214,6 +227,7 @@
   <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
   <script src="app.js"></script>
   <script src="horizon.js"></script>
+  <script src="native-calendar.js"></script>
   <script src="history.js"></script>
   <script src="operations.js"></script>
 </body>

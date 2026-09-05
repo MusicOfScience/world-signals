@@ -1,4 +1,5 @@
 from pathlib import Path
+import copy
 import sys
 import unittest
 
@@ -63,6 +64,30 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(focus["record_count"],1)
         self.assertEqual(focus["records"][0],self.registry["records"][-1])
         self.assertEqual(focus["records"][0]["occurrence_id"],"O6")
+
+    def test_source_native_date_counts_as_canonical_breadth_but_not_gregorian_ready(self):
+        registry=copy.deepcopy(self.registry)
+        registry["records"].append({
+            "occurrence_id":"O7",
+            "series_id":"S5",
+            "region":"South Asia",
+            "category":"FISCAL_SOVEREIGN_FINANCE",
+            "institution":"Inst E",
+            "source_id":"SRC5",
+            "canonical_name":"Native-calendar fiscal occurrence",
+            "timing_type":"SOURCE_NATIVE_CALENDAR_DATE",
+            "gregorian_resolution_status":"UNRESOLVED_AUTHORITATIVE_CONVERSION",
+        })
+        sources=copy.deepcopy(self.sources)
+        sources["sources"].append({"source_id":"SRC5","monitoring_readiness_status":"MANUAL_ONLY"})
+        audit=build_coverage_audit(registry,sources)
+        self.assertEqual(audit["totals"]["occurrence_count"],7)
+        self.assertEqual(audit["totals"]["unique_series_count"],5)
+        readiness=audit["calendar_projection_readiness"]
+        self.assertEqual(readiness["source_native_unresolved_occurrence_count"],1)
+        self.assertEqual(readiness["source_native_unresolved_occurrence_ids"],["O7"])
+        self.assertEqual(readiness["source_native_unresolved_series_ids"],["S5"])
+        self.assertTrue(audit["methodology"]["canonical_coverage_is_not_gregorian_schedulability"])
 
 
 if __name__=="__main__":

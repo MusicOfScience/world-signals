@@ -33,6 +33,10 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         cls.sources = json.loads(SOURCES_PATH.read_text(encoding="utf-8"))
         cls.overlay = json.loads(OVERLAY_PATH.read_text(encoding="utf-8"))
 
+    @staticmethod
+    def _version(value):
+        return tuple(int(p) for p in str(value).split("."))
+
     def _is_pre(self):
         return (
             self.canonical.get("version") == "0.26"
@@ -42,15 +46,16 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
             and self.overlay.get("version") == "0.1"
         )
 
-    def _is_post(self):
+    def _is_post_or_descendant(self):
         ids = {row.get("occurrence_id") for row in self.canonical.get("records", [])}
         source_ids = {row.get("source_id") for row in self.sources.get("sources", [])}
+        checkpoint=self.overlay.get("canonical_checkpoint") or {}
         return (
-            self.canonical.get("version") == "0.27"
-            and len(self.canonical.get("records", [])) == 673
-            and self.sources.get("version") == "1.68"
-            and len(self.sources.get("sources", [])) == 231
-            and self.overlay.get("version") == "0.2"
+            self._version(self.canonical.get("version","0")) >= (0,27)
+            and len(self.canonical.get("records", [])) >= 673
+            and self._version(self.sources.get("version","0")) >= (1,68)
+            and len(self.sources.get("sources", [])) >= 231
+            and checkpoint == {"registry_version": self.canonical.get("version"), "record_count": len(self.canonical.get("records",[]))}
             and set(self.plan["preconditions"]["required_absent_occurrence_ids"]).issubset(ids)
             and set(self.plan["preconditions"]["required_absent_source_ids"]).issubset(source_ids)
         )
@@ -60,18 +65,23 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
             TX.preflight(self.canonical, self.sources, self.overlay, self.plan)
             canonical, sources, overlay, _ = TX.build_post_state(self.canonical, self.sources, self.overlay, self.plan)
             return canonical, sources, overlay
-        if self._is_post():
+        if self._is_post_or_descendant():
             return self.canonical, self.sources, self.overlay
-        self.fail("repository is neither exact Correction M pre-state nor reviewed post-state")
+        self.fail("repository is neither exact Correction M pre-state nor a valid descendant containing Correction M")
 
-    def test_repository_is_exact_pre_or_post_state(self):
-        self.assertTrue(self._is_pre() or self._is_post())
+    def test_repository_is_exact_pre_or_valid_descendant(self):
+        self.assertTrue(self._is_pre() or self._is_post_or_descendant())
         canonical, sources, overlay = self._post_objects()
-        self.assertEqual(canonical["version"], "0.27")
-        self.assertEqual(len(canonical["records"]), 673)
-        self.assertEqual(sources["version"], "1.68")
-        self.assertEqual(len(sources["sources"]), 231)
-        self.assertEqual(overlay["canonical_checkpoint"], {"registry_version": "0.27", "record_count": 673})
+        if self._is_pre():
+            self.assertEqual(canonical["version"], "0.27")
+            self.assertEqual(len(canonical["records"]), 673)
+            self.assertEqual(sources["version"], "1.68")
+            self.assertEqual(len(sources["sources"]), 231)
+            self.assertEqual(overlay["canonical_checkpoint"], {"registry_version": "0.27", "record_count": 673})
+        else:
+            self.assertGreaterEqual(self._version(canonical["version"]),(0,27))
+            self.assertGreaterEqual(len(canonical["records"]),673)
+            self.assertEqual(overlay["canonical_checkpoint"],{"registry_version":canonical["version"],"record_count":len(canonical["records"])})
 
     def test_frozen_scope_is_three_series_four_occurrences_three_sources(self):
         self.assertEqual(len(self.plan["series"]), 3)
