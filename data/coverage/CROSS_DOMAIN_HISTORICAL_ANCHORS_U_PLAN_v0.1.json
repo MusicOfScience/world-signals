@@ -1,0 +1,209 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CROSS_DOMAIN_HISTORICAL_ANCHORS_U",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "16f4d441c18a3dee9da5fcdf432606de4da8e310",
+  "purpose": "Admit three completed historical occurrences in existing canonical series to expand post-event analytical contract pressure across biological-security treaty governance, animal-health standards governance and source-native fiscal process timing.",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.29",
+    "canonical_record_count": 678,
+    "source_registry_version": "1.71",
+    "source_record_count": 236,
+    "change_ledger_version": "0.16",
+    "change_ledger_count": 48,
+    "biosecurity_overlay_version": "0.4",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.29",
+      "record_count": 678
+    },
+    "analysis_reviews_version": "0.4",
+    "analysis_review_count": 8,
+    "analysis_evidence_version": "0.4",
+    "analysis_evidence_count": 21,
+    "required_absent_occurrence_ids": [
+      "WSO-BWC-WG-2026-S08",
+      "WSO-WOAH-GS-093",
+      "WSO-FIS-NP-BUDGET-2083"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-INT-034"
+    ],
+    "required_existing_source_dependency_counts": {
+      "WSSRC-INT-033": 1,
+      "WSSRC-FIS-026": 1,
+      "WSSRC-FIS-027": 0
+    },
+    "required_templates": {
+      "WSO-BWC-WG-2026-S10": "WSER-INT-BWC-WG-STRENGTHENING",
+      "WSO-WOAH-GS-094": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "WSO-FIS-NP-BUDGET-2084": "WSER-FIS-NP-FEDERAL-BUDGET"
+    },
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "biosecurity_overlay_semantic_content_unchanged": true,
+    "analysis_reviews_version": "0.4",
+    "analysis_review_count": 8,
+    "analysis_evidence_version": "0.4",
+    "analysis_evidence_count": 21,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 8,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "new_sources": [
+    {
+      "source_id": "WSSRC-INT-034",
+      "clone_source_id": "WSSRC-INT-032",
+      "institution": "Biological Weapons Convention / UNODA",
+      "jurisdiction": "Global",
+      "domain": "international_institutions",
+      "endpoint_role": "BWC Working Group eighth-session official past-meeting archive",
+      "authoritative_url": "https://meetings.unoda.org/meetings/past?f%5B0%5D=meeting_content_organ%3ABiological+Weapons+Convention&f%5B1%5D=meeting_content_organ_type%3ATreaties+and+Other+Instruments&f%5B2%5D=meeting_content_year%3A2026",
+      "backup_source": "https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-eighth-session-2026",
+      "source_type": "official_treaty_meeting_archive",
+      "information_supplied": "Official UNODA past-meeting classification and 9-13 February 2026 date range for the BWC Working Group eighth session in Geneva.",
+      "future_schedule_horizon": "historical completion archive only; not forward schedule authority",
+      "typical_advance_notice": "not applicable historical archive",
+      "source_timezone": "Europe/Zurich",
+      "canonical_dependency_count": 1,
+      "notes": "Manual authoritative historical factual reference only; general UN web-rights hold and production automation hold inherited from the reviewed BWC source family."
+    }
+  ],
+  "anchors": [
+    {
+      "occurrence_id": "WSO-BWC-WG-2026-S08",
+      "template_occurrence_id": "WSO-BWC-WG-2026-S10",
+      "series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "canonical_name": "BWC Working Group on the Strengthening of the Convention — eighth session",
+      "short_calendar_title": "BWC strengthening WG — session 8",
+      "source_id": "WSSRC-INT-034",
+      "completion_source_id": "WSSRC-INT-034",
+      "outcome_url": "https://meetings.unoda.org/meeting/79376/documents",
+      "change_id": "WSCH-HIST-U-BWC-WG-S08-20260906",
+      "timing": {
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-02-09",
+        "end_local": "2026-02-13",
+        "source_timezone": "Europe/Zurich",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY_RANGE",
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+        "all_day_semantics": true
+      },
+      "location": "Tempus Building, Palais des Nations, Geneva, Switzerland",
+      "completion_basis": "UNODA's official 2026 BWC past-meetings archive classifies the eighth session as a past meeting on 9-13 February 2026; the official session documents include final/procedural-report material through 13 February.",
+      "related_document_role": "COMPLETION_AND_FINAL_REPORT_DOCUMENTATION"
+    },
+    {
+      "occurrence_id": "WSO-WOAH-GS-093",
+      "template_occurrence_id": "WSO-WOAH-GS-094",
+      "series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "canonical_name": "WOAH 93rd General Session of the World Assembly of Delegates",
+      "short_calendar_title": "WOAH 93rd General Session",
+      "source_id": "WSSRC-INT-033",
+      "completion_source_id": "WSSRC-INT-033",
+      "outcome_url": "https://www.woah.org/app/uploads/2026/06/93gs-2026-final-report-en.pdf",
+      "change_id": "WSCH-HIST-U-WOAH-GS-093-20260906",
+      "timing": {
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-05-18",
+        "end_local": "2026-05-22",
+        "source_timezone": "Europe/Paris",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY_RANGE",
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+        "all_day_semantics": true
+      },
+      "location": "Paris, France",
+      "completion_basis": "WOAH's official 93rd General Session page states that the session took place 18-22 May 2026 in Paris; the existing WSSRC-INT-033 final report is competent first-party completion/outcome evidence.",
+      "related_document_role": "COMPLETION_OUTCOME_VERIFICATION"
+    },
+    {
+      "occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+      "template_occurrence_id": "WSO-FIS-NP-BUDGET-2084",
+      "series_id": "WSER-FIS-NP-FEDERAL-BUDGET",
+      "canonical_name": "Nepal Federal Budget 2083/84 — presentation",
+      "short_calendar_title": "Nepal Federal Budget 2083/84 — presentation",
+      "source_id": "WSSRC-FIS-026",
+      "completion_source_id": "WSSRC-FIS-027",
+      "outcome_url": "https://mof.gov.np/content/1741/budget-statement-for-the-financial-year-2083-84/",
+      "change_id": "WSCH-HIST-U-NP-BUDGET-2083-20260906",
+      "reference_period": "FY2083/84 (Bikram Sambat)",
+      "timing": {
+        "timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+        "start_local": null,
+        "end_local": null,
+        "source_timezone": "Asia/Kathmandu",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY",
+        "time_status": "NOT_APPLICABLE",
+        "time_basis": "NOT_APPLICABLE",
+        "all_day_semantics": false,
+        "publication_time_semantics": "SOURCE_NATIVE_DATE_ONLY",
+        "native_calendar_system": "BIKRAM_SAMBAT_NEPAL",
+        "native_calendar_year": 2083,
+        "native_calendar_month": "JESTHA",
+        "native_calendar_day": 15,
+        "source_native_date_label": "15 Jestha 2083",
+        "gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION"
+      },
+      "location": null,
+      "completion_basis": "Nepal's Ministry of Finance publishes the FY2083/84 budget statement with the source-native date 15 Jestha 2083; this establishes completion without supplying an authoritative Gregorian conversion or constitutional presentation clock time.",
+      "related_document_role": "COMPLETION_OUTCOME_VERIFICATION"
+    }
+  ],
+  "guardrails": {
+    "new_series_allowed": false,
+    "canonical_schema_mutation": false,
+    "analysis_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "elapsed_date_implies_completion": false,
+    "source_native_date_may_be_third_party_converted": false,
+    "cms_publication_time_is_event_time": false,
+    "split_programme_hours_become_continuous_event_time": false,
+    "cross_domain_biosecurity_membership_changes_primary_category": false,
+    "backlog_completion_is_objective": false
+  },
+  "deferred_frontier": [
+    {
+      "candidate": "Colombia 2026 presidential election",
+      "reason": "Requires dedicated election-process and milestone modelling rather than a one-row historical shortcut."
+    },
+    {
+      "candidate": "WTO MC14 Yaounde",
+      "reason": "Requires a dedicated ministerial-conference series and careful treatment of adopted decisions versus unresolved work returned to Geneva."
+    },
+    {
+      "candidate": "World Health Assembly 79",
+      "reason": "Analytically rich but lower marginal institutional diversity than BWC/WOAH in the present tranche; completed Assembly and continuing PABS process must remain distinct."
+    },
+    {
+      "candidate": "Bank of Canada 2 September 2026",
+      "reason": "Remains eligible for Analysis but is not promoted merely because it is the previous last backlog item."
+    }
+  ]
+}

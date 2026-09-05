@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-06",
-  "version": "1.71",
+  "version": "1.72",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -9483,7 +9483,7 @@
       "automation_summary": "Production automated retrieval remains held.",
       "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
       "monitoring_priority_score": 220,
-      "canonical_dependency_count": 1
+      "canonical_dependency_count": 2
     },
     {
       "source_id": "WSSRC-FIS-026",
@@ -9524,7 +9524,7 @@
       "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 120,
-      "canonical_dependency_count": 1,
+      "canonical_dependency_count": 2,
       "monitoring_readiness_assessed_at": "2026-09-05",
       "last_successful_research_verification_at": "2026-09-05",
       "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
@@ -9735,6 +9735,51 @@
       "governance_backfill_basis": "INDEC permits Creative Commons copying and redistribution with source citation and modification notice, but no separate automated-calendar retrieval clearance was identified. The audited calendar supplies dates without a clock time, so none is inferred.",
       "notes": "Completion/outcome provenance only. Forward dissemination-calendar authority remains WSSRC-REG2-006; no publication clock time is inferred.",
       "last_successful_research_verification_at": "2026-09-06"
+    },
+    {
+      "source_id": "WSSRC-INT-034",
+      "institution": "Biological Weapons Convention / UNODA",
+      "jurisdiction": "Global",
+      "domain": "international_institutions",
+      "authoritative_url": "https://meetings.unoda.org/meetings/past?f%5B0%5D=meeting_content_organ%3ABiological+Weapons+Convention&f%5B1%5D=meeting_content_organ_type%3ATreaties+and+Other+Instruments&f%5B2%5D=meeting_content_year%3A2026",
+      "source_type": "official_treaty_meeting_archive",
+      "rights_evidence_url": "https://www.un.org/en/about-us/terms-of-use",
+      "recommended_verification_cadence": "manual historical recheck if the official archive or final-report surface changes",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_version": null,
+      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+      "backup_source": "https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-eighth-session-2026",
+      "timezone_scope": "FIXED",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "MIXED_SIGNAL_CORRECTION_M_PROVENANCE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_assessed_at": "2026-09-06",
+      "last_successful_research_verification_at": "2026-09-06",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "endpoint_role": "BWC Working Group eighth-session official past-meeting archive",
+      "information_supplied": "Official UNODA past-meeting classification and 9-13 February 2026 date range for the BWC Working Group eighth session in Geneva.",
+      "future_schedule_horizon": "historical completion archive only; not forward schedule authority",
+      "typical_advance_notice": "not applicable historical archive",
+      "machine_readable_available": "HTML",
+      "source_timezone": "Europe/Zurich",
+      "parser_type": "MANUAL_HTML_PROVENANCE",
+      "known_limitations": [
+        "UN general web terms do not grant redistribution/compilation rights.",
+        "Split daily session hours are programme detail, not one continuous canonical timestamp."
+      ],
+      "notes": "Manual authoritative historical factual reference only; general UN web-rights hold and production automation hold inherited from the reviewed BWC source family.",
+      "licence_constraints": "GENERAL_UN_WEB_TERMS_PERSONAL_NONCOMMERCIAL_ONLY",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_MANUAL_ONLY_RIGHTS_HOLD",
+      "licence_review_status": "RIGHTS_HELD_GENERAL_UN_WEB_TERMS",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD",
+      "redistribution_permission": "NO_REDISTRIBUTION_OR_COMPILATION_RIGHT_INFERRED",
+      "rights_summary": "UN website terms permit personal non-commercial download/copy but not redistribution, compilation or derivative works.",
+      "automation_summary": "Production automated retrieval remains held.",
+      "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+      "monitoring_priority_score": 180,
+      "canonical_dependency_count": 1
     }
   ],
   "activation_backlog": [

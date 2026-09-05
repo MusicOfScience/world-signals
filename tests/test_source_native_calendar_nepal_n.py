@@ -153,7 +153,10 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
         by_id={s["source_id"]:s for s in sources["sources"]}
         self.assertIn("Article 119",by_id["WSSRC-FIS-026"]["endpoint_role"])
         self.assertIn("budget",by_id["WSSRC-FIS-027"]["endpoint_role"].lower())
-        self.assertEqual(by_id["WSSRC-FIS-026"]["canonical_dependency_count"],1)
+        expected_primary_dependencies=sum(
+            1 for candidate in canonical["records"] if candidate.get("source_id")=="WSSRC-FIS-026"
+        )
+        self.assertEqual(by_id["WSSRC-FIS-026"]["canonical_dependency_count"],expected_primary_dependencies)
         self.assertEqual(by_id["WSSRC-FIS-027"]["canonical_dependency_count"],0)
 
     def test_sources_are_manual_provenance_not_automation_permission(self):
