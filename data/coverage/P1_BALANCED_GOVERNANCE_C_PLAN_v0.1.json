@@ -1,0 +1,147 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "P1_BALANCED_GOVERNANCE_C",
+  "version": "0.1",
+  "review_date": "2026-09-05",
+  "purpose": "Complete seven forward-active P1 governance contracts selected for leverage and geographic/category correction while repairing one Malaysia population-policy semantic misclassification without changing any event date, time, certainty status, source identity or assertion identity.",
+  "ledger_commit_timestamp_policy": "SET_AT_APPLY_TIME_IN_AUSTRALIA_MELBOURNE; committed_at must not be frozen in research.",
+  "preconditions": {
+    "canonical_registry_version": "0.23",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.64",
+    "source_count": 226,
+    "change_ledger_version": "0.12",
+    "monitor_expectations_version": "0.7",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "biosecurity_overlay_registry_version": "0.23",
+    "biosecurity_overlay_record_count": 669,
+    "source_baselines": {
+      "WSSRC-REGJ-002": {"authoritative_url": "https://www.cbsl.gov.lk/en/monetary-policy/monetary-policy-communication/monetary-policy-advance-release-calendar", "derived_dependency_count": 2},
+      "WSSRC-RISK-001": {"authoritative_url": "https://www.bom.gov.au/climate/cyclones/australia/", "derived_dependency_count": 2},
+      "WSSRC-REG2-004": {"authoritative_url": "https://www.bcentral.cl/en/web/banco-central/news-and-publications/press/monetary-and-financial-policy-calendar", "derived_dependency_count": 2},
+      "WSSRC-HEALTH-004": {"authoritative_url": "https://www.who.int/westernpacific/about/governance/regional-committee/session-77", "derived_dependency_count": 1},
+      "WSSRC-REG-009": {"authoritative_url": "https://www.mof.gov.my/portal/en/news/press-release/pre-budget-statement-2027", "derived_dependency_count": 1},
+      "WSSRC-INT-018": {"authoritative_url": "https://www.afdb.org/en/documents/board-documents/board-of-governors-documents/official-records-of-the-annual-meetings", "derived_dependency_count": 1},
+      "WSSRC-COM-005": {"authoritative_url": "https://www.nass.usda.gov/Publications/Calendar/", "derived_dependency_count": 5}
+    },
+    "malaysia_occurrence": {
+      "occurrence_id": "WSO-REG-A-0014",
+      "source_id": "WSSRC-REG-009",
+      "start_local": "2026-10-09",
+      "certainty_status": "CONFIRMED",
+      "population_horizon_policy": "EXACT_LEGAL_DEADLINE_ONLY"
+    }
+  },
+  "source_updates": {
+    "WSSRC-REGJ-002": {
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "CBSL's current advance-release calendar is first-order authority for the 30 September and 20 November 2026 public monetary-policy announcement dates. Existing source rights state remains conservative; public access does not establish unrestricted reuse or production polling permission."
+    },
+    "WSSRC-RISK-001": {
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "GENERAL_CONTENT_INTERNAL_USE_ONLY_UNLESS_SPECIFIC_CC_BY",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY; CONTENT_REUSE_SUBJECT_TO PAGE-SPECIFIC TERMS",
+      "rights_evidence_url": "https://www.bom.gov.au/copyright",
+      "rights_summary": "The Bureau's cyclone page applies CC BY 4.0 to maps, graphs and diagrams unless otherwise noted. General Bureau terms state that content without specific terms may be used personally or within an organisation but not supplied to others or used commercially without permission. The page-element licence is not expanded to all page content.",
+      "automation_summary": "No production crawler or polling permission is inferred from public accessibility, machine readability or page-element Creative Commons licensing.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "BoM is authoritative for the official 1 November–30 April Australian tropical-cyclone season. Canonical use remains manual factual reference because content terms are page/element specific and no production automation grant is identified."
+    },
+    "WSSRC-REG2-004": {
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "Banco Central de Chile's current financial-policy calendar confirms the 13/16 November FPM and 17 November FSR. Existing rights review restricts external redistribution and does not clear production polling, so verification remains manual."
+    },
+    "WSSRC-HEALTH-004": {
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The session-specific WHO Western Pacific page remains first-order timing authority for RC77 on 19–22 October 2026. WHO content permissions do not establish a production crawler licence; verification remains rights-held manual."
+    },
+    "WSSRC-REG-009": {
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "ALL_RIGHTS_RESERVED_NO_UNRESTRICTED_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_REFERENCE_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
+      "rights_evidence_url": "https://www.mof.gov.my/portal/en/",
+      "rights_summary": "Malaysia Ministry of Finance pages display Copyright © 2026 Ministry of Finance. All Rights Reserved. No unrestricted content-reuse licence was identified in this review.",
+      "automation_summary": "No production automated-retrieval grant is identified for the Pre-Budget Statement endpoint.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The Pre-Budget Statement 2027 is first-order authority for the announced 9 October 2026 tabling date. It supports a scheduled policy milestone, not a statutory deadline; rights remain held for manual factual reference only."
+    },
+    "WSSRC-INT-018": {
+      "backup_source": "https://www.afdb.org/sites/default/files/documents/board-documents/2021_annual_meetings_-_official_record.pdf",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "NONCOMMERCIAL_PERSONAL_USE_GENERAL_WEB_CONTENT",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_REFERENCE_ONLY_NO_COMMERCIAL_CONTENT_REUSE_INFERRED",
+      "rights_evidence_url": "https://www.afdb.org/en/terms-and-conditions",
+      "rights_summary": "AfDB site terms allow printing, downloading or copying material exclusively for personal and non-commercial use and restrict commercial redistribution or derivative use without written consent.",
+      "automation_summary": "Disclosure and public availability do not establish a production crawler licence.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "known_limitations": ["The stable source-family index may lag specific Board records; retain the direct 2021 Board resolution as backup evidence.", "Resolution B/BG/2021/01 – F/BG/2021/01 fixes Niamey, Niger, 24–28 May 2027 but explicitly retains Abidjan as a fallback if an unexpected need arises to reconsider a proposed host country."],
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The direct 2021 Boards of Governors resolution is first-order authority within the existing Annual Meetings governance-document source family. The explicit fallback clause justifies retaining PROVISIONAL canonical certainty; no source split or date change is required."
+    },
+    "WSSRC-COM-005": {
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "NASS provides authoritative HTML/PDF/iCalendar release schedules and existing source rights clear curated factual metadata. Repository inspection found no NASS-specific parser implementation, fixture or operating evidence, so machine readability does not justify AUTOMATED_PILOT; verification remains manual pending an implemented and reviewed endpoint route."
+    }
+  },
+  "canonical_updates": {
+    "WSO-REG-A-0014": {
+      "set": {
+        "population_horizon_policy": "EXACT_LEGAL_OR_POLICY_MILESTONE_ONLY",
+        "notes": "Malaysia Ministry of Finance explicitly announces Budget 2027 tabling in Parliament on 9 October 2026. This is an authoritatively scheduled policy milestone, not an independently established legal deadline; no clock time is supplied or inferred.",
+        "last_verified_at": "2026-09-05"
+      }
+    }
+  },
+  "ledger_entries": [
+    {
+      "change_id": "WSCHANGE-eb685d688491acd5fb",
+      "occurrence_id": "WSO-REG-A-0014",
+      "change_type": "CANONICAL_SEMANTIC_CLASSIFICATION_REPAIR",
+      "review_state": "APPROVED_SEMANTIC_RECONCILIATION",
+      "reviewed_at": "2026-09-05T12:00:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_C"
+    }
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.24",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.65",
+    "source_count": 226,
+    "change_ledger_version": "0.13",
+    "biosecurity_overlay_registry_version": "0.24",
+    "biosecurity_overlay_record_count": 669,
+    "expected_changed_occurrences": ["WSO-REG-A-0014"],
+    "expected_changed_sources": ["WSSRC-REGJ-002", "WSSRC-RISK-001", "WSSRC-REG2-004", "WSSRC-HEALTH-004", "WSSRC-REG-009", "WSSRC-INT-018", "WSSRC-COM-005"],
+    "governance_expected": {"fully_explicit": 81, "missing_any": 145, "p1_canonical_dependent": 74, "p2_registry_only": 71}
+  }
+}

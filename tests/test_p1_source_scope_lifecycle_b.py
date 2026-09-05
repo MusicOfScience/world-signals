@@ -81,8 +81,12 @@ class P1SourceScopeLifecycleBTests(unittest.TestCase):
             )
         else:
             self.assertEqual(
-                self.overlay["canonical_checkpoint"],
-                {"registry_version": "0.23", "record_count": 669},
+                self.overlay["canonical_checkpoint"]["registry_version"],
+                self.canonical["version"],
+            )
+            self.assertEqual(
+                self.overlay["canonical_checkpoint"]["record_count"],
+                len(self.canonical["records"]),
             )
 
     def test_plan_has_exact_six_source_cohort_and_one_new_legal_source(self):
