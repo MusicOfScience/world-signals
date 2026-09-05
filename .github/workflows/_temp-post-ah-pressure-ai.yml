@@ -1,4 +1,4 @@
-name: TEMP AI post-AH pressure audit
+name: TEMP AI Bank of Canada Analysis check-only gate
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  audit:
+  check:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -22,9 +22,19 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "b12058d260a8139c893feb52ad864258044e83b2"
-      - name: Run post-AH pressure audit
+      - name: Reproduce post-AH pressure audit
         run: python scripts/audit_post_ah_pressure_ai.py
-      - name: Validate canonical and Analysis pre-state
+      - name: Fail-closed AI check-only transform
+        run: python scripts/apply_bank_of_canada_analysis_ai.py
+      - name: AI contract tests
+        run: python -m unittest tests.test_bank_of_canada_analysis_ai -v
+      - name: Validate upstream pre-state
         run: |
           python scripts/validate_registry.py
           python scripts/validate_analysis.py
+      - name: Python compile
+        run: |
+          python -m py_compile \
+            scripts/audit_post_ah_pressure_ai.py \
+            scripts/apply_bank_of_canada_analysis_ai.py \
+            tests/test_bank_of_canada_analysis_ai.py
