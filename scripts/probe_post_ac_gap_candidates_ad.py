@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +87,27 @@ for row in wha:
             if key in source
         }
         print("WHA_SOURCE", json.dumps(source_fields, sort_keys=True, ensure_ascii=False))
+
+health_rows = [row for row in records if row.get("category") == "HEALTH_BIOSECURITY"]
+for row in sorted(health_rows, key=lambda x: x.get("occurrence_id", "")):
+    print("HEALTH_ID", json.dumps({
+        "occurrence_id": row.get("occurrence_id"),
+        "series_id": row.get("series_id"),
+        "source_id": row.get("source_id"),
+        "canonical_name": row.get("canonical_name"),
+        "start_local": row.get("start_local"),
+    }, sort_keys=True, ensure_ascii=False))
+
+who_source_deps = [row for row in records if row.get("source_id") == "WSSRC-HEALTH-001"]
+print("WHO_SOURCE_DEPENDENCIES", json.dumps({
+    "actual_count": len(who_source_deps),
+    "helper_count": by_source["WSSRC-HEALTH-001"].get("canonical_dependency_count"),
+    "occurrence_ids": sorted(row.get("occurrence_id") for row in who_source_deps),
+}, sort_keys=True))
+
+candidate_ids = ["WSO-HEALTH-B-0001", "WSO-HEALTH-A-0000", "WSO-HEALTH-WHA-079"]
+existing_ids = {row.get("occurrence_id") for row in records}
+print("CANDIDATE_ID_COLLISIONS", json.dumps({cid: cid in existing_ids for cid in candidate_ids}, sort_keys=True))
 
 # Past-starting records in still-missing categories that are not terminal.
 for row in records:
