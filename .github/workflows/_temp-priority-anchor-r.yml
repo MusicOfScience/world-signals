@@ -1,4 +1,4 @@
-name: TEMP priority anchor R inventory
+name: TEMP priority anchor R simulation
 
 on:
   push:
@@ -11,24 +11,24 @@ permissions:
   contents: read
 
 jobs:
-  inventory:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print available source ID ranges and dependency counts
+      - name: Prove exact base and protected branch state
         shell: bash
         run: |
-          python - <<'PY'
-          import json, re
-          from pathlib import Path
-          sources=json.loads(Path('data/sources/registry.json').read_text())
-          for prefix in ['WSSRC-MAC-','WSSRC-REG-','WSSRC-REGJ-','WSSRC-REG2-']:
-              rows=[s for s in sources['sources'] if str(s.get('source_id','')).startswith(prefix)]
-              print('\n',prefix,'COUNT',len(rows))
-              for s in sorted(rows,key=lambda x:x['source_id']):
-                  print(s['source_id'], s.get('institution'), 'deps=',s.get('canonical_dependency_count'), 'role=',s.get('endpoint_role'))
-          print('\nTOTAL',sources['version'],len(sources['sources']))
-          PY
+          set -euo pipefail
+          BASE=a8bfb87bb7e889381ba67ab83c5f32218e6c2bd2
+          git diff --exit-code "$BASE" HEAD -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+      - name: Run fail-closed check-only transaction
+        run: python scripts/apply_priority_region_historical_anchors_r.py
+      - name: Run R regression tests
+        run: python -m unittest tests.test_priority_region_historical_anchors_r -v
+      - name: Compile transaction code
+        run: python -m py_compile scripts/apply_priority_region_historical_anchors_r.py tests/test_priority_region_historical_anchors_r.py
