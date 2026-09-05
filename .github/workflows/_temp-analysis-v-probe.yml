@@ -1,4 +1,4 @@
-name: TEMP cross-domain Analysis V probe
+name: TEMP prepare cross-domain Analysis V
 
 on:
   push:
@@ -8,38 +8,78 @@ on:
       - .github/workflows/_temp-analysis-v-probe.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  probe:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print exact V candidate state
+      - name: Apply reviewed source and lineage patches
         run: |
           python - <<'PY'
-          import json
           from pathlib import Path
-          c=json.loads(Path('data/canonical/registry.json').read_text())
-          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
-          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
-          s=json.loads(Path('data/sources/registry.json').read_text())
-          ids={'WSO-BWC-WG-2026-S08','WSO-WOAH-GS-093','WSO-FIS-NP-BUDGET-2083','WSO-ddb70f8ff05a58fb'}
-          rows=[x for x in c['records'] if x['occurrence_id'] in ids]
-          source_ids=set()
-          for row in rows:
-              for key in ('source_id','completion_source_id'):
-                  if row.get(key): source_ids.add(row[key])
-          print('STATE', json.dumps({
-            'canonical': [c['version'],len(c['records'])],
-            'reviews':[r['version'],len(r['reviews'])],
-            'evidence':[e['version'],len(e['evidence'])],
-            'checkpoint':r.get('canonical_checkpoint'),
-          },sort_keys=True))
-          print('ROWS', json.dumps(rows,indent=2,sort_keys=True))
-          print('SOURCES', json.dumps([x for x in s['sources'] if x.get('source_id') in source_ids],indent=2,sort_keys=True))
-          print('REVIEWED_IDS',json.dumps(sorted(x['canonical_occurrence_id'] for x in r['reviews'])))
+
+          def replace_once(path, old, new):
+              p=Path(path)
+              text=p.read_text(encoding='utf-8')
+              count=text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one replacement target, found {count}')
+              p.write_text(text.replace(old,new,1),encoding='utf-8')
+
+          replace_once(
+              'src/world_signals/analysis.py',
+              '''        "start_utc": row.get("start_utc"),\n        "start_local": row.get("start_local"),\n        "source_timezone": row.get("source_timezone"),\n''',
+              '''        "timing_type": row.get("timing_type"),\n        "time_precision": row.get("time_precision"),\n        "start_utc": row.get("start_utc"),\n        "end_utc": row.get("end_utc"),\n        "start_local": row.get("start_local"),\n        "end_local": row.get("end_local"),\n        "source_timezone": row.get("source_timezone"),\n        "source_native_date_label": row.get("source_native_date_label"),\n        "native_calendar_system": row.get("native_calendar_system"),\n        "native_calendar_year": row.get("native_calendar_year"),\n        "native_calendar_month": row.get("native_calendar_month"),\n        "native_calendar_day": row.get("native_calendar_day"),\n        "gregorian_resolution_status": row.get("gregorian_resolution_status"),\n        "publication_time_semantics": row.get("publication_time_semantics"),\n'''
+          )
+
+          replace_once(
+              'web/analysis.js',
+              '''  function section(title, body, className=''){\n''',
+              '''  function canonicalTiming(canonical){\n    if(canonical.timing_type==='SOURCE_NATIVE_CALENDAR_DATE' && canonical.source_native_date_label){\n      const calendar=human(canonical.native_calendar_system||'source native calendar');\n      const resolution=canonical.gregorian_resolution_status?` · Gregorian mapping ${human(canonical.gregorian_resolution_status)}`:'';\n      return `<p class="meta analysis-canonical-time"><strong>Native date ${esc(canonical.source_native_date_label)}</strong> · ${esc(calendar)}${esc(resolution)}</p>`;\n    }\n    if(canonical.start_local && canonical.end_local){\n      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_local)} – ${esc(canonical.end_local)}</strong>${canonical.source_timezone?` · ${esc(canonical.source_timezone)}`:''} · ${esc(human(canonical.time_precision||canonical.timing_type||'canonical range'))}</p>`;\n    }\n    if(canonical.start_local){\n      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_local)}</strong>${canonical.source_timezone?` · ${esc(canonical.source_timezone)}`:''} · ${esc(human(canonical.time_precision||canonical.timing_type||'canonical time'))}</p>`;\n    }\n    if(canonical.start_utc){\n      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_utc)}</strong> · UTC</p>`;\n    }\n    return '<p class="meta analysis-canonical-time">Canonical timing has no Gregorian/local display value in this projection.</p>';\n  }\n\n  function section(title, body, className=''){\n'''
+          )
+
+          replace_once(
+              'web/analysis.js',
+              '''</p></div>\n        <div class="analysis-grade">''',
+              '''</p>${canonicalTiming(canonical)}</div>\n        <div class="analysis-grade">'''
+          )
+
+          replace_once(
+              'tests/test_priority_region_analysis_s.py',
+              '''        self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})\n''',
+              '''        checkpoint = self.reviews["canonical_checkpoint"]\n        self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), (0, 29))\n        self.assertGreaterEqual(checkpoint["record_count"], 678)\n'''
+          )
+
+          replace_once(
+              'tests/test_controlled_analysis_expansion_t.py',
+              '''        cls.is_post = (\n            cls.reviews.get("version") == "0.4"\n            and len(cls.reviews.get("reviews", [])) >= 8\n            and cls.evidence.get("version") == "0.4"\n            and len(cls.evidence.get("evidence", [])) >= 21\n        )\n''',
+              '''        cls.is_post = (\n            version_tuple(cls.reviews.get("version", "0.0")) >= (0, 4)\n            and len(cls.reviews.get("reviews", [])) >= 8\n            and version_tuple(cls.evidence.get("version", "0.0")) >= (0, 4)\n            and len(cls.evidence.get("evidence", [])) >= 21\n        )\n'''
+          )
+
+          replace_once(
+              'tests/test_controlled_analysis_expansion_t.py',
+              '''        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.4", 8))\n        self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})\n        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.4", 21))\n''',
+              '''        self.assertGreaterEqual(version_tuple(self.reviews["version"]), (0, 4))\n        self.assertGreaterEqual(len(self.reviews["reviews"]), 8)\n        checkpoint = self.reviews["canonical_checkpoint"]\n        self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), (0, 29))\n        self.assertGreaterEqual(checkpoint["record_count"], 678)\n        self.assertGreaterEqual(version_tuple(self.evidence["version"]), (0, 4))\n        self.assertGreaterEqual(len(self.evidence["evidence"]), 21)\n'''
+          )
           PY
+      - name: Verify patched sources
+        run: |
+          python -m py_compile src/world_signals/analysis.py tests/test_priority_region_analysis_s.py tests/test_controlled_analysis_expansion_t.py tests/test_cross_domain_analysis_v.py scripts/apply_cross_domain_analysis_v.py
+          node --check web/analysis.js
+          python -m unittest tests.test_cross_domain_analysis_v -v
+      - name: Commit durable V preparation
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add src/world_signals/analysis.py web/analysis.js tests/test_priority_region_analysis_s.py tests/test_controlled_analysis_expansion_t.py
+          git diff --cached --quiet && { echo 'No durable source changes staged'; exit 1; }
+          git commit -m "Preserve canonical temporal semantics in Analysis projection"
+          git push origin HEAD:feature/cross-domain-analysis-v
