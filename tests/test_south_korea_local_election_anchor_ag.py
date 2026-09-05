@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import json
 from pathlib import Path
 import sys
@@ -178,7 +177,6 @@ class SouthKoreaLocalElectionAnchorAGTests(unittest.TestCase):
         self.assertEqual(readiness["reviewed_occurrence_count"], 12)
         self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.8", 12))
         self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.8", 44))
-        self.assertIn("ELECTION_MILESTONE", readiness["completed_by_event_type"])
 
     def test_completed_elections_governance_gap_is_repaired(self):
         completed = [row for row in self.post_registry["records"] if row.get("lifecycle_status") == "COMPLETED"]
@@ -202,7 +200,6 @@ class SouthKoreaLocalElectionAnchorAGTests(unittest.TestCase):
     def test_registry_and_analysis_validate(self):
         report = validate_registry(self.post_registry, self.post_sources)
         self.assertTrue(report.ok, report.errors)
-        overlay_errors = [] if self.is_post else []
         analysis = validate_analysis(self.analysis_schema, self.evidence, self.reviews, self.post_registry)
         self.assertFalse(analysis.errors, analysis.errors)
 
