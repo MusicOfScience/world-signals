@@ -22,107 +22,33 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "7933a9880649ec6a98872fa557566a6b62d55c9d"
-      - name: Read-only post-AD reconnaissance
+      - name: Targeted trade candidate probe
         run: |
           python - <<'PY'
           import json
-          from collections import Counter, defaultdict
           from pathlib import Path
-
-          root = Path('.')
-          reg = json.loads((root/'data/canonical/registry.json').read_text())
-          src = json.loads((root/'data/sources/registry.json').read_text())
-          rev = json.loads((root/'data/analysis/event_reviews.json').read_text())
-          ev = json.loads((root/'data/analysis/evidence_registry.json').read_text())
-          rows = reg['records']
-          reviewed = {r.get('occurrence_id') for r in rev.get('reviews', [])}
-          targets = [
-              'CLIMATE_ENVIRONMENT',
-              'CORPORATE_FINANCIAL_MARKET_STRUCTURE',
-              'ELECTIONS_GOVERNANCE',
-              'PHYSICAL_CLIMATE_RISK',
-              'TRADE_SANCTIONS_INDUSTRIAL_POLICY',
-          ]
-          print('CHECKPOINT', json.dumps({
-              'canonical_version': reg.get('version'), 'canonical_count': len(rows),
-              'source_version': src.get('version'), 'source_count': len(src.get('sources', [])),
-              'reviews_version': rev.get('version'), 'reviews_count': len(rev.get('reviews', [])),
-              'evidence_version': ev.get('version'), 'evidence_count': len(ev.get('evidence', [])),
-          }, sort_keys=True))
-
-          completed = [r for r in rows if r.get('lifecycle_status') == 'COMPLETED']
-          print('COMPLETED_COUNTS', json.dumps({
-              'eligible_completed': len(completed),
-              'reviewed_completed': sum(r.get('occurrence_id') in reviewed for r in completed),
-              'unreviewed_completed': [
-                  {'occurrence_id': r.get('occurrence_id'), 'series_id': r.get('series_id'), 'canonical_name': r.get('canonical_name'), 'region': r.get('region'), 'category': r.get('category'), 'event_type': r.get('event_type'), 'start_local': r.get('start_local')}
-                  for r in completed if r.get('occurrence_id') not in reviewed
-              ],
-          }, sort_keys=True, ensure_ascii=False))
-
-          for cat in targets:
-              subset = [r for r in rows if r.get('category') == cat]
-              comp = [r for r in subset if r.get('lifecycle_status') == 'COMPLETED']
-              print('CATEGORY', json.dumps({
-                  'category': cat,
-                  'occurrences': len(subset),
-                  'series_count': len({r.get('series_id') for r in subset if r.get('series_id')}),
-                  'institution_count': len({r.get('institution') for r in subset if r.get('institution')}),
-                  'lifecycle': dict(sorted(Counter(r.get('lifecycle_status') for r in subset).items())),
-                  'completed_count': len(comp),
-                  'reviewed_completed_count': sum(r.get('occurrence_id') in reviewed for r in comp),
-              }, sort_keys=True))
-              by_series = defaultdict(list)
-              for r in subset:
-                  by_series[r.get('series_id')].append(r)
-              for sid, group in sorted(by_series.items(), key=lambda kv: str(kv[0])):
-                  group = sorted(group, key=lambda r: str(r.get('start_local') or ''))
-                  sample = group[0]
-                  print('SERIES', json.dumps({
-                      'category': cat,
-                      'series_id': sid,
-                      'institution': sample.get('institution'),
-                      'jurisdiction': sample.get('jurisdiction'),
-                      'country_or_economy': sample.get('country_or_economy'),
-                      'region': sample.get('region'),
-                      'event_types': sorted({r.get('event_type') for r in group if r.get('event_type')}),
-                      'source_ids': sorted({r.get('source_id') for r in group if r.get('source_id')}),
-                      'occurrence_ids': [r.get('occurrence_id') for r in group],
-                      'dates': [r.get('start_local') for r in group],
-                      'lifecycle': dict(sorted(Counter(r.get('lifecycle_status') for r in group).items())),
-                      'names': [r.get('canonical_name') for r in group],
-                  }, sort_keys=True, ensure_ascii=False))
-
-          for r in rows:
-              if r.get('category') not in targets:
-                  continue
-              s = r.get('start_local')
-              if not isinstance(s, str) or s[:10] > '2026-09-06':
-                  continue
-              if r.get('lifecycle_status') in {'COMPLETED','CANCELLED'}:
-                  continue
-              print('PAST_NONTERMINAL', json.dumps({
-                  'occurrence_id': r.get('occurrence_id'), 'series_id': r.get('series_id'), 'canonical_name': r.get('canonical_name'),
-                  'category': r.get('category'), 'event_type': r.get('event_type'), 'start_local': r.get('start_local'), 'end_local': r.get('end_local'),
-                  'lifecycle_status': r.get('lifecycle_status'), 'source_id': r.get('source_id')
-              }, sort_keys=True, ensure_ascii=False))
-
-          by_source = {s.get('source_id'): s for s in src.get('sources', [])}
-          used_source_ids = sorted({r.get('source_id') for r in rows if r.get('category') in targets and r.get('source_id')})
-          for sid in used_source_ids:
-              s = by_source.get(sid, {})
-              deps = [r.get('occurrence_id') for r in rows if r.get('source_id') == sid]
-              print('SOURCE', json.dumps({
-                  'source_id': sid,
-                  'publisher': s.get('publisher'),
-                  'title': s.get('title'),
-                  'authoritative_url': s.get('authoritative_url'),
-                  'source_timezone': s.get('source_timezone'),
-                  'parser_type': s.get('parser_type'),
-                  'canonical_dependency_count': s.get('canonical_dependency_count'),
-                  'actual_primary_dependency_count': len(deps),
-                  'actual_occurrence_ids': deps,
-                  'production_automated_monitoring': s.get('production_automated_monitoring'),
-                  'rights_status': s.get('rights_status'),
-              }, sort_keys=True, ensure_ascii=False))
+          root=Path('.')
+          reg=json.loads((root/'data/canonical/registry.json').read_text())
+          src=json.loads((root/'data/sources/registry.json').read_text())
+          rev=json.loads((root/'data/analysis/event_reviews.json').read_text())
+          rows=reg['records']
+          reviewed={r.get('canonical_occurrence_id') for r in rev.get('reviews', [])}
+          completed=[r for r in rows if r.get('lifecycle_status')=='COMPLETED']
+          print('FRONTIER', json.dumps([
+              {k:r.get(k) for k in ('occurrence_id','series_id','canonical_name','region','category','event_type','start_local')}
+              for r in completed if r.get('occurrence_id') not in reviewed
+          ], indent=2, ensure_ascii=False, sort_keys=True))
+          by_id={r.get('occurrence_id'):r for r in rows}
+          by_src={s.get('source_id'):s for s in src.get('sources',[])}
+          for oid in ('WSO-TRD-A-0005','WSO-TRD-A-0003','WSO-TRD-A-0004','WSO-CLIM-A-0001','WSO-EL-A-0001','WSO-EL-ZA-LGE-2021'):
+              if oid in by_id:
+                  print('ROW', oid, json.dumps(by_id[oid], indent=2, ensure_ascii=False, sort_keys=True))
+          for sid in ('WSSRC-TRD-003','WSSRC-TRD-004','WSSRC-CLIM-001','WSSRC-EL-BR-001','WSSRC-EL-ZA-001'):
+              if sid in by_src:
+                  deps=[r.get('occurrence_id') for r in rows if r.get('source_id')==sid]
+                  print('SOURCE_FULL', sid, json.dumps(by_src[sid], indent=2, ensure_ascii=False, sort_keys=True))
+                  print('SOURCE_DEPS', sid, json.dumps(deps, ensure_ascii=False))
+          ids={r.get('occurrence_id') for r in rows}
+          for cand in ('WSO-TRD-EU-RU-SANC-20260625','WSO-TRD-A-0009','WSO-CLIM-UNFCCC-COP30','WSO-EL-BR-GEN-2022-R2'):
+              print('ID_COLLISION', cand, cand in ids)
           PY
