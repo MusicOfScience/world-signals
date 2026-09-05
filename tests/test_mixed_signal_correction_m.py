@@ -58,9 +58,7 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
     def _post_objects(self):
         if self._is_pre():
             TX.preflight(self.canonical, self.sources, self.overlay, self.plan)
-            canonical, sources, overlay, _ = TX.build_post_state(
-                self.canonical, self.sources, self.overlay, self.plan
-            )
+            canonical, sources, overlay, _ = TX.build_post_state(self.canonical, self.sources, self.overlay, self.plan)
             return canonical, sources, overlay
         if self._is_post():
             return self.canonical, self.sources, self.overlay
@@ -79,14 +77,8 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         self.assertEqual(len(self.plan["series"]), 3)
         self.assertEqual(len(self.plan["occurrences"]), 4)
         self.assertEqual(len(self.plan["source_plan"]), 3)
-        self.assertEqual(
-            [row["source_id"] for row in self.plan["source_plan"]],
-            ["WSSRC-CB-014", "WSSRC-INT-032", "WSSRC-INT-033"],
-        )
-        self.assertEqual(
-            [row["occurrence_id"] for row in self.plan["occurrences"]],
-            ["WSO-CBN-MPC-307", "WSO-CBN-MPC-308", "WSO-BWC-WG-2026-S10", "WSO-WOAH-GS-094"],
-        )
+        self.assertEqual([row["source_id"] for row in self.plan["source_plan"]], ["WSSRC-CB-014", "WSSRC-INT-032", "WSSRC-INT-033"])
+        self.assertEqual([row["occurrence_id"] for row in self.plan["occurrences"]], ["WSO-CBN-MPC-307", "WSO-CBN-MPC-308", "WSO-BWC-WG-2026-S10", "WSO-WOAH-GS-094"])
 
     def test_cbn_preserves_two_day_meeting_window_semantics(self):
         canonical, _, _ = self._post_objects()
@@ -104,7 +96,8 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
             self.assertEqual(row["time_precision"], "DAY_RANGE")
             self.assertIsNone(row["start_utc"])
             self.assertIsNone(row["location"])
-            self.assertNotIn("publication day", row["notes"].lower())
+            self.assertIn("no decision publication day", row["notes"].lower())
+            self.assertIn("future venue is inferred", row["notes"].lower())
 
     def test_bwc_and_woah_keep_natural_primary_categories(self):
         canonical, _, overlay = self._post_objects()
@@ -118,7 +111,6 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         self.assertEqual(woah["category"], "AGRICULTURE_FOOD")
         self.assertEqual(woah["subcategory"], "animal_health_standards_governance")
         self.assertEqual((woah["start_local"], woah["end_local"]), ("2027-05-24", "2027-05-28"))
-
         memberships = {row["series_id"]: row for row in overlay["canonical_series_memberships"]}
         self.assertEqual(memberships["WSER-INT-BWC-WG-STRENGTHENING"]["system_ids"], ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"])
         self.assertEqual(memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["system_ids"], ["BIO-ANIMAL-ZOONOTIC-HEALTH"])
