@@ -1,4 +1,4 @@
-name: TEMP analysis P registry introspection
+name: TEMP analysis P full validation
 
 on:
   push:
@@ -11,32 +11,71 @@ permissions:
   contents: read
 
 jobs:
-  inspect:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Print recent canonical event candidates
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove protected upstream state is byte-identical to base
         shell: bash
         run: |
+          set -euo pipefail
+          BASE=f81ce2440d6e3acce2a84c902cd8215e898a002c
+          protected=(
+            data/canonical/registry.json
+            data/canonical/schema.json
+            data/sources/registry.json
+            data/monitor/expectations.json
+            data/monitor/operations_policy.json
+            data/changes/ledger.json
+            data/coverage/biosecurity_overlay.json
+          )
+          for path in "${protected[@]}"; do
+            git diff --exit-code "$BASE" HEAD -- "$path"
+          done
+      - name: Validate registry and analytical contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+      - name: Run full test suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python surfaces
+        run: python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_analysis.py src/world_signals/analysis.py
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and assert analytical projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          test -f docs/data/analysis.json
+          test -f docs/analysis.css
+          grep -q 'bundled source: web/analysis.js' docs/app.js
           python - <<'PY'
           import json
-          from datetime import datetime, timezone
           from pathlib import Path
-          r=json.loads(Path('data/canonical/registry.json').read_text())
-          rows=[]
-          for x in r['records']:
-              vals=[]
-              for k in ('start_utc','start_local','publication_datetime','date_earliest','date_latest'):
-                  v=x.get(k)
-                  if v: vals.append(str(v))
-              if any(v.startswith(('2026-09-01','2026-09-02','2026-09-03','2026-09-04','2026-09-05')) for v in vals):
-                  rows.append({k:x.get(k) for k in (
-                      'occurrence_id','series_id','institution','jurisdiction','event_type','subcategory',
-                      'certainty_status','lifecycle_status','timing_type','start_local','start_utc',
-                      'publication_datetime','source_id','intrinsic_importance','expected_market_sensitivity'
-                  )})
-          print(json.dumps(rows, indent=2, sort_keys=True))
-          print('candidate_count=',len(rows))
-          if not rows:
-              raise SystemExit('no recent canonical candidates')
+          data=json.loads(Path('docs/data/analysis.json').read_text())
+          assert data['metadata']['review_count']==1
+          assert data['metadata']['canonical_mutation_allowed'] is False
+          assert data['metadata']['google_calendar_write'] is False
+          review=data['reviews'][0]
+          assert review['canonical_occurrence_id']=='WSO-MAC-A-0025'
+          assert review['what_appears_connected']['causal_status']=='OBSERVED_ASSOCIATION'
+          assert review['second_order_effects']['status']=='NOT_ESTABLISHED'
+          assert len(review['evidence'])==2
           PY
