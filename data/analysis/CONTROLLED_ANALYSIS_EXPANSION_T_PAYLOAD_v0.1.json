@@ -25,9 +25,9 @@
       "evidence_id": "WSEV-EIA-WPSR-REUTERS-20260902",
       "evidence_class": "REPUTABLE_NEWSWIRE",
       "provider": "Reuters",
-      "host_or_distribution": "Reuters",
+      "host_or_distribution": "Reuters / BOE Report syndication",
       "title": "US crude stocks fall on strong refining activity and exports, EIA says",
-      "url": "https://www.reuters.com/business/energy/us-crude-gasoline-inventories-fell-last-week-distillates-rose-eia-says-2026-09-02/",
+      "url": "https://boereport.com/2026/09/02/us-crude-stocks-fall-on-strong-refining-activity-and-exports-eia-says/",
       "published_at": "2026-09-02",
       "roles": ["EXPECTATION_BENCHMARK", "MARKET_OBSERVATION", "CONTEXT_OR_ALTERNATIVE"],
       "supports": [
@@ -35,6 +35,24 @@
         "Reuters reported the actual crude draw as about 4.5 million barrels and the distillate change as a roughly 0.8 million-barrel build.",
         "Following the report Brent was up $0.68 to $95.33 and WTI was up $0.35 to $90.57 at 11:01 ET.",
         "The release contained mixed product signals rather than a single-direction inventory surprise."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "The BOE Report page identifies Reuters as source. WORLD SIGNALS uses it as analytical evidence only and does not treat it as canonical EIA provenance."
+    },
+    {
+      "evidence_id": "WSEV-EIA-OIL-REUTERS-20260901",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Oil prices settle up more than $4 a barrel on renewed US-Iran fighting",
+      "url": "https://www.reuters.com/business/energy/oil-prices-rise-latest-fighting-resurrects-middle-east-supply-disruption-risks-2026-09-01/",
+      "published_at": "2026-09-01",
+      "roles": ["CONTEXT_OR_ALTERNATIVE", "MARKET_OBSERVATION"],
+      "supports": [
+        "Oil prices settled more than $4 per barrel higher on 1 September as renewed US-Iran fighting intensified Middle East supply-disruption risk.",
+        "Brent settled at $94.65 per barrel, up $4.16 or 4.6 percent, and WTI settled at $90.22, up $4.46 or 5.2 percent.",
+        "The pre-existing geopolitical repricing materially contaminates interpretation of the following day's ordinary inventory-release reaction."
       ],
       "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
       "canonical_provenance_effect": "NONE"
@@ -182,14 +200,14 @@
         "causal_status": "OBSERVED_ASSOCIATION",
         "confidence": "LOW",
         "summary": "Reuters reported oil prices up slightly following the WPSR, which supports a weak contemporaneous association between the release and prices. The signal is not clean: the inventory details were mixed and the oil complex was already dominated by geopolitical supply-risk repricing.",
-        "evidence_refs": ["WSEV-EIA-WPSR-EIA-20260902", "WSEV-EIA-WPSR-REUTERS-20260902"]
+        "evidence_refs": ["WSEV-EIA-WPSR-EIA-20260902", "WSEV-EIA-WPSR-REUTERS-20260902", "WSEV-EIA-OIL-REUTERS-20260901"]
       },
       "what_may_be_noise": [
-        {"summary": "Oil had risen more than $4 per barrel in the preceding session as renewed US-Iran fighting and Strait of Hormuz disruption risk repriced global supply risk; that backdrop can swamp an ordinary weekly inventory signal.", "evidence_refs": ["WSEV-EIA-WPSR-REUTERS-20260902"]},
+        {"summary": "Oil had risen more than $4 per barrel in the preceding session as renewed US-Iran fighting and Strait of Hormuz disruption risk repriced global supply risk; that backdrop can swamp an ordinary weekly inventory signal.", "evidence_refs": ["WSEV-EIA-OIL-REUTERS-20260901"]},
         {"summary": "The WPSR itself was internally mixed: a large crude draw coexisted with an unexpected distillate build, so a single-direction commodity interpretation would discard information.", "evidence_refs": ["WSEV-EIA-WPSR-EIA-20260902", "WSEV-EIA-WPSR-REUTERS-20260902"]}
       ],
       "alternative_explanations": [
-        {"summary": "Persisting Middle East supply disruption risk and the prior session's geopolitical oil-price surge could explain most of the quoted price level and part of the same-session rise independently of the EIA release.", "evidence_refs": ["WSEV-EIA-WPSR-REUTERS-20260902"]},
+        {"summary": "Persisting Middle East supply disruption risk and the prior session's geopolitical oil-price surge could explain most of the quoted price level and part of the same-session rise independently of the EIA release.", "evidence_refs": ["WSEV-EIA-OIL-REUTERS-20260901"]},
         {"summary": "The unexpected distillate build and other product-level details could offset the price implication of the larger crude draw, making the net release signal weaker than the crude headline alone suggests.", "evidence_refs": ["WSEV-EIA-WPSR-EIA-20260902", "WSEV-EIA-WPSR-REUTERS-20260902"]}
       ],
       "second_order_effects": {
