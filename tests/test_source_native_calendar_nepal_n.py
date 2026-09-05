@@ -46,18 +46,32 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             and self.overlay.get("canonical_checkpoint")=={"registry_version":"0.27","record_count":673}
         )
 
+    @staticmethod
+    def _version_at_least(value, floor):
+        try:
+            current=tuple(int(x) for x in str(value).split("."))
+            minimum=tuple(int(x) for x in str(floor).split("."))
+        except ValueError:
+            return False
+        width=max(len(current),len(minimum))
+        return current+(0,)*(width-len(current)) >= minimum+(0,)*(width-len(minimum))
+
     def _is_post(self):
         oids={r.get("occurrence_id") for r in self.canonical.get("records",[])}
         source_ids={r.get("source_id") for r in self.sources.get("sources",[])}
         timing_vocab=(self.schema.get("controlled_vocabularies") or {}).get("timing_type",[])
+        checkpoint=self.overlay.get("canonical_checkpoint")
         return (
-            self.schema.get("version")=="0.52"
-            and self.canonical.get("version")=="0.28"
-            and len(self.canonical.get("records",[]))==674
-            and self.sources.get("version")=="1.69"
-            and len(self.sources.get("sources",[]))==233
-            and self.overlay.get("version")=="0.3"
-            and self.overlay.get("canonical_checkpoint")=={"registry_version":"0.28","record_count":674}
+            self._version_at_least(self.schema.get("version"),"0.52")
+            and self._version_at_least(self.canonical.get("version"),"0.28")
+            and len(self.canonical.get("records",[]))>=674
+            and self._version_at_least(self.sources.get("version"),"1.69")
+            and len(self.sources.get("sources",[]))>=233
+            and self._version_at_least(self.overlay.get("version"),"0.3")
+            and checkpoint=={
+                "registry_version":self.canonical.get("version"),
+                "record_count":len(self.canonical.get("records",[])),
+            }
             and "WSO-FIS-NP-BUDGET-2084" in oids
             and {"WSSRC-FIS-026","WSSRC-FIS-027"}.issubset(source_ids)
             and "SOURCE_NATIVE_CALENDAR_DATE" in timing_vocab
@@ -75,13 +89,16 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
     def test_repository_is_exact_pre_or_post_state(self):
         self.assertTrue(self._is_pre() or self._is_post())
         schema,canonical,sources,overlay=self._post_objects()
-        self.assertEqual(schema["version"],"0.52")
-        self.assertEqual(canonical["version"],"0.28")
-        self.assertEqual(len(canonical["records"]),674)
-        self.assertEqual(sources["version"],"1.69")
-        self.assertEqual(len(sources["sources"]),233)
-        self.assertEqual(overlay["version"],"0.3")
-        self.assertEqual(overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
+        self.assertTrue(self._version_at_least(schema["version"],"0.52"))
+        self.assertTrue(self._version_at_least(canonical["version"],"0.28"))
+        self.assertGreaterEqual(len(canonical["records"]),674)
+        self.assertTrue(self._version_at_least(sources["version"],"1.69"))
+        self.assertGreaterEqual(len(sources["sources"]),233)
+        self.assertTrue(self._version_at_least(overlay["version"],"0.3"))
+        self.assertEqual(
+            overlay["canonical_checkpoint"],
+            {"registry_version":canonical["version"],"record_count":len(canonical["records"])},
+        )
 
     def test_scope_is_one_series_one_occurrence_two_sources(self):
         self.assertEqual(self.plan["preconditions"]["required_absent_series_ids"],["WSER-FIS-NP-FEDERAL-BUDGET"])

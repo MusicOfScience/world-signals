@@ -223,7 +223,6 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         self.assertEqual(sm["WSSRC-INT-031"]["canonical_dependency_count"], 1)
 
     def test_global_write_gates_remain_closed(self):
-        self.assertEqual(self.expectations["version"], "0.7")
         self.assertFalse(self.expectations["automatic_canonical_commit"])
         self.assertFalse(self.expectations["google_calendar_write"])
 

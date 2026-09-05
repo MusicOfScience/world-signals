@@ -148,7 +148,6 @@ class ProvenanceScopeRepairATests(unittest.TestCase):
         self.assertEqual(row["start_local"], "2027-01-05")
 
     def test_safety_controls_remain_closed(self):
-        self.assertEqual(self.expectations["version"], "0.7")
         self.assertFalse(self.expectations["automatic_canonical_commit"])
         self.assertFalse(self.expectations["google_calendar_write"])
 

@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-05",
-  "version": "1.69",
+  "version": "1.70",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -718,7 +718,7 @@
       "notes": null,
       "timezone_scope": "FIXED",
       "parser_version": "eurostat-release-calendar-0.2",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+      "runtime_health_state": "ENDPOINT_IDENTITY_HOLD",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_CC_BY_AND_FREE_STATISTICAL_REUSE",
@@ -730,20 +730,21 @@
       "rights_reviewed_at": "2026-09-02T19:47:00+10:00",
       "rights_review_scope": "P0-A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
       "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "monitoring_readiness_status": "HOLD_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED",
       "monitoring_priority_score": 330,
       "canonical_dependency_count": 12,
       "monitoring_readiness_assessed_at": "2026-09-02",
-      "monitoring_activation_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "ENDPOINT_IDENTITY_HOLD_NO_LIVE_ROUTE",
       "last_successful_research_verification_at": "2026-09-02T23:10:00+10:00",
       "monitor_endpoints": [
         {
-          "endpoint_role": "release_calendar_ics",
+          "endpoint_role": "release_calendar_subscription_landing_page",
           "url": "https://ec.europa.eu/eurostat/en/news/release-calendar",
-          "transport": "ICS",
-          "preferred_for_monitoring": true,
+          "transport": "HTML",
+          "preferred_for_monitoring": false,
           "completeness_scope": "FULL_CALENDAR_WITH_SOURCE_NATIVE_WEEKLY_CERTAINTY",
-          "notes": "Weekly planning confirmed every Friday for the following week; beyond that provisional."
+          "notes": "Current verification shows this URL is HTML. Eurostat still explicitly offers generated .ics subscription URLs, but a stable authoritative generated feed URL was not recovered in this pass. Do not substitute HTML scraping for the intended ICS/feed route.",
+          "route_validation_state": "HTML_LANDING_PAGE_NOT_GENERATED_ICS_FEED"
         },
         {
           "endpoint_role": "euro_indicators_release_calendar",
@@ -757,7 +758,8 @@
       "automated_monitoring_use": "CLEARED",
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "Eurostat permits attributed reuse and expressly provides an internet-calendar subscription that automatically receives calendar updates; automated clearance is bounded to the official ICS/feed route and source-native provisional/confirmed status must be preserved."
+      "governance_backfill_basis": "Eurostat permits attributed reuse and expressly provides an internet-calendar subscription that automatically receives calendar updates; automated clearance is bounded to the official ICS/feed route and source-native provisional/confirmed status must be preserved.",
+      "endpoint_route_validation_state": "MISCLASSIFIED_ICS_ENDPOINT_REPAIRED_GENERATED_FEED_UNRESOLVED"
     },
     {
       "source_id": "WSSRC-MAC-006",
@@ -781,8 +783,8 @@
       "backup_source": null,
       "notes": "Fault-injection P verified that fetch timeout, malformed parser output and syntactically valid false date drift cannot mutate canonical state. Current official Monthly GDP July 2026 page remains 11 Sep 2026 07:00.",
       "timezone_scope": "FIXED",
-      "parser_version": "ons-release-calendar-0.2",
-      "runtime_health_state": "PILOT_VALIDATED_FAULT_INJECTION_RECOVERED",
+      "parser_version": "ons-release-calendar-0.3",
+      "runtime_health_state": "HEALTHY_AT_2026_09_05_IDENTITY_PROBE",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_OPEN_GOVERNMENT_LICENCE",
@@ -813,8 +815,8 @@
         }
       ],
       "last_successful_research_verification_at": "2026-09-02T20:51:00+10:00",
-      "monitoring_activation_status": "PILOT_AUTOMATED_REVIEW_CANDIDATES_NO_AUTO_COMMIT",
-      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 1200,
       "canonical_dependency_count": 19,
       "monitoring_readiness_assessed_at": "2026-09-02",
@@ -825,7 +827,21 @@
       "automated_monitoring_use": "CLEARED",
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "ONS combines OGL reuse, explicit bot/crawler fair-use guidance and official release-query/feed routes; the existing fault-contained release-calendar parser supports automated pilot monitoring under those published controls."
+      "governance_backfill_basis": "ONS combines OGL reuse, explicit bot/crawler fair-use guidance and official release-query/feed routes; the existing fault-contained release-calendar parser supports automated pilot monitoring under those published controls.",
+      "live_adapter_id": "ONS_RELEASE_CALENDAR_RSS",
+      "endpoint_route_validation_state": "RSS_PAGINATION_AND_19_CANONICAL_IDENTITIES_VALIDATED",
+      "live_validation_evidence": {
+        "research_run_id": 33969711355,
+        "observed_at": "2026-09-05",
+        "transport": "application/rss+xml",
+        "page_count": 4,
+        "upcoming_item_count": 343,
+        "canonical_identity_matches": 19,
+        "canonical_identity_failures": 0,
+        "datetime_mismatches": 0,
+        "certainty_status_present_in_rss": false,
+        "automatic_commit_allowed": false
+      }
     },
     {
       "source_id": "WSSRC-MAC-007",

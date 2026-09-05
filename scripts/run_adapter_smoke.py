@@ -20,6 +20,7 @@ from world_signals.adapters import (
     fetch_cellar_celex_document,
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
+    fetch_ons_upcoming_releases,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -51,7 +52,8 @@ def main() -> int:
         "scope":"LIVE_ROUTES_ONLY_PLUS_ENDPOINT_CANDIDATE_PROBES",
         "held_routes_excluded":[
             "KENYA_PFM_BPS_RULE",
-            "EU_CRA_CURRENT_ELI_HTML_HTTP_202_ROUTE"
+            "EU_CRA_CURRENT_ELI_HTML_HTTP_202_ROUTE",
+            "EUROSTAT_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED"
         ],
         "results":[],
     }
@@ -69,6 +71,28 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
+    try:
+        ons_items,ons_snaps=fetch_ons_upcoming_releases()
+        report["results"].append({
+            "adapter":"ONS_RELEASE_CALENDAR_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-MAC-006",
+            "snapshots":[snap.as_dict() for snap in ons_snaps],
+            "page_count":len(ons_snaps),
+            "item_count":len(ons_items),
+            "rss_carries_certainty_status":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"ONS_RELEASE_CALENDAR_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-MAC-006",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         meta,snap=fetch_suin_metadata()

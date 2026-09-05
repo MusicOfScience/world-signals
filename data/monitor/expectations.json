@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.7",
+  "version": "0.8",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -298,6 +298,126 @@
       "current_state_change_policy": "GENERATE_PARENT_ACT_CELLAR_RELATION_TOPOLOGY_REVIEW_CANDIDATE_NO_DIRECT_EVENT_MUTATION",
       "transport_hash_policy": "TRANSPORT_OR_DOCUMENT_HASH_CHANGE_ALONE_IS_NOT_LEGAL_RULE_CHANGE",
       "relation_policy": "NEW_OR_REMOVED_AMENDMENT_CORRIGENDUM_CONSOLIDATION_OR_REPEAL_EDGE_IS_REVIEW_EVIDENCE_NOT_PROOF_OF_TRACKED_DATE_CHANGE",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "ONS_RELEASE_CALENDAR_RSS",
+      "source_id": "WSSRC-MAC-006",
+      "canonical_occurrence_ids": [
+        "WSO-MAC-A-0037",
+        "WSO-MAC-A-0038",
+        "WSO-MAC-A-0039",
+        "WSO-MAC-A-0040",
+        "WSO-MAC-A-0041",
+        "WSO-MAC-A-0042",
+        "WSO-MAC-A-0043",
+        "WSO-MAC-A-0044",
+        "WSO-MAC-A-0045",
+        "WSO-MAC-A-0046",
+        "WSO-MAC-A-0047",
+        "WSO-MAC-A-0048",
+        "WSO-MAC-A-0049",
+        "WSO-MAC-B-0035",
+        "WSO-MAC-B-0036",
+        "WSO-MAC-B-0037",
+        "WSO-MAC-B-0038",
+        "WSO-MAC-B-0039",
+        "WSO-MAC-B-0040"
+      ],
+      "monitor_role": "UPCOMING_RELEASE_DATETIME_SENTINEL",
+      "cadence": "DAILY",
+      "feed": {
+        "base_url": "https://www.ons.gov.uk/releasecalendar",
+        "transport": "RSS",
+        "content_type": "application/rss+xml",
+        "page_limit": 100,
+        "max_pages": 10,
+        "release_type": "type-upcoming"
+      },
+      "tracked_items": [
+        {
+          "occurrence_id": "WSO-MAC-A-0037",
+          "feed_title": "Consumer price inflation, UK: August 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0038",
+          "feed_title": "Consumer price inflation, UK: September 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0039",
+          "feed_title": "Consumer price inflation, UK: October 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0040",
+          "feed_title": "Consumer price inflation, UK: November 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0041",
+          "feed_title": "Consumer price inflation, UK: December 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0042",
+          "feed_title": "UK Labour Market: September 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0043",
+          "feed_title": "UK Labour Market: October 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0044",
+          "feed_title": "UK Labour Market: November 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0045",
+          "feed_title": "UK Labour Market: December 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0046",
+          "feed_title": "UK Labour Market: January 2027"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0047",
+          "feed_title": "GDP quarterly national accounts, UK: April to June 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0048",
+          "feed_title": "GDP first quarterly estimate, UK: July to September 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0049",
+          "feed_title": "GDP quarterly national accounts, UK: July to September 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0035",
+          "feed_title": "GDP monthly estimate, UK: July 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0036",
+          "feed_title": "Index of Production, UK: July 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0037",
+          "feed_title": "UK Trade: July 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0038",
+          "feed_title": "GDP monthly estimate, UK: August 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0039",
+          "feed_title": "Index of Production, UK: August 2026"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0040",
+          "feed_title": "UK Trade: August 2026"
+        }
+      ],
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "identity_policy": "EXACT_TITLE_ONE_MATCH_REQUIRED",
+      "absence_policy": "SOURCE_MATCH_REVIEW_ONLY_NO_CANCELLATION_OR_COMPLETION_INFERENCE",
+      "elapsed_policy": "DO_NOT_PRESENCE_CHECK_ELAPSED_OCCURRENCES_AGAINST_UPCOMING_FEED",
+      "datetime_change_policy": "GENERATE_REVIEW_CANDIDATE_REQUIRE_OFFICIAL_HTML_VERIFICATION",
+      "certainty_policy": "RSS_HAS_NO_CONFIRMED_PROVISIONAL_FIELD_DO_NOT_CHANGE_CERTAINTY_FROM_RSS",
       "automatic_commit_allowed": false
     }
   ]

@@ -50,6 +50,15 @@ from .kenya_law import (
     fetch_kenya_budget_policy_rule_current,
     parse_kenya_budget_policy_rule,
 )
+from .ons_release_calendar import (
+    ONS_RELEASE_CALENDAR,
+    ONS_RELEASE_CALENDAR_RSS_ACCEPT,
+    ONSReleaseItem,
+    fetch_ons_release_calendar_page,
+    fetch_ons_upcoming_releases,
+    ons_release_calendar_rss_url,
+    parse_ons_release_calendar_rss,
+)
 from .rba_fsr import RBA_FSR_RSS, fetch_rba_fsr, parse_rba_fsr_rss
 from .socrata import (
     SUIN_DATASET_ID,
@@ -77,6 +86,9 @@ __all__ = [
     "FetchSnapshot",
     "KENYA_PFM_BASELINE_2025_11_04",
     "KENYA_PFM_CURRENT",
+    "ONS_RELEASE_CALENDAR",
+    "ONS_RELEASE_CALENDAR_RSS_ACCEPT",
+    "ONSReleaseItem",
     "RBA_FSR_RSS",
     "SUIN_DATASET_ID",
     "cellar_celex_url",
@@ -94,10 +106,13 @@ __all__ = [
     "fetch_cra_article_71",
     "fetch_kenya_budget_policy_rule_baseline",
     "fetch_kenya_budget_policy_rule_current",
+    "fetch_ons_release_calendar_page",
+    "fetch_ons_upcoming_releases",
     "fetch_rba_fsr",
     "fetch_suin_metadata",
     "fetch_suin_rows",
     "normalize_cellar_legal_topology",
+    "ons_release_calendar_rss_url",
     "parse_cbam_annual_declaration_surrender_rule",
     "parse_cbam_certificate_sale_rule",
     "parse_cbam_verification_report_rule",
@@ -106,6 +121,7 @@ __all__ = [
     "parse_cellar_legal_relation_diagnostics",
     "parse_eli_current_state",
     "parse_kenya_budget_policy_rule",
+    "parse_ons_release_calendar_rss",
     "parse_rba_fsr_rss",
     "parse_socrata_metadata",
     "parse_socrata_rows",
