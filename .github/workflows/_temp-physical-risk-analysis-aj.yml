@@ -1,0 +1,40 @@
+name: TEMP AJ physical-risk analysis read-only gate
+
+on:
+  push:
+    branches:
+      - feature/physical-risk-analysis-aj
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-64 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "c85db2ec3a675a749acb8201705fb6f1f85de27d"
+      - name: Reproduce post-AI pressure audit
+        run: python scripts/audit_post_ai_pressure_aj.py
+      - name: Fail-closed AJ check-only transform
+        run: python scripts/apply_australian_tropical_cyclone_season_analysis_aj.py
+      - name: AJ contract tests
+        run: python -m unittest tests.test_australian_tropical_cyclone_season_analysis_aj -v
+      - name: Validate canonical remains sound
+        run: python scripts/validate_registry.py
+      - name: Validate current Analysis pre-state
+        run: python scripts/validate_analysis.py
+      - name: Python compile
+        run: |
+          python -m py_compile \
+            scripts/audit_post_ai_pressure_aj.py \
+            scripts/apply_australian_tropical_cyclone_season_analysis_aj.py \
+            src/world_signals/analysis.py
