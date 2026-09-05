@@ -30,6 +30,7 @@
   "new_evidence_ids": [
     "WSEV-EIA-WPSR-EIA-20260902",
     "WSEV-EIA-WPSR-REUTERS-20260902",
+    "WSEV-EIA-OIL-REUTERS-20260901",
     "WSEV-EU-CHIPS-ARTICLE40-2023",
     "WSEV-EU-CHIPS-CWP-2025",
     "WSEV-EU-CHIPS-SWD-20260603",
@@ -46,7 +47,7 @@
     "analysis_reviews_version": "0.4",
     "analysis_review_count": 8,
     "analysis_evidence_version": "0.4",
-    "analysis_evidence_count": 20,
+    "analysis_evidence_count": 21,
     "eligible_completed_occurrence_count": 9,
     "reviewed_occurrence_count": 8,
     "reviewed_event_type_diversity": 7,
