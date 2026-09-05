@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           BASE=1bfa947d1fbd86e945349991778944094a78e5ed
-          REVIEWED_HEAD=c51dcf5d292b849d827e4f869f82e2d49f45fa0b
+          REVIEWED_HEAD=b37b4c4f96b40e25d7024e4c9aa1f9e60a2620a9
           git fetch origin main feature/source-native-fiscal-analysis-v
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git rev-parse HEAD^)" = "$REVIEWED_HEAD"
@@ -132,8 +132,8 @@ jobs:
           git add \
             data/analysis/event_reviews.json \
             data/analysis/evidence_registry.json \
-            data/analysis/SOURCE_NATIVE_FISCAL_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md \
-            .github/workflows/_temp-analysis-v-probe.yml
+            data/analysis/SOURCE_NATIVE_FISCAL_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
+          # git rm in the preceding step has already staged the workflow deletion.
           git diff --cached --name-status
           git commit -m "Apply source-native fiscal analysis V transaction"
           git push origin HEAD:feature/source-native-fiscal-analysis-v
