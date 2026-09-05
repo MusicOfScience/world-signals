@@ -4,6 +4,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 import unittest
 
@@ -93,6 +94,17 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         self.assertFalse(report.ok)
         self.assertTrue(any("surprise requires an explicit comparison basis" in e for e in report.errors))
 
+    def test_interaction_type_reuses_controlled_vocabulary(self):
+        reviews = deepcopy(self.reviews)
+        reviews["reviews"][0]["what_appears_connected"]["interaction_type"] = "POST_HOC_STORY"
+        report = self.validate(reviews=reviews)
+        self.assertFalse(report.ok)
+        self.assertTrue(any("invalid interaction_type" in error for error in report.errors))
+        self.assertIn(
+            "TRANSMISSION_CHANNEL",
+            self.schema["controlled_vocabularies"]["interaction_type"],
+        )
+
     def test_non_null_connection_requires_alternatives(self):
         reviews = deepcopy(self.reviews)
         reviews["reviews"][0]["alternative_explanations"] = []
@@ -139,6 +151,25 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         self.assertFalse(projection["metadata"]["google_calendar_write"])
         self.assertEqual(projection["metadata"]["review_count"], 1)
         self.assertEqual(len(projection["reviews"][0]["evidence"]), 2)
+
+    def test_browser_module_reads_only_analysis_projection(self):
+        source = (ROOT / "web/analysis.js").read_text(encoding="utf-8")
+        fetches = re.findall(r"fetch\((['\"])(.*?)\1", source)
+        self.assertEqual([url for _, url in fetches], ["data/analysis.json"])
+        for forbidden in ("data/canonical", "data/sources", "data/monitor", "method:'POST'", 'method:"POST"', "localStorage"):
+            self.assertNotIn(forbidden, source)
+        self.assertIn("Canonical write: OFF", source)
+        self.assertIn("Movement ≠ cause", source)
+
+    def test_static_build_validates_and_publishes_analysis_without_html_mutation(self):
+        build = (ROOT / "scripts/build_site.py").read_text(encoding="utf-8")
+        html = (ROOT / "web/index.html").read_text(encoding="utf-8")
+        self.assertIn("validate_analysis", build)
+        self.assertIn('docs/"data/analysis.json"', build)
+        self.assertIn('bundled source: web/analysis.js', build)
+        self.assertIn('"analysis.css"', build)
+        self.assertNotIn('id="analysisView"', html)
+        self.assertNotIn('id="analysisTab"', html)
 
 
 if __name__ == "__main__":
