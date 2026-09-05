@@ -25,7 +25,7 @@ if not report.ok:
 
 docs=ROOT/"docs"
 docs.mkdir(exist_ok=True)
-for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","history.js","history.css","operations.js","operations.css"):
+for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 
 # Keep source modules separate while shipping one Operations browser asset.
