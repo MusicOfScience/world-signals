@@ -1,0 +1,513 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CROSS_DOMAIN_ANALYSIS_V",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "United Nations Office for Disarmament Affairs document library",
+      "title": "BWC Working Group eighth session — revised pre-session working text (BWC/WG/8/CRP.1/Rev.2)",
+      "url": "https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionEighth_session_%282026%29/BWC_WG_8_CRP1_Rev1_2.pdf",
+      "published_at": "2026-02-07",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The revised pre-session working text restates the Ninth Review Conference mandate for the Working Group to identify, examine and develop measures, including possible legally binding measures, and make recommendations to strengthen and institutionalise the Convention.",
+        "The document is negotiating working material and distinguishes carried, revised and proposed text; it is not treated as a final substantive agreement of States Parties."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-PROC-20260213",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "United Nations Office for Disarmament Affairs document library",
+      "title": "BWC Working Group eighth session — procedural report working document (BWC/WG/8/CRP.2)",
+      "url": "https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionEighth_session_%282026%29/BWC_WG_8_CRP_2.pdf",
+      "published_at": "2026-02-13",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The eighth session met from 9 to 13 February 2026 and held ten meetings under the continuing strengthening agenda.",
+        "A further revision of the working text was issued at the tenth meeting without prejudice to future discussions.",
+        "The procedural report was adopted by consensus; that procedural consensus is not promoted into a claim of final substantive consensus on the strengthening measures."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-PROGRAMME-20260424",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "93rd General Session — provisional programme",
+      "url": "https://www.woah.org/app/uploads/2026/03/gs93-wd-adm-01-programme-en.pdf",
+      "published_at": "2026-04-24",
+      "roles": [
+        "EXPECTATION_BENCHMARK"
+      ],
+      "supports": [
+        "The provisional programme scheduled presentation and adoption of WOAH's 8th Strategic Plan during the 93rd General Session.",
+        "The programme also scheduled consideration and adoption of standards and resolutions across the Terrestrial and Aquatic Codes and Manuals.",
+        "The programme establishes the planned institutional agenda but not an expected numeric count of resolutions or standards."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-OUTCOMES-20260522",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "93rd General Session of the World Assembly of Delegates — official event outcomes",
+      "url": "https://www.woah.org/en/event/93rd-general-session-of-the-world-assembly-of-delegates/",
+      "published_at": "2026-05-22",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The 93rd General Session took place from 18 to 22 May 2026.",
+        "WOAH reports 35 resolutions and 51 international standards adopted during the session.",
+        "The session also included official disease-status and control-programme decisions, illustrating institutional significance beyond any single market metric."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "WOAH 8th Strategic Plan adopted for 2027–2031",
+      "url": "https://www.woah.org/en/woah-8th-strategic-plan-adopted-for-2027-2031/",
+      "published_at": "2026-05-20",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "The World Assembly adopted WOAH's 8th Strategic Plan on 20 May 2026 for the 2027–2031 period.",
+        "WOAH describes implementation through subsequent global and regional roadmaps and monitoring frameworks.",
+        "The plan's prospective implementation is therefore distinct from the observed fact of adoption at the General Session."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-CONSTITUTION-A119",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Nepal Law Commission",
+      "host_or_distribution": "Nepal Law Commission",
+      "title": "Constitution of Nepal — Article 119 annual estimates rule",
+      "url": "https://lawcommission.gov.np/content/13437/nepal-s-constitution/",
+      "published_at": null,
+      "roles": [
+        "EXPECTATION_BENCHMARK"
+      ],
+      "supports": [
+        "Article 119(3) requires the Finance Minister to present annual revenue and expenditure estimates to the Federal Parliament on the fifteenth day of Jestha every year.",
+        "For this analytical packet the constitutional rule is used only as the source-native recurring-date benchmark; it does not supply a Gregorian conversion or presentation clock time."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-MOF-2083",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Ministry of Finance, Government of Nepal",
+      "host_or_distribution": "Ministry of Finance, Government of Nepal",
+      "title": "Budget Statement for the Financial Year 2083/84",
+      "url": "https://mof.gov.np/content/1741/budget-statement-for-the-financial-year-2083-84/",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Ministry of Finance publishes the FY2083/84 Budget Statement with the source-native date 15 Jestha 2083.",
+        "A CMS publication clock is not used as the constitutional budget-presentation time and no Gregorian event date is derived from the page."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-MOF-APPROPRIATION-2083",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Ministry of Finance, Government of Nepal",
+      "host_or_distribution": "Ministry of Finance, Government of Nepal",
+      "title": "Appropriation Act archive — Appropriation Act 2083",
+      "url": "https://mof.gov.np/category/allocation-act/?page=1",
+      "published_at": null,
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Ministry of Finance archive lists the Appropriation Act 2083 on 7 Saun 2083.",
+        "This is a later observed source-native fiscal-cycle development; it does not by itself reconstruct omitted parliamentary stages or establish that the budget presentation alone caused enactment."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    }
+  ],
+  "reviews": [
+    {
+      "analysis_id": "WSAN-BWC-WG8-20260213-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T18:46:00Z",
+      "canonical_occurrence_id": "WSO-BWC-WG-2026-S08",
+      "canonical_series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "canonical_event_type": "TREATY_WORKING_GROUP_SESSION",
+      "canonical_institution": "Biological Weapons Convention / UNODA",
+      "canonical_release_utc": null,
+      "scope": "BWC strengthening Working Group eighth session, institutional mandate, procedural progress and the distinction between revised negotiating text and substantive consensus",
+      "what_happened": {
+        "summary": "The BWC Working Group held its eighth session in Geneva from 9 to 13 February 2026 under the continuing mandate to develop strengthening measures. Official procedural material records ten meetings and a further revision of the working text issued without prejudice to future discussions; the procedural report itself was adopted by consensus.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The relevant ex-ante benchmark is institutional rather than market-based. Official pre-session material restated the Ninth Review Conference mandate to identify, examine and develop strengthening measures, including possible legally binding measures, and make recommendations.",
+        "benchmarks": [
+          {
+            "metric": "working_group_strengthening_mandate",
+            "value": "identify, examine and develop measures, including possible legally binding measures, and make recommendations to strengthen and institutionalise the Convention",
+            "unit": "institutional_mandate",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-BWC-WG8-UNODA-MANDATE-20260207"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE-20260207"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No defensible pre-session benchmark establishes how much substantive convergence or legal development the eighth session should have achieved. A revised negotiating text is evidence of continuing work, not a basis for labelling the session an upside or downside surprise.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "STRUCTURAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The eighth session is structurally one stage of the formal multi-session process mandated to develop recommendations on strengthening the Convention. That institutional relationship is explicit; it does not establish that this session alone caused any later treaty outcome.",
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Changes in revised working text can reflect drafting, bracket management or preservation of options and should not be counted as substantive agreement merely because they appear in a later revision.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        },
+        {
+          "summary": "Consensus on the procedural report is not equivalent to consensus on the substantive strengthening measures; the official material explicitly preserves future discussion.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Any later convergence in the BWC strengthening process could arise from subsequent Working Group sessions, changes in national positions, intersessional diplomacy or Review Conference bargaining rather than from the eighth session alone.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No later legally binding measure, institutional reform, compliance effect or security outcome is attributed to the eighth session in this packet. Those outcomes remain contingent on subsequent negotiations and formal decisions."
+      },
+      "falsifiers": [
+        "If authoritative BWC records show that the revised text issued at the eighth session was formally adopted as a substantive agreement rather than preserved for future discussion, the outcome classification should be strengthened.",
+        "If a later official record attributes a specific institutional or legal change directly and uniquely to a decision taken at the eighth session, the NOT_A_CAUSAL_CLAIM treatment should be reconsidered.",
+        "If the cited pre-session document is shown not to represent the eighth-session negotiating baseline, the expectation section must be revised."
+      ],
+      "analytical_conclusion": "The eighth BWC strengthening Working Group session is best understood as documented procedural and negotiating progress within a mandated multi-session process. The official record does not support converting revised draft text or procedural consensus into a claim of final substantive agreement, market reaction or downstream treaty effect.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-WOAH-GS93-20260522-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T18:46:00Z",
+      "canonical_occurrence_id": "WSO-WOAH-GS-093",
+      "canonical_series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "canonical_event_type": "GOVERNANCE_ASSEMBLY_SESSION",
+      "canonical_institution": "World Organisation for Animal Health",
+      "canonical_release_utc": null,
+      "scope": "WOAH 93rd General Session, standards and strategic-plan adoption, institutional significance and prospective implementation without manufacturing a market event study",
+      "what_happened": {
+        "summary": "WOAH's World Assembly met from 18 to 22 May 2026. Official outcomes report 35 resolutions and 51 international standards adopted, alongside disease-status and control-programme decisions. The Assembly also adopted WOAH's 8th Strategic Plan for 2027–2031 on 20 May.",
+        "actuals": [
+          {
+            "metric": "resolutions_adopted",
+            "value": 35,
+            "unit": "count",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-OUTCOMES-20260522"
+            ]
+          },
+          {
+            "metric": "international_standards_adopted",
+            "value": 51,
+            "unit": "count",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-OUTCOMES-20260522"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The official provisional programme scheduled adoption work on the 8th Strategic Plan and international standards/resolutions. It did not establish a defensible expected numeric count for the eventual standards or resolutions.",
+        "benchmarks": [
+          {
+            "metric": "strategic_plan_agenda",
+            "value": "presentation and adoption of the 8th Strategic Plan",
+            "unit": "institutional_agenda",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-PROGRAMME-20260424"
+            ]
+          },
+          {
+            "metric": "standards_and_resolutions_agenda",
+            "value": "consideration and adoption of international standards and resolutions across WOAH Codes and Manuals",
+            "unit": "institutional_agenda",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-PROGRAMME-20260424"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The broad adoption agenda was realised, but the pre-session programme did not establish a quantitative forecast against which 35 resolutions or 51 standards could be classified as an upside or downside surprise. Realised institutional output is therefore preserved without synthetic surprise scoring.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "strategic_plan_agenda",
+            "actual": "8th Strategic Plan adopted on 20 May 2026 for 2027–2031",
+            "expected": "presentation and adoption of the 8th Strategic Plan was on the provisional programme",
+            "direction": "AGENDA_ITEM_REALIZED"
+          },
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "standards_and_resolutions_agenda",
+            "actual": "35 resolutions and 51 international standards adopted",
+            "expected": "standards and resolutions were scheduled for consideration and adoption without a numeric forecast",
+            "direction": "AGENDA_REALIZED_WITHOUT_QUANTITATIVE_SURPRISE_BENCHMARK"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424",
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "STRUCTURAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The World Assembly is the formal governance forum in which WOAH members adopt these international standards, resolutions and the organisation's strategic plan. That institutional dependency is explicit, but downstream national policy, trade or animal-health outcomes require later implementation and are not attributed mechanically to the Assembly session.",
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424",
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The number of standards or resolutions adopted is not itself a measure of implementation quality, disease control, trade impact or institutional effectiveness.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        },
+        {
+          "summary": "One Health, zoonotic-risk and biosecurity relevance is cross-domain context. It does not alter the canonical primary category of this WOAH series from AGRICULTURE_FOOD.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522",
+            "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+          ]
+        },
+        {
+          "summary": "High institutional importance does not imply that a clean contemporaneous asset-price response exists or should be manufactured.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Future animal-health, trade or food-system outcomes will depend on member implementation, veterinary capacity, financing, disease conditions and other national or international measures beyond the General Session's formal decisions.",
+          "evidence_refs": [
+            "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "The adopted 8th Strategic Plan is intended for the 2027–2031 period and WOAH describes subsequent roadmaps and monitoring frameworks. Those implementation steps are legitimate watch items, but their effects are prospective rather than observed consequences of the May 2026 session.",
+        "evidence_refs": [
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "falsifiers": [
+        "If official WOAH records revise the reported 35-resolution or 51-standard totals, the structured actuals should be corrected.",
+        "If the provisional programme is shown not to have contemplated the Strategic Plan or standards adoption items represented here, the NO_CLEAR_SURPRISE comparison basis should be revised.",
+        "If later implementation monitoring shows that a proposed downstream effect did not occur, that effect must not be promoted from PLAUSIBLE_WATCH_ITEM to OBSERVED."
+      ],
+      "analytical_conclusion": "The 93rd WOAH General Session delivered the broad standards and strategic-governance agenda signalled in advance, including adoption of the 8th Strategic Plan and a substantial body of standards and resolutions. The realised counts are institutional facts rather than synthetic market surprises; implementation from 2027 is a watch item, not an observed downstream effect. The event remains canonically AGRICULTURE_FOOD despite important One Health and biosecurity connections.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-NP-BUDGET-2083-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T18:46:00Z",
+      "canonical_occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+      "canonical_series_id": "WSER-FIS-NP-FEDERAL-BUDGET",
+      "canonical_event_type": "FISCAL_POLICY_PROCESS",
+      "canonical_institution": "Ministry of Finance, Government of Nepal",
+      "canonical_release_utc": null,
+      "scope": "Nepal Federal Budget 2083/84 presentation, constitutional source-native timing and later fiscal-cycle progression without Gregorian conversion or synthetic clock time",
+      "what_happened": {
+        "summary": "Nepal's Ministry of Finance publishes the FY2083/84 Budget Statement with the source-native date 15 Jestha 2083. The canonical occurrence therefore records an exact jurisdictional civil date in the Bikram Sambat calendar while leaving Gregorian and UTC event timing unresolved.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-NP-BUDGET-MOF-2083"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Article 119(3) of Nepal's Constitution provides the recurring legal benchmark: the Finance Minister presents annual revenue and expenditure estimates to the Federal Parliament on the fifteenth day of Jestha every year.",
+        "benchmarks": [
+          {
+            "metric": "constitutional_budget_presentation_date",
+            "value": "15th day of Jestha every year",
+            "unit": "source_native_recurring_date_rule",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-NP-BUDGET-CONSTITUTION-A119"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-NP-BUDGET-CONSTITUTION-A119"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The official FY2083/84 budget statement carries 15 Jestha 2083, matching the recurring constitutional source-native date rule. No Gregorian conversion or presentation clock time is needed to establish that there is no clear timing surprise on the evidence admitted here.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "constitutional_budget_presentation_date",
+            "actual": "15 Jestha 2083",
+            "expected": "15th day of Jestha every year",
+            "direction": "SOURCE_NATIVE_DATE_MATCHES_RECURRING_LEGAL_RULE"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-NP-BUDGET-CONSTITUTION-A119",
+          "WSEV-NP-BUDGET-MOF-2083"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The constitutional recurring rule supplies the legal timing framework for the annual federal budget presentation, while the Ministry's budget statement supplies the observed source-native occurrence evidence. This is a legal/operational dependency, not a claim about market impact or about the cause of later parliamentary enactment.",
+        "evidence_refs": [
+          "WSEV-NP-BUDGET-CONSTITUTION-A119",
+          "WSEV-NP-BUDGET-MOF-2083"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "A Ministry website CMS publication clock is publication metadata, not evidence of the constitutional presentation clock time, and is not promoted into the event timing.",
+          "evidence_refs": [
+            "WSEV-NP-BUDGET-MOF-2083"
+          ]
+        },
+        {
+          "summary": "Later English-language budget files or archive entries do not create a second budget-presentation occurrence unless an authoritative source identifies a distinct event.",
+          "evidence_refs": [
+            "WSEV-NP-BUDGET-MOF-2083"
+          ]
+        },
+        {
+          "summary": "No third-party Bikram Sambat converter is admitted to turn 15 Jestha 2083 or 7 Saun 2083 into a synthetic Gregorian event date.",
+          "evidence_refs": [
+            "WSEV-NP-BUDGET-CONSTITUTION-A119",
+            "WSEV-NP-BUDGET-MOF-2083",
+            "WSEV-NP-BUDGET-MOF-APPROPRIATION-2083"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Later legal and fiscal-cycle milestones depend on parliamentary consideration, amendment, voting, assent and other institutional processes not reconstructed in this packet; the budget presentation alone is not treated as their sufficient cause.",
+          "evidence_refs": [
+            "WSEV-NP-BUDGET-MOF-2083",
+            "WSEV-NP-BUDGET-MOF-APPROPRIATION-2083"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "OBSERVED",
+        "summary": "The Ministry of Finance later lists the Appropriation Act 2083 on 7 Saun 2083. This is retained as an observed later source-native fiscal-cycle development, not as proof that presentation alone caused enactment and not as a reconstruction of omitted parliamentary milestones.",
+        "evidence_refs": [
+          "WSEV-NP-BUDGET-MOF-APPROPRIATION-2083"
+        ]
+      },
+      "falsifiers": [
+        "If the competent legal text is amended so that Article 119 no longer establishes the fifteenth day of Jestha rule for this budget cycle, the expectation benchmark must be revised.",
+        "If the Ministry of Finance corrects the FY2083/84 budget statement's source-native date, the surprise classification and canonical linkage must be rechecked.",
+        "If a competent Nepal-government source supplies an authoritative Gregorian mapping, the upstream canonical occurrence may be enriched under normal change control; this Analysis packet must not pre-empt that mapping.",
+        "If the Appropriation Act archive date is corrected or shown to refer to a different legal object, the observed second-order entry must be revised or removed."
+      ],
+      "analytical_conclusion": "The FY2083/84 Nepal budget case demonstrates that an exact event date need not be Gregorian. The official source-native date matches the constitutional recurring rule, while Gregorian and clock-time fields correctly remain unresolved. A later Appropriation Act listing is an observed fiscal-cycle development, but no causal shortcut or synthetic parliamentary timeline is inferred.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ]
+}
