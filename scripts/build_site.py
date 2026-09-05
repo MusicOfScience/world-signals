@@ -35,11 +35,15 @@ docs.mkdir(exist_ok=True)
 for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 
-# Keep source modules separate while shipping one Operations browser asset.
-# The appended biosecurity module only injects a read-only analytical section.
+# Keep source modules separate in the repository while shipping the existing
+# no-bundler static site. Biosecurity extends Operations; Analysis extends the
+# main app with a separate read-only view and cannot write canonical data.
 with (docs/"operations.js").open("a",encoding="utf-8") as bundled:
     bundled.write("\n\n/* bundled source: web/biosecurity.js */\n")
     bundled.write((ROOT/"web/biosecurity.js").read_text(encoding="utf-8"))
+with (docs/"app.js").open("a",encoding="utf-8") as bundled:
+    bundled.write("\n\n/* bundled source: web/analysis.js */\n")
+    bundled.write((ROOT/"web/analysis.js").read_text(encoding="utf-8"))
 
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
