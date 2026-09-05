@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-06",
-  "version": "1.75",
+  "version": "1.76",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -2427,7 +2427,7 @@
       "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY; CONTENT_REUSE_SUBJECT_TO PAGE-SPECIFIC TERMS",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 30,
-      "canonical_dependency_count": 2,
+      "canonical_dependency_count": 3,
       "monitoring_readiness_assessed_at": "2026-09-02",
       "rights_evidence_url": "https://www.bom.gov.au/copyright",
       "rights_summary": "The Bureau's cyclone page applies CC BY 4.0 to maps, graphs and diagrams unless otherwise noted. General Bureau terms state that content without specific terms may be used personally or within an organisation but not supplied to others or used commercially without permission. The page-element licence is not expanded to all page content.",

@@ -28,6 +28,10 @@ from scripts.apply_east_asia_lifecycle_repair_z import (
 from src.world_signals.analysis import analysis_population_readiness
 
 
+def version_tuple(raw):
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class EastAsiaLifecycleRepairZTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -69,7 +73,7 @@ class EastAsiaLifecycleRepairZTests(unittest.TestCase):
             self.assertEqual((self.sources["version"], len(self.sources["sources"])), (p["source_registry_version"], p["source_record_count"]))
             self.assertEqual((self.ledger["version"], len(self.ledger["changes"])), (p["change_ledger_version"], p["change_ledger_count"]))
         else:
-            self.assertGreaterEqual(float(self.post_canonical["version"]), float(post["canonical_registry_version"]))
+            self.assertGreaterEqual(version_tuple(self.post_canonical["version"]), version_tuple(post["canonical_registry_version"]))
             self.assertGreaterEqual(len(self.post_canonical["records"]), post["canonical_record_count"])
 
     def test_only_existing_stable_occurrences_are_repaired_by_exact_z_transform(self):
@@ -148,7 +152,10 @@ class EastAsiaLifecycleRepairZTests(unittest.TestCase):
 
     def test_overlay_semantics_are_unchanged_in_transform(self):
         if not self.simulated:
-            self.assertGreaterEqual(float(self.post_overlay["version"]), float(self.plan["postconditions"]["biosecurity_overlay_version"]))
+            self.assertGreaterEqual(
+                version_tuple(self.post_overlay["version"]),
+                version_tuple(self.plan["postconditions"]["biosecurity_overlay_version"]),
+            )
             return
         before = {k: v for k, v in self.overlay.items() if k not in {"version", "canonical_checkpoint"}}
         after = {k: v for k, v in self.post_overlay.items() if k not in {"version", "canonical_checkpoint"}}
