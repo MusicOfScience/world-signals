@@ -1,0 +1,23 @@
+name: TEMP Chile baseline check
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-chile-baseline-check.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-prep
+      - name: Print exact Chile source row
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          row=next(r for r in src['sources'] if r['source_id']=='WSSRC-REG2-004')
+          print(json.dumps(row,indent=2,ensure_ascii=False,sort_keys=True))
+          PY
