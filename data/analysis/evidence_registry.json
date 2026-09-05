@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.6",
+  "version": "0.7",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -632,6 +632,169 @@
       "supports": [
         "UNODA schedules the tenth Working Group session for 7-11 December 2026 in Geneva.",
         "The scheduled continuation is a future process dependency and not evidence that substantive consensus has already been achieved."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-EVENT-OUTCOMES",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "93rd General Session of the World Assembly of Delegates",
+      "url": "https://www.woah.org/en/event/93rd-general-session-of-the-world-assembly-of-delegates/",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The 93rd General Session took place 18-22 May 2026 in Paris.",
+        "WOAH reports 35 resolutions adopted and 51 international standards adopted or revised.",
+        "WOAH reports 3 new and 9 revised Terrestrial Code chapters, 17 revised Terrestrial Manual chapters, 18 revised Aquatic Code chapters and 4 revised Aquatic Manual chapters.",
+        "Six Members had new animal-health statuses recognised and three Members had animal-disease control programmes endorsed."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-FINAL-RESOLUTIONS",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "GS93 — Final resolutions",
+      "url": "https://www.woah.org/app/uploads/2026/06/sg93-final-resolutions-en.pdf",
+      "published_at": "2026-06",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The final resolution set records the formal resolutions adopted at the 93rd General Session.",
+        "Resolution No. 18 concerns the updated Global Action Plan on Antimicrobial Resistance 2026-2036.",
+        "The existence of a formal resolution establishes adoption as an institutional outcome but does not by itself establish national implementation or external impact."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-STRATEGIC-PLAN",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "WOAH 8th Strategic Plan adopted for 2027–2031",
+      "url": "https://www.woah.org/en/woah-8th-strategic-plan-adopted-for-2027-2031/",
+      "published_at": "2026-05-20",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WOAH Members adopted the 8th Strategic Plan on 20 May 2026 for 2027-2031.",
+        "The Plan formally takes effect in 2027.",
+        "Its orientations include strengthening global standards, empowering national animal-health systems and elevating animal health as a global priority.",
+        "The transition from adoption in 2026 to implementation from 2027 is explicit."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-AMR-ADOPTION",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "WOAH Members adopt the updated Global Action Plan on Antimicrobial Resistance",
+      "url": "https://www.woah.org/en/woah-members-adopt-the-updated-global-action-plan-on-antimicrobial-resistance/",
+      "published_at": "2026-07-20",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "WOAH states that its 183 Members adopted the updated GAP-AMR 2026-2036 on 21 May 2026 through Resolution No. 18.",
+        "WOAH characterises the plan as a One Health framework spanning human, animal, plant and environmental health.",
+        "WHO Member States subsequently adopted the updated Plan, demonstrating cross-institutional alignment without establishing implementation success."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-STANDARDS-WTO-SPS",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "International Standards",
+      "url": "https://www.woah.org/en/what-we-do/standards/",
+      "published_at": null,
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "WOAH states that the WTO SPS Agreement encourages WTO Members to base sanitary measures on international standards where they exist.",
+        "WOAH identifies itself as the WTO reference organisation for animal-health and zoonosis standards.",
+        "The Terrestrial Code supports prevention, detection and control of pathogens and safe international trade in animals and animal products."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WTO-WOAH-SPS-RELATIONSHIP",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Trade Organization",
+      "host_or_distribution": "WTO",
+      "title": "The WTO and the World Organization for Animal Health (WOAH)",
+      "url": "https://www.wto.org/english/thewto_e/coher_e/wto_oie_e.htm",
+      "published_at": null,
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "The WTO identifies WOAH as one of the standard-setting bodies recognised by the SPS Agreement.",
+        "WTO-WOAH collaboration concerns the use of international standards in the SPS Agreement context.",
+        "The SPS Agreement calls for Members to base sanitary or phytosanitary measures on international standards, guidelines or recommendations on as wide a basis as possible."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-ANIMAL-WELFARE-SPS-CARVEOUT",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "Development of Animal Welfare Standards",
+      "url": "https://www.woah.org/en/what-we-do/animal-health-and-welfare/animal-welfare/development-of-animal-welfare-standards/",
+      "published_at": null,
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WOAH states that its animal-welfare standards are internationally recognised science-based standards.",
+        "WOAH explicitly distinguishes them from animal-health and veterinary-public-health standards by stating that animal-welfare standards are not recognised in the WTO SPS Agreement.",
+        "Therefore the headline count of standards adopted or revised at GS93 cannot be treated as one homogeneous category of SPS-relevant standards."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-AVIAN-INFLUENZA-STANDARDS",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "WOAH",
+      "title": "How WOAH’s new and revised chapters ensure better control of avian influenza",
+      "url": "https://www.woah.org/en/article/how-woahs-new-and-revised-chapters-ensure-better-control-of-avian-influenza/",
+      "published_at": "2026-05-22",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "WOAH states that GS93 revised a trade standard and created a new biosecurity chapter relevant to avian influenza.",
+        "The changes responded to Member requests and are designed for Members to implement.",
+        "Live-bird markets are identified as a particularly vulnerable setting for infectious-disease spread, illustrating a concrete animal-health, biosecurity and trade interface."
       ],
       "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
       "canonical_provenance_effect": "NONE"
