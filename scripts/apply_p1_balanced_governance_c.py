@@ -271,8 +271,8 @@ def validate_post_state(
     protected = {
         "WSO-REG-J-0006": {"start_local": "2026-09-30"},
         "WSO-REG-J-0007": {"start_local": "2026-11-20"},
-        "WSO-COM-A-0051": {"date_earliest": "2026-11-01", "date_latest": "2027-04-30"},
-        "WSO-COM-A-0052": {"date_earliest": "2027-11-01", "date_latest": "2028-04-30"},
+        "WSO-COM-A-0051": {"start_local": "2026-11-01", "end_local": "2027-04-30"},
+        "WSO-COM-A-0052": {"start_local": "2027-11-01", "end_local": "2028-04-30"},
         "WSO-REG-B-0005": {"start_local": "2026-11-16"},
         "WSO-REG-B-0006": {"start_local": "2026-11-17"},
         "WSO-HEALTH-A-0005": {"start_local": "2026-10-19", "end_local": "2026-10-22"},
