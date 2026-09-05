@@ -1,0 +1,24 @@
+name: TEMP AF post-AE gap reconnaissance
+
+on:
+  push:
+    branches:
+      - feature/post-ae-gap-recon-af
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-60 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "e576719bcbaf94730444cf64b1a1abeeacb25727"
+      - name: Run post-AE pressure probe
+        run: python scripts/probe_post_ae_gap_candidates_af.py
