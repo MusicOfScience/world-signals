@@ -20,6 +20,7 @@ from world_signals.adapters import (
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
     fetch_cellar_rdf_notice,
+    fetch_ons_upcoming_releases,
     fetch_rba_fsr,
     fetch_suin_rows,
     normalize_cellar_legal_topology,
@@ -27,6 +28,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
+from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.legal_monitor import (
     cbam_annual_deadline_review_candidate,
     cbam_legal_milestone_review_candidate,
@@ -194,6 +196,35 @@ def main() -> int:
         report["source_health"].append({
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
+        })
+
+    try:
+        ons_items,ons_snaps=fetch_ons_upcoming_releases(
+            limit=int((configs["ONS_RELEASE_CALENDAR_RSS"].get("feed") or {}).get("page_limit",100)),
+            max_pages=int((configs["ONS_RELEASE_CALENDAR_RSS"].get("feed") or {}).get("max_pages",10)),
+        )
+        report["source_health"].append({
+            "adapter_id":"ONS_RELEASE_CALENDAR_RSS",
+            "source_id":configs["ONS_RELEASE_CALENDAR_RSS"]["source_id"],
+            "state":"HEALTHY",
+            "snapshots":[snap.as_dict() for snap in ons_snaps],
+            "page_count":len(ons_snaps),
+            "item_count":len(ons_items),
+            "rss_carries_certainty_status":False,
+        })
+        candidates,observations=ons_release_calendar_review_candidates(
+            registry.get("records",[]),ons_items,configs["ONS_RELEASE_CALENDAR_RSS"]
+        )
+        report["review_candidates"].extend(candidates)
+        report["observations"].extend(observations)
+    except (AdapterError,ValueError) as exc:
+        report["source_health"].append({
+            "adapter_id":"ONS_RELEASE_CALENDAR_RSS",
+            "source_id":configs["ONS_RELEASE_CALENDAR_RSS"]["source_id"],
+            "state":"DEGRADED",
+            "error":str(exc),
+            "canonical_action":"NONE",
+            "absence_is_not_event_state":True,
         })
 
     try:
