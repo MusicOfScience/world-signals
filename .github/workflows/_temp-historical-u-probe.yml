@@ -1,0 +1,62 @@
+name: TEMP historical anchors U state probe
+
+on:
+  push:
+    branches:
+      - feature/cross-domain-historical-anchors-u
+    paths:
+      - .github/workflows/_temp-historical-u-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Print exact U pre-state and templates
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.analysis import analysis_population_readiness
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          ledger=json.loads(Path('data/changes/ledger.json').read_text())
+          overlay=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          schema=json.loads(Path('data/analysis/schema.json').read_text())
+          reviews=json.loads(Path('data/analysis/event_reviews.json').read_text())
+
+          print('===STATE===')
+          print(json.dumps({
+            'canonical_version':canonical['version'],
+            'canonical_count':len(canonical['records']),
+            'source_version':sources['version'],
+            'source_count':len(sources['sources']),
+            'ledger_version':ledger['version'],
+            'ledger_count':len(ledger['changes']),
+            'overlay_version':overlay['version'],
+            'overlay_checkpoint':overlay['canonical_checkpoint'],
+            'analysis_readiness':analysis_population_readiness(schema,reviews,canonical),
+          },indent=2,ensure_ascii=False))
+
+          occ_ids=['WSO-BWC-WG-2026-S10','WSO-WOAH-GS-094','WSO-FIS-NP-BUDGET-2084']
+          src_ids=['WSSRC-INT-032','WSSRC-INT-033','WSSRC-FIS-026','WSSRC-FIS-027']
+          by_occ={r.get('occurrence_id'):r for r in canonical['records']}
+          by_src={r.get('source_id'):r for r in sources['sources']}
+          print('===OCCURRENCES===')
+          print(json.dumps({i:by_occ.get(i) for i in occ_ids},indent=2,ensure_ascii=False))
+          print('===SOURCES===')
+          print(json.dumps({i:by_src.get(i) for i in src_ids},indent=2,ensure_ascii=False))
+          print('===BIOSECURITY_MEMBERSHIPS===')
+          print(json.dumps([
+            r for r in overlay.get('canonical_series_memberships',[])
+            if r.get('series_id') in {'WSER-INT-BWC-WG-STRENGTHENING','WSER-AGF-WOAH-GENERAL-SESSION'}
+          ],indent=2,ensure_ascii=False))
+          PY
