@@ -120,6 +120,46 @@ The coverage audit must separately report unresolved source-native dates so cano
 
 This work does **not** populate the North Indian Ocean cyclone season. The architecture can represent multi-phase month windows, but reviewed IMD/RSMC New Delhi first-party materials still conflict over the source-defined season boundary. The object remains held rather than being selected to repair both South Asia and `PHYSICAL_CLIMATE_RISK` counts at once.
 
+## Execution evidence
+
+The reviewed transaction was exercised against the exact v0.27 / 673 base before durable branch population.
+
+### Disposable post-state simulation
+
+GitHub Actions run `33968208650`: **SUCCESS**.
+
+The disposable runner:
+
+- validated the exact pre-state and in-memory post-state;
+- applied schema v0.52 / canonical v0.28 / 674 / source registry v1.69 / 233 / biosecurity overlay v0.3;
+- validated **674 canonical occurrences: PASS**;
+- ran the full post-state suite: **350 tests, OK, 13 skipped**;
+- passed browser JavaScript syntax checks, including `web/native-calendar.js`;
+- built the static site for 674 events / 233 governed sources;
+- passed biosecurity-overlay referential validation;
+- passed coverage regression tests and the full read-only coverage audit;
+- verified the generated transaction boundary was exactly canonical registry + canonical schema + transaction audit + biosecurity overlay checkpoint + source registry;
+- discarded the entire simulated mutation after validation.
+
+Exact post-state coverage from that run:
+
+- 674 occurrences;
+- 199 unique series;
+- 125 unique institutions;
+- 156 unique canonical source IDs used;
+- monetary + macro occurrence share: **65.13%**;
+- South Asia: **26 occurrences / 8 series / 6 institutions / 6 sources / 3 categories**;
+- fiscal/sovereign: **55 occurrences / 30 series / 27 institutions**;
+- `PHYSICAL_CLIMATE_RISK`: **5 occurrences / 3 series / 3 institutions** and remains a qualitative review prompt.
+
+### Reviewed feature-branch apply
+
+GitHub Actions run `33968238028`: **SUCCESS**.
+
+The transaction committed the reviewed post-state to `feature/south-asia-physical-risk-depth-n` at `4b576df69fc2de17977ce0ee7921e00bf7db7058` and removed its temporary transaction workflow and trigger in the same commit. `main` was not mutated.
+
+The biosecurity overlay advances from v0.2 @ canonical v0.27 / 673 to v0.3 @ canonical v0.28 / 674 **only** to maintain its exact checkpoint contract. Systems, relationships, canonical-series memberships, candidate nodes, principles and notes remain unchanged; Nepal receives no biosecurity membership.
+
 ## Safety
 
 - automatic canonical commit remains **OFF**;
