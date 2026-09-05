@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.14",
+  "version": "0.15",
   "reference_date": "2026-09-05",
   "changes": [
     {
@@ -1126,6 +1126,136 @@
       "registry_version_after": "0.25",
       "canonical_mutation_committed": true,
       "committed_at": "2026-09-05T16:30:00+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-88f66a2f271468f6d5",
+      "occurrence_id": "WSO-INT-A-0012",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T17:10:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_E",
+      "old_values": {
+        "source_id": "WSSRC-INT-011",
+        "primary_source_assertion_id": "WSA-ce313019624d97a3",
+        "last_successful_assertion_id": "WSA-ce313019624d97a3",
+        "schedule_authority_scope": "HOST_YEAR",
+        "notes": null,
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "source_id": "WSSRC-INT-031",
+        "primary_source_assertion_id": "WSA-070677934abbc0f0",
+        "last_successful_assertion_id": "WSA-070677934abbc0f0",
+        "schedule_authority_scope": "EVENT_SPECIFIC",
+        "notes": "China MFA event-specific first-order evidence confirms the 33rd APEC Economic Leaders' Meeting in Shenzhen on 18–19 November 2026. The APEC China host-year page remains supporting month-level programme context only.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-070677934abbc0f0",
+      "review_basis": [
+        "Current first-order source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved and no timing precision is manufactured beyond the competent source evidence.",
+        "Canonical provenance and automated-monitoring permission remain separate governance dimensions.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.25",
+      "registry_version_after": "0.26",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T18:35:03+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-d35407dca0d7a8c07a",
+      "occurrence_id": "WSO-CLIM-A-0009",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "review_state": "APPROVED_LIFECYCLE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T17:10:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_E",
+      "old_values": {
+        "date_earliest": "2027-07-01",
+        "date_latest": "2027-12-31",
+        "time_precision": "HALF_YEAR",
+        "approval_publication_semantics": "IPCC schedules publication in the second half of 2027; no exact date inferred.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "date_earliest": "2027-12-01",
+        "date_latest": "2027-12-31",
+        "time_precision": "MONTH",
+        "approval_publication_semantics": "Current IPCC report catalogue identifies the Short-lived Climate Forcers Methodology Report for December 2027; no exact publication day is inferred.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-4421411d6f5015a9",
+      "review_basis": [
+        "Current first-order source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved and no timing precision is manufactured beyond the competent source evidence.",
+        "Canonical provenance and automated-monitoring permission remain separate governance dimensions.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.25",
+      "registry_version_after": "0.26",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T18:35:03+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-dc4f6de5ba3e121aff",
+      "occurrence_id": "WSO-CLIM-A-0010",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "review_state": "APPROVED_LIFECYCLE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T17:10:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_E",
+      "old_values": {
+        "date_earliest": "2027-01-01",
+        "date_latest": "2027-12-31",
+        "time_precision": "YEAR",
+        "approval_publication_semantics": "IPCC identifies this as a 2027 Methodology Report; no narrower timing is admitted.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "date_earliest": "2027-12-01",
+        "date_latest": "2027-12-31",
+        "time_precision": "MONTH",
+        "approval_publication_semantics": "Current IPCC report catalogue identifies the Carbon Dioxide Removal / CCUS Methodology Report for December 2027; no exact publication day is inferred.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-5fda594654c3a9e5",
+      "review_basis": [
+        "Current first-order source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved and no timing precision is manufactured beyond the competent source evidence.",
+        "Canonical provenance and automated-monitoring permission remain separate governance dimensions.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.25",
+      "registry_version_after": "0.26",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T18:35:03+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-0b0c025ac3b364bc2a",
+      "occurrence_id": "WSO-INT-B-0113",
+      "change_type": "CANONICAL_SEMANTIC_CLASSIFICATION_REPAIR",
+      "review_state": "APPROVED_SEMANTIC_RECONCILIATION",
+      "reviewed_at": "2026-09-05T17:10:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_E",
+      "old_values": {
+        "time_precision": "DAY",
+        "notes": "NDB Board of Governors selected India as 2027 host; date and city not yet announced.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "time_precision": "TBC",
+        "notes": "NDB confirms India as host of the Twelfth Annual Meeting in 2027, but no date or city is stated. Precision is therefore TBC; no representative day or timing window is inferred.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-ddfc58840300a4f6",
+      "review_basis": [
+        "Current first-order source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved and no timing precision is manufactured beyond the competent source evidence.",
+        "Canonical provenance and automated-monitoring permission remain separate governance dimensions.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.25",
+      "registry_version_after": "0.26",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T18:35:03+10:00"
     }
   ]
 }
