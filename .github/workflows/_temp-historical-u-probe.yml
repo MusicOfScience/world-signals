@@ -1,3 +1,4 @@
+# Rerun after descendant-invariant test repairs.
 name: TEMP historical anchors U full simulation
 
 on:
