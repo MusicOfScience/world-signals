@@ -81,7 +81,7 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         self.assertEqual(len(self.plan["source_plan"]), 3)
         self.assertEqual(
             [row["source_id"] for row in self.plan["source_plan"]],
-            ["WSSRC-CB-012", "WSSRC-INT-032", "WSSRC-INT-033"],
+            ["WSSRC-CB-014", "WSSRC-INT-032", "WSSRC-INT-033"],
         )
         self.assertEqual(
             [row["occurrence_id"] for row in self.plan["occurrences"]],
@@ -97,11 +97,13 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         }
         for oid, dates in expected.items():
             row = rows[oid]
+            self.assertEqual(row["source_id"], "WSSRC-CB-014")
             self.assertEqual(row["event_type"], "MONETARY_POLICY_DECISION_PROCESS")
             self.assertEqual(row["timing_type"], "MULTI_DAY_LOCAL")
             self.assertEqual((row["start_local"], row["end_local"]), dates)
             self.assertEqual(row["time_precision"], "DAY_RANGE")
             self.assertIsNone(row["start_utc"])
+            self.assertIsNone(row["location"])
             self.assertNotIn("publication day", row["notes"].lower())
 
     def test_bwc_and_woah_keep_natural_primary_categories(self):
@@ -118,14 +120,8 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         self.assertEqual((woah["start_local"], woah["end_local"]), ("2027-05-24", "2027-05-28"))
 
         memberships = {row["series_id"]: row for row in overlay["canonical_series_memberships"]}
-        self.assertEqual(
-            memberships["WSER-INT-BWC-WG-STRENGTHENING"]["system_ids"],
-            ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"],
-        )
-        self.assertEqual(
-            memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["system_ids"],
-            ["BIO-ANIMAL-ZOONOTIC-HEALTH"],
-        )
+        self.assertEqual(memberships["WSER-INT-BWC-WG-STRENGTHENING"]["system_ids"], ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"])
+        self.assertEqual(memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["system_ids"], ["BIO-ANIMAL-ZOONOTIC-HEALTH"])
         candidate_ids = {row["candidate_node_id"] for row in overlay["candidate_nodes"]}
         self.assertNotIn("BIO-CAND-BWC", candidate_ids)
         self.assertNotIn("BIO-CAND-WOAH", candidate_ids)
@@ -134,7 +130,7 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
     def test_source_governance_separates_provenance_and_automation(self):
         _, sources, _ = self._post_objects()
         by_id = {row["source_id"]: row for row in sources["sources"]}
-        cbn = by_id["WSSRC-CB-012"]
+        cbn = by_id["WSSRC-CB-014"]
         self.assertEqual(cbn["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
         self.assertEqual(cbn["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
         self.assertEqual(cbn["verification_mode"], "MANUAL_AUTHORITATIVE_RECHECK")
@@ -163,19 +159,10 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
     def test_apply_without_environment_gate_never_writes(self):
         if not self._is_pre():
             self.skipTest("apply-gate mutation test is exercised only from exact pre-state")
-        before = {
-            path: path.read_bytes()
-            for path in (CANONICAL_PATH, SOURCES_PATH, OVERLAY_PATH, LEDGER_PATH, EXPECTATIONS_PATH)
-        }
+        before = {path: path.read_bytes() for path in (CANONICAL_PATH, SOURCES_PATH, OVERLAY_PATH, LEDGER_PATH, EXPECTATIONS_PATH)}
         env = dict(os.environ)
         env.pop(TX.APPLY_ENV, None)
-        proc = subprocess.run(
-            [sys.executable, str(MODULE_PATH), "--apply"],
-            cwd=ROOT,
-            env=env,
-            capture_output=True,
-            text=True,
-        )
+        proc = subprocess.run([sys.executable, str(MODULE_PATH), "--apply"], cwd=ROOT, env=env, capture_output=True, text=True)
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("APPLY BLOCKED", proc.stdout + proc.stderr)
         for path, raw in before.items():
