@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-05",
-  "version": "1.63",
+  "version": "1.64",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -3219,7 +3219,12 @@
           "transport": "HTML",
           "completeness_scope": "SINGLE_RELEASE"
         }
-      ]
+      ],
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "ABS website material is generally CC BY 4.0 and this source has research-validated pilot parser evidence. Copyright reuse and automated production polling remain separate; unrestricted endpoint access is not inferred."
     },
     {
       "source_id": "WSSRC-MAC-022",
@@ -4275,20 +4280,30 @@
       "known_limitations": [
         "As of the reference date the official portal exposes 2026-27, not an authoritative 2027-28 presentation date."
       ],
-      "backup_source": null,
+      "backup_source": "WSSRC-FIS-025",
       "notes": null,
       "timezone_scope": "FIXED",
       "parser_version": "fiscal-b-0.1",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "licence_constraints": null,
-      "ingestion_permission": "NOT_AUDITED",
-      "licence_review_status": "NOT_AUDITED",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "MINISTRY_PERMISSION_REQUIRED_FOR_REPRODUCTION",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "REFERENCE_WITH_ATTRIBUTION; REPRODUCTION_REQUIRES_MINISTRY_PERMISSION",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.indiabudget.gov.in/website-policies.php",
+      "rights_summary": "The Union Budget website policy states that site content may not be reproduced partially or fully without Ministry of Finance permission and requires source acknowledgement when referenced.",
+      "automation_summary": "No production automated-retrieval grant is identified; the portal remains a manual publication/schedule monitor until a cleared route exists.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_SOURCE_SCOPE_LIFECYCLE_B_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The Budget portal is authoritative for official Budget publications and eventual schedule announcements, but its own Terms say it is not a statement of law. Article 112 authority is separated into WSSRC-FIS-025; no 2027 presentation date is inferred."
     },
     {
       "source_id": "WSSRC-MKT-009",
@@ -4546,7 +4561,7 @@
       "endpoint_role": "Singapore ASEAN Chairmanship 2027 high-level meeting forecast",
       "authoritative_url": "https://www.mfa.gov.sg/newsroom/announcements-and-highlights/invitation-for-proposals-for-sponsorship-of-food-and-drinks--furniture--audio-visual-equipment--event-tokens-and-medical-services-for-high-level-meetings-and-conferences-in-2027/",
       "source_type": "official_host_government_announcement",
-      "information_supplied": "Singapore will chair ASEAN in 2027 and organise two Heads of State/Government-level summits; exact dates not specified",
+      "information_supplied": "Singapore MFA's current 2027 high-level-meeting forecast identifies the 50th ASEAN Summit in May 2027 and the 51st ASEAN Summit and Related Summits in November 2027; exact dates are not stated.",
       "future_schedule_horizon": "2027",
       "typical_advance_notice": "year-plus",
       "machine_readable_available": "HTML",
@@ -4555,20 +4570,31 @@
       "activation_status": "ACTIVE_GUARDED",
       "parser_type": "HTML",
       "known_limitations": [
-        "Confirms host year and two summits, not dates."
+        "The MFA schedule is explicitly a forecast; month and estimated duration do not establish exact summit dates.",
+        "Older logistics/procurement windows are not summit date authority."
       ],
       "timezone_scope": "FIXED",
       "parser_version": "inst-a-0.1",
-      "licence_constraints": "Public institutional schedule/procedural factual metadata only.",
-      "ingestion_permission": "PUBLIC_FACTS_ALLOWED",
-      "licence_review_status": "CLEARED_FOR_FACTUAL_METADATA",
-      "automated_retrieval_permission": "PENDING",
-      "redistribution_permission": "PUBLIC_FACTUAL_METADATA_ONLY",
+      "licence_constraints": "MFA website materials are protected; commercial reuse requires prior written permission apart from statutory fair dealing.",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "NONCOMMERCIAL_RESEARCH_REFERENCE_ONLY_GENERAL_WEB_CONTENT",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "FACTUAL_METADATA_REFERENCE_ONLY_NO_COMMERCIAL_CONTENT_REUSE_INFERRED",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 230,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.mfa.gov.sg/terms-of-use/",
+      "rights_summary": "Singapore MFA Terms permit statutory fair dealing but prohibit commercial reproduction/reuse of website material without prior written permission.",
+      "automation_summary": "Public accessibility and official status do not establish a production crawler licence.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_SOURCE_SCOPE_LIFECYCLE_B_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The current Singapore MFA notice is authoritative host-government evidence for May/November forecast months only. Website terms do not clear production automation or commercial content reuse."
     },
     {
       "source_id": "WSSRC-INT-022",
@@ -5385,7 +5411,17 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 220,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.gov.za/terms-and-conditions-use-0",
+      "rights_summary": "South African Government web terms permit copying/distribution for non-commercial informational or reference purposes and require permission for commercial reuse; this is used conservatively as a government-web benchmark rather than as a COGTA crawler licence.",
+      "automation_summary": "No production automated-retrieval permission is inferred for the COGTA proclamation endpoint.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_SOURCE_SCOPE_LIFECYCLE_B_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "COGTA is authoritative for the gazetted 4 November 2026 local-government election date. Conservative government-web terms support manual factual reference but not commercial reuse or production polling without permission."
     },
     {
       "source_id": "WSSRC-EL-ZA-002",
@@ -7169,7 +7205,8 @@
       "activation_status": "ACTIVE_GUARDED",
       "parser_type": "HTML_RULE",
       "known_limitations": [
-        "Deadline is not the actual parliamentary vote date."
+        "The 31 October record is a legal/operational latest boundary, not the actual parliamentary vote date.",
+        "The Treasury explainer contains legacy examples/references; Government Regulation 90/2010 has been revoked and is not used as current authority."
       ],
       "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
       "parser_version": "regional-a-0.1",
@@ -7187,7 +7224,12 @@
       "automation_summary": "Preserve the existing legal/process fact as curated provenance; do not activate a production crawler without a cleared Ministry/Treasury route.",
       "rights_reviewed_at": "2026-09-02T22:35:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_E_ASIA_GLOBAL_SOUTH_CORRECTIVE_SOURCES",
-      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "Law 17/2003 Article 15(4) plus current official Treasury APBN-cycle guidance support the end-October legal boundary. Source-specific reuse/automation terms remain unresolved, so verification stays manual and rights-held."
     },
     {
       "source_id": "WSSRC-REG-006",
@@ -7956,19 +7998,30 @@
       "activation_status": "ACTIVE",
       "parser_type": "LEGAL_HTML",
       "known_limitations": [
-        "Legal boundary does not assert exact submission time."
+        "Law 24.156 Article 26 uses wording equivalent to presentation before 15 September; official budget-process interpretation/practice supports 15 September as the latest civil-date boundary. The boundary does not assert filing time."
       ],
       "timezone_scope": "FIXED",
       "parser_version": "regional-b-0.1",
-      "licence_review_status": "NOT_AUDITED",
-      "ingestion_permission": "CURATED_RESEARCH_METADATA_PENDING_RIGHTS_REVIEW",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "licence_review_status": "CLEARED_CC_BY_4_GENERAL_CONTENT",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "CC_BY_4_WITH_ATTRIBUTION_AND_STATED_EXCEPTIONS",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.argentina.gob.ar/terminos-y-condiciones",
+      "rights_summary": "Argentina.gob states that its digital-service content is licensed under Creative Commons Attribution 4.0 International unless otherwise indicated.",
+      "automation_summary": "CC BY 4.0 content reuse does not itself establish unrestricted automated retrieval of the legal/process endpoint.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_SOURCE_SCOPE_LIFECYCLE_B_RIGHTS_AND_AUTHORITY_REVIEW",
+      "backup_source": "https://www.argentina.gob.ar/onp/presupuesto-ciudadano/proceso-presupuestario",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The annual resolution and official budget-process interpretation jointly support the 15 September legal/operational boundary. Argentina.gob content is CC BY 4.0; production automation remains separately unreviewed."
     },
     {
       "source_id": "WSSRC-REG2-006",
@@ -8958,6 +9011,52 @@
       "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
       "governance_backfill_reviewed_at": "2026-09-05",
       "governance_backfill_basis": "The National Assembly portal is the first-order institutional source for the provisional 20 October 2026 Second Session opening. Because no general reuse/automation grant was identified, the page is retained only as a manual authoritative factual reference; no production polling route is authorised."
+    },
+    {
+      "source_id": "WSSRC-FIS-025",
+      "institution": "Legislative Department, Ministry of Law and Justice, Government of India",
+      "jurisdiction": "India",
+      "domain": "fiscal_sovereign",
+      "endpoint_role": "Constitution of India Article 112 legal basis for annual Union Budget / Annual Financial Statement",
+      "authoritative_url": "https://legislative.gov.in/constitution-of-india/",
+      "source_type": "official_constitutional_text",
+      "information_supplied": "Article 112 requires the President to cause an Annual Financial Statement to be laid before both Houses of Parliament for every financial year; it establishes recurring constitutional existence, not a 2027 presentation date.",
+      "future_schedule_horizon": "standing constitutional rule",
+      "typical_advance_notice": "standing law",
+      "machine_readable_available": "HTML/PDF",
+      "source_timezone": "Asia/Kolkata",
+      "recommended_verification_cadence": "annual legal-text recheck; recheck after constitutional amendment",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_LEGAL_TEXT_VERIFICATION",
+      "known_limitations": [
+        "Article 112 establishes the Annual Financial Statement requirement but does not prescribe the annual presentation date."
+      ],
+      "backup_source": "https://www.legislative.gov.in/static/uploads/2025/07/359f70a69695affb9d72f8393102bd2e.pdf",
+      "notes": "Created to separate constitutional legal authority from the Union Budget publication/announcement monitor. No new canonical occurrence or inferred 1 February date is authorised.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "licence_constraints": "NO_UNRESTRICTED_REUSE_OR_AUTOMATION_GRANT_IDENTIFIED; MINIMAL LEGAL FACTUAL METADATA MANUAL REFERENCE ONLY",
+      "ingestion_permission": "CURATED_LEGAL_FACTUAL_METADATA_MANUAL_ONLY",
+      "licence_review_status": "RIGHTS_AUDIT_REQUIRED_NO_UNRESTRICTED_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_LEGAL_METADATA_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
+      "rights_evidence_url": "https://legislative.gov.in/",
+      "rights_summary": "The Legislative Department is the first-order Government of India source for the Constitution. No unrestricted content-reuse licence is inferred in this review; WORLD SIGNALS retains only minimal legal factual metadata and the authoritative reference.",
+      "automation_summary": "Official status and public availability do not establish crawler or production polling permission.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_SOURCE_SCOPE_LIFECYCLE_B_INDIA_CONSTITUTION_AUTHORITY_REVIEW",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
+      "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
+      "monitoring_priority_score": 20,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-05",
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "Article 112 is direct constitutional authority for the recurring Annual Financial Statement requirement, but not for an annual presentation date. The source is retained as manual legal provenance only."
     }
   ],
   "activation_backlog": [

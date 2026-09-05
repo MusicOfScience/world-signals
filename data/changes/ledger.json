@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.11",
+  "version": "0.12",
   "reference_date": "2026-09-05",
   "changes": [
     {
@@ -847,6 +847,224 @@
       "registry_version_after": "0.22",
       "canonical_mutation_committed": true,
       "committed_at": "2026-09-05T05:21:24+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-f006e2748e0e40d6cd",
+      "occurrence_id": "WSO-REG-B-0007",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T06:45:00+10:00",
+      "commit_mode": "REVIEWED_SOURCE_SCOPE_LIFECYCLE_B",
+      "old_values": {
+        "legal_basis_source_id": null,
+        "governing_instrument": null,
+        "notes": "Law 24.156 article 26 requires presentation before 15 September; the date is a legal latest boundary, not a prediction of the precise filing moment.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "legal_basis_source_id": "WSSRC-REG2-005",
+        "governing_instrument": "Law 24.156 Article 26 / Resolution 446/2026 budget formulation process",
+        "notes": "Law 24.156 Article 26 uses wording equivalent to presentation before 15 September; official Argentina budget-process interpretation and practice treat 15 September as the latest civil-date submission boundary. This is not a prediction of the precise filing time.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-7db752094d273401",
+      "review_basis": [
+        "Primary/authoritative source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved; exact dates remain unchanged except that two previously unscheduled ASEAN occurrences gain month-only forecast bounds.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.22",
+      "registry_version_after": "0.23",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T11:33:58+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-0e40c02bd7cd9c4eb9",
+      "occurrence_id": "WSO-REG-A-0008",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T06:45:00+10:00",
+      "commit_mode": "REVIEWED_SOURCE_SCOPE_LIFECYCLE_B",
+      "old_values": {
+        "legal_basis_source_id": null,
+        "governing_instrument": null,
+        "notes": "Official Ministry of Finance budget-cycle guidance states APBN decision is no later than two months before the fiscal year and operationally no later than end-October. This is not the actual vote date.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "legal_basis_source_id": "WSSRC-REG-005",
+        "governing_instrument": "Law No. 17 of 2003 Article 15(4); current Ministry of Finance APBN-cycle operationalisation",
+        "notes": "Law No. 17 of 2003 Article 15(4) sets the DPR decision no later than two months before the budget year, while current official Ministry of Finance APBN-cycle guidance operationalises enactment at end-October. The 31 October record is a legal-latest boundary, not the actual vote date. Revoked Government Regulation 90/2010 is not used as current authority.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-6e631ee2b545e259",
+      "review_basis": [
+        "Primary/authoritative source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved; exact dates remain unchanged except that two previously unscheduled ASEAN occurrences gain month-only forecast bounds.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.22",
+      "registry_version_after": "0.23",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T11:33:58+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-689bc801f2f1a81701",
+      "occurrence_id": "WSO-INT-A-0018",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "review_state": "APPROVED_LIFECYCLE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T06:45:00+10:00",
+      "commit_mode": "REVIEWED_SOURCE_SCOPE_LIFECYCLE_B",
+      "old_values": {
+        "certainty_status": "TBC",
+        "date_earliest": null,
+        "date_latest": null,
+        "timing_type": "UNSCHEDULED_TBC",
+        "time_precision": "TBC",
+        "time_status": "TBC",
+        "time_basis": "SOURCE_UNSPECIFIED",
+        "render_policy": "HIDE_UNTIL_SCHEDULED",
+        "schedule_authority_scope": "HOST_YEAR",
+        "notes": "Singapore MFA confirms two heads-of-state/government-level summits in 2027; dates not yet stated.",
+        "last_verified_at": "2026-09-02",
+        "status_history": [
+          {
+            "as_of": "2026-09-02",
+            "certainty_status": "TBC",
+            "lifecycle_status": "PLANNED"
+          }
+        ]
+      },
+      "new_values": {
+        "certainty_status": "PROVISIONAL",
+        "date_earliest": "2027-05-01",
+        "date_latest": "2027-05-31",
+        "timing_type": "EXPECTED_DATE_WINDOW",
+        "time_precision": "MONTH",
+        "time_status": "PROVISIONAL",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_MONTH",
+        "render_policy": "INCLUDE_WITH_TBC_MARKER",
+        "schedule_authority_scope": "EVENT_SPECIFIC",
+        "notes": "Singapore MFA's current 2027 high-level-meeting forecast places the 50th ASEAN Summit in May 2027 with an estimated five-day duration. The month is authoritative forecast evidence; no exact start/end dates are inferred from duration or older logistics windows.",
+        "last_verified_at": "2026-09-05",
+        "status_history": [
+          {
+            "as_of": "2026-09-02",
+            "certainty_status": "TBC",
+            "lifecycle_status": "PLANNED"
+          },
+          {
+            "as_of": "2026-09-05",
+            "certainty_status": "PROVISIONAL",
+            "lifecycle_status": "PLANNED"
+          }
+        ]
+      },
+      "source_assertion_id": "WSA-eafbec55bf1bc07c",
+      "review_basis": [
+        "Primary/authoritative source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved; exact dates remain unchanged except that two previously unscheduled ASEAN occurrences gain month-only forecast bounds.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.22",
+      "registry_version_after": "0.23",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T11:33:58+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-add95b897e59a95276",
+      "occurrence_id": "WSO-INT-A-0019",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "review_state": "APPROVED_LIFECYCLE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T06:45:00+10:00",
+      "commit_mode": "REVIEWED_SOURCE_SCOPE_LIFECYCLE_B",
+      "old_values": {
+        "certainty_status": "TBC",
+        "date_earliest": null,
+        "date_latest": null,
+        "timing_type": "UNSCHEDULED_TBC",
+        "time_precision": "TBC",
+        "time_status": "TBC",
+        "time_basis": "SOURCE_UNSPECIFIED",
+        "render_policy": "HIDE_UNTIL_SCHEDULED",
+        "schedule_authority_scope": "HOST_YEAR",
+        "notes": "Singapore MFA confirms two heads-of-state/government-level summits in 2027; dates not yet stated.",
+        "last_verified_at": "2026-09-02",
+        "status_history": [
+          {
+            "as_of": "2026-09-02",
+            "certainty_status": "TBC",
+            "lifecycle_status": "PLANNED"
+          }
+        ]
+      },
+      "new_values": {
+        "certainty_status": "PROVISIONAL",
+        "date_earliest": "2027-11-01",
+        "date_latest": "2027-11-30",
+        "timing_type": "EXPECTED_DATE_WINDOW",
+        "time_precision": "MONTH",
+        "time_status": "PROVISIONAL",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_MONTH",
+        "render_policy": "INCLUDE_WITH_TBC_MARKER",
+        "schedule_authority_scope": "EVENT_SPECIFIC",
+        "notes": "Singapore MFA's current 2027 high-level-meeting forecast places the 51st ASEAN Summit and Related Summits in November 2027 with an estimated six-day duration. The month is authoritative forecast evidence; no exact start/end dates are inferred from duration or older logistics windows.",
+        "last_verified_at": "2026-09-05",
+        "status_history": [
+          {
+            "as_of": "2026-09-02",
+            "certainty_status": "TBC",
+            "lifecycle_status": "PLANNED"
+          },
+          {
+            "as_of": "2026-09-05",
+            "certainty_status": "PROVISIONAL",
+            "lifecycle_status": "PLANNED"
+          }
+        ]
+      },
+      "source_assertion_id": "WSA-c6d03f15568c7c3a",
+      "review_basis": [
+        "Primary/authoritative source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved; exact dates remain unchanged except that two previously unscheduled ASEAN occurrences gain month-only forecast bounds.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.22",
+      "registry_version_after": "0.23",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T11:33:58+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-05ba283396a30b5c98",
+      "occurrence_id": "WSO-FIS-B-0011",
+      "change_type": "PROVENANCE_SCOPE_REPAIR",
+      "review_state": "APPROVED_PROVENANCE_RECONCILIATION",
+      "reviewed_at": "2026-09-05T06:45:00+10:00",
+      "commit_mode": "REVIEWED_SOURCE_SCOPE_LIFECYCLE_B",
+      "old_values": {
+        "activation_mode": "EXPLICITLY_SCHEDULED",
+        "legal_basis_source_id": null,
+        "governing_instrument": null,
+        "notes": "Official Budget portal currently publishes 2026–27 material. No 2027–28 presentation date is inferred from historical 1 February practice.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "activation_mode": "AUTHORITATIVE_RECURRING_RULE",
+        "legal_basis_source_id": "WSSRC-FIS-025",
+        "governing_instrument": "Constitution of India, Article 112",
+        "notes": "Article 112 of the Constitution requires an Annual Financial Statement for every financial year but does not establish the 2027–28 presentation date. The official Budget portal remains the publication/schedule monitor and currently does not provide an authoritative 2027–28 date; no 1 February date is inferred from historical practice.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-a4c712e85faf4a65",
+      "review_basis": [
+        "Primary/authoritative source scope and timing precision were re-audited on 2026-09-05.",
+        "Stable occurrence identity is preserved; exact dates remain unchanged except that two previously unscheduled ASEAN occurrences gain month-only forecast bounds.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.22",
+      "registry_version_after": "0.23",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T11:33:58+10:00"
     }
   ]
 }
