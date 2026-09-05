@@ -69,6 +69,7 @@ jobs:
             data/canonical/registry.json
             data/canonical/schema.json
             data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md
+            data/coverage/biosecurity_overlay.json
             data/sources/registry.json
           )
           if [[ "${changed[*]}" != "${expected[*]}" ]]; then
@@ -76,18 +77,18 @@ jobs:
             exit 1
           fi
       - name: Discard simulated post-state
-        if: steps.stage.outputs.stage == 'SIMULATE'
+        if: always() && steps.stage.outputs.stage == 'SIMULATE'
         run: |
           git reset --hard HEAD
           git clean -fd
       - name: Commit reviewed post-state and remove temporary transaction machinery
-        if: steps.stage.outputs.stage == 'APPLY'
+        if: success() && steps.stage.outputs.stage == 'APPLY'
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm .github/workflows/_temp-source-native-calendar-nepal-n.yml data/coverage/SOURCE_NATIVE_CALENDAR_N_STAGE.trigger
-          git add data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md
+          git add data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/coverage/biosecurity_overlay.json data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md
           git commit -m 'Apply Nepal source-native calendar transaction N [skip ci]'
           git push origin HEAD:feature/south-asia-physical-risk-depth-n
