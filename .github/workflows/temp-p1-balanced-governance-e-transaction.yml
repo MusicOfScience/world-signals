@@ -1,0 +1,111 @@
+name: TEMP P1 balanced governance E transaction
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-balanced-governance-e-transaction.yml'
+permissions:
+  contents: write
+jobs:
+  transact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-e-transaction
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact production base
+        run: |
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "7c1af4f074aa846ff462c3551573cd4b7b233f36"
+          test "$(git merge-base HEAD origin/main)" = "7c1af4f074aa846ff462c3551573cd4b7b233f36"
+      - name: Establish reviewed apply timestamp
+        run: echo "WS_COMMITTED_AT=$(TZ=Australia/Melbourne date --iso-8601=seconds)" >> "$GITHUB_ENV"
+      - name: Read-only preflight
+        run: python scripts/apply_p1_balanced_governance_e.py --committed-at "$WS_COMMITTED_AT"
+      - name: Guarded apply
+        env:
+          WORLD_SIGNALS_ALLOW_P1_BALANCED_GOVERNANCE_E_APPLY: 'YES'
+        run: python scripts/apply_p1_balanced_governance_e.py --apply --committed-at "$WS_COMMITTED_AT"
+      - name: Exact four-file mutation boundary
+        run: |
+          python - <<'PY'
+          import subprocess
+          expected={'data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json'}
+          actual=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          print('CHANGED', sorted(actual))
+          assert actual==expected,(actual,expected)
+          PY
+      - name: Independent post-state assertions
+        run: |
+          python - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          led=json.loads(Path('data/changes/ledger.json').read_text())
+          ov=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert can['version']=='0.26' and len(can['records'])==669
+          assert src['version']=='1.67' and len(src['sources'])==228
+          assert led['version']=='0.15'
+          assert ov['canonical_checkpoint']=={'registry_version':'0.26','record_count':669}
+          rm={r['occurrence_id']:r for r in can['records']}; sm={s['source_id']:s for s in src['sources']}
+          a=rm['WSO-INT-A-0012']
+          assert a['source_id']=='WSSRC-INT-031' and a['start_local']=='2026-11-18' and a['end_local']=='2026-11-19'
+          assert a['certainty_status']=='CONFIRMED' and a['host_city']=='Shenzhen'
+          assert a['primary_source_assertion_id']==a['last_successful_assertion_id']=='WSA-070677934abbc0f0'
+          material='|'.join(str(a.get(k) or '') for k in ('occurrence_id','series_id','source_id','canonical_name','start_local','end_local','publication_datetime'))
+          assert 'WSA-'+hashlib.sha256(material.encode()).hexdigest()[:16]=='WSA-070677934abbc0f0'
+          for oid in ('WSO-CLIM-A-0009','WSO-CLIM-A-0010'):
+              r=rm[oid]
+              assert r['date_earliest']=='2027-12-01' and r['date_latest']=='2027-12-31'
+              assert r['time_precision']=='MONTH' and r['timing_type']=='EXPECTED_DATE_WINDOW'
+              assert r['certainty_status']=='CONFIRMED' and r['time_status']=='CONFIRMED'
+          n=rm['WSO-INT-B-0113']
+          assert n['timing_type']=='UNSCHEDULED_TBC' and n['time_precision']=='TBC' and n['certainty_status']=='TBC'
+          assert n['start_local'] is None and n['date_earliest'] is None and n['date_latest'] is None and n['host_city'] is None
+          assert n['host_confirmed'] is True and n['host_jurisdiction']=='India'
+          assert sm['WSSRC-INT-011']['canonical_dependency_count']==0
+          assert sm['WSSRC-INT-031']['canonical_dependency_count']==1
+          expected={'WSSRC-MAC-023','WSSRC-REG-008','WSSRC-COM-006','WSSRC-CLIM-002','WSSRC-INT-024','WSSRC-INT-011','WSSRC-INT-028','WSSRC-INT-031'}
+          for sid in expected:
+              for k in ('canonical_provenance_use','automated_monitoring_use','verification_mode'):
+                  assert sm[sid].get(k) is not None,(sid,k)
+              assert sm[sid]['verification_mode']!='AUTOMATED_PILOT',sid
+          audit=build_source_governance_audit(can,src,exp)['totals']
+          totals={'fully_explicit':audit['fully_explicit_governance_source_count'],'missing_any':audit['source_records_with_one_or_more_missing_governance_fields'],'p1':audit['backfill_research_priority_counts']['P1_CANONICAL_DEPENDENCY'],'p2':audit['backfill_research_priority_counts']['P2_REGISTRY_ONLY']}
+          print('GOVERNANCE',totals)
+          assert totals=={'fully_explicit':98,'missing_any':130,'p1':59,'p2':71},totals
+          assert rm['WSO-EL-A-0004']['start_local']=='2027-01-05'
+          assert {'WSSRC-REG4-001','WSSRC-REG4-002'}.issubset(sm)
+          assert exp['automatic_canonical_commit'] is False and exp['google_calendar_write'] is False
+          entries=led.get('entries',[])
+          assert len(entries)>=4 and all(entries[-i].get('committed_at') for i in range(1,5))
+          print('INDEPENDENT_TRANSACTION_AUDIT PASS')
+          PY
+      - name: Registry validator
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m compileall -q scripts src
+      - name: Browser JavaScript syntax
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Commit exactly reviewed production files
+        run: |
+          git config user.name 'world-signals-guarded-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/canonical/registry.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json
+          test "$(git diff --cached --name-only | wc -l)" -eq 4
+          git commit -m "Apply balanced P1 source-governance cohort E"
+          git push origin HEAD:p1-balanced-governance-e-transaction
