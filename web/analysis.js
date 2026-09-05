@@ -3,6 +3,31 @@
   const human = value => String(value ?? '').replaceAll('_',' ').toLowerCase();
   let loaded = false;
 
+  function ensureSurface(){
+    if(!document.querySelector('link[href="analysis.css"]')){
+      const link=document.createElement('link');
+      link.rel='stylesheet';
+      link.href='analysis.css';
+      document.head.appendChild(link);
+    }
+    const tabs=document.querySelector('.viewtabs');
+    if(tabs && !document.querySelector('#analysisTab')){
+      tabs.insertAdjacentHTML('beforeend','<button id="analysisTab" aria-pressed="false">Analysis</button>');
+    }
+    if(!document.querySelector('#analysisView')){
+      const anchor=document.querySelector('#historyView')||document.querySelector('main');
+      const html=`<section id="analysisView" class="view-panel" hidden>
+        <section class="analysis-intro">
+          <div><p class="eyebrow">ANALYSIS</p><h2>What happened, what surprised, and what may merely coincide</h2><p>This is a read-only analytical layer linked to canonical occurrences. Expectations, observed responses, alternatives and falsifiers remain evidence-backed analytical objects; none can rewrite the canonical registry.</p><p id="analysisCount" class="meta"></p></div>
+          <div class="analysis-boundary"><strong>Analytical boundary</strong><span>Canonical event truth: referenced, not rewritten</span><span>Expected ≠ actual</span><span>Movement ≠ cause</span><span>Alternatives / falsifiers: explicit</span><span>Canonical write: OFF</span><span>Google Calendar write: OFF</span></div>
+        </section>
+        <section id="analysisReviews"><p class="empty">Analytical reviews load when this view is opened.</p></section>
+      </section>`;
+      if(anchor?.id==='historyView') anchor.insertAdjacentHTML('beforebegin',html);
+      else anchor?.insertAdjacentHTML('beforeend',html);
+    }
+  }
+
   function evidenceLinks(evidence){
     return (evidence||[]).map(item=>`<a class="analysis-source" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(item.provider)}</strong><span>${esc(item.title)}</span><small>${esc(human(item.evidence_class))} · ${esc(human((item.roles||[]).join(' / ')))}</small></a>`).join('');
   }
@@ -87,6 +112,7 @@
     document.querySelector('#analysisTab').setAttribute('aria-pressed','false');
   }
 
+  ensureSurface();
   document.querySelector('#analysisTab').addEventListener('click',showAnalysis);
   document.querySelectorAll('.viewtabs button:not(#analysisTab)').forEach(button=>button.addEventListener('click',hideAnalysis));
 })();
