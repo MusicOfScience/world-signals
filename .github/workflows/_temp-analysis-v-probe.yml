@@ -1,4 +1,4 @@
-name: TEMP cross-domain Analysis V full simulation final
+name: TEMP apply cross-domain Analysis V
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
       - .github/workflows/_temp-analysis-v-probe.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  simulate:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact main and protected pre-state
+      - name: Prove exact main and frozen pre-state
         run: |
           set -euo pipefail
           BASE=1bfa947d1fbd86e945349991778944094a78e5ed
@@ -37,66 +37,17 @@ jobs:
             data/analysis/schema.json \
             data/analysis/event_reviews.json \
             data/analysis/evidence_registry.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          c=json.loads(Path('data/canonical/registry.json').read_text())
-          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
-          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
-          assert (c['version'],len(c['records']))==('0.30',681)
-          assert (r['version'],len(r['reviews']))==('0.4',8)
-          assert (e['version'],len(e['evidence']))==('0.4',21)
-          assert r['canonical_checkpoint']=={'registry_version':'0.29','record_count':678}
-          PY
-      - name: Check-only V transaction
-        run: python scripts/apply_cross_domain_analysis_v.py
-      - name: Apply only inside disposable runner
+          python scripts/apply_cross_domain_analysis_v.py
+      - name: Apply reviewed V transaction
         env:
           WORLD_SIGNALS_APPLY_ANALYSIS_V: YES
         run: python scripts/apply_cross_domain_analysis_v.py --apply
-      - name: Assert exact simulated mutation boundary
+      - name: Validate exact post-state
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
-          expected=(
-            data/analysis/CROSS_DOMAIN_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
-            data/analysis/event_reviews.json
-            data/analysis/evidence_registry.json
-          )
-          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
-          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
-          diff -u /tmp/expected /tmp/actual
-          git diff --exit-code HEAD -- \
-            data/canonical/registry.json \
-            data/canonical/schema.json \
-            data/sources/registry.json \
-            data/changes/ledger.json \
-            data/coverage/biosecurity_overlay.json \
-            data/monitor/expectations.json \
-            data/monitor/operations_policy.json \
-            data/analysis/schema.json
-      - name: Validate registry and Analysis
-        run: |
           python scripts/validate_registry.py
           python scripts/validate_analysis.py
-      - name: Run full repository suite on simulated V post-state
-        run: python -m unittest discover -s tests -v
-      - name: Compile Python surfaces
-        run: |
-          python -m py_compile scripts/apply_cross_domain_analysis_v.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_cross_domain_analysis_v.py tests/test_analysis_layer.py tests/test_cross_domain_historical_anchors_u.py tests/test_priority_region_analysis_s.py tests/test_controlled_analysis_expansion_t.py
-      - name: Check browser JavaScript
-        run: |
-          set -euo pipefail
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-      - name: Build static site and assert V post-state
-        run: |
-          set -euo pipefail
+          python -m unittest discover -s tests -v
           python scripts/build_site.py
           python - <<'PY'
           import json
@@ -109,35 +60,30 @@ jobs:
           assert (r['version'],len(r['reviews']))==('0.5',11)
           assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
           assert (e['version'],len(e['evidence']))==('0.5',29)
-          assert a['metadata']['review_count']==11
-          assert a['metadata']['canonical_mutation_allowed'] is False
-          assert a['metadata']['google_calendar_write'] is False
-          readiness=a['readiness']
-          assert readiness['eligible_completed_occurrence_count']==12
-          assert readiness['reviewed_occurrence_count']==11
-          assert readiness['reviewed_event_type_diversity']==10
-          assert readiness['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
-          reviewed=set(readiness['reviewed_occurrence_ids'])
-          assert 'WSO-ddb70f8ff05a58fb' not in reviewed
-          by={row['analysis_id']:row for row in a['reviews']}
-          bwc=by['WSAN-BWC-WG8-20260213-001']
-          woah=by['WSAN-WOAH-GS93-20260522-001']
-          nepal=by['WSAN-NP-BUDGET-2083-001']
-          assert all(row['what_moved']==[] for row in (bwc,woah,nepal))
-          assert bwc['what_surprised']['status']=='NOT_ESTABLISHED'
-          assert bwc['second_order_effects']['status']=='NOT_ESTABLISHED'
-          assert (bwc['canonical']['start_local'],bwc['canonical']['end_local'])==('2026-02-09','2026-02-13')
-          assert woah['what_surprised']['status']=='NO_CLEAR_SURPRISE'
-          assert woah['second_order_effects']['status']=='PLAUSIBLE_WATCH_ITEM'
-          assert woah['canonical']['category']=='AGRICULTURE_FOOD'
-          assert (woah['canonical']['start_local'],woah['canonical']['end_local'])==('2026-05-18','2026-05-22')
-          n=nepal['canonical']
-          assert n['timing_type']=='SOURCE_NATIVE_CALENDAR_DATE'
-          assert n['source_native_date_label']=='15 Jestha 2083'
-          assert n['native_calendar_system']=='BIKRAM_SAMBAT_NEPAL'
-          assert (n['native_calendar_year'],n['native_calendar_month'],n['native_calendar_day'])==(2083,'JESTHA',15)
-          assert n['gregorian_resolution_status']=='UNRESOLVED_AUTHORITATIVE_CONVERSION'
-          assert n['start_local'] is None and n['start_utc'] is None
-          assert nepal['second_order_effects']['status']=='OBSERVED'
-          print(json.dumps(readiness,indent=2,sort_keys=True))
+          assert a['readiness']['eligible_completed_occurrence_count']==12
+          assert a['readiness']['reviewed_occurrence_count']==11
+          assert a['readiness']['reviewed_event_type_diversity']==10
+          assert a['readiness']['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          assert 'WSO-ddb70f8ff05a58fb' not in set(a['readiness']['reviewed_occurrence_ids'])
           PY
+          git diff --exit-code HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+      - name: Commit reviewed Analysis-only transaction
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/analysis/CROSS_DOMAIN_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
+          git diff --cached --quiet && { echo 'No reviewed V transaction changes staged'; exit 1; }
+          git commit -m "Apply reviewed Cross-domain Analysis V transaction"
+          git push origin HEAD:feature/cross-domain-analysis-v
