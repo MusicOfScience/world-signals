@@ -1,0 +1,39 @@
+name: TEMP monitor O helper patch
+
+on:
+  push:
+    branches:
+      - feature/core-monitor-expansion-o
+    paths:
+      - data/monitor/MONITOR_O_PATCH.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Patch endpoint container name only
+        shell: bash
+        run: |
+          set -euo pipefail
+          count="$(grep -o 'monitored_endpoints' scripts/apply_core_monitor_expansion_o.py | wc -l)"
+          test "$count" -eq 2
+          sed -i 's/monitored_endpoints/monitor_endpoints/g' scripts/apply_core_monitor_expansion_o.py
+          test "$(grep -o 'monitor_endpoints' scripts/apply_core_monitor_expansion_o.py | wc -l)" -eq 2
+          test -z "$(grep -o 'monitored_endpoints' scripts/apply_core_monitor_expansion_o.py || true)"
+          git diff --check
+          test "$(git diff --name-only)" = "scripts/apply_core_monitor_expansion_o.py"
+      - name: Commit branch-only correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/apply_core_monitor_expansion_o.py
+          git commit -m 'Fix monitor O endpoint container name [skip ci]'
+          git push origin HEAD:feature/core-monitor-expansion-o
