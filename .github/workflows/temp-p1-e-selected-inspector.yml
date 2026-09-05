@@ -1,0 +1,32 @@
+name: TEMP P1 E selected inspector
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-e-selected-inspector.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Print selected source rows and dependencies
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ids=['WSSRC-MAC-023','WSSRC-REG-008','WSSRC-COM-006','WSSRC-CLIM-002','WSSRC-INT-024','WSSRC-INT-011','WSSRC-INT-028']
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          sm={x['source_id']:x for x in src['sources']}
+          print('=== SOURCES ===')
+          for sid in ids:
+              print('SOURCE',sid)
+              print(json.dumps(sm[sid],ensure_ascii=False,indent=2,sort_keys=True))
+          print('=== DEPENDENCIES ===')
+          for sid in ids:
+              deps=[r for r in can['records'] if r.get('source_id')==sid]
+              print('DEPENDENCIES',sid,len(deps))
+              for r in deps:
+                  print(json.dumps(r,ensure_ascii=False,indent=2,sort_keys=True))
+          PY
