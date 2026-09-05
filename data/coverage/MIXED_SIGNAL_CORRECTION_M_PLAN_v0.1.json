@@ -57,7 +57,7 @@
       "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
       "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
       "evidence_scope": "2026 MPC meeting calendar; meeting nos. 307 and 308 are two-day windows",
-      "source_semantics": "meeting window only; no decision publication clock time inferred"
+      "source_semantics": "meeting window only; no decision publication clock time or future venue inferred"
     },
     {
       "source_id": "WSSRC-INT-032",
@@ -137,7 +137,7 @@
       "short_calendar_title": "CBN MPC meeting 307",
       "start_local": "2026-09-21",
       "end_local": "2026-09-22",
-      "location": "CBN Head Office, Abuja",
+      "location": null,
       "intrinsic_importance": "HIGH",
       "expected_market_sensitivity": "HIGH",
       "geopolitical_sensitivity": "MEDIUM"
@@ -150,7 +150,7 @@
       "short_calendar_title": "CBN MPC meeting 308",
       "start_local": "2026-11-23",
       "end_local": "2026-11-24",
-      "location": "CBN Head Office, Abuja",
+      "location": null,
       "intrinsic_importance": "HIGH",
       "expected_market_sensitivity": "HIGH",
       "geopolitical_sensitivity": "MEDIUM"
