@@ -1,1 +1,1 @@
-SIMULATE         
+APPLY
