@@ -118,3 +118,7 @@ Changing the schema simply to restate behaviour already implemented would add ch
 - reviewed event-type diversity: 9
 - remaining eligible unreviewed: WOAH GS93 and Bank of Canada
 - broad state: `READY_FOR_CONTROLLED_EXPANSION`
+
+## Transaction note
+
+The reviewed write is deliberately gated through the W transaction script. Protected canonical, source, change-ledger, biosecurity, monitor and Analysis-schema files must remain byte-identical across the apply.
