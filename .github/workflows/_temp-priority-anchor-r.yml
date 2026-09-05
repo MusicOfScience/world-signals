@@ -1,4 +1,5 @@
 name: TEMP priority anchor R full post-state simulation
+# rerun after descendant-checkpoint test repairs
 
 on:
   push:
