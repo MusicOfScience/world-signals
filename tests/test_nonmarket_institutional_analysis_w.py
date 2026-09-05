@@ -57,7 +57,7 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
         evidence_ids = {row["evidence_id"] for row in self.payload["evidence"]}
         self.assertEqual(evidence_ids, set(self.plan["new_evidence_ids"]))
 
-    def test_transform_or_live_poststate_is_exact_for_w(self):
+    def test_transform_or_live_descendant_preserves_w_contract(self):
         if self.has_w:
             new_reviews, new_evidence = self.reviews, self.evidence
             readiness = analysis_population_readiness(self.schema, new_reviews, self.canonical)
@@ -68,19 +68,28 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
                 self.overlay, self.schema, self.reviews, self.evidence,
             )
         post = self.plan["postconditions"]
-        self.assertEqual((new_reviews["version"], len(new_reviews["reviews"])),
-                         (post["analysis_reviews_version"], post["analysis_review_count"]))
-        self.assertEqual((new_evidence["version"], len(new_evidence["evidence"])),
-                         (post["analysis_evidence_version"], post["analysis_evidence_count"]))
+        self.assertGreaterEqual(len(new_reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(len(new_evidence["evidence"]), post["analysis_evidence_count"])
         self.assertEqual(readiness["eligible_completed_occurrence_count"], 12)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 10)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 9)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 10)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 9)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
         by_id = {row["analysis_id"]: row for row in projection["reviews"]}
         projected = by_id["WSAN-BWC-WG8-2026-001"]
         self.assertEqual(projected["what_moved"], [])
         self.assertEqual(projected["what_surprised"]["status"], "NOT_ESTABLISHED")
         self.assertEqual(projected["canonical"]["event_type"], "TREATY_WORKING_GROUP_SESSION")
+
+    def test_w_historical_boundary_is_frozen_without_forbidding_descendants(self):
+        post = self.plan["postconditions"]
+        self.assertEqual(post["analysis_reviews_version"], "0.6")
+        self.assertEqual(post["analysis_review_count"], 10)
+        self.assertEqual(post["analysis_evidence_version"], "0.6")
+        self.assertEqual(post["analysis_evidence_count"], 32)
+        self.assertEqual(set(post["remaining_eligible_unreviewed_occurrence_ids"]),
+                         {"WSO-WOAH-GS-093", "WSO-ddb70f8ff05a58fb"})
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(len(self.evidence["evidence"]), post["analysis_evidence_count"])
 
     def test_current_public_renderer_supports_empty_market_response(self):
         source = (ROOT / "web/analysis.js").read_text(encoding="utf-8")
