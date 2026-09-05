@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.16",
+  "version": "0.17",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1387,6 +1387,105 @@
       "committed_at": "2026-09-06T01:16:31+10:00",
       "registry_version_before": "0.28",
       "registry_version_after": "0.29",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCH-HIST-U-BWC-WG-S08-20260906",
+      "occurrence_id": "WSO-BWC-WG-2026-S08",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-02-09",
+        "end_local": "2026-02-13",
+        "start_utc": null
+      },
+      "source_assertion_id": "WSA-HU-670b2a8306fdeafe",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T03:36:30+10:00",
+      "review_basis": [
+        "https://meetings.unoda.org/meeting/79376/documents",
+        "UNODA's official 2026 BWC past-meetings archive classifies the eighth session as a past meeting on 9-13 February 2026; the official session documents include final/procedural-report material through 13 February.",
+        "Existing canonical series identity is reused; no new series taxonomy is created.",
+        "Completion is admitted only from competent first-party post-event evidence, never elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_U",
+      "committed_at": "2026-09-06T03:36:30+10:00",
+      "registry_version_before": "0.29",
+      "registry_version_after": "0.30",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCH-HIST-U-WOAH-GS-093-20260906",
+      "occurrence_id": "WSO-WOAH-GS-093",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-05-18",
+        "end_local": "2026-05-22",
+        "start_utc": null
+      },
+      "source_assertion_id": "WSA-HU-8c94a9d370ca7cf2",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T03:36:30+10:00",
+      "review_basis": [
+        "https://www.woah.org/app/uploads/2026/06/93gs-2026-final-report-en.pdf",
+        "WOAH's official 93rd General Session page states that the session took place 18-22 May 2026 in Paris; the existing WSSRC-INT-033 final report is competent first-party completion/outcome evidence.",
+        "Existing canonical series identity is reused; no new series taxonomy is created.",
+        "Completion is admitted only from competent first-party post-event evidence, never elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_U",
+      "committed_at": "2026-09-06T03:36:30+10:00",
+      "registry_version_before": "0.29",
+      "registry_version_after": "0.30",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCH-HIST-U-NP-BUDGET-2083-20260906",
+      "occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-FIS-NP-FEDERAL-BUDGET",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+        "start_local": null,
+        "end_local": null,
+        "start_utc": null,
+        "source_native_date_label": "15 Jestha 2083",
+        "native_calendar_system": "BIKRAM_SAMBAT_NEPAL",
+        "gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION"
+      },
+      "source_assertion_id": "WSA-HU-cf2ce3f69327bd33",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T03:36:30+10:00",
+      "review_basis": [
+        "https://mof.gov.np/content/1741/budget-statement-for-the-financial-year-2083-84/",
+        "Nepal's Ministry of Finance publishes the FY2083/84 budget statement with the source-native date 15 Jestha 2083; this establishes completion without supplying an authoritative Gregorian conversion or constitutional presentation clock time.",
+        "Existing canonical series identity is reused; no new series taxonomy is created.",
+        "Completion is admitted only from competent first-party post-event evidence, never elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_U",
+      "committed_at": "2026-09-06T03:36:30+10:00",
+      "registry_version_before": "0.29",
+      "registry_version_after": "0.30",
       "canonical_mutation_committed": true
     }
   ]
