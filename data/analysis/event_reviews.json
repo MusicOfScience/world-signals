@@ -1,11 +1,11 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.2",
+  "version": "0.3",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
-    "registry_version": "0.28",
-    "record_count": 674
+    "registry_version": "0.29",
+    "record_count": 678
   },
   "reviews": [
     {
@@ -324,6 +324,436 @@
         "If the market had in fact priced an OCR path at or below the RBNZ projection immediately before the decision, the 'more gradual than priced' surprise classification would need revision."
       ],
       "analytical_conclusion": "The RBNZ delivered the expected 25 basis point hike, but the package was less hawkish than markets had priced because its projected tightening path was more gradual. Short-rate and currency moves are consistent with that interpretation, while the global oil-driven bond sell-off remains a material competing explanation for longer-duration rates. No second-order consequence is established.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-IN-GDP-2026Q1-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T15:31:00Z",
+      "canonical_occurrence_id": "WSO-HIST-R-IN-GDP-2026Q1",
+      "canonical_series_id": "WSER-MAC-IN-GDP",
+      "canonical_event_type": "DATA_RELEASE",
+      "canonical_institution": "Ministry of Statistics and Programme Implementation",
+      "canonical_release_utc": "2026-08-31T10:30:00Z",
+      "scope": "Q1 FY2026-27 India GDP release, consensus surprise and next-session rupee observation with intervention and flow contamination preserved",
+      "what_happened": {
+        "summary": "India's official Q1 FY2026-27 GDP release reported real GDP growth of 7.8 percent year-on-year.",
+        "actuals": [
+          {
+            "metric": "real_gdp_yoy",
+            "value": 7.8,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-IN-GDP-PIB-20260831"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-IN-GDP-PIB-20260831"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Reuters reported economists' projections of 7.1 percent year-on-year growth.",
+        "benchmarks": [
+          {
+            "metric": "real_gdp_yoy",
+            "value": 7.1,
+            "unit": "percent",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-IN-GDP-REUTERS-20260831"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-IN-GDP-REUTERS-20260831"
+        ]
+      },
+      "what_surprised": {
+        "status": "UPSIDE",
+        "summary": "Real GDP growth exceeded the cited economist forecast by 0.7 percentage points. This is a data surprise, not a claim that the release dominated subsequent asset pricing.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "real_gdp_yoy",
+            "actual": 7.8,
+            "expected": 7.1,
+            "difference_percentage_points": 0.7
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-IN-GDP-PIB-20260831",
+          "WSEV-IN-GDP-REUTERS-20260831"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-IN-GDP-20260901-INRUSD",
+          "movement_type": "FX_SPOT",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "Indian rupee versus US dollar",
+          "before_value": null,
+          "after_value": 94.95,
+          "unit": "INR_per_USD",
+          "change": 0.2,
+          "change_unit": "percent_rupee_appreciation",
+          "direction": "INR_STRONGER",
+          "measurement_window": "Reuters-reported 1 September 2026 close versus the previous close, one session after the GDP release",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-IN-GDP-REUTERS-20260901"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "confidence": "LOW",
+        "summary": "Reuters reported that the previous day's strong growth data improved sentiment toward the rupee, so a supportive association is observable. The same report identified RBI intervention and flow-related dollar supply as the principal immediate drivers; GDP is therefore not promoted as the dominant cause.",
+        "evidence_refs": [
+          "WSEV-IN-GDP-REUTERS-20260831",
+          "WSEV-IN-GDP-REUTERS-20260901"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The rupee move occurred against a global bond sell-off, higher oil prices and renewed US-Iran tensions, all of which could independently affect the currency.",
+          "evidence_refs": [
+            "WSEV-IN-GDP-REUTERS-20260901"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "RBI dollar-selling intervention was identified by Reuters as a principal immediate driver of rupee strength.",
+          "evidence_refs": [
+            "WSEV-IN-GDP-REUTERS-20260901"
+          ]
+        },
+        {
+          "summary": "Flow-related dollar supply from foreign banks and infrastructure-fund inflows also supported the rupee independently of the GDP surprise.",
+          "evidence_refs": [
+            "WSEV-IN-GDP-REUTERS-20260901"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No distinct second-order policy, trade, investment or political outcome is established in this packet. The stronger GDP print may alter subsequent forecasts, but that remains a watch item until separately observed and evidenced."
+      },
+      "falsifiers": [
+        "If higher-frequency evidence shows rupee strengthening materially preceded publication of the GDP result, the GDP-linked association should be weakened.",
+        "If RBI intervention and identified flow effects fully explain the move without a measurable post-data component, the GDP connection should be downgraded to observation context only.",
+        "If later contemporaneous evidence identifies another dominant domestic catalyst, connection confidence should remain low or be reduced further."
+      ],
+      "analytical_conclusion": "India's Q1 GDP beat the cited consensus by 0.7 percentage points. The next-session rupee strengthening is analytically relevant only as a low-confidence association: Reuters explicitly identified central-bank intervention and dollar flows as stronger immediate drivers while describing the GDP beat as supportive sentiment.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-ID-BI-202608-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T15:31:00Z",
+      "canonical_occurrence_id": "WSO-HIST-R-ID-BI-202608",
+      "canonical_series_id": "WSER-REG-ID-BI",
+      "canonical_event_type": "MONETARY_POLICY_DECISION_PROCESS",
+      "canonical_institution": "Bank Indonesia",
+      "canonical_release_utc": null,
+      "scope": "18-19 August 2026 Bank Indonesia Board of Governors decision process and evidence-backed expectation comparison",
+      "what_happened": {
+        "summary": "Bank Indonesia held BI-Rate at 5.75 percent, the Deposit Facility rate at 4.75 percent and the Lending Facility rate at 6.50 percent.",
+        "actuals": [
+          {
+            "metric": "bi_rate",
+            "value": 5.75,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-ID-BI-BI-20260819"
+            ]
+          },
+          {
+            "metric": "deposit_facility_rate",
+            "value": 4.75,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-ID-BI-BI-20260819"
+            ]
+          },
+          {
+            "metric": "lending_facility_rate",
+            "value": 6.5,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-ID-BI-BI-20260819"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-ID-BI-BI-20260819"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Reuters reported that 27 of 28 economists expected BI to hold the benchmark rate at 5.75 percent.",
+        "benchmarks": [
+          {
+            "metric": "bi_rate",
+            "value": 5.75,
+            "unit": "percent",
+            "benchmark_type": "MARKET_CONSENSUS_DECISION",
+            "evidence_refs": [
+              "WSEV-ID-BI-REUTERS-20260819"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-ID-BI-REUTERS-20260819"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The 5.75 percent hold matched the overwhelming Reuters poll expectation. No separate guidance surprise is established by the evidence admitted to this packet.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "bi_rate",
+            "actual": 5.75,
+            "expected": 5.75,
+            "difference_percentage_points": 0.0
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-ID-BI-BI-20260819",
+          "WSEV-ID-BI-REUTERS-20260819"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "LOW",
+        "summary": "No discrete post-decision rupiah, rates or equity movement is promoted from the reviewed evidence. The packet records the expected hold and its policy context without manufacturing a market-reaction narrative.",
+        "evidence_refs": [
+          "WSEV-ID-BI-BI-20260819"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "BI itself identified heightened global volatility and the Middle East war as material rupiah-stability context, while the Reuters-syndicated report notes the decision occurred during a leadership transition.",
+          "evidence_refs": [
+            "WSEV-ID-BI-BI-20260819",
+            "WSEV-ID-BI-REUTERS-20260819"
+          ]
+        }
+      ],
+      "alternative_explanations": [],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No distinct later currency, growth, political or capital-flow effect is established here. Policy continuity under interim leadership is context, not a demonstrated second-order outcome."
+      },
+      "falsifiers": [
+        "If reliable high-frequency evidence establishes a discrete post-decision market move with a clean window, `what_moved` should be revisited rather than remaining empty.",
+        "If a stronger pre-decision source shows expectations were materially split despite the Reuters poll, the NO_CLEAR_SURPRISE classification should be re-examined."
+      ],
+      "analytical_conclusion": "Bank Indonesia delivered the overwhelmingly expected 5.75 percent hold. The reviewed evidence does not justify promoting a discrete market reaction, so the packet preserves a null movement result rather than forcing a tradable narrative.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-EG-CBE-20260820-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T15:31:00Z",
+      "canonical_occurrence_id": "WSO-HIST-R-EG-CBE-20260820",
+      "canonical_series_id": "WSER-REGJ-EG-CBE-MPC",
+      "canonical_event_type": "MONETARY_POLICY_DECISION",
+      "canonical_institution": "Central Bank of Egypt",
+      "canonical_release_utc": null,
+      "scope": "20 August 2026 CBE MPC decision, institutional expectation benchmark and explicitly unpromoted market reaction",
+      "what_happened": {
+        "summary": "The Central Bank of Egypt kept its overnight deposit rate at 19.00 percent, overnight lending rate at 20.00 percent, and both main-operation and discount rates at 19.50 percent.",
+        "actuals": [
+          {
+            "metric": "overnight_deposit_rate",
+            "value": 19.0,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-EG-CBE-CBE-20260820"
+            ]
+          },
+          {
+            "metric": "overnight_lending_rate",
+            "value": 20.0,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-EG-CBE-CBE-20260820"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EG-CBE-CBE-20260820"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "HC Securities & Investment explicitly expected the MPC to keep rates unchanged at the 20 August meeting.",
+        "benchmarks": [
+          {
+            "metric": "policy_stance",
+            "value": "HOLD",
+            "unit": "decision",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-EG-CBE-HC-20260819"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EG-CBE-HC-20260819"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The unchanged stance matched the admitted pre-decision institutional expectation. S does not turn a single institutional forecast into a synthetic consensus distribution.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "policy_stance",
+            "actual": "CBE policy rates unchanged",
+            "expected": "HC Securities expected policy rates to remain unchanged",
+            "direction": "MATCHED_EXPECTATION"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EG-CBE-CBE-20260820",
+          "WSEV-EG-CBE-HC-20260819"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "LOW",
+        "summary": "The reviewed evidence establishes the decision and one defensible expectation benchmark but not a clean post-decision market movement. No market-causality statement is made.",
+        "evidence_refs": [
+          "WSEV-EG-CBE-CBE-20260820",
+          "WSEV-EG-CBE-HC-20260819"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "CBE and HC both identify regional geopolitical turbulence and energy/fiscal inflation pressures as material background conditions, while CBE also reported softer-than-expected monthly inflation.",
+          "evidence_refs": [
+            "WSEV-EG-CBE-CBE-20260820",
+            "WSEV-EG-CBE-HC-20260819"
+          ]
+        }
+      ],
+      "alternative_explanations": [],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No subsequent exchange-rate, treasury-yield, inflation-expectations or political effect is established in this sample. The hold itself is the observed first-order policy outcome."
+      },
+      "falsifiers": [
+        "If a broader and more representative pre-decision expectation survey shows a materially different central expectation, the NO_CLEAR_SURPRISE classification should be reconsidered.",
+        "If clean high-frequency market evidence later establishes a discrete reaction to the CBE decision, `what_moved` should be populated with that evidence rather than inferred retrospectively."
+      ],
+      "analytical_conclusion": "CBE held rates unchanged, matching the admitted HC Securities expectation. The reviewed evidence does not establish a discrete market reaction, so the packet stops at policy outcome and context rather than constructing a causal market story.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-AR-CPI-202607-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T15:31:00Z",
+      "canonical_occurrence_id": "WSO-HIST-R-AR-CPI-202607",
+      "canonical_series_id": "WSER-REG2-AR-CPI",
+      "canonical_event_type": "OFFICIAL_STATISTICAL_RELEASE",
+      "canonical_institution": "INDEC",
+      "canonical_release_utc": null,
+      "scope": "Argentina July 2026 national CPI release, modest consensus surprise and composition context without a promoted market move",
+      "what_happened": {
+        "summary": "Argentina's national CPI rose 2.1 percent month-on-month in July 2026.",
+        "actuals": [
+          {
+            "metric": "national_cpi_mom",
+            "value": 2.1,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-AR-CPI-INDEC-20260813"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AR-CPI-INDEC-20260813"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Reuters reported analyst expectations of 2.0 percent month-on-month inflation.",
+        "benchmarks": [
+          {
+            "metric": "national_cpi_mom",
+            "value": 2.0,
+            "unit": "percent",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-AR-CPI-REUTERS-20260813"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AR-CPI-REUTERS-20260813"
+        ]
+      },
+      "what_surprised": {
+        "status": "UPSIDE",
+        "summary": "Monthly CPI was 0.1 percentage point above the cited analyst expectation. The difference is modest and is not by itself evidence of a material market or policy shock.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "national_cpi_mom",
+            "actual": 2.1,
+            "expected": 2.0,
+            "difference_percentage_points": 0.1
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AR-CPI-INDEC-20260813",
+          "WSEV-AR-CPI-REUTERS-20260813"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "LOW",
+        "summary": "No discrete post-release FX, sovereign-rate or equity movement is promoted from the reviewed evidence. The packet records the modest data surprise and price-composition context only.",
+        "evidence_refs": [
+          "WSEV-AR-CPI-INDEC-20260813",
+          "WSEV-AR-CPI-REUTERS-20260813"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Reuters reports that recreation and culture, particularly winter-holiday packages, led monthly price increases, followed by restaurants and hotels. Seasonal/category composition therefore matters when interpreting the 0.1-point headline surprise.",
+          "evidence_refs": [
+            "WSEV-AR-CPI-REUTERS-20260813"
+          ]
+        }
+      ],
+      "alternative_explanations": [],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No distinct subsequent monetary-policy, exchange-rate, fiscal or political effect is established by this sample. The modest upside surprise remains an observed data fact rather than a promoted transmission story."
+      },
+      "falsifiers": [
+        "If a later reconstruction establishes a discrete and temporally clean Argentine market reaction to the CPI release, `what_moved` should be populated with source-backed measurements.",
+        "If the relevant contemporaneous consensus benchmark is revised materially away from 2.0 percent, the magnitude or direction of the surprise should be recalculated."
+      ],
+      "analytical_conclusion": "Argentina's July CPI was a modest 0.1 percentage point upside surprise relative to the cited analyst expectation. No defensible discrete market move is established, so the packet preserves the surprise without forcing a market-causality narrative.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }
