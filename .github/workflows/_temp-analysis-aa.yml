@@ -1,0 +1,75 @@
+name: Temporary Japan sovereign financing analysis AA
+
+on:
+  push:
+    branches: [feature/japan-sovereign-financing-analysis-aa]
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-55 merge base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "dee2ddc328f9f6795adb80b61dbb671160653aca"
+      - name: Fail-closed AA check-only transform
+        run: python scripts/apply_japan_sovereign_financing_analysis_aa.py
+      - name: AA-specific tests before apply
+        run: python -m unittest tests.test_japan_sovereign_financing_analysis_aa -v
+      - name: Reviewed AA apply
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_AA: REVIEWED_APPLY
+        run: python scripts/apply_japan_sovereign_financing_analysis_aa.py --apply
+      - name: Validate canonical registry
+        run: python scripts/validate_registry.py
+      - name: Validate Analysis
+        run: python scripts/validate_analysis.py
+      - name: Full repository tests
+        run: python -m unittest discover -s tests -v
+      - name: Python compile
+        run: python -m py_compile scripts/apply_japan_sovereign_financing_analysis_aa.py scripts/validate_analysis.py src/world_signals/analysis.py
+      - name: Browser JavaScript checks
+        run: |
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Static site build
+        run: python scripts/build_site.py
+      - name: Prove AA mutation boundary
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed={
+            'data/analysis/event_reviews.json',
+            'data/analysis/evidence_registry.json',
+            'data/analysis/JAPAN_SOVEREIGN_FINANCING_ANALYSIS_AA_TRANSACTION_AUDIT_v0.1.md',
+          }
+          lines=subprocess.check_output(['git','status','--porcelain'], text=True).splitlines()
+          changed={line[3:] for line in lines if len(line) >= 4}
+          print('changed after apply:', sorted(changed))
+          unexpected=changed-allowed
+          missing=allowed-changed
+          if unexpected or missing:
+              raise SystemExit(f'AA mutation boundary failed: unexpected={sorted(unexpected)} missing={sorted(missing)}')
+          PY
+      - name: Commit reviewed AA transaction and self-remove workflow
+        run: |
+          git config user.name world-signals-transaction-bot
+          git config user.email world-signals-transaction-bot@users.noreply.github.com
+          git add data/analysis/event_reviews.json data/analysis/evidence_registry.json data/analysis/JAPAN_SOVEREIGN_FINANCING_ANALYSIS_AA_TRANSACTION_AUDIT_v0.1.md
+          git rm .github/workflows/_temp-analysis-aa.yml
+          git commit -m "Apply Japan sovereign financing analysis AA transaction"
+          git push origin HEAD:feature/japan-sovereign-financing-analysis-aa
