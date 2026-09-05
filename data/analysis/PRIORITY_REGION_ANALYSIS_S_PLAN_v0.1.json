@@ -1,0 +1,105 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "PRIORITY_REGION_ANALYSIS_S",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "purpose": "Add one reviewed analytical stress sample for each priority geographic region now possessing an authoritative COMPLETED canonical anchor, while preserving null market-reaction results and keeping all upstream layers read-only.",
+  "base_main": "a7ba439673fa2c468f2c9c4ef28904fb25c688a7",
+  "preconditions": {
+    "canonical_registry_version": "0.29",
+    "canonical_record_count": 678,
+    "analysis_schema_version": "0.2",
+    "analysis_reviews_version": "0.2",
+    "analysis_review_count": 2,
+    "analysis_evidence_version": "0.2",
+    "analysis_evidence_count": 5,
+    "required_priority_region_state": "ELIGIBLE_UNREVIEWED"
+  },
+  "protected_upstream_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json"
+  ],
+  "analysis_post_state": {
+    "reviews_version": "0.3",
+    "canonical_checkpoint": {
+      "registry_version": "0.29",
+      "record_count": 678
+    },
+    "review_count": 6,
+    "evidence_version": "0.3",
+    "evidence_count": 14,
+    "expected_readiness": "READY_FOR_CONTROLLED_EXPANSION",
+    "readiness_semantics": "Controlled expansion means the four geographic stress regions each contain one audited sample and minimum event-type diversity is satisfied. It is not regional completeness, representativeness or population authority."
+  },
+  "new_reviews": [
+    {
+      "analysis_id": "WSAN-IN-GDP-2026Q1-001",
+      "occurrence_id": "WSO-HIST-R-IN-GDP-2026Q1",
+      "region": "South Asia",
+      "event_type": "DATA_RELEASE",
+      "surprise_status": "UPSIDE",
+      "market_movement_policy": "ONE_SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+      "causal_status": "OBSERVED_ASSOCIATION",
+      "connection_confidence": "LOW"
+    },
+    {
+      "analysis_id": "WSAN-ID-BI-202608-001",
+      "occurrence_id": "WSO-HIST-R-ID-BI-202608",
+      "region": "Southeast Asia",
+      "event_type": "MONETARY_POLICY_DECISION_PROCESS",
+      "surprise_status": "NO_CLEAR_SURPRISE",
+      "market_movement_policy": "NO_DISCRETE_MOVE_PROMOTED",
+      "causal_status": "NOT_A_CAUSAL_CLAIM",
+      "connection_confidence": "LOW"
+    },
+    {
+      "analysis_id": "WSAN-EG-CBE-20260820-001",
+      "occurrence_id": "WSO-HIST-R-EG-CBE-20260820",
+      "region": "Africa",
+      "event_type": "MONETARY_POLICY_DECISION",
+      "surprise_status": "NO_CLEAR_SURPRISE",
+      "market_movement_policy": "NO_DISCRETE_MOVE_PROMOTED",
+      "causal_status": "NOT_A_CAUSAL_CLAIM",
+      "connection_confidence": "LOW"
+    },
+    {
+      "analysis_id": "WSAN-AR-CPI-202607-001",
+      "occurrence_id": "WSO-HIST-R-AR-CPI-202607",
+      "region": "Latin America",
+      "event_type": "OFFICIAL_STATISTICAL_RELEASE",
+      "surprise_status": "UPSIDE",
+      "market_movement_policy": "NO_DISCRETE_MOVE_PROMOTED",
+      "causal_status": "NOT_A_CAUSAL_CLAIM",
+      "connection_confidence": "LOW"
+    }
+  ],
+  "new_evidence_ids": [
+    "WSEV-IN-GDP-PIB-20260831",
+    "WSEV-IN-GDP-REUTERS-20260831",
+    "WSEV-IN-GDP-REUTERS-20260901",
+    "WSEV-ID-BI-BI-20260819",
+    "WSEV-ID-BI-REUTERS-20260819",
+    "WSEV-EG-CBE-CBE-20260820",
+    "WSEV-EG-CBE-HC-20260819",
+    "WSEV-AR-CPI-INDEC-20260813",
+    "WSEV-AR-CPI-REUTERS-20260813"
+  ],
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "monitor_configuration_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "google_calendar_write": false,
+    "automatic_canonical_commit": false,
+    "missing_market_move_may_remain_empty": true,
+    "missing_market_baseline_may_be_reconstructed": false,
+    "temporal_sequence_establishes_causality": false,
+    "one_review_per_priority_region_implies_completeness": false
+  }
+}
