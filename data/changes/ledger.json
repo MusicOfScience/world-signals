@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.17",
+  "version": "0.18",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1486,6 +1486,74 @@
       "committed_at": "2026-09-06T03:36:30+10:00",
       "registry_version_before": "0.29",
       "registry_version_after": "0.30",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-9696496c97b1e4c3d3",
+      "occurrence_id": "WSO-FIS-A-0015",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "old_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "PLANNED",
+        "last_verified_at": "2026-09-02",
+        "last_successful_assertion_id": "WSA-5a72f97de6fa87f7"
+      },
+      "new_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "last_verified_at": "2026-09-06",
+        "last_successful_assertion_id": "WSA-b7ac6942617a2ddb",
+        "completion_source_id": "WSSRC-FIS-028",
+        "completion_source_url": "https://www.mof.go.jp/english/policy/jgbs/auction/calendar/eresul/eresul20260903.htm"
+      },
+      "source_assertion_id": "WSA-b7ac6942617a2ddb",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T06:07:35+10:00",
+      "review_basis": [
+        "https://www.mof.go.jp/english/policy/jgbs/auction/calendar/eresul/eresul20260903.htm",
+        "Japan Ministry of Finance published the official result for the 30-year JGB auction dated 3 September 2026. This establishes that the scheduled auction occurred; elapsed time alone is not used as completion evidence. The result page does not establish a single canonical clock time for the underlying auction occurrence.",
+        "Stable occurrence, series and forward schedule-source identities are preserved.",
+        "Source-native day precision and null UTC fields are preserved; no clock time is inferred from publication/result material.",
+        "Lifecycle completion is supported by competent first-party post-event evidence and is not inferred from elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_LIFECYCLE_REPAIR_Z",
+      "committed_at": "2026-09-06T06:07:35+10:00",
+      "registry_version_before": "0.30",
+      "registry_version_after": "0.31",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-fdab8de39915ce010e",
+      "occurrence_id": "WSO-MAC-B-0041",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "old_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "PLANNED",
+        "last_verified_at": "2026-09-02",
+        "last_successful_assertion_id": "WSA-9e26e3a0ddd1f7f2"
+      },
+      "new_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "last_verified_at": "2026-09-06",
+        "last_successful_assertion_id": "WSA-a8bd1c192d6555a5",
+        "completion_source_id": "WSSRC-MAC-029",
+        "completion_source_url": "https://www.stat.go.jp/english/data/kakei/156.htm"
+      },
+      "source_assertion_id": "WSA-a8bd1c192d6555a5",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T06:07:35+10:00",
+      "review_basis": [
+        "https://www.stat.go.jp/english/data/kakei/156.htm",
+        "Statistics Bureau of Japan identifies the July 2026 Family Income and Expenditure Survey as released on 4 September 2026 and publishes the survey results. This establishes that the scheduled release occurred; no publication clock time is inferred.",
+        "Stable occurrence, series and forward schedule-source identities are preserved.",
+        "Source-native day precision and null UTC fields are preserved; no clock time is inferred from publication/result material.",
+        "Lifecycle completion is supported by competent first-party post-event evidence and is not inferred from elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_LIFECYCLE_REPAIR_Z",
+      "committed_at": "2026-09-06T06:07:35+10:00",
+      "registry_version_before": "0.30",
+      "registry_version_after": "0.31",
       "canonical_mutation_committed": true
     }
   ]

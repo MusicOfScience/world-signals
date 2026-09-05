@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.30",
+  "version": "0.31",
   "reference_date": "2026-09-06",
   "record_count": 681,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
@@ -27733,7 +27733,7 @@
       "record_class": "OCCURRENCE",
       "certainty_status": "CONFIRMED",
       "activation_mode": "EXPLICITLY_SCHEDULED",
-      "lifecycle_status": "PLANNED",
+      "lifecycle_status": "COMPLETED",
       "condition_state": "NOT_REQUIRED",
       "condition_description": null,
       "trigger_source_id": null,
@@ -27756,21 +27756,36 @@
       "time_basis": "SOURCE_UNSPECIFIED",
       "source_id": "WSSRC-MAC-024",
       "primary_source_assertion_id": "WSA-9e26e3a0ddd1f7f2",
-      "last_successful_assertion_id": "WSA-9e26e3a0ddd1f7f2",
+      "last_successful_assertion_id": "WSA-a8bd1c192d6555a5",
       "status_history": [
         {
           "as_of": "2026-09-02",
           "certainty_status": "CONFIRMED",
           "lifecycle_status": "PLANNED"
+        },
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Existing scheduled occurrence marked completed after authoritative first-party post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-a8bd1c192d6555a5",
+          "basis": "Statistics Bureau of Japan identifies the July 2026 Family Income and Expenditure Survey as released on 4 September 2026 and publishes the survey results. This establishes that the scheduled release occurred; no publication clock time is inferred."
         }
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-06",
       "next_verification_due": "SOURCE_SPECIFIC",
       "parent_occurrence_id": null,
       "related_occurrence_ids": [],
-      "related_documents": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-MAC-029",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://www.stat.go.jp/english/data/kakei/156.htm"
+        }
+      ],
       "intrinsic_importance": "HIGH",
       "expected_market_sensitivity": "MEDIUM_HIGH",
       "geopolitical_sensitivity": "LOW",
@@ -30996,7 +31011,7 @@
       "record_class": "OCCURRENCE",
       "certainty_status": "CONFIRMED",
       "activation_mode": "EXPLICITLY_SCHEDULED",
-      "lifecycle_status": "PLANNED",
+      "lifecycle_status": "COMPLETED",
       "condition_state": "NOT_REQUIRED",
       "condition_description": null,
       "trigger_source_id": null,
@@ -31019,21 +31034,36 @@
       "time_basis": "SOURCE_UNSPECIFIED",
       "source_id": "WSSRC-FIS-007",
       "primary_source_assertion_id": "WSA-5a72f97de6fa87f7",
-      "last_successful_assertion_id": "WSA-5a72f97de6fa87f7",
+      "last_successful_assertion_id": "WSA-b7ac6942617a2ddb",
       "status_history": [
         {
           "as_of": "2026-09-02",
           "certainty_status": "CONFIRMED",
           "lifecycle_status": "PLANNED"
+        },
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Existing scheduled occurrence marked completed after authoritative first-party post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-b7ac6942617a2ddb",
+          "basis": "Japan Ministry of Finance published the official result for the 30-year JGB auction dated 3 September 2026. This establishes that the scheduled auction occurred; elapsed time alone is not used as completion evidence. The result page does not establish a single canonical clock time for the underlying auction occurrence."
         }
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-06",
       "next_verification_due": "SOURCE_SPECIFIC",
       "parent_occurrence_id": null,
       "related_occurrence_ids": [],
-      "related_documents": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-FIS-028",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://www.mof.go.jp/english/policy/jgbs/auction/calendar/eresul/eresul20260903.htm"
+        }
+      ],
       "intrinsic_importance": "MEDIUM_HIGH",
       "expected_market_sensitivity": "LOW_MEDIUM",
       "geopolitical_sensitivity": "LOW",
