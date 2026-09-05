@@ -11,6 +11,20 @@
     return human(value||'source-native calendar');
   }
 
+  function isUnresolvedNative(event){
+    return event?.timing_type===TARGET_TYPE && event?.gregorian_resolution_status===UNRESOLVED;
+  }
+
+  const inheritedFormatWhen=window.formatWhen;
+  if(typeof inheritedFormatWhen==='function'){
+    window.formatWhen=function(event){
+      if(isUnresolvedNative(event)){
+        return `<strong>${esc(event.source_native_date_label||'source-native date')}</strong><br><span class="meta">${esc(calendarName(event.native_calendar_system))} · Gregorian resolution pending</span>`;
+      }
+      return inheritedFormatWhen(event);
+    };
+  }
+
   function sourceLink(event){
     return event.source_url
       ? `<a href="${esc(event.source_url)}" target="_blank" rel="noopener">authoritative source</a>`
@@ -46,11 +60,7 @@
       const response=await fetch('data/events.json');
       if(!response.ok) throw new Error(`events.json ${response.status}`);
       const projection=await response.json();
-      const rows=(projection.events||[]).filter(event=>
-        event.timing_type===TARGET_TYPE &&
-        event.gregorian_resolution_status===UNRESOLVED &&
-        event.lifecycle!=='CANCELLED'
-      );
+      const rows=(projection.events||[]).filter(event=>isUnresolvedNative(event) && event.lifecycle!=='CANCELLED');
       rows.sort((a,b)=>String(a.source_native_date_label||'').localeCompare(String(b.source_native_date_label||'')));
       target.innerHTML=rows.length
         ? rows.map(card).join('')
