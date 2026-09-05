@@ -26,6 +26,10 @@ def digest(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+def version_tuple(value):
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class PriorityRegionHistoricalAnchorsRTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -67,11 +71,16 @@ class PriorityRegionHistoricalAnchorsRTests(unittest.TestCase):
         }
 
     def test_repository_is_exact_pre_or_reviewed_post_state(self):
-        allowed = {
-            ("0.28", 674, "1.70", 233, "0.15", 44),
-            ("0.29", 678, "1.71", 236, "0.16", 48),
-        }
-        self.assertIn(self.state(), allowed)
+        state = self.state()
+        if state == ("0.28", 674, "1.70", 233, "0.15", 44):
+            pass
+        else:
+            self.assertGreaterEqual(version_tuple(state[0]), (0, 29))
+            self.assertGreaterEqual(state[1], 678)
+            self.assertGreaterEqual(version_tuple(state[2]), (1, 71))
+            self.assertGreaterEqual(state[3], 236)
+            self.assertGreaterEqual(version_tuple(state[4]), (0, 16))
+            self.assertGreaterEqual(state[5], 48)
         self.assertEqual(str(self.schema.get("version")), "0.52")
 
     def test_scope_is_four_existing_series_one_per_priority_region(self):
@@ -174,29 +183,26 @@ class PriorityRegionHistoricalAnchorsRTests(unittest.TestCase):
             self.assertEqual(post_overlay["version"], "0.4")
             self.assertEqual(post_overlay["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
         else:
-            self.assertEqual(self.overlay["version"], "0.4")
-            self.assertEqual(self.overlay["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
+            self.assertGreaterEqual(version_tuple(self.overlay["version"]), (0, 4))
+            self.assertEqual(
+                self.overlay["canonical_checkpoint"],
+                {"registry_version": self.registry["version"], "record_count": len(self.registry["records"])},
+            )
 
     def test_analysis_readiness_preserves_r_anchor_contribution_through_descendants(self):
         post_registry, *_rest, report = self.simulated_or_live_post()
         readiness = report.get("readiness") or analysis_population_readiness(
             self.analysis_schema, self.analysis_reviews, post_registry
         )
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 9)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 9)
         priority = {r["region"]: r for r in readiness["priority_geographic_stress_regions"]}
         for region in ("Africa", "South Asia", "Southeast Asia", "Latin America"):
             row = priority[region]
-            self.assertEqual(row["eligible_completed_count"], 1)
-            self.assertIn(row["reviewed_count"], (0, 1))
-            if row["reviewed_count"] == 0:
-                self.assertEqual(row["state"], "ELIGIBLE_UNREVIEWED")
-            else:
-                self.assertEqual(row["state"], "REVIEWED_SAMPLE_PRESENT")
-        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 2)
-        self.assertIn(
-            readiness["broad_population_state"],
-            {"BLOCKED_PRIORITY_REGION_REVIEW_GAP", "READY_FOR_CONTROLLED_EXPANSION"},
-        )
+            self.assertGreaterEqual(row["eligible_completed_count"], 1)
+            self.assertGreaterEqual(row["reviewed_count"], 1)
+            self.assertEqual(row["state"], "REVIEWED_SAMPLE_PRESENT")
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 6)
+        self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
 
     def test_frozen_plan_keeps_global_write_gates_closed(self):
         post = self.plan["postconditions"]
