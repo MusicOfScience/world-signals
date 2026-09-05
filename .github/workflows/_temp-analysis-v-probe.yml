@@ -113,3 +113,5 @@ jobs:
           node --check web/analysis.js
       - name: Static site build
         run: python scripts/build_site.py
+
+# rerun marker: semantic-invariant tests repaired
