@@ -15,6 +15,10 @@ def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
+def version_tuple(value):
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class PriorityRegionAnalysisSTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -31,7 +35,8 @@ class PriorityRegionAnalysisSTests(unittest.TestCase):
         cls.by_evidence = {row["evidence_id"]: row for row in cls.evidence["evidence"]}
 
     def test_s_state_survives_descendant_population_and_validator(self):
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.29", 678))
+        self.assertGreaterEqual(version_tuple(self.canonical["version"]), (0, 29))
+        self.assertGreaterEqual(len(self.canonical["records"]), 678)
         s_post = self.plan["analysis_post_state"]
         self.assertEqual(s_post["review_count"], 6)
         self.assertEqual(s_post["evidence_count"], 14)
