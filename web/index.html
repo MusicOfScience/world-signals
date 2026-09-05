@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WORLD SIGNALS</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="horizon.css">
   <link rel="stylesheet" href="history.css">
   <link rel="stylesheet" href="operations.css">
 </head>
 <body>
   <header class="hero">
     <div>
-      <p class="eyebrow">WORLD SIGNALS · EXECUTABLE THIN SLICE</p>
+      <p class="eyebrow">WORLD SIGNALS · GLOBAL SIGNAL HORIZON</p>
       <h1>Global political-economic time, without pretending certainty.</h1>
-      <p class="lede">A read-only projection of canonical events, source governance, dated monitor evidence and reviewed change history. Live intelligence and analysis remain separate layers.</p>
+      <p class="lede">What matters now, over the next week and over the next month — derived read-only from the canonical registry. Source/change monitoring, live intelligence and analysis remain separate layers.</p>
     </div>
     <div class="safety">
       <strong>Safety boundary</strong>
@@ -23,6 +24,52 @@
   </header>
 
   <main>
+    <section id="horizon" class="horizon-shell" aria-labelledby="horizonTitle">
+      <div class="horizon-heading">
+        <div>
+          <p class="eyebrow">NOW / NEXT</p>
+          <h2 id="horizonTitle">What is coming into view</h2>
+          <p>A short-horizon projection of canonical events. Exact events stay exact; uncertain and month-precision timing stays in a separate window rail.</p>
+        </div>
+        <div class="horizon-timezone">
+          <strong id="horizonClock">Loading local time…</strong>
+          <span>Displayed in your device timezone; source timezone remains visible.</span>
+        </div>
+      </div>
+
+      <div class="horizon-controls" aria-label="Horizon filters">
+        <input id="horizonSearch" type="search" placeholder="Search event, institution, jurisdiction…">
+        <select id="horizonDomain"><option value="">All signal families</option></select>
+        <select id="horizonRegion"><option value="">All regions</option></select>
+        <select id="horizonJurisdiction"><option value="">All jurisdictions</option></select>
+      </div>
+
+      <div id="horizonSummary" class="horizon-summary" aria-live="polite">Loading canonical horizon…</div>
+
+      <div class="horizon-lanes">
+        <section class="horizon-lane" aria-labelledby="horizonNowTitle">
+          <div class="horizon-lane-head"><h3 id="horizonNowTitle">NOW</h3><span>active today</span></div>
+          <div id="horizonNow"></div>
+        </section>
+        <section class="horizon-lane" aria-labelledby="horizon7Title">
+          <div class="horizon-lane-head"><h3 id="horizon7Title">NEXT 7 DAYS</h3><span>tomorrow → day 7</span></div>
+          <div id="horizon7"></div>
+        </section>
+        <section class="horizon-lane" aria-labelledby="horizon30Title">
+          <div class="horizon-lane-head"><h3 id="horizon30Title">NEXT 30 DAYS</h3><span>days 8–30 · no repeats</span></div>
+          <div id="horizon30"></div>
+        </section>
+      </div>
+
+      <section class="horizon-window-shell" aria-labelledby="horizonWindowsTitle">
+        <div class="horizon-window-head">
+          <h3 id="horizonWindowsTitle">WINDOWS IN VIEW</h3>
+          <p>Expected ranges and month-bounded risk windows overlapping the next 30 days.</p>
+        </div>
+        <div id="horizonWindows" class="horizon-windows"></div>
+      </section>
+    </section>
+
     <section id="stats" class="stats" aria-live="polite"></section>
 
     <section class="viewbar" aria-label="View selector">
@@ -166,6 +213,7 @@
 
   <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
   <script src="app.js"></script>
+  <script src="horizon.js"></script>
   <script src="history.js"></script>
   <script src="operations.js"></script>
 </body>

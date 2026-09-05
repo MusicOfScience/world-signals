@@ -1,0 +1,58 @@
+.horizon-shell{
+  margin:1.25rem 0 1.75rem;
+  padding:1.25rem;
+  border:1px solid var(--line,#d7d7d7);
+  border-radius:18px;
+  background:var(--panel,#fff);
+}
+.horizon-heading{display:flex;justify-content:space-between;gap:1.5rem;align-items:flex-start;margin-bottom:1rem}
+.horizon-heading h2{margin:.15rem 0 .35rem;font-size:clamp(1.5rem,2.4vw,2.2rem)}
+.horizon-heading p{max-width:72ch;margin:.2rem 0}
+.horizon-timezone{display:flex;flex-direction:column;gap:.2rem;text-align:right;min-width:12rem}
+.horizon-timezone span{font-size:.8rem;opacity:.72}
+.horizon-controls{display:grid;grid-template-columns:minmax(14rem,2fr) repeat(3,minmax(10rem,1fr));gap:.65rem;margin:1rem 0}
+.horizon-controls input,.horizon-controls select{width:100%;min-height:2.7rem;padding:.55rem .7rem;border:1px solid var(--line,#ccc);border-radius:10px;background:inherit;color:inherit}
+.horizon-summary{margin:.35rem 0 1rem;font-size:.92rem;opacity:.82}
+.horizon-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;align-items:start}
+.horizon-lane{min-width:0}
+.horizon-lane-head{display:flex;justify-content:space-between;gap:.75rem;align-items:baseline;border-bottom:1px solid var(--line,#ddd);padding-bottom:.45rem;margin-bottom:.65rem}
+.horizon-lane-head h3{font-size:1rem;letter-spacing:.04em;margin:0}
+.horizon-lane-head span{font-size:.75rem;opacity:.68;text-align:right}
+.horizon-card{display:grid;grid-template-columns:1fr;gap:.55rem;padding:.8rem;margin-bottom:.65rem;border:1px solid var(--line,#ddd);border-radius:12px;cursor:pointer;background:var(--panel-raised,rgba(127,127,127,.035))}
+.horizon-card:hover,.horizon-card:focus-within,.horizon-window-card:hover{border-color:currentColor}
+.horizon-card h3,.horizon-window-card h3{font-size:1rem;line-height:1.25;margin:.12rem 0}
+.horizon-domain{font-size:.72rem;text-transform:uppercase;letter-spacing:.055em;opacity:.72;margin:0}
+.horizon-when{display:flex;flex-direction:column;gap:.16rem}
+.horizon-when strong{font-size:.9rem}
+.horizon-when span,.horizon-window-time span{font-size:.76rem;opacity:.72}
+.horizon-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem}
+.horizon-tags span{font-size:.7rem;border:1px solid var(--line,#ddd);border-radius:999px;padding:.16rem .42rem}
+.horizon-source{font-size:.76rem}
+.horizon-source a{color:inherit;text-underline-offset:2px}
+.horizon-change{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;padding:.4rem .5rem;border-left:3px solid currentColor;background:rgba(127,127,127,.07);font-size:.73rem}
+.horizon-change span{opacity:.75}
+.horizon-window-shell{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line,#ddd)}
+.horizon-window-head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;margin-bottom:.6rem}
+.horizon-window-head h3{margin:0;font-size:1rem}
+.horizon-window-head p{margin:0;font-size:.78rem;opacity:.7}
+.horizon-windows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.horizon-window-card{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(9rem,.85fr);gap:.55rem 1rem;padding:.8rem;border:1px solid var(--line,#ddd);border-radius:12px;cursor:pointer}
+.horizon-window-time{display:flex;flex-direction:column;gap:.15rem;text-align:right}
+.horizon-window-card .horizon-tags,.horizon-window-card .horizon-source{align-self:end}
+.horizon-window-card .horizon-source{text-align:right}
+.horizon-empty,.horizon-error{font-size:.82rem;opacity:.7;padding:.65rem 0}
+@media (max-width:1000px){
+  .horizon-controls{grid-template-columns:1fr 1fr}
+  .horizon-lanes{grid-template-columns:1fr}
+  .horizon-card{grid-template-columns:minmax(11rem,.75fr) minmax(0,2fr) auto;align-items:start}
+  .horizon-windows{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .horizon-shell{padding:.9rem}
+  .horizon-heading{flex-direction:column}
+  .horizon-timezone{text-align:left;min-width:0}
+  .horizon-controls{grid-template-columns:1fr}
+  .horizon-card{grid-template-columns:1fr}
+  .horizon-window-card{grid-template-columns:1fr}
+  .horizon-window-time,.horizon-window-card .horizon-source{text-align:left}
+}
