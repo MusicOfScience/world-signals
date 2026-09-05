@@ -67,7 +67,7 @@ class AnalysisSampleAuditYTests(unittest.TestCase):
     def test_markdown_preserves_methodological_warnings(self):
         text = markdown(self.report)
         self.assertIn("sample population → audit", text)
-        self.assertIn("not evidence of representative global coverage", text)
+        self.assertIn("**not** evidence of representative global coverage", text)
         self.assertIn("Finishing this list is **not** the objective", text)
         self.assertIn("EXACT_TIMESTAMP_SERIES", text)
         self.assertIn("controlled expansion with upstream gap repair", text)
