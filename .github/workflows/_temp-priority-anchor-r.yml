@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print completed-anchor and target-series semantics
+      - name: Print completion change ledger and assertion contract
         shell: bash
         run: |
           python - <<'PY'
@@ -26,39 +26,27 @@ jobs:
           from pathlib import Path
 
           canonical=json.loads(Path('data/canonical/registry.json').read_text())
-          sources=json.loads(Path('data/sources/registry.json').read_text())
           schema=json.loads(Path('data/canonical/schema.json').read_text())
-          by_occ={r['occurrence_id']:r for r in canonical['records']}
-          by_source={s['source_id']:s for s in sources['sources']}
+          ledger=json.loads(Path('data/changes/ledger.json').read_text())
 
-          print('CHECKPOINT', canonical['version'], len(canonical['records']), sources['version'], len(sources['sources']), schema['version'])
+          print('CHECKPOINT', canonical['version'], len(canonical['records']), ledger.get('version'), len(ledger.get('changes',[])))
+          print('\n=== COMPLETION LEDGER ENTRIES ===')
+          wanted={'WSO-MAC-A-0025','WSO-8df73c7804d45880'}
+          for row in ledger.get('changes',[]):
+              if row.get('occurrence_id') in wanted:
+                  print(json.dumps(row, indent=2, sort_keys=True))
 
-          print('\n=== COMPLETED REPRESENTATIVES ===')
-          for oid in ['WSO-MAC-A-0025','WSO-8df73c7804d45880']:
-              print(oid)
-              print(json.dumps(by_occ[oid], indent=2, sort_keys=True))
+          print('\n=== SCHEMA SOURCE ASSERTION FIELDS ===')
+          print(json.dumps(schema.get('source_assertion_fields'), indent=2, sort_keys=True))
+          print('\n=== SCHEMA OCCURRENCE CHANGE FIELDS ===')
+          print(json.dumps(schema.get('occurrence_change_fields'), indent=2, sort_keys=True))
+          print('\n=== CONTROLLED VOCABULARIES RELEVANT ===')
+          vocab=schema.get('controlled_vocabularies') or {}
+          for key in sorted(vocab):
+              if any(token in key.lower() for token in ['change','review','assert','lifecycle','certainty','evidence','status']):
+                  print(key, json.dumps(vocab[key], sort_keys=True))
 
-          print('\n=== TARGET SERIES REPRESENTATIVES ===')
-          targets=['WSER-MAC-IN-GDP','WSER-REG-ID-BI','WSER-REGJ-EG-CBE-MPC','WSER-REG2-AR-CPI']
-          for sid in targets:
-              rows=[r for r in canonical['records'] if r.get('series_id')==sid]
-              print('\nSERIES', sid, 'COUNT', len(rows))
-              for r in rows[:2]: print(json.dumps(r, indent=2, sort_keys=True))
-
-          print('\n=== TARGET SOURCE ROWS ===')
-          for sid in ['WSSRC-MAC-017','WSSRC-REG-004','WSSRC-REGJ-005','WSSRC-REG2-006']:
-              print(sid)
-              print(json.dumps(by_source[sid], indent=2, sort_keys=True))
-
-          print('\n=== REGISTRY TOP-LEVEL KEYS ===')
-          print(sorted(canonical.keys()))
-          print('\n=== SCHEMA CONTROLLED VALUES / FIELD NAMES ===')
-          print(json.dumps({
-            'top_keys': sorted(schema.keys()),
-            'lifecycle_values': schema.get('lifecycle_status_values'),
-            'certainty_values': schema.get('certainty_values'),
-            'timing_types': schema.get('timing_type_values'),
-            'publication_time_semantics_values': schema.get('publication_time_semantics_values'),
-            'record_required_fields': schema.get('record_required_fields'),
-          }, indent=2, sort_keys=True))
+          print('\n=== RECENT LEDGER SHAPE SAMPLE ===')
+          for row in ledger.get('changes',[])[-5:]:
+              print(json.dumps(row, indent=2, sort_keys=True))
           PY
