@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_SCHEMA",
-  "version": "0.51",
+  "version": "0.52",
   "reference_date": "2026-09-04",
   "design_decisions": [
     "Source-health state is not stored on event occurrences; source fetch/parser incidents live in a separate monitor ledger.",
@@ -365,7 +365,8 @@
     "For month-bounded seasonal windows, start_local/end_local, UTC timestamps and date_earliest/date_latest remain empty because those fields would imply day or clock precision the source did not assert.",
     "Calendar/index rendering may derive an internal month-start sort proxy from season_phases[] but that proxy is never canonical timing and must not be displayed, exported or written back as an event date.",
     "A dynamic annual season outlook is an information assertion about expected timing and remains separate from a stable PHYSICAL_RISK_WINDOW occurrence unless the authority explicitly establishes a canonical bounded window.",
-    "Exact civil-day seasonal windows use publication_time_semantics=SEASONAL_DATE_RANGE; source-native month-bounded seasonal windows use SEASONAL_MONTH_RANGE and must not manufacture first/last civil-day boundaries."
+    "Exact civil-day seasonal windows use publication_time_semantics=SEASONAL_DATE_RANGE; source-native month-bounded seasonal windows use SEASONAL_MONTH_RANGE and must not manufacture first/last civil-day boundaries.",
+    "An authoritative source-native civil-calendar date may be canonical before an authoritative Gregorian mapping exists. Preserve native calendar components and keep Gregorian timing fields empty until a competent mapping is available; event certainty and Gregorian-resolution status are independent."
   ],
   "controlled_vocabularies": {
     "certainty_status": [
@@ -609,7 +610,8 @@
       "NORMAL_RELEASE_WINDOW",
       "DATE_ONLY",
       "SEASONAL_DATE_RANGE",
-      "SEASONAL_MONTH_RANGE"
+      "SEASONAL_MONTH_RANGE",
+      "SOURCE_NATIVE_DATE_ONLY"
     ],
     "physical_shock_routing": [
       "NO_SHOCK_IN_THIS_RECORD",
@@ -867,7 +869,8 @@
     "fiscal_process_milestone_type": [
       "BUDGET_SUBMISSION_DEADLINE",
       "BUDGET_APPROVAL_OR_TRANSMISSION_DEADLINE",
-      "BUDGET_EFFECTIVE_DATE"
+      "BUDGET_EFFECTIVE_DATE",
+      "BUDGET_PRESENTATION"
     ],
     "snapshot_completeness_scope": [
       "FULL_SOURCE",
@@ -1303,7 +1306,8 @@
       "MULTI_DAY_LOCAL",
       "MULTI_PHASE_SEASON_WINDOW",
       "TIMED_EVENT",
-      "UNSCHEDULED_TBC"
+      "UNSCHEDULED_TBC",
+      "SOURCE_NATIVE_CALENDAR_DATE"
     ],
     "season_window_model": [
       "MONTH_BOUNDED_SINGLE_PHASE",
@@ -1311,6 +1315,12 @@
     ],
     "season_phase_boundary_precision": [
       "MONTH"
+    ],
+    "native_calendar_system": [
+      "BIKRAM_SAMBAT_NEPAL"
+    ],
+    "gregorian_resolution_status": [
+      "UNRESOLVED_AUTHORITATIVE_CONVERSION"
     ]
   },
   "event_occurrence_fields": {
@@ -1360,7 +1370,13 @@
       "time_basis",
       "season_window_model",
       "source_native_window_label",
-      "season_phases"
+      "season_phases",
+      "native_calendar_system",
+      "native_calendar_year",
+      "native_calendar_month",
+      "native_calendar_day",
+      "source_native_date_label",
+      "gregorian_resolution_status"
     ],
     "provenance_links": [
       "source_id",
