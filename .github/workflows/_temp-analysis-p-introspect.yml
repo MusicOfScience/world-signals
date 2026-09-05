@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Print completed RBA August decision records
+      - name: Print actual RBA canonical series and August records
         shell: bash
         run: |
           python - <<'PY'
@@ -24,14 +24,17 @@ jobs:
           r=json.loads(Path('data/canonical/registry.json').read_text())
           rows=[]
           for x in r['records']:
-              if x.get('institution')=='Reserve Bank of Australia' and (
-                  x.get('series_id')=='WS.CB.RBA.MONETARY_POLICY_DECISION' or
-                  'Monetary Policy Decision' in str(x.get('title',''))
-              ):
-                  vals=' '.join(str(x.get(k,'')) for k in ('start_local','start_utc','date_earliest','date_latest','publication_datetime'))
-                  if '2026-08-11' in vals:
-                      rows.append(x)
+              hay=' '.join(str(x.get(k,'')) for k in ('institution','jurisdiction','series_id','title','event_type','source_id'))
+              if 'Reserve Bank of Australia' in hay or '.RBA.' in hay or 'RBA' in str(x.get('series_id','')):
+                  rows.append({
+                      k:x.get(k) for k in (
+                          'occurrence_id','series_id','institution','jurisdiction','title','event_type',
+                          'certainty_status','lifecycle_status','timing_type','start_local','start_utc',
+                          'end_local','end_utc','date_earliest','date_latest','publication_datetime',
+                          'publication_time_semantics','source_id'
+                      )
+                  })
           print(json.dumps(rows, indent=2, sort_keys=True))
-          if len(rows)!=1:
-              raise SystemExit(f'expected exactly one RBA decision record; got {len(rows)}')
+          if not rows:
+              raise SystemExit('no RBA-shaped canonical records found')
           PY
