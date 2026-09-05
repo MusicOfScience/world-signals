@@ -1,0 +1,32 @@
+name: Temporary East Asia anchor Z probe
+
+on:
+  push:
+    branches: [feature/east-asia-anchor-z]
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-54 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "0131220f7c919e3a76c98063bab8fda0c504b4fc"
+      - name: Probe East Asia target and ledger state
+        run: python scripts/probe_east_asia_anchor_z.py
+      - name: Self-remove temporary workflow
+        run: |
+          git config user.name world-signals-transaction-bot
+          git config user.email world-signals-transaction-bot@users.noreply.github.com
+          git rm .github/workflows/_temp-east-asia-anchor-z.yml
+          git commit -m "Remove temporary East Asia anchor Z probe workflow"
+          git push origin HEAD:feature/east-asia-anchor-z
