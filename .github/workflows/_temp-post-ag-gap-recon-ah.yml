@@ -1,4 +1,4 @@
-name: TEMP AH post-AG gap reconnaissance
+name: TEMP AH UNFCCC SB64 check-only gate
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  check:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -22,5 +22,16 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "0d55a9dcd877736886dd9ee3e8fcaa8a93a869d1"
-      - name: Probe remaining completed-anchor gaps
-        run: python scripts/probe_post_ag_gap_candidates_ah.py
+      - name: Fail-closed AH check-only transform
+        run: python scripts/apply_unfccc_sb64_historical_anchor_ah.py
+      - name: AH contract tests
+        run: python -m unittest tests.test_unfccc_sb64_historical_anchor_ah -v
+      - name: Canonical validator pre-state
+        run: python scripts/validate_registry.py
+      - name: Analysis validator pre-state
+        run: python scripts/validate_analysis.py
+      - name: Python compile
+        run: |
+          python -m py_compile \
+            scripts/apply_unfccc_sb64_historical_anchor_ah.py \
+            tests/test_unfccc_sb64_historical_anchor_ah.py
