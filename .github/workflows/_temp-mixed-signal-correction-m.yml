@@ -60,7 +60,7 @@ jobs:
           node --check web/operations.js
           node --check web/biosecurity.js
           python scripts/build_site.py
-          mapfile -t changed < <(git diff --name-only | sort)
+          mapfile -t changed < <(git status --porcelain --untracked-files=all | sed -E 's/^.. //' | sort)
           printf 'generated transaction diff:\n%s\n' "${changed[*]}"
           expected=(
             data/canonical/registry.json
