@@ -20,6 +20,7 @@ RESEARCH_PATH=ROOT/"data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_AUDIT_v0.1.md"
 SCHEMA_PATH=ROOT/"data/canonical/schema.json"
 CANONICAL_PATH=ROOT/"data/canonical/registry.json"
 SOURCES_PATH=ROOT/"data/sources/registry.json"
+OVERLAY_PATH=ROOT/"data/coverage/biosecurity_overlay.json"
 LEDGER_PATH=ROOT/"data/changes/ledger.json"
 EXPECTATIONS_PATH=ROOT/"data/monitor/expectations.json"
 
@@ -32,6 +33,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
         cls.schema=json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
         cls.canonical=json.loads(CANONICAL_PATH.read_text(encoding="utf-8"))
         cls.sources=json.loads(SOURCES_PATH.read_text(encoding="utf-8"))
+        cls.overlay=json.loads(OVERLAY_PATH.read_text(encoding="utf-8"))
 
     def _is_pre(self):
         return (
@@ -40,6 +42,8 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             and len(self.canonical.get("records",[]))==673
             and self.sources.get("version")=="1.68"
             and len(self.sources.get("sources",[]))==231
+            and self.overlay.get("version")=="0.2"
+            and self.overlay.get("canonical_checkpoint")=={"registry_version":"0.27","record_count":673}
         )
 
     def _is_post(self):
@@ -52,6 +56,8 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             and len(self.canonical.get("records",[]))==674
             and self.sources.get("version")=="1.69"
             and len(self.sources.get("sources",[]))==233
+            and self.overlay.get("version")=="0.3"
+            and self.overlay.get("canonical_checkpoint")=={"registry_version":"0.28","record_count":674}
             and "WSO-FIS-NP-BUDGET-2084" in oids
             and {"WSSRC-FIS-026","WSSRC-FIS-027"}.issubset(source_ids)
             and "SOURCE_NATIVE_CALENDAR_DATE" in timing_vocab
@@ -59,29 +65,43 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
 
     def _post_objects(self):
         if self._is_pre():
-            TX.preflight(self.schema,self.canonical,self.sources,self.plan)
-            schema,canonical,sources,_=TX.build_post_state(self.schema,self.canonical,self.sources,self.plan)
-            return schema,canonical,sources
+            TX.preflight(self.schema,self.canonical,self.sources,self.overlay,self.plan)
+            schema,canonical,sources,overlay,_=TX.build_post_state(self.schema,self.canonical,self.sources,self.overlay,self.plan)
+            return schema,canonical,sources,overlay
         if self._is_post():
-            return self.schema,self.canonical,self.sources
+            return self.schema,self.canonical,self.sources,self.overlay
         self.fail("repository is neither exact Nepal N pre-state nor reviewed post-state")
 
     def test_repository_is_exact_pre_or_post_state(self):
         self.assertTrue(self._is_pre() or self._is_post())
-        schema,canonical,sources=self._post_objects()
+        schema,canonical,sources,overlay=self._post_objects()
         self.assertEqual(schema["version"],"0.52")
         self.assertEqual(canonical["version"],"0.28")
         self.assertEqual(len(canonical["records"]),674)
         self.assertEqual(sources["version"],"1.69")
         self.assertEqual(len(sources["sources"]),233)
+        self.assertEqual(overlay["version"],"0.3")
+        self.assertEqual(overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
 
     def test_scope_is_one_series_one_occurrence_two_sources(self):
         self.assertEqual(self.plan["preconditions"]["required_absent_series_ids"],["WSER-FIS-NP-FEDERAL-BUDGET"])
         self.assertEqual(self.plan["preconditions"]["required_absent_occurrence_ids"],["WSO-FIS-NP-BUDGET-2084"])
         self.assertEqual([s["source_id"] for s in self.plan["sources"]],["WSSRC-FIS-026","WSSRC-FIS-027"])
 
+    def test_overlay_alignment_changes_only_version_and_checkpoint(self):
+        if self._is_pre():
+            _,_,_,post_overlay,_=TX.build_post_state(self.schema,self.canonical,self.sources,self.overlay,self.plan)
+            self.assertEqual(TX.overlay_semantic_payload(post_overlay),TX.overlay_semantic_payload(self.overlay))
+            self.assertEqual(post_overlay["version"],"0.3")
+            self.assertEqual(post_overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
+        else:
+            self.assertEqual(self.overlay["version"],"0.3")
+            self.assertEqual(self.overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
+        memberships={r["series_id"] for r in self.overlay["canonical_series_memberships"]}
+        self.assertNotIn("WSER-FIS-NP-FEDERAL-BUDGET",memberships)
+
     def test_nepal_is_exact_native_date_and_gregorian_fields_are_empty(self):
-        _,canonical,_=self._post_objects()
+        _,canonical,_,_=self._post_objects()
         row=next(r for r in canonical["records"] if r.get("occurrence_id")=="WSO-FIS-NP-BUDGET-2084")
         self.assertEqual(row["certainty_status"],"CONFIRMED")
         self.assertEqual(row["activation_mode"],"AUTHORITATIVE_RECURRING_RULE")
@@ -95,7 +115,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             self.assertIsNone(row[field],field)
 
     def test_nepal_uses_existing_fiscal_process_taxonomy_without_deadline_mislabel(self):
-        _,canonical,_=self._post_objects()
+        _,canonical,_,_=self._post_objects()
         row=next(r for r in canonical["records"] if r.get("occurrence_id")=="WSO-FIS-NP-BUDGET-2084")
         self.assertEqual(row["category"],"FISCAL_SOVEREIGN_FINANCE")
         self.assertEqual(row["subcategory"],"national_budget")
@@ -105,7 +125,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
         self.assertIsNone(row["deadline_semantics"])
 
     def test_legal_authority_and_publication_source_are_separated(self):
-        _,canonical,sources=self._post_objects()
+        _,canonical,sources,_=self._post_objects()
         row=next(r for r in canonical["records"] if r.get("occurrence_id")=="WSO-FIS-NP-BUDGET-2084")
         self.assertEqual(row["source_id"],"WSSRC-FIS-026")
         self.assertEqual(row["legal_basis_source_id"],"WSSRC-FIS-026")
@@ -117,7 +137,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
         self.assertEqual(by_id["WSSRC-FIS-027"]["canonical_dependency_count"],0)
 
     def test_sources_are_manual_provenance_not_automation_permission(self):
-        _,_,sources=self._post_objects()
+        _,_,sources,_=self._post_objects()
         by_id={s["source_id"]:s for s in sources["sources"]}
         for sid in ("WSSRC-FIS-026","WSSRC-FIS-027"):
             row=by_id[sid]
@@ -127,7 +147,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             self.assertEqual(row["monitoring_readiness_status"],"RIGHTS_AUDIT_REQUIRED")
 
     def test_schema_support_is_reusable_not_nepal_date_conversion(self):
-        schema,_,_=self._post_objects()
+        schema,_,_,_=self._post_objects()
         cv=schema["controlled_vocabularies"]
         self.assertIn("SOURCE_NATIVE_CALENDAR_DATE",cv["timing_type"])
         self.assertIn("SOURCE_NATIVE_DATE_ONLY",cv["publication_time_semantics"])
@@ -160,7 +180,7 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
     def test_apply_without_environment_gate_never_writes(self):
         if not self._is_pre():
             self.skipTest("apply-gate mutation test is exercised only from exact pre-state")
-        paths=(SCHEMA_PATH,CANONICAL_PATH,SOURCES_PATH,LEDGER_PATH,EXPECTATIONS_PATH)
+        paths=(SCHEMA_PATH,CANONICAL_PATH,SOURCES_PATH,OVERLAY_PATH,LEDGER_PATH,EXPECTATIONS_PATH)
         before={path:path.read_bytes() for path in paths}
         env=dict(os.environ)
         env.pop(TX.APPLY_ENV,None)
