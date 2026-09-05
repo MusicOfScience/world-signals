@@ -12,22 +12,9 @@
     "source_registry_version": "1.67",
     "source_record_count": 228,
     "biosecurity_overlay_version": "0.1",
-    "required_absent_source_ids": [
-      "WSSRC-CB-012",
-      "WSSRC-INT-032",
-      "WSSRC-INT-033"
-    ],
-    "required_absent_series_ids": [
-      "WSER-CB-NG-CBN-MPC",
-      "WSER-INT-BWC-WG-STRENGTHENING",
-      "WSER-AGF-WOAH-GENERAL-SESSION"
-    ],
-    "required_absent_occurrence_ids": [
-      "WSO-CBN-MPC-307",
-      "WSO-CBN-MPC-308",
-      "WSO-BWC-WG-2026-S10",
-      "WSO-WOAH-GS-094"
-    ]
+    "required_absent_source_ids": ["WSSRC-CB-014", "WSSRC-INT-032", "WSSRC-INT-033"],
+    "required_absent_series_ids": ["WSER-CB-NG-CBN-MPC", "WSER-INT-BWC-WG-STRENGTHENING", "WSER-AGF-WOAH-GENERAL-SESSION"],
+    "required_absent_occurrence_ids": ["WSO-CBN-MPC-307", "WSO-CBN-MPC-308", "WSO-BWC-WG-2026-S10", "WSO-WOAH-GS-094"]
   },
   "postconditions": {
     "canonical_registry_version": "0.27",
@@ -45,7 +32,7 @@
   },
   "source_plan": [
     {
-      "source_id": "WSSRC-CB-012",
+      "source_id": "WSSRC-CB-014",
       "institution": "Central Bank of Nigeria",
       "jurisdiction": "Nigeria",
       "region": "Africa",
@@ -93,7 +80,7 @@
   "series": [
     {
       "series_id": "WSER-CB-NG-CBN-MPC",
-      "source_id": "WSSRC-CB-012",
+      "source_id": "WSSRC-CB-014",
       "category": "MONETARY_FINANCIAL_POLICY",
       "subcategory": "monetary_policy",
       "event_type": "MONETARY_POLICY_DECISION_PROCESS",
@@ -132,7 +119,7 @@
     {
       "occurrence_id": "WSO-CBN-MPC-307",
       "series_id": "WSER-CB-NG-CBN-MPC",
-      "source_id": "WSSRC-CB-012",
+      "source_id": "WSSRC-CB-014",
       "canonical_name": "Central Bank of Nigeria Monetary Policy Committee meeting 307 — September 2026",
       "short_calendar_title": "CBN MPC meeting 307",
       "start_local": "2026-09-21",
@@ -145,7 +132,7 @@
     {
       "occurrence_id": "WSO-CBN-MPC-308",
       "series_id": "WSER-CB-NG-CBN-MPC",
-      "source_id": "WSSRC-CB-012",
+      "source_id": "WSSRC-CB-014",
       "canonical_name": "Central Bank of Nigeria Monetary Policy Committee meeting 308 — November 2026",
       "short_calendar_title": "CBN MPC meeting 308",
       "start_local": "2026-11-23",
@@ -183,13 +170,7 @@
     }
   ],
   "explicit_holds": [
-    {
-      "candidate": "IPPC CPM-21",
-      "reason": "Conflicting official tentative-status surfaces; do not resolve by convenience."
-    },
-    {
-      "candidate": "North Indian Ocean tropical cyclone seasons",
-      "reason": "Conflicting IMD first-phase definitions (April-June versus April-May); ontology readiness does not cure source conflict."
-    }
+    {"candidate": "IPPC CPM-21", "reason": "Conflicting official tentative-status surfaces; do not resolve by convenience."},
+    {"candidate": "North Indian Ocean tropical cyclone seasons", "reason": "Conflicting IMD first-phase definitions (April-June versus April-May); ontology readiness does not cure source conflict."}
   ]
 }
