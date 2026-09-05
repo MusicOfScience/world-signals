@@ -108,6 +108,24 @@ def _focus_inventory(records: list[dict]) -> dict:
     }
 
 
+def _calendar_projection_readiness(records: list[dict]) -> dict:
+    unresolved=[
+        r for r in records
+        if r.get("timing_type")=="SOURCE_NATIVE_CALENDAR_DATE"
+        and r.get("gregorian_resolution_status")=="UNRESOLVED_AUTHORITATIVE_CONVERSION"
+    ]
+    return {
+        "source_native_unresolved_occurrence_count":len(unresolved),
+        "source_native_unresolved_occurrence_ids":sorted(
+            str(r.get("occurrence_id")) for r in unresolved if r.get("occurrence_id")
+        ),
+        "source_native_unresolved_series_ids":sorted({
+            str(r.get("series_id")) for r in unresolved if r.get("series_id")
+        }),
+        "note":"Canonical coverage is broader than Gregorian calendar schedulability. Source-native dates with unresolved authoritative conversion are counted as canonical signals but must not be placed on a Gregorian civil day.",
+    }
+
+
 def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
     records=list(registry.get("records",[]))
     series=_series_summary(records)
@@ -131,7 +149,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
     return {
         "project":"WORLD SIGNALS",
         "dataset":"COVERAGE_BIAS_AUDIT",
-        "version":"0.2",
+        "version":"0.3",
         "canonical_registry_version":registry.get("version"),
         "canonical_reference_date":registry.get("reference_date"),
         "methodology":{
@@ -141,6 +159,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
             "series_identity_is_primary_unit_for_coverage_shape":True,
             "institution_diversity_is_secondary_unit":True,
             "focus_inventory_is_read_only_projection":True,
+            "canonical_coverage_is_not_gregorian_schedulability":True,
         },
         "totals":{
             "occurrence_count":occurrence_total,
@@ -157,6 +176,7 @@ def build_coverage_audit(registry: dict, source_registry: dict) -> dict:
         "region_category_matrix":_region_category_matrix(records),
         "high_frequency_series":series[:40],
         "source_readiness":_source_readiness_for_records(records,source_registry),
+        "calendar_projection_readiness":_calendar_projection_readiness(records),
         "focus_inventory":_focus_inventory(records),
         "diagnostic_flags":{
             "regions_with_fewer_than_10_unique_series":sorted([k for k,v in region_series_counts.items() if v<10]),
