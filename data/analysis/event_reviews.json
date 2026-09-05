@@ -1,11 +1,11 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
-    "registry_version": "0.31",
-    "record_count": 681
+    "registry_version": "0.37",
+    "record_count": 687
   },
   "reviews": [
     {
@@ -1728,6 +1728,222 @@
         "If later evidence shows Japanese institutional reallocation accelerated independently of domestic yield levels or was driven primarily by another factor, the proposed second-order sovereign-funding/global-capital channel should be weakened."
       ],
       "analytical_conclusion": "The 3 September 30-year JGB auction cleared without a clear directional surprise. Demand metrics were somewhat softer than at the previous sale, but the result was broadly uneventful relative to expectations and recent norms. Japanese bond yields rallied strongly on the day, yet the matched 30-year yield was reported unchanged after the auction itself. The useful signal is therefore not 'auction caused bond rally' but the coexistence of acceptable super-long demand with a broader rates repricing driven by multiple monetary, global and positioning forces.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-CA-BOC-20260902-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T23:20:00Z",
+      "canonical_occurrence_id": "WSO-ddb70f8ff05a58fb",
+      "canonical_series_id": "WS.CB.BOC.POLICY_RATE_ANNOUNCEMENT",
+      "canonical_event_type": "DECISION",
+      "canonical_institution": "Bank of Canada",
+      "canonical_release_utc": "2026-09-02T13:45:00Z",
+      "scope": "Bank of Canada 2 September 2026 policy-rate decision, communication/path surprise and contemporaneous CAD/rate-pricing response, preserving the difference between exact canonical release time and source-reported market measurement precision",
+      "what_happened": {
+        "summary": "The Bank of Canada maintained the target for the overnight rate at 2.25%, with Bank Rate at 2.5% and the deposit rate at 2.20%. The Bank said recent growth and inflation data had evolved broadly as forecast, but persistent high energy prices had increased upside inflation risks while renewed Canada-US trade tensions increased uncertainty around growth. Governor Tiff Macklem said the Bank was prepared to adjust policy as needed and subsequently said multiple hikes could be required if inflation remained too high.",
+        "actuals": [
+          {
+            "metric": "overnight_rate_target",
+            "value": 2.25,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-CA-BOC-OFFICIAL-20260902"
+            ]
+          },
+          {
+            "metric": "bank_rate",
+            "value": 2.5,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-CA-BOC-OFFICIAL-20260902"
+            ]
+          },
+          {
+            "metric": "deposit_rate",
+            "value": 2.2,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-CA-BOC-OFFICIAL-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-CA-BOC-OFFICIAL-20260902",
+          "WSEV-CA-BOC-OPENING-20260902",
+          "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The headline decision was exceptionally well anticipated. In a Reuters poll completed on 28 August, all 35 economists expected the overnight rate to remain at 2.25%, in line with market pricing. The poll's median path expected the Bank to remain on hold through at least the third quarter of 2027, with a move to 2.50% only in the fourth quarter of 2027.",
+        "benchmarks": [
+          {
+            "metric": "overnight_rate_target",
+            "value": 2.25,
+            "unit": "percent",
+            "benchmark_type": "MARKET_CONSENSUS_DECISION",
+            "evidence_refs": [
+              "WSEV-CA-BOC-REUTERS-POLL-20260828"
+            ]
+          },
+          {
+            "metric": "median_policy_path",
+            "value": "Hold 2.25% through at least 2027 Q3; 2.50% in 2027 Q4",
+            "unit": "qualitative_path",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-CA-BOC-REUTERS-POLL-20260828"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-CA-BOC-REUTERS-POLL-20260828"
+        ]
+      },
+      "what_surprised": {
+        "status": "MIXED",
+        "summary": "The 2.25% hold itself was not a surprise: it matched all 35 economists in the Reuters poll and market pricing. The communication/path signal was more hawkish than that pre-event baseline. Reuters reported that the Bank dropped earlier language describing the current policy rate as appropriate to balance risks, Macklem said multiple hikes might be required if inflation stayed too high, and markets moved to price hikes beginning in December. AI therefore separates a fully expected headline action from a qualitatively hawkish path surprise rather than forcing both into one number.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "overnight_rate_target",
+            "actual": 2.25,
+            "expected": 2.25,
+            "difference_percentage_points": 0.0,
+            "direction": "MATCHED_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-CA-BOC-OFFICIAL-20260902",
+              "WSEV-CA-BOC-REUTERS-POLL-20260828"
+            ]
+          },
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "policy_path_and_guidance",
+            "actual": "Bank communication placed greater emphasis on upside inflation risk and Macklem said multiple hikes could be needed if inflation remained too high; Reuters reported markets then pricing hikes beginning in December.",
+            "expected": "Reuters poll median expected 2.25% to persist through at least 2027 Q3, with only a later 2027 Q4 increase to 2.50%.",
+            "direction": "HAWKISHER_THAN_EXPECTED",
+            "evidence_refs": [
+              "WSEV-CA-BOC-OPENING-20260902",
+              "WSEV-CA-BOC-REUTERS-POLL-20260828",
+              "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-CA-BOC-OFFICIAL-20260902",
+          "WSEV-CA-BOC-OPENING-20260902",
+          "WSEV-CA-BOC-REUTERS-POLL-20260828",
+          "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-CA-BOC-20260902-CADUSD",
+          "movement_type": "FX_SPOT",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "Canadian dollar against the US dollar; Reuters CAD-performance measure with USD/CAD endpoint",
+          "before_value": null,
+          "after_value": 1.384,
+          "unit": "CAD_per_USD",
+          "change": 0.4,
+          "change_unit": "percent_CAD_appreciation_on_day",
+          "direction": "CAD_STRONGER_ON_DAY",
+          "measurement_window": "Reuters source-reported 2 September 2026 session after the Bank decision and subsequent policy communication; endpoint C$1.3840 per US$1, after an earlier intraday low for CAD at C$1.3939 per US$1. This is not an independently reconstructed 09:45 event window.",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-CA-CAD-REUTERS-REACTION-20260902"
+          ]
+        },
+        {
+          "movement_id": "WSMV-CA-BOC-20260902-PATH",
+          "movement_type": "POLICY_PROBABILITY_REPRICING",
+          "movement_representation": "QUALITATIVE_ONLY",
+          "instrument_or_measure": "Bank of Canada market-implied future policy-rate path",
+          "before_value": null,
+          "after_value": null,
+          "change": null,
+          "change_unit": null,
+          "direction": "MORE_HAWKISH_PATH",
+          "measurement_window": "Reuters post-decision reporting on 2 September 2026 states that markets moved to price Bank of Canada rate hikes beginning in December and potentially extending into 2027; no independently reconstructed probability series is used.",
+          "measurement_precision": "QUALITATIVE_ONLY",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "confidence": "MEDIUM",
+        "summary": "Multiple Reuters reports explicitly connect the Bank's greater emphasis on upside inflation risks and Macklem's willingness to contemplate multiple hikes with increased market expectations of future tightening and a firmer Canadian dollar. That supports an observed association between the policy communication and repricing. It is not a clean causal estimate: the same session was exposed to global bond, US-dollar, energy, tariff and geopolitical forces, and the reviewed market data are not an exact timestamp series.",
+        "evidence_refs": [
+          "WSEV-CA-BOC-REUTERS-DECISION-20260902",
+          "WSEV-CA-CAD-REUTERS-REACTION-20260902",
+          "WSEV-CA-MARKETS-REUTERS-PRECONTEXT-20260901"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The Canadian dollar's reported 0.4% daily strengthening and the earlier C$1.3939 intraday level span more than the canonical 09:45 decision window. They are evidence of same-session repricing, not a reconstructed immediate announcement jump.",
+          "evidence_refs": [
+            "WSEV-CA-CAD-REUTERS-REACTION-20260902"
+          ]
+        },
+        {
+          "summary": "Reuters reported Canadian government bond yields edged higher after the remarks, but the reviewed material does not supply a matched exact pre/post yield pair. AI therefore does not create a numeric sovereign-yield movement row from descriptive language alone.",
+          "evidence_refs": [
+            "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+          ]
+        },
+        {
+          "summary": "The S&P/TSX Composite closed 0.7% higher, led by financial and mining shares. Treating that broad equity-session move as a clean Bank-of-Canada reaction would overstate event specificity and suppress sector/global drivers.",
+          "evidence_refs": [
+            "WSEV-CA-BOC-REUTERS-DECISION-20260902"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "The Canadian dollar and domestic yields entered the decision against a strong global bond sell-off and broad US-dollar dynamics. Reuters reported on 1 September that Canada's 10-year yield had reached a two-year high while the loonie weakened 0.4%, establishing substantial pre-existing cross-market pressure.",
+          "evidence_refs": [
+            "WSEV-CA-MARKETS-REUTERS-PRECONTEXT-20260901"
+          ]
+        },
+        {
+          "summary": "Middle East conflict and elevated oil prices were simultaneously changing Canada's inflation terms-of-trade backdrop. Those energy and geopolitical forces can strengthen the Canadian dollar and lift rate expectations independently of the Bank's communication.",
+          "evidence_refs": [
+            "WSEV-CA-BOC-OFFICIAL-20260902",
+            "WSEV-CA-BOC-OPENING-20260902"
+          ]
+        },
+        {
+          "summary": "New US tariffs, Canadian counter-measures and stronger Q2 Canadian growth were already affecting expectations for growth, inflation and policy. Repricing around the decision may therefore reflect reassessment of the broader information set rather than the 09:45 release alone.",
+          "evidence_refs": [
+            "WSEV-CA-BOC-OPENING-20260902",
+            "WSEV-CA-BOC-REUTERS-POLL-20260828"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "If the shift toward a tighter expected Bank of Canada path persists, second-order channels include higher Canadian borrowing and mortgage-reset costs, firmer domestic yields and a potentially stronger currency. These are prospective transmission channels from a sustained policy-path change, not observed consequences attributable to this single decision.",
+        "evidence_refs": [
+          "WSEV-CA-BOC-REUTERS-DECISION-20260902",
+          "WSEV-CA-BOC-OPENING-20260902"
+        ]
+      },
+      "falsifiers": [
+        "If reliable independent high-frequency CAD or Canadian-rates data around 09:45 ET show no material repricing at the decision and instead locate the move primarily around later press-conference remarks or another contemporaneous event, the observed-association wording should be narrowed to that later information window.",
+        "If a competent contemporaneous expectation source shows that markets already priced near-term Bank of Canada hikes before 09:45 despite the Reuters economist poll's long-hold path, the qualitative guidance-surprise classification should be reassessed.",
+        "If Reuters or the Bank of Canada correct the reported policy decision, timing or quoted communication, the factual and expectation comparisons must be updated.",
+        "If subsequent evidence shows the 2 September CAD move was predominantly explained by broad US-dollar or oil-price moves with little Canada-specific residual, the policy-communication association should be weakened.",
+        "If an independently licensed exact timestamp market series becomes available, AI's measurement-precision classification may be upgraded only from that evidence; the canonical 09:45 timestamp alone is insufficient."
+      ],
+      "analytical_conclusion": "The Bank of Canada's 2 September hold at 2.25% was fully anticipated, but the communication around inflation risks and the possible need for multiple future hikes was more hawkish than the pre-event economist path. Markets subsequently shifted toward earlier tightening, and the Canadian dollar strengthened on the session. The evidence supports a medium-confidence observed association between the communication and repricing, while global rates, US-dollar, energy and geopolitical conditions remain material alternatives. Crucially, an exact 09:45 canonical event timestamp does not turn source-reported same-session market observations into an exact timestamp series.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }

@@ -25,6 +25,10 @@ from src.world_signals.analysis import analysis_population_readiness, validate_a
 from src.world_signals.validation import validate_registry
 
 
+def version_tuple(raw):
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class UNFCCCSB64HistoricalAnchorAHTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -138,9 +142,19 @@ class UNFCCCSB64HistoricalAnchorAHTests(unittest.TestCase):
         self.assertTrue(any(r.get("category") == "CLIMATE_ENVIRONMENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
         self.assertTrue(any(r.get("event_type") == "ENVIRONMENTAL_GOVERNANCE_EVENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
         self.assertEqual(self.readiness["eligible_completed_occurrence_count"], 20)
-        self.assertEqual(self.readiness["reviewed_occurrence_count"], 12)
-        self.assertEqual(len(self.reviews["reviews"]), 12)
-        self.assertEqual(len(self.evidence["evidence"]), 44)
+
+        # AH froze Analysis at 12 reviews / 44 evidence and explicitly prohibited
+        # an Analysis write in the same transaction. Descendant Analysis work may
+        # grow the live registries while preserving that historical boundary.
+        post = self.plan["postconditions"]
+        self.assertEqual((post["analysis_reviews_version"], post["analysis_review_count"]), ("0.8", 12))
+        self.assertEqual((post["analysis_evidence_version"], post["analysis_evidence_count"]), ("0.8", 44))
+        self.assertFalse(self.plan["selection_discipline"]["analysis_write_in_same_transaction"])
+        self.assertGreaterEqual(self.readiness["reviewed_occurrence_count"], post["reviewed_occurrence_count"])
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), version_tuple(post["analysis_reviews_version"]))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), version_tuple(post["analysis_evidence_version"]))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), post["analysis_evidence_count"])
 
     def test_post_state_versions_and_counts_are_exact_or_descendant_safe(self):
         if self.is_post:

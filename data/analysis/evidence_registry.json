@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -874,6 +874,133 @@
         "Reuters documented evidence that higher Japanese yields were making domestic bonds more attractive to Japanese investors.",
         "The article described reduced marginal Japanese demand for foreign sovereign debt and possible effects on global term premia.",
         "This is structural context and an observed broader trend; it is not evidence that the 3 September auction caused capital repatriation."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-BOC-OFFICIAL-20260902",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Bank of Canada",
+      "host_or_distribution": "Bank of Canada",
+      "title": "Bank of Canada maintains the policy rate at 2¼%",
+      "url": "https://www.bankofcanada.ca/2026/09/fad-press-release-2026-09-02/",
+      "published_at": "2026-09-02",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The target for the overnight rate was maintained at 2.25 percent, Bank Rate at 2.5 percent and the deposit rate at 2.20 percent.",
+        "The decision statement identified persistent Middle East conflict, high energy prices and renewed Canada-US tariff measures as material risks.",
+        "This official release establishes the policy outcome, not a market expectation or market reaction."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-BOC-OPENING-20260902",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Bank of Canada",
+      "host_or_distribution": "Bank of Canada",
+      "title": "Monetary Policy Decision Press Conference Opening Statement — 2 September 2026",
+      "url": "https://www.bankofcanada.ca/2026/09/opening-statement-2026-09-02/",
+      "published_at": "2026-09-02",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "Macklem said recent growth and inflation had evolved broadly as forecast and explained the decision to maintain 2.25 percent.",
+        "He said upside risks to inflation had increased as high energy prices persisted, while new tariffs increased uncertainty around growth.",
+        "The Bank remained prepared to adjust monetary policy as needed.",
+        "The statement supports policy-transmission watch items but does not establish observed market causality."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-BOC-REUTERS-POLL-20260828",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Bank of Canada to hold rates for another year, wait for more stability on trade: Reuters poll",
+      "url": "https://www.reuters.com/world/americas/bank-canada-hold-rates-another-year-wait-more-stability-trade-2026-08-28/",
+      "published_at": "2026-08-28",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "All 35 economists polled expected the Bank of Canada to hold the overnight rate at 2.25 percent on 2 September, in line with market pricing.",
+        "The poll median expected 2.25 percent to persist through at least 2027 Q3, with 2.50 percent in 2027 Q4.",
+        "The poll provides a defensible pre-event headline and path benchmark; it is not itself market-movement evidence."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-BOC-REUTERS-DECISION-20260902",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Bank of Canada holds key rate, says multiple hikes might be needed",
+      "url": "https://www.reuters.com/world/americas/bank-canada-set-hold-rates-strong-growth-collides-with-trade-risks-2026-09-02/",
+      "published_at": "2026-09-02",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "MARKET_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "Reuters reported the 2.25 percent hold was widely expected.",
+        "Reuters described the communication as more hawkish, including the removal of earlier language that the current rate was appropriate to balance risks and Macklem's statement that multiple hikes could be needed if inflation remained too high.",
+        "Markets moved to price hikes beginning in December and potentially continuing into 2027.",
+        "Reuters reported the Canadian dollar rose slightly and Canadian government bond yields edged higher after the remarks.",
+        "The report links communication and repricing but does not provide an independently reconstructed exact timestamp market series."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-CAD-REUTERS-REACTION-20260902",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters / syndicated copies",
+      "title": "Canadian dollar rebounds from nearly three-week low on BoC rate hike bets",
+      "url": "https://www.reuters.com/business/canadian-dollar-rebounds-nearly-three-week-low-boc-inflation-concerns-2026-09-02/",
+      "published_at": "2026-09-02",
+      "roles": [
+        "MARKET_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported the Canadian dollar 0.4 percent stronger at C$1.3840 per US dollar after earlier touching C$1.3939.",
+        "The report said investors raised expectations of future Bank of Canada rate hikes after the Bank emphasised greater upside inflation risks.",
+        "RBC strategists said the emphasis on upside inflation risks from energy-price pass-through caught the market off guard.",
+        "The reported session move is not an independently reconstructed exact 09:45 pre/post series."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-CA-MARKETS-REUTERS-PRECONTEXT-20260901",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Canadian dollar weakens ahead of BoC rate decision, 10-year yield hits a 2-year high",
+      "url": "https://www.reuters.com/business/canadian-dollar-weakens-ahead-boc-rate-decision-10-year-yield-hits-2-year-high-2026-09-01/",
+      "published_at": "2026-09-01",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "MARKET_OBSERVATION"
+      ],
+      "supports": [
+        "On 1 September the Canadian dollar weakened 0.4 percent to C$1.3905 per US dollar.",
+        "Canada's 10-year government bond yield reached a two-year high amid a broader global bond sell-off.",
+        "This establishes material pre-existing FX and rates volatility ahead of the Bank decision and limits monocausal interpretation of 2 September moves."
       ],
       "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
       "canonical_provenance_effect": "NONE"

@@ -174,9 +174,19 @@ class SouthKoreaLocalElectionAnchorAGTests(unittest.TestCase):
     def test_analysis_population_expands_without_analysis_write(self):
         readiness = analysis_population_readiness(self.analysis_schema, self.reviews, self.post_registry)
         self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 19)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 12)
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.8", 12))
-        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.8", 44))
+
+        # AG's historical transaction contract held Analysis fixed at v0.8 / 12
+        # reviews / 44 evidence. Descendant Analysis tranches may grow those
+        # registries without changing the fact that AG itself wrote no Analysis.
+        post = self.plan["postconditions"]
+        self.assertEqual((post["analysis_reviews_version"], post["analysis_review_count"]), ("0.8", 12))
+        self.assertEqual((post["analysis_evidence_version"], post["analysis_evidence_count"]), ("0.8", 44))
+        self.assertIn("No Analysis review or evidence row is created.", self.plan["guardrails"])
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], post["reviewed_completed_count"])
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), version_tuple(post["analysis_reviews_version"]))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), version_tuple(post["analysis_evidence_version"]))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), post["analysis_evidence_count"])
 
     def test_completed_elections_governance_gap_is_repaired(self):
         completed = [row for row in self.post_registry["records"] if row.get("lifecycle_status") == "COMPLETED"]
