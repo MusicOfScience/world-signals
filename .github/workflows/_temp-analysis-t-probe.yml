@@ -1,4 +1,4 @@
-name: TEMP controlled Analysis T full simulation rerun
+name: TEMP controlled Analysis T full simulation final
 
 on:
   push:
@@ -118,8 +118,8 @@ jobs:
           assert eia['what_appears_connected']['confidence']=='LOW'
           assert all(m['before_value'] is None for m in eia['what_moved'])
           chips=by['WSAN-EU-CHIPS-EVAL-20260603-001']
-          assert chips['canonical_context']['start_local']=='2026-09-20'
-          assert chips['canonical_context']['start_utc'] is None
+          assert chips['canonical']['start_local']=='2026-09-20'
+          assert chips['canonical']['start_utc'] is None
           assert chips['what_moved']==[]
           assert chips['what_appears_connected']['causal_status']=='NOT_A_CAUSAL_CLAIM'
           print(json.dumps(readiness,indent=2,sort_keys=True))
