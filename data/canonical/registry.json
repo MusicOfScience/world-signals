@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.34",
+  "version": "0.35",
   "reference_date": "2026-09-06",
-  "record_count": 684,
+  "record_count": 685,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56196,6 +56196,110 @@
       "population_tranche": "EU_RUSSIA_SANCTIONS_RENEWAL_HISTORICAL_ANCHOR_AE",
       "derivation_sources": [
         "WSSRC-TRD-004"
+      ]
+    },
+    {
+      "occurrence_id": "WSO-RISK-AU-TC-2025-26",
+      "series_id": "WSER-RISK-AU-TC",
+      "external_source_id": null,
+      "canonical_name": "Australian tropical cyclone season 2025–26",
+      "short_calendar_title": "Australian tropical cyclone season 2025–26",
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "subcategory": "tropical_cyclone_risk_window",
+      "jurisdiction": "Australian region",
+      "region": "Oceania / Pacific",
+      "institution": "Australian Bureau of Meteorology",
+      "event_type": "PHYSICAL_RISK_WINDOW",
+      "record_class": "PHYSICAL_RISK_WINDOW",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "AUTHORITATIVE_RECURRING_RULE",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "ALL_DAY_RANGE",
+      "start_local": "2025-11-01",
+      "end_local": "2026-04-30",
+      "source_timezone": null,
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": null,
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-RISK-001",
+      "primary_source_assertion_id": "WSA-AF-d7f81cc694afe173",
+      "last_successful_assertion_id": "WSA-AF-25e181aeb044e911",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical physical-risk window admitted after competent first-party post-season verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AF-25e181aeb044e911",
+          "basis": "Bureau of Meteorology first-party material defines the official Australian-region tropical cyclone season as 1 November to 30 April, and the Bureau's 14 May 2026 post-season summary reports the 2025–26 Australian-region tropical cyclone activity. Completion is therefore supported by competent post-season evidence and is not inferred from elapsed time alone."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-RISK-001",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://www.bom.gov.au/climate/current/season/tropics/summary.shtml"
+        }
+      ],
+      "intrinsic_importance": "MEDIUM_HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "MEDIUM",
+      "transmission_channels": [
+        "commodities",
+        "inflation",
+        "trade",
+        "currencies",
+        "equities",
+        "sovereign_bonds",
+        "food_security",
+        "shipping_logistics"
+      ],
+      "render_policy": "THEMATIC_ONLY",
+      "visibility_tier": "BACKGROUND",
+      "signal_object_class": "PHYSICAL_RISK_WINDOW",
+      "publication_time_semantics": "SEASONAL_DATE_RANGE",
+      "commodity_scope": [
+        "LNG",
+        "iron ore",
+        "bauxite",
+        "agriculture",
+        "shipping"
+      ],
+      "supply_chain_scope": [
+        "north-west Australian resources",
+        "Queensland/Top End infrastructure",
+        "ports"
+      ],
+      "physical_shock_routing": "ROUTE_ACTUAL_EVENT_TO_SHOCK_REGISTER",
+      "observed_market_response": null,
+      "expected_market_sensitivity_basis": "Official Bureau season definition; actual cyclones route to Shock Register.",
+      "publication_bundle_type": "SINGLE_RELEASE",
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE",
+      "notes": "Bureau of Meteorology first-party material defines the official Australian-region tropical cyclone season as 1 November to 30 April, and the Bureau's 14 May 2026 post-season summary reports the 2025–26 Australian-region tropical cyclone activity. Completion is therefore supported by competent post-season evidence and is not inferred from elapsed time alone. seasonal risk window != individual tropical cyclone occurrence != landfall or damage != climate-change attribution != observed market response != causal attribution. Actual named cyclones or material shocks remain separate objects routed through the Shock Register where warranted.",
+      "population_tranche": "AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF",
+      "derivation_sources": [
+        "WSSRC-RISK-001"
       ]
     }
   ]

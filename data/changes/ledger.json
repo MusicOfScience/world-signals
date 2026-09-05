@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.21",
+  "version": "0.22",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1665,6 +1665,46 @@
       "committed_at": "2026-09-06T07:27:23+10:00",
       "registry_version_before": "0.33",
       "registry_version_after": "0.34",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-a3519cce2dd0bacb36",
+      "occurrence_id": "WSO-RISK-AU-TC-2025-26",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-RISK-AU-TC",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "ALL_DAY_RANGE",
+        "start_local": "2025-11-01",
+        "end_local": "2026-04-30",
+        "source_timezone": null,
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY",
+        "record_class": "PHYSICAL_RISK_WINDOW",
+        "signal_object_class": "PHYSICAL_RISK_WINDOW"
+      },
+      "source_assertion_id": "WSA-AF-25e181aeb044e911",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T08:18:14+10:00",
+      "review_basis": [
+        "https://www.bom.gov.au/climate/cyclones/australia/",
+        "https://www.bom.gov.au/climate/current/season/tropics/summary.shtml",
+        "https://www.bom.gov.au/news-and-media/northern-australias-2025-26-wet-season-summary-now-available",
+        "Bureau of Meteorology first-party material defines the official Australian-region tropical cyclone season as 1 November to 30 April, and the Bureau's 14 May 2026 post-season summary reports the 2025–26 Australian-region tropical cyclone activity. Completion is therefore supported by competent post-season evidence and is not inferred from elapsed time alone.",
+        "The Bureau's official 1 November–30 April season definition supplies the window boundaries; the 14 May 2026 Bureau summary supplies competent post-season completion evidence.",
+        "The Australian-region seasonal window retains null canonical timezone/UTC endpoints; Bureau source-route timezone metadata is not promoted into the event object.",
+        "Seasonal risk window, individual cyclones, landfall/damage, climate attribution, market response and causal attribution remain distinct."
+      ],
+      "commit_mode": "REVIEWED_AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF",
+      "committed_at": "2026-09-06T08:18:14+10:00",
+      "registry_version_before": "0.34",
+      "registry_version_after": "0.35",
       "canonical_mutation_committed": true
     }
   ]
