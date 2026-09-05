@@ -1,5 +1,4 @@
-# Rerun after descendant-invariant test repairs.
-name: TEMP historical anchors U full simulation
+name: TEMP historical anchors U reviewed apply
 
 on:
   push:
@@ -9,10 +8,10 @@ on:
       - .github/workflows/_temp-historical-u-probe.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  simulate:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -21,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact base and protected branch pre-state
+      - name: Prove exact reviewed pre-state
         shell: bash
         run: |
           set -euo pipefail
@@ -39,37 +38,13 @@ jobs:
             data/analysis/schema.json \
             data/analysis/event_reviews.json \
             data/analysis/evidence_registry.json
-      - name: Run fail-closed check-only U transaction
+      - name: Re-run fail-closed check-only U transaction
         run: python scripts/apply_cross_domain_historical_anchors_u.py
-      - name: Exercise U transaction tests from exact pre-state
-        run: python -m unittest tests.test_cross_domain_historical_anchors_u -v
-      - name: Disposable APPLY
+      - name: Apply reviewed historical anchors U transaction
         env:
           WORLD_SIGNALS_APPLY_HISTORICAL_ANCHORS_U: YES
         run: python scripts/apply_cross_domain_historical_anchors_u.py --apply
-      - name: Assert exact mutation boundary
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
-          expected=(
-            data/canonical/registry.json
-            data/sources/registry.json
-            data/changes/ledger.json
-            data/coverage/biosecurity_overlay.json
-            data/coverage/CROSS_DOMAIN_HISTORICAL_ANCHORS_U_TRANSACTION_AUDIT_v0.1.md
-          )
-          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
-          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
-          diff -u /tmp/expected /tmp/actual
-          git diff --exit-code HEAD -- \
-            data/canonical/schema.json \
-            data/monitor/expectations.json \
-            data/monitor/operations_policy.json \
-            data/analysis/schema.json \
-            data/analysis/event_reviews.json \
-            data/analysis/evidence_registry.json
-      - name: Validate canonical and Analysis post-state
+      - name: Validate exact reviewed post-state and repository suite
         shell: bash
         run: |
           set -euo pipefail
@@ -97,14 +72,8 @@ jobs:
           assert ready['reviewed_occurrence_count']==8
           assert ready['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
           PY
-      - name: Run full repository suite
-        run: python -m unittest discover -s tests -v
-      - name: Python compile
-        run: python -m py_compile scripts/apply_cross_domain_historical_anchors_u.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_analysis.py src/world_signals/analysis.py
-      - name: Browser JavaScript checks
-        shell: bash
-        run: |
-          set -euo pipefail
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_cross_domain_historical_anchors_u.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_analysis.py src/world_signals/analysis.py
           node --check web/app.js
           node --check web/horizon.js
           node --check web/native-calendar.js
@@ -112,5 +81,53 @@ jobs:
           node --check web/operations.js
           node --check web/biosecurity.js
           node --check web/analysis.js
-      - name: Static site build
-        run: python scripts/build_site.py
+          python scripts/build_site.py
+      - name: Assert write boundary and self-remove temporary workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/canonical/registry.json
+            data/sources/registry.json
+            data/changes/ledger.json
+            data/coverage/biosecurity_overlay.json
+            data/coverage/CROSS_DOMAIN_HISTORICAL_ANCHORS_U_TRANSACTION_AUDIT_v0.1.md
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/schema.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+          git rm .github/workflows/_temp-historical-u-probe.yml
+          git add \
+            data/canonical/registry.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/coverage/CROSS_DOMAIN_HISTORICAL_ANCHORS_U_TRANSACTION_AUDIT_v0.1.md
+          mapfile -t staged < <(git diff --cached --name-only | sort)
+          expected_staged=(
+            .github/workflows/_temp-historical-u-probe.yml
+            data/canonical/registry.json
+            data/sources/registry.json
+            data/changes/ledger.json
+            data/coverage/biosecurity_overlay.json
+            data/coverage/CROSS_DOMAIN_HISTORICAL_ANCHORS_U_TRANSACTION_AUDIT_v0.1.md
+          )
+          printf '%s\n' "${expected_staged[@]}" | sort > /tmp/expected_staged
+          printf '%s\n' "${staged[@]}" | sort > /tmp/actual_staged
+          diff -u /tmp/expected_staged /tmp/actual_staged
+      - name: Commit reviewed U transaction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "world-signals-transaction-bot"
+          git config user.email "world-signals-transaction-bot@users.noreply.github.com"
+          git commit -m "Apply cross-domain historical anchors U transaction"
+          git push origin HEAD:feature/cross-domain-historical-anchors-u
