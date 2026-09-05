@@ -15,26 +15,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Print actual RBA canonical series and August records
+      - name: Print recent canonical event candidates
         shell: bash
         run: |
           python - <<'PY'
           import json
+          from datetime import datetime, timezone
           from pathlib import Path
           r=json.loads(Path('data/canonical/registry.json').read_text())
           rows=[]
           for x in r['records']:
-              hay=' '.join(str(x.get(k,'')) for k in ('institution','jurisdiction','series_id','title','event_type','source_id'))
-              if 'Reserve Bank of Australia' in hay or '.RBA.' in hay or 'RBA' in str(x.get('series_id','')):
-                  rows.append({
-                      k:x.get(k) for k in (
-                          'occurrence_id','series_id','institution','jurisdiction','title','event_type',
-                          'certainty_status','lifecycle_status','timing_type','start_local','start_utc',
-                          'end_local','end_utc','date_earliest','date_latest','publication_datetime',
-                          'publication_time_semantics','source_id'
-                      )
-                  })
+              vals=[]
+              for k in ('start_utc','start_local','publication_datetime','date_earliest','date_latest'):
+                  v=x.get(k)
+                  if v: vals.append(str(v))
+              if any(v.startswith(('2026-09-01','2026-09-02','2026-09-03','2026-09-04','2026-09-05')) for v in vals):
+                  rows.append({k:x.get(k) for k in (
+                      'occurrence_id','series_id','institution','jurisdiction','event_type','subcategory',
+                      'certainty_status','lifecycle_status','timing_type','start_local','start_utc',
+                      'publication_datetime','source_id','intrinsic_importance','expected_market_sensitivity'
+                  )})
           print(json.dumps(rows, indent=2, sort_keys=True))
+          print('candidate_count=',len(rows))
           if not rows:
-              raise SystemExit('no RBA-shaped canonical records found')
+              raise SystemExit('no recent canonical candidates')
           PY
