@@ -11,11 +11,13 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
+from src.world_signals.analytical_overlays import validate_biosecurity_overlay
 from src.world_signals.validation import validate_registry
 
 SCHEMA_PATH=ROOT/"data/canonical/schema.json"
 REGISTRY_PATH=ROOT/"data/canonical/registry.json"
 SOURCE_PATH=ROOT/"data/sources/registry.json"
+OVERLAY_PATH=ROOT/"data/coverage/biosecurity_overlay.json"
 PLAN_PATH=ROOT/"data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_PLAN_v0.1.json"
 AUDIT_PATH=ROOT/"data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md"
 LEDGER_PATH=ROOT/"data/changes/ledger.json"
@@ -48,7 +50,16 @@ def append_absent(seq:list,value,label:str)->None:
     seq.append(value)
 
 
-def preflight(schema:dict,registry:dict,sources:dict,plan:dict)->None:
+def overlay_semantic_payload(overlay:dict)->dict:
+    """Return overlay content that must remain byte-equivalent as Python data.
+
+    Nepal has no biosecurity membership. This transaction may advance only
+    the overlay artifact version and exact canonical checkpoint.
+    """
+    return {k:copy.deepcopy(v) for k,v in overlay.items() if k not in {"version","canonical_checkpoint"}}
+
+
+def preflight(schema:dict,registry:dict,sources:dict,overlay:dict,plan:dict)->None:
     p=plan["preconditions"]
     errors=[]
     if str(schema.get("version"))!=p["canonical_schema_version"]:
@@ -61,6 +72,13 @@ def preflight(schema:dict,registry:dict,sources:dict,plan:dict)->None:
         errors.append("source registry version drift")
     if len(sources.get("sources",[]))!=p["source_record_count"]:
         errors.append("source record-count drift")
+    if str(overlay.get("version"))!=p["biosecurity_overlay_version"]:
+        errors.append("biosecurity overlay version drift")
+    if overlay.get("canonical_checkpoint")!=p["biosecurity_overlay_checkpoint"]:
+        errors.append("biosecurity overlay checkpoint drift")
+    overlay_errors=validate_biosecurity_overlay(registry,overlay)
+    if overlay_errors:
+        errors.extend(f"biosecurity overlay pre-state: {e}" for e in overlay_errors)
 
     occurrence_ids={r.get("occurrence_id") for r in registry.get("records",[])}
     series_ids={r.get("series_id") for r in registry.get("records",[])}
@@ -113,7 +131,7 @@ def build_source(item:dict,dependency_count:int)->dict:
         "information_supplied":item["information_supplied"],
         "future_schedule_horizon":"standing annual legal rule" if legal else "current budget archive; future Gregorian mapping not asserted",
         "typical_advance_notice":"standing law" if legal else "publication/archive surface",
-        "machine_readable_available":"HTML/PDF" if legal else "HTML/PDF",
+        "machine_readable_available":"HTML/PDF",
         "source_timezone":item["source_timezone"],
         "recommended_verification_cadence":"annual legal-text recheck; recheck when competent 2084 dual-calendar mapping appears" if legal else "manual monthly; weekly once 2084 official calendar/schedule material appears",
         "activation_status":"ACTIVE_MANUAL_PROVENANCE_ONLY",
@@ -253,31 +271,46 @@ def migrate_schema(schema:dict,plan:dict)->dict:
     return out
 
 
-def build_post_state(schema:dict,registry:dict,sources:dict,plan:dict):
+def advance_overlay(overlay:dict,plan:dict)->dict:
+    before_semantics=overlay_semantic_payload(overlay)
+    out=copy.deepcopy(overlay)
+    out["version"]=plan["postconditions"]["biosecurity_overlay_version"]
+    out["canonical_checkpoint"]=copy.deepcopy(plan["postconditions"]["biosecurity_overlay_checkpoint"])
+    if overlay_semantic_payload(out)!=before_semantics:
+        raise SystemExit("POSTCONDITION FAILED: biosecurity overlay semantic content changed")
+    return out
+
+
+def build_post_state(schema:dict,registry:dict,sources:dict,overlay:dict,plan:dict):
     old_records=copy.deepcopy(registry["records"])
     old_sources=copy.deepcopy(sources["sources"])
+    old_overlay_semantics=overlay_semantic_payload(overlay)
     post_schema=migrate_schema(schema,plan)
     post_registry=copy.deepcopy(registry)
     post_sources=copy.deepcopy(sources)
     occurrence=build_occurrence(plan["occurrence"])
-    new_sources=[
-        build_source(plan["sources"][0],1),
-        build_source(plan["sources"][1],0),
-    ]
+    new_sources=[build_source(plan["sources"][0],1),build_source(plan["sources"][1],0)]
+
     post_registry.update(version="0.28",reference_date="2026-09-05")
     post_registry["records"].append(occurrence)
     post_registry["record_count"]=len(post_registry["records"])
     post_sources.update(version="1.69",reference_date="2026-09-05")
     post_sources["sources"].extend(new_sources)
+    post_overlay=advance_overlay(overlay,plan)
 
     if post_registry["records"][:-1]!=old_records:
         raise SystemExit("POSTCONDITION FAILED: pre-existing canonical objects changed")
     if post_sources["sources"][:-2]!=old_sources:
         raise SystemExit("POSTCONDITION FAILED: pre-existing source objects changed")
+    if overlay_semantic_payload(post_overlay)!=old_overlay_semantics:
+        raise SystemExit("POSTCONDITION FAILED: biosecurity semantic content changed")
 
     validation=validate_registry(post_registry,post_sources)
     if not validation.ok:
         raise SystemExit("POSTCONDITION FAILED: registry validation: "+"; ".join(validation.errors))
+    overlay_errors=validate_biosecurity_overlay(post_registry,post_overlay)
+    if overlay_errors:
+        raise SystemExit("POSTCONDITION FAILED: biosecurity overlay validation: "+"; ".join(overlay_errors))
 
     expected=plan["postconditions"]
     checks={
@@ -286,6 +319,9 @@ def build_post_state(schema:dict,registry:dict,sources:dict,plan:dict):
         "canonical_count":post_registry.get("record_count")==expected["canonical_record_count"],
         "source_version":post_sources.get("version")==expected["source_registry_version"],
         "source_count":len(post_sources.get("sources",[]))==expected["source_record_count"],
+        "overlay_version":post_overlay.get("version")==expected["biosecurity_overlay_version"],
+        "overlay_checkpoint":post_overlay.get("canonical_checkpoint")==expected["biosecurity_overlay_checkpoint"],
+        "overlay_semantics_unchanged":overlay_semantic_payload(post_overlay)==old_overlay_semantics,
         "new_occurrence_count":1==expected["new_occurrence_count"],
         "new_series_count":1==expected["new_series_count"],
         "new_source_count":len(new_sources)==expected["new_source_count"],
@@ -296,7 +332,15 @@ def build_post_state(schema:dict,registry:dict,sources:dict,plan:dict):
     failed=[k for k,v in checks.items() if not v]
     if failed:
         raise SystemExit("POSTCONDITION FAILED: "+", ".join(failed))
-    return post_schema,post_registry,post_sources,{"checks":checks,"warnings":validation.warnings,"occurrence":occurrence,"source_ids":[s["source_id"] for s in new_sources]}
+    report={
+        "checks":checks,
+        "warnings":validation.warnings,
+        "occurrence":occurrence,
+        "source_ids":[s["source_id"] for s in new_sources],
+        "overlay_version":post_overlay["version"],
+        "overlay_checkpoint":post_overlay["canonical_checkpoint"],
+    }
+    return post_schema,post_registry,post_sources,post_overlay,report
 
 
 def audit_text(report:dict,ledger_hash:str,expectations_hash:str)->str:
@@ -304,8 +348,8 @@ def audit_text(report:dict,ledger_hash:str,expectations_hash:str)->str:
     return f"""# WORLD SIGNALS — Nepal source-native calendar transaction audit v0.1
 
 **Transaction date:** 2026-09-05  
-**Base:** schema v0.51; canonical v0.27 / 673; source v1.68 / 231  
-**Post-state:** schema **v0.52**; canonical **v0.28 / 674**; source **v1.69 / 233**
+**Base:** schema v0.51; canonical v0.27 / 673; source v1.68 / 231; biosecurity overlay v0.2 @ v0.27/673  
+**Post-state:** schema **v0.52**; canonical **v0.28 / 674**; source **v1.69 / 233**; biosecurity overlay **v0.3 @ v0.28/674**
 
 ## Added canonical occurrence
 - `{report['occurrence']['occurrence_id']}` — `{report['occurrence']['canonical_name']}`
@@ -314,6 +358,12 @@ def audit_text(report:dict,ledger_hash:str,expectations_hash:str)->str:
 
 ## Added sources
 """+"\n".join(f"- `{sid}`" for sid in report["source_ids"])+f"""
+
+## Analytical-overlay checkpoint alignment
+- biosecurity overlay version advances from v0.2 to v0.3 solely to record the new canonical checkpoint;
+- canonical checkpoint advances from v0.27 / 673 to v0.28 / 674;
+- systems, relationships, canonical-series memberships, candidate nodes, principles and notes remain unchanged;
+- Nepal receives no biosecurity membership.
 
 ## Invariants
 - all 673 pre-existing canonical objects unchanged;
@@ -338,10 +388,14 @@ def main()->None:
     parser=argparse.ArgumentParser()
     parser.add_argument("--apply",action="store_true")
     args=parser.parse_args()
-    schema,registry,sources,plan=load(SCHEMA_PATH),load(REGISTRY_PATH),load(SOURCE_PATH),load(PLAN_PATH)
+    schema=load(SCHEMA_PATH)
+    registry=load(REGISTRY_PATH)
+    sources=load(SOURCE_PATH)
+    overlay=load(OVERLAY_PATH)
+    plan=load(PLAN_PATH)
     ledger_hash,expectations_hash=file_hash(LEDGER_PATH),file_hash(EXPECTATIONS_PATH)
-    preflight(schema,registry,sources,plan)
-    post_schema,post_registry,post_sources,report=build_post_state(schema,registry,sources,plan)
+    preflight(schema,registry,sources,overlay,plan)
+    post_schema,post_registry,post_sources,post_overlay,report=build_post_state(schema,registry,sources,overlay,plan)
     print(json.dumps({
         "mode":"APPLY" if args.apply else "CHECK_ONLY",
         "post":{
@@ -350,6 +404,8 @@ def main()->None:
             "canonical_count":post_registry["record_count"],
             "source_version":post_sources["version"],
             "source_count":len(post_sources["sources"]),
+            "biosecurity_overlay_version":post_overlay["version"],
+            "biosecurity_overlay_checkpoint":post_overlay["canonical_checkpoint"],
         },
         "occurrence_id":report["occurrence"]["occurrence_id"],
         "source_native_date_label":report["occurrence"]["source_native_date_label"],
@@ -364,6 +420,7 @@ def main()->None:
     dump(SCHEMA_PATH,post_schema)
     dump(REGISTRY_PATH,post_registry)
     dump(SOURCE_PATH,post_sources)
+    dump(OVERLAY_PATH,post_overlay)
     AUDIT_PATH.write_text(audit_text(report,ledger_hash,expectations_hash),encoding="utf-8")
     if file_hash(LEDGER_PATH)!=ledger_hash:
         raise SystemExit("PROTECTED FILE CHANGED: change ledger")
