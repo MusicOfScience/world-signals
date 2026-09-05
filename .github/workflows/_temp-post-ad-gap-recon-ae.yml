@@ -1,4 +1,4 @@
-name: TEMP post-AD gap recon AE
+name: TEMP AE sanctions anchor preflight
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  recon:
+  preflight:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -22,33 +22,13 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "7933a9880649ec6a98872fa557566a6b62d55c9d"
-      - name: Targeted trade candidate probe
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root=Path('.')
-          reg=json.loads((root/'data/canonical/registry.json').read_text())
-          src=json.loads((root/'data/sources/registry.json').read_text())
-          rev=json.loads((root/'data/analysis/event_reviews.json').read_text())
-          rows=reg['records']
-          reviewed={r.get('canonical_occurrence_id') for r in rev.get('reviews', [])}
-          completed=[r for r in rows if r.get('lifecycle_status')=='COMPLETED']
-          print('FRONTIER', json.dumps([
-              {k:r.get(k) for k in ('occurrence_id','series_id','canonical_name','region','category','event_type','start_local')}
-              for r in completed if r.get('occurrence_id') not in reviewed
-          ], indent=2, ensure_ascii=False, sort_keys=True))
-          by_id={r.get('occurrence_id'):r for r in rows}
-          by_src={s.get('source_id'):s for s in src.get('sources',[])}
-          for oid in ('WSO-TRD-A-0005','WSO-TRD-A-0003','WSO-TRD-A-0004','WSO-CLIM-A-0001','WSO-EL-A-0001','WSO-EL-ZA-LGE-2021'):
-              if oid in by_id:
-                  print('ROW', oid, json.dumps(by_id[oid], indent=2, ensure_ascii=False, sort_keys=True))
-          for sid in ('WSSRC-TRD-003','WSSRC-TRD-004','WSSRC-CLIM-001','WSSRC-EL-BR-001','WSSRC-EL-ZA-001'):
-              if sid in by_src:
-                  deps=[r.get('occurrence_id') for r in rows if r.get('source_id')==sid]
-                  print('SOURCE_FULL', sid, json.dumps(by_src[sid], indent=2, ensure_ascii=False, sort_keys=True))
-                  print('SOURCE_DEPS', sid, json.dumps(deps, ensure_ascii=False))
-          ids={r.get('occurrence_id') for r in rows}
-          for cand in ('WSO-TRD-EU-RU-SANC-20260625','WSO-TRD-A-0009','WSO-CLIM-UNFCCC-COP30','WSO-EL-BR-GEN-2022-R2'):
-              print('ID_COLLISION', cand, cand in ids)
-          PY
+      - name: AE check-only transform
+        run: python scripts/apply_eu_russia_sanctions_renewal_anchor_ae.py
+      - name: AE contract tests
+        run: python -m unittest tests.test_eu_russia_sanctions_renewal_anchor_ae -v
+      - name: Canonical baseline validator
+        run: python scripts/validate_registry.py
+      - name: Analysis baseline validator
+        run: python scripts/validate_analysis.py
+      - name: Python compile
+        run: python -m py_compile scripts/apply_eu_russia_sanctions_renewal_anchor_ae.py
