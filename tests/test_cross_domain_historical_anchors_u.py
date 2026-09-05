@@ -207,16 +207,24 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 8)
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
+
+        # U's historical contract is that it changed the canonical population while
+        # leaving Analysis untouched at its own transaction boundary. Later Analysis
+        # tranches may legitimately review any U anchor.
+        post = self.plan["postconditions"]
+        self.assertEqual(post["analysis_reviews_version"], "0.4")
+        self.assertEqual(post["analysis_review_count"], 8)
+        self.assertEqual(post["analysis_evidence_version"], "0.4")
+        self.assertEqual(post["analysis_evidence_count"], 21)
+        self.assertFalse(self.plan["guardrails"]["analysis_mutation"])
+        self.assertGreaterEqual(len(self.analysis_reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(len(self.analysis_evidence["evidence"]), post["analysis_evidence_count"])
+
         reviewed = set(readiness["reviewed_occurrence_ids"])
-        for occurrence_id in (
-            "WSO-BWC-WG-2026-S08",
-            "WSO-WOAH-GS-093",
-            "WSO-FIS-NP-BUDGET-2083",
-            "WSO-ddb70f8ff05a58fb",
-        ):
-            self.assertNotIn(occurrence_id, reviewed)
-        self.assertEqual((self.analysis_reviews["version"], len(self.analysis_reviews["reviews"])), ("0.4", 8))
-        self.assertEqual((self.analysis_evidence["version"], len(self.analysis_evidence["evidence"])), ("0.4", 21))
+        self.assertNotIn("WSO-BWC-WG-2026-S08", reviewed)
+        self.assertNotIn("WSO-WOAH-GS-093", reviewed)
+        self.assertNotIn("WSO-ddb70f8ff05a58fb", reviewed)
+        # Nepal may be reviewed by a later Analysis tranche without violating U.
 
     def test_global_write_gates_remain_closed(self):
         guardrails = self.plan["guardrails"]
