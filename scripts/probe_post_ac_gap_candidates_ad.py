@@ -74,19 +74,8 @@ for row in wha:
         if key in row
     }
     print("WHA_RECORD", json.dumps(fields, sort_keys=True, ensure_ascii=False))
-    source = by_source.get(row.get("source_id"))
-    if source:
-        source_fields = {
-            key: source.get(key)
-            for key in (
-                "source_id", "institution", "jurisdiction", "domain", "endpoint_role",
-                "authoritative_url", "source_type", "source_timezone", "information_supplied",
-                "canonical_dependency_count", "automation_permission_status",
-                "monitoring_readiness", "notes",
-            )
-            if key in source
-        }
-        print("WHA_SOURCE", json.dumps(source_fields, sort_keys=True, ensure_ascii=False))
+
+print("WHO_SOURCE_FULL", json.dumps(by_source["WSSRC-HEALTH-001"], sort_keys=True, ensure_ascii=False))
 
 health_rows = [row for row in records if row.get("category") == "HEALTH_BIOSECURITY"]
 for row in sorted(health_rows, key=lambda x: x.get("occurrence_id", "")):
@@ -109,7 +98,6 @@ candidate_ids = ["WSO-HEALTH-B-0001", "WSO-HEALTH-A-0000", "WSO-HEALTH-WHA-079"]
 existing_ids = {row.get("occurrence_id") for row in records}
 print("CANDIDATE_ID_COLLISIONS", json.dumps({cid: cid in existing_ids for cid in candidate_ids}, sort_keys=True))
 
-# Past-starting records in still-missing categories that are not terminal.
 for row in records:
     if row.get("category") not in TARGET_CATEGORIES:
         continue
