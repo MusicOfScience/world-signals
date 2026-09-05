@@ -131,7 +131,9 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertEqual(benchmarks["latest_reported_budget_range"]["value"], "approximately NPR 2.1-2.2 trillion")
         comparison = next(x for x in review["what_surprised"]["comparisons"] if x["comparison_kind"] == "QUANTITATIVE")
         self.assertEqual((comparison["actual"], comparison["expected"]), (2124.34, 2150.0))
-        self.assertIn("latest", review["what_surprised"]["summary"].lower())
+        summary = review["what_surprised"]["summary"].lower()
+        self.assertIn("revised before presentation", summary)
+        self.assertIn("earliest available benchmark", summary)
 
     def test_first_market_move_remains_noncausal_and_unreconstructed(self):
         reviews, _ = self.post_objects()
@@ -155,9 +157,10 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         values = {x["metric"]: x["value"] for x in second["observations"]}
         self.assertEqual(values["total_expenditure_share_of_annual_budget"], 5.79)
         self.assertEqual(values["capital_expenditure_share_of_annual_budget"], 1.19)
-        self.assertIn("reconciliation", second["summary"].lower())
-        self.assertNotIn("failure", second["summary"].lower())
-        self.assertNotIn("success", second["summary"].lower())
+        summary = second["summary"].lower()
+        self.assertIn("reconciliation", summary)
+        self.assertIn("not a success/failure verdict", summary)
+        self.assertIn("unprocessed", summary)
 
     def test_analysis_evidence_never_becomes_canonical_provenance_or_time(self):
         reviews, evidence = self.post_objects()
