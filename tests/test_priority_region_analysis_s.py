@@ -32,12 +32,14 @@ class PriorityRegionAnalysisSTests(unittest.TestCase):
 
     def test_s_state_survives_descendant_population_and_validator(self):
         self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.29", 678))
-        self.assertEqual(self.plan["post_state"]["analysis_review_count"], 6)
-        self.assertEqual(self.plan["post_state"]["analysis_evidence_count"], 14)
+        s_post = self.plan["analysis_post_state"]
+        self.assertEqual(s_post["review_count"], 6)
+        self.assertEqual(s_post["evidence_count"], 14)
         self.assertGreaterEqual(len(self.reviews["reviews"]), 6)
         self.assertGreaterEqual(len(self.evidence["evidence"]), 14)
         self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
-        self.assertTrue(set(self.plan["new_analysis_ids"]) <= set(self.by_analysis))
+        s_analysis_ids = {row["analysis_id"] for row in self.plan["new_reviews"]}
+        self.assertTrue(s_analysis_ids <= set(self.by_analysis))
         self.assertTrue(set(self.plan["new_evidence_ids"]) <= set(self.by_evidence))
         report = validate_analysis(self.schema, self.evidence, self.reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
