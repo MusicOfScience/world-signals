@@ -1,4 +1,4 @@
-name: TEMP source-native fiscal analysis V full simulation
+name: TEMP source-native fiscal analysis V reviewed apply
 
 on:
   push:
@@ -8,25 +8,28 @@ on:
       - .github/workflows/_temp-analysis-v-probe.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  simulate:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: feature/source-native-fiscal-analysis-v
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact base and protected upstream pre-state
+      - name: Prove exact reviewed pre-state
         shell: bash
         run: |
           set -euo pipefail
           BASE=1bfa947d1fbd86e945349991778944094a78e5ed
-          git fetch origin main
+          REVIEWED_HEAD=c51dcf5d292b849d827e4f869f82e2d49f45fa0b
+          git fetch origin main feature/source-native-fiscal-analysis-v
           test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git rev-parse HEAD^)" = "$REVIEWED_HEAD"
           git diff --exit-code "$BASE" HEAD -- \
             data/canonical/registry.json \
             data/canonical/schema.json \
@@ -37,23 +40,76 @@ jobs:
             data/monitor/operations_policy.json \
             data/analysis/event_reviews.json \
             data/analysis/evidence_registry.json
-      - name: Run fail-closed check-only V transaction
+      - name: Re-run fail-closed check-only V transaction
         run: python scripts/apply_source_native_fiscal_analysis_v.py
-      - name: Exercise V tests from exact pre-state
-        run: python -m unittest tests.test_source_native_fiscal_analysis_v -v
-      - name: Disposable APPLY
+      - name: Apply reviewed source-native fiscal Analysis V transaction
         env:
           WORLD_SIGNALS_APPLY_ANALYSIS_V: YES
         run: python scripts/apply_source_native_fiscal_analysis_v.py --apply
-      - name: Assert exact transaction write boundary
+      - name: Validate exact reviewed post-state and repository suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_source_native_fiscal_analysis_v.py scripts/validate_analysis.py src/world_signals/analysis.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.analysis import analysis_population_readiness, public_analysis_projection
+          def load(p): return json.loads(Path(p).read_text())
+          c=load('data/canonical/registry.json')
+          s=load('data/sources/registry.json')
+          l=load('data/changes/ledger.json')
+          o=load('data/coverage/biosecurity_overlay.json')
+          a=load('data/analysis/schema.json')
+          r=load('data/analysis/event_reviews.json')
+          e=load('data/analysis/evidence_registry.json')
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert (s['version'],len(s['sources']))==('1.72',237)
+          assert (l['version'],len(l['changes']))==('0.17',51)
+          assert (o['version'],o['canonical_checkpoint'])==('0.5',{'registry_version':'0.30','record_count':681})
+          assert a['version']=='0.3'
+          assert (r['version'],len(r['reviews']))==('0.5',9)
+          assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
+          assert (e['version'],len(e['evidence']))==('0.5',28)
+          ready=analysis_population_readiness(a,r,c)
+          assert ready['eligible_completed_occurrence_count']==12
+          assert ready['reviewed_occurrence_count']==9
+          assert ready['reviewed_event_type_diversity']==8
+          assert ready['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          assert sorted(
+              x['occurrence_id'] for x in c['records']
+              if x.get('lifecycle_status')=='COMPLETED'
+              and x['occurrence_id'] not in set(ready['reviewed_occurrence_ids'])
+          )==sorted(['WSO-BWC-WG-2026-S08','WSO-WOAH-GS-093','WSO-ddb70f8ff05a58fb'])
+          projection=public_analysis_projection(a,e,r,c)
+          v=next(x for x in projection['reviews'] if x['analysis_id']=='WSAN-NP-BUDGET-2083-001')
+          assert v['canonical']['source_native_date_label']=='15 Jestha 2083'
+          assert v['canonical']['gregorian_resolution_status']=='UNRESOLVED_AUTHORITATIVE_CONVERSION'
+          assert v['canonical']['start_local'] is None and v['canonical']['start_utc'] is None
+          assert v['what_surprised']['status']=='NO_CLEAR_SURPRISE'
+          assert v['what_appears_connected']['causal_status']=='NOT_A_CAUSAL_CLAIM'
+          assert v['second_order_effects']['status']=='OBSERVED'
+          PY
+      - name: Assert transaction write boundary and self-remove temporary workflow
         shell: bash
         run: |
           set -euo pipefail
           mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
           expected=(
+            data/analysis/SOURCE_NATIVE_FISCAL_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
             data/analysis/event_reviews.json
             data/analysis/evidence_registry.json
-            data/analysis/SOURCE_NATIVE_FISCAL_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
           )
           printf '%s\n' "${expected[@]}" | sort > /tmp/expected
           printf '%s\n' "${changed[@]}" | sort > /tmp/actual
@@ -66,52 +122,18 @@ jobs:
             data/coverage/biosecurity_overlay.json \
             data/monitor/expectations.json \
             data/monitor/operations_policy.json
-      - name: Validate exact V post-state
+          git rm .github/workflows/_temp-analysis-v-probe.yml
+      - name: Commit reviewed V transaction
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/validate_registry.py
-          python scripts/validate_analysis.py
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from src.world_signals.analysis import analysis_population_readiness, public_analysis_projection
-          def load(p): return json.loads(Path(p).read_text())
-          c=load('data/canonical/registry.json')
-          a=load('data/analysis/schema.json')
-          r=load('data/analysis/event_reviews.json')
-          e=load('data/analysis/evidence_registry.json')
-          assert (c['version'],len(c['records']))==('0.30',681)
-          assert a['version']=='0.3'
-          assert (r['version'],len(r['reviews']))==('0.5',9)
-          assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
-          assert (e['version'],len(e['evidence']))==('0.5',28)
-          ready=analysis_population_readiness(a,r,c)
-          assert ready['eligible_completed_occurrence_count']==12
-          assert ready['reviewed_occurrence_count']==9
-          assert ready['reviewed_event_type_diversity']==8
-          assert ready['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
-          projection=public_analysis_projection(a,e,r,c)
-          v=next(x for x in projection['reviews'] if x['analysis_id']=='WSAN-NP-BUDGET-2083-001')
-          assert v['canonical']['source_native_date_label']=='15 Jestha 2083'
-          assert v['canonical']['gregorian_resolution_status']=='UNRESOLVED_AUTHORITATIVE_CONVERSION'
-          assert v['canonical']['start_local'] is None and v['canonical']['start_utc'] is None
-          PY
-      - name: Run full repository suite
-        run: python -m unittest discover -s tests -v
-      - name: Python compile
-        run: python -m py_compile scripts/apply_source_native_fiscal_analysis_v.py scripts/validate_analysis.py src/world_signals/analysis.py
-      - name: Browser JavaScript checks
-        shell: bash
-        run: |
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-      - name: Static site build
-        run: python scripts/build_site.py
-
-# rerun marker: descendant lineage assumptions repaired
+          git config user.name world-signals-transaction-bot
+          git config user.email world-signals-transaction-bot@users.noreply.github.com
+          git add \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/analysis/SOURCE_NATIVE_FISCAL_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md \
+            .github/workflows/_temp-analysis-v-probe.yml
+          git diff --cached --name-status
+          git commit -m "Apply source-native fiscal analysis V transaction"
+          git push origin HEAD:feature/source-native-fiscal-analysis-v
