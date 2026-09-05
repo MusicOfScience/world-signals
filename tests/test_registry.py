@@ -13,7 +13,7 @@ class RegistryTests(unittest.TestCase):
     def test_checkpoint_count(self):
         version=tuple(int(p) for p in str(self.reg["version"]).split("."))
         self.assertGreaterEqual(version,(0,20))
-        self.assertEqual(self.reg["record_count"],669)
+        self.assertEqual(self.reg["record_count"],673 if version >= (0,27) else 669)
         if version >= (0,21):
             row=next(r for r in self.reg["records"] if r["occurrence_id"]=="WSO-EL-A-0004")
             self.assertEqual(row["source_id"], "WSSRC-EL-BR-002")
@@ -24,6 +24,9 @@ class RegistryTests(unittest.TestCase):
             self.assertEqual(row["source_id"], "WSSRC-REG5-002")
             self.assertEqual(row["start_local"], "2026-10-20")
             self.assertEqual(row["certainty_status"], "PROVISIONAL")
+        if version >= (0,27):
+            ids={r["occurrence_id"] for r in self.reg["records"]}
+            self.assertTrue({"WSO-CBN-MPC-307","WSO-CBN-MPC-308","WSO-BWC-WG-2026-S10","WSO-WOAH-GS-094"}.issubset(ids))
     def test_registry_validates(self):
         report=validate_registry(self.reg,self.src)
         self.assertTrue(report.ok, report.errors)
