@@ -1,0 +1,177 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF",
+  "reference_date": "2026-09-06",
+  "exact_base_main": "e576719bcbaf94730444cf64b1a1abeeacb25727",
+  "architecture_layer": "CANONICAL_REGISTRY",
+  "selection_policy": {
+    "queue_exhaustion_is_goal": false,
+    "geographic_quota_fill_is_goal": false,
+    "selection_basis": "Distinct physical-risk-window contract plus exact existing series/source reuse and competent Bureau post-season completion evidence.",
+    "known_bias": "Australian/Oceania specimen; selected for domain/object-class diversity rather than geographic correction.",
+    "deferred_candidate_note": "COP30 remains attractive for climate/environment and Global South coverage but first-party closing-date semantics require a dedicated provenance-resolution tranche."
+  },
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.34",
+    "canonical_record_count": 684,
+    "source_registry_version": "1.75",
+    "source_record_count": 240,
+    "change_ledger_version": "0.21",
+    "change_ledger_count": 56,
+    "biosecurity_overlay_version": "0.9",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.34",
+      "record_count": 684
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-RISK-AU-TC-2025-26"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-a3519cce2dd0bacb36"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-COM-A-0051",
+      "series_id": "WSER-RISK-AU-TC",
+      "source_id": "WSSRC-RISK-001",
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "subcategory": "tropical_cyclone_risk_window",
+      "jurisdiction": "Australian region",
+      "region": "Oceania / Pacific",
+      "institution": "Australian Bureau of Meteorology",
+      "event_type": "PHYSICAL_RISK_WINDOW",
+      "record_class": "PHYSICAL_RISK_WINDOW",
+      "signal_object_class": "PHYSICAL_RISK_WINDOW",
+      "activation_mode": "AUTHORITATIVE_RECURRING_RULE",
+      "timing_type": "ALL_DAY_RANGE",
+      "source_timezone": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "render_policy": "THEMATIC_ONLY",
+      "visibility_tier": "BACKGROUND",
+      "physical_shock_routing": "ROUTE_ACTUAL_EVENT_TO_SHOCK_REGISTER"
+    },
+    "required_second_descendant": {
+      "occurrence_id": "WSO-COM-A-0052",
+      "series_id": "WSER-RISK-AU-TC",
+      "source_id": "WSSRC-RISK-001",
+      "canonical_name": "Australian tropical cyclone season 2027–28"
+    },
+    "required_active_atlantic": {
+      "occurrence_id": "WSO-COM-A-0049",
+      "series_id": "WSER-RISK-ATL-HURR",
+      "lifecycle_status": "ACTIVE",
+      "end_local": "2026-11-30"
+    },
+    "required_primary_source": {
+      "source_id": "WSSRC-RISK-001",
+      "institution": "Australian Bureau of Meteorology",
+      "authoritative_url": "https://www.bom.gov.au/climate/cyclones/australia/",
+      "source_type": "official_risk_monitor",
+      "source_timezone": "Australia/Brisbane",
+      "canonical_dependency_count": 2,
+      "actual_primary_dependency_count": 2,
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY"
+    }
+  },
+  "anchor": {
+    "occurrence_id": "WSO-RISK-AU-TC-2025-26",
+    "template_occurrence_id": "WSO-COM-A-0051",
+    "series_id": "WSER-RISK-AU-TC",
+    "source_id": "WSSRC-RISK-001",
+    "canonical_name": "Australian tropical cyclone season 2025–26",
+    "short_calendar_title": "Australian tropical cyclone season 2025–26",
+    "category": "PHYSICAL_CLIMATE_RISK",
+    "event_type": "PHYSICAL_RISK_WINDOW",
+    "record_class": "PHYSICAL_RISK_WINDOW",
+    "signal_object_class": "PHYSICAL_RISK_WINDOW",
+    "certainty_status": "CONFIRMED",
+    "lifecycle_status": "COMPLETED",
+    "timing": {
+      "timing_type": "ALL_DAY_RANGE",
+      "start_local": "2025-11-01",
+      "end_local": "2026-04-30",
+      "source_timezone": null,
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+    },
+    "season_definition_url": "https://www.bom.gov.au/climate/cyclones/australia/",
+    "completion_url": "https://www.bom.gov.au/climate/current/season/tropics/summary.shtml",
+    "corroborating_url": "https://www.bom.gov.au/news-and-media/northern-australias-2025-26-wet-season-summary-now-available",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "Bureau of Meteorology first-party material defines the official Australian-region tropical cyclone season as 1 November to 30 April, and the Bureau's 14 May 2026 post-season summary reports the 2025–26 Australian-region tropical cyclone activity. Completion is therefore supported by competent post-season evidence and is not inferred from elapsed time alone.",
+    "semantic_guardrail": "seasonal risk window != individual tropical cyclone occurrence != landfall or damage != climate-change attribution != observed market response != causal attribution",
+    "primary_source_assertion_id": "WSA-AF-d7f81cc694afe173",
+    "completion_source_assertion_id": "WSA-AF-25e181aeb044e911",
+    "change_id": "WSCHANGE-a3519cce2dd0bacb36"
+  },
+  "source_mutation": {
+    "source_id": "WSSRC-RISK-001",
+    "new_source_identity_allowed": false,
+    "allowed_existing_field_changes": {
+      "canonical_dependency_count": {
+        "from": 2,
+        "to": 3
+      }
+    }
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.35",
+    "canonical_record_count": 685,
+    "source_registry_version": "1.76",
+    "source_record_count": 240,
+    "change_ledger_version": "0.22",
+    "change_ledger_count": 57,
+    "biosecurity_overlay_version": "0.10",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.35",
+      "record_count": 685
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "completed_analysis_population_count": 18,
+    "reviewed_completed_count": 12,
+    "new_completed_category": "PHYSICAL_CLIMATE_RISK",
+    "new_completed_event_type": "PHYSICAL_RISK_WINDOW",
+    "primary_source_dependency_count": 3
+  },
+  "write_boundary": {
+    "production_files": [
+      "data/canonical/registry.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/coverage/AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "analysis_mutation_allowed": false,
+    "calendar_mutation_allowed": false,
+    "monitor_policy_mutation_allowed": false,
+    "new_source_identity_allowed": false
+  },
+  "guardrails": [
+    "Completion requires competent Bureau post-season evidence; elapsed date alone is insufficient.",
+    "The regional seasonal date range must not synthesize a single source timezone or UTC endpoint.",
+    "The Bureau source timezone Australia/Brisbane is source-route metadata, not the canonical timezone of the Australian-region risk window.",
+    "The season window must not be expanded into named cyclone occurrences in this tranche.",
+    "Cyclone activity, landfall, damage, climate attribution, market response and causal attribution remain separate objects/claims.",
+    "Existing 2026–27 and 2027–28 Australian season occurrences remain unchanged.",
+    "Atlantic hurricane season 2026 remains ACTIVE.",
+    "No Analysis review or evidence row is created.",
+    "PR #40 remains untouched.",
+    "Manual merge only."
+  ]
+}
