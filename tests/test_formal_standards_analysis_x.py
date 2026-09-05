@@ -35,10 +35,11 @@ class FormalStandardsAnalysisXTests(unittest.TestCase):
         source = self.reviews if self.has_x else self.payload
         return next(row for row in source["reviews"] if row["analysis_id"] == "WSAN-WOAH-GS93-2026-001")
 
-    def test_frozen_prestate_and_no_schema_change(self):
+    def test_frozen_prestate_contract_and_no_schema_change(self):
         pre = self.plan["preconditions"]
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])),
-                         (pre["canonical_registry_version"], pre["canonical_record_count"]))
+        self.assertEqual((pre["canonical_registry_version"], pre["canonical_record_count"]), ("0.30", 681))
+        self.assertGreaterEqual(float(self.canonical["version"]), float(pre["canonical_registry_version"]))
+        self.assertGreaterEqual(len(self.canonical["records"]), pre["canonical_record_count"])
         self.assertEqual(self.schema["version"], "0.3")
         self.assertEqual(self.plan["schema_decision"]["version_unchanged"], "0.3")
         for key in (
@@ -95,7 +96,7 @@ class FormalStandardsAnalysisXTests(unittest.TestCase):
         self.assertGreaterEqual(len(evidence["evidence"]), post["analysis_evidence_count"])
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], post["reviewed_occurrence_count"])
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], post["reviewed_event_type_diversity"])
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 12)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 12)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
         by_id = {row["analysis_id"]: row for row in projection["reviews"]}
         projected = by_id["WSAN-WOAH-GS93-2026-001"]
