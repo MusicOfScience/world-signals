@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.36",
+  "version": "0.37",
   "reference_date": "2026-09-06",
-  "record_count": 686,
+  "record_count": 687,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56403,6 +56403,105 @@
       "location": null,
       "derivation_sources": [
         "WSSRC-EL-KR-001"
+      ]
+    },
+    {
+      "occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+      "series_id": "WSER-CLIM-UNFCCC-SB",
+      "external_source_id": null,
+      "canonical_name": "UNFCCC June Climate Meetings (SB64)",
+      "short_calendar_title": "UNFCCC SB64 — Bonn",
+      "category": "CLIMATE_ENVIRONMENT",
+      "subcategory": "climate_treaty_governance",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "institution": "UNFCCC",
+      "event_type": "ENVIRONMENTAL_GOVERNANCE_EVENT",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "start_local": "2026-06-08",
+      "end_local": "2026-06-18",
+      "source_timezone": "Europe/Berlin",
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": null,
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-CLIM-005",
+      "primary_source_assertion_id": "WSA-AH-837ddedf4a76da02",
+      "last_successful_assertion_id": "WSA-AH-f18dbcab964171c7",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical climate-governance occurrence admitted after first-party UNFCCC closure verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AH-f18dbcab964171c7",
+          "basis": "UNFCCC's first-party SB64 event page establishes the 8-18 June 2026 Bonn meeting window and records at 23:45 on 18 June that the June Climate Meetings had officially closed. The 23:45 update is completion evidence only and is not promoted into a synthetic canonical endpoint for the multi-day event. Completion is not inferred from elapsed time."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-CLIM-005",
+          "role": "AUTHORITATIVE_SCHEDULE_VERIFICATION",
+          "source_locator": "https://unfccc.int/sb64"
+        },
+        {
+          "source_id": "WSSRC-CLIM-005",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://unfccc.int/news/written-statement-of-unfccc-executive-secretary-on-closing-of-un-june-climate-meetings-sb64"
+        }
+      ],
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "HIGH",
+      "transmission_channels": [
+        "climate_policy",
+        "carbon_markets",
+        "energy_transition",
+        "trade",
+        "biodiversity",
+        "land_use",
+        "adaptation",
+        "finance"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ESSENTIAL",
+      "environmental_process_type": "HISTORICAL_CONTEXT_ANCHOR",
+      "treaty_or_assessment_body": "UNFCCC",
+      "legal_session_identity": "SB64 umbrella: SBSTA64 and SBI64 remain legally distinct sessions",
+      "conference_complex_id": null,
+      "assessment_product_name": null,
+      "approval_publication_semantics": null,
+      "publication_bundle_type": "SINGLE_RELEASE",
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE",
+      "notes": "UNFCCC's first-party SB64 event page establishes the 8-18 June 2026 Bonn meeting window and records at 23:45 on 18 June that the June Climate Meetings had officially closed. The 23:45 update is completion evidence only and is not promoted into a synthetic canonical endpoint for the multi-day event. Completion is not inferred from elapsed time. Meeting completion does not establish negotiation success, implementation, emissions effects, climate outcomes, observed market response or causal attribution. SBSTA64 and SBI64 remain legally distinct sessions under the SB64 umbrella.",
+      "location": "Bonn, Germany",
+      "population_tranche": "UNFCCC_SB64_HISTORICAL_ANCHOR_AH",
+      "derivation_sources": [
+        "WSSRC-CLIM-005"
       ]
     }
   ]
