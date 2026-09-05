@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.3",
+  "version": "0.4",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
     "registry_version": "0.29",
@@ -754,6 +754,309 @@
         "If the relevant contemporaneous consensus benchmark is revised materially away from 2.0 percent, the magnitude or direction of the surprise should be recalculated."
       ],
       "analytical_conclusion": "Argentina's July CPI was a modest 0.1 percentage point upside surprise relative to the cited analyst expectation. No defensible discrete market move is established, so the packet preserves the surprise without forcing a market-causality narrative.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-EIA-WPSR-20260902-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T16:24:00Z",
+      "canonical_occurrence_id": "WSO-COM-A-0013",
+      "canonical_series_id": "WSER-COM-EIA-WPSR",
+      "canonical_event_type": "INFORMATION_RELEASE",
+      "canonical_institution": "U.S. Energy Information Administration",
+      "canonical_release_utc": "2026-09-02T14:30:00Z",
+      "scope": "2 September 2026 EIA Weekly Petroleum Status Report, multidimensional inventory surprise and source-reported oil-price response under severe geopolitical contamination",
+      "what_happened": {
+        "summary": "The EIA's 2 September release for the week ending 28 August showed commercial crude stocks falling from 428.910 million to 424.460 million barrels, while distillate stocks rose from 103.391 million to 104.187 million barrels.",
+        "actuals": [
+          {
+            "metric": "commercial_crude_stock_change",
+            "value": -4.45,
+            "unit": "million_barrels",
+            "evidence_refs": [
+              "WSEV-EIA-WPSR-EIA-20260902"
+            ]
+          },
+          {
+            "metric": "distillate_stock_change",
+            "value": 0.796,
+            "unit": "million_barrels",
+            "evidence_refs": [
+              "WSEV-EIA-WPSR-EIA-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EIA-WPSR-EIA-20260902"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Reuters reported poll expectations for a 1.1 million-barrel crude draw and a 1.3 million-barrel distillate draw.",
+        "benchmarks": [
+          {
+            "metric": "commercial_crude_stock_change",
+            "value": -1.1,
+            "unit": "million_barrels",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-EIA-WPSR-REUTERS-20260902"
+            ]
+          },
+          {
+            "metric": "distillate_stock_change",
+            "value": -1.3,
+            "unit": "million_barrels",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-EIA-WPSR-REUTERS-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EIA-WPSR-REUTERS-20260902"
+        ]
+      },
+      "what_surprised": {
+        "status": "MIXED",
+        "summary": "Crude inventories drew far more than expected, while distillates moved in the opposite direction from the expected draw. The packet therefore preserves a mixed product signal rather than collapsing the release into a single bullish or bearish label.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "commercial_crude_stock_change",
+            "actual": -4.45,
+            "expected": -1.1,
+            "direction": "LARGER_DRAW_THAN_EXPECTED"
+          },
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "distillate_stock_change",
+            "actual": 0.796,
+            "expected": -1.3,
+            "direction": "BUILD_VERSUS_EXPECTED_DRAW"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EIA-WPSR-EIA-20260902",
+          "WSEV-EIA-WPSR-REUTERS-20260902"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-EIA-WPSR-20260902-BRENT",
+          "movement_type": "COMMODITY_PRICE",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "Brent crude futures",
+          "before_value": null,
+          "after_value": 95.33,
+          "unit": "USD_per_barrel",
+          "change": 0.68,
+          "change_unit": "USD_per_barrel",
+          "direction": "HIGHER",
+          "measurement_window": "Reuters-reported price at 11:01 ET after the 10:30 ET EIA release on 2026-09-02; change is the source-reported session change, not a reconstructed event-window baseline",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-EIA-WPSR-REUTERS-20260902"
+          ]
+        },
+        {
+          "movement_id": "WSMV-EIA-WPSR-20260902-WTI",
+          "movement_type": "COMMODITY_PRICE",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "West Texas Intermediate crude futures",
+          "before_value": null,
+          "after_value": 90.57,
+          "unit": "USD_per_barrel",
+          "change": 0.35,
+          "change_unit": "USD_per_barrel",
+          "direction": "HIGHER",
+          "measurement_window": "Reuters-reported price at 11:01 ET after the 10:30 ET EIA release on 2026-09-02; change is the source-reported session change, not a reconstructed event-window baseline",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-EIA-WPSR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "TRANSMISSION_CHANNEL",
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "confidence": "LOW",
+        "summary": "Reuters reported oil prices up slightly following the WPSR, which supports a weak contemporaneous association between the release and prices. The signal is not clean: the inventory details were mixed and the oil complex was already dominated by geopolitical supply-risk repricing.",
+        "evidence_refs": [
+          "WSEV-EIA-WPSR-EIA-20260902",
+          "WSEV-EIA-WPSR-REUTERS-20260902",
+          "WSEV-EIA-OIL-REUTERS-20260901"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Oil had risen more than $4 per barrel in the preceding session as renewed US-Iran fighting and Strait of Hormuz disruption risk repriced global supply risk; that backdrop can swamp an ordinary weekly inventory signal.",
+          "evidence_refs": [
+            "WSEV-EIA-OIL-REUTERS-20260901"
+          ]
+        },
+        {
+          "summary": "The WPSR itself was internally mixed: a large crude draw coexisted with an unexpected distillate build, so a single-direction commodity interpretation would discard information.",
+          "evidence_refs": [
+            "WSEV-EIA-WPSR-EIA-20260902",
+            "WSEV-EIA-WPSR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Persisting Middle East supply disruption risk and the prior session's geopolitical oil-price surge could explain most of the quoted price level and part of the same-session rise independently of the EIA release.",
+          "evidence_refs": [
+            "WSEV-EIA-OIL-REUTERS-20260901"
+          ]
+        },
+        {
+          "summary": "The unexpected distillate build and other product-level details could offset the price implication of the larger crude draw, making the net release signal weaker than the crude headline alone suggests.",
+          "evidence_refs": [
+            "WSEV-EIA-WPSR-EIA-20260902",
+            "WSEV-EIA-WPSR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No downstream inflation, consumer-price, transport, political or production consequence is attributed to this single weekly inventory release."
+      },
+      "falsifiers": [
+        "If higher-frequency oil futures data show the reported price gains occurred before the EIA release, the WPSR-specific association should be removed or weakened.",
+        "If contemporaneous market commentary attributes the post-10:30 move primarily to a geopolitical headline or another catalyst, the connection confidence should fall further.",
+        "If a corrected EIA release materially revises the crude or distillate changes, the surprise classification must be recomputed."
+      ],
+      "analytical_conclusion": "The 2 September WPSR contained a much larger-than-expected crude draw but an unexpected distillate build. Oil was modestly higher after the report, yet the association is LOW confidence because the release was mixed and geopolitical supply risk was already dominating the oil market. No stronger causal or second-order claim is established.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-EU-CHIPS-EVAL-20260603-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T16:24:00Z",
+      "canonical_occurrence_id": "WSO-TECH-A-0002",
+      "canonical_series_id": "WSER-TECH-EU-CHIPS",
+      "canonical_event_type": "TECHNOLOGY_POLICY_MILESTONE",
+      "canonical_institution": "European Commission",
+      "canonical_release_utc": null,
+      "scope": "First EU Chips Act Article 40 evaluation/review, early statutory completion versus an earlier indicative Q1 planning window, and explicit policy linkage to Chips Act 2.0 without a market-causality requirement",
+      "what_happened": {
+        "summary": "The Commission's 3 June 2026 Chips Act 2.0 package verifies that the first Article 40 evaluation/review had been submitted before the statutory 20 September deadline. The accompanying impact-assessment package contains the Evaluation of the Chips Act as an annex and uses its findings in the follow-on policy process.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-EU-CHIPS-SWD-20260603",
+          "WSEV-EU-CHIPS-COM-20260603"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Two official timing benchmarks must remain distinct: Article 40 set a legal latest date of 20 September 2026, while the Commission's 2026 Work Programme listed Q1 2026 as an indicative adoption time for the evaluation.",
+        "benchmarks": [
+          {
+            "metric": "statutory_submission_deadline",
+            "value": "2026-09-20",
+            "unit": "civil_date",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-EU-CHIPS-ARTICLE40-2023"
+            ]
+          },
+          {
+            "metric": "indicative_adoption_window",
+            "value": "Q1 2026",
+            "unit": "quarter_window",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-EU-CHIPS-CWP-2025"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EU-CHIPS-ARTICLE40-2023",
+          "WSEV-EU-CHIPS-CWP-2025"
+        ]
+      },
+      "what_surprised": {
+        "status": "MIXED",
+        "summary": "Completion was verified by 3 June: later than the Commission's indicative Q1 planning window but well before the statutory 20 September latest date. The packet treats those as two different schedule benchmarks and does not convert either into a market-surprise claim.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "indicative_adoption_window",
+            "actual": "completion verified by 3 June 2026",
+            "expected": "indicative Q1 2026 adoption window",
+            "direction": "LATER_THAN_INDICATIVE_WINDOW"
+          },
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "statutory_submission_deadline",
+            "actual": "completion verified by 3 June 2026",
+            "expected": "submission by 20 September 2026",
+            "direction": "COMPLETED_BEFORE_LEGAL_DEADLINE"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EU-CHIPS-ARTICLE40-2023",
+          "WSEV-EU-CHIPS-CWP-2025",
+          "WSEV-EU-CHIPS-COM-20260603"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "POLICY_RESPONSE_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The Commission's own Chips Act 2.0 documents explicitly use the first Chips Act evaluation within the follow-on proposal and impact-assessment package. This establishes documentary policy context, not a claim that the evaluation alone caused Chips Act 2.0.",
+        "evidence_refs": [
+          "WSEV-EU-CHIPS-SWD-20260603",
+          "WSEV-EU-CHIPS-COM-20260603"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The evaluation and Chips Act 2.0 impact assessment were developed as part of the same broader policy process, so temporal sequence cannot isolate one as the cause of the other.",
+          "evidence_refs": [
+            "WSEV-EU-CHIPS-SWD-20260603",
+            "WSEV-EU-CHIPS-COM-20260603"
+          ]
+        },
+        {
+          "summary": "Semiconductor policy in 2026 also reflected AI demand, supply-chain dependencies, economic-security concerns, stakeholder consultation and geopolitical pressure; those drivers are not reducible to the evaluation report.",
+          "evidence_refs": [
+            "WSEV-EU-CHIPS-SWD-20260603",
+            "WSEV-EU-CHIPS-COM-20260603"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "The Chips Act 2.0 proposal may be explained substantially by independent strategic, technological and geopolitical developments identified in the impact assessment, rather than by the evaluation itself.",
+          "evidence_refs": [
+            "WSEV-EU-CHIPS-SWD-20260603",
+            "WSEV-EU-CHIPS-COM-20260603"
+          ]
+        },
+        {
+          "summary": "Stakeholder consultation and the wider impact-assessment process supplied additional evidence and policy options beyond the ex-post evaluation.",
+          "evidence_refs": [
+            "WSEV-EU-CHIPS-SWD-20260603"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "The existence of a Chips Act 2.0 proposal is an observed linked policy development, but this packet does not attribute later legislative adoption, semiconductor investment, supply-chain resilience or geopolitical outcomes to the evaluation."
+      },
+      "falsifiers": [
+        "If authoritative records show the Article 40 report was not actually submitted or made public by the time represented in the 3 June package, the lifecycle-linked analytical packet must be reopened.",
+        "If the Q1 2026 item in the Commission annual plan is shown to refer to a materially different evaluation object, the indicative-window comparison must be removed.",
+        "If later documentary evidence shows the Chips Act 2.0 proposal was developed independently of the first Chips Act evaluation, the POLICY_RESPONSE_CONTEXT connection should be weakened."
+      ],
+      "analytical_conclusion": "The first Chips Act evaluation was completed before the statutory September deadline but after the Commission's indicative Q1 planning window. The case demonstrates that legal deadlines, indicative planning windows and actual completion evidence are different objects. The evaluation is explicitly linked to Chips Act 2.0 policy development, but no market reaction or exclusive causal claim is required or promoted.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }
