@@ -1,0 +1,113 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CROSS_DOMAIN_ANALYSIS_V",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "1bfa947d1fbd86e945349991778944094a78e5ed",
+  "purpose": "Review three completed cross-domain historical anchors admitted by U and repair the read-only Analysis temporal projection so source-native dates and multi-day ranges remain visible without synthetic conversion.",
+  "pre_state": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "analysis_schema_version": "0.2",
+    "analysis_reviews_version": "0.4",
+    "analysis_review_count": 8,
+    "analysis_evidence_version": "0.4",
+    "analysis_evidence_count": 21,
+    "analysis_canonical_checkpoint": {
+      "registry_version": "0.29",
+      "record_count": 678
+    },
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 8,
+    "reviewed_event_type_diversity": 7,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "admit_occurrence_ids": [
+    "WSO-BWC-WG-2026-S08",
+    "WSO-WOAH-GS-093",
+    "WSO-FIS-NP-BUDGET-2083"
+  ],
+  "hold_occurrence_ids": [
+    "WSO-ddb70f8ff05a58fb"
+  ],
+  "new_analysis_ids": [
+    "WSAN-BWC-WG8-20260213-001",
+    "WSAN-WOAH-GS93-20260522-001",
+    "WSAN-NP-BUDGET-2083-001"
+  ],
+  "new_evidence_ids": [
+    "WSEV-BWC-WG8-UNODA-MANDATE-20260207",
+    "WSEV-BWC-WG8-UNODA-PROC-20260213",
+    "WSEV-WOAH-GS93-PROGRAMME-20260424",
+    "WSEV-WOAH-GS93-OUTCOMES-20260522",
+    "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+    "WSEV-NP-BUDGET-CONSTITUTION-A119",
+    "WSEV-NP-BUDGET-MOF-2083",
+    "WSEV-NP-BUDGET-MOF-APPROPRIATION-2083"
+  ],
+  "selection_rationale": {
+    "WSO-BWC-WG-2026-S08": "Exercises treaty-governance analysis where negotiating drafts, procedural consensus and substantive agreement must remain distinct and no market reaction is required.",
+    "WSO-WOAH-GS-093": "Exercises international standards governance, preserves AGRICULTURE_FOOD as the primary canonical category and tests a prospective second-order implementation watch item.",
+    "WSO-FIS-NP-BUDGET-2083": "Exercises source-native fiscal timing, legal recurring-rule expectations and an observed later fiscal-cycle development without Gregorian conversion or CMS-clock substitution.",
+    "WSO-ddb70f8ff05a58fb": "Held despite eligibility because V prioritises new analytical contract pressure rather than completing the remaining central-bank backlog item."
+  },
+  "projection_change": {
+    "layer": "READ_ONLY_ANALYSIS_PUBLIC_PROJECTION",
+    "canonical_source_of_truth_unchanged": true,
+    "fields_preserved": [
+      "timing_type",
+      "time_precision",
+      "start_local",
+      "end_local",
+      "start_utc",
+      "end_utc",
+      "source_timezone",
+      "source_native_date_label",
+      "native_calendar_system",
+      "native_calendar_year",
+      "native_calendar_month",
+      "native_calendar_day",
+      "gregorian_resolution_status",
+      "publication_time_semantics"
+    ],
+    "synthetic_date_conversion_allowed": false
+  },
+  "post_state": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "analysis_schema_version": "0.2",
+    "analysis_reviews_version": "0.5",
+    "analysis_review_count": 11,
+    "analysis_evidence_version": "0.5",
+    "analysis_evidence_count": 29,
+    "analysis_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 11,
+    "reviewed_event_type_diversity": 10,
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "canonical_schema_mutation": false,
+    "source_registry_mutation": false,
+    "monitor_configuration_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "google_calendar_write": false,
+    "automatic_canonical_commit": false,
+    "backlog_completion_is_population_objective": false,
+    "missing_market_move_may_be_invented": false,
+    "source_native_date_may_be_third_party_converted": false,
+    "cms_publication_time_is_event_time": false,
+    "draft_negotiating_text_is_final_substantive_outcome": false,
+    "one_health_context_changes_woah_primary_category": false,
+    "temporal_sequence_establishes_causality": false
+  }
+}
