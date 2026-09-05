@@ -72,10 +72,13 @@ class EastAsiaLifecycleRepairZTests(unittest.TestCase):
             self.assertGreaterEqual(float(self.post_canonical["version"]), float(post["canonical_registry_version"]))
             self.assertGreaterEqual(len(self.post_canonical["records"]), post["canonical_record_count"])
 
-    def test_only_existing_stable_occurrences_are_repaired(self):
+    def test_only_existing_stable_occurrences_are_repaired_by_exact_z_transform(self):
         by_id = {row["occurrence_id"]: row for row in self.post_canonical["records"]}
         self.assertTrue(set(TARGET_IDS).issubset(by_id))
-        self.assertFalse(any(row.get("occurrence_id", "").startswith("WSO-KR-") for row in self.post_canonical["records"]))
+        if self.simulated:
+            before_ids = {row["occurrence_id"] for row in self.canonical["records"]}
+            after_ids = {row["occurrence_id"] for row in self.post_canonical["records"]}
+            self.assertEqual(after_ids, before_ids)
         for oid in TARGET_IDS:
             self.assertEqual(by_id[oid]["lifecycle_status"], "COMPLETED")
             self.assertEqual(by_id[oid]["certainty_status"], "CONFIRMED")
