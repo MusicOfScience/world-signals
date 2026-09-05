@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-05",
-  "version": "1.65",
+  "version": "1.66",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -1695,22 +1695,33 @@
       "activation_status": "ACTIVE_GUARDED",
       "parser_type": "HTML",
       "known_limitations": [
-        "Rotating chairship requires year-specific source binding; current summit dates were announced relatively late."
+        "The registered PIB URL is a stable 2026 host-government source-family surface; retain the specific Prime Minister release as event-level backup evidence.",
+        "No source-specific production parser or fixture exists in WORLD SIGNALS."
       ],
-      "backup_source": null,
+      "backup_source": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2305262&lang=2&reg=48",
       "notes": null,
       "timezone_scope": "FIXED",
       "parser_version": null,
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "licence_constraints": null,
-      "ingestion_permission": "NOT_AUDITED",
-      "licence_review_status": "NOT_AUDITED",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "CLEARED_REPRODUCTION_WITH_ATTRIBUTION_GENERAL_PIB_CONTENT",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "REPRODUCTION_WITH_ATTRIBUTION_EXCLUDING_THIRD_PARTY_MATERIAL",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.pib.gov.in/content/132_2_Copyright-Policy.aspx?lang=1&reg=1",
+      "rights_summary": "PIB permits reproduction of website material free of charge without prior approval, excluding third-party material, provided the material is reproduced accurately and the source is prominently acknowledged.",
+      "automation_summary": "PIB content-reuse permission does not itself establish unrestricted automated retrieval or an implemented production monitor route.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The specific PIB Prime Minister release directly confirms the 18th BRICS Summit on 12–13 September 2026. It belongs to the existing year-specific host-government source family, so stable source identity is preserved."
     },
     {
       "source_id": "WSSRC-INT-014",
@@ -5728,14 +5739,24 @@
       "parser_version": "election-a-0.1",
       "licence_constraints": "Public official electoral/legal factual metadata.",
       "ingestion_permission": "PUBLIC_FACTS_ALLOWED",
-      "licence_review_status": "CLEARED_FOR_FACTUAL_METADATA",
-      "automated_retrieval_permission": "PENDING",
-      "redistribution_permission": "PUBLIC_FACTUAL_METADATA_ONLY",
+      "licence_review_status": "CLEARED_CC_BY_4_GENERAL_WEBSITE_CONTENT_WITH_EXCEPTIONS",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "CC_BY_4_WITH_ATTRIBUTION_EXCLUDING_BRANDING_MEDIA_AND_THIRD_PARTY_CONTENT",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 240,
       "canonical_dependency_count": 3,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://vec.vic.gov.au/legal",
+      "rights_summary": "VEC licenses general website material under CC BY 4.0, excluding images, photographs, videos, branding and third-party content.",
+      "automation_summary": "CC BY 4.0 content reuse does not establish an implemented polling route; WORLD SIGNALS contains no VEC-specific parser or fixture implementation.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "VEC first-order material confirms the 28 November 2026 state election, 3 November writ milestone including a 6 pm issue time, and 19 December return-of-writ boundary. No canonical timing change is required."
     },
     {
       "source_id": "WSSRC-EL-CA-001",
@@ -5799,7 +5820,17 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 250,
       "canonical_dependency_count": 4,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.usda.gov/sites/default/files/documents/dr-1410-001.pdf",
+      "rights_summary": "USDA departmental policy states works prepared by USDA employees as part of official duties are United States Government works and are not subject to US copyright; third-party materials remain separately protected.",
+      "automation_summary": "The WASDE page exposes multiple report formats, but WORLD SIGNALS contains no WASDE-specific parser, fixture or operating evidence. Machine readability is not automated-monitor permission or implementation.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "USDA's current WASDE page explicitly confirms the four remaining 2026 releases at 12:00 ET. No 2027 dates are inferred and no automated pilot is claimed without implementation evidence."
     },
     {
       "source_id": "WSSRC-COM-009",
@@ -5831,7 +5862,17 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 260,
       "canonical_dependency_count": 5,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.eia.gov/about/copyrights_reuse.php",
+      "rights_summary": "EIA states that US government publications are public domain and its website data, files, reports and information products may be used and distributed with acknowledgement, subject to third-party exceptions.",
+      "automation_summary": "EIA separately offers a documented API for programmatic data access, but no reviewed STEO release-schedule adapter or fixture exists in WORLD SIGNALS; API availability is not treated as schedule-monitor implementation.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The current EIA STEO schedule confirms all five canonical releases and now extends further into 2027. Additional dates are deferred to a later population pass. No source-specific implementation evidence exists, so verification remains manual."
     },
     {
       "source_id": "WSSRC-COM-010",
@@ -5932,7 +5973,17 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 230,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.weather.gov/disclaimer/",
+      "rights_summary": "NOAA/NWS states that information on its government web pages is public domain unless specifically annotated otherwise, subject to non-endorsement and non-misrepresentation restrictions and third-party exceptions.",
+      "automation_summary": "Public-domain factual content does not itself prove a reviewed production polling route; repository inspection found no NHC-specific parser or fixture implementation.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "NHC is first-order authority for the official 1 June–30 November Atlantic hurricane season. Factual reuse is compatible with NOAA/NWS public-domain terms, but no implemented production endpoint route exists in WORLD SIGNALS."
     },
     {
       "source_id": "WSSRC-RISK-003",
@@ -6048,7 +6099,8 @@
       "activation_status": "ACTIVE",
       "parser_type": "HTML_RULE",
       "known_limitations": [
-        "60-day boundary creates eligibility to request a panel, not a scheduled request or panel establishment."
+        "The dispute-status notice and case page establish request/circulation facts but do not establish the respondent's receipt date required by DSU Article 4.7.",
+        "The standing 60-day legal rule is separated into WSSRC-TRD-008 rather than treating the news/status page as legal authority."
       ],
       "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
       "parser_version": "trade-a-0.1",
@@ -6061,7 +6113,18 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 220,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "backup_source": "WSSRC-TRD-008",
+      "rights_evidence_url": "https://www.wto.org/english/info_e/copyrights_permissions_e.htm",
+      "rights_summary": "WTO distinguishes unrestricted official documents/legal texts, which are free for public use, from other website material whose commercial reuse requires written permission. This source retains only curated factual dispute-status metadata.",
+      "automation_summary": "No WTO DS646-specific production parser or endpoint route exists in WORLD SIGNALS; automated monitoring remains subject to endpoint review.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "WSSRC-TRD-002 remains first-order WTO dispute-status provenance for DS646. DSU Article 4.7 legal authority is decomposed into WSSRC-TRD-008; the existing evidence-bounded 25–28 September eligibility window is unchanged."
     },
     {
       "source_id": "WSSRC-TRD-003",
@@ -6895,7 +6958,12 @@
           "completeness_scope": "EVENT_OR_GOVERNANCE_PAGE",
           "notes": "Observed WHO event publishing stack offers iCal/Outlook/Google Calendar exports. Do not treat export transport as production permission or a stable subscription feed."
         }
-      ]
+      ],
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "WHO's current IGWG governance page confirms the eighth meeting on 14–18 September 2026. Existing WHO terms permit research/private-study extracts but restrict commercial use; the established production rights hold remains in force."
     },
     {
       "source_id": "WSSRC-HEALTH-003",
@@ -7975,15 +8043,25 @@
       ],
       "timezone_scope": "FIXED",
       "parser_version": "regional-b-0.1",
-      "licence_review_status": "NOT_AUDITED",
-      "ingestion_permission": "CURATED_RESEARCH_METADATA_PENDING_RIGHTS_REVIEW",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "licence_review_status": "RIGHTS_HOLD_NO_GENERAL_REUSE_GRANT_IDENTIFIED",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_REFERENCE_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.dipres.gob.cl/",
+      "rights_summary": "No general DIPRES content-reuse licence was identified. DIPRES institutional publications commonly carry explicit all-rights-reserved notices; transparency/public accessibility is not treated as a reuse or commercial licence.",
+      "automation_summary": "No production automated-retrieval grant or implemented DIPRES parser is identified.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "DIPRES is first-order authority that the 2027 Budget bill enters Congress no later than 30 September 2026. The canonical legal/policy latest boundary is unchanged; rights remain conservative and manual."
     },
     {
       "source_id": "WSSRC-REG2-004",
@@ -9108,6 +9186,52 @@
       "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
       "governance_backfill_reviewed_at": "2026-09-05",
       "governance_backfill_basis": "Article 112 is direct constitutional authority for the recurring Annual Financial Statement requirement, but not for an annual presentation date. The source is retained as manual legal provenance only."
+    },
+    {
+      "source_id": "WSSRC-TRD-008",
+      "institution": "World Trade Organization",
+      "jurisdiction": "WTO multilateral",
+      "domain": "trade_sanctions_industrial_policy",
+      "endpoint_role": "WTO Dispute Settlement Understanding Article 4.7 legal basis for consultation-to-panel eligibility",
+      "authoritative_url": "https://www.wto.org/english/tratop_e/dispu_e/dsu_e.htm",
+      "source_type": "official_multilateral_legal_text",
+      "information_supplied": "DSU Article 4.7 provides that if consultations fail to settle a dispute within 60 days after the date of receipt of the consultation request, the complaining party may request establishment of a panel, subject to the article's stated exceptions.",
+      "future_schedule_horizon": "standing legal rule",
+      "typical_advance_notice": "standing law",
+      "machine_readable_available": "HTML",
+      "source_timezone": "Europe/Zurich",
+      "recommended_verification_cadence": "annual legal-text recheck and on WTO dispute-settlement reform",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_LEGAL_TEXT_VERIFICATION",
+      "known_limitations": [
+        "Article 4.7 runs from receipt of the consultation request; it does not establish the DS646 respondent receipt date."
+      ],
+      "backup_source": "https://www.wto.org/english/info_e/copyrights_permissions_e.htm",
+      "notes": "Created to separate the standing DSU legal rule from WSSRC-TRD-002 dispute-status evidence. It is legal provenance only and does not create a monitor route or a new canonical occurrence.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "licence_constraints": "WTO states unrestricted official documents and legal texts are free for public use; logo/trademark and other website material have separate restrictions.",
+      "ingestion_permission": "CURATED_LEGAL_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "CLEARED_WTO_OFFICIAL_LEGAL_TEXT_PUBLIC_USE",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "OFFICIAL_LEGAL_TEXT_PUBLIC_USE_WITH_SOURCE_IDENTIFICATION",
+      "rights_evidence_url": "https://www.wto.org/english/info_e/copyrights_permissions_e.htm",
+      "rights_summary": "WTO copyright guidance states unrestricted official WTO documents and legal texts are free for public use. Other website material is governed separately.",
+      "automation_summary": "Public-use legal-text rights do not prove or activate a production polling route; verification remains manual pending endpoint implementation and review.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_D_WTO_DSU_AUTHORITY_REVIEW",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
+      "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+      "monitoring_priority_score": 20,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-05",
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "DSU Article 4.7 is first-order standing legal authority for the 60-day consultation rule. The source is retained separately from dispute-status evidence and does not resolve the DS646 receipt-date uncertainty."
     }
   ],
   "activation_backlog": [
