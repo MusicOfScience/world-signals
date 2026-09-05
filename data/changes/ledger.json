@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.12",
+  "version": "0.13",
   "reference_date": "2026-09-05",
   "changes": [
     {
@@ -1065,6 +1065,35 @@
       "registry_version_after": "0.23",
       "canonical_mutation_committed": true,
       "committed_at": "2026-09-05T11:33:58+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-eb685d688491acd5fb",
+      "occurrence_id": "WSO-REG-A-0014",
+      "change_type": "CANONICAL_SEMANTIC_CLASSIFICATION_REPAIR",
+      "review_state": "APPROVED_SEMANTIC_RECONCILIATION",
+      "reviewed_at": "2026-09-05T12:00:00+10:00",
+      "commit_mode": "REVIEWED_P1_BALANCED_GOVERNANCE_C",
+      "old_values": {
+        "population_horizon_policy": "EXACT_LEGAL_DEADLINE_ONLY",
+        "notes": "Ministry of Finance explicitly announces the tabling date; no clock time is supplied.",
+        "last_verified_at": "2026-09-02"
+      },
+      "new_values": {
+        "population_horizon_policy": "EXACT_LEGAL_OR_POLICY_MILESTONE_ONLY",
+        "notes": "Malaysia Ministry of Finance explicitly announces Budget 2027 tabling in Parliament on 9 October 2026. This is an authoritatively scheduled policy milestone, not an independently established legal deadline; no clock time is supplied or inferred.",
+        "last_verified_at": "2026-09-05"
+      },
+      "source_assertion_id": "WSA-881d7c4dc6a73eb4",
+      "review_basis": [
+        "Malaysia Ministry of Finance Pre-Budget Statement 2027 explicitly announces tabling on 9 October 2026.",
+        "The source establishes an authoritatively scheduled policy milestone, not an independently established statutory deadline.",
+        "The 9 October civil date, certainty status, source identity and assertion identity remain unchanged.",
+        "Automatic canonical commit and Google Calendar writes remain disabled."
+      ],
+      "registry_version_before": "0.23",
+      "registry_version_after": "0.24",
+      "canonical_mutation_committed": true,
+      "committed_at": "2026-09-05T15:51:47+10:00"
     }
   ]
 }

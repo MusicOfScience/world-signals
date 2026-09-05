@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-05",
-  "version": "1.64",
+  "version": "1.65",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -1873,22 +1873,33 @@
       "activation_status": "ACTIVE_GUARDED",
       "parser_type": "HTML",
       "known_limitations": [
-        "Current public index can lag latest governance documents; retain resolution snapshots."
+        "The stable source-family index may lag specific Board records; retain the direct 2021 Board resolution as backup evidence.",
+        "Resolution B/BG/2021/01 – F/BG/2021/01 fixes Niamey, Niger, 24–28 May 2027 but explicitly retains Abidjan as a fallback if an unexpected need arises to reconsider a proposed host country."
       ],
-      "backup_source": null,
+      "backup_source": "https://www.afdb.org/sites/default/files/documents/board-documents/2021_annual_meetings_-_official_record.pdf",
       "notes": null,
       "timezone_scope": "EVENT_LOCAL",
       "parser_version": null,
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "licence_constraints": null,
-      "ingestion_permission": "NOT_AUDITED",
-      "licence_review_status": "NOT_AUDITED",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "NONCOMMERCIAL_PERSONAL_USE_GENERAL_WEB_CONTENT",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_REFERENCE_ONLY_NO_COMMERCIAL_CONTENT_REUSE_INFERRED",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.afdb.org/en/terms-and-conditions",
+      "rights_summary": "AfDB site terms allow printing, downloading or copying material exclusively for personal and non-commercial use and restrict commercial redistribution or derivative use without written consent.",
+      "automation_summary": "Disclosure and public availability do not establish a production crawler licence.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The direct 2021 Boards of Governors resolution is first-order authority within the existing Annual Meetings governance-document source family. The explicit fallback clause justifies retaining PROVISIONAL canonical certainty; no source split or date change is required."
     },
     {
       "source_id": "WSSRC-COM-001",
@@ -2135,7 +2146,12 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 260,
       "canonical_dependency_count": 5,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "NASS provides authoritative HTML/PDF/iCalendar release schedules and existing source rights clear curated factual metadata. Repository inspection found no NASS-specific parser implementation, fixture or operating evidence, so machine readability does not justify AUTOMATED_PILOT; verification remains manual pending an implemented and reviewed endpoint route."
     },
     {
       "source_id": "WSSRC-COM-006",
@@ -2354,14 +2370,24 @@
       "parser_version": null,
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "licence_constraints": null,
-      "ingestion_permission": "NOT_AUDITED",
-      "licence_review_status": "NOT_AUDITED",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "GENERAL_CONTENT_INTERNAL_USE_ONLY_UNLESS_SPECIFIC_CC_BY",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY; CONTENT_REUSE_SUBJECT_TO PAGE-SPECIFIC TERMS",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 30,
       "canonical_dependency_count": 2,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.bom.gov.au/copyright",
+      "rights_summary": "The Bureau's cyclone page applies CC BY 4.0 to maps, graphs and diagrams unless otherwise noted. General Bureau terms state that content without specific terms may be used personally or within an organisation but not supplied to others or used commercially without permission. The page-element licence is not expanded to all page content.",
+      "automation_summary": "No production crawler or polling permission is inferred from public accessibility, machine readability or page-element Creative Commons licensing.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "BoM is authoritative for the official 1 November–30 April Australian tropical-cyclone season. Canonical use remains manual factual reference because content terms are page/element specific and no production automation grant is identified."
     },
     {
       "source_id": "WSSRC-EL-BR-001",
@@ -6967,7 +6993,12 @@
       "notes": "Session-specific page confirms 19–22 Oct 2026; global governance directory says 19–23. Specific page governs canonical timing; no event mutation required.",
       "source_health_incident_state": "CLOSED_NO_EVENT_CHANGE",
       "source_health_primary_surface": "SESSION_SPECIFIC_PAGE",
-      "source_health_degraded_surface": "WHO_GLOBAL_GOVERNANCE_DIRECTORY"
+      "source_health_degraded_surface": "WHO_GLOBAL_GOVERNANCE_DIRECTORY",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The session-specific WHO Western Pacific page remains first-order timing authority for RC77 on 19–22 October 2026. WHO content permissions do not establish a production crawler licence; verification remains rights-held manual."
     },
     {
       "source_id": "WSSRC-HEALTH-005",
@@ -7362,15 +7393,25 @@
       ],
       "timezone_scope": "FIXED",
       "parser_version": "regional-a-0.1",
-      "licence_review_status": "NOT_AUDITED",
-      "ingestion_permission": "CURATED_RESEARCH_METADATA_PENDING_RIGHTS_REVIEW",
-      "automated_retrieval_permission": "NOT_AUDITED",
-      "redistribution_permission": "NOT_AUDITED",
+      "licence_review_status": "ALL_RIGHTS_RESERVED_NO_UNRESTRICTED_REUSE_GRANT_IDENTIFIED",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_REFERENCE_ONLY_NO_CONTENT_REPUBLICATION_INFERRED",
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 20,
       "canonical_dependency_count": 1,
-      "monitoring_readiness_assessed_at": "2026-09-02"
+      "monitoring_readiness_assessed_at": "2026-09-02",
+      "rights_evidence_url": "https://www.mof.gov.my/portal/en/",
+      "rights_summary": "Malaysia Ministry of Finance pages display Copyright © 2026 Ministry of Finance. All Rights Reserved. No unrestricted content-reuse licence was identified in this review.",
+      "automation_summary": "No production automated-retrieval grant is identified for the Pre-Budget Statement endpoint.",
+      "rights_reviewed_at": "2026-09-05",
+      "rights_review_scope": "P1_BALANCED_GOVERNANCE_C_RIGHTS_AND_AUTHORITY_REVIEW",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "The Pre-Budget Statement 2027 is first-order authority for the announced 9 October 2026 tabling date. It supports a scheduled policy milestone, not a statutory deadline; rights remain held for manual factual reference only."
     },
     {
       "source_id": "WSSRC-REG-010",
@@ -7979,7 +8020,12 @@
       "automation_summary": "The Bank also reserves the right to restrict anomalous access. The financial-policy calendar remains curated provenance, while production monitoring/distribution is held pending a suitable authorised route.",
       "rights_reviewed_at": "2026-09-02T22:35:00+10:00",
       "rights_review_scope": "SOURCE_RIGHTS_E_ASIA_GLOBAL_SOUTH_CORRECTIVE_SOURCES",
-      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice."
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "Banco Central de Chile's current financial-policy calendar confirms the 13/16 November FPM and 17 November FSR. Existing rights review restricts external redistribution and does not clear production polling, so verification remains manual."
     },
     {
       "source_id": "WSSRC-REG2-005",
@@ -8544,7 +8590,12 @@
       "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
       "monitoring_priority_score": 620,
       "canonical_dependency_count": 2,
-      "last_successful_research_verification_at": "2026-09-03"
+      "last_successful_research_verification_at": "2026-09-03",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-05",
+      "governance_backfill_basis": "CBSL's current advance-release calendar is first-order authority for the 30 September and 20 November 2026 public monetary-policy announcement dates. Existing source rights state remains conservative; public access does not establish unrestricted reuse or production polling permission."
     },
     {
       "domain": "monetary_policy",

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.23",
+  "version": "0.24",
   "reference_date": "2026-09-05",
   "record_count": 669,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
@@ -51251,7 +51251,7 @@
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-05",
       "next_verification_due": "SOURCE_SPECIFIC",
       "parent_occurrence_id": null,
       "related_occurrence_ids": [],
@@ -51274,14 +51274,14 @@
       "derivation_sources": [],
       "coverage_program_id": "WSCP-REGIONAL-CORRECTION-A",
       "coverage_repair_reason": "ZERO_CANONICAL_COUNTRY_COVERAGE",
-      "population_horizon_policy": "EXACT_LEGAL_DEADLINE_ONLY",
+      "population_horizon_policy": "EXACT_LEGAL_OR_POLICY_MILESTONE_ONLY",
       "country_system": "Malaysia",
       "selection_rationale": "Authoritative source-ready gap identified in Coverage Audit v0.1; populate complete remaining-2026 series or exact legal fiscal milestone.",
       "future_schedule_deferred": false,
       "publication_bundle_type": "SINGLE_RELEASE",
       "render_cluster_key": null,
       "calendar_aggregation_policy": "STANDALONE",
-      "notes": "Ministry of Finance explicitly announces the tabling date; no clock time is supplied."
+      "notes": "Malaysia Ministry of Finance explicitly announces Budget 2027 tabling in Parliament on 9 October 2026. This is an authoritatively scheduled policy milestone, not an independently established legal deadline; no clock time is supplied or inferred."
     },
     {
       "occurrence_id": "WSO-REG-A-0015",
