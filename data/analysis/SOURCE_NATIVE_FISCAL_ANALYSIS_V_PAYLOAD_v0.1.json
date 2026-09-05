@@ -1,0 +1,221 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "SOURCE_NATIVE_FISCAL_ANALYSIS_V",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-NP-BUDGET-MOF-2083",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Ministry of Finance, Government of Nepal",
+      "host_or_distribution": "Ministry of Finance, Government of Nepal",
+      "title": "Budget speech archive — FY2083/84 budget statement",
+      "url": "https://www.mof.gov.np/category/budget-speech/",
+      "published_at": null,
+      "roles": ["OFFICIAL_OUTCOME"],
+      "supports": [
+        "The Ministry of Finance budget-speech archive lists the FY2083/84 budget statement with the source-native date 15 Jestha 2083.",
+        "The English 2026/27 budget speech is listed separately and later on the archive.",
+        "The archive's CMS publication-time field is not evidence of the constitutional budget-presentation clock time and is not used to resolve canonical Gregorian or UTC timing."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-RN-PRE-20260529",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "Public Service Broadcasting / Radio Nepal",
+      "host_or_distribution": "Radio Nepal",
+      "title": "Budget to focus on good governance and economic revitalization",
+      "url": "https://radionepalonline.com/en/2026/05/29/430529.html",
+      "published_at": "2026-05-29",
+      "roles": ["EXPECTATION_BENCHMARK", "CONTEXT_OR_ALTERNATIVE"],
+      "supports": [
+        "Before presentation, Radio Nepal reported that the National Planning Commission had set an NPR 1.89 trillion budget ceiling.",
+        "A senior Finance Ministry official was reported as expecting a budget in roughly the NPR 1.89-2.00 trillion range.",
+        "The earlier planning envelope is historical expectation context and must not automatically override later pre-event revisions."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-KP-PRE-20260529",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "The Kathmandu Post",
+      "host_or_distribution": "The Kathmandu Post",
+      "title": "Wagle set to unveil large deficit budget above fiscal ceiling",
+      "url": "https://kathmandupost.com/money/2026/05/29/wagle-set-to-unveil-large-deficit-budget-above-fiscal-ceiling",
+      "published_at": "2026-05-29T06:39:00+05:45",
+      "roles": ["EXPECTATION_BENCHMARK", "CONTEXT_OR_ALTERNATIVE"],
+      "supports": [
+        "Before presentation, the article reported that the original NPR 1.89 trillion ceiling had been revised on Wednesday to around NPR 2.15 trillion at the Finance Minister's request.",
+        "The article described the expected spending plan as roughly NPR 2.1-2.2 trillion.",
+        "This later pre-event benchmark supersedes use of the original ceiling as a standalone surprise baseline."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-RN-OUTCOME-20260529",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "Public Service Broadcasting / Radio Nepal",
+      "host_or_distribution": "Radio Nepal",
+      "title": "Budget 2026/27: Budget estimates of 2124 billion for the upcoming fiscal year",
+      "url": "https://radionepalonline.com/en/2026/05/29/430550.html",
+      "published_at": "2026-05-29",
+      "roles": ["OFFICIAL_OUTCOME"],
+      "supports": [
+        "The announced FY2083/84 budget total was NPR 2,124.34 billion.",
+        "Current expenditure was NPR 1,270.58 billion, capital expenditure NPR 431.10 billion and financial management NPR 422.64 billion.",
+        "The reported deficit was NPR 657.29 billion, with NPR 247.28 billion planned from foreign loans and NPR 410 billion from internal loans."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "Republica",
+      "host_or_distribution": "Republica / Nagarik Network",
+      "title": "NEPSE welcomes budget 2026/27 on negative note, index plunges 26.72 points",
+      "url": "https://myrepublica.nagariknetwork.com/news/nepse-welcomes-budget-202627-on-negative-note-index-plunges-2672-points-29-72.html",
+      "published_at": "2026-06-01",
+      "roles": ["MARKET_OBSERVATION"],
+      "supports": [
+        "On the first trading day after the budget announcement, NEPSE fell 26.72 points and closed at 2,755.37.",
+        "The source reports the market opened at 2,782.10, but V preserves the source-reported change and endpoint rather than reconstructing its own event-window baseline."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-KP-MARKET-20260531",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "The Kathmandu Post",
+      "host_or_distribution": "The Kathmandu Post",
+      "title": "Capital market reforms draw mixed response as investors flag tax inequities",
+      "url": "https://kathmandupost.com/money/2026/05/31/capital-market-reforms-draw-mixed-response-as-investors-flag-tax-inequities",
+      "published_at": "2026-05-31T15:49:00+05:45",
+      "roles": ["CONTEXT_OR_ALTERNATIVE"],
+      "supports": [
+        "Market participants welcomed final-tax treatment and some structural capital-market reforms while criticising higher capital-gains tax rates and the absence of portfolio loss offsets.",
+        "The article also describes weak corporate performance and hesitant investor demand as pre-existing constraints on market momentum.",
+        "The budget therefore contained internally mixed capital-market signals rather than a single-direction equity catalyst."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NP-BUDGET-FCGO-20260903",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Financial Comptroller General Office, Government of Nepal",
+      "host_or_distribution": "Financial Comptroller General Office",
+      "title": "Daily Receipts & Payments Status — as of 2083-05-18 / 2026-09-03",
+      "url": "https://old.fcgo.gov.np/daily-budgetary-analysis",
+      "published_at": "2026-09-03",
+      "roles": ["SECOND_ORDER_OBSERVATION"],
+      "supports": [
+        "As of 3 September 2026, the page reported total Treasury expenditure at 5.79 percent of the annual budget.",
+        "Recurrent expenditure was 5.69 percent, capital expenditure 1.19 percent and financing 10.78 percent.",
+        "The FCGO explicitly warns that the data are unprocessed and subject to change after reconciliation, with direct-payment expenditure only partially included."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    }
+  ],
+  "reviews": [
+    {
+      "analysis_id": "WSAN-NP-BUDGET-2083-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T18:45:00Z",
+      "canonical_occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+      "canonical_series_id": "WSER-FIS-NP-FEDERAL-BUDGET",
+      "canonical_event_type": "FISCAL_POLICY_PROCESS",
+      "canonical_institution": "Ministry of Finance, Government of Nepal",
+      "canonical_release_utc": null,
+      "scope": "FY2083/84 Nepal federal budget presentation: source-native canonical date preservation, evolving pre-event budget-size expectations, first-trading-day NEPSE observation and reconciliation-qualified implementation follow-through",
+      "what_happened": {
+        "summary": "The government announced an FY2083/84 budget of NPR 2,124.34 billion. Radio Nepal reported NPR 1,270.58 billion for current expenditure, NPR 431.10 billion for capital expenditure and NPR 422.64 billion for financial management, with a reported NPR 657.29 billion deficit.",
+        "actuals": [
+          {"metric": "total_budget", "value": 2124.34, "unit": "NPR_billion", "evidence_refs": ["WSEV-NP-BUDGET-RN-OUTCOME-20260529"]},
+          {"metric": "current_expenditure", "value": 1270.58, "unit": "NPR_billion", "evidence_refs": ["WSEV-NP-BUDGET-RN-OUTCOME-20260529"]},
+          {"metric": "capital_expenditure", "value": 431.10, "unit": "NPR_billion", "evidence_refs": ["WSEV-NP-BUDGET-RN-OUTCOME-20260529"]},
+          {"metric": "budget_deficit", "value": 657.29, "unit": "NPR_billion", "evidence_refs": ["WSEV-NP-BUDGET-RN-OUTCOME-20260529"]},
+          {"metric": "planned_internal_loans", "value": 410.0, "unit": "NPR_billion", "evidence_refs": ["WSEV-NP-BUDGET-RN-OUTCOME-20260529"]}
+        ],
+        "evidence_refs": ["WSEV-NP-BUDGET-MOF-2083", "WSEV-NP-BUDGET-RN-OUTCOME-20260529"]
+      },
+      "what_was_expected": {
+        "summary": "The expectation set moved before presentation. Radio Nepal still reported the original NPR 1.89 trillion NPC ceiling and an NPR 1.89-2.00 trillion preparation range on presentation day, but Kathmandu Post reported that the ceiling had already been revised to around NPR 2.15 trillion and that the likely budget was roughly NPR 2.1-2.2 trillion. The latest pre-event benchmark therefore matters more than the stale early ceiling.",
+        "benchmarks": [
+          {"metric": "initial_planning_ceiling", "value": 1890.0, "unit": "NPR_billion", "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION", "evidence_refs": ["WSEV-NP-BUDGET-RN-PRE-20260529"]},
+          {"metric": "reported_revised_ceiling", "value": 2150.0, "unit": "NPR_billion", "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION", "evidence_refs": ["WSEV-NP-BUDGET-KP-PRE-20260529"]},
+          {"metric": "latest_reported_budget_range", "value": "approximately NPR 2.1-2.2 trillion", "unit": "range", "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION", "evidence_refs": ["WSEV-NP-BUDGET-KP-PRE-20260529"]}
+        ],
+        "evidence_refs": ["WSEV-NP-BUDGET-RN-PRE-20260529", "WSEV-NP-BUDGET-KP-PRE-20260529"]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The final NPR 2.12434 trillion headline was materially above the original NPR 1.89 trillion planning envelope, but that earlier ceiling had been revised before presentation. Relative to the later reported NPR 2.15 trillion ceiling and NPR 2.1-2.2 trillion range, the headline budget size was not a clear surprise. V does not manufacture surprise by freezing the earliest available benchmark.",
+        "comparisons": [
+          {"comparison_kind": "QUANTITATIVE", "metric": "total_budget_vs_reported_revised_ceiling", "actual": 2124.34, "expected": 2150.0, "difference": -25.66, "unit": "NPR_billion", "direction": "BELOW_REPORTED_REVISED_CEILING"},
+          {"comparison_kind": "QUALITATIVE", "metric": "total_budget_vs_latest_reported_range", "actual": "NPR 2.12434 trillion", "expected": "approximately NPR 2.1-2.2 trillion", "direction": "WITHIN_LATEST_REPORTED_RANGE"}
+        ],
+        "evidence_refs": ["WSEV-NP-BUDGET-RN-PRE-20260529", "WSEV-NP-BUDGET-KP-PRE-20260529", "WSEV-NP-BUDGET-RN-OUTCOME-20260529"]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-NP-BUDGET-2083-NEPSE",
+          "movement_type": "EQUITY_INDEX",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "Nepal Stock Exchange (NEPSE) benchmark index",
+          "before_value": null,
+          "after_value": 2755.37,
+          "unit": "index_points",
+          "change": -26.72,
+          "change_unit": "index_points",
+          "direction": "LOWER",
+          "measurement_window": "source-reported first trading day after the FY2026/27 budget announcement; session-level change and close, not an independently reconstructed immediate event window",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": ["WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601"]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "TEMPORAL_COINCIDENCE_ONLY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "NEPSE fell on the first trading day after the budget, establishing a clear sequence but not a clean causal event window. The budget contained both market-supportive reforms and criticised tax changes, while pre-existing corporate weakness and investor hesitation were also present. V therefore records timing and market response without claiming that the budget as a whole caused the index decline.",
+        "evidence_refs": ["WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601", "WSEV-NP-BUDGET-KP-MARKET-20260531"]
+      },
+      "what_may_be_noise": [
+        {"summary": "The market observation is a full first-trading-day session after the budget rather than an immediate high-frequency event window, so unrelated information and ordinary trading dynamics can contaminate the move.", "evidence_refs": ["WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601"]},
+        {"summary": "The capital-market package itself was mixed: final-tax treatment and structural reforms were welcomed while higher CGT rates and missing portfolio loss offsets were criticised.", "evidence_refs": ["WSEV-NP-BUDGET-KP-MARKET-20260531"]}
+      ],
+      "alternative_explanations": [
+        {"summary": "Specific capital-market tax provisions could have mattered more for the first post-budget session than the aggregate fiscal stance or headline budget size.", "evidence_refs": ["WSEV-NP-BUDGET-KP-MARKET-20260531"]},
+        {"summary": "Weak corporate performance and hesitant investor demand were pre-existing constraints and could independently depress equity prices despite supportive policy measures.", "evidence_refs": ["WSEV-NP-BUDGET-KP-MARKET-20260531"]},
+        {"summary": "Because canonical timing remains source-native with no authoritative Gregorian/UTC event timestamp, V does not construct an artificial intraday before/after market window from noncanonical reporting dates.", "evidence_refs": ["WSEV-NP-BUDGET-MOF-2083", "WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601"]}
+      ],
+      "second_order_effects": {
+        "status": "OBSERVED",
+        "summary": "By 3 September 2026, the FCGO daily status reported total Treasury expenditure at 5.79 percent of the annual budget and capital expenditure at 1.19 percent. This is an observed implementation signal, not a success/failure verdict: the issuing office explicitly says the daily data are unprocessed, subject to reconciliation and only partially include direct-payment expenditure.",
+        "observations": [
+          {"metric": "total_expenditure_share_of_annual_budget", "value": 5.79, "unit": "percent", "as_of": "2026-09-03", "evidence_refs": ["WSEV-NP-BUDGET-FCGO-20260903"]},
+          {"metric": "capital_expenditure_share_of_annual_budget", "value": 1.19, "unit": "percent", "as_of": "2026-09-03", "evidence_refs": ["WSEV-NP-BUDGET-FCGO-20260903"]}
+        ],
+        "evidence_refs": ["WSEV-NP-BUDGET-FCGO-20260903"]
+      },
+      "falsifiers": [
+        "If stronger evidence shows that the reported revision to the NPR 2.15 trillion ceiling was not operative before the budget was presented, the no-clear-surprise conclusion should be revisited.",
+        "If high-frequency or exchange-source reconstruction shows the first post-budget NEPSE move was primarily driven by a distinct catalyst unrelated to the budget package, even descriptive budget-linked interpretation should be weakened.",
+        "If reconciled FCGO data materially revise the 3 September expenditure snapshot, the recorded second-order observation must be updated rather than treated as durable fact.",
+        "If a competent canonical authority supplies an authoritative Gregorian mapping or event clock time for 15 Jestha 2083, canonical timing may be updated upstream; analytical evidence alone must not perform that conversion."
+      ],
+      "analytical_conclusion": "Nepal's FY2083/84 budget is a useful non-Western fiscal-process specimen precisely because the clean story is not available. The headline size was not a clear surprise relative to the latest pre-event benchmark, NEPSE fell in the first post-budget session without establishing budget-wide causality, and early implementation data provide an observed but unreconciled follow-through signal. The canonical date remains 15 Jestha 2083 with authoritative Gregorian conversion unresolved; Analysis must preserve that fact rather than silently replacing it with a reporting date.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ]
+}

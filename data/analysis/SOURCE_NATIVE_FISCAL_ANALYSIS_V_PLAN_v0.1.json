@@ -1,0 +1,148 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "SOURCE_NATIVE_FISCAL_ANALYSIS_V",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "1bfa947d1fbd86e945349991778944094a78e5ed",
+  "purpose": "Stress-test the Analysis layer with a completed source-native fiscal occurrence whose canonical Gregorian/UTC timing remains unresolved, while preserving evolving pre-event expectations, a non-causal first-market observation and a reconciliation-qualified observed implementation signal.",
+  "preconditions": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_schema_version": "0.2",
+    "analysis_reviews_version": "0.4",
+    "analysis_review_count": 8,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.29",
+      "record_count": 678
+    },
+    "analysis_evidence_version": "0.4",
+    "analysis_evidence_count": 21,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 8,
+    "reviewed_event_type_diversity": 7,
+    "required_target_occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+    "required_target_native_date_label": "15 Jestha 2083",
+    "required_target_gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION",
+    "required_target_start_local": null,
+    "required_target_start_utc": null,
+    "required_absent_analysis_ids": ["WSAN-NP-BUDGET-2083-001"],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-FIS-NP-BUDGET-2083",
+    "selection_rationale": [
+      "Adds FISCAL_POLICY_PROCESS to reviewed event-type diversity.",
+      "Directly tests source-native canonical timing semantics that the current public Analysis projection drops.",
+      "Supports a changing-expectation case: the initial Rs1.89tn planning ceiling was revised before presentation, so the final budget cannot be compared only with the stale early ceiling.",
+      "Supports a first-trading-day market observation without requiring a causal claim.",
+      "Supports an observed implementation follow-through from official daily expenditure data while preserving the issuing office's reconciliation warning."
+    ],
+    "held_occurrence_ids": [
+      "WSO-ddb70f8ff05a58fb",
+      "WSO-BWC-WG-2026-S08",
+      "WSO-WOAH-GS-093"
+    ],
+    "hold_rationale": "BoC, BWC and WOAH remain analytically eligible. V selects Nepal for contract pressure, not FIFO/backlog completion; the held cases remain available for later controlled expansion."
+  },
+  "analysis_schema_evolution": {
+    "from_version": "0.2",
+    "to_version": "0.3",
+    "new_policy": {
+      "canonical_temporal_context_must_be_preserved_in_public_projection": true,
+      "source_native_calendar_semantics_must_not_be_dropped": true,
+      "analytical_evidence_may_not_resolve_missing_canonical_gregorian_or_utc_time": true,
+      "public_projection_may_not_infer_missing_canonical_time": true
+    },
+    "required_public_canonical_temporal_fields": [
+      "timing_type",
+      "time_precision",
+      "time_status",
+      "time_basis",
+      "publication_time_semantics",
+      "all_day_semantics",
+      "start_local",
+      "end_local",
+      "start_utc",
+      "end_utc",
+      "source_timezone",
+      "date_earliest",
+      "date_latest",
+      "native_calendar_system",
+      "native_calendar_year",
+      "native_calendar_month",
+      "native_calendar_day",
+      "source_native_date_label",
+      "gregorian_resolution_status"
+    ],
+    "design_decision": "Analysis may enrich interpretation but must project canonical temporal truth losslessly enough to distinguish an unresolved Gregorian mapping from an undated event. A Gregorian date appearing in analytical evidence is not canonical conversion authority."
+  },
+  "new_analysis_id": "WSAN-NP-BUDGET-2083-001",
+  "new_evidence_ids": [
+    "WSEV-NP-BUDGET-MOF-2083",
+    "WSEV-NP-BUDGET-RN-PRE-20260529",
+    "WSEV-NP-BUDGET-KP-PRE-20260529",
+    "WSEV-NP-BUDGET-RN-OUTCOME-20260529",
+    "WSEV-NP-BUDGET-REPUBLICA-NEPSE-20260601",
+    "WSEV-NP-BUDGET-KP-MARKET-20260531",
+    "WSEV-NP-BUDGET-FCGO-20260903"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.5",
+    "analysis_review_count": 9,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_evidence_version": "0.5",
+    "analysis_evidence_count": 28,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 9,
+    "reviewed_event_type_diversity": 8,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-BWC-WG-2026-S08",
+      "WSO-WOAH-GS-093",
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "noncanonical_gregorian_date_may_resolve_canonical_native_date": false,
+    "stale_early_expectation_may_override_later_pre_event_expectation": false,
+    "first_post_event_market_move_establishes_causality": false,
+    "raw_implementation_snapshot_establishes_policy_success_or_failure": false,
+    "backlog_completion_is_population_objective": false
+  }
+}
