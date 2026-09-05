@@ -20,17 +20,19 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
         cls.overlay=json.loads((ROOT/"data/coverage/biosecurity_overlay.json").read_text(encoding="utf-8"))
         cls.public=public_biosecurity_projection(cls.registry,cls.overlay)
 
+    def occurrence_count(self, series_ids):
+        return sum(1 for row in self.registry["records"] if row.get("series_id") in set(series_ids))
+
     def test_public_projection_preserves_boundary(self):
         metadata=self.public["metadata"]
         self.assertEqual(metadata["canonical_registry_version"],self.registry["version"])
         self.assertEqual(metadata["canonical_record_count"],len(self.registry["records"]))
+        membership_series={row["series_id"] for row in self.overlay["canonical_series_memberships"]}
+        self.assertEqual(metadata["mapped_canonical_series_count"],len(membership_series))
+        self.assertEqual(metadata["mapped_canonical_occurrence_count"],self.occurrence_count(membership_series))
         if version_tuple(self.overlay["version"]) < (0,2):
-            self.assertEqual(metadata["mapped_canonical_series_count"],5)
-            self.assertEqual(metadata["mapped_canonical_occurrence_count"],10)
             self.assertEqual(metadata["candidate_node_count"],4)
         else:
-            self.assertEqual(metadata["mapped_canonical_series_count"],7)
-            self.assertEqual(metadata["mapped_canonical_occurrence_count"],12)
             self.assertEqual(metadata["candidate_node_count"],2)
         self.assertFalse(metadata["candidate_nodes_are_canonical"])
         self.assertFalse(metadata["canonical_mutation_authorized"])
@@ -46,8 +48,15 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
     def test_system_counts_show_cross_domain_biosecurity_shape(self):
         systems={row["system_id"]:row for row in self.public["systems"]}
         human=systems["BIO-HUMAN-HEALTH-GOVERNANCE"]
+        human_series={
+            "WSER-HEALTH-WHA",
+            "WSER-HEALTH-WHO-EB",
+            "WSER-HEALTH-WHO-IGWG",
+            "WSER-HEALTH-WHO-PBAC",
+            "WSER-HEALTH-WHO-RC",
+        }
         self.assertEqual(human["canonical_series_count"],5)
-        self.assertEqual(human["canonical_occurrence_count"],10)
+        self.assertEqual(human["canonical_occurrence_count"],self.occurrence_count(human_series))
         self.assertEqual(human["candidate_node_count"],1)
         if version_tuple(self.overlay["version"]) < (0,2):
             self.assertEqual(systems["BIO-ANIMAL-ZOONOTIC-HEALTH"]["canonical_series_count"],0)
@@ -59,8 +68,14 @@ class BiosecurityPublicProjectionTests(unittest.TestCase):
             animal=systems["BIO-ANIMAL-ZOONOTIC-HEALTH"]
             arms=systems["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"]
             plant=systems["BIO-PLANT-PHYTOSANITARY-SECURITY"]
-            self.assertEqual((animal["canonical_series_count"],animal["canonical_occurrence_count"],animal["candidate_node_count"]),(1,1,0))
-            self.assertEqual((arms["canonical_series_count"],arms["canonical_occurrence_count"],arms["candidate_node_count"]),(1,1,0))
+            self.assertEqual(
+                (animal["canonical_series_count"],animal["canonical_occurrence_count"],animal["candidate_node_count"]),
+                (1,self.occurrence_count({"WSER-AGF-WOAH-GENERAL-SESSION"}),0),
+            )
+            self.assertEqual(
+                (arms["canonical_series_count"],arms["canonical_occurrence_count"],arms["candidate_node_count"]),
+                (1,self.occurrence_count({"WSER-INT-BWC-WG-STRENGTHENING"}),0),
+            )
             self.assertEqual((plant["canonical_series_count"],plant["candidate_node_count"]),(0,1))
 
     def test_browser_module_is_read_only_and_build_bundles_it(self):
