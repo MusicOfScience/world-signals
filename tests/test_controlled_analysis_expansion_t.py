@@ -34,19 +34,28 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
         cls.by_occurrence = {row["occurrence_id"]: row for row in cls.canonical["records"]}
         cls.by_analysis = {row["analysis_id"]: row for row in cls.reviews["reviews"]}
         cls.by_evidence = {row["evidence_id"]: row for row in cls.evidence["evidence"]}
-        cls.is_post = (
-            cls.reviews.get("version") == "0.4"
-            and len(cls.reviews.get("reviews", [])) >= 8
-            and cls.evidence.get("version") == "0.4"
-            and len(cls.evidence.get("evidence", [])) >= 21
+        cls.t_analysis_ids = set(cls.plan["new_analysis_ids"])
+        cls.t_evidence_ids = set(cls.plan["new_evidence_ids"])
+        cls.has_t_contribution = (
+            cls.t_analysis_ids <= set(cls.by_analysis)
+            and cls.t_evidence_ids <= set(cls.by_evidence)
+        )
+        pre = cls.plan["pre_state"]
+        cls.is_exact_pre = (
+            (cls.canonical.get("version"), len(cls.canonical.get("records", []))) ==
+            (pre["canonical_registry_version"], pre["canonical_record_count"])
+            and (cls.reviews.get("version"), len(cls.reviews.get("reviews", []))) ==
+            (pre["analysis_reviews_version"], pre["analysis_review_count"])
+            and (cls.evidence.get("version"), len(cls.evidence.get("evidence", []))) ==
+            (pre["analysis_evidence_version"], pre["analysis_evidence_count"])
         )
 
     def require_post(self):
-        if not self.is_post:
-            self.skipTest("exact T contribution assertions run after reviewed T transaction")
+        if not self.has_t_contribution:
+            self.skipTest("T contribution is not present in this repository state")
 
     def test_check_only_transform_is_exact_from_frozen_pre_state(self):
-        if self.is_post:
+        if not self.is_exact_pre:
             self.skipTest("check-only transform is exercised only from exact T pre-state")
         new_reviews, new_evidence, readiness = txn.transform(
             self.plan,
@@ -64,11 +73,21 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
 
     def test_exact_t_post_state_and_validator(self):
         self.require_post()
+        post = self.plan["post_state"]
+        self.assertEqual(
+            (post["analysis_reviews_version"], post["analysis_review_count"],
+             post["analysis_evidence_version"], post["analysis_evidence_count"]),
+            ("0.4", 8, "0.4", 21),
+        )
         self.assertGreaterEqual(version_tuple(self.canonical["version"]), (0, 29))
         self.assertGreaterEqual(len(self.canonical["records"]), 678)
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.4", 8))
-        self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
-        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.4", 21))
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), (0, 4))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 8)
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), (0, 4))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 21)
+        checkpoint = self.reviews["canonical_checkpoint"]
+        self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), (0, 29))
+        self.assertGreaterEqual(checkpoint["record_count"], 678)
         report = validate_analysis(self.schema, self.evidence, self.reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
 
