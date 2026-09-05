@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.32",
+  "version": "0.33",
   "reference_date": "2026-09-06",
-  "record_count": 682,
+  "record_count": 683,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56005,6 +56005,101 @@
       ],
       "derivation_sources": [
         "WSSRC-FIN-001"
+      ]
+    },
+    {
+      "occurrence_id": "WSO-HEALTH-WHA-079",
+      "series_id": "WSER-HEALTH-WHA",
+      "external_source_id": null,
+      "canonical_name": "79th World Health Assembly",
+      "short_calendar_title": "79th World Health Assembly",
+      "category": "HEALTH_BIOSECURITY",
+      "subcategory": "global_health_governance",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "institution": "World Health Organization",
+      "event_type": "HEALTH_GOVERNANCE_EVENT",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "start_local": "2026-05-18",
+      "end_local": "2026-05-23",
+      "source_timezone": "Europe/Zurich",
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": null,
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-HEALTH-001",
+      "primary_source_assertion_id": "WSA-AD-07354478cbeaad0b",
+      "last_successful_assertion_id": "WSA-AD-9fab78c505e911cc",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical occurrence admitted after authoritative post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AD-9fab78c505e911cc",
+          "basis": "WHO first-party governing-body archive and 23 May closing material establish that the 79th World Health Assembly occurred in Geneva on 18-23 May 2026 and closed on 23 May. Completion is not inferred from elapsed time. The authoritative 09:00 opening-session time is evidentiary context only and is not promoted into a synthetic timestamp for the six-day Assembly."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-HEALTH-006",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://apps.who.int/gb/e/e_WHA79.html"
+        }
+      ],
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "MEDIUM_HIGH",
+      "transmission_channels": [
+        "health_security",
+        "public_health",
+        "pharmaceuticals",
+        "biotechnology",
+        "trade",
+        "government_policy",
+        "development_finance",
+        "supply_chains"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ESSENTIAL",
+      "health_process_type": "GLOBAL_HEALTH_GOVERNANCE",
+      "health_security_relevance": "HIGH",
+      "governance_aliases": [],
+      "pandemic_agreement_component": null,
+      "health_emergency_routing": "ROUTE_OUTBREAK_TO_SHOCK_CANDIDATE",
+      "outbreak_or_incident_is_calendar_event": false,
+      "publication_bundle_type": "SINGLE_RELEASE",
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE",
+      "notes": "WHO first-party governing-body archive and 23 May closing material establish that the 79th World Health Assembly occurred in Geneva on 18-23 May 2026 and closed on 23 May. Completion is not inferred from elapsed time. The authoritative 09:00 opening-session time is evidentiary context only and is not promoted into a synthetic timestamp for the six-day Assembly. WHA79 remains distinct from the continuing WHO Pandemic Agreement IGWG/PABS process; the Assembly's opening-session clock is not promoted to whole-event canonical time.",
+      "location": "Geneva, Switzerland",
+      "population_tranche": "WHO_WHA79_HISTORICAL_ANCHOR_AD",
+      "derivation_sources": [
+        "WSSRC-HEALTH-001",
+        "WSSRC-HEALTH-006"
       ]
     }
   ]

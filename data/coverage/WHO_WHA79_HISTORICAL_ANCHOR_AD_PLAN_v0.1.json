@@ -1,0 +1,163 @@
+{
+  "project": "WORLD SIGNALS",
+  "plan": "WHO_WHA79_HISTORICAL_ANCHOR_AD",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "de352644445d6b5e445aba7793c0e16f5960efc4",
+  "architecture_position": "CANONICAL_HISTORICAL_ANCHOR",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.32",
+    "canonical_record_count": 682,
+    "source_registry_version": "1.73",
+    "source_record_count": 239,
+    "change_ledger_version": "0.19",
+    "change_ledger_count": 54,
+    "biosecurity_overlay_version": "0.7",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.32",
+      "record_count": 682
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-HEALTH-WHA-079"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-HEALTH-006"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-38d91b77af7e59dfe1"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-HEALTH-A-0010",
+      "series_id": "WSER-HEALTH-WHA",
+      "source_id": "WSSRC-HEALTH-001",
+      "institution": "World Health Organization",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "category": "HEALTH_BIOSECURITY",
+      "subcategory": "global_health_governance",
+      "event_type": "HEALTH_GOVERNANCE_EVENT",
+      "expected_market_sensitivity": "MEDIUM",
+      "health_security_relevance": "HIGH"
+    },
+    "required_primary_source": {
+      "source_id": "WSSRC-HEALTH-001",
+      "institution": "World Health Organization",
+      "authoritative_url": "https://apps.who.int/gb/GOV/en/dates-of-meetings-eb_en.html",
+      "canonical_dependency_count": 6,
+      "actual_primary_dependency_count": 6
+    }
+  },
+  "new_source": {
+    "source_id": "WSSRC-HEALTH-006",
+    "clone_source_id": "WSSRC-HEALTH-001",
+    "institution": "World Health Organization",
+    "jurisdiction": "Global",
+    "domain": "health_biosecurity",
+    "endpoint_role": "WHA79 governing-body archive and closing evidence",
+    "authoritative_url": "https://apps.who.int/gb/e/e_WHA79.html",
+    "backup_source": "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
+    "source_type": "official_governance_outcome_archive",
+    "information_supplied": "WHA79 journals, resolutions, decisions and first-party post-event closure evidence for 18-23 May 2026.",
+    "future_schedule_horizon": "historical completion archive only; not forward schedule authority",
+    "typical_advance_notice": "not applicable historical archive",
+    "source_timezone": "Europe/Zurich",
+    "canonical_dependency_count": 0,
+    "notes": "Supporting-only historical factual provenance. Inherit the reviewed WHO source family's conservative manual-information and production-automation rights posture; public accessibility is not crawler permission."
+  },
+  "anchor": {
+    "occurrence_id": "WSO-HEALTH-WHA-079",
+    "template_occurrence_id": "WSO-HEALTH-A-0010",
+    "series_id": "WSER-HEALTH-WHA",
+    "source_id": "WSSRC-HEALTH-001",
+    "completion_source_id": "WSSRC-HEALTH-006",
+    "canonical_name": "79th World Health Assembly",
+    "short_calendar_title": "79th World Health Assembly",
+    "timing": {
+      "timing_type": "MULTI_DAY_LOCAL",
+      "start_local": "2026-05-18",
+      "end_local": "2026-05-23",
+      "source_timezone": "Europe/Zurich",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+    },
+    "location": "Geneva, Switzerland",
+    "lifecycle_status": "COMPLETED",
+    "certainty_status": "CONFIRMED",
+    "primary_source_assertion_id": "WSA-AD-07354478cbeaad0b",
+    "completion_source_assertion_id": "WSA-AD-9fab78c505e911cc",
+    "change_id": "WSCHANGE-38d91b77af7e59dfe1",
+    "schedule_url": "https://apps.who.int/gb/GOV/en/dates-of-meetings-eb_en.html",
+    "assembly_page_url": "https://www.who.int/about/governance/world-health-assembly/seventy-ninth",
+    "archive_url": "https://apps.who.int/gb/e/e_WHA79.html",
+    "opening_journal_url": "https://apps.who.int/gb/ebwha/pdf_files/WHA79/JRN-A79-1_en.pdf",
+    "closing_update_url": "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
+    "closing_remarks_url": "https://www.who.int/news-room/speeches/item/who-director-general-s-closing-remarks-at-the-79th-world-health-assembly----23-may-2026",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "WHO first-party governing-body archive and 23 May closing material establish that the 79th World Health Assembly occurred in Geneva on 18-23 May 2026 and closed on 23 May. Completion is not inferred from elapsed time. The authoritative 09:00 opening-session time is evidentiary context only and is not promoted into a synthetic timestamp for the six-day Assembly."
+  },
+  "mutation_policy": {
+    "canonical_registry": true,
+    "source_registry": true,
+    "source_registry_existing_record_scope": [
+      "WSSRC-HEALTH-001"
+    ],
+    "source_registry_new_record_scope": [
+      "WSSRC-HEALTH-006"
+    ],
+    "change_ledger": true,
+    "biosecurity_overlay_checkpoint_only": true,
+    "canonical_schema": false,
+    "monitor_configuration": false,
+    "analysis_schema": false,
+    "analysis_reviews": false,
+    "analysis_evidence": false,
+    "calendar": false,
+    "automatic_canonical_commit": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.33",
+    "canonical_record_count": 683,
+    "source_registry_version": "1.74",
+    "source_record_count": 240,
+    "primary_source_dependency_count": 7,
+    "supporting_source_dependency_count": 0,
+    "change_ledger_version": "0.20",
+    "change_ledger_count": 55,
+    "biosecurity_overlay_version": "0.8",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.33",
+      "record_count": 683
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "eligible_completed_occurrence_count": 16,
+    "reviewed_occurrence_count": 12,
+    "health_biosecurity_completed_anchor_present": true,
+    "health_governance_event_completed_type_present": true
+  },
+  "selection_discipline": {
+    "queue_completion_is_objective": false,
+    "elapsed_time_is_completion_evidence": false,
+    "opening_session_clock_is_whole_event_time": false,
+    "new_series_created": false,
+    "supporting_source_becomes_primary_source": false,
+    "wha_completion_implies_pabs_completion": false,
+    "resolution_count_is_impact_magnitude": false,
+    "who_only_concentration_is_repaired": false,
+    "analysis_write_in_same_transaction": false,
+    "calendar_write": false
+  }
+}
