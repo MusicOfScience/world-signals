@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.19",
+  "version": "0.20",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1591,6 +1591,44 @@
       "committed_at": "2026-09-06T06:54:26+10:00",
       "registry_version_before": "0.31",
       "registry_version_after": "0.32",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-38d91b77af7e59dfe1",
+      "occurrence_id": "WSO-HEALTH-WHA-079",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-HEALTH-WHA",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-05-18",
+        "end_local": "2026-05-23",
+        "source_timezone": "Europe/Zurich",
+        "start_utc": null,
+        "time_precision": "DAY"
+      },
+      "source_assertion_id": "WSA-AD-9fab78c505e911cc",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T07:08:35+10:00",
+      "review_basis": [
+        "https://apps.who.int/gb/GOV/en/dates-of-meetings-eb_en.html",
+        "https://www.who.int/about/governance/world-health-assembly/seventy-ninth",
+        "https://apps.who.int/gb/e/e_WHA79.html",
+        "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
+        "https://www.who.int/news-room/speeches/item/who-director-general-s-closing-remarks-at-the-79th-world-health-assembly----23-may-2026",
+        "WHO first-party governing-body archive and 23 May closing material establish that the 79th World Health Assembly occurred in Geneva on 18-23 May 2026 and closed on 23 May. Completion is not inferred from elapsed time. The authoritative 09:00 opening-session time is evidentiary context only and is not promoted into a synthetic timestamp for the six-day Assembly.",
+        "Existing WHA series and primary schedule source are reused; supporting outcome provenance remains a distinct source role.",
+        "Completion is admitted only from WHO first-party post-event evidence, never elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_WHO_WHA79_HISTORICAL_ANCHOR_AD",
+      "committed_at": "2026-09-06T07:08:35+10:00",
+      "registry_version_before": "0.32",
+      "registry_version_after": "0.33",
       "canonical_mutation_committed": true
     }
   ]
