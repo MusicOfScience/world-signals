@@ -10,6 +10,11 @@
     "canonical_record_count": 673,
     "source_registry_version": "1.68",
     "source_record_count": 231,
+    "biosecurity_overlay_version": "0.2",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.27",
+      "record_count": 673
+    },
     "required_absent_occurrence_ids": ["WSO-FIS-NP-BUDGET-2084"],
     "required_absent_series_ids": ["WSER-FIS-NP-FEDERAL-BUDGET"],
     "required_absent_source_ids": ["WSSRC-FIS-026", "WSSRC-FIS-027"],
@@ -22,6 +27,12 @@
     "canonical_record_count": 674,
     "source_registry_version": "1.69",
     "source_record_count": 233,
+    "biosecurity_overlay_version": "0.3",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.28",
+      "record_count": 674
+    },
+    "biosecurity_overlay_semantic_content_unchanged": true,
     "new_series_count": 1,
     "new_occurrence_count": 1,
     "new_source_count": 2,
@@ -43,6 +54,12 @@
     ],
     "fiscal_process_milestone_type": "BUDGET_PRESENTATION",
     "design_decision": "An authoritative source-native civil-calendar date may be canonical before an authoritative Gregorian mapping exists. Preserve native calendar components and keep Gregorian timing fields empty until a competent mapping is available; event certainty and Gregorian-resolution status are independent."
+  },
+  "overlay_alignment": {
+    "file": "data/coverage/biosecurity_overlay.json",
+    "reason": "The overlay contract is pinned to the exact canonical checkpoint. Nepal does not alter any biosecurity system, relationship, membership or candidate; only overlay version and canonical_checkpoint advance so referential validation remains true.",
+    "allowed_changed_top_level_fields": ["version", "canonical_checkpoint"],
+    "forbidden_semantic_changes": ["principles", "systems", "relationships", "canonical_series_memberships", "candidate_nodes", "notes"]
   },
   "sources": [
     {
