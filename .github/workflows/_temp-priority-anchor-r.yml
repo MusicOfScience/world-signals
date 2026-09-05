@@ -18,54 +18,47 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print exact priority-region canonical inventory
+      - name: Print completed-anchor and target-series semantics
         shell: bash
         run: |
           python - <<'PY'
           import json
-          from collections import defaultdict, Counter
           from pathlib import Path
 
           canonical=json.loads(Path('data/canonical/registry.json').read_text())
           sources=json.loads(Path('data/sources/registry.json').read_text())
-          source_by_id={s.get('source_id'):s for s in sources.get('sources',[])}
-          regions=['Africa','South Asia','Southeast Asia','Latin America']
+          schema=json.loads(Path('data/canonical/schema.json').read_text())
+          by_occ={r['occurrence_id']:r for r in canonical['records']}
+          by_source={s['source_id']:s for s in sources['sources']}
 
-          print('CHECKPOINT', canonical.get('version'), len(canonical.get('records',[])), sources.get('version'), len(sources.get('sources',[])))
-          for region in regions:
-              rows=[r for r in canonical['records'] if r.get('region')==region]
-              grouped=defaultdict(list)
-              for r in rows: grouped[r.get('series_id')].append(r)
-              print(f'\n=== REGION {region} occurrences={len(rows)} series={len(grouped)} ===')
-              for sid, rr in sorted(grouped.items(), key=lambda kv: (kv[1][0].get('institution',''), kv[0] or '')):
-                  one=rr[0]
-                  statuses=Counter(x.get('lifecycle_status') for x in rr)
-                  dates=[]
-                  for x in rr:
-                      d=x.get('start_local') or x.get('date_earliest') or x.get('source_native_date_label')
-                      if d: dates.append(str(d))
-                  print(json.dumps({
-                      'series_id':sid,
-                      'institution':one.get('institution'),
-                      'jurisdiction':one.get('jurisdiction'),
-                      'category':one.get('category'),
-                      'subcategory':one.get('subcategory'),
-                      'event_type':one.get('event_type'),
-                      'source_id':one.get('source_id'),
-                      'count':len(rr),
-                      'lifecycle':dict(statuses),
-                      'first_date':min(dates) if dates else None,
-                      'last_date':max(dates) if dates else None,
-                  }, sort_keys=True))
+          print('CHECKPOINT', canonical['version'], len(canonical['records']), sources['version'], len(sources['sources']), schema['version'])
 
-          print('\n=== INDIA MoSPI series ===')
-          for r in canonical['records']:
-              if r.get('source_id')=='WSSRC-MAC-017':
-                  print(json.dumps({k:r.get(k) for k in ['occurrence_id','series_id','canonical_name','category','subcategory','event_type','start_local','start_utc','source_timezone','time_precision','lifecycle_status','certainty','source_id']}, sort_keys=True))
+          print('\n=== COMPLETED REPRESENTATIVES ===')
+          for oid in ['WSO-MAC-A-0025','WSO-8df73c7804d45880']:
+              print(oid)
+              print(json.dumps(by_occ[oid], indent=2, sort_keys=True))
 
-          print('\n=== EXISTING SOURCE ROWS FOR PRIORITY SERIES ===')
-          used=sorted({r.get('source_id') for r in canonical['records'] if r.get('region') in regions and r.get('source_id')})
-          for sid in used:
-              s=source_by_id.get(sid,{})
-              print(json.dumps({k:s.get(k) for k in ['source_id','provider','institution','jurisdiction','authoritative_url','url','source_type','canonical_provenance_use','automated_monitoring_use','verification_mode','rights_classification']}, sort_keys=True))
+          print('\n=== TARGET SERIES REPRESENTATIVES ===')
+          targets=['WSER-MAC-IN-GDP','WSER-REG-ID-BI','WSER-REGJ-EG-CBE-MPC','WSER-REG2-AR-CPI']
+          for sid in targets:
+              rows=[r for r in canonical['records'] if r.get('series_id')==sid]
+              print('\nSERIES', sid, 'COUNT', len(rows))
+              for r in rows[:2]: print(json.dumps(r, indent=2, sort_keys=True))
+
+          print('\n=== TARGET SOURCE ROWS ===')
+          for sid in ['WSSRC-MAC-017','WSSRC-REG-004','WSSRC-REGJ-005','WSSRC-REG2-006']:
+              print(sid)
+              print(json.dumps(by_source[sid], indent=2, sort_keys=True))
+
+          print('\n=== REGISTRY TOP-LEVEL KEYS ===')
+          print(sorted(canonical.keys()))
+          print('\n=== SCHEMA CONTROLLED VALUES / FIELD NAMES ===')
+          print(json.dumps({
+            'top_keys': sorted(schema.keys()),
+            'lifecycle_values': schema.get('lifecycle_status_values'),
+            'certainty_values': schema.get('certainty_values'),
+            'timing_types': schema.get('timing_type_values'),
+            'publication_time_semantics_values': schema.get('publication_time_semantics_values'),
+            'record_required_fields': schema.get('record_required_fields'),
+          }, indent=2, sort_keys=True))
           PY
