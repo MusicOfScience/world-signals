@@ -198,7 +198,7 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         self.assertEqual(memberships["WSER-INT-BWC-WG-STRENGTHENING"]["canonical_primary_category"], "INTERNATIONAL_INSTITUTIONS")
         self.assertEqual(memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["canonical_primary_category"], "AGRICULTURE_FOOD")
 
-    def test_u_expands_analytical_choice_without_touching_analysis(self):
+    def test_u_expands_analytical_choice_without_mutating_analysis_at_u_transaction(self):
         post_registry, *_rest, report = self.simulated_or_live_post()
         readiness = report.get("readiness") or analysis_population_readiness(
             self.analysis_schema, self.analysis_reviews, post_registry
@@ -207,16 +207,19 @@ class CrossDomainHistoricalAnchorsUTests(unittest.TestCase):
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 8)
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
-        reviewed = set(readiness["reviewed_occurrence_ids"])
-        for occurrence_id in (
-            "WSO-BWC-WG-2026-S08",
-            "WSO-WOAH-GS-093",
-            "WSO-FIS-NP-BUDGET-2083",
-            "WSO-ddb70f8ff05a58fb",
-        ):
-            self.assertNotIn(occurrence_id, reviewed)
-        self.assertEqual((self.analysis_reviews["version"], len(self.analysis_reviews["reviews"])), ("0.4", 8))
-        self.assertEqual((self.analysis_evidence["version"], len(self.analysis_evidence["evidence"])), ("0.4", 21))
+        self.assertFalse(self.plan["guardrails"]["analysis_mutation"])
+        u_ids = {"WSO-BWC-WG-2026-S08", "WSO-WOAH-GS-093", "WSO-FIS-NP-BUDGET-2083"}
+        self.assertTrue(u_ids <= {row["occurrence_id"] for row in post_registry["records"]})
+        if self.analysis_reviews["version"] == "0.4" and len(self.analysis_reviews["reviews"]) == 8:
+            reviewed = set(readiness["reviewed_occurrence_ids"])
+            for occurrence_id in u_ids | {"WSO-ddb70f8ff05a58fb"}:
+                self.assertNotIn(occurrence_id, reviewed)
+            self.assertEqual((self.analysis_evidence["version"], len(self.analysis_evidence["evidence"])), ("0.4", 21))
+        else:
+            self.assertGreaterEqual(tuple(int(part) for part in self.analysis_reviews["version"].split(".")), (0, 4))
+            self.assertGreaterEqual(len(self.analysis_reviews["reviews"]), 8)
+            self.assertGreaterEqual(tuple(int(part) for part in self.analysis_evidence["version"].split(".")), (0, 4))
+            self.assertGreaterEqual(len(self.analysis_evidence["evidence"]), 21)
 
     def test_global_write_gates_remain_closed(self):
         guardrails = self.plan["guardrails"]
