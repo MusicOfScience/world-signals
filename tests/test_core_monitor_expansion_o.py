@@ -22,10 +22,20 @@ class CoreMonitorExpansionOTests(unittest.TestCase):
         cls.sources = json.loads(cls.sources_path.read_text(encoding="utf-8"))
         cls.expectations = json.loads(cls.expectations_path.read_text(encoding="utf-8"))
 
+    @staticmethod
+    def _version_at_least(value, floor):
+        try:
+            current = tuple(int(x) for x in str(value).split("."))
+            minimum = tuple(int(x) for x in str(floor).split("."))
+        except ValueError:
+            return False
+        width = max(len(current), len(minimum))
+        return current + (0,) * (width - len(current)) >= minimum + (0,) * (width - len(minimum))
+
     def _source(self, source_id: str) -> dict:
         return next(x for x in self.sources["sources"] if x["source_id"] == source_id)
 
-    def test_repository_is_exact_pre_or_reviewed_post_state(self):
+    def test_repository_is_exact_pre_or_reviewed_post_lineage(self):
         state = (
             self.canonical["version"],
             len(self.canonical["records"]),
@@ -34,17 +44,20 @@ class CoreMonitorExpansionOTests(unittest.TestCase):
             self.expectations["version"],
             len(self.expectations["adapters"]),
         )
-        self.assertIn(
-            state,
-            {
-                ("0.28", 674, "1.69", 233, "0.7", 6),
-                ("0.28", 674, "1.70", 233, "0.8", 7),
-            },
+        exact_pre = state == ("0.28", 674, "1.69", 233, "0.7", 6)
+        reviewed_post_or_descendant = (
+            self._version_at_least(self.canonical["version"], "0.28")
+            and len(self.canonical["records"]) >= 674
+            and self._version_at_least(self.sources["version"], "1.70")
+            and len(self.sources["sources"]) >= 233
+            and self._version_at_least(self.expectations["version"], "0.8")
+            and len(self.expectations["adapters"]) >= 7
         )
+        self.assertTrue(exact_pre or reviewed_post_or_descendant, state)
 
-    def test_canonical_scope_is_unchanged(self):
-        self.assertEqual(self.canonical["version"], "0.28")
-        self.assertEqual(len(self.canonical["records"]), 674)
+    def test_o_tracked_canonical_scope_survives_descendant_population(self):
+        self.assertTrue(self._version_at_least(self.canonical["version"], "0.28"))
+        self.assertGreaterEqual(len(self.canonical["records"]), 674)
         ons_ids = {
             r["occurrence_id"]
             for r in self.canonical["records"]

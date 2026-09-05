@@ -112,8 +112,11 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
             self.assertEqual(post_overlay["version"],"0.3")
             self.assertEqual(post_overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
         else:
-            self.assertEqual(self.overlay["version"],"0.3")
-            self.assertEqual(self.overlay["canonical_checkpoint"],{"registry_version":"0.28","record_count":674})
+            self.assertTrue(self._version_at_least(self.overlay["version"],"0.3"))
+            self.assertEqual(
+                self.overlay["canonical_checkpoint"],
+                {"registry_version":self.canonical["version"],"record_count":len(self.canonical["records"])},
+            )
         memberships={r["series_id"] for r in self.overlay["canonical_series_memberships"]}
         self.assertNotIn("WSER-FIS-NP-FEDERAL-BUDGET",memberships)
 

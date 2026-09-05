@@ -1,0 +1,225 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "PRIORITY_REGION_HISTORICAL_ANCHORS_R",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "purpose": "Add one authoritative completed historical occurrence in each Analysis priority geographic stress region without manufacturing lifecycle completion, timing precision or new series taxonomy.",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.28",
+    "canonical_record_count": 674,
+    "source_registry_version": "1.70",
+    "source_record_count": 233,
+    "change_ledger_version": "0.15",
+    "change_ledger_count": 44,
+    "biosecurity_overlay_version": "0.3",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.28",
+      "record_count": 674
+    },
+    "required_absent_occurrence_ids": [
+      "WSO-HIST-R-IN-GDP-2026Q1",
+      "WSO-HIST-R-ID-BI-202608",
+      "WSO-HIST-R-EG-CBE-20260820",
+      "WSO-HIST-R-AR-CPI-202607"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-MAC-028",
+      "WSSRC-REG-012",
+      "WSSRC-REG2-008"
+    ],
+    "required_source_dependency_counts": {
+      "WSSRC-MAC-017": 17,
+      "WSSRC-REG-004": 4,
+      "WSSRC-REGJ-005": 3,
+      "WSSRC-REG2-006": 4
+    }
+  },
+  "anchors": [
+    {
+      "region": "South Asia",
+      "jurisdiction": "India",
+      "occurrence_id": "WSO-HIST-R-IN-GDP-2026Q1",
+      "series_id": "WSER-MAC-IN-GDP",
+      "template_occurrence_id": "WSO-MAC-A-0091",
+      "schedule_source_id": "WSSRC-MAC-017",
+      "completion_source_id": "WSSRC-MAC-028",
+      "schedule_assertion_id": "WSA-HIST-SCHED-cf73633566a22004",
+      "completion_assertion_id": "WSA-HIST-COMP-d160ffd84eb4ad8c",
+      "change_id": "WSCHANGE-2242bcdfd758b048aa",
+      "canonical_name": "India GDP — Q1 FY2026-27 quarterly estimate",
+      "short_calendar_title": "India GDP — Q1 FY2026-27",
+      "timing": {
+        "timing_type": "LOCAL_DATETIME",
+        "start_local": "2026-08-31T16:00:00",
+        "end_local": null,
+        "source_timezone": "Asia/Kolkata",
+        "start_utc": "2026-08-31T10:30:00Z",
+        "end_utc": null,
+        "time_precision": "MINUTE",
+        "all_day_semantics": false,
+        "publication_datetime": "2026-08-31T16:00:00",
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_OCCURRENCE_TIME"
+      },
+      "reference_period": "Q1 FY2026-27 (April-June 2026)",
+      "outcome_url": "https://www.mospi.gov.in/node/31376",
+      "schedule_evidence_url": "https://www.mospi.gov.in/uploads/documents/releaseCalender/1779709510470-ADVANCE%20RELEASE%20CALENDAR%202026-27%20Updated%2025.05.2026.pdf",
+      "completion_basis": "MoSPI's official site lists the Q1 FY2026-27 GDP press note as released on 31 August 2026. A first-party MoSPI announcement states the Q1 estimates were to be released at 4:00 PM on that date; the time is occurrence-specific and is not promoted into a series-wide clock rule."
+    },
+    {
+      "region": "Southeast Asia",
+      "jurisdiction": "Indonesia",
+      "occurrence_id": "WSO-HIST-R-ID-BI-202608",
+      "series_id": "WSER-REG-ID-BI",
+      "template_occurrence_id": "WSO-REG-A-0004",
+      "schedule_source_id": "WSSRC-REG-004",
+      "completion_source_id": "WSSRC-REG-012",
+      "schedule_assertion_id": "WSA-HIST-SCHED-0f008516665a8515",
+      "completion_assertion_id": "WSA-HIST-COMP-225daf8b2e110525",
+      "change_id": "WSCHANGE-bb0665b5221e02f8f5",
+      "canonical_name": "Bank Indonesia Board of Governors meeting — August 2026",
+      "short_calendar_title": "Bank Indonesia — Aug 2026",
+      "timing": {
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-08-18",
+        "end_local": "2026-08-19",
+        "source_timezone": "Asia/Jakarta",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY_RANGE",
+        "all_day_semantics": true,
+        "publication_datetime": null,
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+      },
+      "reference_period": "August 2026",
+      "outcome_url": "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2816226.aspx",
+      "schedule_evidence_url": "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2727625.aspx",
+      "completion_basis": "Bank Indonesia's official 19 August 2026 press release states that the Board of Governors Meeting on 18-19 August 2026 decided to hold BI-Rate at 5.75%, confirming that the scheduled two-day decision process occurred. The press-page clock timestamp is not used as the canonical event time."
+    },
+    {
+      "region": "Africa",
+      "jurisdiction": "Egypt",
+      "occurrence_id": "WSO-HIST-R-EG-CBE-20260820",
+      "series_id": "WSER-REGJ-EG-CBE-MPC",
+      "template_occurrence_id": "WSO-REG-J-0011",
+      "schedule_source_id": "WSSRC-REGJ-005",
+      "completion_source_id": "WSSRC-REGJ-005",
+      "schedule_assertion_id": "WSA-HIST-SCHED-28e4804522e3f0e1",
+      "completion_assertion_id": "WSA-HIST-COMP-f2e6a7f5cb3e7b91",
+      "change_id": "WSCHANGE-1b5b294073c4cf4888",
+      "canonical_name": "Central Bank of Egypt MPC decision — 20 August 2026",
+      "short_calendar_title": "CBE MPC — 20 Aug 2026",
+      "timing": {
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-08-20",
+        "end_local": null,
+        "source_timezone": "Africa/Cairo",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY",
+        "all_day_semantics": true,
+        "publication_datetime": null,
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+      },
+      "reference_period": "20 August 2026 MPC decision",
+      "outcome_url": "https://www.cbe.org.eg/en/news-publications/news/2026/08/20/15/17/mpc-press-release-20-august-2026",
+      "schedule_evidence_url": "https://www.cbe.org.eg/en/monetary-policy/monetary-policy-decisions",
+      "completion_basis": "The Central Bank of Egypt's official MPC press release dated 20 August 2026 states that the Committee kept the overnight deposit, lending, main-operation and discount rates unchanged. The existing governed CBE source explicitly covers both scheduled MPC dates and links to completed decision releases."
+    },
+    {
+      "region": "Latin America",
+      "jurisdiction": "Argentina",
+      "occurrence_id": "WSO-HIST-R-AR-CPI-202607",
+      "series_id": "WSER-REG2-AR-CPI",
+      "template_occurrence_id": "WSO-REG-B-0008",
+      "schedule_source_id": "WSSRC-REG2-006",
+      "completion_source_id": "WSSRC-REG2-008",
+      "schedule_assertion_id": "WSA-HIST-SCHED-71fd8cc616bc59c9",
+      "completion_assertion_id": "WSA-HIST-COMP-1acdc23b554f484a",
+      "change_id": "WSCHANGE-a3dacb1c469e9e57a9",
+      "canonical_name": "Argentina national CPI — July 2026",
+      "short_calendar_title": "Argentina CPI — Jul 2026",
+      "timing": {
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-08-13",
+        "end_local": null,
+        "source_timezone": "America/Argentina/Buenos_Aires",
+        "start_utc": null,
+        "end_utc": null,
+        "time_precision": "DAY",
+        "all_day_semantics": true,
+        "publication_datetime": null,
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+      },
+      "reference_period": "July 2026",
+      "outcome_url": "https://www.indec.gob.ar/Nivel4/Tema/3/5/31",
+      "schedule_evidence_url": "https://www.indec.gob.ar/ftp/cuadros/publicaciones/calendario_2sem2026.pdf",
+      "completion_basis": "INDEC's official CPI page records a 13 August 2026 technical report for July 2026 and states that national CPI rose 2.1% month-on-month. No publication clock time is admitted."
+    }
+  ],
+  "new_completion_sources": [
+    {
+      "source_id": "WSSRC-MAC-028",
+      "clone_source_id": "WSSRC-MAC-017",
+      "institution": "Ministry of Statistics and Programme Implementation",
+      "jurisdiction": "India",
+      "endpoint_role": "GDP press-note publication / completed-release verification",
+      "authoritative_url": "https://www.mospi.gov.in/node/31376",
+      "source_type": "official_statistical_press_release_surface",
+      "information_supplied": "Official post-event GDP press-note publication date and release outcome for Q1 FY2026-27.",
+      "notes": "Completion/outcome provenance only. Forward GDP schedule authority remains WSSRC-MAC-017. No series-wide publication clock is inferred from this source."
+    },
+    {
+      "source_id": "WSSRC-REG-012",
+      "clone_source_id": "WSSRC-REG-004",
+      "institution": "Bank Indonesia",
+      "jurisdiction": "Indonesia",
+      "endpoint_role": "Monetary-policy decision press releases / completed-meeting verification",
+      "authoritative_url": "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2816226.aspx",
+      "source_type": "official_central_bank_decision_release",
+      "information_supplied": "Official post-event Board of Governors decision and confirmation that the 18-19 August 2026 meeting occurred.",
+      "notes": "Manual completion/outcome provenance under the same rights hold as WSSRC-REG-004. Forward meeting schedule authority remains WSSRC-REG-004; this source does not authorise production crawling."
+    },
+    {
+      "source_id": "WSSRC-REG2-008",
+      "clone_source_id": "WSSRC-REG2-006",
+      "institution": "INDEC",
+      "jurisdiction": "Argentina",
+      "endpoint_role": "Consumer Price Index technical reports / completed-release verification",
+      "authoritative_url": "https://www.indec.gob.ar/Nivel4/Tema/3/5/31",
+      "source_type": "official_statistical_release_surface",
+      "information_supplied": "Official post-event CPI technical-report publication date, reference period and headline national CPI result.",
+      "notes": "Completion/outcome provenance only. Forward dissemination-calendar authority remains WSSRC-REG2-006; no publication clock time is inferred."
+    }
+  ],
+  "postconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.29",
+    "canonical_record_count": 678,
+    "source_registry_version": "1.71",
+    "source_record_count": 236,
+    "change_ledger_version": "0.16",
+    "change_ledger_count": 48,
+    "biosecurity_overlay_version": "0.4",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.29",
+      "record_count": 678
+    },
+    "new_occurrence_count": 4,
+    "new_series_count": 0,
+    "new_source_count": 3,
+    "priority_region_completed_anchor_counts": {
+      "Africa": 1,
+      "South Asia": 1,
+      "Southeast Asia": 1,
+      "Latin America": 1
+    },
+    "analysis_readiness_broad_state": "BLOCKED_PRIORITY_REGION_REVIEW_GAP",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  }
+}

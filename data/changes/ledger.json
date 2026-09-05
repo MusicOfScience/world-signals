@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.15",
-  "reference_date": "2026-09-05",
+  "version": "0.16",
+  "reference_date": "2026-09-06",
   "changes": [
     {
       "change_id": "WSCHANGE-b5a5e064f7f9e408b8",
@@ -1256,6 +1256,138 @@
       "registry_version_after": "0.26",
       "canonical_mutation_committed": true,
       "committed_at": "2026-09-05T18:35:03+10:00"
+    },
+    {
+      "change_id": "WSCHANGE-2242bcdfd758b048aa",
+      "occurrence_id": "WSO-HIST-R-IN-GDP-2026Q1",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-MAC-IN-GDP",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "LOCAL_DATETIME",
+        "start_local": "2026-08-31T16:00:00",
+        "end_local": null,
+        "start_utc": "2026-08-31T10:30:00Z",
+        "reference_period": "Q1 FY2026-27 (April-June 2026)"
+      },
+      "source_assertion_id": "WSA-HIST-COMP-d160ffd84eb4ad8c",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T01:16:31+10:00",
+      "review_basis": [
+        "https://www.mospi.gov.in/node/31376",
+        "MoSPI's official site lists the Q1 FY2026-27 GDP press note as released on 31 August 2026. A first-party MoSPI announcement states the Q1 estimates were to be released at 4:00 PM on that date; the time is occurrence-specific and is not promoted into a series-wide clock rule.",
+        "Existing series and schedule-source identity are reused; no new series taxonomy is created.",
+        "The occurrence is admitted as completed only because a competent first-party post-event source verifies it; elapsed time alone is not evidence of completion."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_R",
+      "committed_at": "2026-09-06T01:16:31+10:00",
+      "registry_version_before": "0.28",
+      "registry_version_after": "0.29",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-bb0665b5221e02f8f5",
+      "occurrence_id": "WSO-HIST-R-ID-BI-202608",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-REG-ID-BI",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-08-18",
+        "end_local": "2026-08-19",
+        "start_utc": null,
+        "reference_period": "August 2026"
+      },
+      "source_assertion_id": "WSA-HIST-COMP-225daf8b2e110525",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T01:16:31+10:00",
+      "review_basis": [
+        "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2816226.aspx",
+        "Bank Indonesia's official 19 August 2026 press release states that the Board of Governors Meeting on 18-19 August 2026 decided to hold BI-Rate at 5.75%, confirming that the scheduled two-day decision process occurred. The press-page clock timestamp is not used as the canonical event time.",
+        "Existing series and schedule-source identity are reused; no new series taxonomy is created.",
+        "The occurrence is admitted as completed only because a competent first-party post-event source verifies it; elapsed time alone is not evidence of completion."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_R",
+      "committed_at": "2026-09-06T01:16:31+10:00",
+      "registry_version_before": "0.28",
+      "registry_version_after": "0.29",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-1b5b294073c4cf4888",
+      "occurrence_id": "WSO-HIST-R-EG-CBE-20260820",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-REGJ-EG-CBE-MPC",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-08-20",
+        "end_local": null,
+        "start_utc": null,
+        "reference_period": "20 August 2026 MPC decision"
+      },
+      "source_assertion_id": "WSA-HIST-COMP-f2e6a7f5cb3e7b91",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T01:16:31+10:00",
+      "review_basis": [
+        "https://www.cbe.org.eg/en/news-publications/news/2026/08/20/15/17/mpc-press-release-20-august-2026",
+        "The Central Bank of Egypt's official MPC press release dated 20 August 2026 states that the Committee kept the overnight deposit, lending, main-operation and discount rates unchanged. The existing governed CBE source explicitly covers both scheduled MPC dates and links to completed decision releases.",
+        "Existing series and schedule-source identity are reused; no new series taxonomy is created.",
+        "The occurrence is admitted as completed only because a competent first-party post-event source verifies it; elapsed time alone is not evidence of completion."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_R",
+      "committed_at": "2026-09-06T01:16:31+10:00",
+      "registry_version_before": "0.28",
+      "registry_version_after": "0.29",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-a3dacb1c469e9e57a9",
+      "occurrence_id": "WSO-HIST-R-AR-CPI-202607",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-REG2-AR-CPI",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-08-13",
+        "end_local": null,
+        "start_utc": null,
+        "reference_period": "July 2026"
+      },
+      "source_assertion_id": "WSA-HIST-COMP-1acdc23b554f484a",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T01:16:31+10:00",
+      "review_basis": [
+        "https://www.indec.gob.ar/Nivel4/Tema/3/5/31",
+        "INDEC's official CPI page records a 13 August 2026 technical report for July 2026 and states that national CPI rose 2.1% month-on-month. No publication clock time is admitted.",
+        "Existing series and schedule-source identity are reused; no new series taxonomy is created.",
+        "The occurrence is admitted as completed only because a competent first-party post-event source verifies it; elapsed time alone is not evidence of completion."
+      ],
+      "commit_mode": "REVIEWED_HISTORICAL_ANCHOR_R",
+      "committed_at": "2026-09-06T01:16:31+10:00",
+      "registry_version_before": "0.28",
+      "registry_version_after": "0.29",
+      "canonical_mutation_committed": true
     }
   ]
 }
