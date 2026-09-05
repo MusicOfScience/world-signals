@@ -59,7 +59,8 @@ jobs:
             'data/coverage/biosecurity_overlay.json',
             'data/coverage/EAST_ASIA_LIFECYCLE_REPAIR_Z_TRANSACTION_AUDIT_v0.1.md',
           }
-          changed=set(subprocess.check_output(['git','diff','--name-only','HEAD'], text=True).splitlines())
+          status=subprocess.check_output(['git','status','--porcelain'], text=True).splitlines()
+          changed={line[3:] for line in status if len(line) >= 4}
           print('changed after apply:', sorted(changed))
           unexpected=changed-allowed
           missing=allowed-changed
