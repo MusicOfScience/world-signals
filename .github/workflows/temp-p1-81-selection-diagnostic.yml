@@ -1,0 +1,91 @@
+name: TEMP P1 81 selection diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-81-selection-diagnostic.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-81-selection-diagnostic
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Diagnose current P1 queue
+        run: |
+          python - <<'PY'
+          from collections import Counter, defaultdict
+          from datetime import date, timedelta
+          import json
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+
+          AS_OF=date(2026,9,5)
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          audit=build_source_governance_audit(can,src,exp)
+          p1=[r for r in audit['backfill_research_queue'] if r['research_priority']=='P1_CANONICAL_DEPENDENCY']
+          assert len(p1)==81, len(p1)
+          sb={r['source_id']:r for r in src['sources']}
+          deps=defaultdict(list)
+          for r in can['records']:
+              if r.get('source_id'): deps[r['source_id']].append(r)
+          def day(r):
+              for k in ('start_local','date_earliest','publication_datetime','start_utc'):
+                  v=r.get(k)
+                  if v:
+                      try:return date.fromisoformat(str(v)[:10])
+                      except:pass
+              return None
+          def active(r):
+              return str(r.get('lifecycle_status','')).upper() not in {'COMPLETED','CANCELLED'} and str(r.get('certainty_status','')).upper()!='CANCELLED'
+          rows=[]
+          for a in p1:
+              sid=a['source_id']; s=sb[sid]; ee=deps[sid]
+              future=[r for r in ee if active(r) and (day(r) is None or day(r)>=AS_OF)]
+              dated=[r for r in future if day(r)]
+              regions=Counter(str(r.get('region') or 'UNKNOWN') for r in ee)
+              cats=Counter(str(r.get('category') or 'UNKNOWN') for r in ee)
+              row={
+                'source_id':sid,'institution':s.get('institution'),'jurisdiction':s.get('jurisdiction'),
+                'domain':s.get('domain'),'source_type':s.get('source_type'),'url':s.get('authoritative_url'),
+                'machine':s.get('machine_readable_available'),'deps':len(ee),'future':len(future),
+                'within30':sum(1 for r in dated if AS_OF<=day(r)<=AS_OF+timedelta(days=30)),
+                'within90':sum(1 for r in dated if AS_OF<=day(r)<=AS_OF+timedelta(days=90)),
+                'within180':sum(1 for r in dated if AS_OF<=day(r)<=AS_OF+timedelta(days=180)),
+                'next':min((day(r) for r in dated),default=None),
+                'undated':sum(1 for r in future if day(r) is None),
+                'regions':dict(regions),'categories':dict(cats),
+                'rights_status':s.get('licence_review_status'),'ingestion':s.get('ingestion_permission'),
+                'automation_permission':s.get('automated_retrieval_permission'),'rights_url':s.get('rights_evidence_url'),
+                'limitations':s.get('known_limitations'),
+              }
+              row['next']=row['next'].isoformat() if row['next'] else None
+              rows.append(row)
+          mech=sorted(rows,key=lambda r:(-r['within30'],-r['within90'],-r['within180'],-r['future'],-r['deps'],r['source_id']))
+          corrective_regions={'South Asia','Africa','Southeast Asia','Latin America','Oceania / Pacific'}
+          corrective_cats={'PHYSICAL_CLIMATE_RISK','CLIMATE_ENVIRONMENT','HEALTH_BIOSECURITY','TRADE_SANCTIONS_INDUSTRIAL_POLICY','TECHNOLOGY_CRITICAL_INFRASTRUCTURE','AGRICULTURE_FOOD','FINANCIAL_STABILITY_REGULATION'}
+          def has_region(r): return any(k in corrective_regions for k in r['regions'])
+          def has_cat(r): return any(k in corrective_cats for k in r['categories'])
+          corr=sorted([r for r in rows if has_region(r)],key=lambda r:(-int('South Asia' in r['regions']),-int(has_cat(r)),-r['within90'],-r['future'],-r['deps'],r['source_id']))
+          nonmono=sorted([r for r in rows if not any(k in {'MONETARY_FINANCIAL_POLICY','MACROECONOMIC_RELEASE'} for k in r['categories'])],key=lambda r:(-int(has_region(r)),-int(has_cat(r)),-r['within90'],-r['future'],-r['deps'],r['source_id']))
+          climate=sorted([r for r in rows if 'PHYSICAL_CLIMATE_RISK' in r['categories'] or 'CLIMATE_ENVIRONMENT' in r['categories']],key=lambda r:(-r['within180'],-r['deps'],r['source_id']))
+          southasia=[r for r in rows if 'South Asia' in r['regions'] or r['jurisdiction'] in {'Sri Lanka','India','Pakistan','Bangladesh','Nepal','Bhutan','Maldives'}]
+          print('CHECKPOINT',json.dumps({'canonical':can['version'],'sources':src['version'],'source_count':len(src['sources']),'p1':len(p1)}))
+          print('FIELD_SHAPES',Counter(tuple(r['missing_governance_fields']) for r in p1))
+          print('MECHANICAL_TOP_15')
+          print(json.dumps(mech[:15],indent=2,ensure_ascii=False))
+          print('CORRECTIVE_REGION_TOP_20')
+          print(json.dumps(corr[:20],indent=2,ensure_ascii=False))
+          print('NON_MONETARY_MACRO_CORRECTIVE_TOP_20')
+          print(json.dumps(nonmono[:20],indent=2,ensure_ascii=False))
+          print('SOUTH_ASIA_ALL')
+          print(json.dumps(southasia,indent=2,ensure_ascii=False))
+          print('CLIMATE_ALL')
+          print(json.dumps(climate,indent=2,ensure_ascii=False))
+          PY
