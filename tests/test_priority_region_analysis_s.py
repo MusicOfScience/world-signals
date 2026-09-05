@@ -30,11 +30,15 @@ class PriorityRegionAnalysisSTests(unittest.TestCase):
         cls.by_occurrence = {row["occurrence_id"]: row for row in cls.canonical["records"]}
         cls.by_evidence = {row["evidence_id"]: row for row in cls.evidence["evidence"]}
 
-    def test_exact_s_post_state_and_validator(self):
+    def test_s_state_survives_descendant_population_and_validator(self):
         self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.29", 678))
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.3", 6))
+        self.assertEqual(self.plan["post_state"]["analysis_review_count"], 6)
+        self.assertEqual(self.plan["post_state"]["analysis_evidence_count"], 14)
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 6)
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 14)
         self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
-        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.3", 14))
+        self.assertTrue(set(self.plan["new_analysis_ids"]) <= set(self.by_analysis))
+        self.assertTrue(set(self.plan["new_evidence_ids"]) <= set(self.by_evidence))
         report = validate_analysis(self.schema, self.evidence, self.reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
 
@@ -121,17 +125,16 @@ class PriorityRegionAnalysisSTests(unittest.TestCase):
         for evidence_id in expected:
             self.assertEqual(self.by_evidence[evidence_id]["canonical_provenance_effect"], "NONE")
 
-    def test_readiness_becomes_controlled_expansion_not_completeness(self):
+    def test_readiness_remains_controlled_expansion_not_completeness(self):
         readiness = analysis_population_readiness(self.schema, self.reviews, self.canonical)
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 9)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 6)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 9)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 6)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
         priority = {row["region"]: row for row in readiness["priority_geographic_stress_regions"]}
         for region in ("Africa", "South Asia", "Southeast Asia", "Latin America"):
-            self.assertEqual(
-                (priority[region]["eligible_completed_count"], priority[region]["reviewed_count"], priority[region]["state"]),
-                (1, 1, "REVIEWED_SAMPLE_PRESENT"),
-            )
+            self.assertGreaterEqual(priority[region]["eligible_completed_count"], 1)
+            self.assertGreaterEqual(priority[region]["reviewed_count"], 1)
+            self.assertEqual(priority[region]["state"], "REVIEWED_SAMPLE_PRESENT")
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 2)
         self.assertIn("not a claim of analytical completeness", " ".join(readiness["notes"]).lower())
 
