@@ -1,4 +1,4 @@
-name: TEMP controlled Analysis T registry probe
+name: TEMP controlled Analysis T full simulation
 
 on:
   push:
@@ -11,40 +11,116 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact merged base and inspect unreviewed completed anchors
+      - name: Prove exact main and protected pre-state
         shell: bash
         run: |
           set -euo pipefail
           BASE=33826d046cc7b966cf8e77fe4fbb7debb6a50278
           git fetch origin main
           test "$(git rev-parse origin/main)" = "$BASE"
+          git diff --exit-code "$BASE" HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+      - name: Check-only T transaction
+        run: python scripts/apply_controlled_analysis_expansion_t.py
+      - name: Apply only inside disposable runner
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_T: YES
+        run: python scripts/apply_controlled_analysis_expansion_t.py --apply
+      - name: Assert exact simulated mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/analysis/CONTROLLED_ANALYSIS_EXPANSION_T_TRANSACTION_AUDIT_v0.1.md
+            data/analysis/event_reviews.json
+            data/analysis/evidence_registry.json
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+      - name: Validate registry and Analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+      - name: Run full repository suite on simulated T post-state
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python surfaces
+        run: python -m py_compile scripts/apply_controlled_analysis_expansion_t.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_controlled_analysis_expansion_t.py tests/test_priority_region_analysis_s.py
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and assert T post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
           python - <<'PY'
           import json
           from pathlib import Path
           c=json.loads(Path('data/canonical/registry.json').read_text())
           r=json.loads(Path('data/analysis/event_reviews.json').read_text())
-          l=json.loads(Path('data/changes/ledger.json').read_text())
-          reviewed={x['canonical_occurrence_id'] for x in r['reviews'] if x.get('review_state') in {'REVIEWED_SAMPLE','REVIEWED'} and x.get('review_phase')=='POST_EVENT'}
-          completed=[x for x in c['records'] if x.get('lifecycle_status')=='COMPLETED']
-          assert len(completed)==9, len(completed)
-          unreviewed=[x for x in completed if x['occurrence_id'] not in reviewed]
-          assert len(unreviewed)==3, len(unreviewed)
-          print('=== UNREVIEWED FULL RECORDS ===')
-          for x in unreviewed:
-              print(json.dumps(x, sort_keys=True))
-          print('=== LEDGER FOR UNREVIEWED ===')
-          ids={x['occurrence_id'] for x in unreviewed}
-          for change in l.get('changes', l.get('records', [])):
-              if change.get('occurrence_id') in ids:
-                  print(json.dumps(change, sort_keys=True))
-          tech=next(x for x in unreviewed if x['occurrence_id']=='WSO-TECH-A-0002')
-          assert tech['start_local']=='2026-09-20'
-          assert tech['lifecycle_status']=='COMPLETED'
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          a=json.loads(Path('docs/data/analysis.json').read_text())
+          assert (c['version'],len(c['records']))==('0.29',678)
+          assert (r['version'],len(r['reviews']))==('0.4',8)
+          assert r['canonical_checkpoint']=={'registry_version':'0.29','record_count':678}
+          assert (e['version'],len(e['evidence']))==('0.4',21)
+          readiness=a['readiness']
+          assert readiness['eligible_completed_occurrence_count']==9
+          assert readiness['reviewed_occurrence_count']==8
+          assert readiness['reviewed_event_type_diversity']==7
+          assert readiness['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          reviewed=set(readiness['reviewed_occurrence_ids'])
+          assert 'WSO-COM-A-0013' in reviewed
+          assert 'WSO-TECH-A-0002' in reviewed
+          assert 'WSO-ddb70f8ff05a58fb' not in reviewed
+          by={row['analysis_id']:row for row in a['reviews']}
+          eia=by['WSAN-EIA-WPSR-20260902-001']
+          assert eia['what_surprised']['status']=='MIXED'
+          assert eia['what_appears_connected']['confidence']=='LOW'
+          assert all(m['before_value'] is None for m in eia['what_moved'])
+          chips=by['WSAN-EU-CHIPS-EVAL-20260603-001']
+          assert chips['canonical_context']['start_local']=='2026-09-20'
+          assert chips['canonical_context']['start_utc'] is None
+          assert chips['what_moved']==[]
+          assert chips['what_appears_connected']['causal_status']=='NOT_A_CAUSAL_CLAIM'
+          print(json.dumps(readiness,indent=2,sort_keys=True))
           PY
