@@ -1,0 +1,48 @@
+name: TEMP analysis Q candidate introspection
+
+on:
+  push:
+    branches:
+      - feature/analysis-diversity-stress-test-q
+    paths:
+      - .github/workflows/_temp-analysis-q-introspect.yml
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Print diverse completed canonical candidates
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('data/canonical/registry.json').read_text())
+          focus={'Africa','South Asia','Southeast Asia','Latin America','East Asia','Oceania / Pacific','Cross-regional / Global'}
+          rows=[]
+          for x in r['records']:
+              if x.get('lifecycle_status')!='COMPLETED':
+                  continue
+              if x.get('event_type')=='DATA_RELEASE':
+                  continue
+              region=x.get('region') or x.get('broad_region')
+              if region not in focus:
+                  continue
+              vals=[str(x.get(k,'')) for k in ('start_utc','start_local','publication_datetime','date_earliest','date_latest') if x.get(k)]
+              if not any('2026-' in v for v in vals):
+                  continue
+              rows.append({k:x.get(k) for k in (
+                  'occurrence_id','series_id','canonical_name','institution','jurisdiction','region','category','subcategory','event_type',
+                  'certainty_status','lifecycle_status','timing_type','start_local','start_utc','end_local','end_utc','publication_datetime',
+                  'date_earliest','date_latest','source_id','intrinsic_importance','expected_market_sensitivity','visibility_tier','notes'
+              )})
+          rows.sort(key=lambda x: str(x.get('start_utc') or x.get('start_local') or x.get('publication_datetime') or x.get('date_earliest') or ''))
+          print(json.dumps(rows, indent=2, ensure_ascii=False, sort_keys=True))
+          print('candidate_count=',len(rows))
+          if not rows:
+              raise SystemExit('no diverse completed non-data-release candidates found')
+          PY
