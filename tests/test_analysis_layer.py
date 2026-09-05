@@ -44,11 +44,21 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
     def canonical_row(self, occurrence_id: str):
         return next(row for row in self.canonical["records"] if row.get("occurrence_id") == occurrence_id)
 
-    def test_samples_validate(self):
+    def test_foundation_samples_validate_through_descendant_population(self):
         report = self.validate()
         self.assertTrue(report.ok, report.errors)
-        self.assertEqual(len(self.reviews["reviews"]), 2)
-        self.assertEqual(len(self.evidence["evidence"]), 5)
+        analysis_ids = {row["analysis_id"] for row in self.reviews["reviews"]}
+        evidence_ids = {row["evidence_id"] for row in self.evidence["evidence"]}
+        self.assertTrue({"WSAN-AU-GDP-2026Q2-001", "WSAN-NZ-OCR-20260902-001"} <= analysis_ids)
+        self.assertTrue({
+            "WSEV-AU-GDP-ABS-20260902",
+            "WSEV-AU-GDP-REUTERS-20260902",
+            "WSEV-NZ-OCR-RBNZ-20260902",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902",
+        } <= evidence_ids)
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 2)
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 5)
 
     def test_samples_bind_to_completed_occurrences_of_different_types(self):
         abs_review = self.review("WSAN-AU-GDP-2026Q2-001")
@@ -155,15 +165,15 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         evidence["evidence"][0]["canonical_provenance_effect"] = "REPLACE_CANONICAL_SOURCE"
         self.assertTrue(any("cannot alter canonical provenance" in e for e in self.validate(evidence=evidence).errors))
 
-    def test_second_order_none_is_explicit_for_both_samples(self):
+    def test_second_order_none_is_explicit_for_all_current_samples(self):
         self.assertTrue(all(row["second_order_effects"]["status"] == "NOT_ESTABLISHED" for row in self.reviews["reviews"]))
 
-    def test_population_readiness_tracks_two_reviewed_event_types(self):
+    def test_population_readiness_preserves_foundation_through_descendants(self):
         readiness = analysis_population_readiness(self.schema, self.reviews, self.canonical)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 2)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 2)
-        self.assertEqual(readiness["reviewed_by_event_type"].get("DATA_RELEASE"), 1)
-        self.assertEqual(readiness["reviewed_by_event_type"].get("DECISION"), 1)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 2)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 2)
+        self.assertGreaterEqual(readiness["reviewed_by_event_type"].get("DATA_RELEASE", 0), 1)
+        self.assertGreaterEqual(readiness["reviewed_by_event_type"].get("DECISION", 0), 1)
         self.assertEqual([row["region"] for row in readiness["priority_geographic_stress_regions"]],
                          ["Africa", "South Asia", "Southeast Asia", "Latin America"])
         self.assertTrue(readiness["elapsed_date_never_implies_completion"])
@@ -176,7 +186,7 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         self.assertFalse(projection["metadata"]["canonical_mutation_allowed"])
         self.assertFalse(projection["metadata"]["google_calendar_write"])
         self.assertTrue(projection["metadata"]["population_readiness_is_descriptive_not_population_authority"])
-        self.assertEqual(projection["metadata"]["review_count"], 2)
+        self.assertEqual(projection["metadata"]["review_count"], len(self.reviews["reviews"]))
         by_id = {row["analysis_id"]: row for row in projection["reviews"]}
         self.assertEqual(len(by_id["WSAN-AU-GDP-2026Q2-001"]["evidence"]), 2)
         self.assertEqual(len(by_id["WSAN-NZ-OCR-20260902-001"]["evidence"]), 3)
