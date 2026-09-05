@@ -122,3 +122,5 @@ Changing the schema simply to restate behaviour already implemented would add ch
 ## Transaction note
 
 The reviewed write is deliberately gated through the W transaction script. Protected canonical, source, change-ledger, biosecurity, monitor and Analysis-schema files must remain byte-identical across the apply.
+
+The first full-suite simulation exposed only stale descendant assumptions in historical U/V tests. Those tests were repaired to preserve the exact historical tranche contracts while allowing later Analysis descendants; no production logic or W analytical claim was weakened.
