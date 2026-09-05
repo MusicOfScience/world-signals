@@ -83,7 +83,7 @@ jobs:
           assert rm['WSO-EL-A-0004']['start_local']=='2027-01-05'
           assert {'WSSRC-REG4-001','WSSRC-REG4-002'}.issubset(sm)
           assert exp['automatic_canonical_commit'] is False and exp['google_calendar_write'] is False
-          entries=led.get('entries',[])
+          entries=led.get('changes',[])
           assert len(entries)>=4 and all(entries[-i].get('committed_at') for i in range(1,5))
           print('INDEPENDENT_TRANSACTION_AUDIT PASS')
           PY
