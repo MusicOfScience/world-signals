@@ -1,0 +1,64 @@
+name: TEMP source-native analysis V state probe
+
+on:
+  push:
+    branches:
+      - feature/source-native-fiscal-analysis-v
+    paths:
+      - .github/workflows/_temp-analysis-v-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Print exact V pre-state and Nepal anchor
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.analysis import analysis_population_readiness, public_analysis_projection
+
+          def load(path):
+              return json.loads(Path(path).read_text())
+
+          c=load('data/canonical/registry.json')
+          s=load('data/sources/registry.json')
+          l=load('data/changes/ledger.json')
+          o=load('data/coverage/biosecurity_overlay.json')
+          a=load('data/analysis/schema.json')
+          r=load('data/analysis/event_reviews.json')
+          e=load('data/analysis/evidence_registry.json')
+          row=next(x for x in c['records'] if x.get('occurrence_id')=='WSO-FIS-NP-BUDGET-2083')
+          ready=analysis_population_readiness(a,r,c)
+          projection=public_analysis_projection(a,e,r,c)
+          print('===STATE===')
+          print(json.dumps({
+              'canonical':[c['version'],len(c['records'])],
+              'sources':[s['version'],len(s['sources'])],
+              'ledger':[l['version'],len(l['changes'])],
+              'overlay':[o['version'],o['canonical_checkpoint']],
+              'analysis_schema':a['version'],
+              'reviews':[r['version'],len(r['reviews']),r['canonical_checkpoint']],
+              'evidence':[e['version'],len(e['evidence'])],
+              'readiness':ready,
+          },indent=2,ensure_ascii=False))
+          print('===NEPAL_ANCHOR===')
+          print(json.dumps(row,indent=2,ensure_ascii=False))
+          print('===CURRENT_CANONICAL_CONTEXT_KEYS===')
+          sample=projection['reviews'][0]['canonical']
+          print(json.dumps(sorted(sample.keys()),indent=2))
+          print('===UNREVIEWED_COMPLETED===')
+          reviewed=set(ready['reviewed_occurrence_ids'])
+          print(json.dumps([
+              {'occurrence_id':x['occurrence_id'],'series_id':x.get('series_id'),'event_type':x.get('event_type'),'region':x.get('region'),'timing_type':x.get('timing_type')}
+              for x in c['records'] if x.get('lifecycle_status')=='COMPLETED' and x['occurrence_id'] not in reviewed
+          ],indent=2,ensure_ascii=False))
+          PY
