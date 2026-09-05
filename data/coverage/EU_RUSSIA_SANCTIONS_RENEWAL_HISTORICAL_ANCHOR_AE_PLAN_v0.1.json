@@ -1,0 +1,141 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "EU_RUSSIA_SANCTIONS_RENEWAL_HISTORICAL_ANCHOR_AE",
+  "reference_date": "2026-09-06",
+  "exact_base_main": "7933a9880649ec6a98872fa557566a6b62d55c9d",
+  "architecture_layer": "CANONICAL_REGISTRY",
+  "selection_policy": {
+    "queue_exhaustion_is_goal": false,
+    "geographic_quota_fill_is_goal": false,
+    "selection_basis": "Distinct sanctions/legal-policy contract plus exact existing series/source reuse and competent first-party completion evidence.",
+    "known_bias": "European specimen; selected for semantic/source economy rather than geographic correction."
+  },
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.33",
+    "canonical_record_count": 683,
+    "source_registry_version": "1.74",
+    "source_record_count": 240,
+    "change_ledger_version": "0.20",
+    "change_ledger_count": 55,
+    "biosecurity_overlay_version": "0.8",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.33",
+      "record_count": 683
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-836bc8b100cf5fb3c6"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-TRD-A-0005",
+      "series_id": "WSER-TRD-EU-RU-SANC",
+      "category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+      "event_type": "SANCTIONS_PROCESS",
+      "source_id": "WSSRC-TRD-004",
+      "trade_policy_temporal_role": "EXPIRY_OR_RENEWAL_BOUNDARY",
+      "trade_measure_state": "IN_FORCE",
+      "lifecycle_status": "PLANNED",
+      "certainty_status": "CONFIRMED",
+      "start_local": "2027-07-31"
+    },
+    "required_primary_source": {
+      "source_id": "WSSRC-TRD-004",
+      "institution": "Council of the European Union",
+      "authoritative_url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/",
+      "canonical_dependency_count": 1,
+      "actual_primary_dependency_count": 1,
+      "source_timezone": "Europe/Brussels",
+      "parser_type": "HTML_COUNCIL_DECISION_MONITOR"
+    }
+  },
+  "anchor": {
+    "occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+    "template_occurrence_id": "WSO-TRD-A-0005",
+    "series_id": "WSER-TRD-EU-RU-SANC",
+    "canonical_name": "EU economic sanctions on Russia — 2026 renewal decision",
+    "short_calendar_title": "EU Russia economic sanctions — 2026 renewal",
+    "institution": "Council of the European Union",
+    "jurisdiction": "European Union / Russia",
+    "region": "Europe",
+    "category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+    "subcategory": "sanctions",
+    "event_type": "SANCTIONS_PROCESS",
+    "record_class": "OCCURRENCE",
+    "certainty_status": "CONFIRMED",
+    "lifecycle_status": "COMPLETED",
+    "source_id": "WSSRC-TRD-004",
+    "primary_source_assertion_id": "WSA-AE-df523b565d3c7a2b",
+    "completion_source_assertion_id": "WSA-AE-a3963c3c12c807f2",
+    "change_id": "WSCHANGE-836bc8b100cf5fb3c6",
+    "trade_policy_temporal_role": "LEGAL_ADOPTION",
+    "trade_measure_state": "IN_FORCE",
+    "review_or_renewal_required": true,
+    "expiry_does_not_imply_termination": false,
+    "timing": {
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-06-25",
+      "end_local": null,
+      "source_timezone": "Europe/Brussels",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+    },
+    "source_url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "Council of the European Union first-party notice dated 25 June 2026 states that the Council renewed the restrictive measures that day for a further twelve months until 31 July 2027. The page's 19:45 timestamp is treated only as press-release publication time, not as the decision time."
+  },
+  "source_mutation": {
+    "source_id": "WSSRC-TRD-004",
+    "allowed_existing_field_changes": {
+      "canonical_dependency_count": {
+        "from": 1,
+        "to": 2
+      }
+    },
+    "new_sources": 0
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.34",
+    "canonical_record_count": 684,
+    "source_registry_version": "1.75",
+    "source_record_count": 240,
+    "change_ledger_version": "0.21",
+    "change_ledger_count": 56,
+    "biosecurity_overlay_version": "0.9",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.34",
+      "record_count": 684
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "completed_analysis_eligible_count": 17,
+    "reviewed_completed_count": 12,
+    "new_completed_category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+    "new_completed_event_type": "SANCTIONS_PROCESS"
+  },
+  "guardrails": [
+    "Renewal decision is not the press-release publication timestamp.",
+    "Renewal decision is not the future expiry/renewal boundary.",
+    "Expiry does not imply termination.",
+    "Canonical completion is based on competent first-party post-event evidence, never elapsed time alone.",
+    "No observed market response or causal attribution is written in this tranche.",
+    "No Analysis review or evidence row is created.",
+    "No new source identity or event taxonomy is created.",
+    "PR #40 remains untouched.",
+    "Manual merge only."
+  ]
+}
