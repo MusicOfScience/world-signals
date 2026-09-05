@@ -1,0 +1,176 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "MIXED_SIGNAL_CORRECTION_M_PLAN",
+  "version": "0.1",
+  "reference_date": "2026-09-05",
+  "coverage_program_id": "WSCP-MIXED-SIGNAL-CORRECTION-M",
+  "purpose": "Add four high-value, source-led signal occurrences across African monetary policy, biological-security treaty governance and animal-health standards governance without quota filling or category distortion.",
+  "base_main_sha": "01a37513c88d5fd3f4f6dce17d8c91e609016c87",
+  "preconditions": {
+    "canonical_registry_version": "0.26",
+    "canonical_record_count": 669,
+    "source_registry_version": "1.67",
+    "source_record_count": 228,
+    "biosecurity_overlay_version": "0.1",
+    "required_absent_source_ids": ["WSSRC-CB-014", "WSSRC-INT-032", "WSSRC-INT-033"],
+    "required_absent_series_ids": ["WSER-CB-NG-CBN-MPC", "WSER-INT-BWC-WG-STRENGTHENING", "WSER-AGF-WOAH-GENERAL-SESSION"],
+    "required_absent_occurrence_ids": ["WSO-CBN-MPC-307", "WSO-CBN-MPC-308", "WSO-BWC-WG-2026-S10", "WSO-WOAH-GS-094"]
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.27",
+    "canonical_record_count": 673,
+    "source_registry_version": "1.68",
+    "source_record_count": 231,
+    "biosecurity_overlay_version": "0.2",
+    "new_occurrence_count": 4,
+    "new_series_count": 3,
+    "new_source_count": 3,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "monitor_expectations_unchanged": true,
+    "change_ledger_unchanged": true
+  },
+  "source_plan": [
+    {
+      "source_id": "WSSRC-CB-014",
+      "institution": "Central Bank of Nigeria",
+      "jurisdiction": "Nigeria",
+      "region": "Africa",
+      "domain": "monetary_policy",
+      "authoritative_url": "https://www.cbn.gov.ng/MonetaryPolicy/calendar.html",
+      "source_type": "official_mpc_calendar",
+      "rights_evidence_url": "https://www.cbn.gov.ng/Legal.html",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "evidence_scope": "2026 MPC meeting calendar; meeting nos. 307 and 308 are two-day windows",
+      "source_semantics": "meeting window only; no decision publication clock time or future venue inferred"
+    },
+    {
+      "source_id": "WSSRC-INT-032",
+      "institution": "Biological Weapons Convention / UNODA",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "domain": "international_institutions",
+      "authoritative_url": "https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-tenth-session-2026",
+      "source_type": "official_treaty_meeting_page",
+      "rights_evidence_url": "https://www.un.org/en/about-us/terms-of-use",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "evidence_scope": "Working Group tenth session, 7-11 December 2026, Geneva",
+      "source_semantics": "one multi-day treaty working-group session; daily split session times are descriptive, not a continuous event timestamp"
+    },
+    {
+      "source_id": "WSSRC-INT-033",
+      "institution": "World Organisation for Animal Health",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "domain": "agriculture_food",
+      "authoritative_url": "https://www.woah.org/app/uploads/2026/06/93gs-2026-final-report-en.pdf",
+      "source_type": "official_final_report",
+      "rights_evidence_url": "https://theanimalecho.woah.org/en/terms-and-conditions/",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "evidence_scope": "93rd General Session final report states 94th General Session will occur 24-28 May 2027 at CNIT Forest, Paris",
+      "source_semantics": "one World Assembly governance session; animal-health standards and resolutions are primary ontology, One Health is an analytical relationship"
+    }
+  ],
+  "series": [
+    {
+      "series_id": "WSER-CB-NG-CBN-MPC",
+      "source_id": "WSSRC-CB-014",
+      "category": "MONETARY_FINANCIAL_POLICY",
+      "subcategory": "monetary_policy",
+      "event_type": "MONETARY_POLICY_DECISION_PROCESS",
+      "institution": "Central Bank of Nigeria",
+      "jurisdiction": "Nigeria",
+      "region": "Africa",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "source_timezone": "Africa/Lagos"
+    },
+    {
+      "series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "source_id": "WSSRC-INT-032",
+      "category": "INTERNATIONAL_INSTITUTIONS",
+      "subcategory": "biological_security_arms_control",
+      "event_type": "TREATY_WORKING_GROUP_SESSION",
+      "institution": "Biological Weapons Convention / UNODA",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "source_timezone": "Europe/Zurich"
+    },
+    {
+      "series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "source_id": "WSSRC-INT-033",
+      "category": "AGRICULTURE_FOOD",
+      "subcategory": "animal_health_standards_governance",
+      "event_type": "GOVERNANCE_ASSEMBLY_SESSION",
+      "institution": "World Organisation for Animal Health",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "timing_type": "MULTI_DAY_LOCAL",
+      "source_timezone": "Europe/Paris"
+    }
+  ],
+  "occurrences": [
+    {
+      "occurrence_id": "WSO-CBN-MPC-307",
+      "series_id": "WSER-CB-NG-CBN-MPC",
+      "source_id": "WSSRC-CB-014",
+      "canonical_name": "Central Bank of Nigeria Monetary Policy Committee meeting 307 — September 2026",
+      "short_calendar_title": "CBN MPC meeting 307",
+      "start_local": "2026-09-21",
+      "end_local": "2026-09-22",
+      "location": null,
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "HIGH",
+      "geopolitical_sensitivity": "MEDIUM"
+    },
+    {
+      "occurrence_id": "WSO-CBN-MPC-308",
+      "series_id": "WSER-CB-NG-CBN-MPC",
+      "source_id": "WSSRC-CB-014",
+      "canonical_name": "Central Bank of Nigeria Monetary Policy Committee meeting 308 — November 2026",
+      "short_calendar_title": "CBN MPC meeting 308",
+      "start_local": "2026-11-23",
+      "end_local": "2026-11-24",
+      "location": null,
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "HIGH",
+      "geopolitical_sensitivity": "MEDIUM"
+    },
+    {
+      "occurrence_id": "WSO-BWC-WG-2026-S10",
+      "series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "source_id": "WSSRC-INT-032",
+      "canonical_name": "BWC Working Group on the Strengthening of the Convention — tenth session",
+      "short_calendar_title": "BWC strengthening WG — session 10",
+      "start_local": "2026-12-07",
+      "end_local": "2026-12-11",
+      "location": "Tempus Building, Palais des Nations, Geneva, Switzerland",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "LOW",
+      "geopolitical_sensitivity": "HIGH"
+    },
+    {
+      "occurrence_id": "WSO-WOAH-GS-094",
+      "series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "source_id": "WSSRC-INT-033",
+      "canonical_name": "WOAH 94th General Session of the World Assembly of Delegates",
+      "short_calendar_title": "WOAH 94th General Session",
+      "start_local": "2027-05-24",
+      "end_local": "2027-05-28",
+      "location": "CNIT Forest, Paris, France",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "MEDIUM"
+    }
+  ],
+  "explicit_holds": [
+    {"candidate": "IPPC CPM-21", "reason": "Conflicting official tentative-status surfaces; do not resolve by convenience."},
+    {"candidate": "North Indian Ocean tropical cyclone seasons", "reason": "Conflicting IMD first-phase definitions (April-June versus April-May); ontology readiness does not cure source conflict."}
+  ]
+}

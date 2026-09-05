@@ -22,35 +22,63 @@ class BiosecurityOverlayTests(unittest.TestCase):
     def test_live_overlay_validates_at_checkpoint(self):
         self.assertEqual(validate_biosecurity_overlay(self.registry, self.overlay), [])
 
-    def test_only_existing_five_who_series_are_canonical_memberships(self):
-        expected = {
+    def test_canonical_memberships_match_overlay_generation(self):
+        who = {
             "WSER-HEALTH-WHA",
             "WSER-HEALTH-WHO-EB",
             "WSER-HEALTH-WHO-IGWG",
             "WSER-HEALTH-WHO-PBAC",
             "WSER-HEALTH-WHO-RC",
         }
+        if self.overlay["version"] == "0.1":
+            expected = who
+            mapped_occurrences = 10
+        else:
+            self.assertEqual(self.overlay["version"], "0.2")
+            expected = who | {
+                "WSER-INT-BWC-WG-STRENGTHENING",
+                "WSER-AGF-WOAH-GENERAL-SESSION",
+            }
+            mapped_occurrences = 12
         memberships = self.overlay["canonical_series_memberships"]
         self.assertEqual({x["series_id"] for x in memberships}, expected)
-        self.assertTrue(all(x["canonical_institution"] == "World Health Organization" for x in memberships))
-        self.assertTrue(all(x["canonical_primary_category"] == "HEALTH_BIOSECURITY" for x in memberships))
         summary = biosecurity_overlay_summary(self.registry, self.overlay)
-        self.assertEqual(summary["mapped_canonical_series_count"], 5)
-        self.assertEqual(summary["mapped_canonical_occurrence_count"], 10)
+        self.assertEqual(summary["mapped_canonical_series_count"], len(expected))
+        self.assertEqual(summary["mapped_canonical_occurrence_count"], mapped_occurrences)
 
     def test_candidate_nodes_are_explicitly_noncanonical_and_have_no_canonical_ids(self):
-        expected = {
-            "BIO-CAND-WOAH",
-            "BIO-CAND-IPPC-CPM",
-            "BIO-CAND-BWC",
-            "BIO-CAND-AFRICA-CDC",
-        }
+        expected = (
+            {"BIO-CAND-WOAH", "BIO-CAND-IPPC-CPM", "BIO-CAND-BWC", "BIO-CAND-AFRICA-CDC"}
+            if self.overlay["version"] == "0.1"
+            else {"BIO-CAND-IPPC-CPM", "BIO-CAND-AFRICA-CDC"}
+        )
         nodes = self.overlay["candidate_nodes"]
         self.assertEqual({x["candidate_node_id"] for x in nodes}, expected)
         for node in nodes:
             self.assertEqual(node["canonical_status"], "NOT_CANONICAL_AT_V0.20")
             self.assertNotIn("series_id", node)
             self.assertNotIn("occurrence_id", node)
+
+    def test_correction_m_graduates_bwc_and_woah_without_primary_category_distortion(self):
+        if self.overlay["version"] != "0.2":
+            self.skipTest("Correction M graduation assertion applies to overlay v0.2+")
+        memberships={x["series_id"]:x for x in self.overlay["canonical_series_memberships"]}
+        self.assertEqual(
+            memberships["WSER-INT-BWC-WG-STRENGTHENING"]["canonical_primary_category"],
+            "INTERNATIONAL_INSTITUTIONS",
+        )
+        self.assertEqual(
+            memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["canonical_primary_category"],
+            "AGRICULTURE_FOOD",
+        )
+        self.assertEqual(
+            memberships["WSER-INT-BWC-WG-STRENGTHENING"]["system_ids"],
+            ["BIO-BIOLOGICAL-SECURITY-ARMS-CONTROL"],
+        )
+        self.assertEqual(
+            memberships["WSER-AGF-WOAH-GENERAL-SESSION"]["system_ids"],
+            ["BIO-ANIMAL-ZOONOTIC-HEALTH"],
+        )
 
     def test_one_health_is_relation_not_primary_system(self):
         relation = next(x for x in self.overlay["relationships"] if x["relationship_id"] == "ONE_HEALTH")
