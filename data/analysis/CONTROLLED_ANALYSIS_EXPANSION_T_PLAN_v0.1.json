@@ -1,0 +1,74 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CONTROLLED_ANALYSIS_EXPANSION_T",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "33826d046cc7b966cf8e77fe4fbb7debb6a50278",
+  "pre_state": {
+    "canonical_registry_version": "0.29",
+    "canonical_record_count": 678,
+    "analysis_reviews_version": "0.3",
+    "analysis_review_count": 6,
+    "analysis_evidence_version": "0.3",
+    "analysis_evidence_count": 14,
+    "eligible_completed_occurrence_count": 9,
+    "reviewed_occurrence_count": 6,
+    "reviewed_event_type_diversity": 5,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "admit_occurrence_ids": [
+    "WSO-COM-A-0013",
+    "WSO-TECH-A-0002"
+  ],
+  "hold_occurrence_ids": [
+    "WSO-ddb70f8ff05a58fb"
+  ],
+  "new_analysis_ids": [
+    "WSAN-EIA-WPSR-20260902-001",
+    "WSAN-EU-CHIPS-EVAL-20260603-001"
+  ],
+  "new_evidence_ids": [
+    "WSEV-EIA-WPSR-EIA-20260902",
+    "WSEV-EIA-WPSR-REUTERS-20260902",
+    "WSEV-EU-CHIPS-ARTICLE40-2023",
+    "WSEV-EU-CHIPS-CWP-2025",
+    "WSEV-EU-CHIPS-SWD-20260603",
+    "WSEV-EU-CHIPS-COM-20260603"
+  ],
+  "selection_rationale": {
+    "WSO-COM-A-0013": "Adds energy/commodity information-release analysis with multidimensional inventory surprise and heavily contaminated commodity-price response.",
+    "WSO-TECH-A-0002": "Adds technology/industrial-policy analysis, legal-deadline versus indicative-plan timing, and a high-importance event for which no market movement need be promoted.",
+    "WSO-ddb70f8ff05a58fb": "Held despite adequate evidence because another central-bank decision would add less analytical-contract pressure than the selected domain-diversity specimens."
+  },
+  "post_state": {
+    "canonical_registry_version": "0.29",
+    "canonical_record_count": 678,
+    "analysis_reviews_version": "0.4",
+    "analysis_review_count": 8,
+    "analysis_evidence_version": "0.4",
+    "analysis_evidence_count": 20,
+    "eligible_completed_occurrence_count": 9,
+    "reviewed_occurrence_count": 8,
+    "reviewed_event_type_diversity": 7,
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION"
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "monitor_configuration_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "google_calendar_write": false,
+    "automatic_canonical_commit": false,
+    "backlog_completion_is_population_objective": false,
+    "missing_market_baseline_may_be_reconstructed": false,
+    "market_reaction_required_for_review": false,
+    "legal_deadline_is_actual_publication_time": false,
+    "indicative_official_timetable_is_exact_commitment": false,
+    "temporal_sequence_establishes_causality": false
+  }
+}
