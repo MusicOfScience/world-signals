@@ -1,4 +1,4 @@
-name: TEMP P1 81 selected scope diagnostic
+name: TEMP P1 81 architecture diagnostic
 on:
   push:
     paths:
@@ -15,21 +15,35 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print selected source and canonical contracts
+      - name: Inspect verification and semantic precedents
         run: |
           python - <<'PY'
-          import json
           from pathlib import Path
-          ids=['WSSRC-REGJ-002','WSSRC-RISK-001','WSSRC-REG2-004','WSSRC-HEALTH-004','WSSRC-REG-009','WSSRC-INT-018','WSSRC-COM-005']
+          import json
           can=json.loads(Path('data/canonical/registry.json').read_text())
           src=json.loads(Path('data/sources/registry.json').read_text())
-          by={r['source_id']:r for r in src['sources']}
-          print('CHECKPOINT',can['version'],src['version'],len(can['records']),len(src['sources']))
-          for sid in ids:
-              print('\n=== SOURCE',sid,'===')
-              print(json.dumps(by[sid],ensure_ascii=False,indent=2,sort_keys=True))
-              rr=[r for r in can['records'] if r.get('source_id')==sid]
-              print('DEPENDENCIES',len(rr))
-              for r in rr:
-                  print(json.dumps(r,ensure_ascii=False,indent=2,sort_keys=True))
+          print('=== USDA/NASS REPO REFERENCES ===')
+          needles=('WSSRC-COM-005','USDA NASS','nass.usda.gov')
+          for p in list(Path('scripts').rglob('*'))+list(Path('src').rglob('*'))+list(Path('tests').rglob('*')):
+              if not p.is_file(): continue
+              try:t=p.read_text(errors='ignore')
+              except: continue
+              if any(n.lower() in t.lower() for n in needles):
+                  print(p)
+                  for i,line in enumerate(t.splitlines(),1):
+                      if any(n.lower() in line.lower() for n in needles): print(f'  {i}: {line[:300]}')
+          print('=== POPULATION HORIZON POLICY COUNTS / FISCAL EXAMPLES ===')
+          from collections import Counter
+          print(Counter(r.get('population_horizon_policy') for r in can['records'] if r.get('population_horizon_policy')))
+          for r in can['records']:
+              if r.get('category')=='FISCAL_SOVEREIGN_FINANCE' and r.get('population_horizon_policy'):
+                  print(json.dumps({k:r.get(k) for k in ['occurrence_id','canonical_name','jurisdiction','event_type','population_horizon_policy','start_local','source_id','notes']},ensure_ascii=False))
+          print('=== VERIFICATION MODE PRECEDENTS BY PARSER/RIGHTS STATE ===')
+          for r in src['sources']:
+              if r.get('verification_mode') and (r.get('parser_type') in {'ICS+PDF','HTML','HTML_WITH_ICAL_EXPORT_RESEARCH_CANDIDATE'} or r.get('automated_monitoring_use')=='ENDPOINT_REVIEW_REQUIRED'):
+                  print(json.dumps({k:r.get(k) for k in ['source_id','institution','parser_type','parser_version','runtime_health_state','canonical_provenance_use','automated_monitoring_use','verification_mode','automated_retrieval_permission']},ensure_ascii=False))
+          print('=== GOVERNANCE RESOLUTION SOURCE PRECEDENTS ===')
+          for r in src['sources']:
+              if 'governance' in str(r.get('source_type','')).lower() or 'resolution' in str(r.get('endpoint_role','')).lower():
+                  print(json.dumps({k:r.get(k) for k in ['source_id','institution','source_type','endpoint_role','authoritative_url','backup_source','canonical_provenance_use','automated_monitoring_use','verification_mode']},ensure_ascii=False))
           PY
