@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
@@ -28,11 +28,26 @@
     "second_order_effects",
     "falsifiers"
   ],
+  "population_readiness_policy": {
+    "post_event_anchor_lifecycle": "COMPLETED",
+    "priority_geographic_stress_regions": [
+      "Africa",
+      "South Asia",
+      "Southeast Asia",
+      "Latin America"
+    ],
+    "minimum_reviewed_event_type_diversity_before_broad_population": 2,
+    "elapsed_date_never_implies_completion": true,
+    "missing_historical_anchor_never_authorizes_synthetic_occurrence": true
+  },
   "controlled_vocabularies": {
     "review_state": [
       "DRAFT",
       "REVIEWED_SAMPLE",
       "REVIEWED"
+    ],
+    "review_phase": [
+      "POST_EVENT"
     ],
     "surprise_status": [
       "UPSIDE",
@@ -40,6 +55,17 @@
       "MIXED",
       "NO_CLEAR_SURPRISE",
       "NOT_ESTABLISHED"
+    ],
+    "benchmark_type": [
+      "MARKET_FORECAST",
+      "MARKET_CONSENSUS_DECISION",
+      "MARKET_PRICING_PATH",
+      "OFFICIAL_PRIOR_GUIDANCE",
+      "OTHER_DEFENSIBLE_EXPECTATION"
+    ],
+    "comparison_kind": [
+      "QUANTITATIVE",
+      "QUALITATIVE"
     ],
     "interaction_type": [
       "STRUCTURAL_DEPENDENCY",
@@ -83,13 +109,20 @@
       "POLICY_PROBABILITY_REPRICING",
       "FX_SPOT",
       "SOVEREIGN_YIELD",
+      "SWAP_RATE",
       "EQUITY_INDEX",
       "COMMODITY_PRICE",
       "CREDIT_SPREAD",
       "OTHER_MARKET_MEASURE"
     ],
+    "movement_representation": [
+      "PRE_POST_VALUES",
+      "CHANGE_AND_ENDPOINT",
+      "QUALITATIVE_ONLY"
+    ],
     "measurement_precision": [
       "SOURCE_REPORTED_PRE_POST",
+      "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
       "EXACT_TIMESTAMP_SERIES",
       "SESSION_LEVEL",
       "QUALITATIVE_ONLY"
@@ -102,14 +135,17 @@
   },
   "guardrails": [
     "Every analytical review must resolve to an existing canonical occurrence_id.",
+    "A REVIEWED_SAMPLE or REVIEWED post-event packet requires the linked canonical occurrence to be lifecycle COMPLETED; elapsed time alone never supplies completion evidence.",
     "Analytical evidence is governed separately from canonical provenance; citing it does not reassign source_id or alter canonical truth.",
     "Expected values and actual values must remain distinct objects even when numerically equal.",
-    "A surprise label must identify its comparison basis; no surprise may be inferred solely from observed market movement.",
-    "Every market-movement assertion requires an evidence reference, measurement window and measurement precision.",
+    "A surprise may be quantitative or qualitative, but every directional or MIXED surprise must identify an explicit comparison basis.",
+    "A headline policy action can match consensus while guidance or path information is surprising; do not collapse these dimensions into one synthetic numeric surprise.",
+    "Every market-movement assertion requires an evidence reference, measurement window, precision class and representation. Missing pre-values must remain missing rather than being algebraically reconstructed unless an exact independent series is used.",
     "Market movement does not establish causality. interaction_type, causal_status and confidence must be explicit.",
     "Any connection stronger than NOT_A_CAUSAL_CLAIM requires at least one alternative explanation; stronger causal support requires independent evidence beyond temporal sequence.",
     "Second-order effects must distinguish observed outcomes from prospective watch items.",
     "Intrinsic importance and expected market sensitivity are canonical metadata and must not be overwritten by observed response.",
-    "The analytical layer must be able to conclude NO_CLEAR_SURPRISE, NOT_ESTABLISHED or NOT_A_CAUSAL_CLAIM without penalty."
+    "The analytical layer must be able to conclude NO_CLEAR_SURPRISE, NOT_ESTABLISHED or NOT_A_CAUSAL_CLAIM without penalty.",
+    "Analysis population readiness must report geographic and event-type anchor gaps. A missing Global South completed occurrence is a population constraint, not permission to manufacture historical canonical records."
   ]
 }

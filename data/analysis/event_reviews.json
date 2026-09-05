@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
     "registry_version": "0.28",
@@ -11,6 +11,7 @@
     {
       "analysis_id": "WSAN-AU-GDP-2026Q2-001",
       "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
       "analysis_as_of_utc": "2026-09-05T14:15:00Z",
       "canonical_occurrence_id": "WSO-MAC-A-0025",
       "canonical_series_id": "WSER-MAC-AU-GDP",
@@ -73,12 +74,14 @@
         "summary": "Both the quarterly and annual growth readings were above the cited market forecasts. This is a data surprise, not by itself a directional market or policy prediction.",
         "comparisons": [
           {
+            "comparison_kind": "QUANTITATIVE",
             "metric": "real_gdp_qoq",
             "actual": 0.4,
             "expected": 0.3,
             "difference_percentage_points": 0.1
           },
           {
+            "comparison_kind": "QUANTITATIVE",
             "metric": "real_gdp_yoy",
             "actual": 2.1,
             "expected": 1.8,
@@ -94,6 +97,7 @@
         {
           "movement_id": "WSMV-AU-GDP-20260902-RBA-SEP",
           "movement_type": "POLICY_PROBABILITY_REPRICING",
+          "movement_representation": "PRE_POST_VALUES",
           "instrument_or_measure": "market-implied probability of an RBA September 2026 rate increase",
           "before_value": 48,
           "after_value": 57,
@@ -151,6 +155,175 @@
         "If a stronger contemporaneous source attributes the repricing primarily to a different catalyst, the connection confidence should be reduced."
       ],
       "analytical_conclusion": "A modest upside GDP surprise was followed by a measurable increase in near-term RBA hike pricing. The connection is analytically useful but not exclusive: a concurrent global oil/geopolitical inflation shock was also moving Australian rates. No stronger causal or second-order claim is established here.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-NZ-OCR-20260902-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T14:40:00Z",
+      "canonical_occurrence_id": "WSO-8df73c7804d45880",
+      "canonical_series_id": "WS.CB.RBNZ.OCR_DECISION",
+      "canonical_event_type": "DECISION",
+      "canonical_institution": "Reserve Bank of New Zealand",
+      "canonical_release_utc": "2026-09-02T02:00:00Z",
+      "scope": "2 September 2026 RBNZ OCR decision, forward policy-path signal and immediately reported New Zealand dollar and two-year swap response",
+      "what_happened": {
+        "summary": "The Reserve Bank of New Zealand increased the Official Cash Rate by 25 basis points to 2.75 percent by consensus. The Committee said further increases could be required but the future path was not pre-determined.",
+        "actuals": [
+          {
+            "metric": "ocr_level",
+            "value": 2.75,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-RBNZ-20260902"
+            ]
+          },
+          {
+            "metric": "ocr_change",
+            "value": 25,
+            "unit": "basis_points",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-RBNZ-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-NZ-OCR-RBNZ-20260902"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The headline increase was widely expected. The Business Times reported that 27 of 31 economists in a Reuters poll expected a 25 basis point hike to 2.75 percent.",
+        "benchmarks": [
+          {
+            "metric": "ocr_level",
+            "value": 2.75,
+            "unit": "percent",
+            "benchmark_type": "MARKET_CONSENSUS_DECISION",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-BT-20260902"
+            ]
+          },
+          {
+            "metric": "ocr_change",
+            "value": 25,
+            "unit": "basis_points",
+            "benchmark_type": "MARKET_CONSENSUS_DECISION",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-BT-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-NZ-OCR-BT-20260902"
+        ]
+      },
+      "what_surprised": {
+        "status": "MIXED",
+        "summary": "The 25 basis point hike itself matched consensus. The surprise was in the policy path: Reuters reported that the RBNZ projected a more gradual and limited tightening path than markets had priced, making the package slightly dovish relative to expectations despite the hike.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUANTITATIVE",
+            "metric": "ocr_level",
+            "actual": 2.75,
+            "expected": 2.75,
+            "difference_percentage_points": 0.0
+          },
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "forward_policy_path",
+            "actual": "RBNZ projected the OCR at 2.81 percent by December 2026 and 3.15 percent at end-2027",
+            "expected": "Markets had priced a faster pace of tightening and a peak around 3.5 percent",
+            "direction": "MORE_GRADUAL_THAN_MARKET_PRICING"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-NZ-OCR-RBNZ-20260902",
+          "WSEV-NZ-OCR-BT-20260902",
+          "WSEV-NZ-OCR-REUTERS-20260902"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-NZ-OCR-20260902-SWAP2Y",
+          "movement_type": "SWAP_RATE",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "New Zealand two-year swap rate",
+          "before_value": null,
+          "after_value": 3.7001,
+          "unit": "percent",
+          "change": -3,
+          "change_unit": "basis_points",
+          "direction": "LOWER",
+          "measurement_window": "source-reported immediate post-decision reaction on 2026-09-02",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ]
+        },
+        {
+          "movement_id": "WSMV-NZ-OCR-20260902-NZDUSD",
+          "movement_type": "FX_SPOT",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "New Zealand dollar versus US dollar",
+          "before_value": null,
+          "after_value": 0.5893,
+          "unit": "USD_per_NZD",
+          "change": -0.7,
+          "change_unit": "percent",
+          "direction": "NZD_LOWER",
+          "measurement_window": "source-reported same-session move after the RBNZ decision on 2026-09-02",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "TRANSMISSION_CHANNEL",
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "confidence": "MEDIUM",
+        "summary": "The immediate fall in two-year swap rates and the New Zealand dollar is directionally consistent with the forward OCR path being less aggressive than markets had priced. Reuters explicitly linked the currency and short-rate reaction to the RBNZ's gradual guidance, but this packet does not treat the entire New Zealand bond-market session as a clean decision-only experiment.",
+        "evidence_refs": [
+          "WSEV-NZ-OCR-RBNZ-20260902",
+          "WSEV-NZ-OCR-REUTERS-20260902"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Longer-term New Zealand yields were rising in a global bond sell-off as renewed Gulf fighting lifted oil prices and inflation concerns. Those long-end moves should not be attributed mechanically to the RBNZ decision.",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "The global oil and bond-market shock could dominate or contaminate longer-duration New Zealand yield moves independently of the domestic policy decision.",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ]
+        },
+        {
+          "summary": "The New Zealand dollar had already fallen overnight, so same-session currency weakness cannot be assigned wholly to the RBNZ announcement without a higher-frequency reconstruction.",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "The RBNZ's projected gradual tightening path is forward guidance, not an observed second-order outcome. No later mortgage, growth, political or capital-flow consequence is promoted in this sample."
+      },
+      "falsifiers": [
+        "If high-frequency swap or FX data show the reported moves materially preceded the RBNZ release, the decision-specific association should be weakened.",
+        "If later evidence shows the short-end move was primarily driven by a simultaneous global rates catalyst rather than the RBNZ path, connection confidence should be reduced.",
+        "If the market had in fact priced an OCR path at or below the RBNZ projection immediately before the decision, the 'more gradual than priced' surprise classification would need revision."
+      ],
+      "analytical_conclusion": "The RBNZ delivered the expected 25 basis point hike, but the package was less hawkish than markets had priced because its projected tightening path was more gradual. Short-rate and currency moves are consistent with that interpretation, while the global oil-driven bond sell-off remains a material competing explanation for longer-duration rates. No second-order consequence is established.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }
