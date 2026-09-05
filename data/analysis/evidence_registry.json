@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.5",
+  "version": "0.6",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -555,6 +555,83 @@
         "As of 3 September 2026, the page reported total Treasury expenditure at 5.79 percent of the annual budget.",
         "Recurrent expenditure was 5.69 percent, capital expenditure 1.19 percent and financing 10.78 percent.",
         "The FCGO explicitly warns that the data are unprocessed and subject to change after reconciliation, with direct-payment expenditure only partially included."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-MANDATE",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations Office for Disarmament Affairs / Biological Weapons Convention",
+      "host_or_distribution": "UNODA",
+      "title": "BWC Meetings — Working Group on the Strengthening of the Convention",
+      "url": "https://disarmament.unoda.org/en/our-work/weapons-mass-destruction/biological-weapons/bwc-meetings",
+      "published_at": null,
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Ninth Review Conference established the Working Group to identify, examine and develop measures, including possible legally-binding measures, and make recommendations to strengthen and institutionalise the Convention.",
+        "The Working Group was urged to complete its work as soon as possible, preferably before the end of 2025.",
+        "At completion the Working Group is to adopt by consensus a report with conclusions and recommendations for States Parties."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-OUTCOME",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Documents Library",
+      "title": "BWC/WG/8/CRP.2 — Draft procedural report of the eighth session",
+      "url": "https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionEighth_session_%282026%29/BWC_WG_8_CRP_2.pdf",
+      "published_at": "2026-02-13",
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The eighth session continued consideration of measures under agenda item 6.",
+        "The Chair issued successive revisions of the draft final report during the session, culminating in Rev.3 on 13 February without prejudice to future discussions.",
+        "At the closing meeting on 13 February, the eighth session adopted its procedural report by consensus."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-DOCUMENTS",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Meetings Place",
+      "title": "Eighth session (2026) — official document index",
+      "url": "https://meetings.unoda.org/meeting/79376/documents",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The official eighth-session document index lists successive revised draft final reports through BWC/WG/8/CRP.1/Rev.3.",
+        "The same index separately lists the procedural report, distinguishing the negotiated draft final-report text from the procedural report adopted for the session."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG10-UNODA-SCHEDULE",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Meetings Place",
+      "title": "Working Group on the Strengthening of the Convention — tenth session (2026)",
+      "url": "https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-tenth-session-2026",
+      "published_at": null,
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "UNODA schedules the tenth Working Group session for 7-11 December 2026 in Geneva.",
+        "The scheduled continuation is a future process dependency and not evidence that substantive consensus has already been achieved."
       ],
       "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
       "canonical_provenance_effect": "NONE"
