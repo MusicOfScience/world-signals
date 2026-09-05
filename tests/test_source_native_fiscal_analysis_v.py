@@ -205,7 +205,7 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertGreaterEqual(len(self.ledger["changes"]), 51)
         self.assertGreaterEqual(float(self.overlay["version"]), 0.5)
         self.assertGreaterEqual(float(self.overlay["canonical_checkpoint"]["registry_version"]), 0.30)
-        self.assertEqual(self.overlay["canonical_checkpoint"]["record_count"], 681)
+        self.assertGreaterEqual(self.overlay["canonical_checkpoint"]["record_count"], 681)
 
 
 if __name__ == "__main__":

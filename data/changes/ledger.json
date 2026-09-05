@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.18",
+  "version": "0.19",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1554,6 +1554,43 @@
       "committed_at": "2026-09-06T06:07:35+10:00",
       "registry_version_before": "0.30",
       "registry_version_after": "0.31",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-40fbe6cb581b404e10",
+      "occurrence_id": "WSO-FIN-B-0004",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-FIN-AU-RBA-FSR",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "timing_type": "TIMED_EVENT",
+        "start_local": "2026-03-19T11:30:00",
+        "end_local": null,
+        "source_timezone": "Australia/Sydney",
+        "start_utc": "2026-03-19T00:30:00Z",
+        "time_precision": "MINUTE"
+      },
+      "source_assertion_id": "WSA-AC-fdbc15d8c3cd2325",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T06:54:26+10:00",
+      "review_basis": [
+        "https://www.rba.gov.au/publications/fsr/",
+        "https://www.rba.gov.au/publications/fsr/2026/mar/",
+        "https://www.rba.gov.au/media-releases/2026/mr-26-09.html",
+        "https://www.rba.gov.au/news/",
+        "RBA first-party publication and media-release evidence establishes that the March 2026 Financial Stability Review was released on 19 March 2026; the RBA News archive records the publication at 11:30 am AEDT. Completion is not inferred from elapsed time.",
+        "Existing canonical series and source identities are reused; no new taxonomy or source endpoint identity is created.",
+        "Completion is admitted only from first-party post-event evidence, never elapsed time alone."
+      ],
+      "commit_mode": "REVIEWED_RBA_FINANCIAL_STABILITY_HISTORICAL_ANCHOR_AC",
+      "committed_at": "2026-09-06T06:54:26+10:00",
+      "registry_version_before": "0.31",
+      "registry_version_after": "0.32",
       "canonical_mutation_committed": true
     }
   ]

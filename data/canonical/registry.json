@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.31",
+  "version": "0.32",
   "reference_date": "2026-09-06",
-  "record_count": 681,
+  "record_count": 682,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -55927,6 +55927,85 @@
       "notes": "Nepal's Ministry of Finance publishes the FY2083/84 budget statement with the source-native date 15 Jestha 2083; this establishes completion without supplying an authoritative Gregorian conversion or constitutional presentation clock time. Historical admission preserves series identity and does not infer missing event-time precision.",
       "location": null,
       "population_tranche": "ANALYSIS_HISTORICAL_ANCHOR_U"
+    },
+    {
+      "occurrence_id": "WSO-FIN-B-0004",
+      "series_id": "WSER-FIN-AU-RBA-FSR",
+      "external_source_id": null,
+      "canonical_name": "RBA Financial Stability Review — March 2026",
+      "short_calendar_title": "RBA Financial Stability Review — March 2026",
+      "category": "FINANCIAL_STABILITY_REGULATION",
+      "subcategory": "systemic_risk_assessment",
+      "jurisdiction": "Australia",
+      "region": "Oceania / Pacific",
+      "institution": "Reserve Bank of Australia",
+      "event_type": "FINANCIAL_STABILITY_REPORT",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "timing_type": "TIMED_EVENT",
+      "start_local": "2026-03-19T11:30:00",
+      "end_local": null,
+      "source_timezone": "Australia/Sydney",
+      "start_utc": "2026-03-19T00:30:00Z",
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "MINUTE",
+      "all_day_semantics": false,
+      "reference_period": "October 2026",
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-FIN-001",
+      "primary_source_assertion_id": "WSA-AC-37459211c4047865",
+      "last_successful_assertion_id": "WSA-AC-fdbc15d8c3cd2325",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical occurrence admitted after authoritative post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AC-fdbc15d8c3cd2325",
+          "basis": "RBA first-party publication and media-release evidence establishes that the March 2026 Financial Stability Review was released on 19 March 2026; the RBA News archive records the publication at 11:30 am AEDT. Completion is not inferred from elapsed time."
+        }
+      ],
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "MEDIUM",
+      "transmission_channels": [
+        "banking",
+        "credit",
+        "liquidity",
+        "housing",
+        "households",
+        "financial_markets",
+        "macroprudential_policy"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ESSENTIAL",
+      "financial_stability_event_type": "FINANCIAL_STABILITY_REPORT",
+      "financial_stability_information_role": "SYSTEMIC_RISK_ASSESSMENT",
+      "notes": "RBA first-party publication and media-release evidence establishes that the March 2026 Financial Stability Review was released on 19 March 2026; the RBA News archive records the publication at 11:30 am AEDT. Completion is not inferred from elapsed time. The occurrence reuses the existing RBA FSR series and source; no new series or source identity is created.",
+      "first_announced_at": null,
+      "population_tranche": "RBA_FINANCIAL_STABILITY_HISTORICAL_ANCHOR_AC",
+      "related_documents": [
+        {
+          "source_id": "WSSRC-FIN-001",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://www.rba.gov.au/publications/fsr/2026/mar/"
+        }
+      ],
+      "derivation_sources": [
+        "WSSRC-FIN-001"
+      ]
     }
   ]
 }
