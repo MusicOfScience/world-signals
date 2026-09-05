@@ -55,9 +55,25 @@ def _canonical_context(row: dict[str, Any]) -> dict[str, Any]:
         "lifecycle_status": row.get("lifecycle_status"),
         "intrinsic_importance": row.get("intrinsic_importance"),
         "expected_market_sensitivity": row.get("expected_market_sensitivity"),
-        "start_utc": row.get("start_utc"),
+        "timing_type": row.get("timing_type"),
+        "time_precision": row.get("time_precision"),
+        "time_status": row.get("time_status"),
+        "time_basis": row.get("time_basis"),
+        "publication_time_semantics": row.get("publication_time_semantics"),
+        "all_day_semantics": row.get("all_day_semantics"),
         "start_local": row.get("start_local"),
+        "end_local": row.get("end_local"),
+        "start_utc": row.get("start_utc"),
+        "end_utc": row.get("end_utc"),
         "source_timezone": row.get("source_timezone"),
+        "date_earliest": row.get("date_earliest"),
+        "date_latest": row.get("date_latest"),
+        "native_calendar_system": row.get("native_calendar_system"),
+        "native_calendar_year": row.get("native_calendar_year"),
+        "native_calendar_month": row.get("native_calendar_month"),
+        "native_calendar_day": row.get("native_calendar_day"),
+        "source_native_date_label": row.get("source_native_date_label"),
+        "gregorian_resolution_status": row.get("gregorian_resolution_status"),
     }
 
 
@@ -165,6 +181,7 @@ def validate_analysis(
     vocab = schema.get("controlled_vocabularies") or {}
     required_sections = schema.get("required_review_sections") or []
     population_policy = schema.get("population_readiness_policy") or {}
+    temporal_policy = schema.get("temporal_context_policy") or {}
 
     if (schema.get("layer_boundary") or {}).get("canonical_mutation_allowed") is not False:
         errors.append("analysis schema must prohibit canonical mutation")
@@ -174,6 +191,14 @@ def validate_analysis(
         errors.append("analysis population policy must prohibit elapsed-date completion inference")
     if population_policy.get("missing_historical_anchor_never_authorizes_synthetic_occurrence") is not True:
         errors.append("analysis population policy must prohibit synthetic historical anchors")
+    required_temporal_flags = (
+        "canonical_temporal_context_must_be_preserved_in_public_projection",
+        "source_native_calendar_semantics_must_not_be_dropped",
+        "analytical_evidence_may_not_resolve_missing_canonical_gregorian_or_utc_time",
+        "public_projection_may_not_infer_missing_canonical_time",
+    )
+    if any(temporal_policy.get(flag) is not True for flag in required_temporal_flags):
+        errors.append("analysis temporal-context policy must preserve canonical time without inference")
 
     canonical_by_id = {
         row.get("occurrence_id"): row
