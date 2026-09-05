@@ -1,3 +1,4 @@
+# rerun after semantic test repairs
 name: TEMP priority-region Analysis S full simulation
 
 on:
