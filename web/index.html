@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="history.css">
   <link rel="stylesheet" href="operations.css">
+  <link rel="stylesheet" href="coverage.css">
 </head>
 <body>
   <header class="hero">
@@ -29,6 +30,7 @@
       <div class="viewtabs">
         <button data-view="calendar" aria-pressed="true">Calendar</button>
         <button data-view="index" aria-pressed="false">Event index</button>
+        <button id="coverageTab" aria-pressed="false">Coverage</button>
         <button data-view="monitors" aria-pressed="false">Monitor routes</button>
         <button id="operationsTab" aria-pressed="false">Operations</button>
         <button id="historyTab" aria-pressed="false">Change history</button>
@@ -82,6 +84,54 @@
         <button id="futureOnly" class="toggle" aria-pressed="true">Future/current only</button>
       </section>
       <section id="events" class="events"></section>
+    </section>
+
+    <section id="coverageView" class="view-panel" hidden>
+      <section class="coverage-intro">
+        <div>
+          <p class="eyebrow">COVERAGE / BIAS AUDIT</p>
+          <h2>What the registry covers — and where it is thin</h2>
+          <p>This is a read-only audit of the canonical registry’s shape. It compares distinct series, institutions and sources so high-frequency releases do not masquerade as broad global coverage.</p>
+          <p id="coverageVersion" class="meta"></p>
+        </div>
+        <div class="coverage-boundary">
+          <strong>Interpretation boundary</strong>
+          <span>Coverage diagnostics: descriptive</span>
+          <span>Thresholds: review prompts only</span>
+          <span>Population quotas: prohibited</span>
+          <span>Canonical mutation authority: none</span>
+        </div>
+      </section>
+
+      <section id="coverageStats" class="stats" aria-live="polite"></section>
+
+      <div class="coverage-method">
+        <strong>How to read this</strong>
+        <p>Occurrence density is not coverage quality. A monthly release can create many calendar rows while representing one signal family; breadth is therefore assessed primarily at series level and secondarily through institutional diversity.</p>
+        <p>Highlighted rows are research prompts, not instructions to add records until a numerical target is reached.</p>
+      </div>
+
+      <section class="coverage-card coverage-prompts">
+        <div class="section-heading"><div><p class="eyebrow">MECHANICAL REVIEW PROMPTS</p><h3>Where qualitative research should look next</h3></div></div>
+        <div id="coveragePrompts"><p class="empty">Loading coverage diagnostics…</p></div>
+      </section>
+
+      <section class="coverage-grid">
+        <article class="coverage-card">
+          <div class="section-heading"><div><p class="eyebrow">REGIONAL SHAPE</p><h3>Series and institutional diversity</h3></div></div>
+          <div id="coverageRegions"></div>
+        </article>
+        <article class="coverage-card">
+          <div class="section-heading"><div><p class="eyebrow">DOMAIN SHAPE</p><h3>Category breadth and recurrence</h3></div></div>
+          <div id="coverageCategories"></div>
+        </article>
+      </section>
+
+      <section class="coverage-card">
+        <div class="section-heading"><div><p class="eyebrow">RECURRENCE CONCENTRATION</p><h3>Why occurrence counts can mislead</h3></div></div>
+        <p class="meta">The most frequently recurring series are shown to make density visible rather than letting it stand in for importance or geographic breadth.</p>
+        <div id="coverageFrequency" class="coverage-frequency"></div>
+      </section>
     </section>
 
     <section id="monitorsView" class="view-panel" hidden>
@@ -168,5 +218,6 @@
   <script src="app.js"></script>
   <script src="history.js"></script>
   <script src="operations.js"></script>
+  <script src="coverage.js"></script>
 </body>
 </html>
