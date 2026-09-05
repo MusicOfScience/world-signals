@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.35",
+  "version": "0.36",
   "reference_date": "2026-09-06",
-  "record_count": 685,
+  "record_count": 686,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56300,6 +56300,109 @@
       "population_tranche": "AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF",
       "derivation_sources": [
         "WSSRC-RISK-001"
+      ]
+    },
+    {
+      "occurrence_id": "WSO-EL-KR-LGE-20260603",
+      "series_id": "WSER-EL-KR-LGE",
+      "external_source_id": null,
+      "canonical_name": "South Korea — 9th Nationwide Simultaneous Local Elections",
+      "short_calendar_title": "South Korea local elections — 2026",
+      "category": "ELECTIONS_GOVERNANCE",
+      "subcategory": "local_government_election",
+      "jurisdiction": "South Korea",
+      "region": "East Asia",
+      "institution": "National Election Commission of the Republic of Korea",
+      "event_type": "ELECTION_MILESTONE",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-06-03",
+      "end_local": null,
+      "source_timezone": "Asia/Seoul",
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": null,
+      "publication_datetime": null,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+      "source_id": "WSSRC-EL-KR-001",
+      "primary_source_assertion_id": "WSA-AG-8cb4550e88acf988",
+      "last_successful_assertion_id": "WSA-AG-3c48fad3a0fbdae4",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Historical electoral-process milestone admitted after competent first-party NEC post-event verification; completion is not inferred from elapsed time.",
+          "source_assertion_id": "WSA-AG-3c48fad3a0fbdae4",
+          "basis": "Current National Election Commission Policy & Pledge material exposes winner pledges for the 9th Nationwide Simultaneous Local Elections, establishing a post-event winning-candidate state. Completion is not inferred from elapsed time."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-EL-KR-001",
+          "role": "AUTHORITATIVE_SCHEDULE_VERIFICATION",
+          "source_locator": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084"
+        },
+        {
+          "source_id": "WSSRC-EL-KR-001",
+          "role": "COMPLETION_OUTCOME_VERIFICATION",
+          "source_locator": "https://policy.nec.go.kr/plc/main/initUMAMain.do"
+        }
+      ],
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM",
+      "geopolitical_sensitivity": "HIGH",
+      "transmission_channels": [
+        "politics",
+        "fiscal_policy",
+        "regulation",
+        "currencies",
+        "equities",
+        "sovereign_bonds",
+        "trade"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ESSENTIAL",
+      "election_process_id": "WSEP-ZA-LGE-2026",
+      "election_milestone_type": "POLL_GENERAL",
+      "election_date_basis": "LEGAL_PROCLAMATION",
+      "round_number": null,
+      "round_activation_status": "NOT_APPLICABLE",
+      "legal_activation_status": "PROCLAIMED",
+      "result_dependency_occurrence_id": null,
+      "court_dependency_monitor_id": null,
+      "transition_resolution_mode": "NO_SEPARATE_TRANSITION_MODEL",
+      "deadline_is_actual_event_time": false,
+      "publication_bundle_type": "SINGLE_RELEASE",
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE",
+      "notes": "Current National Election Commission Policy & Pledge material exposes winner pledges for the 9th Nationwide Simultaneous Local Elections, establishing a post-event winning-candidate state. Completion is not inferred from elapsed time. Election-day milestone is distinct from early voting, individual local contests, result/certification milestones, government formation, policy implementation, observed market response and causal attribution. NEC polling hours (06:00–18:00) and 29–30 May early voting remain supporting process detail, not canonical election-day clock time.",
+      "observed_market_response": null,
+      "population_tranche": "SOUTH_KOREA_LOCAL_ELECTION_HISTORICAL_ANCHOR_AG",
+      "location": null,
+      "derivation_sources": [
+        "WSSRC-EL-KR-001"
       ]
     }
   ]

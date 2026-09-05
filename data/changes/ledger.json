@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.22",
+  "version": "0.23",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1705,6 +1705,48 @@
       "committed_at": "2026-09-06T08:18:14+10:00",
       "registry_version_before": "0.34",
       "registry_version_after": "0.35",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-bb86c8fb8f26d617a1",
+      "occurrence_id": "WSO-EL-KR-LGE-20260603",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-EL-KR-LGE",
+        "source_id": "WSSRC-EL-KR-001",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "category": "ELECTIONS_GOVERNANCE",
+        "subcategory": "local_government_election",
+        "event_type": "ELECTION_MILESTONE",
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-06-03",
+        "source_timezone": "Asia/Seoul",
+        "start_utc": null,
+        "time_precision": "DAY"
+      },
+      "source_assertion_id": "WSA-AG-3c48fad3a0fbdae4",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T08:41:41+10:00",
+      "review_basis": [
+        "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+        "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+        "https://policy.nec.go.kr/plc/main/initUMAMain.do",
+        "https://www.nec.go.kr/site/nec/07/10702030000002020040802.jsp",
+        "Current National Election Commission Policy & Pledge material exposes winner pledges for the 9th Nationwide Simultaneous Local Elections, establishing a post-event winning-candidate state. Completion is not inferred from elapsed time.",
+        "The event-specific NEC schedule confirms 3 June 2026; the generic English calendar's provisional label is not used as the sole final date authority.",
+        "Election day remains a civil-date milestone. Polling hours and early voting are supporting process details, not canonical clock-time boundaries.",
+        "The nationwide simultaneous local election is not collapsed into one synthetic national winner, vote share or mandate.",
+        "NEC factual provenance is separated from KOGL content-reuse conditions and from production automation permission."
+      ],
+      "commit_mode": "REVIEWED_SOUTH_KOREA_LOCAL_ELECTION_HISTORICAL_ANCHOR_AG",
+      "committed_at": "2026-09-06T08:41:41+10:00",
+      "registry_version_before": "0.35",
+      "registry_version_after": "0.36",
       "canonical_mutation_committed": true
     }
   ]
