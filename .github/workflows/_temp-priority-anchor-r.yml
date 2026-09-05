@@ -18,35 +18,17 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print completion change ledger and assertion contract
+      - name: Print available source ID ranges and dependency counts
         shell: bash
         run: |
           python - <<'PY'
-          import json
+          import json, re
           from pathlib import Path
-
-          canonical=json.loads(Path('data/canonical/registry.json').read_text())
-          schema=json.loads(Path('data/canonical/schema.json').read_text())
-          ledger=json.loads(Path('data/changes/ledger.json').read_text())
-
-          print('CHECKPOINT', canonical['version'], len(canonical['records']), ledger.get('version'), len(ledger.get('changes',[])))
-          print('\n=== COMPLETION LEDGER ENTRIES ===')
-          wanted={'WSO-MAC-A-0025','WSO-8df73c7804d45880'}
-          for row in ledger.get('changes',[]):
-              if row.get('occurrence_id') in wanted:
-                  print(json.dumps(row, indent=2, sort_keys=True))
-
-          print('\n=== SCHEMA SOURCE ASSERTION FIELDS ===')
-          print(json.dumps(schema.get('source_assertion_fields'), indent=2, sort_keys=True))
-          print('\n=== SCHEMA OCCURRENCE CHANGE FIELDS ===')
-          print(json.dumps(schema.get('occurrence_change_fields'), indent=2, sort_keys=True))
-          print('\n=== CONTROLLED VOCABULARIES RELEVANT ===')
-          vocab=schema.get('controlled_vocabularies') or {}
-          for key in sorted(vocab):
-              if any(token in key.lower() for token in ['change','review','assert','lifecycle','certainty','evidence','status']):
-                  print(key, json.dumps(vocab[key], sort_keys=True))
-
-          print('\n=== RECENT LEDGER SHAPE SAMPLE ===')
-          for row in ledger.get('changes',[])[-5:]:
-              print(json.dumps(row, indent=2, sort_keys=True))
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          for prefix in ['WSSRC-MAC-','WSSRC-REG-','WSSRC-REGJ-','WSSRC-REG2-']:
+              rows=[s for s in sources['sources'] if str(s.get('source_id','')).startswith(prefix)]
+              print('\n',prefix,'COUNT',len(rows))
+              for s in sorted(rows,key=lambda x:x['source_id']):
+                  print(s['source_id'], s.get('institution'), 'deps=',s.get('canonical_dependency_count'), 'role=',s.get('endpoint_role'))
+          print('\nTOTAL',sources['version'],len(sources['sources']))
           PY
