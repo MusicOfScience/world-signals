@@ -7,11 +7,13 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from src.world_signals.analytical_overlays import validate_biosecurity_overlay
 from src.world_signals.validation import validate_registry
-
-ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "data/canonical/registry.json"
 SOURCE_PATH = ROOT / "data/sources/registry.json"
 OVERLAY_PATH = ROOT / "data/coverage/biosecurity_overlay.json"
