@@ -158,10 +158,10 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         review = next(x for x in reviews["reviews"] if x["analysis_id"] == "WSAN-NP-BUDGET-2083-001")
         self.assertIsNone(review["canonical_release_utc"])
 
-    def test_v_expands_reviewed_type_diversity_but_not_backlog_completion(self):
+    def test_v_expands_reviewed_type_diversity_but_does_not_define_future_backlog(self):
         reviews, _ = self.post_objects()
         readiness = analysis_population_readiness(self.schema, reviews, self.canonical)
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 12)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 12)
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], self.plan["postconditions"]["reviewed_event_type_diversity"])
         self.assertGreaterEqual(readiness["reviewed_by_event_type"].get("FISCAL_POLICY_PROCESS", 0), 1)
@@ -171,8 +171,12 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
             if x.get("lifecycle_status") == "COMPLETED"
             and x["occurrence_id"] not in set(readiness["reviewed_occurrence_ids"])
         }
-        self.assertTrue(remaining <= set(self.plan["selection"]["held_occurrence_ids"]))
         self.assertNotIn("WSO-FIS-NP-BUDGET-2083", remaining)
+        # V freezes which occurrences it deliberately held at its own boundary; later
+        # canonical lifecycle repairs may legitimately add further unreviewed items.
+        for held in self.plan["selection"]["held_occurrence_ids"]:
+            if held not in readiness["reviewed_occurrence_ids"]:
+                self.assertIn(held, remaining)
         self.assertFalse(self.plan["guardrails"]["backlog_completion_is_population_objective"])
 
     def test_browser_renders_source_native_truth_without_converter(self):
@@ -186,14 +190,22 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertNotIn("2026-05-29", source)
         self.assertNotIn("data/canonical", source)
 
-    def test_all_v_write_gates_and_upstream_versions_remain_closed(self):
+    def test_v_write_gates_and_frozen_upstream_boundary_survive_descendants(self):
         for key, value in self.plan["guardrails"].items():
             self.assertFalse(value, key)
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.30", 681))
-        self.assertEqual((self.sources["version"], len(self.sources["sources"])), ("1.72", 237))
-        self.assertEqual((self.ledger["version"], len(self.ledger["changes"])), ("0.17", 51))
-        self.assertEqual((self.overlay["version"], self.overlay["canonical_checkpoint"]),
-                         ("0.5", {"registry_version": "0.30", "record_count": 681}))
+        pre = self.plan["preconditions"]
+        self.assertEqual((pre["canonical_registry_version"], pre["canonical_record_count"]), ("0.30", 681))
+        self.assertEqual((pre["source_registry_version"], pre["source_record_count"]), ("1.72", 237))
+        self.assertEqual((pre["change_ledger_version"], pre["change_ledger_count"]), ("0.17", 51))
+        self.assertGreaterEqual(float(self.canonical["version"]), 0.30)
+        self.assertGreaterEqual(len(self.canonical["records"]), 681)
+        self.assertGreaterEqual(float(self.sources["version"]), 1.72)
+        self.assertGreaterEqual(len(self.sources["sources"]), 237)
+        self.assertGreaterEqual(float(self.ledger["version"]), 0.17)
+        self.assertGreaterEqual(len(self.ledger["changes"]), 51)
+        self.assertGreaterEqual(float(self.overlay["version"]), 0.5)
+        self.assertGreaterEqual(float(self.overlay["canonical_checkpoint"]["registry_version"]), 0.30)
+        self.assertEqual(self.overlay["canonical_checkpoint"]["record_count"], 681)
 
 
 if __name__ == "__main__":
