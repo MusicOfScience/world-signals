@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.23",
+  "version": "0.24",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1747,6 +1747,46 @@
       "committed_at": "2026-09-06T08:41:41+10:00",
       "registry_version_before": "0.35",
       "registry_version_after": "0.36",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-df0b909ec6b120fb85",
+      "occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+      "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-CLIM-UNFCCC-SB",
+        "source_id": "WSSRC-CLIM-005",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "category": "CLIMATE_ENVIRONMENT",
+        "event_type": "ENVIRONMENTAL_GOVERNANCE_EVENT",
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-06-08",
+        "end_local": "2026-06-18",
+        "source_timezone": "Europe/Berlin",
+        "start_utc": null,
+        "time_precision": "DAY"
+      },
+      "source_assertion_id": "WSA-AH-f18dbcab964171c7",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T09:01:11+10:00",
+      "review_basis": [
+        "https://unfccc.int/sb64",
+        "https://unfccc.int/news/written-statement-of-unfccc-executive-secretary-on-closing-of-un-june-climate-meetings-sb64",
+        "UNFCCC's first-party SB64 event page establishes the 8-18 June 2026 Bonn meeting window and records at 23:45 on 18 June that the June Climate Meetings had officially closed. The 23:45 update is completion evidence only and is not promoted into a synthetic canonical endpoint for the multi-day event. Completion is not inferred from elapsed time.",
+        "The 23:45 closure update is completion evidence, not the canonical endpoint of the multi-day meeting.",
+        "SB64 umbrella identity does not merge SBSTA64 and SBI64 legal session identities.",
+        "Meeting closure does not imply negotiation success, implementation, climate outcome or market causality.",
+        "UNFCCC source governance remains manual-information / production-automation hold."
+      ],
+      "commit_mode": "REVIEWED_UNFCCC_SB64_HISTORICAL_ANCHOR_AH",
+      "committed_at": "2026-09-06T09:01:11+10:00",
+      "registry_version_before": "0.36",
+      "registry_version_after": "0.37",
       "canonical_mutation_committed": true
     }
   ]

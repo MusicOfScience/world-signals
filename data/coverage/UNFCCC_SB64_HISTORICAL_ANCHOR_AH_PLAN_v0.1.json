@@ -1,0 +1,161 @@
+{
+  "project": "WORLD SIGNALS",
+  "plan": "UNFCCC_SB64_HISTORICAL_ANCHOR_AH",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "0d55a9dcd877736886dd9ee3e8fcaa8a93a869d1",
+  "architecture_position": "CANONICAL_HISTORICAL_ANCHOR",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.36",
+    "canonical_record_count": 686,
+    "source_registry_version": "1.77",
+    "source_record_count": 241,
+    "change_ledger_version": "0.23",
+    "change_ledger_count": 58,
+    "biosecurity_overlay_version": "0.11",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.36",
+      "record_count": 686
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-CLIM-UNFCCC-SB64-202606"
+    ],
+    "required_absent_series_ids": [
+      "WSER-CLIM-UNFCCC-SB"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-CLIM-005"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-df0b909ec6b120fb85"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-CLIM-A-0001",
+      "source_id": "WSSRC-CLIM-001",
+      "institution": "UNFCCC",
+      "jurisdiction": "Global",
+      "region": "Cross-regional / Global",
+      "category": "CLIMATE_ENVIRONMENT",
+      "subcategory": "climate_treaty_governance",
+      "event_type": "ENVIRONMENTAL_GOVERNANCE_EVENT",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM"
+    },
+    "required_source_family": {
+      "source_id": "WSSRC-CLIM-001",
+      "institution": "UNFCCC",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY"
+    }
+  },
+  "new_source": {
+    "source_id": "WSSRC-CLIM-005",
+    "clone_source_id": "WSSRC-CLIM-001",
+    "institution": "UNFCCC",
+    "jurisdiction": "Global",
+    "domain": "climate_environment",
+    "endpoint_role": "SB64 official event page and closure updates",
+    "authoritative_url": "https://unfccc.int/sb64",
+    "backup_source": "https://unfccc.int/news/written-statement-of-unfccc-executive-secretary-on-closing-of-un-june-climate-meetings-sb64",
+    "source_type": "official_event_site_historical_completion",
+    "information_supplied": "SB64 dates/location, subsidiary-body session links and first-party closure evidence for 8-18 June 2026.",
+    "future_schedule_horizon": "historical event-specific page only; not forward schedule authority",
+    "typical_advance_notice": "event-specific schedule published in advance; retained historical page",
+    "source_timezone": "Europe/Berlin",
+    "canonical_dependency_count": 1,
+    "notes": "Event-specific curated factual provenance. Inherit the reviewed UNFCCC manual-information and production-automation hold; public accessibility is not crawler permission."
+  },
+  "anchor": {
+    "occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+    "template_occurrence_id": "WSO-CLIM-A-0001",
+    "series_id": "WSER-CLIM-UNFCCC-SB",
+    "source_id": "WSSRC-CLIM-005",
+    "canonical_name": "UNFCCC June Climate Meetings (SB64)",
+    "short_calendar_title": "UNFCCC SB64 — Bonn",
+    "timing": {
+      "timing_type": "MULTI_DAY_LOCAL",
+      "start_local": "2026-06-08",
+      "end_local": "2026-06-18",
+      "source_timezone": "Europe/Berlin",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+    },
+    "location": "Bonn, Germany",
+    "lifecycle_status": "COMPLETED",
+    "certainty_status": "CONFIRMED",
+    "environmental_process_type": "HISTORICAL_CONTEXT_ANCHOR",
+    "treaty_or_assessment_body": "UNFCCC",
+    "legal_session_identity": "SB64 umbrella: SBSTA64 and SBI64 remain legally distinct sessions",
+    "primary_source_assertion_id": "WSA-AH-837ddedf4a76da02",
+    "completion_source_assertion_id": "WSA-AH-f18dbcab964171c7",
+    "change_id": "WSCHANGE-df0b909ec6b120fb85",
+    "event_page_url": "https://unfccc.int/sb64",
+    "closing_statement_url": "https://unfccc.int/news/written-statement-of-unfccc-executive-secretary-on-closing-of-un-june-climate-meetings-sb64",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "UNFCCC's first-party SB64 event page establishes the 8-18 June 2026 Bonn meeting window and records at 23:45 on 18 June that the June Climate Meetings had officially closed. The 23:45 update is completion evidence only and is not promoted into a synthetic canonical endpoint for the multi-day event. Completion is not inferred from elapsed time."
+  },
+  "mutation_policy": {
+    "canonical_registry": true,
+    "source_registry": true,
+    "source_registry_existing_record_mutation": false,
+    "source_registry_new_record_scope": [
+      "WSSRC-CLIM-005"
+    ],
+    "change_ledger": true,
+    "biosecurity_overlay_checkpoint_only": true,
+    "canonical_schema": false,
+    "monitor_configuration": false,
+    "analysis_schema": false,
+    "analysis_reviews": false,
+    "analysis_evidence": false,
+    "calendar": false,
+    "automatic_canonical_commit": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "new_source_dependency_count": 1,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 12,
+    "climate_environment_completed_anchor_present": true,
+    "environmental_governance_event_completed_type_present": true
+  },
+  "selection_discipline": {
+    "queue_completion_is_objective": false,
+    "elapsed_time_is_completion_evidence": false,
+    "closing_update_clock_is_whole_event_endpoint": false,
+    "sb64_umbrella_merges_legal_subsidiary_bodies": false,
+    "meeting_completion_implies_negotiation_success": false,
+    "meeting_completion_implies_implementation": false,
+    "meeting_completion_implies_climate_outcome": false,
+    "observed_market_response_inferred": false,
+    "market_structure_gap_auto_filled": false,
+    "analysis_write_in_same_transaction": false,
+    "calendar_write": false
+  }
+}
