@@ -1,0 +1,347 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "INSTITUTIONAL_ANALYSIS_W",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-BWC-WG-MANDATE-UNODA",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations Office for Disarmament Affairs",
+      "host_or_distribution": "United Nations Office for Disarmament Affairs",
+      "title": "BWC Meetings — Working Group on the Strengthening of the Convention",
+      "url": "https://disarmament.unoda.org/en/our-work/weapons-mass-destruction/biological-weapons/bwc-meetings",
+      "published_at": null,
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Ninth Review Conference established the Working Group to identify, examine and develop specific and effective measures, including possible legally binding measures, and make recommendations to strengthen and institutionalise the Convention.",
+        "The Working Group is a multi-session process whose adopted report is submitted to States Parties for later consideration and further action."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-PROC-20260213",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "United Nations Office for Disarmament Affairs document library",
+      "title": "BWC/WG/8/CRP.2 — Draft procedural report of the eighth session",
+      "url": "https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionEighth_session_%282026%29/BWC_WG_8_CRP_2.pdf",
+      "published_at": "2026-02-13",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The eighth session met in Geneva from 9 to 13 February 2026 and held ten meetings.",
+        "The Working Group continued consideration of measures under its strengthening mandate.",
+        "The Chair issued successive revised versions of the draft final report during the session, with the 13 February revision issued without prejudice to future discussions.",
+        "At the closing meeting on 13 February, the Working Group adopted its procedural report by consensus."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-PROGRAMME-20260424",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "93rd General Session — Provisional Programme",
+      "url": "https://www.woah.org/app/uploads/2026/03/gs93-wd-adm-01-programme-en.pdf",
+      "published_at": "2026-04-24",
+      "roles": [
+        "EXPECTATION_BENCHMARK"
+      ],
+      "supports": [
+        "The provisional programme scheduled presentation and adoption of the 8th Strategic Plan.",
+        "The programme scheduled consideration and adoption of international standards and resolutions across WOAH Codes and Manuals.",
+        "The official agenda did not establish a quantitative forecast for the eventual number of standards or resolutions adopted."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-GS93-OUTCOMES-20260522",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "93rd General Session of the World Assembly of Delegates",
+      "url": "https://www.woah.org/en/event/93rd-general-session-of-the-world-assembly-of-delegates/",
+      "published_at": "2026-05-22",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The 93rd General Session took place in Paris from 18 to 22 May 2026.",
+        "WOAH reports 35 resolutions adopted by Delegates.",
+        "WOAH reports 51 international standards adopted or revised.",
+        "The session also included official animal-health status and control-programme decisions."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Organisation for Animal Health",
+      "host_or_distribution": "World Organisation for Animal Health",
+      "title": "WOAH 8th Strategic Plan adopted for 2027–2031",
+      "url": "https://www.woah.org/en/woah-8th-strategic-plan-adopted-for-2027-2031/",
+      "published_at": "2026-05-20",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "The World Assembly adopted WOAH's 8th Strategic Plan on 20 May 2026 for the 2027–2031 period.",
+        "The Plan formally takes effect in 2027.",
+        "WOAH describes a transition from adoption to later implementation through subsequent roadmaps and monitoring frameworks."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    }
+  ],
+  "reviews": [
+    {
+      "analysis_id": "WSAN-BWC-WG8-20260213-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T19:08:00Z",
+      "canonical_occurrence_id": "WSO-BWC-WG-2026-S08",
+      "canonical_series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "canonical_event_type": "TREATY_WORKING_GROUP_SESSION",
+      "canonical_institution": "Biological Weapons Convention / UNODA",
+      "canonical_release_utc": null,
+      "scope": "BWC strengthening Working Group eighth session, institutional mandate, procedural consensus and the boundary between revised negotiating text and substantive treaty agreement",
+      "what_happened": {
+        "summary": "The BWC Working Group held its eighth session in Geneva from 9 to 13 February 2026 and held ten meetings under the continuing strengthening mandate. Official procedural material records successive revised draft-final-report texts during the session; the 13 February revision was issued without prejudice to future discussions, while the procedural report was adopted by consensus at the closing meeting.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The relevant ex-ante benchmark is institutional rather than market-based. UNODA records the Ninth Review Conference mandate for the Working Group to identify, examine and develop strengthening measures, including possible legally binding measures, and make recommendations for later consideration by States Parties.",
+        "benchmarks": [
+          {
+            "metric": "working_group_strengthening_mandate",
+            "value": "identify, examine and develop specific and effective measures, including possible legally binding measures, and make recommendations to strengthen and institutionalise the Convention",
+            "unit": "institutional_mandate",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-BWC-WG-MANDATE-UNODA"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-BWC-WG-MANDATE-UNODA"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No defensible pre-session benchmark establishes how much substantive convergence or legal development the eighth session should have achieved. Revised negotiating text and procedural consensus therefore do not supply a directional surprise measure.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG-MANDATE-UNODA",
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "STRUCTURAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The eighth session is structurally one stage of the formal multi-session process mandated to develop recommendations on strengthening the Convention. That institutional relationship is explicit; it does not establish that this session alone caused any later treaty outcome.",
+        "evidence_refs": [
+          "WSEV-BWC-WG-MANDATE-UNODA",
+          "WSEV-BWC-WG8-UNODA-PROC-20260213"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Successive revisions of negotiating text can reflect drafting, option preservation or areas still subject to negotiation and should not be counted as substantive agreement merely because a later revision exists.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        },
+        {
+          "summary": "Consensus on the procedural report is not equivalent to consensus on the substantive strengthening measures; the official record explicitly says the revised draft final report was issued without prejudice to future discussions.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Any later convergence in the BWC strengthening process could arise from subsequent Working Group sessions, changes in national positions, intersessional diplomacy or Review Conference bargaining rather than from the eighth session alone.",
+          "evidence_refs": [
+            "WSEV-BWC-WG-MANDATE-UNODA",
+            "WSEV-BWC-WG8-UNODA-PROC-20260213"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No later legally binding measure, institutional reform, compliance effect or security outcome is attributed to the eighth session in this packet. Those outcomes remain contingent on subsequent negotiations and formal decisions."
+      },
+      "falsifiers": [
+        "If authoritative BWC records show that substantive strengthening measures were formally agreed at the eighth session rather than preserved for future discussion, the outcome classification should be strengthened.",
+        "If a later official record attributes a specific institutional or legal change directly and uniquely to a decision taken at the eighth session, the NOT_A_CAUSAL_CLAIM treatment should be reconsidered.",
+        "If the formal Working Group mandate changes materially, the expectation benchmark must be revised."
+      ],
+      "analytical_conclusion": "The eighth BWC strengthening Working Group session is best treated as documented procedural and negotiating progress within a mandated multi-session process. The official record supports neither converting revised negotiating text into final substantive agreement nor treating procedural consensus as treaty consensus. No market or downstream causal claim is required.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-WOAH-GS93-20260522-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T19:08:00Z",
+      "canonical_occurrence_id": "WSO-WOAH-GS-093",
+      "canonical_series_id": "WSER-AGF-WOAH-GENERAL-SESSION",
+      "canonical_event_type": "GOVERNANCE_ASSEMBLY_SESSION",
+      "canonical_institution": "World Organisation for Animal Health",
+      "canonical_release_utc": null,
+      "scope": "WOAH 93rd General Session, standards and strategic-plan adoption, institutional significance and prospective implementation without manufacturing a market event study",
+      "what_happened": {
+        "summary": "WOAH's World Assembly met in Paris from 18 to 22 May 2026. Official outcomes report 35 resolutions and 51 international standards adopted or revised, alongside animal-health status and control-programme decisions. The Assembly also adopted WOAH's 8th Strategic Plan for 2027–2031 on 20 May.",
+        "actuals": [
+          {
+            "metric": "resolutions_adopted",
+            "value": 35,
+            "unit": "count",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-OUTCOMES-20260522"
+            ]
+          },
+          {
+            "metric": "international_standards_adopted_or_revised",
+            "value": 51,
+            "unit": "count",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-OUTCOMES-20260522"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The official provisional programme scheduled presentation/adoption of the 8th Strategic Plan and consideration/adoption of international standards and resolutions. It did not establish a defensible expected numeric count for the eventual standards or resolutions.",
+        "benchmarks": [
+          {
+            "metric": "strategic_plan_agenda",
+            "value": "presentation and adoption of the 8th Strategic Plan",
+            "unit": "institutional_agenda",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-PROGRAMME-20260424"
+            ]
+          },
+          {
+            "metric": "standards_and_resolutions_agenda",
+            "value": "consideration and adoption of international standards and resolutions",
+            "unit": "institutional_agenda",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-WOAH-GS93-PROGRAMME-20260424"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The broad adoption agenda was realised, but the pre-session programme did not establish a quantitative forecast against which 35 resolutions or 51 standards could be classified as an upside or downside surprise. Realised institutional output is preserved without synthetic surprise scoring.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "strategic_plan_agenda",
+            "actual": "8th Strategic Plan adopted on 20 May 2026 for 2027–2031",
+            "expected": "presentation and adoption of the 8th Strategic Plan was on the provisional programme",
+            "direction": "AGENDA_ITEM_REALIZED"
+          },
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "standards_and_resolutions_agenda",
+            "actual": "35 resolutions and 51 international standards adopted or revised",
+            "expected": "standards and resolutions were scheduled for consideration and adoption without a numeric forecast",
+            "direction": "AGENDA_REALIZED_WITHOUT_QUANTITATIVE_SURPRISE_BENCHMARK"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424",
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "STRUCTURAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The World Assembly is the formal governance forum in which WOAH Members adopt international standards, resolutions and the organisation's strategic plan. That institutional dependency is explicit, but downstream national policy, trade or animal-health outcomes require later implementation and are not attributed mechanically to the Assembly session.",
+        "evidence_refs": [
+          "WSEV-WOAH-GS93-PROGRAMME-20260424",
+          "WSEV-WOAH-GS93-OUTCOMES-20260522",
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The number of standards or resolutions adopted is not itself a measure of implementation quality, disease control, trade impact or institutional effectiveness.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        },
+        {
+          "summary": "One Health, zoonotic-risk and biosecurity relevance is cross-domain context. It does not alter the canonical primary category of this WOAH series from AGRICULTURE_FOOD.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522",
+            "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+          ]
+        },
+        {
+          "summary": "High institutional importance does not imply that a clean contemporaneous asset-price response exists or should be manufactured.",
+          "evidence_refs": [
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Future animal-health, trade or food-system outcomes will depend on Member implementation, veterinary capacity, financing, disease conditions and other national or international measures beyond the General Session's formal decisions.",
+          "evidence_refs": [
+            "WSEV-WOAH-STRATEGIC-PLAN-20260520",
+            "WSEV-WOAH-GS93-OUTCOMES-20260522"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "The adopted 8th Strategic Plan formally takes effect in 2027 and WOAH describes subsequent implementation roadmaps and monitoring frameworks. Those steps are legitimate watch items, but their effects are prospective rather than observed consequences of the May 2026 session.",
+        "evidence_refs": [
+          "WSEV-WOAH-STRATEGIC-PLAN-20260520"
+        ]
+      },
+      "falsifiers": [
+        "If official WOAH records revise the reported 35-resolution or 51-standard totals, the structured actuals should be corrected.",
+        "If the provisional programme is shown not to have contemplated the Strategic Plan or standards/resolutions adoption items represented here, the NO_CLEAR_SURPRISE comparison basis should be revised.",
+        "If later implementation monitoring shows that a proposed downstream effect did not occur, that effect must not be promoted from PLAUSIBLE_WATCH_ITEM to OBSERVED."
+      ],
+      "analytical_conclusion": "The 93rd WOAH General Session delivered the broad standards and strategic-governance agenda signalled in advance, including adoption of the 8th Strategic Plan and a substantial body of standards and resolutions. The realised counts are institutional facts rather than synthetic market surprises; implementation from 2027 is a watch item, not an observed downstream effect. The event remains canonically AGRICULTURE_FOOD despite important One Health, biosecurity, food-security and trade connections.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ]
+}
