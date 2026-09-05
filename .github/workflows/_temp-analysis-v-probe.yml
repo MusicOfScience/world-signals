@@ -1,0 +1,45 @@
+name: TEMP cross-domain Analysis V probe
+
+on:
+  push:
+    branches:
+      - feature/cross-domain-analysis-v
+    paths:
+      - .github/workflows/_temp-analysis-v-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Print exact V candidate state
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          ids={'WSO-BWC-WG-2026-S08','WSO-WOAH-GS-093','WSO-FIS-NP-BUDGET-2083','WSO-ddb70f8ff05a58fb'}
+          rows=[x for x in c['records'] if x['occurrence_id'] in ids]
+          source_ids=set()
+          for row in rows:
+              for key in ('source_id','completion_source_id'):
+                  if row.get(key): source_ids.add(row[key])
+          print('STATE', json.dumps({
+            'canonical': [c['version'],len(c['records'])],
+            'reviews':[r['version'],len(r['reviews'])],
+            'evidence':[e['version'],len(e['evidence'])],
+            'checkpoint':r.get('canonical_checkpoint'),
+          },sort_keys=True))
+          print('ROWS', json.dumps(rows,indent=2,sort_keys=True))
+          print('SOURCES', json.dumps([x for x in s['sources'] if x.get('source_id') in source_ids],indent=2,sort_keys=True))
+          print('REVIEWED_IDS',json.dumps(sorted(x['canonical_occurrence_id'] for x in r['reviews'])))
+          PY
