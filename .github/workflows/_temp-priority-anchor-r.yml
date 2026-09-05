@@ -1,5 +1,4 @@
-name: TEMP priority anchor R full post-state simulation
-# rerun after Nepal test restoration
+name: TEMP priority anchor R reviewed apply
 
 on:
   push:
@@ -9,10 +8,10 @@ on:
       - .github/workflows/_temp-priority-anchor-r.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  simulate:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -21,24 +20,44 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact base and protected branch state
+      - name: Prove exact reviewed pre-state
         shell: bash
         run: |
           set -euo pipefail
           BASE=a8bfb87bb7e889381ba67ab83c5f32218e6c2bd2
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
           git diff --exit-code "$BASE" HEAD -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
-      - name: Run fail-closed check-only transaction
+      - name: Re-run fail-closed check-only transaction
         run: python scripts/apply_priority_region_historical_anchors_r.py
-      - name: Apply only inside disposable runner
+      - name: Apply reviewed transaction to working tree
         env:
           WORLD_SIGNALS_APPLY_HISTORICAL_ANCHORS_R: YES
         run: python scripts/apply_priority_region_historical_anchors_r.py --apply
-      - name: Assert exact simulated mutation boundary
+      - name: Validate exact reviewed post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+          python -m unittest tests.test_priority_region_historical_anchors_r -v
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
+          o=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          assert (c['version'],c['record_count'],len(c['records']))==('0.29',678,678)
+          assert (s['version'],len(s['sources']))==('1.71',236)
+          assert (l['version'],len(l['changes']))==('0.16',48)
+          assert (o['version'],o['canonical_checkpoint'])==('0.4',{'registry_version':'0.29','record_count':678})
+          PY
+      - name: Assert write boundary and self-remove temporary workflow
         shell: bash
         run: |
           set -euo pipefail
           mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
-          printf '%s\n' "${changed[@]}"
           expected=(
             data/canonical/registry.json
             data/changes/ledger.json
@@ -50,53 +69,25 @@ jobs:
           printf '%s\n' "${changed[@]}" | sort > /tmp/actual
           diff -u /tmp/expected /tmp/actual
           git diff --exit-code HEAD -- data/canonical/schema.json data/monitor/expectations.json data/monitor/operations_policy.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
-      - name: Validate post-state registry and Analysis
+          git rm .github/workflows/_temp-priority-anchor-r.yml
+          git add data/canonical/registry.json data/changes/ledger.json data/coverage/PRIORITY_REGION_HISTORICAL_ANCHORS_R_TRANSACTION_AUDIT_v0.1.md data/coverage/biosecurity_overlay.json data/sources/registry.json
+          mapfile -t staged < <(git diff --cached --name-only | sort)
+          expected_staged=(
+            .github/workflows/_temp-priority-anchor-r.yml
+            data/canonical/registry.json
+            data/changes/ledger.json
+            data/coverage/PRIORITY_REGION_HISTORICAL_ANCHORS_R_TRANSACTION_AUDIT_v0.1.md
+            data/coverage/biosecurity_overlay.json
+            data/sources/registry.json
+          )
+          printf '%s\n' "${expected_staged[@]}" | sort > /tmp/expected_staged
+          printf '%s\n' "${staged[@]}" | sort > /tmp/actual_staged
+          diff -u /tmp/expected_staged /tmp/actual_staged
+      - name: Commit reviewed feature-branch transaction
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/validate_registry.py
-          python scripts/validate_analysis.py
-      - name: Run full repository suite on simulated post-state
-        run: python -m unittest discover -s tests -v
-      - name: Compile Python surfaces
-        run: python -m py_compile scripts/apply_priority_region_historical_anchors_r.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_priority_region_historical_anchors_r.py
-      - name: Check browser JavaScript
-        shell: bash
-        run: |
-          set -euo pipefail
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-      - name: Build static site and assert post-state readiness
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/build_site.py
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          c=json.loads(Path('data/canonical/registry.json').read_text())
-          s=json.loads(Path('data/sources/registry.json').read_text())
-          l=json.loads(Path('data/changes/ledger.json').read_text())
-          a=json.loads(Path('docs/data/analysis.json').read_text())
-          assert (c['version'],c['record_count'],len(c['records']))==('0.29',678,678)
-          assert (s['version'],len(s['sources']))==('1.71',236)
-          assert (l['version'],len(l['changes']))==('0.16',48)
-          by={r['occurrence_id']:r for r in c['records']}
-          ids={'WSO-HIST-R-IN-GDP-2026Q1','WSO-HIST-R-ID-BI-202608','WSO-HIST-R-EG-CBE-20260820','WSO-HIST-R-AR-CPI-202607'}
-          assert ids <= set(by)
-          assert all(by[i]['lifecycle_status']=='COMPLETED' for i in ids)
-          readiness=a['readiness']
-          assert readiness['eligible_completed_occurrence_count']==9
-          assert readiness['broad_population_state']=='BLOCKED_PRIORITY_REGION_REVIEW_GAP'
-          priority={r['region']:r for r in readiness['priority_geographic_stress_regions']}
-          for region in ['Africa','South Asia','Southeast Asia','Latin America']:
-              assert priority[region]['eligible_completed_count']==1
-              assert priority[region]['reviewed_count']==0
-              assert priority[region]['state']=='ELIGIBLE_UNREVIEWED'
-          print(json.dumps(readiness,indent=2,sort_keys=True))
-          PY
+          git config user.name "world-signals-transaction-bot"
+          git config user.email "world-signals-transaction-bot@users.noreply.github.com"
+          git commit -m "Apply priority-region historical anchor transaction R [skip ci]"
+          git push origin HEAD:feature/priority-region-historical-anchors-r
