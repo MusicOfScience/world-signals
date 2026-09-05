@@ -1,0 +1,50 @@
+name: TEMP fix BoM window assertions
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-fix-bom-window-assertions.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-prep
+      - name: Align BoM guards with exact canonical field representation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          replacements = {
+            Path('scripts/apply_p1_balanced_governance_c.py'): [
+              ('"WSO-COM-A-0051": {"date_earliest": "2026-11-01", "date_latest": "2027-04-30"}', '"WSO-COM-A-0051": {"start_local": "2026-11-01", "end_local": "2027-04-30"}'),
+              ('"WSO-COM-A-0052": {"date_earliest": "2027-11-01", "date_latest": "2028-04-30"}', '"WSO-COM-A-0052": {"start_local": "2027-11-01", "end_local": "2028-04-30"}'),
+            ],
+            Path('.github/workflows/temp-p1-balanced-governance-c-simulate.yml'): [
+              ("assert rec['WSO-COM-A-0051']['date_earliest']=='2026-11-01' and rec['WSO-COM-A-0051']['date_latest']=='2027-04-30'", "assert rec['WSO-COM-A-0051']['start_local']=='2026-11-01' and rec['WSO-COM-A-0051']['end_local']=='2027-04-30'"),
+              ("assert rec['WSO-COM-A-0052']['date_earliest']=='2027-11-01' and rec['WSO-COM-A-0052']['date_latest']=='2028-04-30'", "assert rec['WSO-COM-A-0052']['start_local']=='2027-11-01' and rec['WSO-COM-A-0052']['end_local']=='2028-04-30'"),
+            ],
+          }
+          for path, pairs in replacements.items():
+              text=path.read_text()
+              for old,new in pairs:
+                  if text.count(old)!=1:
+                      raise SystemExit(f'{path}: expected exactly one match for {old!r}, got {text.count(old)}')
+                  text=text.replace(old,new)
+              path.write_text(text)
+          PY
+          git diff --check
+      - name: Commit exact assertion corrections
+        run: |
+          git config user.name 'world-signals-bot'
+          git config user.email 'world-signals-bot@users.noreply.github.com'
+          git add scripts/apply_p1_balanced_governance_c.py .github/workflows/temp-p1-balanced-governance-c-simulate.yml
+          python - <<'PY'
+          import subprocess
+          expected={'scripts/apply_p1_balanced_governance_c.py','.github/workflows/temp-p1-balanced-governance-c-simulate.yml'}
+          actual=set(subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines())
+          assert actual==expected,(actual,expected)
+          PY
+          git commit -m 'Align BoM governance guards with canonical range fields'
+          git push origin HEAD:p1-balanced-governance-c-prep
