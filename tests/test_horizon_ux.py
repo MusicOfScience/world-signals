@@ -66,5 +66,12 @@ class HorizonUXTests(unittest.TestCase):
         self.assertIn('id="horizonRegion"',html)
         self.assertIn('id="horizonJurisdiction"',html)
 
+    def test_horizon_event_cards_are_keyboard_openable(self):
+        js=(ROOT/"web/horizon.js").read_text(encoding="utf-8")
+        self.assertIn('role="button" tabindex="0"',js)
+        self.assertIn("event.key==='Enter'",js)
+        self.assertIn("event.key===' '",js)
+        self.assertIn("window.showDetail",js)
+
 if __name__=="__main__":
     unittest.main()
