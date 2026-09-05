@@ -1,4 +1,4 @@
-name: TEMP AF post-AE gap reconnaissance
+name: TEMP AF cyclone-season check-only gate
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  check:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -22,5 +22,13 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "e576719bcbaf94730444cf64b1a1abeeacb25727"
-      - name: Run post-AE pressure probe
-        run: python scripts/probe_post_ae_gap_candidates_af.py
+      - name: Fail-closed AF check-only transform
+        run: python scripts/apply_australian_tropical_cyclone_season_anchor_af.py
+      - name: AF contract tests
+        run: python -m unittest tests.test_australian_tropical_cyclone_season_anchor_af -v
+      - name: Canonical validator pre-state
+        run: python scripts/validate_registry.py
+      - name: Analysis validator pre-state
+        run: python scripts/validate_analysis.py
+      - name: Python compile
+        run: python -m py_compile scripts/apply_australian_tropical_cyclone_season_anchor_af.py scripts/probe_post_ae_gap_candidates_af.py
