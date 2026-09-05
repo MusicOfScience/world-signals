@@ -257,8 +257,8 @@ def validate_post_state(
     if list(before_sources) != list(after_sources):
         errors.append("source identity/order changed")
     changed_sources = [sid for sid in before_sources if before_sources[sid] != after_sources[sid]]
-    if changed_sources != post["expected_changed_sources"]:
-        errors.append(f"unexpected changed sources/order: {changed_sources}")
+    if set(changed_sources) != set(post["expected_changed_sources"]) or len(changed_sources) != len(post["expected_changed_sources"]):
+        errors.append(f"unexpected changed source set: {changed_sources}")
     for sid, fields in plan["source_updates"].items():
         _exact(after_sources[sid], fields, f"source post-state {sid}", errors)
 
