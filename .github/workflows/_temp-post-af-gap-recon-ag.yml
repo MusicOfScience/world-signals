@@ -1,4 +1,4 @@
-name: TEMP AG post-AF gap reconnaissance
+name: TEMP AG South Korea local-election check gate
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  check:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -22,5 +22,16 @@ jobs:
         run: |
           git fetch origin main
           test "$(git merge-base HEAD origin/main)" = "3ebd01e1f6f3ba2b09343f238f3ac72262484391"
-      - name: Probe remaining completed-anchor gaps
-        run: python scripts/probe_post_af_gap_candidates_ag.py
+      - name: Fail-closed AG check-only transform
+        run: python scripts/apply_south_korea_local_election_anchor_ag.py
+      - name: AG contract tests
+        run: python -m unittest tests.test_south_korea_local_election_anchor_ag -v
+      - name: Canonical validator pre-state
+        run: python scripts/validate_registry.py
+      - name: Analysis validator pre-state
+        run: python scripts/validate_analysis.py
+      - name: Python compile
+        run: |
+          python -m py_compile \
+            scripts/apply_south_korea_local_election_anchor_ag.py \
+            tests/test_south_korea_local_election_anchor_ag.py
