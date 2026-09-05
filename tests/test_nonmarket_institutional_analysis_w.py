@@ -31,10 +31,11 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
         cls.evidence = load("data/analysis/evidence_registry.json")
         cls.has_w = any(row.get("analysis_id") == cls.plan["new_analysis_id"] for row in cls.reviews.get("reviews", []))
 
-    def test_frozen_prestate_and_no_schema_change(self):
+    def test_frozen_prestate_contract_and_no_schema_change(self):
         pre = self.plan["preconditions"]
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])),
-                         (pre["canonical_registry_version"], pre["canonical_record_count"]))
+        self.assertEqual((pre["canonical_registry_version"], pre["canonical_record_count"]), ("0.30", 681))
+        self.assertGreaterEqual(float(self.canonical["version"]), float(pre["canonical_registry_version"]))
+        self.assertGreaterEqual(len(self.canonical["records"]), pre["canonical_record_count"])
         self.assertEqual(self.schema["version"], "0.3")
         self.assertEqual(self.plan["schema_decision"]["version_unchanged"], "0.3")
         for key in (
@@ -70,7 +71,7 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
         post = self.plan["postconditions"]
         self.assertGreaterEqual(len(new_reviews["reviews"]), post["analysis_review_count"])
         self.assertGreaterEqual(len(new_evidence["evidence"]), post["analysis_evidence_count"])
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 12)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 12)
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 10)
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 9)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")

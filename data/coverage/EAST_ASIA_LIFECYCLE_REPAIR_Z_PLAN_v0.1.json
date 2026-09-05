@@ -1,0 +1,105 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "EAST_ASIA_LIFECYCLE_REPAIR_Z",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "exact_base_main_sha": "0131220f7c919e3a76c98063bab8fda0c504b4fc",
+  "purpose": "Repair two already-scheduled East Asian occurrences from PLANNED to COMPLETED using competent first-party post-event evidence, preserving stable identities and source-native timing.",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {"registry_version": "0.30", "record_count": 681},
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.7",
+    "analysis_review_count": 11,
+    "analysis_evidence_version": "0.7",
+    "analysis_evidence_count": 40,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 11,
+    "required_absent_source_ids": ["WSSRC-FIS-028", "WSSRC-MAC-029"],
+    "targets": {
+      "WSO-FIS-A-0015": {
+        "series_id": "WSER-FIS-JP-JGB",
+        "source_id": "WSSRC-FIS-007",
+        "lifecycle_status": "PLANNED",
+        "certainty_status": "CONFIRMED",
+        "start_local": "2026-09-03",
+        "source_timezone": "Asia/Tokyo",
+        "start_utc": null,
+        "time_precision": "DAY",
+        "time_status": "TBC",
+        "primary_source_assertion_id": "WSA-5a72f97de6fa87f7"
+      },
+      "WSO-MAC-B-0041": {
+        "series_id": "WSER-MAC-JP-HHSPEND",
+        "source_id": "WSSRC-MAC-024",
+        "lifecycle_status": "PLANNED",
+        "certainty_status": "CONFIRMED",
+        "start_local": "2026-09-04",
+        "source_timezone": "Asia/Tokyo",
+        "start_utc": null,
+        "time_precision": "DAY",
+        "time_status": "TBC",
+        "primary_source_assertion_id": "WSA-9e26e3a0ddd1f7f2"
+      }
+    }
+  },
+  "repairs": [
+    {
+      "occurrence_id": "WSO-FIS-A-0015",
+      "completion_source_id": "WSSRC-FIS-028",
+      "completion_source_clone_id": "WSSRC-FIS-007",
+      "completion_source_endpoint_role": "30-year JGB auction result / completed-auction verification",
+      "completion_source_url": "https://www.mof.go.jp/english/policy/jgbs/auction/calendar/eresul/eresul20260903.htm",
+      "completion_source_type": "official_auction_result",
+      "completion_information_supplied": "Official 3 September 2026 30-year JGB auction result, including accepted bids, prices and yields; completion/outcome provenance only.",
+      "completion_basis": "Japan Ministry of Finance published the official result for the 30-year JGB auction dated 3 September 2026. This establishes that the scheduled auction occurred; elapsed time alone is not used as completion evidence. The result page does not establish a single canonical clock time for the underlying auction occurrence.",
+      "related_document_role": "COMPLETION_OUTCOME_VERIFICATION"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0041",
+      "completion_source_id": "WSSRC-MAC-029",
+      "completion_source_clone_id": "WSSRC-MAC-024",
+      "completion_source_endpoint_role": "Family Income and Expenditure Survey current result / completed-release verification",
+      "completion_source_url": "https://www.stat.go.jp/english/data/kakei/156.htm",
+      "completion_source_type": "official_statistical_result_surface",
+      "completion_information_supplied": "Official July 2026 Family Income and Expenditure Survey result stating release on 4 September 2026 and reporting household expenditure/income results; completion/outcome provenance only.",
+      "completion_basis": "Statistics Bureau of Japan identifies the July 2026 Family Income and Expenditure Survey as released on 4 September 2026 and publishes the survey results. This establishes that the scheduled release occurred; no publication clock time is inferred.",
+      "related_document_role": "COMPLETION_OUTCOME_VERIFICATION"
+    }
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.31",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.73",
+    "source_record_count": 239,
+    "change_ledger_version": "0.18",
+    "change_ledger_count": 53,
+    "biosecurity_overlay_version": "0.6",
+    "biosecurity_overlay_checkpoint": {"registry_version": "0.31", "record_count": 681},
+    "eligible_completed_occurrence_count": 14,
+    "reviewed_occurrence_count": 11,
+    "east_asia_completed_occurrence_count": 2
+  },
+  "mutation_policy": {
+    "canonical_target_occurrences_only": true,
+    "canonical_schema": false,
+    "preexisting_source_objects": false,
+    "new_supporting_source_objects": true,
+    "change_ledger": true,
+    "biosecurity_overlay_semantics": false,
+    "biosecurity_overlay_checkpoint_only": true,
+    "monitor_configuration": false,
+    "analysis_schema": false,
+    "analysis_reviews": false,
+    "analysis_evidence": false,
+    "google_calendar_write": false,
+    "automatic_canonical_commit": false
+  }
+}
