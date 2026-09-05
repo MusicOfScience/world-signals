@@ -1,4 +1,4 @@
-name: TEMP historical anchors U state probe
+name: TEMP historical anchors U full simulation
 
 on:
   push:
@@ -11,52 +11,105 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Print exact U pre-state and templates
+      - name: Prove exact base and protected branch pre-state
         shell: bash
         run: |
+          set -euo pipefail
+          BASE=16f4d441c18a3dee9da5fcdf432606de4da8e310
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git diff --exit-code "$BASE" HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+      - name: Run fail-closed check-only U transaction
+        run: python scripts/apply_cross_domain_historical_anchors_u.py
+      - name: Exercise U transaction tests from exact pre-state
+        run: python -m unittest tests.test_cross_domain_historical_anchors_u -v
+      - name: Disposable APPLY
+        env:
+          WORLD_SIGNALS_APPLY_HISTORICAL_ANCHORS_U: YES
+        run: python scripts/apply_cross_domain_historical_anchors_u.py --apply
+      - name: Assert exact mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/canonical/registry.json
+            data/sources/registry.json
+            data/changes/ledger.json
+            data/coverage/biosecurity_overlay.json
+            data/coverage/CROSS_DOMAIN_HISTORICAL_ANCHORS_U_TRANSACTION_AUDIT_v0.1.md
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/schema.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+      - name: Validate canonical and Analysis post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
           python - <<'PY'
           import json
           from pathlib import Path
           from src.world_signals.analysis import analysis_population_readiness
-
-          canonical=json.loads(Path('data/canonical/registry.json').read_text())
-          sources=json.loads(Path('data/sources/registry.json').read_text())
-          ledger=json.loads(Path('data/changes/ledger.json').read_text())
-          overlay=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
-          schema=json.loads(Path('data/analysis/schema.json').read_text())
-          reviews=json.loads(Path('data/analysis/event_reviews.json').read_text())
-
-          print('===STATE===')
-          print(json.dumps({
-            'canonical_version':canonical['version'],
-            'canonical_count':len(canonical['records']),
-            'source_version':sources['version'],
-            'source_count':len(sources['sources']),
-            'ledger_version':ledger['version'],
-            'ledger_count':len(ledger['changes']),
-            'overlay_version':overlay['version'],
-            'overlay_checkpoint':overlay['canonical_checkpoint'],
-            'analysis_readiness':analysis_population_readiness(schema,reviews,canonical),
-          },indent=2,ensure_ascii=False))
-
-          occ_ids=['WSO-BWC-WG-2026-S10','WSO-WOAH-GS-094','WSO-FIS-NP-BUDGET-2084']
-          src_ids=['WSSRC-INT-032','WSSRC-INT-033','WSSRC-FIS-026','WSSRC-FIS-027']
-          by_occ={r.get('occurrence_id'):r for r in canonical['records']}
-          by_src={r.get('source_id'):r for r in sources['sources']}
-          print('===OCCURRENCES===')
-          print(json.dumps({i:by_occ.get(i) for i in occ_ids},indent=2,ensure_ascii=False))
-          print('===SOURCES===')
-          print(json.dumps({i:by_src.get(i) for i in src_ids},indent=2,ensure_ascii=False))
-          print('===BIOSECURITY_MEMBERSHIPS===')
-          print(json.dumps([
-            r for r in overlay.get('canonical_series_memberships',[])
-            if r.get('series_id') in {'WSER-INT-BWC-WG-STRENGTHENING','WSER-AGF-WOAH-GENERAL-SESSION'}
-          ],indent=2,ensure_ascii=False))
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
+          o=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          a=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert (s['version'],len(s['sources']))==('1.72',237)
+          assert (l['version'],len(l['changes']))==('0.17',51)
+          assert (o['version'],o['canonical_checkpoint'])==('0.5',{'registry_version':'0.30','record_count':681})
+          assert (r['version'],len(r['reviews']))==('0.4',8)
+          assert (e['version'],len(e['evidence']))==('0.4',21)
+          ready=analysis_population_readiness(a,r,c)
+          assert ready['eligible_completed_occurrence_count']==12
+          assert ready['reviewed_occurrence_count']==8
+          assert ready['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
           PY
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compile
+        run: python -m py_compile scripts/apply_cross_domain_historical_anchors_u.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_analysis.py src/world_signals/analysis.py
+      - name: Browser JavaScript checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Static site build
+        run: python scripts/build_site.py
