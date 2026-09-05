@@ -41,7 +41,15 @@ class AnalysisSampleAuditYTests(unittest.TestCase):
         for report in (self.frozen, self.live):
             self.assertIn("QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE", {row["finding"] for row in report["findings"]})
             self.assertIn("not quotas", report["next_stage"]["anti_quota_note"])
-        self.assertIn("WSO-ddb70f8ff05a58fb", {row["occurrence_id"] for row in self.live["eligible_unreviewed_frontier"]})
+
+        # Y freezes the historical frontier at its own checkpoint. A descendant
+        # Analysis tranche may legitimately review a frozen frontier member, in
+        # which case it must leave the live frontier and appear in reviewed IDs.
+        boc_id = "WSO-ddb70f8ff05a58fb"
+        live_frontier_ids = {row["occurrence_id"] for row in self.live["eligible_unreviewed_frontier"]}
+        live_reviewed_ids = set(self.live["readiness"]["reviewed_occurrence_ids"])
+        self.assertIn(boc_id, live_frontier_ids | live_reviewed_ids)
+        self.assertFalse(boc_id in live_frontier_ids and boc_id in live_reviewed_ids)
 
     def test_readiness_gate_is_minimum_not_representativeness_claim(self):
         frozen = self.frozen["readiness"]
