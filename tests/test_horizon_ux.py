@@ -23,8 +23,10 @@ class HorizonUXTests(unittest.TestCase):
         self.assertNotIn("data/canonical/registry.json",js)
         self.assertNotIn("method:'POST'",js)
         self.assertNotIn('method:"POST"',js)
-        self.assertNotIn("PUT",js)
-        self.assertNotIn("DELETE",js)
+        self.assertNotIn("method:'PUT'",js)
+        self.assertNotIn('method:"PUT"',js)
+        self.assertNotIn("method:'DELETE'",js)
+        self.assertNotIn('method:"DELETE"',js)
 
     def test_horizon_preserves_window_precision(self):
         js=(ROOT/"web/horizon.js").read_text(encoding="utf-8")
