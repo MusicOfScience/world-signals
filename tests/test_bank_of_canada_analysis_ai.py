@@ -134,7 +134,7 @@ class BankOfCanadaAnalysisAITests(unittest.TestCase):
             reviews, evidence, _readiness, _projection = transform(
                 self.plan, self.payload, self.canonical, self.sources, self.ledger,
                 self.overlay, self.schema, self.reviews, self.evidence
-            )[:2] + (None, None)
+            )
         validation = validate_analysis(self.schema, evidence, reviews, self.canonical)
         self.assertTrue(validation.ok, validation.errors)
         readiness = analysis_population_readiness(self.schema, reviews, self.canonical)
