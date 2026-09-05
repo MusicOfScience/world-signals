@@ -1,0 +1,93 @@
+name: TEMP source-native calendar Nepal N transaction
+
+on:
+  push:
+    branches: [feature/south-asia-physical-risk-depth-n]
+    paths:
+      - data/coverage/SOURCE_NATIVE_CALENDAR_N_STAGE.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Read stage
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          STAGE="$(tr -d '\r\n ' < data/coverage/SOURCE_NATIVE_CALENDAR_N_STAGE.trigger)"
+          if [[ "$STAGE" != "SIMULATE" && "$STAGE" != "APPLY" ]]; then
+            echo "invalid stage: $STAGE" >&2
+            exit 1
+          fi
+          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
+      - name: Fail-closed pre-state and in-memory simulation
+        run: |
+          python scripts/apply_source_native_calendar_nepal_n.py
+          python scripts/validate_registry.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_source_native_calendar_nepal_n.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          python scripts/build_site.py
+      - name: Build ephemeral exact post-state
+        env:
+          WORLD_SIGNALS_APPLY_NATIVE_CALENDAR_N: YES
+        run: python scripts/apply_source_native_calendar_nepal_n.py --apply
+      - name: Validate exact post-state and generated boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_source_native_calendar_nepal_n.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          python scripts/build_site.py
+          python -m unittest tests.test_coverage -v
+          python scripts/run_coverage_audit.py
+          rm -rf artifacts/coverage
+          mapfile -t changed < <({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
+          printf 'generated transaction diff:\n%s\n' "${changed[*]}"
+          expected=(
+            data/canonical/registry.json
+            data/canonical/schema.json
+            data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md
+            data/sources/registry.json
+          )
+          if [[ "${changed[*]}" != "${expected[*]}" ]]; then
+            echo "unexpected generated transaction boundary" >&2
+            exit 1
+          fi
+      - name: Discard simulated post-state
+        if: steps.stage.outputs.stage == 'SIMULATE'
+        run: |
+          git reset --hard HEAD
+          git clean -fd
+      - name: Commit reviewed post-state and remove temporary transaction machinery
+        if: steps.stage.outputs.stage == 'APPLY'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/_temp-source-native-calendar-nepal-n.yml data/coverage/SOURCE_NATIVE_CALENDAR_N_STAGE.trigger
+          git add data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/coverage/SOURCE_NATIVE_CALENDAR_NEPAL_TRANSACTION_AUDIT_v0.1.md
+          git commit -m 'Apply Nepal source-native calendar transaction N [skip ci]'
+          git push origin HEAD:feature/south-asia-physical-risk-depth-n
