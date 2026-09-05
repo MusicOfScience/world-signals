@@ -28,6 +28,10 @@ from src.world_signals.analysis import analysis_population_readiness, validate_a
 from src.world_signals.validation import validate_registry
 
 
+def version_tuple(raw):
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class WHA79HistoricalAnchorADTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -179,12 +183,22 @@ class WHA79HistoricalAnchorADTests(unittest.TestCase):
         self.assertEqual(anchor["category"], "HEALTH_BIOSECURITY")
         self.assertEqual(anchor["event_type"], "HEALTH_GOVERNANCE_EVENT")
         self.assertGreaterEqual(self.post_readiness["eligible_completed_occurrence_count"], 16)
-        self.assertGreaterEqual(self.post_readiness["reviewed_occurrence_count"], 12)
-        self.assertNotIn("WSO-HEALTH-WHA-079", set(self.post_readiness["reviewed_occurrence_ids"]))
+
+        # AD itself froze Analysis at v0.8 / 12 reviews / 44 evidence and the
+        # mutation policy explicitly prohibited Analysis writes. Descendants may
+        # later review WHA79 or other completed anchors without rewriting AD.
+        p = self.plan["preconditions"]
+        self.assertEqual((p["analysis_reviews_version"], p["analysis_review_count"]), ("0.8", 12))
+        self.assertEqual((p["analysis_evidence_version"], p["analysis_evidence_count"]), ("0.8", 44))
+        self.assertFalse(self.plan["mutation_policy"]["analysis_reviews"])
+        self.assertFalse(self.plan["mutation_policy"]["analysis_evidence"])
+        self.assertGreaterEqual(self.post_readiness["reviewed_occurrence_count"], p["analysis_review_count"])
         report = validate_analysis(self.analysis_schema, self.evidence, self.reviews, self.post_canonical)
         self.assertTrue(report.ok, report.errors)
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.8", 12))
-        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.8", 44))
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), version_tuple(p["analysis_reviews_version"]))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), p["analysis_review_count"])
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), version_tuple(p["analysis_evidence_version"]))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), p["analysis_evidence_count"])
 
     def test_canonical_and_source_post_state_validate(self):
         report = validate_registry(self.post_canonical, self.post_sources)
