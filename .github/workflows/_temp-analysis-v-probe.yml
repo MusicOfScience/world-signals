@@ -1,4 +1,4 @@
-name: TEMP repair Analysis V lineage
+name: TEMP cross-domain Analysis V full simulation final
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
       - .github/workflows/_temp-analysis-v-probe.yml
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  repair:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -20,40 +20,124 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Repair descendant assumptions narrowly
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          def replace_once(path, old, new):
-              p=Path(path)
-              text=p.read_text(encoding='utf-8')
-              count=text.count(old)
-              if count != 1:
-                  raise SystemExit(f'{path}: expected one target, found {count}')
-              p.write_text(text.replace(old,new,1),encoding='utf-8')
-
-          replace_once(
-            'tests/test_analysis_layer.py',
-            '''    def test_second_order_none_is_explicit_for_all_current_samples(self):\n        self.assertTrue(all(row["second_order_effects"]["status"] == "NOT_ESTABLISHED" for row in self.reviews["reviews"]))\n''',
-            '''    def test_foundation_second_order_none_survives_descendant_population(self):\n        by_analysis = {row["analysis_id"]: row for row in self.reviews["reviews"]}\n        for analysis_id in ("WSAN-AU-GDP-2026Q2-001", "WSAN-NZ-OCR-20260902-001"):\n            self.assertIn(analysis_id, by_analysis)\n            self.assertEqual(by_analysis[analysis_id]["second_order_effects"]["status"], "NOT_ESTABLISHED")\n'''
-          )
-
-          replace_once(
-            'tests/test_cross_domain_historical_anchors_u.py',
-            '''    def test_u_expands_analytical_choice_without_touching_analysis(self):\n        post_registry, *_rest, report = self.simulated_or_live_post()\n        readiness = report.get("readiness") or analysis_population_readiness(\n            self.analysis_schema, self.analysis_reviews, post_registry\n        )\n        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 12)\n        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 8)\n        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)\n        self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")\n        reviewed = set(readiness["reviewed_occurrence_ids"])\n        for occurrence_id in (\n            "WSO-BWC-WG-2026-S08",\n            "WSO-WOAH-GS-093",\n            "WSO-FIS-NP-BUDGET-2083",\n            "WSO-ddb70f8ff05a58fb",\n        ):\n            self.assertNotIn(occurrence_id, reviewed)\n        self.assertEqual((self.analysis_reviews["version"], len(self.analysis_reviews["reviews"])), ("0.4", 8))\n        self.assertEqual((self.analysis_evidence["version"], len(self.analysis_evidence["evidence"])), ("0.4", 21))\n''',
-            '''    def test_u_expands_analytical_choice_without_mutating_analysis_at_u_transaction(self):\n        post_registry, *_rest, report = self.simulated_or_live_post()\n        readiness = report.get("readiness") or analysis_population_readiness(\n            self.analysis_schema, self.analysis_reviews, post_registry\n        )\n        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 12)\n        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 8)\n        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)\n        self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")\n        self.assertFalse(self.plan["guardrails"]["analysis_mutation"])\n        u_ids = {"WSO-BWC-WG-2026-S08", "WSO-WOAH-GS-093", "WSO-FIS-NP-BUDGET-2083"}\n        self.assertTrue(u_ids <= {row["occurrence_id"] for row in post_registry["records"]})\n        if self.analysis_reviews["version"] == "0.4" and len(self.analysis_reviews["reviews"]) == 8:\n            reviewed = set(readiness["reviewed_occurrence_ids"])\n            for occurrence_id in u_ids | {"WSO-ddb70f8ff05a58fb"}:\n                self.assertNotIn(occurrence_id, reviewed)\n            self.assertEqual((self.analysis_evidence["version"], len(self.analysis_evidence["evidence"])), ("0.4", 21))\n        else:\n            self.assertGreaterEqual(tuple(int(part) for part in self.analysis_reviews["version"].split(".")), (0, 4))\n            self.assertGreaterEqual(len(self.analysis_reviews["reviews"]), 8)\n            self.assertGreaterEqual(tuple(int(part) for part in self.analysis_evidence["version"].split(".")), (0, 4))\n            self.assertGreaterEqual(len(self.analysis_evidence["evidence"]), 21)\n'''
-          )
-          PY
-      - name: Verify repaired tests against current pre-state
-        run: |
-          python -m py_compile tests/test_analysis_layer.py tests/test_cross_domain_historical_anchors_u.py
-          python -m unittest tests.test_analysis_layer tests.test_cross_domain_historical_anchors_u tests.test_cross_domain_analysis_v -v
-      - name: Commit descendant-safe lineage repairs
+      - name: Prove exact main and protected pre-state
         run: |
           set -euo pipefail
-          git config user.name "Mx Hud Harding"
-          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add tests/test_analysis_layer.py tests/test_cross_domain_historical_anchors_u.py
-          git diff --cached --quiet && { echo 'No lineage changes staged'; exit 1; }
-          git commit -m "Keep Analysis and U regression tests descendant-safe"
-          git push origin HEAD:feature/cross-domain-analysis-v
+          BASE=1bfa947d1fbd86e945349991778944094a78e5ed
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git diff --exit-code "$BASE" HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert (r['version'],len(r['reviews']))==('0.4',8)
+          assert (e['version'],len(e['evidence']))==('0.4',21)
+          assert r['canonical_checkpoint']=={'registry_version':'0.29','record_count':678}
+          PY
+      - name: Check-only V transaction
+        run: python scripts/apply_cross_domain_analysis_v.py
+      - name: Apply only inside disposable runner
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_V: YES
+        run: python scripts/apply_cross_domain_analysis_v.py --apply
+      - name: Assert exact simulated mutation boundary
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/analysis/CROSS_DOMAIN_ANALYSIS_V_TRANSACTION_AUDIT_v0.1.md
+            data/analysis/event_reviews.json
+            data/analysis/evidence_registry.json
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+      - name: Validate registry and Analysis
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+      - name: Run full repository suite on simulated V post-state
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python surfaces
+        run: |
+          python -m py_compile scripts/apply_cross_domain_analysis_v.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_cross_domain_analysis_v.py tests/test_analysis_layer.py tests/test_cross_domain_historical_anchors_u.py tests/test_priority_region_analysis_s.py tests/test_controlled_analysis_expansion_t.py
+      - name: Check browser JavaScript
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and assert V post-state
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          a=json.loads(Path('docs/data/analysis.json').read_text())
+          assert (c['version'],len(c['records']))==('0.30',681)
+          assert (r['version'],len(r['reviews']))==('0.5',11)
+          assert r['canonical_checkpoint']=={'registry_version':'0.30','record_count':681}
+          assert (e['version'],len(e['evidence']))==('0.5',29)
+          assert a['metadata']['review_count']==11
+          assert a['metadata']['canonical_mutation_allowed'] is False
+          assert a['metadata']['google_calendar_write'] is False
+          readiness=a['readiness']
+          assert readiness['eligible_completed_occurrence_count']==12
+          assert readiness['reviewed_occurrence_count']==11
+          assert readiness['reviewed_event_type_diversity']==10
+          assert readiness['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          reviewed=set(readiness['reviewed_occurrence_ids'])
+          assert 'WSO-ddb70f8ff05a58fb' not in reviewed
+          by={row['analysis_id']:row for row in a['reviews']}
+          bwc=by['WSAN-BWC-WG8-20260213-001']
+          woah=by['WSAN-WOAH-GS93-20260522-001']
+          nepal=by['WSAN-NP-BUDGET-2083-001']
+          assert all(row['what_moved']==[] for row in (bwc,woah,nepal))
+          assert bwc['what_surprised']['status']=='NOT_ESTABLISHED'
+          assert bwc['second_order_effects']['status']=='NOT_ESTABLISHED'
+          assert (bwc['canonical']['start_local'],bwc['canonical']['end_local'])==('2026-02-09','2026-02-13')
+          assert woah['what_surprised']['status']=='NO_CLEAR_SURPRISE'
+          assert woah['second_order_effects']['status']=='PLAUSIBLE_WATCH_ITEM'
+          assert woah['canonical']['category']=='AGRICULTURE_FOOD'
+          assert (woah['canonical']['start_local'],woah['canonical']['end_local'])==('2026-05-18','2026-05-22')
+          n=nepal['canonical']
+          assert n['timing_type']=='SOURCE_NATIVE_CALENDAR_DATE'
+          assert n['source_native_date_label']=='15 Jestha 2083'
+          assert n['native_calendar_system']=='BIKRAM_SAMBAT_NEPAL'
+          assert (n['native_calendar_year'],n['native_calendar_month'],n['native_calendar_day'])==(2083,'JESTHA',15)
+          assert n['gregorian_resolution_status']=='UNRESOLVED_AUTHORITATIVE_CONVERSION'
+          assert n['start_local'] is None and n['start_utc'] is None
+          assert nepal['second_order_effects']['status']=='OBSERVED'
+          print(json.dumps(readiness,indent=2,sort_keys=True))
+          PY
