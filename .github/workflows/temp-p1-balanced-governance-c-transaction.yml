@@ -1,0 +1,55 @@
+name: TEMP P1 balanced governance C transaction
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-balanced-governance-c-transaction.yml'
+permissions:
+  contents: write
+jobs:
+  transact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-transaction
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Guarded read-only preflight
+        run: python scripts/apply_p1_balanced_governance_c.py
+      - name: Apply reviewed transaction
+        env:
+          WORLD_SIGNALS_ALLOW_P1_BALANCED_GOVERNANCE_C_APPLY: 'YES'
+        run: python scripts/apply_p1_balanced_governance_c.py --apply
+      - name: Enforce exact four-file production surface
+        run: |
+          python - <<'PY'
+          import subprocess
+          expected={'data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json'}
+          actual=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          print('CHANGED',sorted(actual))
+          assert actual==expected,(actual,expected)
+          PY
+      - name: Registry validator
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m compileall -q scripts src
+      - name: Browser JavaScript syntax
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Commit exact reviewed transaction
+        run: |
+          git config user.name 'world-signals-bot'
+          git config user.email 'world-signals-bot@users.noreply.github.com'
+          git add data/canonical/registry.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json
+          test "$(git diff --cached --name-only | sort)" = "$(printf '%s\n' data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json | sort)"
+          git commit -m 'Apply balanced P1 source-governance cohort C'
+          git push origin HEAD:p1-balanced-governance-c-transaction
+          echo "TRANSACTION_COMMIT=$(git rev-parse HEAD)"
