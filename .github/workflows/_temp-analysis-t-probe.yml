@@ -1,4 +1,4 @@
-name: TEMP controlled Analysis T full simulation
+name: TEMP controlled Analysis T full simulation rerun
 
 on:
   push:
