@@ -1,0 +1,26 @@
+name: TEMP WTO D baseline
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-wto-d-baseline.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Print exact WTO occurrence and selected source baselines
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          can=json.loads(Path('data/canonical/registry.json').read_text()); src=json.loads(Path('data/sources/registry.json').read_text())
+          r=next(x for x in can['records'] if x['occurrence_id']=='WSO-TRD-A-0002')
+          print('WTO_OCC',json.dumps(r,ensure_ascii=False,sort_keys=True))
+          ids=['WSSRC-RISK-002','WSSRC-COM-009','WSSRC-COM-008','WSSRC-INT-013','WSSRC-HEALTH-002','WSSRC-TRD-002','WSSRC-REG2-003','WSSRC-EL-VIC-001']
+          sm={x['source_id']:x for x in src['sources']}
+          for sid in ids:
+              x=sm[sid]
+              print('SRC',sid,json.dumps({k:x.get(k) for k in ['authoritative_url','source_type','canonical_dependency_count','canonical_provenance_use','automated_monitoring_use','verification_mode']},ensure_ascii=False,sort_keys=True))
+          PY
