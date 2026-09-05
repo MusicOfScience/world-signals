@@ -157,14 +157,23 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
         self.assertEqual(connection["confidence"], "HIGH")
         self.assertEqual(review["second_order_effects"]["status"], "NOT_ESTABLISHED")
 
-    def test_boc_remains_deliberately_eligible_unreviewed(self):
+    def test_boc_was_deliberately_held_at_t_and_may_be_reviewed_by_descendants(self):
         self.require_post()
         boc = self.by_occurrence["WSO-ddb70f8ff05a58fb"]
         self.assertEqual((boc["event_type"], boc["lifecycle_status"]), ("DECISION", "COMPLETED"))
-        reviewed_occurrences = {row["canonical_occurrence_id"] for row in self.reviews["reviews"]}
-        self.assertNotIn(boc["occurrence_id"], reviewed_occurrences)
         self.assertEqual(self.plan["hold_occurrence_ids"], [boc["occurrence_id"]])
         self.assertFalse(self.plan["guardrails"]["backlog_completion_is_population_objective"])
+
+        boc_reviews = [
+            row for row in self.reviews["reviews"]
+            if row.get("canonical_occurrence_id") == boc["occurrence_id"]
+        ]
+        # T's historical decision to hold BoC is immutable; a later controlled
+        # Analysis tranche may legitimately review that completed occurrence.
+        self.assertLessEqual(len(boc_reviews), 1)
+        if boc_reviews:
+            self.assertEqual(boc_reviews[0]["review_phase"], "POST_EVENT")
+            self.assertIn(boc_reviews[0]["review_state"], {"REVIEWED_SAMPLE", "REVIEWED"})
 
     def test_evidence_is_analysis_only_and_exactly_seven_new_records(self):
         self.require_post()
@@ -189,7 +198,10 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
             if row.get("lifecycle_status") == "COMPLETED"
             and row["occurrence_id"] not in reviewed
         }
-        self.assertIn("WSO-ddb70f8ff05a58fb", remaining)
+        boc_id = "WSO-ddb70f8ff05a58fb"
+        self.assertIn(boc_id, reviewed | remaining)
+        self.assertFalse(boc_id in reviewed and boc_id in remaining)
+        self.assertEqual(self.plan["hold_occurrence_ids"], [boc_id])
         self.assertIn("WSO-COM-A-0013", reviewed)
         self.assertIn("WSO-TECH-A-0002", reviewed)
         self.assertIn("not a claim of analytical completeness", " ".join(readiness["notes"]).lower())
