@@ -1,0 +1,158 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "EVENT_ANALYSIS_REVIEWS",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "canonical_checkpoint": {
+    "registry_version": "0.28",
+    "record_count": 674
+  },
+  "reviews": [
+    {
+      "analysis_id": "WSAN-AU-GDP-2026Q2-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "analysis_as_of_utc": "2026-09-05T14:15:00Z",
+      "canonical_occurrence_id": "WSO-MAC-A-0025",
+      "canonical_series_id": "WSER-MAC-AU-GDP",
+      "canonical_event_type": "DATA_RELEASE",
+      "canonical_institution": "Australian Bureau of Statistics",
+      "canonical_release_utc": "2026-09-02T01:30:00Z",
+      "scope": "June-quarter 2026 Australian National Accounts release and immediately reported policy-pricing response",
+      "what_happened": {
+        "summary": "The ABS reported that real GDP rose 0.4% in the June quarter of 2026 and 2.1% through the year. The ABS described growth as subdued and household behaviour as cautious.",
+        "actuals": [
+          {
+            "metric": "real_gdp_qoq",
+            "value": 0.4,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-AU-GDP-ABS-20260902"
+            ]
+          },
+          {
+            "metric": "real_gdp_yoy",
+            "value": 2.1,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-AU-GDP-ABS-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-GDP-ABS-20260902"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Contemporaneous Reuters reporting put market forecasts at 0.3% quarter-on-quarter and 1.8% year-on-year growth.",
+        "benchmarks": [
+          {
+            "metric": "real_gdp_qoq",
+            "value": 0.3,
+            "unit": "percent",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-AU-GDP-REUTERS-20260902"
+            ]
+          },
+          {
+            "metric": "real_gdp_yoy",
+            "value": 1.8,
+            "unit": "percent",
+            "benchmark_type": "MARKET_FORECAST",
+            "evidence_refs": [
+              "WSEV-AU-GDP-REUTERS-20260902"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-GDP-REUTERS-20260902"
+        ]
+      },
+      "what_surprised": {
+        "status": "UPSIDE",
+        "summary": "Both the quarterly and annual growth readings were above the cited market forecasts. This is a data surprise, not by itself a directional market or policy prediction.",
+        "comparisons": [
+          {
+            "metric": "real_gdp_qoq",
+            "actual": 0.4,
+            "expected": 0.3,
+            "difference_percentage_points": 0.1
+          },
+          {
+            "metric": "real_gdp_yoy",
+            "actual": 2.1,
+            "expected": 1.8,
+            "difference_percentage_points": 0.3
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-GDP-ABS-20260902",
+          "WSEV-AU-GDP-REUTERS-20260902"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-AU-GDP-20260902-RBA-SEP",
+          "movement_type": "POLICY_PROBABILITY_REPRICING",
+          "instrument_or_measure": "market-implied probability of an RBA September 2026 rate increase",
+          "before_value": 48,
+          "after_value": 57,
+          "unit": "percent_probability",
+          "change": 9,
+          "change_unit": "percentage_points",
+          "direction": "HIGHER_HIKE_PROBABILITY",
+          "measurement_window": "source-reported pre-release versus immediate post-release repricing on 2026-09-02",
+          "measurement_precision": "SOURCE_REPORTED_PRE_POST",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-AU-GDP-REUTERS-20260902"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "TRANSMISSION_CHANNEL",
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "confidence": "MEDIUM",
+        "summary": "The upside GDP surprise coincided with, and Reuters explicitly reported a response in, near-term RBA hike pricing. The direction is consistent with a standard growth-to-policy-expectations transmission channel, but the packet does not claim that GDP was the sole driver of Australian rates markets that session.",
+        "evidence_refs": [
+          "WSEV-AU-GDP-ABS-20260902",
+          "WSEV-AU-GDP-REUTERS-20260902"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The broader rise in Australian long-term bond yields should not be attributed to the GDP release in this packet. Reuters reported that renewed US-Iran fighting, higher oil prices and inflation concerns were simultaneously pushing ten-year yields to a 15-year high.",
+          "evidence_refs": [
+            "WSEV-AU-GDP-REUTERS-20260902"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Global energy and inflation repricing related to renewed US-Iran conflict could explain part of the same-session Australian rates move independently of domestic GDP.",
+          "evidence_refs": [
+            "WSEV-AU-GDP-REUTERS-20260902"
+          ]
+        },
+        {
+          "summary": "The release may have reinforced an RBA path already being repriced on prior inflation and activity information rather than creating a wholly new policy expectation.",
+          "evidence_refs": [
+            "WSEV-AU-GDP-REUTERS-20260902"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No distinct second-order economic or political effect is promoted in this sample packet. The near-term RBA probability shift is treated as the observed first-order pricing response, not as proof of later policy action."
+      },
+      "falsifiers": [
+        "If the reported RBA repricing rapidly reversed without new Australian information while global rates continued in the same direction, the GDP-specific attribution should be weakened.",
+        "If later high-frequency pricing reconstruction shows the probability shift occurred materially before the ABS release, this packet's observed-association claim should be revised.",
+        "If a stronger contemporaneous source attributes the repricing primarily to a different catalyst, the connection confidence should be reduced."
+      ],
+      "analytical_conclusion": "A modest upside GDP surprise was followed by a measurable increase in near-term RBA hike pricing. The connection is analytically useful but not exclusive: a concurrent global oil/geopolitical inflation shock was also moving Australian rates. No stronger causal or second-order claim is established here.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ]
+}

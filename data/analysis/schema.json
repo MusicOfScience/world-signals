@@ -1,0 +1,115 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "ANALYTICAL_LAYER_SCHEMA",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "architecture_position": "ANALYSIS",
+  "upstream_layers": [
+    "CANONICAL_REGISTRY",
+    "SOURCE_CHANGE_MONITOR",
+    "LIVE_INTELLIGENCE"
+  ],
+  "layer_boundary": {
+    "canonical_mutation_allowed": false,
+    "calendar_mutation_allowed": false,
+    "monitor_configuration_mutation_allowed": false,
+    "analysis_may_reference_canonical_occurrence": true,
+    "analysis_may_use_noncanonical_evidence": true,
+    "noncanonical_evidence_never_becomes_canonical_provenance_by_reference": true
+  },
+  "required_review_sections": [
+    "what_happened",
+    "what_was_expected",
+    "what_surprised",
+    "what_moved",
+    "what_appears_connected",
+    "what_may_be_noise",
+    "alternative_explanations",
+    "second_order_effects",
+    "falsifiers"
+  ],
+  "controlled_vocabularies": {
+    "review_state": [
+      "DRAFT",
+      "REVIEWED_SAMPLE",
+      "REVIEWED"
+    ],
+    "surprise_status": [
+      "UPSIDE",
+      "DOWNSIDE",
+      "MIXED",
+      "NO_CLEAR_SURPRISE",
+      "NOT_ESTABLISHED"
+    ],
+    "interaction_type": [
+      "STRUCTURAL_DEPENDENCY",
+      "REGULATORY_OVERLAP",
+      "POLICY_RESPONSE_CONTEXT",
+      "OBSERVATION_CONTEXT",
+      "TRANSMISSION_CHANNEL",
+      "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+      "TEMPORAL_COINCIDENCE_ONLY",
+      "COMMON_DRIVER_CONTEXT"
+    ],
+    "causal_status": [
+      "NOT_A_CAUSAL_CLAIM",
+      "MECHANISM_PLAUSIBLE_NOT_TESTED",
+      "OBSERVED_ASSOCIATION",
+      "CAUSAL_HYPOTHESIS",
+      "CAUSAL_SUPPORT_PARTIAL",
+      "CAUSAL_SUPPORT_STRONG"
+    ],
+    "confidence": [
+      "LOW",
+      "MEDIUM",
+      "HIGH"
+    ],
+    "evidence_class": [
+      "PRIMARY_OFFICIAL",
+      "REPUTABLE_NEWSWIRE",
+      "REPUTABLE_MEDIA",
+      "MARKET_DATA_PROVIDER",
+      "ACADEMIC_OR_INSTITUTIONAL",
+      "OTHER_REVIEWED"
+    ],
+    "evidence_role": [
+      "OFFICIAL_OUTCOME",
+      "EXPECTATION_BENCHMARK",
+      "MARKET_OBSERVATION",
+      "CONTEXT_OR_ALTERNATIVE",
+      "SECOND_ORDER_OBSERVATION"
+    ],
+    "movement_type": [
+      "POLICY_PROBABILITY_REPRICING",
+      "FX_SPOT",
+      "SOVEREIGN_YIELD",
+      "EQUITY_INDEX",
+      "COMMODITY_PRICE",
+      "CREDIT_SPREAD",
+      "OTHER_MARKET_MEASURE"
+    ],
+    "measurement_precision": [
+      "SOURCE_REPORTED_PRE_POST",
+      "EXACT_TIMESTAMP_SERIES",
+      "SESSION_LEVEL",
+      "QUALITATIVE_ONLY"
+    ],
+    "second_order_status": [
+      "OBSERVED",
+      "PLAUSIBLE_WATCH_ITEM",
+      "NOT_ESTABLISHED"
+    ]
+  },
+  "guardrails": [
+    "Every analytical review must resolve to an existing canonical occurrence_id.",
+    "Analytical evidence is governed separately from canonical provenance; citing it does not reassign source_id or alter canonical truth.",
+    "Expected values and actual values must remain distinct objects even when numerically equal.",
+    "A surprise label must identify its comparison basis; no surprise may be inferred solely from observed market movement.",
+    "Every market-movement assertion requires an evidence reference, measurement window and measurement precision.",
+    "Market movement does not establish causality. interaction_type, causal_status and confidence must be explicit.",
+    "Any connection stronger than NOT_A_CAUSAL_CLAIM requires at least one alternative explanation; stronger causal support requires independent evidence beyond temporal sequence.",
+    "Second-order effects must distinguish observed outcomes from prospective watch items.",
+    "Intrinsic importance and expected market sensitivity are canonical metadata and must not be overwritten by observed response.",
+    "The analytical layer must be able to conclude NO_CLEAR_SURPRISE, NOT_ESTABLISHED or NOT_A_CAUSAL_CLAIM without penalty."
+  ]
+}
