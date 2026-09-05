@@ -35,27 +35,20 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         cls.schema = load("data/analysis/schema.json")
         cls.reviews = load("data/analysis/event_reviews.json")
         cls.evidence = load("data/analysis/evidence_registry.json")
-        cls.is_post = (
-            cls.schema.get("version") == "0.3"
-            and cls.reviews.get("version") == "0.5"
-            and len(cls.reviews.get("reviews", [])) == 9
-            and cls.evidence.get("version") == "0.5"
-            and len(cls.evidence.get("evidence", [])) == 28
+        cls.has_v = any(row.get("analysis_id") == "WSAN-NP-BUDGET-2083-001" for row in cls.reviews.get("reviews", []))
+        cls.is_exact_v_pre = (
+            cls.reviews.get("version") == cls.plan["preconditions"]["analysis_reviews_version"]
+            and len(cls.reviews.get("reviews", [])) == cls.plan["preconditions"]["analysis_review_count"]
+            and cls.evidence.get("version") == cls.plan["preconditions"]["analysis_evidence_version"]
+            and len(cls.evidence.get("evidence", [])) == cls.plan["preconditions"]["analysis_evidence_count"]
         )
 
     def post_objects(self):
-        if self.is_post:
+        if self.has_v:
             return self.reviews, self.evidence
         reviews, evidence, _readiness, _projection = txn.transform(
-            self.plan,
-            self.payload,
-            self.canonical,
-            self.sources,
-            self.ledger,
-            self.overlay,
-            self.schema,
-            self.reviews,
-            self.evidence,
+            self.plan, self.payload, self.canonical, self.sources, self.ledger,
+            self.overlay, self.schema, self.reviews, self.evidence,
         )
         return reviews, evidence
 
@@ -71,26 +64,16 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertTrue(any("temporal-context policy" in e for e in validate_analysis(broken, self.evidence, self.reviews, self.canonical).errors))
 
     def test_check_only_transform_is_exact_and_does_not_mutate_inputs(self):
-        if self.is_post:
-            self.skipTest("check-only transform is exercised from exact V pre-state")
+        if not self.is_exact_v_pre:
+            self.skipTest("check-only transform is exercised only from exact V pre-state")
         before = {
-            "canonical": digest(self.canonical),
-            "sources": digest(self.sources),
-            "ledger": digest(self.ledger),
-            "overlay": digest(self.overlay),
-            "reviews": digest(self.reviews),
-            "evidence": digest(self.evidence),
+            "canonical": digest(self.canonical), "sources": digest(self.sources),
+            "ledger": digest(self.ledger), "overlay": digest(self.overlay),
+            "reviews": digest(self.reviews), "evidence": digest(self.evidence),
         }
         reviews, evidence, readiness, projection = txn.transform(
-            self.plan,
-            self.payload,
-            self.canonical,
-            self.sources,
-            self.ledger,
-            self.overlay,
-            self.schema,
-            self.reviews,
-            self.evidence,
+            self.plan, self.payload, self.canonical, self.sources, self.ledger,
+            self.overlay, self.schema, self.reviews, self.evidence,
         )
         self.assertEqual((reviews["version"], len(reviews["reviews"])), ("0.5", 9))
         self.assertEqual((evidence["version"], len(evidence["evidence"])), ("0.5", 28))
@@ -98,12 +81,9 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         self.assertEqual(readiness["reviewed_event_type_diversity"], 8)
         self.assertEqual(len(projection["reviews"]), 9)
         after = {
-            "canonical": digest(self.canonical),
-            "sources": digest(self.sources),
-            "ledger": digest(self.ledger),
-            "overlay": digest(self.overlay),
-            "reviews": digest(self.reviews),
-            "evidence": digest(self.evidence),
+            "canonical": digest(self.canonical), "sources": digest(self.sources),
+            "ledger": digest(self.ledger), "overlay": digest(self.overlay),
+            "reviews": digest(self.reviews), "evidence": digest(self.evidence),
         }
         self.assertEqual(before, after)
 
@@ -182,16 +162,17 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
         reviews, _ = self.post_objects()
         readiness = analysis_population_readiness(self.schema, reviews, self.canonical)
         self.assertEqual(readiness["eligible_completed_occurrence_count"], 12)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 9)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 8)
-        self.assertEqual(readiness["reviewed_by_event_type"]["FISCAL_POLICY_PROCESS"], 1)
-        remaining = sorted(
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], self.plan["postconditions"]["reviewed_event_type_diversity"])
+        self.assertGreaterEqual(readiness["reviewed_by_event_type"].get("FISCAL_POLICY_PROCESS", 0), 1)
+        self.assertIn("WSO-FIS-NP-BUDGET-2083", readiness["reviewed_occurrence_ids"])
+        remaining = {
             x["occurrence_id"] for x in self.canonical["records"]
             if x.get("lifecycle_status") == "COMPLETED"
             and x["occurrence_id"] not in set(readiness["reviewed_occurrence_ids"])
-        )
-        self.assertEqual(remaining, sorted(self.plan["postconditions"]["remaining_eligible_unreviewed_occurrence_ids"]))
-        self.assertEqual(set(self.plan["selection"]["held_occurrence_ids"]), set(remaining))
+        }
+        self.assertTrue(remaining <= set(self.plan["selection"]["held_occurrence_ids"]))
+        self.assertNotIn("WSO-FIS-NP-BUDGET-2083", remaining)
         self.assertFalse(self.plan["guardrails"]["backlog_completion_is_population_objective"])
 
     def test_browser_renders_source_native_truth_without_converter(self):

@@ -1,0 +1,118 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "NONMARKET_INSTITUTIONAL_ANALYSIS_W",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "cfa55b4aa6c7e907613c349557c64276e9c6498e",
+  "purpose": "Stress-test the Analysis layer with a completed treaty-governance session where substantive negotiations continued, no defensible session-specific surprise benchmark is established, and no market response should be manufactured.",
+  "preconditions": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.5",
+    "analysis_review_count": 9,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_evidence_version": "0.5",
+    "analysis_evidence_count": 28,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 9,
+    "reviewed_event_type_diversity": 8,
+    "required_target_occurrence_id": "WSO-BWC-WG-2026-S08",
+    "required_target_series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+    "required_target_event_type": "TREATY_WORKING_GROUP_SESSION",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_start_local": "2026-02-09",
+    "required_target_end_local": "2026-02-13",
+    "required_target_start_utc": null,
+    "required_absent_analysis_ids": [
+      "WSAN-BWC-WG8-2026-001"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-BWC-WG-2026-S08",
+    "selection_rationale": [
+      "Adds TREATY_WORKING_GROUP_SESSION to reviewed event-type diversity.",
+      "Tests whether a required what_moved section may correctly remain empty when no defensible market observation exists.",
+      "Tests NOT_ESTABLISHED surprise semantics where official prior guidance describes an overall completion aspiration but no defensible session-specific outcome benchmark.",
+      "Tests institutional-process analysis in which a procedural report is adopted while substantive draft text remains open for future discussions.",
+      "Keeps biological-security treaty governance analytically distinct from the primary canonical category and from market-centric event templates."
+    ],
+    "held_occurrence_ids": [
+      "WSO-WOAH-GS-093",
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "hold_rationale": "WOAH and Bank of Canada remain analytically eligible. W selects BWC session 8 for non-market institutional contract pressure, not backlog completion."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.3",
+    "reason": "The existing schema already requires the what_moved section but permits an empty list, permits NOT_ESTABLISHED surprise, and permits NOT_A_CAUSAL_CLAIM. The public browser already renders an empty movement set as 'No observed market response established.' W therefore demonstrates the contract rather than changing it."
+  },
+  "new_analysis_id": "WSAN-BWC-WG8-2026-001",
+  "new_evidence_ids": [
+    "WSEV-BWC-WG8-UNODA-MANDATE",
+    "WSEV-BWC-WG8-UNODA-OUTCOME",
+    "WSEV-BWC-WG8-UNODA-DOCUMENTS",
+    "WSEV-BWC-WG10-UNODA-SCHEDULE"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.30",
+    "canonical_record_count": 681,
+    "source_registry_version": "1.72",
+    "source_record_count": 237,
+    "change_ledger_version": "0.17",
+    "change_ledger_count": 51,
+    "biosecurity_overlay_version": "0.5",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.6",
+    "analysis_review_count": 10,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.30",
+      "record_count": 681
+    },
+    "analysis_evidence_version": "0.6",
+    "analysis_evidence_count": 32,
+    "eligible_completed_occurrence_count": 12,
+    "reviewed_occurrence_count": 10,
+    "reviewed_event_type_diversity": 9,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-WOAH-GS-093",
+      "WSO-ddb70f8ff05a58fb"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "absence_of_market_observation_may_be_filled_with_proxy": false,
+    "soft_institutional_target_is_session_specific_forecast": false,
+    "draft_text_is_final_adopted_outcome": false,
+    "procedural_consensus_implies_substantive_consensus": false,
+    "backlog_completion_is_population_objective": false
+  }
+}
