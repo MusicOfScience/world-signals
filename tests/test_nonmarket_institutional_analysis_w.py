@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_nonmarket_institutional_analysis_w import transform
-from world_signals.analysis import public_analysis_projection
+from world_signals.analysis import analysis_population_readiness, public_analysis_projection
 
 
 def load(path: str):
@@ -29,6 +29,7 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
         cls.schema = load("data/analysis/schema.json")
         cls.reviews = load("data/analysis/event_reviews.json")
         cls.evidence = load("data/analysis/evidence_registry.json")
+        cls.has_w = any(row.get("analysis_id") == cls.plan["new_analysis_id"] for row in cls.reviews.get("reviews", []))
 
     def test_frozen_prestate_and_no_schema_change(self):
         pre = self.plan["preconditions"]
@@ -56,11 +57,16 @@ class NonMarketInstitutionalAnalysisWTests(unittest.TestCase):
         evidence_ids = {row["evidence_id"] for row in self.payload["evidence"]}
         self.assertEqual(evidence_ids, set(self.plan["new_evidence_ids"]))
 
-    def test_transform_produces_exact_w_poststate(self):
-        new_reviews, new_evidence, readiness, projection = transform(
-            self.plan, self.payload, self.canonical, self.sources, self.ledger,
-            self.overlay, self.schema, self.reviews, self.evidence,
-        )
+    def test_transform_or_live_poststate_is_exact_for_w(self):
+        if self.has_w:
+            new_reviews, new_evidence = self.reviews, self.evidence
+            readiness = analysis_population_readiness(self.schema, new_reviews, self.canonical)
+            projection = public_analysis_projection(self.schema, new_evidence, new_reviews, self.canonical)
+        else:
+            new_reviews, new_evidence, readiness, projection = transform(
+                self.plan, self.payload, self.canonical, self.sources, self.ledger,
+                self.overlay, self.schema, self.reviews, self.evidence,
+            )
         post = self.plan["postconditions"]
         self.assertEqual((new_reviews["version"], len(new_reviews["reviews"])),
                          (post["analysis_reviews_version"], post["analysis_review_count"]))
