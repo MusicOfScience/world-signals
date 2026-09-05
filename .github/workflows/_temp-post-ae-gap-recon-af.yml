@@ -1,4 +1,4 @@
-name: TEMP AF cyclone-season transaction
+name: TEMP AF descendant repair gate
 
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - feature/post-ae-gap-recon-af
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  transaction:
+  repair-check:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -24,66 +24,22 @@ jobs:
           test "$(git merge-base HEAD origin/main)" = "e576719bcbaf94730444cf64b1a1abeeacb25727"
       - name: Fail-closed AF check-only transform
         run: python scripts/apply_australian_tropical_cyclone_season_anchor_af.py
-      - name: AF tests before write
+      - name: AF contract tests
         run: python -m unittest tests.test_australian_tropical_cyclone_season_anchor_af -v
-      - name: Apply reviewed AF transaction
-        env:
-          WORLD_SIGNALS_APPLY_AU_TC_SEASON_ANCHOR_AF: REVIEWED_APPLY
-        run: python scripts/apply_australian_tropical_cyclone_season_anchor_af.py --apply
-      - name: Validate canonical post-state
+      - name: Historical descendant tests under repair
+        run: |
+          python -m unittest \
+            tests.test_east_asia_lifecycle_repair_z \
+            tests.test_source_native_fiscal_analysis_v \
+            tests.test_eu_russia_sanctions_renewal_anchor_ae -v
+      - name: Canonical validator pre-state
         run: python scripts/validate_registry.py
-      - name: Validate Analysis remains sound
+      - name: Analysis validator pre-state
         run: python scripts/validate_analysis.py
-      - name: Full repository tests
-        run: python -m unittest discover -s tests -v
       - name: Python compile
         run: |
           python -m py_compile \
             scripts/apply_australian_tropical_cyclone_season_anchor_af.py \
-            scripts/fetch_latest_monitor_snapshot.py \
-            scripts/fetch_retained_review_state.py \
-            scripts/validate_analysis.py \
-            src/world_signals/analysis.py
-      - name: Browser JavaScript checks
-        run: |
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-      - name: Static site build
-        run: python scripts/build_site.py
-      - name: Exact AF production mutation boundary
-        run: |
-          python - <<'PY'
-          import subprocess
-          expected = {
-              'data/canonical/registry.json',
-              'data/sources/registry.json',
-              'data/changes/ledger.json',
-              'data/coverage/biosecurity_overlay.json',
-              'data/coverage/AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF_TRANSACTION_AUDIT_v0.1.md',
-          }
-          paths = {line[3:] for line in subprocess.check_output(['git','status','--porcelain'], text=True).splitlines()}
-          if paths != expected:
-              raise SystemExit(f'AF mutation boundary drift: expected {sorted(expected)}, got {sorted(paths)}')
-          print('AF_MUTATION_BOUNDARY_OK')
-          PY
-      - name: Commit reviewed transaction and self-remove temporary research files
-        run: |
-          rm .github/workflows/_temp-post-ae-gap-recon-af.yml
-          rm scripts/probe_post_ae_gap_candidates_af.py
-          git config user.name "world-signals-transaction-bot"
-          git config user.email "world-signals-transaction-bot@users.noreply.github.com"
-          git add \
-            data/canonical/registry.json \
-            data/sources/registry.json \
-            data/changes/ledger.json \
-            data/coverage/biosecurity_overlay.json \
-            data/coverage/AUSTRALIAN_TROPICAL_CYCLONE_SEASON_HISTORICAL_ANCHOR_AF_TRANSACTION_AUDIT_v0.1.md \
-            .github/workflows/_temp-post-ae-gap-recon-af.yml \
-            scripts/probe_post_ae_gap_candidates_af.py
-          git commit -m "Apply Australian cyclone-season historical anchor AF"
-          git push origin HEAD:feature/post-ae-gap-recon-af
+            tests/test_east_asia_lifecycle_repair_z.py \
+            tests/test_source_native_fiscal_analysis_v.py \
+            tests/test_eu_russia_sanctions_renewal_anchor_ae.py
