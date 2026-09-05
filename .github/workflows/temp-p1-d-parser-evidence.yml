@@ -1,0 +1,43 @@
+name: TEMP P1 D parser evidence
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-d-parser-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Find implementation evidence
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          needles={
+            'NOAA':['WSSRC-RISK-002','nhc.noaa.gov/climo','Atlantic hurricane season'],
+            'EIA':['WSSRC-COM-009','release_schedule.php','Short-Term Energy Outlook','STEO'],
+            'USDA':['WSSRC-COM-008','wasde-report','WASDE'],
+            'BRICS':['WSSRC-INT-013','pib.gov.in','BRICS'],
+            'WHO':['WSSRC-HEALTH-002','Pandemic Agreement IGWG','who-governance-calendar'],
+            'WTO':['WSSRC-TRD-002','DS646','trade-a-0.1'],
+            'CHILE':['WSSRC-REG2-003','w3-article-419249','regional-b-0.1'],
+            'VEC':['WSSRC-EL-VIC-001','2026-state-election','election-a-0.1'],
+          }
+          roots=['src','scripts','tests','fixtures','data/monitor']
+          files=[]
+          for root in roots:
+            p=Path(root)
+            if p.exists(): files += [x for x in p.rglob('*') if x.is_file() and x.stat().st_size < 2_000_000]
+          print('FILES_SCANNED',len(files))
+          for label,ns in needles.items():
+            print('===',label,'===')
+            found=[]
+            for f in files:
+              try: txt=f.read_text(errors='ignore')
+              except: continue
+              hits=[n for n in ns if n.lower() in txt.lower()]
+              if hits: found.append((str(f),hits))
+            for f,h in found: print(f,repr(h))
+            print('MATCHED_FILES',len(found))
+          PY
