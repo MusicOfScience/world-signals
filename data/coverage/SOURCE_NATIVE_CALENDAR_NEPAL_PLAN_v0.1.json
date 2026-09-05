@@ -1,0 +1,133 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "SOURCE_NATIVE_CALENDAR_NEPAL_N",
+  "version": "0.1",
+  "review_date": "2026-09-05",
+  "purpose": "Add reusable source-native calendar-date semantics and admit the Nepal federal budget presentation for 15 Jestha 2084 without fabricating a Gregorian date.",
+  "preconditions": {
+    "canonical_schema_version": "0.51",
+    "canonical_registry_version": "0.27",
+    "canonical_record_count": 673,
+    "source_registry_version": "1.68",
+    "source_record_count": 231,
+    "required_absent_occurrence_ids": ["WSO-FIS-NP-BUDGET-2084"],
+    "required_absent_series_ids": ["WSER-FIS-NP-FEDERAL-BUDGET"],
+    "required_absent_source_ids": ["WSSRC-FIS-026", "WSSRC-FIS-027"],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.28",
+    "canonical_record_count": 674,
+    "source_registry_version": "1.69",
+    "source_record_count": 233,
+    "new_series_count": 1,
+    "new_occurrence_count": 1,
+    "new_source_count": 2,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "schema_additions": {
+    "timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+    "publication_time_semantics": "SOURCE_NATIVE_DATE_ONLY",
+    "native_calendar_system": "BIKRAM_SAMBAT_NEPAL",
+    "gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION",
+    "timing_fields": [
+      "native_calendar_system",
+      "native_calendar_year",
+      "native_calendar_month",
+      "native_calendar_day",
+      "source_native_date_label",
+      "gregorian_resolution_status"
+    ],
+    "fiscal_process_milestone_type": "BUDGET_PRESENTATION",
+    "design_decision": "An authoritative source-native civil-calendar date may be canonical before an authoritative Gregorian mapping exists. Preserve native calendar components and keep Gregorian timing fields empty until a competent mapping is available; event certainty and Gregorian-resolution status are independent."
+  },
+  "sources": [
+    {
+      "source_id": "WSSRC-FIS-026",
+      "institution": "Nepal Law Commission",
+      "jurisdiction": "Nepal",
+      "domain": "fiscal_sovereign_finance",
+      "endpoint_role": "Constitution of Nepal Article 119 legal recurring-rule authority for annual federal budget presentation",
+      "authoritative_url": "https://lawcommission.gov.np/content/13437/nepal-s-constitution/",
+      "backup_source": "https://repository.lawcommission.gov.np/np/wp-content/uploads/2021/01/%E0%A4%A8%E0%A5%87%E0%A4%AA%E0%A4%BE%E0%A4%B2%E0%A4%95%E0%A5%8B-%E0%A4%B8%E2%80%8C%E0%A4%82%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%A8.pdf",
+      "source_type": "official_constitutional_text",
+      "information_supplied": "Article 119(3) requires the Finance Minister to present the revenue and expenditure estimates to the Federal Parliament on the fifteenth day of Jestha every year.",
+      "source_timezone": "Asia/Kathmandu",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY"
+    },
+    {
+      "source_id": "WSSRC-FIS-027",
+      "institution": "Ministry of Finance, Government of Nepal",
+      "jurisdiction": "Nepal",
+      "domain": "fiscal_sovereign_finance",
+      "endpoint_role": "Federal budget statement and budget-speech publication archive",
+      "authoritative_url": "https://mof.gov.np/category/budget-speech/",
+      "backup_source": "https://mof.gov.np/content/1741/budget-statement-for-the-financial-year-2083-84/",
+      "source_type": "official_budget_publication_archive",
+      "information_supplied": "Current and historical federal budget statements; FY2083/84 budget statement is dated 15 Jestha 2083. Historical rows do not themselves supply the 2084 Gregorian conversion.",
+      "source_timezone": "Asia/Kathmandu",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY"
+    }
+  ],
+  "occurrence": {
+    "occurrence_id": "WSO-FIS-NP-BUDGET-2084",
+    "series_id": "WSER-FIS-NP-FEDERAL-BUDGET",
+    "canonical_name": "Nepal Federal Budget 2084/85 — presentation",
+    "short_calendar_title": "Nepal Federal Budget 2084/85 — presentation",
+    "category": "FISCAL_SOVEREIGN_FINANCE",
+    "subcategory": "national_budget",
+    "jurisdiction": "Nepal",
+    "region": "South Asia",
+    "institution": "Ministry of Finance, Government of Nepal",
+    "event_type": "FISCAL_POLICY_PROCESS",
+    "fiscal_process_milestone_type": "BUDGET_PRESENTATION",
+    "source_id": "WSSRC-FIS-026",
+    "legal_basis_source_id": "WSSRC-FIS-026",
+    "supporting_source_ids": ["WSSRC-FIS-027"],
+    "governing_instrument": "Constitution of Nepal, Article 119(3)",
+    "certainty_status": "CONFIRMED",
+    "activation_mode": "AUTHORITATIVE_RECURRING_RULE",
+    "lifecycle_status": "PLANNED",
+    "timing_type": "SOURCE_NATIVE_CALENDAR_DATE",
+    "native_calendar_system": "BIKRAM_SAMBAT_NEPAL",
+    "native_calendar_year": 2084,
+    "native_calendar_month": "JESTHA",
+    "native_calendar_day": 15,
+    "source_native_date_label": "15 Jestha 2084",
+    "gregorian_resolution_status": "UNRESOLVED_AUTHORITATIVE_CONVERSION",
+    "publication_time_semantics": "SOURCE_NATIVE_DATE_ONLY",
+    "source_timezone": "Asia/Kathmandu",
+    "time_precision": "DAY",
+    "time_status": "NOT_APPLICABLE",
+    "time_basis": "NOT_APPLICABLE",
+    "intrinsic_importance": "HIGH",
+    "expected_market_sensitivity": "MEDIUM",
+    "geopolitical_sensitivity": "LOW",
+    "visibility_tier": "ANALYST",
+    "render_policy": "INCLUDE",
+    "transmission_channels": [
+      "fiscal_policy",
+      "government_expenditure",
+      "taxation",
+      "inflation",
+      "growth",
+      "development_finance",
+      "sovereign_finance",
+      "currencies"
+    ]
+  },
+  "holds": [
+    {
+      "candidate": "North Indian Ocean tropical cyclone season",
+      "status": "HOLD_OFFICIAL_DEFINITION_CONFLICT",
+      "reason": "Reviewed IMD/RSMC New Delhi first-party materials continue to conflict over the source-defined season boundary; no convenient definition may be selected to repair coverage counts."
+    }
+  ]
+}
