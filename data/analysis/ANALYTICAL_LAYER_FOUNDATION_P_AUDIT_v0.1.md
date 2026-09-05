@@ -149,3 +149,23 @@ Automatic canonical commit remains OFF. Google Calendar writes remain OFF.
 ## Population discipline
 
 One Australian sample is a contract test, not a global analytical corpus and not a preferred geography for future analysis. Before broad population, the same model should be challenged against materially different event types and regions — including non-Western and Global South cases — so the schema is not accidentally shaped around central-bank/macro-market conventions.
+
+## Full validation gate
+
+Temporary branch-only validation run `33971669135`: **SUCCESS**.
+
+The gate proved all seven protected upstream files above were byte-identical to base `f81ce2440d6e3acce2a84c902cd8215e898a002c` before running the analytical checks.
+
+Results:
+
+- canonical validator: PASS for 674 occurrences;
+- analytical validator: PASS for 1 review / 2 analytical evidence records;
+- full repository suite: **382 tests PASS, 14 skipped**;
+- Python compile checks: PASS;
+- browser JavaScript checks, including `web/analysis.js`: PASS;
+- static build: PASS for **674 events / 7 monitor routes / 233 governed sources / 1 analytical review**;
+- generated `docs/data/analysis.json`: one review, `WSO-MAC-A-0025`, `OBSERVED_ASSOCIATION`, `NOT_ESTABLISHED`, two evidence records;
+- canonical mutation flag: OFF;
+- Google Calendar write flag: OFF.
+
+The temporary validation/introspection workflow was removed before PR preparation.
