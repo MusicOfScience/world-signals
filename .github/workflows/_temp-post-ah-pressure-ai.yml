@@ -1,0 +1,30 @@
+name: TEMP AI post-AH pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-ah-pressure-audit-ai
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-63 base
+        run: |
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "b12058d260a8139c893feb52ad864258044e83b2"
+      - name: Run post-AH pressure audit
+        run: python scripts/audit_post_ah_pressure_ai.py
+      - name: Validate canonical and Analysis pre-state
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
