@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Print completed Global South data-release candidates
+      - name: Print past-dated Global South records still planned
         shell: bash
         run: |
           python - <<'PY'
@@ -24,26 +24,29 @@ jobs:
           r=json.loads(Path('data/canonical/registry.json').read_text())
           focus_regions={'Africa','South Asia','Southeast Asia','Latin America'}
           focus_jurisdictions={'India','Indonesia','Brazil','South Africa','Mexico','Nigeria','Kenya','Vietnam','Philippines','Malaysia','Thailand','Argentina','Colombia','Chile'}
+          cutoff='2026-09-05T23:59:59Z'
           rows=[]
           for x in r['records']:
-              if x.get('lifecycle_status')!='COMPLETED' or x.get('event_type')!='DATA_RELEASE':
+              if x.get('lifecycle_status')!='PLANNED':
                   continue
               region=x.get('region') or x.get('broad_region')
               jur=x.get('jurisdiction')
               jur_tokens=set(jur if isinstance(jur,list) else [jur])
               if region not in focus_regions and not (jur_tokens & focus_jurisdictions):
                   continue
-              vals=[str(x.get(k,'')) for k in ('start_utc','start_local','publication_datetime','date_earliest','date_latest') if x.get(k)]
-              if not any('2026-' in v for v in vals):
+              raw=x.get('start_utc') or x.get('start_local') or x.get('publication_datetime') or x.get('date_latest') or x.get('date_earliest')
+              if not raw or not str(raw).startswith('2026-'):
+                  continue
+              if str(raw)[:10] > '2026-09-05':
                   continue
               rows.append({k:x.get(k) for k in (
                   'occurrence_id','series_id','canonical_name','institution','jurisdiction','region','category','subcategory','event_type',
                   'certainty_status','lifecycle_status','timing_type','start_local','start_utc','publication_datetime','date_earliest','date_latest',
                   'source_id','intrinsic_importance','expected_market_sensitivity','visibility_tier','notes'
               )})
-          rows.sort(key=lambda x: str(x.get('start_utc') or x.get('start_local') or x.get('publication_datetime') or x.get('date_earliest') or ''))
-          print(json.dumps(rows, indent=2, ensure_ascii=False, sort_keys=True))
+          rows.sort(key=lambda x: str(x.get('start_utc') or x.get('start_local') or x.get('publication_datetime') or x.get('date_latest') or x.get('date_earliest') or ''), reverse=True)
+          print(json.dumps(rows[:80], indent=2, ensure_ascii=False, sort_keys=True))
           print('candidate_count=',len(rows))
           if not rows:
-              raise SystemExit('no completed Global South data-release candidates found')
+              raise SystemExit('no past-dated Global South planned records found')
           PY
