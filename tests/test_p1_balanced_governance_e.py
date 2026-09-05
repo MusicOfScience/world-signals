@@ -86,7 +86,7 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         self.assertEqual(set(self.plan["source_updates"]), expected)
         self.assertEqual(set(TX.SELECTED_SOURCES), expected)
         self.assertEqual(len(self.plan["new_sources"]), 1)
-        self.assertEqual(self.plan["new_sources"][0]["source_id"], "WSSRC-INT-030")
+        self.assertEqual(self.plan["new_sources"][0]["source_id"], "WSSRC-INT-031")
         self.assertEqual(self.plan["new_sources"][0]["canonical_dependency_count"], 1)
 
     def test_research_keeps_governance_and_population_layers_separate(self):
@@ -101,9 +101,9 @@ class P1BalancedGovernanceETests(unittest.TestCase):
 
     def test_apec_is_provenance_repair_not_date_repair(self):
         update = self.plan["canonical_updates"]["WSO-INT-A-0012"]["set"]
-        self.assertEqual(update["source_id"], "WSSRC-INT-030")
-        self.assertEqual(update["primary_source_assertion_id"], "WSA-2da49d940b9d5802")
-        self.assertEqual(update["last_successful_assertion_id"], "WSA-2da49d940b9d5802")
+        self.assertEqual(update["source_id"], "WSSRC-INT-031")
+        self.assertEqual(update["primary_source_assertion_id"], "WSA-070677934abbc0f0")
+        self.assertEqual(update["last_successful_assertion_id"], "WSA-070677934abbc0f0")
         for forbidden in ("start_local", "end_local", "date_earliest", "date_latest", "time_precision", "certainty_status"):
             self.assertNotIn(forbidden, update)
         baseline = self.plan["preconditions"]["canonical_baselines"]["WSO-INT-A-0012"]
@@ -116,7 +116,7 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         old = self.plan["source_updates"]["WSSRC-INT-011"]
         new = self.plan["new_sources"][0]
         self.assertEqual(old["canonical_dependency_count"], 0)
-        self.assertEqual(old["backup_source"], "WSSRC-INT-030")
+        self.assertEqual(old["backup_source"], "WSSRC-INT-031")
         self.assertIn("month-level", old["information_supplied"])
         self.assertEqual(new["source_type"], "official_host_government_announcement")
         self.assertEqual(new["canonical_dependency_count"], 1)
@@ -126,7 +126,7 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         baseline = next(r for r in self.canonical["records"] if r["occurrence_id"] == "WSO-INT-A-0012")
         changed = dict(baseline)
         changed.update(self.plan["canonical_updates"]["WSO-INT-A-0012"]["set"])
-        self.assertEqual(TX.assertion_id(changed), "WSA-2da49d940b9d5802")
+        self.assertEqual(TX.assertion_id(changed), "WSA-070677934abbc0f0")
 
     def test_ipcc_uses_december_month_precision_without_inventing_day(self):
         for oid in ("WSO-CLIM-A-0009", "WSO-CLIM-A-0010"):
@@ -187,7 +187,7 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         self.assertEqual(overlay_post["canonical_checkpoint"], {"registry_version": "0.26", "record_count": 669})
         self.assertEqual(set(report["changed_occurrences"]), set(TX.CHANGED_OIDS))
         self.assertEqual(set(report["changed_existing_sources"]), set(TX.SELECTED_SOURCES))
-        self.assertEqual(report["new_source"], "WSSRC-INT-030")
+        self.assertEqual(report["new_source"], "WSSRC-INT-031")
         self.assertEqual(report["governance"], {
             "fully_explicit": 98,
             "missing_any": 130,
@@ -208,8 +208,8 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         after = {r["occurrence_id"]: r for r in canonical_post["records"]}
         apec = after["WSO-INT-A-0012"]
         self.assertEqual((apec["start_local"], apec["end_local"]), ("2026-11-18", "2026-11-19"))
-        self.assertEqual(apec["source_id"], "WSSRC-INT-030")
-        self.assertEqual(apec["primary_source_assertion_id"], "WSA-2da49d940b9d5802")
+        self.assertEqual(apec["source_id"], "WSSRC-INT-031")
+        self.assertEqual(apec["primary_source_assertion_id"], "WSA-070677934abbc0f0")
         for oid in ("WSO-CLIM-A-0009", "WSO-CLIM-A-0010"):
             row = after[oid]
             self.assertEqual((row["date_earliest"], row["date_latest"], row["time_precision"]), ("2027-12-01", "2027-12-31", "MONTH"))
@@ -220,7 +220,7 @@ class P1BalancedGovernanceETests(unittest.TestCase):
         self.assertIsNone(ndb["host_city"])
         sm = {s["source_id"]: s for s in sources_post["sources"]}
         self.assertEqual(sm["WSSRC-INT-011"]["canonical_dependency_count"], 0)
-        self.assertEqual(sm["WSSRC-INT-030"]["canonical_dependency_count"], 1)
+        self.assertEqual(sm["WSSRC-INT-031"]["canonical_dependency_count"], 1)
 
     def test_global_write_gates_remain_closed(self):
         self.assertEqual(self.expectations["version"], "0.7")

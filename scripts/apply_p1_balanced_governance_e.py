@@ -26,7 +26,7 @@ EXPECTATIONS_PATH = ROOT / "data/monitor/expectations.json"
 
 APPLY_ENV = "WORLD_SIGNALS_ALLOW_P1_BALANCED_GOVERNANCE_E_APPLY"
 APPLY_VALUE = "YES"
-NEW_SOURCE_ID = "WSSRC-INT-030"
+NEW_SOURCE_ID = "WSSRC-INT-031"
 APEC_OID = "WSO-INT-A-0012"
 IPCC_SLCF_OID = "WSO-CLIM-A-0009"
 IPCC_CDR_OID = "WSO-CLIM-A-0010"
@@ -188,7 +188,7 @@ def build_post_state(
     for sid, fields in plan["source_updates"].items():
         by_source[sid].update(copy.deepcopy(fields))
     if len(plan.get("new_sources", [])) != 1 or plan["new_sources"][0].get("source_id") != NEW_SOURCE_ID:
-        raise ValueError("plan must define exactly one WSSRC-INT-030 source")
+        raise ValueError("plan must define exactly one WSSRC-INT-031 source")
     sources_out["sources"].append(copy.deepcopy(plan["new_sources"][0]))
     sources_out["version"] = plan["postconditions"]["source_registry_version"]
     sources_out["reference_date"] = plan["review_date"]
@@ -295,11 +295,11 @@ def validate_post_state(
         "host_confirmed": True,
         "host_jurisdiction": "China",
         "host_city": "Shenzhen",
-        "primary_source_assertion_id": "WSA-2da49d940b9d5802",
-        "last_successful_assertion_id": "WSA-2da49d940b9d5802",
+        "primary_source_assertion_id": "WSA-070677934abbc0f0",
+        "last_successful_assertion_id": "WSA-070677934abbc0f0",
         "schedule_authority_scope": "EVENT_SPECIFIC",
     }, "APEC post-state", errors)
-    if assertion_id(apec_after) != "WSA-2da49d940b9d5802":
+    if assertion_id(apec_after) != "WSA-070677934abbc0f0":
         errors.append("APEC assertion hash does not match new source identity")
 
     # IPCC: month precision only; source/assertion/certainty stay stable.
@@ -353,7 +353,7 @@ def validate_post_state(
     before_ids = [row.get("source_id") for row in sources_before.get("sources", [])]
     after_ids = [row.get("source_id") for row in sources_after.get("sources", [])]
     if after_ids != before_ids + [NEW_SOURCE_ID]:
-        errors.append("source identity/order changed outside appended WSSRC-INT-030")
+        errors.append("source identity/order changed outside appended WSSRC-INT-031")
     actual_source_changes = {sid for sid in before_ids if before_sources[sid] != after_sources[sid]}
     if actual_source_changes != set(post["expected_changed_existing_sources"]):
         errors.append(f"unexpected existing source changed set: {sorted(actual_source_changes)}")
@@ -367,11 +367,11 @@ def validate_post_state(
         if dep_count(canonical_after, sid) != expected:
             errors.append(f"derived dependency mismatch after transaction: {sid}")
     if dep_count(canonical_after, NEW_SOURCE_ID) != 1:
-        errors.append("WSSRC-INT-030 must have exactly one primary canonical dependency")
+        errors.append("WSSRC-INT-031 must have exactly one primary canonical dependency")
     if after_sources["WSSRC-INT-011"].get("canonical_dependency_count") != 0:
         errors.append("WSSRC-INT-011 stored dependency helper must be zero after reassignment")
     if after_sources[NEW_SOURCE_ID].get("canonical_dependency_count") != 1:
-        errors.append("WSSRC-INT-030 stored dependency helper must be one")
+        errors.append("WSSRC-INT-031 stored dependency helper must be one")
 
     # Historical/global invariants.
     exact(after_records["WSO-EL-A-0004"], {"start_local": "2027-01-05"}, "Brazil inauguration", errors)

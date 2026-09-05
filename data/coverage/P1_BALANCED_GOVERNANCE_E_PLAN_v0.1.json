@@ -16,7 +16,7 @@
     "google_calendar_write": false,
     "biosecurity_overlay_registry_version": "0.25",
     "biosecurity_overlay_record_count": 669,
-    "required_absent_source_ids": ["WSSRC-INT-030"],
+    "required_absent_source_ids": ["WSSRC-INT-031"],
     "source_baselines": {
       "WSSRC-MAC-023": {"authoritative_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods", "source_type": "official_series_schedule", "derived_dependency_count": 6},
       "WSSRC-REG-008": {"authoritative_url": "https://www.bcb.gov.br/detalhenoticia/20739/nota", "source_type": "official_central_bank_schedule", "derived_dependency_count": 3},
@@ -147,8 +147,8 @@
       "automation_summary": "No unrestricted production retrieval right or source-specific implementation is identified for the APEC China host-year site.",
       "rights_reviewed_at": "2026-09-05",
       "rights_review_scope": "P1_BALANCED_GOVERNANCE_E_RIGHTS_AND_AUTHORITY_REVIEW",
-      "backup_source": "WSSRC-INT-030",
-      "known_limitations": ["Current host-year meetings page supplies month-level November 2026 timing only; it is not used as independent authority for the 18–19 November exact day range.", "Exact day-level timing is assigned to WSSRC-INT-030 China MFA event-specific evidence."],
+      "backup_source": "WSSRC-INT-031",
+      "known_limitations": ["Current host-year meetings page supplies month-level November 2026 timing only; it is not used as independent authority for the 18–19 November exact day range.", "Exact day-level timing is assigned to WSSRC-INT-031 China MFA event-specific evidence."],
       "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
       "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
       "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
@@ -173,7 +173,7 @@
   },
   "new_sources": [
     {
-      "source_id": "WSSRC-INT-030",
+      "source_id": "WSSRC-INT-031",
       "institution": "Ministry of Foreign Affairs of the People's Republic of China",
       "jurisdiction": "China / APEC host government",
       "domain": "international_institutions",
@@ -220,9 +220,9 @@
   "canonical_updates": {
     "WSO-INT-A-0012": {
       "set": {
-        "source_id": "WSSRC-INT-030",
-        "primary_source_assertion_id": "WSA-2da49d940b9d5802",
-        "last_successful_assertion_id": "WSA-2da49d940b9d5802",
+        "source_id": "WSSRC-INT-031",
+        "primary_source_assertion_id": "WSA-070677934abbc0f0",
+        "last_successful_assertion_id": "WSA-070677934abbc0f0",
         "schedule_authority_scope": "EVENT_SPECIFIC",
         "notes": "China MFA event-specific first-order evidence confirms the 33rd APEC Economic Leaders' Meeting in Shenzhen on 18–19 November 2026. The APEC China host-year page remains supporting month-level programme context only.",
         "last_verified_at": "2026-09-05"
@@ -270,7 +270,7 @@
     "biosecurity_overlay_record_count": 669,
     "expected_changed_occurrences": ["WSO-INT-A-0012", "WSO-CLIM-A-0009", "WSO-CLIM-A-0010", "WSO-INT-B-0113"],
     "expected_changed_existing_sources": ["WSSRC-MAC-023", "WSSRC-REG-008", "WSSRC-COM-006", "WSSRC-CLIM-002", "WSSRC-INT-024", "WSSRC-INT-011", "WSSRC-INT-028"],
-    "expected_new_source_id": "WSSRC-INT-030",
+    "expected_new_source_id": "WSSRC-INT-031",
     "governance_expected": {"fully_explicit": 98, "missing_any": 130, "p1_canonical_dependent": 59, "p2_registry_only": 71}
   }
 }

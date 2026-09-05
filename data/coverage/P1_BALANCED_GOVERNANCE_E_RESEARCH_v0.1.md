@@ -175,7 +175,7 @@ Frozen modern governance classification:
 
 No AU canonical mutation is authorised.
 
-## 6. APEC Economic Leaders' Meeting 2026 — `WSSRC-INT-011` plus new `WSSRC-INT-030`
+## 6. APEC Economic Leaders' Meeting 2026 — `WSSRC-INT-011` plus new `WSSRC-INT-031`
 
 Existing APEC China host-year meetings page:  
 https://www.apec2026.cn/node_196.html
@@ -194,10 +194,10 @@ Findings:
 Frozen source decomposition:
 
 - retain `WSSRC-INT-011` as the APEC China 2026 host-year programme/month-level source;
-- add `WSSRC-INT-030` for the China MFA exact-date announcement;
-- reassign only `WSO-INT-A-0012` primary `source_id` to `WSSRC-INT-030`;
+- add `WSSRC-INT-031` for the China MFA exact-date announcement;
+- reassign only `WSO-INT-A-0012` primary `source_id` to `WSSRC-INT-031`;
 - preserve 18–19 November 2026, Shenzhen, CONFIRMED status, stable occurrence/series identity and all non-provenance semantics;
-- because assertion identity hashes `source_id`, update primary and last-successful assertion IDs to `WSA-2da49d940b9d5802`.
+- because assertion identity hashes `source_id`, update primary and last-successful assertion IDs to `WSA-070677934abbc0f0`.
 
 Frozen modern governance for both APEC sources:
 
