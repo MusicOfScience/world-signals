@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.24",
+  "version": "0.25",
   "reference_date": "2026-09-05",
   "record_count": 669,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
@@ -48235,7 +48235,7 @@
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-05",
       "next_verification_due": "SOURCE_SPECIFIC",
       "parent_occurrence_id": null,
       "related_occurrence_ids": [],
@@ -48267,7 +48267,9 @@
       "publication_bundle_type": "SINGLE_RELEASE",
       "render_cluster_key": null,
       "calendar_aggregation_policy": "STANDALONE",
-      "notes": "DSU Article 4.7 runs from receipt of the consultation request. WTO sources establish a 27 July request and 30 July circulation, but currently accessible official evidence does not establish the respondent receipt date. The prior exact 28 September date improperly used circulation as the legal anchor; 25–28 September is retained as an evidence-bounded conditional eligibility window pending receipt-date verification."
+      "notes": "DSU Article 4.7 runs from receipt of the consultation request. WTO dispute-status sources establish a 27 July 2026 request and 30 July circulation, while WSSRC-TRD-008 separately supplies the standing Article 4.7 legal rule. Accessible first-order evidence still does not establish the US receipt date. The evidence-bounded 25–28 September 2026 conditional eligibility window therefore remains unchanged pending receipt-date verification.",
+      "legal_basis_source_id": "WSSRC-TRD-008",
+      "governing_instrument": "WTO Dispute Settlement Understanding, Article 4.7"
     },
     {
       "occurrence_id": "WSO-TRD-A-0003",
