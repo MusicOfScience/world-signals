@@ -19,7 +19,7 @@
     "source_baselines": {
       "WSSRC-REGJ-002": {"authoritative_url": "https://www.cbsl.gov.lk/en/monetary-policy/monetary-policy-communication/monetary-policy-advance-release-calendar", "derived_dependency_count": 2},
       "WSSRC-RISK-001": {"authoritative_url": "https://www.bom.gov.au/climate/cyclones/australia/", "derived_dependency_count": 2},
-      "WSSRC-REG2-004": {"authoritative_url": "https://www.bcentral.cl/en/news-and-publications/press/monetary-and-financial-policy-calendar", "derived_dependency_count": 2},
+      "WSSRC-REG2-004": {"authoritative_url": "https://www.bcentral.cl/en/web/banco-central/news-and-publications/press/monetary-and-financial-policy-calendar", "derived_dependency_count": 2},
       "WSSRC-HEALTH-004": {"authoritative_url": "https://www.who.int/westernpacific/about/governance/regional-committee/session-77", "derived_dependency_count": 1},
       "WSSRC-REG-009": {"authoritative_url": "https://www.mof.gov.my/portal/en/news/press-release/pre-budget-statement-2027", "derived_dependency_count": 1},
       "WSSRC-INT-018": {"authoritative_url": "https://www.afdb.org/en/documents/board-documents/board-of-governors-documents/official-records-of-the-annual-meetings", "derived_dependency_count": 1},
