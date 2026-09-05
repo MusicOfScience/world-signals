@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Prove exact merged base and print completed anchor inventory
+      - name: Prove exact merged base and inspect unreviewed completed anchors
         shell: bash
         run: |
           set -euo pipefail
@@ -30,29 +30,21 @@ jobs:
           from pathlib import Path
           c=json.loads(Path('data/canonical/registry.json').read_text())
           r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
           reviewed={x['canonical_occurrence_id'] for x in r['reviews'] if x.get('review_state') in {'REVIEWED_SAMPLE','REVIEWED'} and x.get('review_phase')=='POST_EVENT'}
           completed=[x for x in c['records'] if x.get('lifecycle_status')=='COMPLETED']
           assert len(completed)==9, len(completed)
-          for x in completed:
-              print(json.dumps({
-                  'reviewed': x['occurrence_id'] in reviewed,
-                  'occurrence_id': x.get('occurrence_id'),
-                  'series_id': x.get('series_id'),
-                  'canonical_name': x.get('canonical_name') or x.get('title'),
-                  'institution': x.get('institution'),
-                  'jurisdiction': x.get('jurisdiction'),
-                  'region': x.get('region') or x.get('broad_region'),
-                  'category': x.get('category'),
-                  'subcategory': x.get('subcategory'),
-                  'event_type': x.get('event_type'),
-                  'start_local': x.get('start_local'),
-                  'start_utc': x.get('start_utc'),
-                  'source_timezone': x.get('source_timezone'),
-                  'source_id': x.get('source_id'),
-                  'intrinsic_importance': x.get('intrinsic_importance'),
-                  'expected_market_sensitivity': x.get('expected_market_sensitivity'),
-              }, sort_keys=True))
           unreviewed=[x for x in completed if x['occurrence_id'] not in reviewed]
           assert len(unreviewed)==3, len(unreviewed)
-          print('UNREVIEWED_IDS=' + ','.join(x['occurrence_id'] for x in unreviewed))
+          print('=== UNREVIEWED FULL RECORDS ===')
+          for x in unreviewed:
+              print(json.dumps(x, sort_keys=True))
+          print('=== LEDGER FOR UNREVIEWED ===')
+          ids={x['occurrence_id'] for x in unreviewed}
+          for change in l.get('changes', l.get('records', [])):
+              if change.get('occurrence_id') in ids:
+                  print(json.dumps(change, sort_keys=True))
+          tech=next(x for x in unreviewed if x['occurrence_id']=='WSO-TECH-A-0002')
+          assert tech['start_local']=='2026-09-20'
+          assert tech['lifecycle_status']=='COMPLETED'
           PY
