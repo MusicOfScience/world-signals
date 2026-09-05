@@ -1,4 +1,4 @@
-# rerun after semantic test repairs
+# rerun after structural null-result test repair
 name: TEMP priority-region Analysis S full simulation
 
 on:
