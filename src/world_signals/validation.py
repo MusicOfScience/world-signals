@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
-from .temporal import validate_season_window
+from .temporal import validate_season_window, validate_source_native_calendar_date
 
 TIMED_TYPES = {"LOCAL_DATETIME", "LOCAL_DATETIME_RANGE", "TIMED_EVENT"}
 
@@ -39,12 +39,15 @@ def validate_registry(registry: dict, source_registry: dict | None = None) -> Va
             if not r.get("start_utc"):
                 report.warnings.append(f"{oid}: timed event missing start_utc (legacy/backfill candidate)")
 
-        temporal_report = validate_season_window(r)
-        report.errors.extend(temporal_report.errors)
+        for temporal_report in (
+            validate_season_window(r),
+            validate_source_native_calendar_date(r),
+        ):
+            report.errors.extend(temporal_report.errors)
 
         sid = r.get("source_id")
         if source_registry and sid and sid not in source_ids:
             report.errors.append(f"{oid}: source_id {sid} absent from source registry")
-        if r.get("certainty_status") not in {"CONFIRMED", "PROVISIONAL", "TBC"}:
+        if r.get("certainty_status") not in {"CONFIRMED", "PROVISIONAL", "TBC", "EXPECTED_WINDOW"}:
             report.warnings.append(f"{oid}: unrecognised certainty_status {r.get('certainty_status')}")
     return report
