@@ -1,0 +1,137 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AUSTRALIAN_TROPICAL_CYCLONE_SEASON_ANALYSIS_AJ",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "c85db2ec3a675a749acb8201705fb6f1f85de27d",
+  "purpose": "Review the completed 2025-26 Australian tropical cyclone season as the first Analysis PHYSICAL_RISK_WINDOW specimen, preserving the distinction between climatology and forecast, seasonal hazard and named shock, and realised weather activity versus damage, market response or climate attribution.",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.9",
+    "analysis_review_count": 13,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.9",
+    "analysis_evidence_count": 50,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 13,
+    "reviewed_event_type_diversity": 11,
+    "required_target_occurrence_id": "WSO-RISK-AU-TC-2025-26",
+    "required_target_series_id": "WSER-RISK-AU-TC",
+    "required_target_category": "PHYSICAL_CLIMATE_RISK",
+    "required_target_event_type": "PHYSICAL_RISK_WINDOW",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_start_local": "2025-11-01",
+    "required_target_end_local": "2026-04-30",
+    "required_target_source_timezone": null,
+    "required_target_start_utc": null,
+    "required_target_end_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_absent_analysis_ids": [
+      "WSAN-AU-TCSEASON-2025-26-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-RISK-AU-TC-2025-26",
+    "selection_rationale": [
+      "The specimen is the first completed PHYSICAL_RISK_WINDOW available for Analysis and therefore adds an object class not yet reviewed.",
+      "The Bureau supplies competent first-party pre-season planning/climatology and post-season outcome evidence.",
+      "The material creates a useful anti-folklore test: a climatological average must not be silently promoted into a season-specific forecast or forecast error.",
+      "The six-month risk window creates a strong boundary test between aggregate season, individual cyclone shocks, damage, markets and climate attribution.",
+      "The remaining market-structure canonical gap is not filled mechanically because queue or histogram completion is not the project objective."
+    ],
+    "held_occurrence_ids": [
+      "WSO-FIN-B-0004",
+      "WSO-HEALTH-WHA-079",
+      "WSO-EL-KR-LGE-20260603",
+      "WSO-CLIM-UNFCCC-SB64-202606",
+      "WSO-TRD-EU-RU-SANC-20260625",
+      "WSO-MAC-B-0041"
+    ],
+    "hold_rationale": "The remaining completed anchors stay as a choice set. AJ selects the physical-risk window for immediate object-class and causal-discipline novelty, not FIFO completion or geographic quota filling."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.3",
+    "reason": "Existing Analysis vocabulary supports OTHER_DEFENSIBLE_EXPECTATION, NOT_ESTABLISHED surprise, empty market movement, COMMON_DRIVER_CONTEXT, NOT_A_CAUSAL_CLAIM, explicit noise/alternatives, NOT_ESTABLISHED second-order effects and falsifiers. AJ needs semantic discipline rather than schema expansion."
+  },
+  "new_analysis_id": "WSAN-AU-TCSEASON-2025-26-001",
+  "new_evidence_ids": [
+    "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+    "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+    "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+    "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.10",
+    "analysis_review_count": 14,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.10",
+    "analysis_evidence_count": 54,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 14,
+    "reviewed_event_type_diversity": 12,
+    "reviewed_physical_risk_window_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-CLIM-UNFCCC-SB64-202606",
+      "WSO-EL-KR-LGE-20260603",
+      "WSO-FIN-B-0004",
+      "WSO-HEALTH-WHA-079",
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "climatological_average_is_season_specific_forecast": false,
+    "eleven_vs_ten_is_directional_surprise": false,
+    "season_window_equals_named_cyclone_occurrence": false,
+    "severe_cyclone_count_implies_damage": false,
+    "landfall_count_implies_market_move": false,
+    "warm_sst_context_is_climate_change_attribution": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "market_structure_gap_must_be_filled_next": false
+  }
+}
