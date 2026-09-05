@@ -114,4 +114,4 @@ jobs:
       - name: Static site build
         run: python scripts/build_site.py
 
-# rerun marker: semantic-invariant tests repaired
+# rerun marker: descendant lineage assumptions repaired
