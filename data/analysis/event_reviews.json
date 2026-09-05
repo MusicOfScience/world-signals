@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.7",
+  "version": "0.8",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
-    "registry_version": "0.30",
+    "registry_version": "0.31",
     "record_count": 681
   },
   "reviews": [
@@ -1522,6 +1522,212 @@
         "If high-quality market evidence establishes a discrete GS93-related event-window price response, what_moved may be populated in a later review, with contamination and alternative explanations assessed separately."
       ],
       "analytical_conclusion": "WOAH GS93 produced substantial formal institutional output: 35 resolutions, 51 adopted or revised standards, a new 2027-2031 Strategic Plan and adoption of the updated GAP-AMR. The analytical discipline is to stop at what the evidence supports. Some animal-health and zoonosis standards have a recognised WTO-SPS regulatory relationship; animal-welfare standards do not share that status, and none of the package is treated as automatic proof of domestic implementation, market movement or realised health and trade effects. The next signal is uptake and implementation, not retrospective causal storytelling.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-JP-JGB30-20260903-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T20:20:00Z",
+      "canonical_occurrence_id": "WSO-FIS-A-0015",
+      "canonical_series_id": "WSER-FIS-JP-JGB",
+      "canonical_event_type": "FISCAL_FINANCING_EVENT",
+      "canonical_institution": "Japan Ministry of Finance",
+      "canonical_release_utc": null,
+      "scope": "3 September 2026 Japan 30-year JGB auction outcome and same-session sovereign-yield context, preserving unresolved canonical clock time and separating auction mechanics from broader bond-market drivers",
+      "what_happened": {
+        "summary": "Japan's Ministry of Finance completed the 3 September 2026 auction of 30-year JGB issue 91. The security carried a 4.0% coupon. Competitive bids totalled JPY 1,728.1 billion, accepted competitive bids totalled JPY 456.2 billion, the lowest accepted price was 98.65 with a 4.100% yield, and the weighted-average price was 98.93 with a 4.079% yield. Reuters reported a 3.79-times bid-to-cover ratio and an auction tail of 0.28.",
+        "actuals": [
+          {
+            "metric": "nominal_coupon",
+            "value": 4.0,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-RESULT-20260903"
+            ]
+          },
+          {
+            "metric": "competitive_bids",
+            "value": 1728.1,
+            "unit": "JPY_billion",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-RESULT-20260903"
+            ]
+          },
+          {
+            "metric": "accepted_competitive_bids",
+            "value": 456.2,
+            "unit": "JPY_billion",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-RESULT-20260903"
+            ]
+          },
+          {
+            "metric": "lowest_accepted_yield",
+            "value": 4.1,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-RESULT-20260903"
+            ]
+          },
+          {
+            "metric": "weighted_average_yield",
+            "value": 4.079,
+            "unit": "percent",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-RESULT-20260903"
+            ]
+          },
+          {
+            "metric": "bid_to_cover_ratio",
+            "value": 3.79,
+            "unit": "times",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+            ]
+          },
+          {
+            "metric": "auction_tail",
+            "value": 0.28,
+            "unit": "price_points",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-JP-JGB30-MOF-RESULT-20260903",
+          "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The Ministry had indicated approximately JPY 600 billion of 30-year issuance. Reuters characterised the auction as largely uneventful as expected. The reviewed evidence does not establish a contemporaneous numeric consensus for bid-to-cover, tail or clearing yield, so previous-auction values are treated as context rather than forecast.",
+        "benchmarks": [
+          {
+            "metric": "planned_issuance_amount",
+            "value": 600.0,
+            "unit": "JPY_billion_approximately",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-MOF-OFFER-20260903"
+            ]
+          },
+          {
+            "metric": "auction_demand_quality",
+            "value": "largely uneventful",
+            "unit": "qualitative",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-JP-JGB30-MOF-OFFER-20260903",
+          "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+        ]
+      },
+      "what_surprised": {
+        "status": "NO_CLEAR_SURPRISE",
+        "summary": "The auction did not establish a clear directional surprise. Bid-to-cover was lower and the tail wider than at the previous auction, but Reuters reported that the auction was broadly uneventful as expected and cited an assessment that the result was not poor relative to the broader recent trend. The previous auction is not promoted into a synthetic market-consensus benchmark.",
+        "comparisons": [
+          {
+            "comparison_kind": "QUALITATIVE",
+            "metric": "auction_demand_quality",
+            "actual": "Bid-to-cover was 3.79 versus 3.86 previously and the tail was 0.28 versus 0.21; a strategist described the result as somewhat weaker than the previous auction on those measures but not poor against the broader recent trend.",
+            "expected": "Reuters described the auction as largely uneventful as expected.",
+            "direction": "NO_CLEAR_SURPRISE"
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+        ]
+      },
+      "what_moved": [
+        {
+          "movement_id": "WSMV-JP-JGB30-20260903-30Y",
+          "movement_type": "SOVEREIGN_YIELD",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "instrument_or_measure": "Japan 30-year government bond secondary-market yield",
+          "before_value": null,
+          "after_value": 4.07,
+          "unit": "percent",
+          "change": -9.5,
+          "change_unit": "basis_points",
+          "direction": "LOWER_ON_DAY",
+          "measurement_window": "source-reported same Tokyo session on 2026-09-03; Reuters separately states the 30-year yield was unchanged after the auction",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "independently_reconstructed": false,
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        }
+      ],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The auction provided a same-session test of demand at the super-long end, but Reuters reported that the 30-year secondary-market yield was unchanged after the auction. The recorded -9.5 basis-point daily decline therefore describes the broader session rather than an auction-caused move. AA treats the auction as context within the day's sovereign-yield repricing and makes no event-specific causal claim.",
+        "evidence_refs": [
+          "WSEV-JP-JGB30-MOF-RESULT-20260903",
+          "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The 4.100% lowest-accepted yield and 4.079% weighted-average auction yield are auction-clearing metrics, not observed secondary-market yield changes. Treating either as 'the market move' would conflate two different objects.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-MOF-RESULT-20260903"
+          ]
+        },
+        {
+          "summary": "The 9.5 basis-point decline in the 30-year secondary-market yield was a same-session move, but the source explicitly says the yield was unchanged after the auction. Using the full daily move as the auction reaction would create post-hoc causal storytelling.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        },
+        {
+          "summary": "A lower bid-to-cover ratio and wider tail than the immediately preceding auction do not by themselves establish a weak auction regime. The same Reuters report notes that the result was not poor against the broader recent average/trend.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "U.S. Treasury yields were easing after softer U.S. private-payroll data and Federal Reserve commentary reduced some near-term tightening expectations, providing a global duration tailwind independent of the Japanese auction.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        },
+        {
+          "summary": "The yen was strengthening while investors repriced Bank of Japan policy expectations in a more hawkish direction. Those cross-market monetary-policy dynamics can move JGB yields independently of auction demand.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        },
+        {
+          "summary": "The session followed a sharp multi-day JGB and global bond sell-off driven by inflation, fiscal and government-debt concerns. Position adjustment or partial reversal of that move is an alternative explanation for lower yields.",
+          "evidence_refs": [
+            "WSEV-JP-JGB30-REUTERS-REACTION-20260903"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "Repeated super-long auction demand conditions and persistently higher domestic Japanese yields could influence sovereign funding costs, debt-management choices and Japanese institutional allocation between JGBs and foreign bonds. Reuters has separately documented a broader shift toward domestic bonds and reduced marginal foreign-bond demand. AA does not attribute that structural trend to this single auction.",
+        "evidence_refs": [
+          "WSEV-JP-JGB-REUTERS-CAPITAL-FLOWS-20260902"
+        ]
+      },
+      "falsifiers": [
+        "If reliable high-frequency JGB data show a material 30-year yield discontinuity immediately after the auction that is not visible in the reviewed Reuters account, the 'no incremental auction move established' interpretation should be revised.",
+        "If a competent contemporaneous pre-auction source establishes a numeric market consensus for bid-to-cover, tail or clearing yield, the NO_CLEAR_SURPRISE classification should be reassessed against that benchmark.",
+        "If the Ministry of Finance corrects the reported auction prices, yields or accepted-bid amounts, AA's factual actuals must be updated.",
+        "If later evidence shows Japanese institutional reallocation accelerated independently of domestic yield levels or was driven primarily by another factor, the proposed second-order sovereign-funding/global-capital channel should be weakened."
+      ],
+      "analytical_conclusion": "The 3 September 30-year JGB auction cleared without a clear directional surprise. Demand metrics were somewhat softer than at the previous sale, but the result was broadly uneventful relative to expectations and recent norms. Japanese bond yields rallied strongly on the day, yet the matched 30-year yield was reported unchanged after the auction itself. The useful signal is therefore not 'auction caused bond rally' but the coexistence of acceptable super-long demand with a broader rates repricing driven by multiple monetary, global and positioning forces.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }
