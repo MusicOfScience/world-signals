@@ -1,0 +1,461 @@
+{
+  "project": "WORLD SIGNALS",
+  "audit": "POST_AA_PRESSURE_AUDIT_AB",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "c4b499436db54f6dc3ebbe045cfda2fba7f730dd",
+  "architecture_position": "ANALYSIS_AUDIT",
+  "mutation_policy": {
+    "canonical_registry": false,
+    "source_registry": false,
+    "change_ledger": false,
+    "monitor_configuration": false,
+    "analysis_schema": false,
+    "analysis_reviews": false,
+    "analysis_evidence": false,
+    "calendar": false
+  },
+  "checkpoint": {
+    "canonical_registry_version": "0.31",
+    "canonical_record_count": 681,
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "analysis_validation_ok": true
+  },
+  "readiness": {
+    "post_event_anchor_lifecycle": "COMPLETED",
+    "eligible_completed_occurrence_count": 14,
+    "reviewed_occurrence_count": 12,
+    "reviewed_occurrence_ids": [
+      "WSO-8df73c7804d45880",
+      "WSO-BWC-WG-2026-S08",
+      "WSO-COM-A-0013",
+      "WSO-FIS-A-0015",
+      "WSO-FIS-NP-BUDGET-2083",
+      "WSO-HIST-R-AR-CPI-202607",
+      "WSO-HIST-R-EG-CBE-20260820",
+      "WSO-HIST-R-ID-BI-202608",
+      "WSO-HIST-R-IN-GDP-2026Q1",
+      "WSO-MAC-A-0025",
+      "WSO-TECH-A-0002",
+      "WSO-WOAH-GS-093"
+    ],
+    "eligible_by_region": {
+      "Africa": 1,
+      "Cross-regional / Global": 3,
+      "East Asia": 2,
+      "Europe": 1,
+      "Latin America": 1,
+      "North America": 1,
+      "Oceania / Pacific": 2,
+      "South Asia": 2,
+      "Southeast Asia": 1
+    },
+    "reviewed_by_region": {
+      "Africa": 1,
+      "Cross-regional / Global": 3,
+      "East Asia": 1,
+      "Europe": 1,
+      "Latin America": 1,
+      "Oceania / Pacific": 2,
+      "South Asia": 2,
+      "Southeast Asia": 1
+    },
+    "eligible_by_event_type": {
+      "DATA_RELEASE": 3,
+      "DECISION": 2,
+      "FISCAL_FINANCING_EVENT": 1,
+      "FISCAL_POLICY_PROCESS": 1,
+      "GOVERNANCE_ASSEMBLY_SESSION": 1,
+      "INFORMATION_RELEASE": 1,
+      "MONETARY_POLICY_DECISION": 1,
+      "MONETARY_POLICY_DECISION_PROCESS": 1,
+      "OFFICIAL_STATISTICAL_RELEASE": 1,
+      "TECHNOLOGY_POLICY_MILESTONE": 1,
+      "TREATY_WORKING_GROUP_SESSION": 1
+    },
+    "reviewed_by_event_type": {
+      "DATA_RELEASE": 2,
+      "DECISION": 1,
+      "FISCAL_FINANCING_EVENT": 1,
+      "FISCAL_POLICY_PROCESS": 1,
+      "GOVERNANCE_ASSEMBLY_SESSION": 1,
+      "INFORMATION_RELEASE": 1,
+      "MONETARY_POLICY_DECISION": 1,
+      "MONETARY_POLICY_DECISION_PROCESS": 1,
+      "OFFICIAL_STATISTICAL_RELEASE": 1,
+      "TECHNOLOGY_POLICY_MILESTONE": 1,
+      "TREATY_WORKING_GROUP_SESSION": 1
+    },
+    "reviewed_event_type_diversity": 11,
+    "minimum_reviewed_event_type_diversity_before_broad_population": 2,
+    "priority_geographic_stress_regions": [
+      {
+        "region": "Africa",
+        "eligible_completed_count": 1,
+        "reviewed_count": 1,
+        "state": "REVIEWED_SAMPLE_PRESENT"
+      },
+      {
+        "region": "South Asia",
+        "eligible_completed_count": 2,
+        "reviewed_count": 2,
+        "state": "REVIEWED_SAMPLE_PRESENT"
+      },
+      {
+        "region": "Southeast Asia",
+        "eligible_completed_count": 1,
+        "reviewed_count": 1,
+        "state": "REVIEWED_SAMPLE_PRESENT"
+      },
+      {
+        "region": "Latin America",
+        "eligible_completed_count": 1,
+        "reviewed_count": 1,
+        "state": "REVIEWED_SAMPLE_PRESENT"
+      }
+    ],
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "elapsed_date_never_implies_completion": true,
+    "missing_historical_anchor_never_authorizes_synthetic_occurrence": true,
+    "notes": [
+      "Readiness counts canonical lifecycle state, not elapsed clock time.",
+      "A zero-anchor priority region is an upstream canonical-population constraint, not permission for the Analysis layer to invent historical occurrences.",
+      "Review counts measure audited sample coverage only; they are not a claim of analytical completeness."
+    ]
+  },
+  "reviewed_sample": {
+    "regions": {
+      "Cross-regional / Global": 3,
+      "Oceania / Pacific": 2,
+      "South Asia": 2,
+      "Africa": 1,
+      "East Asia": 1,
+      "Europe": 1,
+      "Latin America": 1,
+      "Southeast Asia": 1
+    },
+    "categories": {
+      "MACROECONOMIC_RELEASE": 3,
+      "MONETARY_FINANCIAL_POLICY": 3,
+      "FISCAL_SOVEREIGN_FINANCE": 2,
+      "AGRICULTURE_FOOD": 1,
+      "ENERGY_COMMODITIES": 1,
+      "INTERNATIONAL_INSTITUTIONS": 1,
+      "TECHNOLOGY_CRITICAL_INFRASTRUCTURE": 1
+    },
+    "event_types": {
+      "DATA_RELEASE": 2,
+      "DECISION": 1,
+      "FISCAL_FINANCING_EVENT": 1,
+      "FISCAL_POLICY_PROCESS": 1,
+      "GOVERNANCE_ASSEMBLY_SESSION": 1,
+      "INFORMATION_RELEASE": 1,
+      "MONETARY_POLICY_DECISION": 1,
+      "MONETARY_POLICY_DECISION_PROCESS": 1,
+      "OFFICIAL_STATISTICAL_RELEASE": 1,
+      "TECHNOLOGY_POLICY_MILESTONE": 1,
+      "TREATY_WORKING_GROUP_SESSION": 1
+    },
+    "institutions": {
+      "Australian Bureau of Statistics": 1,
+      "Bank Indonesia": 1,
+      "Biological Weapons Convention / UNODA": 1,
+      "Central Bank of Egypt": 1,
+      "European Commission": 1,
+      "INDEC": 1,
+      "Japan Ministry of Finance": 1,
+      "Ministry of Finance, Government of Nepal": 1,
+      "Ministry of Statistics and Programme Implementation": 1,
+      "Reserve Bank of New Zealand": 1,
+      "U.S. Energy Information Administration": 1,
+      "World Organisation for Animal Health": 1
+    },
+    "intrinsic_importance": {
+      "HIGH": 9,
+      "MEDIUM_HIGH": 2,
+      "UNRATED_PENDING_CALIBRATION": 1
+    },
+    "expected_market_sensitivity": {
+      "HIGH": 5,
+      "MEDIUM": 3,
+      "LOW": 1,
+      "LOW_MEDIUM": 1,
+      "MEDIUM_HIGH": 1,
+      "UNRATED_PENDING_CALIBRATION": 1
+    }
+  },
+  "analysis_semantics": {
+    "surprise_status": {
+      "NO_CLEAR_SURPRISE": 4,
+      "MIXED": 3,
+      "UPSIDE": 3,
+      "NOT_ESTABLISHED": 2
+    },
+    "benchmark_type": {
+      "MARKET_FORECAST": 6,
+      "OTHER_DEFENSIBLE_EXPECTATION": 6,
+      "MARKET_CONSENSUS_DECISION": 3,
+      "OFFICIAL_PRIOR_GUIDANCE": 3
+    },
+    "reviews_without_benchmarks": 1,
+    "interaction_type": {
+      "OBSERVATION_CONTEXT": 5,
+      "TRANSMISSION_CHANNEL": 3,
+      "LEGAL_OR_OPERATIONAL_DEPENDENCY": 1,
+      "POLICY_RESPONSE_CONTEXT": 1,
+      "REGULATORY_OVERLAP": 1,
+      "TEMPORAL_COINCIDENCE_ONLY": 1
+    },
+    "causal_status": {
+      "NOT_A_CAUSAL_CLAIM": 8,
+      "OBSERVED_ASSOCIATION": 4
+    },
+    "connection_confidence": {
+      "HIGH": 5,
+      "LOW": 5,
+      "MEDIUM": 2
+    },
+    "second_order_status": {
+      "NOT_ESTABLISHED": 8,
+      "PLAUSIBLE_WATCH_ITEM": 3,
+      "OBSERVED": 1
+    },
+    "reviews_with_market_movement": 6,
+    "reviews_without_market_movement": 6,
+    "movement_type": {
+      "COMMODITY_PRICE": 2,
+      "FX_SPOT": 2,
+      "EQUITY_INDEX": 1,
+      "POLICY_PROBABILITY_REPRICING": 1,
+      "SOVEREIGN_YIELD": 1,
+      "SWAP_RATE": 1
+    },
+    "measurement_precision": {
+      "SOURCE_REPORTED_CHANGE_AND_ENDPOINT": 7,
+      "SOURCE_REPORTED_PRE_POST": 1
+    },
+    "movement_independently_reconstructed": {
+      "False": 8
+    },
+    "total_market_movement_rows": 8,
+    "exact_timestamp_series_rows": 0,
+    "source_reported_or_session_market_rows": 8,
+    "minimum_falsifier_count_per_review": 2
+  },
+  "evidence_profile": {
+    "referenced_evidence_count": 44,
+    "missing_evidence_refs": [],
+    "evidence_class": {
+      "PRIMARY_OFFICIAL": 27,
+      "REPUTABLE_NEWSWIRE": 10,
+      "REPUTABLE_MEDIA": 6,
+      "OTHER_REVIEWED": 1
+    },
+    "evidence_role": {
+      "CONTEXT_OR_ALTERNATIVE": 28,
+      "OFFICIAL_OUTCOME": 20,
+      "EXPECTATION_BENCHMARK": 15,
+      "SECOND_ORDER_OBSERVATION": 9,
+      "MARKET_OBSERVATION": 7
+    },
+    "provider": {
+      "Reuters": 10,
+      "World Organisation for Animal Health": 7,
+      "Biological Weapons Convention / UNODA": 3,
+      "European Commission": 3,
+      "Japan Ministry of Finance": 2,
+      "Public Service Broadcasting / Radio Nepal": 2,
+      "The Kathmandu Post": 2,
+      "Australian Bureau of Statistics": 1,
+      "Bank Indonesia": 1,
+      "Central Bank of Egypt": 1,
+      "European Union": 1,
+      "Financial Comptroller General Office, Government of Nepal": 1,
+      "HC Securities & Investment": 1,
+      "INDEC": 1,
+      "Ministry of Finance, Government of Nepal": 1,
+      "Ministry of Statistics & Programme Implementation / Press Information Bureau": 1,
+      "Republica": 1,
+      "Reserve Bank of New Zealand – Te Pūtea Matua": 1,
+      "The Business Times": 1,
+      "U.S. Energy Information Administration": 1,
+      "United Nations Office for Disarmament Affairs / Biological Weapons Convention": 1,
+      "World Trade Organization": 1
+    },
+    "top_provider": {
+      "provider": "Reuters",
+      "count": 10,
+      "share_percent": 22.7
+    },
+    "primary_official_share_percent": 61.4
+  },
+  "upstream_population_gaps": {
+    "regions_present_in_registry_but_absent_from_completed_anchors": [],
+    "categories_present_in_registry_but_absent_from_completed_anchors": [
+      "CLIMATE_ENVIRONMENT",
+      "CORPORATE_FINANCIAL_MARKET_STRUCTURE",
+      "ELECTIONS_GOVERNANCE",
+      "FINANCIAL_STABILITY_REGULATION",
+      "HEALTH_BIOSECURITY",
+      "PHYSICAL_CLIMATE_RISK",
+      "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+    ],
+    "event_types_present_in_registry_but_absent_from_completed_anchors": [
+      "ELECTION_MILESTONE",
+      "ENVIRONMENTAL_GOVERNANCE_EVENT",
+      "FINANCIAL_STABILITY_POLICY_EVENT",
+      "FINANCIAL_STABILITY_REPORT",
+      "FISCAL_PROCESS",
+      "HEALTH_GOVERNANCE_EVENT",
+      "INDUSTRIAL_TRADE_POLICY_PROCESS",
+      "INFORMATION_CATALYST_MEETING",
+      "INSTITUTIONAL_MEETING",
+      "LEADERSHIP_TRANSITION_PROCESS",
+      "LEGISLATIVE_FISCAL_POLICY_SESSION",
+      "LEGISLATIVE_SESSION_OPENING",
+      "MARKET_STRUCTURE_EVENT",
+      "MEETING",
+      "MONETARY_POLICY_REFERENCE_RATE_PUBLICATION",
+      "PHYSICAL_RISK_WINDOW",
+      "POLITICAL_CONSULTATIVE_SESSION",
+      "POLITICAL_DECISION_PROCESS",
+      "PRESS_CONFERENCE",
+      "PRODUCER_POLICY_MEETING",
+      "PRUDENTIAL_STANDARD_EFFECTIVE_DATE",
+      "PUBLICATION",
+      "SANCTIONS_PROCESS",
+      "SCIENTIFIC_ASSESSMENT_RELEASE",
+      "SECTORAL_MINISTERIAL_MEETING",
+      "SYSTEMIC_TAX_REFORM_IMPLEMENTATION_BOUNDARY",
+      "TRADE_POLICY_PROCESS"
+    ],
+    "regions_with_completed_anchor_but_no_reviewed_sample": [
+      "North America"
+    ],
+    "categories_with_completed_anchor_but_no_reviewed_sample": [],
+    "event_types_with_completed_anchor_but_no_reviewed_sample": []
+  },
+  "eligible_unreviewed_frontier": [
+    {
+      "occurrence_id": "WSO-MAC-B-0041",
+      "canonical_name": "Japan Family Income and Expenditure Survey — July 2026",
+      "institution": "Statistics Bureau of Japan",
+      "region": "East Asia",
+      "category": "MACROECONOMIC_RELEASE",
+      "event_type": "DATA_RELEASE",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM_HIGH",
+      "novelty_against_reviewed_sample": {
+        "new_region": false,
+        "new_category": false,
+        "new_event_type": false,
+        "new_institution": true
+      },
+      "novel_dimension_count": 1
+    },
+    {
+      "occurrence_id": "WSO-ddb70f8ff05a58fb",
+      "canonical_name": "Bank of Canada policy interest rate announcement — 2026-09-02",
+      "institution": "Bank of Canada",
+      "region": "North America",
+      "category": "MONETARY_FINANCIAL_POLICY",
+      "event_type": "DECISION",
+      "intrinsic_importance": "UNRATED_PENDING_CALIBRATION",
+      "expected_market_sensitivity": "UNRATED_PENDING_CALIBRATION",
+      "novelty_against_reviewed_sample": {
+        "new_region": true,
+        "new_category": false,
+        "new_event_type": false,
+        "new_institution": true
+      },
+      "novel_dimension_count": 2
+    }
+  ],
+  "findings": [
+    {
+      "finding": "CONTROLLED_EXPANSION_GATE_IS_NOT_REPRESENTATIVE_COVERAGE",
+      "severity": "METHOD",
+      "detail": "The schema readiness state is a minimum gate. The audit must not interpret READY_FOR_CONTROLLED_EXPANSION as evidence that the reviewed sample or completed-anchor population is globally representative."
+    },
+    {
+      "finding": "MARKET_MEASUREMENT_PRECISION_GAP",
+      "severity": "MATERIAL",
+      "detail": "The reviewed sample contains market-response rows but none currently use EXACT_TIMESTAMP_SERIES precision. Future market-sensitive specimens should test higher-frequency measurement where defensibly obtainable, rather than merely adding more source-reported session moves."
+    },
+    {
+      "finding": "EVIDENCE_PROVIDER_CONCENTRATION_DESCRIPTIVE",
+      "severity": "WATCH",
+      "detail": "The most-used referenced evidence provider is Reuters at 22.7% of referenced evidence rows. This is a concentration diagnostic, not a quality judgment or quota."
+    },
+    {
+      "finding": "QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE",
+      "severity": "METHOD",
+      "detail": "The remaining completed-but-unreviewed frontier must be selected by marginal analytical value. Exhausting the current queue is not itself a research objective."
+    }
+  ],
+  "next_stage": {
+    "recommendation": "SELECT_NEXT_PRESSURE_POINT_AFTER_AUDIT",
+    "priority_order": [
+      "Choose an upstream historical anchor that addresses a material completed-anchor geographic/domain gap where authoritative completion evidence is available.",
+      "For the next market-sensitive Analysis specimen, prefer one that materially improves measurement precision or another under-tested contract dimension.",
+      "Retain any remaining eligible review, including Bank of Canada if still present, as a legitimate option rather than a compulsory queue-completion task."
+    ],
+    "anti_quota_note": "Vocabulary states, regions, event types, providers and causal labels are not quotas. Do not manufacture DOWNSIDE surprises, stronger causal language, market moves or historical events merely to balance distributions."
+  },
+  "post_aa_comparison": {
+    "east_asia_completed_anchor_gap_repaired": true,
+    "east_asia_reviewed_sample_present": true,
+    "fiscal_financing_event_reviewed": true,
+    "exact_timestamp_series_gap_remains": true,
+    "completed_anchor_region_gap_count": 0,
+    "completed_anchor_category_gap_count": 7,
+    "completed_anchor_event_type_gap_count": 27
+  },
+  "frontier_ranked_by_sample_novelty": [
+    {
+      "occurrence_id": "WSO-ddb70f8ff05a58fb",
+      "canonical_name": "Bank of Canada policy interest rate announcement — 2026-09-02",
+      "institution": "Bank of Canada",
+      "region": "North America",
+      "category": "MONETARY_FINANCIAL_POLICY",
+      "event_type": "DECISION",
+      "intrinsic_importance": "UNRATED_PENDING_CALIBRATION",
+      "expected_market_sensitivity": "UNRATED_PENDING_CALIBRATION",
+      "novelty_against_reviewed_sample": {
+        "new_region": true,
+        "new_category": false,
+        "new_event_type": false,
+        "new_institution": true
+      },
+      "novel_dimension_count": 2
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0041",
+      "canonical_name": "Japan Family Income and Expenditure Survey — July 2026",
+      "institution": "Statistics Bureau of Japan",
+      "region": "East Asia",
+      "category": "MACROECONOMIC_RELEASE",
+      "event_type": "DATA_RELEASE",
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "MEDIUM_HIGH",
+      "novelty_against_reviewed_sample": {
+        "new_region": false,
+        "new_category": false,
+        "new_event_type": false,
+        "new_institution": true
+      },
+      "novel_dimension_count": 1
+    }
+  ],
+  "selection_discipline": {
+    "frontier_is_not_backlog": true,
+    "remaining_frontier_count": 2,
+    "upstream_gap_repair_has_priority_when_material": true,
+    "market_precision_gap_is_not_permission_to_infer_timestamps": true,
+    "recommendation": "Do not consume the two remaining completed reviews mechanically. With East Asia and FISCAL_FINANCING_EVENT now repaired, the next tranche should compare: (a) a historical anchor in a still-missing completed category/event type, and (b) Bank of Canada only if authoritative high-frequency market evidence can materially improve measurement precision. Japan household spending is lower marginal value because it repeats East Asia, MACROECONOMIC_RELEASE and DATA_RELEASE."
+  }
+}
