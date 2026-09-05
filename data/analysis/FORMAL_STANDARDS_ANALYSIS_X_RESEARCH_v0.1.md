@@ -154,7 +154,7 @@ The contract pressure is semantic, not structural: X proves the existing schema 
 - biosecurity overlay: v0.5 @ canonical v0.30 / 681 — unchanged
 - Analysis schema: v0.3 — unchanged
 - Analysis reviews: v0.7 / 11
-- Analysis evidence: v0.7 / 39
+- Analysis evidence: v0.7 / 40
 - eligible completed occurrences: 12
 - reviewed completed occurrences: 11
 - reviewed event-type diversity: 10
