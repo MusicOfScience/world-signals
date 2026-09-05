@@ -41,6 +41,16 @@
       "NO_CLEAR_SURPRISE",
       "NOT_ESTABLISHED"
     ],
+    "interaction_type": [
+      "STRUCTURAL_DEPENDENCY",
+      "REGULATORY_OVERLAP",
+      "POLICY_RESPONSE_CONTEXT",
+      "OBSERVATION_CONTEXT",
+      "TRANSMISSION_CHANNEL",
+      "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+      "TEMPORAL_COINCIDENCE_ONLY",
+      "COMMON_DRIVER_CONTEXT"
+    ],
     "causal_status": [
       "NOT_A_CAUSAL_CLAIM",
       "MECHANISM_PLAUSIBLE_NOT_TESTED",
@@ -96,7 +106,7 @@
     "Expected values and actual values must remain distinct objects even when numerically equal.",
     "A surprise label must identify its comparison basis; no surprise may be inferred solely from observed market movement.",
     "Every market-movement assertion requires an evidence reference, measurement window and measurement precision.",
-    "Market movement does not establish causality. causal_status and confidence must be explicit.",
+    "Market movement does not establish causality. interaction_type, causal_status and confidence must be explicit.",
     "Any connection stronger than NOT_A_CAUSAL_CLAIM requires at least one alternative explanation; stronger causal support requires independent evidence beyond temporal sequence.",
     "Second-order effects must distinguish observed outcomes from prospective watch items.",
     "Intrinsic importance and expected market sensitivity are canonical metadata and must not be overwritten by observed response.",
