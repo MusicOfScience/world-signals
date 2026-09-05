@@ -1,0 +1,62 @@
+{
+  "project": "WORLD SIGNALS",
+  "transaction": "CORE_MONITOR_EXPANSION_O",
+  "version": "0.1",
+  "base_main_sha": "03b6255cdc121062816b39073e3c88dd049db29c",
+  "pre_state": {
+    "canonical_registry_version": "0.28",
+    "canonical_occurrence_count": 674,
+    "source_registry_version": "1.69",
+    "source_registry_count": 233,
+    "monitor_expectations_version": "0.7",
+    "monitor_adapter_count": 6
+  },
+  "post_state": {
+    "canonical_registry_version": "0.28",
+    "canonical_occurrence_count": 674,
+    "source_registry_version": "1.70",
+    "source_registry_count": 233,
+    "monitor_expectations_version": "0.8",
+    "monitor_adapter_count": 7
+  },
+  "ons": {
+    "source_id": "WSSRC-MAC-006",
+    "adapter_id": "ONS_RELEASE_CALENDAR_RSS",
+    "canonical_dependency_count": 19,
+    "transport": "RSS",
+    "content_type": "application/rss+xml",
+    "pagination_limit": 100,
+    "pagination_max_pages": 10,
+    "research_validation_run_id": 33969711355,
+    "research_validation_result": "EXACT_IDENTITY_MATCH_PASS_19_OF_19",
+    "monitor_semantics": [
+      "EXACT_PER_OCCURRENCE_FEED_TITLE_IDENTITY",
+      "COMPARE_SCHEDULED_DATETIME_ONLY",
+      "RSS_DOES_NOT_CARRY_CONFIRMED_PROVISIONAL_STATUS",
+      "DATETIME_DRIFT_REQUIRES_HTML_VERIFICATION",
+      "ABSENCE_OR_RENAME_IS_SOURCE_MATCH_REVIEW_NOT_CANCELLATION",
+      "ELAPSED_OCCURRENCES_NOT_PRESENCE_CHECKED_AGAINST_UPCOMING_FEED",
+      "SOURCE_FAILURE_IS_SOURCE_HEALTH_ONLY"
+    ]
+  },
+  "eurostat": {
+    "source_id": "WSSRC-MAC-005",
+    "action": "ENDPOINT_IDENTITY_REPAIR_AND_HOLD",
+    "permission_state_preserved": "CLEARED",
+    "misclassified_url": "https://ec.europa.eu/eurostat/en/news/release-calendar",
+    "observed_transport": "HTML",
+    "hold": "HOLD_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED",
+    "live_route_added": false
+  },
+  "protected": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/operations_policy.json"
+  ],
+  "global_write_gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  }
+}
