@@ -32,9 +32,9 @@ The official tables carry a 2 September 2026 release date for data through 28 Au
 
 ### Expectations and market observation
 
-Reuters, 2 September 2026:
+Reuters, 2 September 2026, distributed via BOE Report:
 
-https://www.reuters.com/business/energy/us-crude-gasoline-inventories-fell-last-week-distillates-rose-eia-says-2026-09-02/
+https://boereport.com/2026/09/02/us-crude-stocks-fall-on-strong-refining-activity-and-exports-eia-says/
 
 Reuters reported a poll expectation for a 1.1 million-barrel crude draw and a 1.3 million-barrel distillate draw. The actual release was therefore internally mixed: crude drew much more than expected, while distillates built instead of drawing. Reuters also reported that oil prices were up slightly after the report, with Brent up $0.68 to $95.33 and WTI up $0.35 to $90.57 at 11:01 ET.
 
@@ -45,6 +45,8 @@ Reuters, 1 September 2026:
 https://www.reuters.com/business/energy/oil-prices-rise-latest-fighting-resurrects-middle-east-supply-disruption-risks-2026-09-01/
 
 Oil had surged more than $4 per barrel the preceding session as renewed US-Iran fighting and Strait of Hormuz disruption risk dominated the market. T therefore treats the post-WPSR price move as a LOW-confidence observed association, not a clean inventory causal experiment.
+
+The 1 September geopolitical-market report is stored as a **separate analytical evidence record** from the 2 September inventory/expectations report. This prevents a true contextual claim from riding on the wrong source lineage.
 
 ### Analytical treatment
 
@@ -118,7 +120,7 @@ If both specimens validate:
 
 - canonical: v0.29 / 678 — unchanged;
 - Analysis reviews: v0.4 / 8;
-- Analysis evidence: v0.4 / 20;
+- Analysis evidence: v0.4 / **21**;
 - eligible completed anchors: 9;
 - reviewed anchors: 8;
 - reviewed event-type diversity: 7;
