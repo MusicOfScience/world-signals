@@ -1,0 +1,185 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "NONMARKET_INSTITUTIONAL_ANALYSIS_W",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-MANDATE",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations Office for Disarmament Affairs / Biological Weapons Convention",
+      "host_or_distribution": "UNODA",
+      "title": "BWC Meetings — Working Group on the Strengthening of the Convention",
+      "url": "https://disarmament.unoda.org/en/our-work/weapons-mass-destruction/biological-weapons/bwc-meetings",
+      "published_at": null,
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Ninth Review Conference established the Working Group to identify, examine and develop measures, including possible legally-binding measures, and make recommendations to strengthen and institutionalise the Convention.",
+        "The Working Group was urged to complete its work as soon as possible, preferably before the end of 2025.",
+        "At completion the Working Group is to adopt by consensus a report with conclusions and recommendations for States Parties."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-OUTCOME",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Documents Library",
+      "title": "BWC/WG/8/CRP.2 — Draft procedural report of the eighth session",
+      "url": "https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionEighth_session_%282026%29/BWC_WG_8_CRP_2.pdf",
+      "published_at": "2026-02-13",
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The eighth session continued consideration of measures under agenda item 6.",
+        "The Chair issued successive revisions of the draft final report during the session, culminating in Rev.3 on 13 February without prejudice to future discussions.",
+        "At the closing meeting on 13 February, the eighth session adopted its procedural report by consensus."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG8-UNODA-DOCUMENTS",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Meetings Place",
+      "title": "Eighth session (2026) — official document index",
+      "url": "https://meetings.unoda.org/meeting/79376/documents",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The official eighth-session document index lists successive revised draft final reports through BWC/WG/8/CRP.1/Rev.3.",
+        "The same index separately lists the procedural report, distinguishing the negotiated draft final-report text from the procedural report adopted for the session."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG10-UNODA-SCHEDULE",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Biological Weapons Convention / UNODA",
+      "host_or_distribution": "UNODA Meetings Place",
+      "title": "Working Group on the Strengthening of the Convention — tenth session (2026)",
+      "url": "https://meetings.unoda.org/bwc-/biological-weapons-convention-working-group-on-the-strengthening-of-the-convention-tenth-session-2026",
+      "published_at": null,
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "UNODA schedules the tenth Working Group session for 7-11 December 2026 in Geneva.",
+        "The scheduled continuation is a future process dependency and not evidence that substantive consensus has already been achieved."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    }
+  ],
+  "reviews": [
+    {
+      "analysis_id": "WSAN-BWC-WG8-2026-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-05T19:35:00Z",
+      "canonical_occurrence_id": "WSO-BWC-WG-2026-S08",
+      "canonical_series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "canonical_event_type": "TREATY_WORKING_GROUP_SESSION",
+      "canonical_institution": "Biological Weapons Convention / UNODA",
+      "canonical_release_utc": null,
+      "scope": "BWC Working Group eighth session: substantive draft progression, procedural consensus, unresolved final-package status and the absence of a defensible market-response requirement",
+      "what_happened": {
+        "summary": "The eighth session continued negotiations on measures to strengthen and institutionalise the Biological Weapons Convention. During the session the Chair circulated successive revisions of the draft final report, with Rev.3 issued on 13 February without prejudice to future discussions. The session adopted its procedural report by consensus; the official record does not establish adoption of the substantive final strengthening report at this session.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-OUTCOME",
+          "WSEV-BWC-WG8-UNODA-DOCUMENTS"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The Working Group's governing mandate called for a consensus report with conclusions and recommendations and urged completion as soon as possible, preferably before the end of 2025. That was an overall institutional aspiration, not a defensible forecast that the eighth session itself would conclude the substantive package.",
+        "benchmarks": [
+          {
+            "metric": "working_group_completion_guidance",
+            "value": "complete as soon as possible, preferably before the end of 2025, with a consensus report at completion",
+            "unit": "qualitative_institutional_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-BWC-WG8-UNODA-MANDATE"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No defensible contemporaneous benchmark has been identified that makes adoption or non-adoption of a substantive final package at the eighth session a measurable surprise. The earlier preferred completion window had already passed, but soft institutional guidance is not converted into a session-specific forecast.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE",
+          "WSEV-BWC-WG8-UNODA-OUTCOME"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The eighth session is one stage in a consensus-based institutional process whose mandate requires a final report with conclusions and recommendations. Because the substantive draft remained open to future discussion, later Working Group sessions are operationally connected to the unresolved text. This is process dependency, not a causal claim about external political, security or market outcomes.",
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE",
+          "WSEV-BWC-WG8-UNODA-OUTCOME",
+          "WSEV-BWC-WG10-UNODA-SCHEDULE"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Treating the number of revised or provisionally agreed passages as a scalar measure of substantive success would overstate what the official record establishes; draft, ad-referendum and provisional text remain distinct from a final adopted package.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-DOCUMENTS",
+            "WSEV-BWC-WG8-UNODA-OUTCOME"
+          ]
+        },
+        {
+          "summary": "The absence of a market-movement entry is intentional. No market proxy is introduced merely because the Analysis template contains a what_moved section.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-OUTCOME"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Continued negotiation may reflect unresolved substantive differences, the Convention's consensus process, deliberate sequencing across scheduled sessions, or a combination of these. This packet does not infer which explanation dominates from procedural chronology alone.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-MANDATE",
+            "WSEV-BWC-WG8-UNODA-OUTCOME"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "The key follow-through is whether later Working Group sessions convert the evolving draft into a consensus package of conclusions and recommendations. UNODA schedules a tenth session for 7-11 December 2026; that future meeting is a watch point, not evidence that the eighth session itself resolved the substantive package.",
+        "evidence_refs": [
+          "WSEV-BWC-WG10-UNODA-SCHEDULE",
+          "WSEV-BWC-WG8-UNODA-MANDATE"
+        ]
+      },
+      "falsifiers": [
+        "If an authoritative eighth-session record establishes that the substantive final strengthening report itself was adopted by consensus on 13 February 2026, the 'procedural consensus with substantive text still open' conclusion must be revised.",
+        "If BWC/WG/8/CRP.1/Rev.3 is shown by an authoritative record to have final adopted status rather than revised draft status, the unresolved-text interpretation must be withdrawn.",
+        "If the scheduled tenth session is cancelled, materially rescheduled or superseded by an earlier final consensus mechanism, the second-order watch item must be updated without altering the historical eighth-session record."
+      ],
+      "analytical_conclusion": "The eighth BWC strengthening session advanced the negotiating text and achieved procedural consensus, but the official record supports neither a substantive final-package adoption claim nor a defensible market-response story. Its analytical significance lies in the unresolved institutional pathway: progress occurred, but final consensus remained an open process dependency.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ]
+}
