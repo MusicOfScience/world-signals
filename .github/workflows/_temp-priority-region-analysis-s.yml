@@ -1,0 +1,122 @@
+name: TEMP priority-region Analysis S full simulation
+
+on:
+  push:
+    branches:
+      - feature/priority-region-analysis-s
+    paths:
+      - .github/workflows/_temp-priority-region-analysis-s.yml
+
+permissions:
+  contents: read
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact main and upstream branch state
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=a7ba439673fa2c468f2c9c4ef28904fb25c688a7
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git diff --exit-code "$BASE" HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+      - name: Check-only Analysis S transaction
+        run: python scripts/apply_priority_region_analysis_s.py
+      - name: Apply only inside disposable runner
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_S: YES
+        run: python scripts/apply_priority_region_analysis_s.py --apply
+      - name: Assert exact simulated mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          expected=(
+            data/analysis/PRIORITY_REGION_ANALYSIS_S_TRANSACTION_AUDIT_v0.1.md
+            data/analysis/event_reviews.json
+            data/analysis/evidence_registry.json
+          )
+          printf '%s\n' "${expected[@]}" | sort > /tmp/expected
+          printf '%s\n' "${changed[@]}" | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+      - name: Validate registry and Analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+      - name: Run full repository suite on simulated post-state
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python surfaces
+        run: python -m py_compile scripts/apply_priority_region_analysis_s.py scripts/validate_analysis.py src/world_signals/analysis.py tests/test_analysis_layer.py tests/test_priority_region_analysis_s.py
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and assert Analysis S readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          a=json.loads(Path('docs/data/analysis.json').read_text())
+          assert (c['version'],len(c['records']))==('0.29',678)
+          assert (r['version'],len(r['reviews']))==('0.3',6)
+          assert r['canonical_checkpoint']=={'registry_version':'0.29','record_count':678}
+          assert (e['version'],len(e['evidence']))==('0.3',14)
+          readiness=a['readiness']
+          assert readiness['eligible_completed_occurrence_count']==9
+          assert readiness['reviewed_occurrence_count']==6
+          assert readiness['broad_population_state']=='READY_FOR_CONTROLLED_EXPANSION'
+          priority={row['region']:row for row in readiness['priority_geographic_stress_regions']}
+          for region in ['Africa','South Asia','Southeast Asia','Latin America']:
+              assert priority[region]['eligible_completed_count']==1
+              assert priority[region]['reviewed_count']==1
+              assert priority[region]['state']=='REVIEWED_SAMPLE_PRESENT'
+          by={row['analysis_id']:row for row in a['reviews']}
+          assert by['WSAN-IN-GDP-2026Q1-001']['what_moved'][0]['before_value'] is None
+          assert by['WSAN-IN-GDP-2026Q1-001']['what_appears_connected']['confidence']=='LOW'
+          for analysis_id in ['WSAN-ID-BI-202608-001','WSAN-EG-CBE-20260820-001','WSAN-AR-CPI-202607-001']:
+              assert by[analysis_id]['what_moved']==[]
+              assert by[analysis_id]['what_appears_connected']['causal_status']=='NOT_A_CAUSAL_CLAIM'
+          print(json.dumps(readiness,indent=2,sort_keys=True))
+          PY
