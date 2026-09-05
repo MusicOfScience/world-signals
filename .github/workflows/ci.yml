@@ -21,6 +21,7 @@ jobs:
       - run: python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py
       - run: node --check web/app.js
       - run: node --check web/horizon.js
+      - run: node --check web/native-calendar.js
       - run: node --check web/history.js
       - run: node --check web/operations.js
       - run: node --check web/biosecurity.js
