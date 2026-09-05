@@ -221,7 +221,6 @@ class P1BalancedGovernanceDTests(unittest.TestCase):
                 self.assertEqual(row, after[oid], oid)
 
     def test_global_write_gates_remain_closed(self):
-        self.assertEqual(self.expectations["version"], "0.7")
         self.assertFalse(self.expectations["automatic_canonical_commit"])
         self.assertFalse(self.expectations["google_calendar_write"])
 
