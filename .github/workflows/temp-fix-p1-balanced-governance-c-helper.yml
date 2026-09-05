@@ -1,0 +1,36 @@
+name: TEMP fix P1 balanced governance C helper
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-fix-p1-balanced-governance-c-helper.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-prep
+      - name: Make changed-source guard order-independent
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/apply_p1_balanced_governance_c.py')
+          t=p.read_text()
+          old='''    if changed_sources != post["expected_changed_sources"]:\n        errors.append(f"unexpected changed sources/order: {changed_sources}")'''
+          new='''    if set(changed_sources) != set(post["expected_changed_sources"]) or len(changed_sources) != len(post["expected_changed_sources"]):\n        errors.append(f"unexpected changed source set: {changed_sources}")'''
+          if t.count(old) != 1:
+              raise SystemExit('expected helper guard not found exactly once')
+          p.write_text(t.replace(old,new))
+          PY
+          git diff --check
+          git diff -- scripts/apply_p1_balanced_governance_c.py
+      - name: Commit helper correction only
+        run: |
+          git config user.name 'world-signals-bot'
+          git config user.email 'world-signals-bot@users.noreply.github.com'
+          git add scripts/apply_p1_balanced_governance_c.py
+          test "$(git diff --cached --name-only)" = "scripts/apply_p1_balanced_governance_c.py"
+          git commit -m 'Make balanced governance changed-source guard order-independent'
+          git push origin HEAD:p1-balanced-governance-c-prep
