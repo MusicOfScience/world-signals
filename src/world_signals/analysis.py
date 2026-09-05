@@ -80,6 +80,7 @@ def validate_analysis(
     seen_analysis_ids: set[str] = set()
     allowed_review_states = set(vocab.get("review_state", []))
     allowed_surprise = set(vocab.get("surprise_status", []))
+    allowed_interaction = set(vocab.get("interaction_type", []))
     allowed_causal = set(vocab.get("causal_status", []))
     allowed_confidence = set(vocab.get("confidence", []))
     allowed_movement = set(vocab.get("movement_type", []))
@@ -146,6 +147,8 @@ def validate_analysis(
                 )
 
         connection = review.get("what_appears_connected") or {}
+        if connection.get("interaction_type") not in allowed_interaction:
+            errors.append(f"{analysis_id}: invalid interaction_type")
         causal_status = connection.get("causal_status")
         if causal_status not in allowed_causal:
             errors.append(f"{analysis_id}: invalid causal_status")
