@@ -1,0 +1,37 @@
+name: TEMP analysis P registry introspection
+
+on:
+  push:
+    branches:
+      - feature/analytical-layer-foundation-p
+    paths:
+      - .github/workflows/_temp-analysis-p-introspect.yml
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Print completed RBA August decision records
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('data/canonical/registry.json').read_text())
+          rows=[]
+          for x in r['records']:
+              if x.get('institution')=='Reserve Bank of Australia' and (
+                  x.get('series_id')=='WS.CB.RBA.MONETARY_POLICY_DECISION' or
+                  'Monetary Policy Decision' in str(x.get('title',''))
+              ):
+                  vals=' '.join(str(x.get(k,'')) for k in ('start_local','start_utc','date_earliest','date_latest','publication_datetime'))
+                  if '2026-08-11' in vals:
+                      rows.append(x)
+          print(json.dumps(rows, indent=2, sort_keys=True))
+          if len(rows)!=1:
+              raise SystemExit(f'expected exactly one RBA decision record; got {len(rows)}')
+          PY
