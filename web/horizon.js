@@ -214,7 +214,7 @@
   function exactCard(event){
     const when=formatDeviceAndNative(event);
     const change=changeBlock(event);
-    return `<article class="horizon-card" data-horizon-id="${esc(event.occurrence_id)}">
+    return `<article class="horizon-card" data-horizon-id="${esc(event.occurrence_id)}" role="button" tabindex="0">
       <div class="horizon-when"><strong>${esc(when.primary)}</strong><span>${esc(when.secondary)}</span></div>
       <div class="horizon-card-main">
         <p class="horizon-domain">${esc(domainFor(event))}</p>
@@ -237,7 +237,7 @@
       : (event.date_latest && event.date_latest!==event.date_earliest
           ? `${event.date_earliest||'?'} → ${event.date_latest}`
           : event.date_earliest||event.date_latest||'TBC');
-    return `<article class="horizon-window-card" data-horizon-id="${esc(event.occurrence_id)}">
+    return `<article class="horizon-window-card" data-horizon-id="${esc(event.occurrence_id)}" role="button" tabindex="0">
       <div><p class="horizon-domain">${esc(domainFor(event))}</p><h3>${esc(event.title)}</h3>
         <p class="meta">${esc(event.institution)} · ${esc(jurisdictions(event).join(', ') || event.region)}</p></div>
       <div class="horizon-window-time"><strong>${esc(label)}</strong>
@@ -249,9 +249,16 @@
 
   function attachDetails(root){
     root.querySelectorAll('[data-horizon-id]').forEach(card => {
-      card.addEventListener('click', event => {
+      const openDetail=event => {
         if(event.target.closest('a')) return;
         if(typeof window.showDetail==='function') window.showDetail(card.dataset.horizonId);
+      };
+      card.addEventListener('click',openDetail);
+      card.addEventListener('keydown',event => {
+        if(event.key==='Enter' || event.key===' '){
+          event.preventDefault();
+          openDetail(event);
+        }
       });
     });
   }
