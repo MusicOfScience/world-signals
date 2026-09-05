@@ -1,0 +1,205 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "SOUTH_KOREA_LOCAL_ELECTION_HISTORICAL_ANCHOR_AG",
+  "reference_date": "2026-09-06",
+  "exact_base_main": "3ebd01e1f6f3ba2b09343f238f3ac72262484391",
+  "architecture_layer": "CANONICAL_REGISTRY",
+  "selection_policy": {
+    "queue_exhaustion_is_goal": false,
+    "geographic_quota_fill_is_goal": false,
+    "selection_basis": "A completed East Asian democratic electoral-process specimen adds greater marginal analytical diversity than another mechanical market-structure occurrence and reuses existing election taxonomy without inventing ontology.",
+    "known_bias": "South Korea is selected for domain/process diversity, not because East Asia is regionally absent from completed anchors. Climate/environment and corporate/market-structure gaps remain material after this tranche."
+  },
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.35",
+    "canonical_record_count": 685,
+    "source_registry_version": "1.76",
+    "source_record_count": 240,
+    "change_ledger_version": "0.22",
+    "change_ledger_count": 57,
+    "biosecurity_overlay_version": "0.10",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.35",
+      "record_count": 685
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "required_absent_occurrence_ids": [
+      "WSO-EL-KR-LGE-20260603"
+    ],
+    "required_absent_series_ids": [
+      "WSER-EL-KR-LGE"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-EL-KR-001"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-bb86c8fb8f26d617a1"
+    ],
+    "required_template": {
+      "occurrence_id": "WSO-EL-A-0011",
+      "series_id": "WSER-EL-ZA-LGE",
+      "category": "ELECTIONS_GOVERNANCE",
+      "subcategory": "local_government_election",
+      "event_type": "ELECTION_MILESTONE",
+      "record_class": "OCCURRENCE",
+      "lifecycle_status": "PLANNED",
+      "certainty_status": "CONFIRMED",
+      "timing_type": "CIVIL_DATE",
+      "time_precision": "DAY",
+      "all_day_semantics": true
+    }
+  },
+  "anchor": {
+    "occurrence_id": "WSO-EL-KR-LGE-20260603",
+    "template_occurrence_id": "WSO-EL-A-0011",
+    "series_id": "WSER-EL-KR-LGE",
+    "canonical_name": "South Korea — 9th Nationwide Simultaneous Local Elections",
+    "short_calendar_title": "South Korea local elections — 2026",
+    "institution": "National Election Commission of the Republic of Korea",
+    "jurisdiction": "South Korea",
+    "region": "East Asia",
+    "category": "ELECTIONS_GOVERNANCE",
+    "subcategory": "local_government_election",
+    "event_type": "ELECTION_MILESTONE",
+    "record_class": "OCCURRENCE",
+    "certainty_status": "CONFIRMED",
+    "lifecycle_status": "COMPLETED",
+    "intrinsic_importance": "HIGH",
+    "expected_market_sensitivity": "MEDIUM",
+    "source_id": "WSSRC-EL-KR-001",
+    "primary_source_assertion_id": "WSA-AG-8cb4550e88acf988",
+    "completion_source_assertion_id": "WSA-AG-3c48fad3a0fbdae4",
+    "change_id": "WSCHANGE-bb86c8fb8f26d617a1",
+    "timing": {
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-06-03",
+      "end_local": null,
+      "source_timezone": "Asia/Seoul",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
+    },
+    "schedule_url": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+    "schedule_card_url": "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+    "event_portal_url": "https://www.nec.go.kr/portal/contents.do?menuNo=200008",
+    "completion_url": "https://policy.nec.go.kr/plc/main/initUMAMain.do",
+    "rights_url": "https://www.nec.go.kr/site/nec/07/10702030000002020040802.jsp",
+    "related_document_role": "COMPLETION_OUTCOME_VERIFICATION",
+    "completion_basis": "Current National Election Commission Policy & Pledge material exposes winner pledges for the 9th Nationwide Simultaneous Local Elections, establishing a post-event winning-candidate state. Completion is not inferred from elapsed time.",
+    "semantic_guardrail": "Election-day milestone is distinct from early voting, individual local contests, result/certification milestones, government formation, policy implementation, observed market response and causal attribution"
+  },
+  "new_source": {
+    "source_id": "WSSRC-EL-KR-001",
+    "institution": "National Election Commission of the Republic of Korea",
+    "jurisdiction": "South Korea",
+    "domain": "elections",
+    "endpoint_role": "9th Nationwide Simultaneous Local Elections official schedule and post-event winner surfaces",
+    "authoritative_url": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+    "source_type": "official_election_schedule_and_results",
+    "information_supplied": "Official 2026 local-election date and administrative timetable, plus linked first-party election/winner verification surfaces",
+    "future_schedule_horizon": "event-specific 2026 election cycle",
+    "typical_advance_notice": "months ahead; event-specific schedule published in 2025 and refreshed through election period",
+    "machine_readable_available": "HTML/PDF",
+    "source_timezone": "Asia/Seoul",
+    "recommended_verification_cadence": "manual event-driven; weekly before event and post-event result verification",
+    "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+    "parser_type": "MANUAL_OFFICIAL_ELECTION_PORTAL_VERIFICATION",
+    "known_limitations": [
+      "The generic English election calendar labelled the 3 June 2026 date provisional; the event-specific NEC schedule notice provides the authoritative election-specific date.",
+      "Polling hours and early-voting dates are process detail and are not canonicalised as the election-day timestamp or start of the election-day occurrence.",
+      "The nationwide simultaneous election contains many local contests and does not have one synthetic national winner or result.",
+      "Public accessibility does not establish unrestricted production crawler permission."
+    ],
+    "backup_source": "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+    "notes": "Canonical factual election metadata only; post-event winner verification is linked from the NEC Policy & Pledge portal. No page-content republication or automated retrieval permission is inferred.",
+    "timezone_scope": "FIXED",
+    "parser_version": null,
+    "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+    "licence_constraints": "NEC public works require applicable KOGL marking and source attribution; unmarked material requires prior coordination. No blanket production-automation grant inferred.",
+    "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+    "licence_review_status": "CLEARED_FACTUAL_METADATA_REUSE_WITH_KOGL_CONTENT_BOUNDARY",
+    "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY; SOURCE-SPECIFIC_KOGL_CONDITIONS_APPLY_TO_PROTECTED_CONTENT",
+    "rights_evidence_url": "https://www.nec.go.kr/site/nec/07/10702030000002020040802.jsp",
+    "rights_summary": "NEC-owned public works may be freely used where the relevant KOGL marking applies and source attribution is provided; material without KOGL marking requires prior coordination.",
+    "automation_summary": "Copyright/reuse status and public accessibility do not establish production crawler permission; endpoint behaviour and permission require separate review.",
+    "rights_reviewed_at": "2026-09-06",
+    "rights_review_scope": "SOUTH_KOREA_LOCAL_ELECTION_AG_FACTUAL_PROVENANCE_AND_AUTOMATION_SEPARATED",
+    "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
+    "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+    "monitoring_priority_score": 220,
+    "canonical_dependency_count": 1,
+    "monitoring_readiness_assessed_at": "2026-09-06",
+    "last_successful_research_verification_at": "2026-09-06",
+    "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+    "monitor_endpoints": [
+      {
+        "endpoint_role": "election_schedule_notice",
+        "url": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+        "transport": "HTML/PDF",
+        "completeness_scope": "EVENT_SPECIFIC_ADMINISTRATIVE_SCHEDULE",
+        "preferred_for_monitoring": false
+      },
+      {
+        "endpoint_role": "election_schedule_card",
+        "url": "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+        "transport": "HTML",
+        "completeness_scope": "KEY_EVENT_MILESTONES_AND_POLLING_HOURS",
+        "preferred_for_monitoring": false
+      },
+      {
+        "endpoint_role": "post_event_winner_pledges",
+        "url": "https://policy.nec.go.kr/plc/main/initUMAMain.do",
+        "transport": "HTML",
+        "completeness_scope": "POST_EVENT_WINNER_PLEDGE_SURFACE",
+        "preferred_for_monitoring": false
+      }
+    ]
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.36",
+    "canonical_record_count": 686,
+    "source_registry_version": "1.77",
+    "source_record_count": 241,
+    "change_ledger_version": "0.23",
+    "change_ledger_count": 58,
+    "biosecurity_overlay_version": "0.11",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.36",
+      "record_count": 686
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_reviews_version": "0.8",
+    "analysis_review_count": 12,
+    "analysis_evidence_version": "0.8",
+    "analysis_evidence_count": 44,
+    "completed_analysis_population_count": 19,
+    "reviewed_completed_count": 12,
+    "new_completed_category": "ELECTIONS_GOVERNANCE",
+    "new_completed_event_type": "ELECTION_MILESTONE",
+    "new_source_dependency_count": 1
+  },
+  "guardrails": [
+    "Election-day milestone is not the early-voting window.",
+    "Polling hours are supporting schedule detail and are not promoted into a canonical clock timestamp.",
+    "A nationwide simultaneous local election is not a synthetic single national winner or result.",
+    "Individual local contests, certification/result milestones and government formation remain separate objects if later required.",
+    "Canonical completion uses competent first-party post-event NEC evidence, never elapsed time alone.",
+    "No observed market response or causal attribution is written in this tranche.",
+    "No Analysis review or evidence row is created.",
+    "No new event taxonomy is created.",
+    "Production automation permission is not inferred from public accessibility or official status.",
+    "PR #40 remains untouched.",
+    "Manual merge only."
+  ]
+}

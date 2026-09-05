@@ -25,6 +25,10 @@ from src.world_signals.analysis import analysis_population_readiness, validate_a
 from src.world_signals.validation import validate_registry
 
 
+def version_tuple(raw):
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class AustralianTropicalCycloneSeasonAnchorAFTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -154,6 +158,7 @@ class AustralianTropicalCycloneSeasonAnchorAFTests(unittest.TestCase):
         self.assertEqual(before, after)
 
     def test_physical_risk_gap_repaired_without_analysis_write(self):
+        post = self.plan["postconditions"]
         self.assertTrue(any(
             row.get("category") == "PHYSICAL_CLIMATE_RISK" and row.get("lifecycle_status") == "COMPLETED"
             for row in self.post_registry["records"]
@@ -162,21 +167,39 @@ class AustralianTropicalCycloneSeasonAnchorAFTests(unittest.TestCase):
             row.get("event_type") == "PHYSICAL_RISK_WINDOW" and row.get("lifecycle_status") == "COMPLETED"
             for row in self.post_registry["records"]
         ))
-        self.assertEqual(self.readiness["eligible_completed_occurrence_count"], 18)
-        self.assertEqual(self.readiness["reviewed_occurrence_count"], 12)
-        self.assertEqual(len(self.reviews["reviews"]), 12)
-        self.assertEqual(len(self.evidence["evidence"]), 44)
+        self.assertGreaterEqual(self.readiness["eligible_completed_occurrence_count"], post["completed_analysis_population_count"])
+        self.assertGreaterEqual(self.readiness["reviewed_occurrence_count"], post["reviewed_completed_count"])
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(len(self.evidence["evidence"]), post["analysis_evidence_count"])
 
-    def test_post_state_counts_are_exact(self):
-        self.assertEqual((self.post_registry["version"], self.post_registry["record_count"]), ("0.35", 685))
-        self.assertEqual((self.post_sources["version"], len(self.post_sources["sources"])), ("1.76", 240))
-        self.assertEqual((self.post_ledger["version"], len(self.post_ledger["changes"])), ("0.22", 57))
-        self.assertEqual(self.post_overlay["version"], "0.10")
-        self.assertEqual(self.post_overlay["canonical_checkpoint"], {"registry_version": "0.35", "record_count": 685})
+    def test_post_state_counts_are_exact_or_descendant_safe(self):
+        post = self.plan["postconditions"]
+        if not self.is_post:
+            self.assertEqual((self.post_registry["version"], self.post_registry["record_count"]), (post["canonical_registry_version"], post["canonical_record_count"]))
+            self.assertEqual((self.post_sources["version"], len(self.post_sources["sources"])), (post["source_registry_version"], post["source_record_count"]))
+            self.assertEqual((self.post_ledger["version"], len(self.post_ledger["changes"])), (post["change_ledger_version"], post["change_ledger_count"]))
+            self.assertEqual(self.post_overlay["version"], post["biosecurity_overlay_version"])
+            self.assertEqual(self.post_overlay["canonical_checkpoint"], post["biosecurity_overlay_checkpoint"])
+            return
+        self.assertGreaterEqual(version_tuple(self.post_registry["version"]), version_tuple(post["canonical_registry_version"]))
+        self.assertGreaterEqual(self.post_registry["record_count"], post["canonical_record_count"])
+        self.assertGreaterEqual(version_tuple(self.post_sources["version"]), version_tuple(post["source_registry_version"]))
+        self.assertGreaterEqual(len(self.post_sources["sources"]), post["source_record_count"])
+        self.assertGreaterEqual(version_tuple(self.post_ledger["version"]), version_tuple(post["change_ledger_version"]))
+        self.assertGreaterEqual(len(self.post_ledger["changes"]), post["change_ledger_count"])
+        self.assertGreaterEqual(version_tuple(self.post_overlay["version"]), version_tuple(post["biosecurity_overlay_version"]))
+        self.assertGreaterEqual(
+            version_tuple(self.post_overlay["canonical_checkpoint"]["registry_version"]),
+            version_tuple(post["biosecurity_overlay_checkpoint"]["registry_version"]),
+        )
+        self.assertGreaterEqual(self.post_overlay["canonical_checkpoint"]["record_count"], post["biosecurity_overlay_checkpoint"]["record_count"])
 
     def test_overlay_semantics_are_unchanged_in_simulation(self):
         if self.is_post:
-            self.assertEqual(self.post_overlay["version"], "0.10")
+            self.assertGreaterEqual(
+                version_tuple(self.post_overlay["version"]),
+                version_tuple(self.plan["postconditions"]["biosecurity_overlay_version"]),
+            )
         else:
             self.assertEqual(overlay_semantics(self.overlay), overlay_semantics(self.post_overlay))
 

@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-06",
-  "version": "1.76",
+  "version": "1.77",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -9943,6 +9943,76 @@
       "governance_backfill_basis": "WHO general website terms support limited research/private-study use but do not clear production automation; user-facing calendar export transport is not treated as permission.",
       "backup_source": "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
       "notes": "Supporting-only historical factual provenance. Inherit the reviewed WHO source family's conservative manual-information and production-automation rights posture; public accessibility is not crawler permission."
+    },
+    {
+      "source_id": "WSSRC-EL-KR-001",
+      "institution": "National Election Commission of the Republic of Korea",
+      "jurisdiction": "South Korea",
+      "domain": "elections",
+      "endpoint_role": "9th Nationwide Simultaneous Local Elections official schedule and post-event winner surfaces",
+      "authoritative_url": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+      "source_type": "official_election_schedule_and_results",
+      "information_supplied": "Official 2026 local-election date and administrative timetable, plus linked first-party election/winner verification surfaces",
+      "future_schedule_horizon": "event-specific 2026 election cycle",
+      "typical_advance_notice": "months ahead; event-specific schedule published in 2025 and refreshed through election period",
+      "machine_readable_available": "HTML/PDF",
+      "source_timezone": "Asia/Seoul",
+      "recommended_verification_cadence": "manual event-driven; weekly before event and post-event result verification",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_ELECTION_PORTAL_VERIFICATION",
+      "known_limitations": [
+        "The generic English election calendar labelled the 3 June 2026 date provisional; the event-specific NEC schedule notice provides the authoritative election-specific date.",
+        "Polling hours and early-voting dates are process detail and are not canonicalised as the election-day timestamp or start of the election-day occurrence.",
+        "The nationwide simultaneous election contains many local contests and does not have one synthetic national winner or result.",
+        "Public accessibility does not establish unrestricted production crawler permission."
+      ],
+      "backup_source": "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+      "notes": "Canonical factual election metadata only; post-event winner verification is linked from the NEC Policy & Pledge portal. No page-content republication or automated retrieval permission is inferred.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+      "licence_constraints": "NEC public works require applicable KOGL marking and source attribution; unmarked material requires prior coordination. No blanket production-automation grant inferred.",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
+      "licence_review_status": "CLEARED_FACTUAL_METADATA_REUSE_WITH_KOGL_CONTENT_BOUNDARY",
+      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY; SOURCE-SPECIFIC_KOGL_CONDITIONS_APPLY_TO_PROTECTED_CONTENT",
+      "rights_evidence_url": "https://www.nec.go.kr/site/nec/07/10702030000002020040802.jsp",
+      "rights_summary": "NEC-owned public works may be freely used where the relevant KOGL marking applies and source attribution is provided; material without KOGL marking requires prior coordination.",
+      "automation_summary": "Copyright/reuse status and public accessibility do not establish production crawler permission; endpoint behaviour and permission require separate review.",
+      "rights_reviewed_at": "2026-09-06",
+      "rights_review_scope": "SOUTH_KOREA_LOCAL_ELECTION_AG_FACTUAL_PROVENANCE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
+      "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+      "monitoring_priority_score": 220,
+      "canonical_dependency_count": 1,
+      "monitoring_readiness_assessed_at": "2026-09-06",
+      "last_successful_research_verification_at": "2026-09-06",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "election_schedule_notice",
+          "url": "https://www.nec.go.kr/site/nec/ex/bbs/View.do?bcIdx=294445&cbIdx=1084",
+          "transport": "HTML/PDF",
+          "completeness_scope": "EVENT_SPECIFIC_ADMINISTRATIVE_SCHEDULE",
+          "preferred_for_monitoring": false
+        },
+        {
+          "endpoint_role": "election_schedule_card",
+          "url": "https://shipvote.nec.go.kr/site/vt/ex/bbs/View.do?bcIdx=298999&cbIdx=1147",
+          "transport": "HTML",
+          "completeness_scope": "KEY_EVENT_MILESTONES_AND_POLLING_HOURS",
+          "preferred_for_monitoring": false
+        },
+        {
+          "endpoint_role": "post_event_winner_pledges",
+          "url": "https://policy.nec.go.kr/plc/main/initUMAMain.do",
+          "transport": "HTML",
+          "completeness_scope": "POST_EVENT_WINNER_PLEDGE_SURFACE",
+          "preferred_for_monitoring": false
+        }
+      ]
     }
   ],
   "activation_backlog": [
