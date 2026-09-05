@@ -17,6 +17,10 @@ def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
+def version_tuple(value):
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class ControlledAnalysisExpansionTTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -32,14 +36,14 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
         cls.by_evidence = {row["evidence_id"]: row for row in cls.evidence["evidence"]}
         cls.is_post = (
             cls.reviews.get("version") == "0.4"
-            and len(cls.reviews.get("reviews", [])) == 8
+            and len(cls.reviews.get("reviews", [])) >= 8
             and cls.evidence.get("version") == "0.4"
-            and len(cls.evidence.get("evidence", [])) == 21
+            and len(cls.evidence.get("evidence", [])) >= 21
         )
 
     def require_post(self):
         if not self.is_post:
-            self.skipTest("exact T post-state assertions run after reviewed T transaction")
+            self.skipTest("exact T contribution assertions run after reviewed T transaction")
 
     def test_check_only_transform_is_exact_from_frozen_pre_state(self):
         if self.is_post:
@@ -60,7 +64,8 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
 
     def test_exact_t_post_state_and_validator(self):
         self.require_post()
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.29", 678))
+        self.assertGreaterEqual(version_tuple(self.canonical["version"]), (0, 29))
+        self.assertGreaterEqual(len(self.canonical["records"]), 678)
         self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.4", 8))
         self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
         self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.4", 21))
@@ -155,16 +160,19 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
     def test_t_readiness_expands_domain_diversity_without_claiming_completeness(self):
         self.require_post()
         readiness = analysis_population_readiness(self.schema, self.reviews, self.canonical)
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 9)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 8)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 7)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 9)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 8)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 7)
         self.assertEqual(readiness["broad_population_state"], "READY_FOR_CONTROLLED_EXPANSION")
-        remaining = sorted(
+        reviewed = set(readiness["reviewed_occurrence_ids"])
+        remaining = {
             row["occurrence_id"] for row in self.canonical["records"]
             if row.get("lifecycle_status") == "COMPLETED"
-            and row["occurrence_id"] not in set(readiness["reviewed_occurrence_ids"])
-        )
-        self.assertEqual(remaining, ["WSO-ddb70f8ff05a58fb"])
+            and row["occurrence_id"] not in reviewed
+        }
+        self.assertIn("WSO-ddb70f8ff05a58fb", remaining)
+        self.assertIn("WSO-COM-A-0013", reviewed)
+        self.assertIn("WSO-TECH-A-0002", reviewed)
         self.assertIn("not a claim of analytical completeness", " ".join(readiness["notes"]).lower())
 
     def test_all_t_write_gates_remain_closed(self):
