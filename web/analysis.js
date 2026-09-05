@@ -71,6 +71,24 @@
     return `<article class="analysis-move"><div><p class="eyebrow">${esc(human(row.movement_type))}</p><h4>${esc(row.instrument_or_measure)}</h4></div><div class="analysis-move-values"><strong>${movementHeadline(row)}</strong><span>${detail}</span></div><p>${esc(row.measurement_window)}</p><small>${esc(human(row.measurement_precision))}${row.independently_reconstructed?' · independently reconstructed':' · source-reported, not independently reconstructed'}</small></article>`;
   }
 
+  function canonicalTiming(canonical){
+    if(canonical.timing_type==='SOURCE_NATIVE_CALENDAR_DATE' && canonical.source_native_date_label){
+      const calendar=human(canonical.native_calendar_system||'source native calendar');
+      const resolution=canonical.gregorian_resolution_status?` · Gregorian mapping ${human(canonical.gregorian_resolution_status)}`:'';
+      return `<p class="meta analysis-canonical-time"><strong>Native date ${esc(canonical.source_native_date_label)}</strong> · ${esc(calendar)}${esc(resolution)}</p>`;
+    }
+    if(canonical.start_local && canonical.end_local){
+      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_local)} – ${esc(canonical.end_local)}</strong>${canonical.source_timezone?` · ${esc(canonical.source_timezone)}`:''} · ${esc(human(canonical.time_precision||canonical.timing_type||'canonical range'))}</p>`;
+    }
+    if(canonical.start_local){
+      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_local)}</strong>${canonical.source_timezone?` · ${esc(canonical.source_timezone)}`:''} · ${esc(human(canonical.time_precision||canonical.timing_type||'canonical time'))}</p>`;
+    }
+    if(canonical.start_utc){
+      return `<p class="meta analysis-canonical-time"><strong>${esc(canonical.start_utc)}</strong> · UTC</p>`;
+    }
+    return '<p class="meta analysis-canonical-time">Canonical timing has no Gregorian/local display value in this projection.</p>';
+  }
+
   function section(title, body, className=''){
     return `<section class="analysis-section ${className}"><h3>${esc(title)}</h3>${body}</section>`;
   }
@@ -98,7 +116,7 @@
     const context=[canonical.region,canonical.category,canonical.event_type].filter(Boolean).map(human).join(' · ');
     return `<article class="analysis-review">
       <header class="analysis-review-head">
-        <div><p class="eyebrow">${esc(review.analysis_id)}</p><h2>${esc(title)}</h2><p>${esc(review.scope)}</p><p class="meta"><code>${esc(review.canonical_occurrence_id)}</code> · ${esc(review.canonical_institution)}${context?` · ${esc(context)}`:''} · analysis as of ${esc(new Date(review.analysis_as_of_utc).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'}))}</p></div>
+        <div><p class="eyebrow">${esc(review.analysis_id)}</p><h2>${esc(title)}</h2><p>${esc(review.scope)}</p><p class="meta"><code>${esc(review.canonical_occurrence_id)}</code> · ${esc(review.canonical_institution)}${context?` · ${esc(context)}`:''} · analysis as of ${esc(new Date(review.analysis_as_of_utc).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'}))}</p>${canonicalTiming(canonical)}</div>
         <div class="analysis-grade"><span>${esc(human(review.review_state))}</span><strong>${esc(human(connection.causal_status))}</strong><small>${esc(human(connection.confidence))} confidence</small></div>
       </header>
       <div class="analysis-grid">

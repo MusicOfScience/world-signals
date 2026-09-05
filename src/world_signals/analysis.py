@@ -55,9 +55,20 @@ def _canonical_context(row: dict[str, Any]) -> dict[str, Any]:
         "lifecycle_status": row.get("lifecycle_status"),
         "intrinsic_importance": row.get("intrinsic_importance"),
         "expected_market_sensitivity": row.get("expected_market_sensitivity"),
+        "timing_type": row.get("timing_type"),
+        "time_precision": row.get("time_precision"),
         "start_utc": row.get("start_utc"),
+        "end_utc": row.get("end_utc"),
         "start_local": row.get("start_local"),
+        "end_local": row.get("end_local"),
         "source_timezone": row.get("source_timezone"),
+        "source_native_date_label": row.get("source_native_date_label"),
+        "native_calendar_system": row.get("native_calendar_system"),
+        "native_calendar_year": row.get("native_calendar_year"),
+        "native_calendar_month": row.get("native_calendar_month"),
+        "native_calendar_day": row.get("native_calendar_day"),
+        "gregorian_resolution_status": row.get("gregorian_resolution_status"),
+        "publication_time_semantics": row.get("publication_time_semantics"),
     }
 
 

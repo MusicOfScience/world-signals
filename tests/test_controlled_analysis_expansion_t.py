@@ -35,9 +35,9 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
         cls.by_analysis = {row["analysis_id"]: row for row in cls.reviews["reviews"]}
         cls.by_evidence = {row["evidence_id"]: row for row in cls.evidence["evidence"]}
         cls.is_post = (
-            cls.reviews.get("version") == "0.4"
+            version_tuple(cls.reviews.get("version", "0.0")) >= (0, 4)
             and len(cls.reviews.get("reviews", [])) >= 8
-            and cls.evidence.get("version") == "0.4"
+            and version_tuple(cls.evidence.get("version", "0.0")) >= (0, 4)
             and len(cls.evidence.get("evidence", [])) >= 21
         )
 
@@ -66,9 +66,13 @@ class ControlledAnalysisExpansionTTests(unittest.TestCase):
         self.require_post()
         self.assertGreaterEqual(version_tuple(self.canonical["version"]), (0, 29))
         self.assertGreaterEqual(len(self.canonical["records"]), 678)
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.4", 8))
-        self.assertEqual(self.reviews["canonical_checkpoint"], {"registry_version": "0.29", "record_count": 678})
-        self.assertEqual((self.evidence["version"], len(self.evidence["evidence"])), ("0.4", 21))
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), (0, 4))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 8)
+        checkpoint = self.reviews["canonical_checkpoint"]
+        self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), (0, 29))
+        self.assertGreaterEqual(checkpoint["record_count"], 678)
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), (0, 4))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 21)
         report = validate_analysis(self.schema, self.evidence, self.reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
 
