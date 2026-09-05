@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -45,6 +45,68 @@
       "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
       "canonical_provenance_effect": "NONE",
       "distribution_note": "The linked RTÉ page identifies Reuters as its source. WORLD SIGNALS does not treat this syndication page as authority for canonical event timing."
+    },
+    {
+      "evidence_id": "WSEV-NZ-OCR-RBNZ-20260902",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Reserve Bank of New Zealand – Te Pūtea Matua",
+      "host_or_distribution": "Reserve Bank of New Zealand – Te Pūtea Matua",
+      "title": "OCR increased by 25 basis points to 2.75%",
+      "url": "https://www.rbnz.govt.nz/news-and-events/news/2026/09/ocr-increased-by-25-basis-points-to-2-75",
+      "published_at": "2026-09-02T14:00:00+12:00",
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The Monetary Policy Committee increased the Official Cash Rate by 25 basis points to 2.75 percent.",
+        "The decision was made by consensus.",
+        "The Committee said future policy would depend on the balance of risks to medium-term inflation and did not pre-determine the future OCR path."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-NZ-OCR-BT-20260902",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "The Business Times",
+      "host_or_distribution": "The Business Times",
+      "title": "New Zealand central bank raises rates by 25 bps, flags gradual tightening path",
+      "url": "https://www.businesstimes.com.sg/companies-markets/banking-finance/new-zealand-central-bank-raises-rates-25-bps-flags-gradual-tightening-path",
+      "published_at": "2026-09-02T11:26:00+08:00",
+      "roles": [
+        "EXPECTATION_BENCHMARK"
+      ],
+      "supports": [
+        "The article reports that 27 of 31 economists polled by Reuters expected a 25 basis point increase to 2.75 percent.",
+        "The headline policy action was therefore widely expected before the decision."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "This evidence record is used only to preserve the reported pre-decision Reuters poll benchmark. It does not establish canonical timing or source authority."
+    },
+    {
+      "evidence_id": "WSEV-NZ-OCR-REUTERS-20260902",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Business Recorder syndication",
+      "title": "NZ dollar skids as RBNZ flags gradual hikes, Aussie supported",
+      "url": "https://www.brecorder.com/news/amp/40437554",
+      "published_at": "2026-09-02T11:09:00+05:00",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "MARKET_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters described the 25 basis point increase to 2.75 percent as expected, while characterising the projected future tightening path as more gradual and limited than markets had priced.",
+        "The RBNZ projected the OCR at 2.81 percent by December 2026 and 3.15 percent at the end of 2027, while markets had priced a faster pace and a peak around 3.5 percent.",
+        "Two-year swap rates fell 3 basis points to 3.7001 percent after the decision.",
+        "The New Zealand dollar fell 0.7 percent to US$0.5893.",
+        "Longer-term bond yields were simultaneously being lifted by a global sell-off associated with renewed Gulf fighting, higher oil prices and inflation concerns."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "The Business Recorder page identifies Reuters as the source. WORLD SIGNALS uses it as analytical evidence only and does not treat it as canonical RBNZ provenance."
     }
   ]
 }
