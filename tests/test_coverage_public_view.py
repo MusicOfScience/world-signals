@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 import unittest
 
-from src.world_signals.coverage import build_coverage_audit
-from src.world_signals.coverage_public import public_coverage_projection
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from world_signals.coverage import build_coverage_audit
+from world_signals.coverage_public import public_coverage_projection
 
 
 class PublicCoverageViewTests(unittest.TestCase):
@@ -58,8 +60,12 @@ class PublicCoverageViewTests(unittest.TestCase):
         self.assertIn("data/coverage.json", build)
         self.assertIn("public_coverage_projection", build)
         self.assertIn("fetch('data/coverage.json'", js)
-        for forbidden in ("POST", "PUT", "PATCH", "DELETE", "canonical write", "google calendar write"):
-            self.assertNotIn(forbidden, js.lower() if forbidden.islower() else js)
+        upper = js.upper()
+        for forbidden in ("POST", "PUT", "PATCH", "DELETE"):
+            self.assertNotIn(forbidden, upper)
+        lower = js.lower()
+        for forbidden in ("canonical write", "google calendar write"):
+            self.assertNotIn(forbidden, lower)
 
 
 if __name__ == "__main__":
