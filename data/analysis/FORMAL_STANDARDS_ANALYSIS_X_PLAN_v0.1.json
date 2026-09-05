@@ -66,6 +66,7 @@
     "WSEV-WOAH-GS93-STRATEGIC-PLAN",
     "WSEV-WOAH-GS93-AMR-ADOPTION",
     "WSEV-WOAH-STANDARDS-WTO-SPS",
+    "WSEV-WTO-WOAH-SPS-RELATIONSHIP",
     "WSEV-WOAH-ANIMAL-WELFARE-SPS-CARVEOUT",
     "WSEV-WOAH-GS93-AVIAN-INFLUENZA-STANDARDS"
   ],
@@ -89,7 +90,7 @@
       "record_count": 681
     },
     "analysis_evidence_version": "0.7",
-    "analysis_evidence_count": 39,
+    "analysis_evidence_count": 40,
     "eligible_completed_occurrence_count": 12,
     "reviewed_occurrence_count": 11,
     "reviewed_event_type_diversity": 10,
