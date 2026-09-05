@@ -1,0 +1,127 @@
+name: TEMP audit P1 source-scope lifecycle B
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-source-scope-lifecycle-b-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-source-scope-lifecycle-b-transaction
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify branch ancestry and durable production diff
+        run: |
+          git merge-base --is-ancestor 80d3c371a88ede82b38ca332a929d713c6b89484 HEAD
+          python - <<'PY'
+          import subprocess
+          files=set(subprocess.check_output(['git','diff','--name-only','80d3c371a88ede82b38ca332a929d713c6b89484...HEAD'], text=True).splitlines())
+          expected={
+              'data/canonical/registry.json',
+              'data/sources/registry.json',
+              'data/changes/ledger.json',
+              'data/coverage/biosecurity_overlay.json',
+              '.github/workflows/temp-p1-source-scope-lifecycle-b-audit.yml',
+          }
+          if files != expected:
+              raise SystemExit(f'audit surface mismatch: {files!r}')
+          print('AUDIT_SURFACE PASS')
+          PY
+      - name: Independent committed-state audit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          led=json.loads(Path('data/changes/ledger.json').read_text())
+          ov=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          rec={r['occurrence_id']:r for r in can['records']}
+          sources={r['source_id']:r for r in src['sources']}
+
+          assert can['version']=='0.23' and len(can['records'])==669
+          assert src['version']=='1.64' and len(src['sources'])==226
+          assert led['version']=='0.12'
+          assert ov['canonical_checkpoint']=={'registry_version':'0.23','record_count':669}
+          assert len(rec)==669
+          assert len({r['occurrence_id'] for r in can['records']})==669
+
+          assert rec['WSO-REG-B-0007']['start_local']=='2026-09-15'
+          assert rec['WSO-REG-A-0008']['start_local']=='2026-10-31'
+          assert rec['WSO-EL-A-0004']['start_local']=='2027-01-05'
+
+          india=rec['WSO-FIS-B-0011']
+          assert india['start_local'] is None and india['date_earliest'] is None and india['date_latest'] is None
+          assert india['timing_type']=='UNSCHEDULED_TBC' and india['certainty_status']=='TBC'
+          assert india['legal_basis_source_id']=='WSSRC-FIS-025'
+          assert sources['WSSRC-FIS-025']['canonical_dependency_count']==0
+
+          for oid, lo, hi in (
+              ('WSO-INT-A-0018','2027-05-01','2027-05-31'),
+              ('WSO-INT-A-0019','2027-11-01','2027-11-30'),
+          ):
+              r=rec[oid]
+              assert r['date_earliest']==lo and r['date_latest']==hi
+              assert r['start_local'] is None and r['end_local'] is None
+              assert r['start_utc'] is None and r['end_utc'] is None
+              assert r['time_precision']=='MONTH'
+              assert r['schedule_authority_scope']=='EVENT_SPECIFIC'
+
+          assert {'WSSRC-REG4-001','WSSRC-REG4-002'} <= set(sources)
+          assert exp['automatic_canonical_commit'] is False
+          assert exp['google_calendar_write'] is False
+
+          audit=build_source_governance_audit(can, src, exp)
+          t=audit['totals']
+          actual={
+              'fully_explicit':t['fully_explicit_governance_source_count'],
+              'missing_any':t['source_records_with_one_or_more_missing_governance_fields'],
+              'p1':t['backfill_research_priority_counts']['P1_CANONICAL_DEPENDENCY'],
+              'p2':t['backfill_research_priority_counts']['P2_REGISTRY_ONLY'],
+          }
+          assert actual=={'fully_explicit':74,'missing_any':152,'p1':81,'p2':71}, actual
+
+          added=led['changes'][-5:]
+          assert len(added)==5
+          assert len({x['change_id'] for x in added})==5
+          committed={x['committed_at'] for x in added}
+          assert len(committed)==1
+          ts=next(iter(committed))
+          assert ts.endswith('+10:00')
+          assert all(x.get('canonical_mutation_committed') is True for x in added)
+          print('REVIEWED_COMMITTED_AT', ts)
+          print('GOVERNANCE', actual)
+          print('INDEPENDENT_COMMITTED_STATE_AUDIT PASS')
+          PY
+      - name: Registry validator
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m compileall -q scripts src
+      - name: Browser JavaScript syntax
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Permanent workflow inventory guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          names=sorted(p.name for p in Path('.github/workflows').glob('*.yml') if not p.name.startswith('temp-'))
+          expected=sorted(['adapter-smoke.yml','ci.yml','coverage-audit.yml','live-monitor.yml','monitor-dry-run.yml','pages.yml'])
+          assert names==expected, (names, expected)
+          print('PERMANENT_WORKFLOWS', len(names), names)
+          PY
