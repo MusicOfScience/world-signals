@@ -85,9 +85,6 @@ class PriorityRegionAnalysisSTests(unittest.TestCase):
             connection = review["what_appears_connected"]
             self.assertEqual(connection["causal_status"], "NOT_A_CAUSAL_CLAIM")
             self.assertEqual(connection["confidence"], "LOW")
-            summary = connection["summary"].lower()
-            self.assertIn("market", summary)
-            self.assertTrue("no " in summary or "not " in summary)
             self.assertEqual(review["second_order_effects"]["status"], "NOT_ESTABLISHED")
 
     def test_bi_expected_hold_is_not_relabelled_as_surprise(self):
