@@ -1,0 +1,110 @@
+name: TEMP P1 balanced governance C post-audit
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-balanced-governance-c-postaudit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-transaction
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Independent committed-state audit
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+          BASE='289352e49d5a21a3622d0f5a88ad1df191bd6bf8'
+          TX='5f462411ecbb9a719cb6d68fd57437afa5626731'
+          def old(path):
+              return json.loads(subprocess.check_output(['git','show',f'{BASE}:{path}'],text=True))
+          can0=old('data/canonical/registry.json'); src0=old('data/sources/registry.json'); led0=old('data/changes/ledger.json'); ov0=old('data/coverage/biosecurity_overlay.json')
+          can=json.loads(Path('data/canonical/registry.json').read_text()); src=json.loads(Path('data/sources/registry.json').read_text()); led=json.loads(Path('data/changes/ledger.json').read_text()); ov=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text()); exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert can['version']=='0.24' and len(can['records'])==669
+          assert src['version']=='1.65' and len(src['sources'])==226
+          assert led['version']=='0.13'
+          assert ov['canonical_checkpoint']=={'registry_version':'0.24','record_count':669}
+          b0={r['occurrence_id']:r for r in can0['records']}; b={r['occurrence_id']:r for r in can['records']}
+          assert list(b0)==list(b)
+          changed=[oid for oid in b0 if b0[oid]!=b[oid]]
+          assert changed==['WSO-REG-A-0014'],changed
+          m0=b0['WSO-REG-A-0014']; m=b['WSO-REG-A-0014']
+          protected=['occurrence_id','series_id','source_id','source_timezone','start_local','end_local','start_utc','end_utc','date_earliest','date_latest','publication_datetime','timing_type','time_precision','certainty_status','lifecycle_status','primary_source_assertion_id','last_successful_assertion_id']
+          for k in protected: assert m0.get(k)==m.get(k),(k,m0.get(k),m.get(k))
+          assert m['start_local']=='2026-10-09' and m['certainty_status']=='CONFIRMED'
+          assert m0['population_horizon_policy']=='EXACT_LEGAL_DEADLINE_ONLY'
+          assert m['population_horizon_policy']=='EXACT_LEGAL_OR_POLICY_MILESTONE_ONLY'
+          s0={r['source_id']:r for r in src0['sources']}; s={r['source_id']:r for r in src['sources']}
+          assert list(s0)==list(s)
+          changed_sources={sid for sid in s0 if s0[sid]!=s[sid]}
+          expected={'WSSRC-REGJ-002','WSSRC-RISK-001','WSSRC-REG2-004','WSSRC-HEALTH-004','WSSRC-REG-009','WSSRC-INT-018','WSSRC-COM-005'}
+          assert changed_sources==expected,(changed_sources,expected)
+          for sid in expected:
+              for k in ('canonical_provenance_use','automated_monitoring_use','verification_mode'):
+                  assert s[sid].get(k) is not None,(sid,k)
+          assert s['WSSRC-COM-005']['verification_mode']=='MANUAL_AUTHORITATIVE_RECHECK'
+          assert s['WSSRC-COM-005']['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert s['WSSRC-RISK-001']['verification_mode']=='RIGHTS_HELD_MANUAL_ONLY'
+          assert s['WSSRC-INT-018']['backup_source'].endswith('2021_annual_meetings_-_official_record.pdf')
+          assert led['changes'][:-1]==led0['changes']
+          assert len(led['changes'])==len(led0['changes'])+1
+          entry=led['changes'][-1]
+          assert entry['change_id']=='WSCHANGE-eb685d688491acd5fb'
+          assert entry['occurrence_id']=='WSO-REG-A-0014'
+          assert entry['change_type']=='CANONICAL_SEMANTIC_CLASSIFICATION_REPAIR'
+          assert entry.get('committed_at')
+          expected_ov=json.loads(json.dumps(ov0)); expected_ov['canonical_checkpoint']={'registry_version':'0.24','record_count':669}
+          assert ov==expected_ov
+          assert b['WSO-REG-J-0006']['start_local']=='2026-09-30'
+          assert b['WSO-REG-J-0007']['start_local']=='2026-11-20'
+          assert b['WSO-COM-A-0051']['start_local']=='2026-11-01' and b['WSO-COM-A-0051']['end_local']=='2027-04-30'
+          assert b['WSO-COM-A-0052']['start_local']=='2027-11-01' and b['WSO-COM-A-0052']['end_local']=='2028-04-30'
+          assert b['WSO-REG-B-0005']['start_local']=='2026-11-16' and b['WSO-REG-B-0006']['start_local']=='2026-11-17'
+          assert b['WSO-HEALTH-A-0005']['start_local']=='2026-10-19' and b['WSO-HEALTH-A-0005']['end_local']=='2026-10-22'
+          assert b['WSO-INT-A-0014']['start_local']=='2027-05-24' and b['WSO-INT-A-0014']['end_local']=='2027-05-28' and b['WSO-INT-A-0014']['certainty_status']=='PROVISIONAL'
+          assert b['WSO-EL-A-0004']['start_local']=='2027-01-05'
+          assert b['WSO-FIS-B-0011']['start_local'] is None and b['WSO-FIS-B-0011']['certainty_status']=='TBC'
+          assert {'WSSRC-REG4-001','WSSRC-REG4-002'} <= set(s)
+          assert exp['automatic_canonical_commit'] is False and exp['google_calendar_write'] is False
+          audit=build_source_governance_audit(can,src,exp)['totals']
+          totals={'fully_explicit':audit['fully_explicit_governance_source_count'],'missing_any':audit['source_records_with_one_or_more_missing_governance_fields'],'p1':audit['backfill_research_priority_counts']['P1_CANONICAL_DEPENDENCY'],'p2':audit['backfill_research_priority_counts']['P2_REGISTRY_ONLY']}
+          assert totals=={'fully_explicit':81,'missing_any':145,'p1':74,'p2':71},totals
+          full=set(subprocess.check_output(['git','diff','--name-only',BASE,'HEAD'],text=True).splitlines())
+          allowed={'data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json','.github/workflows/temp-p1-balanced-governance-c-postaudit.yml'}
+          assert full<=allowed,full
+          txfiles=set(subprocess.check_output(['git','diff','--name-only',BASE,TX],text=True).splitlines())
+          assert txfiles=={'data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json','.github/workflows/temp-p1-balanced-governance-c-transaction.yml'},txfiles
+          print('COMMITTED_AT',entry['committed_at'])
+          print('GOVERNANCE',totals)
+          print('INDEPENDENT_COMMITTED_STATE_AUDIT PASS')
+          PY
+      - name: Transaction replay fails closed
+        run: |
+          set +e
+          out=$(python scripts/apply_p1_balanced_governance_c.py 2>&1)
+          code=$?
+          set -e
+          test "$code" -ne 0
+          echo "$out" | grep -q 'PRECONDITION FAILED'
+          echo 'REPLAY_FAIL_CLOSED PASS'
+      - name: Registry validator
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation and browser checks
+        run: |
+          python -m compileall -q scripts src
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
