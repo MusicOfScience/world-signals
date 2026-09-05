@@ -139,11 +139,12 @@ class SourceNativeCalendarNepalNTests(unittest.TestCase):
 
     def test_no_third_party_converter_or_synthetic_gregorian_date_in_plan(self):
         text=PLAN_PATH.read_text(encoding="utf-8")+"\n"+self.research
-        self.assertNotIn("hamropatro",text.lower())
-        self.assertNotIn("nepalicalendar",text.lower())
+        lower=text.lower()
+        self.assertNotIn("hamropatro",lower)
+        self.assertNotIn("nepalicalendar",lower)
         self.assertNotIn("2027-05-29",text)
-        self.assertIn("third-party",text.lower())
-        self.assertIn("No Gregorian date",self.research)
+        self.assertIn("third-party",lower)
+        self.assertIn("no gregorian date is inferred",lower)
 
     def test_physical_risk_hold_remains_explicit(self):
         hold=self.plan["holds"][0]
