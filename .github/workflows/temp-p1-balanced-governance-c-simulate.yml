@@ -1,0 +1,123 @@
+name: TEMP simulate P1 balanced governance C
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-p1-balanced-governance-c-simulate.yml'
+permissions:
+  contents: read
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: p1-balanced-governance-c-prep
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Guarded read-only preflight
+        run: python scripts/apply_p1_balanced_governance_c.py --committed-at '2026-09-05T12:15:00+10:00'
+      - name: Apply only in disposable checkout
+        env:
+          WORLD_SIGNALS_ALLOW_P1_BALANCED_GOVERNANCE_C_APPLY: 'YES'
+        run: python scripts/apply_p1_balanced_governance_c.py --apply --committed-at '2026-09-05T12:15:00+10:00'
+      - name: Enforce exact four-file production mutation
+        run: |
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/canonical/registry.json',
+              'data/sources/registry.json',
+              'data/changes/ledger.json',
+              'data/coverage/biosecurity_overlay.json',
+          }
+          actual=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          print('CHANGED',sorted(actual))
+          if actual != expected:
+              raise SystemExit(f'exact transaction surface failed: {actual!r} != {expected!r}')
+          PY
+      - name: Registry validator
+        run: python scripts/validate_registry.py
+      - name: Full unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Python compilation
+        run: python -m compileall -q scripts src
+      - name: Browser JavaScript syntax
+        run: |
+          node --check web/app.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+      - name: Full site build
+        run: python scripts/build_site.py
+      - name: Independent simulated post-state assertions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.world_signals.source_governance_audit import build_source_governance_audit
+
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          led=json.loads(Path('data/changes/ledger.json').read_text())
+          ov=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          exp=json.loads(Path('data/monitor/expectations.json').read_text())
+          rec={r['occurrence_id']:r for r in can['records']}
+          sb={r['source_id']:r for r in src['sources']}
+
+          assert can['version']=='0.24' and len(can['records'])==669
+          assert src['version']=='1.65' and len(src['sources'])==226
+          assert led['version']=='0.13'
+          assert ov['canonical_checkpoint']=={'registry_version':'0.24','record_count':669}
+          assert len(rec)==669
+
+          m=rec['WSO-REG-A-0014']
+          assert m['start_local']=='2026-10-09'
+          assert m['certainty_status']=='CONFIRMED'
+          assert m['population_horizon_policy']=='EXACT_LEGAL_OR_POLICY_MILESTONE_ONLY'
+          assert m.get('primary_source_assertion_id')
+
+          assert rec['WSO-REG-J-0006']['start_local']=='2026-09-30'
+          assert rec['WSO-REG-J-0007']['start_local']=='2026-11-20'
+          assert rec['WSO-COM-A-0051']['date_earliest']=='2026-11-01' and rec['WSO-COM-A-0051']['date_latest']=='2027-04-30'
+          assert rec['WSO-COM-A-0052']['date_earliest']=='2027-11-01' and rec['WSO-COM-A-0052']['date_latest']=='2028-04-30'
+          assert rec['WSO-REG-B-0005']['start_local']=='2026-11-16'
+          assert rec['WSO-REG-B-0006']['start_local']=='2026-11-17'
+          assert rec['WSO-HEALTH-A-0005']['start_local']=='2026-10-19' and rec['WSO-HEALTH-A-0005']['end_local']=='2026-10-22'
+          assert rec['WSO-INT-A-0014']['start_local']=='2027-05-24' and rec['WSO-INT-A-0014']['end_local']=='2027-05-28'
+          assert rec['WSO-INT-A-0014']['certainty_status']=='PROVISIONAL'
+
+          assert sb['WSSRC-COM-005']['verification_mode']=='MANUAL_AUTHORITATIVE_RECHECK'
+          assert sb['WSSRC-COM-005']['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert sb['WSSRC-INT-018']['backup_source'].endswith('2021_annual_meetings_-_official_record.pdf')
+          assert sb['WSSRC-RISK-001']['verification_mode']=='RIGHTS_HELD_MANUAL_ONLY'
+
+          assert rec['WSO-EL-A-0004']['start_local']=='2027-01-05'
+          assert rec['WSO-FIS-B-0011']['start_local'] is None and rec['WSO-FIS-B-0011']['certainty_status']=='TBC'
+          assert rec['WSO-INT-A-0018']['time_precision']=='MONTH'
+          assert rec['WSO-INT-A-0019']['time_precision']=='MONTH'
+          assert {'WSSRC-REG4-001','WSSRC-REG4-002'} <= set(sb)
+          assert exp['automatic_canonical_commit'] is False
+          assert exp['google_calendar_write'] is False
+
+          audit=build_source_governance_audit(can,src,exp)
+          t=audit['totals']
+          actual={
+              'fully_explicit':t['fully_explicit_governance_source_count'],
+              'missing_any':t['source_records_with_one_or_more_missing_governance_fields'],
+              'p1':t['backfill_research_priority_counts']['P1_CANONICAL_DEPENDENCY'],
+              'p2':t['backfill_research_priority_counts']['P2_REGISTRY_ONLY'],
+          }
+          assert actual=={'fully_explicit':81,'missing_any':145,'p1':74,'p2':71},actual
+          added=led['changes'][-1]
+          assert added['change_id']=='WSCHANGE-eb685d688491acd5fb'
+          assert added['occurrence_id']=='WSO-REG-A-0014'
+          assert added['change_type']=='CANONICAL_SEMANTIC_CLASSIFICATION_REPAIR'
+          assert added['committed_at']=='2026-09-05T12:15:00+10:00'
+          print('GOVERNANCE',actual)
+          print('INDEPENDENT_SIMULATED_POST_STATE PASS')
+          PY
+      - name: Assert no writes were pushed
+        run: |
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/p1-balanced-governance-c-prep)"
+          echo 'DISPOSABLE_CHECKOUT_ONLY PASS'
