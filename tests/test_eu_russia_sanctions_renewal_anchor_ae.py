@@ -114,8 +114,17 @@ class EURussiaSanctionsRenewalAnchorAETests(unittest.TestCase):
     def test_trade_gap_repaired_without_analysis_write(self):
         self.assertTrue(any(r.get("category") == "TRADE_SANCTIONS_INDUSTRIAL_POLICY" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
         self.assertTrue(any(r.get("event_type") == "SANCTIONS_PROCESS" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
-        self.assertEqual(len(self.reviews["reviews"]), 12)
-        self.assertEqual(len(self.evidence["evidence"]), 44)
+
+        # AE's own frozen transaction contract wrote no Analysis rows. Later
+        # Analysis tranches may legitimately grow the live registries.
+        post = self.plan["postconditions"]
+        self.assertEqual((post["analysis_reviews_version"], post["analysis_review_count"]), ("0.8", 12))
+        self.assertEqual((post["analysis_evidence_version"], post["analysis_evidence_count"]), ("0.8", 44))
+        self.assertIn("No Analysis review or evidence row is created.", self.plan["guardrails"])
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), version_tuple(post["analysis_reviews_version"]))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
+        self.assertGreaterEqual(version_tuple(self.evidence["version"]), version_tuple(post["analysis_evidence_version"]))
+        self.assertGreaterEqual(len(self.evidence["evidence"]), post["analysis_evidence_count"])
 
     def test_post_state_counts_are_exact(self):
         post = self.plan["postconditions"]
