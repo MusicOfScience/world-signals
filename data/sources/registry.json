@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-06",
-  "version": "1.74",
+  "version": "1.75",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -6250,7 +6250,7 @@
       "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 220,
-      "canonical_dependency_count": 1,
+      "canonical_dependency_count": 2,
       "monitoring_readiness_assessed_at": "2026-09-02",
       "rights_evidence_url": "https://www.consilium.europa.eu/en/about-site/copyright/",
       "rights_reviewed_at": "2026-09-02T23:35:00+10:00",
