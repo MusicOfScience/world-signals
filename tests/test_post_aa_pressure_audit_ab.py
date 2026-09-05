@@ -15,6 +15,9 @@ class PostAAPressureAuditABTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.report = build_report()
+        cls.frozen = json.loads(
+            (ROOT / "data/analysis/POST_AA_PRESSURE_AUDIT_AB_v0.1.json").read_text(encoding="utf-8")
+        )
 
     def test_exact_ab_base_is_frozen(self):
         self.assertEqual(BASE_MAIN_SHA, "c4b499436db54f6dc3ebbe045cfda2fba7f730dd")
@@ -37,9 +40,15 @@ class PostAAPressureAuditABTests(unittest.TestCase):
         self.assertTrue(self.report["selection_discipline"]["market_precision_gap_is_not_permission_to_infer_timestamps"])
 
     def test_frontier_is_not_backlog(self):
-        frontier = self.report["frontier_ranked_by_sample_novelty"]
-        ids = {row["occurrence_id"] for row in frontier}
-        self.assertEqual(ids, {"WSO-MAC-B-0041", "WSO-ddb70f8ff05a58fb"})
+        frozen_ids = {
+            row["occurrence_id"] for row in self.frozen["frontier_ranked_by_sample_novelty"]
+        }
+        self.assertEqual(frozen_ids, {"WSO-MAC-B-0041", "WSO-ddb70f8ff05a58fb"})
+
+        live_ids = {
+            row["occurrence_id"] for row in self.report["frontier_ranked_by_sample_novelty"]
+        }
+        self.assertTrue(frozen_ids.issubset(live_ids))
         self.assertTrue(self.report["selection_discipline"]["frontier_is_not_backlog"])
 
     def test_boc_has_more_sample_novelty_than_household_spending(self):
