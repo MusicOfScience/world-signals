@@ -25,16 +25,24 @@ def main() -> None:
     overlay = json.loads((ROOT / "data/coverage/biosecurity_overlay.json").read_text(encoding="utf-8"))
 
     records = registry["records"]
-    reviewed_ids = {r.get("canonical_occurrence_id") for r in reviews.get("reviews", [])}
-    completed = [r for r in records if r.get("lifecycle_status") == "COMPLETED"]
-    eligible_ids = {row["occurrence_id"] for row in report["eligible_completed_population"]}
-    eligible_completed = [r for r in completed if r.get("occurrence_id") in eligible_ids]
-    unreviewed = [r for r in eligible_completed if r.get("occurrence_id") not in reviewed_ids]
+    by_id = {r.get("occurrence_id"): r for r in records if r.get("occurrence_id")}
+    reviewed_ids = {
+        r.get("canonical_occurrence_id")
+        for r in reviews.get("reviews", [])
+        if r.get("review_state") in {"REVIEWED_SAMPLE", "REVIEWED"}
+        and r.get("review_phase") == "POST_EVENT"
+        and r.get("canonical_occurrence_id")
+    }
+    frontier_ids = {row["occurrence_id"] for row in report["eligible_unreviewed_frontier"]}
+    eligible_ids = reviewed_ids | frontier_ids
+    eligible_completed = [by_id[occ_id] for occ_id in sorted(eligible_ids) if occ_id in by_id]
+    unreviewed = [by_id[occ_id] for occ_id in sorted(frontier_ids) if occ_id in by_id]
+    reviewed_canonical = [by_id[occ_id] for occ_id in sorted(reviewed_ids) if occ_id in by_id]
 
-    reviewed_regions = {r.get("canonical_region") for r in reviews.get("reviews", []) if r.get("canonical_region")}
-    reviewed_categories = {r.get("canonical_category") for r in reviews.get("reviews", []) if r.get("canonical_category")}
-    reviewed_types = {r.get("canonical_event_type") for r in reviews.get("reviews", []) if r.get("canonical_event_type")}
-    reviewed_institutions = {r.get("canonical_institution") for r in reviews.get("reviews", []) if r.get("canonical_institution")}
+    reviewed_regions = {r.get("region") for r in reviewed_canonical}
+    reviewed_categories = {r.get("category") for r in reviewed_canonical}
+    reviewed_types = {r.get("event_type") for r in reviewed_canonical}
+    reviewed_institutions = {r.get("institution") for r in reviewed_canonical}
 
     frontier = []
     for r in unreviewed:
@@ -94,7 +102,7 @@ def main() -> None:
         },
         "completed_population": {
             "eligible_completed": len(eligible_completed),
-            "reviewed": len(reviewed_ids & eligible_ids),
+            "reviewed": len(reviewed_ids),
             "unreviewed": len(unreviewed),
             "category_counts": dict(sorted(Counter(r.get("category") for r in eligible_completed).items())),
             "event_type_counts": dict(sorted(Counter(r.get("event_type") for r in eligible_completed).items())),
