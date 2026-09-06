@@ -1,0 +1,42 @@
+name: WORLD SIGNALS AX Live Intelligence contract patch
+
+on:
+  push:
+    branches:
+      - feature/post-aw-pressure-audit-ax
+    paths:
+      - .github/workflows/tmp-live-intelligence-ax-contract-patch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-78 base
+        run: |
+          BASE=721206169033eb0ceb695075d44fb38e7fa2edc3
+          test "$(git merge-base HEAD $BASE)" = "$BASE"
+      - name: Apply AX contract and descendant patch
+        run: python scripts/tmp_patch_live_intelligence_ax.py
+      - name: Compile and run existing Live Intelligence tests
+        run: |
+          python -m py_compile src/world_signals/live_intelligence.py
+          python -m unittest tests.test_live_intelligence_foundation_av -v
+          python -m unittest tests.test_nepal_rasuwa_flood_live_intelligence_aw -v
+      - name: Commit patch and self-remove helpers
+        run: |
+          rm .github/workflows/tmp-live-intelligence-ax-contract-patch.yml
+          rm scripts/tmp_patch_live_intelligence_ax.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/world_signals/live_intelligence.py tests/test_nepal_rasuwa_flood_live_intelligence_aw.py .github/workflows/tmp-live-intelligence-ax-contract-patch.yml scripts/tmp_patch_live_intelligence_ax.py
+          git commit -m "AX: add evolving-state and manual story validation"
+          git push
