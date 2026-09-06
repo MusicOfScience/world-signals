@@ -1,4 +1,4 @@
-name: WORLD SIGNALS AW Live Intelligence Nepal preflight
+name: WORLD SIGNALS AW Live Intelligence Nepal preflight v2
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
           test "$(git merge-base HEAD $BASE)" = "$BASE"
           test "$(find .github/workflows -maxdepth 1 -type f -name 'tmp-*' | wc -l)" -eq 1
           test ! -e scripts/tmp_patch_live_intelligence_aw.py
+          test ! -e scripts/tmp_patch_av_descendant_aw.py
           git diff --check $BASE..HEAD
       - name: Prove protected upstream and Live production data unchanged before transaction
         run: |
