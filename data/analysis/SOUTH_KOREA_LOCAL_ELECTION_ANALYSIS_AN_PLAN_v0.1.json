@@ -68,6 +68,14 @@
     "version_unchanged": "0.4",
     "reason": "Existing Analysis v0.4 supports NOT_ESTABLISHED surprise, OTHER_DEFENSIBLE_EXPECTATION, empty what_moved, OBSERVED_ASSOCIATION with explicit alternatives, OBSERVED second-order effects and falsifiers. Existing reviewed MIXED specimens demonstrate that multi-dimensional outcomes can be decomposed into comparison rows when a competent benchmark exists; AN has no need to invent an aggregate election surprise."
   },
+  "descendant_checkpoint_repairs": [
+    {
+      "path": "tests/test_rba_financial_stability_analysis_am.py",
+      "reason": "The first AN controlled write failed closed because AM's live descendant test hard-coded the historically correct post-AM reviewed count/diversity of 15/13. AN preserves AM's frozen plan and exact historical transform boundary, while changing only the live descendant assertions to require at least those values and exactly one FINANCIAL_STABILITY_REPORT contribution.",
+      "historical_checkpoint_preserved": true,
+      "live_descendant_growth_permitted": true
+    }
+  ],
   "new_analysis_id": "WSAN-KR-LGE-20260603-001",
   "new_evidence_ids": [
     "WSEV-KR-LGE-NEC-WINNERS-202606",
@@ -121,6 +129,9 @@
       "data/analysis/event_reviews.json",
       "data/analysis/evidence_registry.json",
       "data/analysis/SOUTH_KOREA_LOCAL_ELECTION_ANALYSIS_AN_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "compatibility_test_repair_paths": [
+      "tests/test_rba_financial_stability_analysis_am.py"
     ],
     "protected_unchanged_paths": [
       "data/canonical/registry.json",
