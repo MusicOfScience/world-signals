@@ -1,6 +1,6 @@
 # WORLD SIGNALS — post-AU pressure audit AV v0.1
 
-**Exact post-#76 main:** `a487eaecd6c08e9692a42ce6ffed2dea1e455879`  
+**Exact post-#76 main:** `a487eaecd6c08e9692a42ce6ffed2dea1e455879`
 **Reference date:** 2026-09-06
 
 ## Frozen checkpoint
