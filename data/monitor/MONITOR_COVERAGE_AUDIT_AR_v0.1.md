@@ -1,10 +1,10 @@
 # WORLD SIGNALS — reviewed Source/Change Monitor coverage audit AR v0.1
 
-**Checkpoint:** exact post-#72 `main` `2c215ce4d3ff70001af4733fce797f166bab2a46`  
-**Canonical registry:** v0.37 / 687  
-**Source registry:** v1.78 / 242  
-**Monitor expectations:** v0.9  
-**Monitor-coverage audit dataset:** v0.1  
+**Checkpoint:** exact post-#72 `main` `2c215ce4d3ff70001af4733fce797f166bab2a46`
+**Canonical registry:** v0.37 / 687
+**Source registry:** v1.78 / 242
+**Monitor expectations:** v0.9
+**Monitor-coverage audit dataset:** v0.1
 **Nature:** read-only scope audit; no route-creation or canonical-write authority
 
 ## Boundary
