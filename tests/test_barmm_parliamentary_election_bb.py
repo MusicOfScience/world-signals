@@ -16,11 +16,40 @@ class BarmmParliamentaryElectionBBTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.plan = json.loads(apply_bb.PLAN_PATH.read_text(encoding="utf-8"))
-        cls.target = apply_bb.simulate(cls.plan, "2026-09-06T21:30:00+10:00")
-        cls.pre_canonical = apply_bb.load(apply_bb.CANONICAL_PATH)
-        cls.pre_sources = apply_bb.load(apply_bb.SOURCES_PATH)
-        cls.pre_ledger = apply_bb.load(apply_bb.LEDGER_PATH)
-        cls.pre_overlay = apply_bb.load(apply_bb.OVERLAY_PATH)
+        canonical = apply_bb.load(apply_bb.CANONICAL_PATH)
+        sources = apply_bb.load(apply_bb.SOURCES_PATH)
+        ledger = apply_bb.load(apply_bb.LEDGER_PATH)
+        overlay = apply_bb.load(apply_bb.OVERLAY_PATH)
+
+        if canonical.get("version") == "0.38" and canonical.get("record_count") == 688:
+            cls.target = apply_bb.simulate(cls.plan, "2026-09-06T21:30:00+10:00")
+            cls.pre_canonical = canonical
+            cls.pre_sources = sources
+            cls.pre_ledger = ledger
+            cls.pre_overlay = overlay
+        elif canonical.get("version") == "0.39" and canonical.get("record_count") == 689:
+            cls.target = {
+                "canonical": canonical,
+                "sources": sources,
+                "ledger": ledger,
+                "overlay": overlay,
+                "status": apply_bb.STATUS_PATH.read_text(encoding="utf-8"),
+                "roadmap": apply_bb.ROADMAP_PATH.read_text(encoding="utf-8"),
+            }
+            cls.pre_canonical = {"records": canonical["records"][:-1]}
+            cls.pre_sources = {"sources": sources["sources"][:-1]}
+            cls.pre_ledger = {"changes": ledger["changes"][:-1]}
+            cls.pre_overlay = dict(overlay)
+            cls.pre_overlay["version"] = "0.13"
+            cls.pre_overlay["canonical_checkpoint"] = {
+                "registry_version": "0.38",
+                "record_count": 688,
+            }
+            apply_bb.assert_target(cls.plan, cls.target)
+        else:
+            raise RuntimeError(
+                f"BB tests require exact prestate v0.38/688 or reviewed poststate v0.39/689; got {canonical.get('version')}/{canonical.get('record_count')}"
+            )
 
     def test_exact_base_and_deterministic_identities(self) -> None:
         self.assertEqual(

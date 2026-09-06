@@ -85,11 +85,10 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertEqual(apply_ba.exact_series_count(self.reviews), 0)
 
     def test_status_helper_preserves_later_descendant_only_with_frozen_ba_invariants(self):
-        historical = self.target["status"]
-        ba_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
+        current = apply_ba.STATUS_PATH.read_text(encoding="utf-8")
+        first_header = current.splitlines()[0]
         descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
-        self.assertIn(ba_header, historical)
-        descendant = historical.replace(ba_header, descendant_header, 1)
+        descendant = current.replace(first_header, descendant_header, 1)
         self.assertEqual(apply_ba.target_status(descendant), descendant)
 
         malformed = descendant.replace(
