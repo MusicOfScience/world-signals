@@ -8,7 +8,7 @@ The repository is the operational implementation. `WORLD_SIGNALS_PROJECT_CHARTER
 
 ## Current checkpoint
 
-Post-#76 / AV foundation checkpoint:
+Post-#77 / AW controlled Live Intelligence checkpoint:
 
 - Canonical Registry: **v0.38 — 688 occurrences**
 - Canonical schema: **v0.52**
@@ -16,7 +16,7 @@ Post-#76 / AV foundation checkpoint:
 - reviewed Change Ledger: **v0.24 — 59 entries**
 - Source/Change Monitor expectations: **v0.10 — 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.1 foundation — 0 observations / 0 evidence; population gate closed**
+- Live Intelligence: **v0.2 — 1 reviewed internal observation / 2 primary-official evidence rows; public observation projection closed**
 - Analysis schema: **v0.4**
 - Analysis: **v0.16 — 20 reviews / 91 evidence rows / 18 reviewed event types**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
@@ -53,7 +53,7 @@ The layers are deliberately separate:
 1. **Canonical Registry** — authoritative event identities, lifecycle and timing.
 2. **Calendar** — disposable human-facing projection from Canonical.
 3. **Source / Change Monitor** — authoritative-source verification, source health and review candidates.
-4. **Live Intelligence** — factual current-development observations; AV v0.1 is foundation-only and intentionally empty.
+4. **Live Intelligence** — factual current-development observations; AW v0.2 contains one controlled internal specimen and still exposes zero public observations.
 5. **Analysis** — expectations, surprise, market response, connections, alternatives, second-order effects and falsifiers.
 
 The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state. Live Intelligence is **not** Analysis. A source failure or absence cannot itself cancel, complete or reschedule an event, and it cannot itself create a Live Intelligence fact.
@@ -72,7 +72,7 @@ Current visible layers include:
 - **Change history** — reviewed canonical ledger showing what changed and why.
 - **Analysis** — reviewed post-event analytical specimens linked to canonical occurrences.
 
-AV also emits `docs/data/live_intelligence.json`, but **only as foundation metadata**. It contains no public observations and makes no claim to be a current-news or runtime intelligence feed.
+AW emits `docs/data/live_intelligence.json` as **curated-store metadata only**. The repository contains one reviewed internal observation, but the projection still contains zero public observations and makes no claim to be a current-news or runtime intelligence feed.
 
 ## Monitoring and review state
 
@@ -91,20 +91,21 @@ These routes are review-only. They can fetch, parse, compare and generate eviden
 
 Review-candidate identity is separate from monitor-run identity. Stable `WSRV-*` propositions can aggregate repeated equivalent observations while preserving materially different proposals as siblings. Retained Actions evidence is bounded by its retention horizon; durable checkpoint architecture remains noncanonical.
 
-## Live Intelligence foundation
+## Live Intelligence controlled population
 
-AV v0.1 makes the Charter's missing Live Intelligence layer executable without populating it prematurely.
+AV v0.1 established the zero-population contract. AW v0.2 opens it only far enough for one reviewed physical-shock specimen: the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal.
 
-The foundation:
+The controlled state:
 
-- allows genuinely unscheduled observations to exist without fabricated canonical events;
-- allows optional links to existing canonical occurrences;
-- separates observation time, source-publication time and real-world event time;
-- preserves corrections/revisions rather than silently rewriting history;
-- prohibits causal interpretation and market-move attribution;
-- prohibits Live evidence from altering canonical provenance or resolving missing canonical time;
-- prohibits retrospective migration of Analysis evidence merely to make the new layer appear populated;
-- deliberately rejects production observation/evidence population until a later pressure-audited specimen opens that gate.
+- preserves the unscheduled flood without fabricating a Canonical occurrence;
+- preserves the authoritative `Asia/Kathmandu` local time `08:40` and matching `02:55Z`;
+- keeps WORLD SIGNALS observation time separate from real-world event time;
+- adds explicit evidence publication-time precision so civil publication dates cannot be upgraded to invented clock times;
+- contains exactly one internal observation and two primary-official evidence rows;
+- leaves the uncertain upstream physical trigger unresolved rather than promoting a preliminary mechanism into fact;
+- creates no story ID and does not automatically fold the later UN appeal into the shock;
+- prohibits causal interpretation, market-move attribution, Analysis-evidence migration and automatic ingestion;
+- keeps public observation projection closed at zero.
 
 ## Analysis state
 

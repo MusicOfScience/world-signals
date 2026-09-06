@@ -1,8 +1,8 @@
-# CURRENT RECOVERY OVERRIDE — POST-AU / AV FOUNDATION
+# CURRENT RECOVERY OVERRIDE — POST-AV / AW CONTROLLED LIVE INTELLIGENCE
 
 **Effective checkpoint:** 2026-09-06
-**Exact post-#76 main base:** `a487eaecd6c08e9692a42ce6ffed2dea1e455879`
-**AV branch:** `feature/post-au-pressure-audit-av`
+**Exact post-#77 main base:** `4768c73532c4ba4038b30314079b85be64fbee01`
+**AW branch:** `feature/post-av-pressure-audit-aw`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
@@ -15,7 +15,7 @@ This override supersedes stale "current" counts in the historical body below whi
 - biosecurity overlay: **v0.13 @ canonical v0.38 / 688**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.1 foundation / 0 observations / 0 evidence / production population CLOSED**
+- Live Intelligence: **v0.2 / 1 reviewed internal observation / 2 primary-official evidence rows / public observation projection CLOSED**
 - Analysis schema: **v0.4**
 - Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
@@ -26,11 +26,11 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-AV pauses further Analysis population. The next architectural step is the executable **Live Intelligence** layer required by the Charter, kept separate from both Source/Change Monitor and Analysis.
+AW has exercised the Live Intelligence contract with its first real specimen without opening a general feed. Live Intelligence v0.2 contains one internally curated physical-shock observation for the 26 August 2026 Nepal Bhote Koshi / Rasuwa flood and exactly two primary-official evidence rows. Public observation projection, automatic ingestion, story clustering, automatic Canonical commit and Google Calendar writes remain closed.
 
-AV v0.1 is deliberately foundation-only: its validator rejects production observations/evidence, prohibits causal interpretation and market-move attribution, allows genuinely unscheduled observations without fabricated canonical events, and emits only metadata to the static build. Existing Analysis evidence is not migrated.
+The specimen has no fabricated Canonical occurrence or link. Native `Asia/Kathmandu` event time is preserved as `2026-08-26T08:40:00` / `2026-08-26T02:55:00Z`; evidence publication dates remain civil-date precision; the uncertain upstream physical trigger is deliberately not asserted as cause.
 
-After AV merges, run a fresh pressure audit before selecting the first Live Intelligence specimen. Japan household spending remains a valid held Analysis specimen, not a queue-completion obligation.
+The next pressure audit should determine whether Live Intelligence now needs repeated as-of state / revision / developing-story semantics before prospective Live Intelligence → Analysis linkage. The 2026 DRC Bundibugyo Ebola outbreak is a strong candidate but is not pre-authorised. Japan household spending remains a valid held Analysis specimen, not a queue-completion obligation.
 
 ## Current configured monitor cohort
 
