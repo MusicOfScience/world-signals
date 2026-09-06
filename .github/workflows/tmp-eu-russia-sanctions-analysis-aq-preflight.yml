@@ -1,5 +1,6 @@
 name: WORLD SIGNALS AQ EU Russia sanctions analysis preflight
 
+# Rerun after narrow semantic assertion repair.
 on:
   push:
     branches:
