@@ -281,7 +281,7 @@ def target_status(current: str) -> str:
     text = text.replace("- Analysis schema: **v0.5**", "- Analysis schema: **v0.6**", 1)
     text = text.replace(
         "- Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**",
-        "- Analysis: **v0.17 / 21 reviews / 94 evidence / 18 reviewed event types**",
+        "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**",
         1,
     )
     text = text.replace(
