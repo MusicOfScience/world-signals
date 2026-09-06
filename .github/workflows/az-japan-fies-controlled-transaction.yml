@@ -52,7 +52,7 @@ jobs:
           node --check web/biosecurity.js
           node --check web/analysis.js
           python scripts/build_site.py
-          git checkout -- docs
+          rm -rf docs
       - name: Prove exact target, protected immutability and mutation boundary
         shell: bash
         run: |
@@ -99,6 +99,7 @@ jobs:
           }
           changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
           assert changed==expected,(changed,expected)
+          assert not (ROOT/'docs').exists()
           PY
           for p in \
             data/canonical/registry.json \
