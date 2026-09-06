@@ -29,14 +29,14 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         schema["foundation_population_policy"]["evidence_population_allowed"] = True
         return schema
 
-    def evidence_row(self, evidence_id="WSEV-LI-TEST-1"):
+    def evidence_row(self, evidence_id="WSEV-LI-TEST-1", roles=None):
         return {
             "evidence_id": evidence_id,
             "evidence_class": "PRIMARY_OFFICIAL",
             "provider": "Test authority",
             "title": "Test factual observation",
             "url": "https://example.test/observation",
-            "roles": ["FACTUAL_OBSERVATION"],
+            "roles": roles or ["FACTUAL_OBSERVATION"],
             "canonical_provenance_effect": "NONE",
         }
 
@@ -109,6 +109,12 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertIn("unknown canonical occurrence", " ".join(report.errors))
 
+    def test_inferential_canonical_relationships_are_not_live_vocab(self):
+        relationships = set(self.schema["controlled_vocabularies"]["canonical_relationship"])
+        self.assertNotIn("AFFECTS_EXPECTATION_FOR", relationships)
+        self.assertNotIn("RESPONSE_OBSERVATION_FOR", relationships)
+        self.assertIn("COINCIDENT_WITH", relationships)
+
     def test_analysis_only_interpretation_fields_are_rejected(self):
         schema = self.opened_schema()
         evidence = copy.deepcopy(self.evidence)
@@ -121,6 +127,19 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         joined = " ".join(report.errors)
         self.assertIn("Analysis-only fields prohibited", joined)
         self.assertIn("causal_status", joined)
+
+    def test_pre_analysis_semantics_keep_confidence_and_explanations_noncausal(self):
+        semantics = self.schema["pre_analysis_semantics"]
+        self.assertIn("verification_state", semantics["confidence"])
+        self.assertIn("belongs in Analysis", semantics["competing_explanation"])
+        self.assertIn("Attribution", semantics["market_reaction"])
+        self.assertFalse(self.schema["story_grouping_policy"]["automatic_clustering_allowed"])
+
+    def test_monitor_candidates_do_not_automatically_promote_to_live_intelligence(self):
+        bridge = self.schema["monitor_bridge_policy"]
+        self.assertFalse(bridge["automatic_promotion_from_monitor_candidate"])
+        self.assertTrue(bridge["monitor_review_candidate_is_not_live_intelligence_observation"])
+        self.assertTrue(bridge["positive_monitor_evidence_requires_separate_live_evidence_record"])
 
     def test_evidence_refs_and_live_provenance_fail_closed(self):
         schema = self.opened_schema()
@@ -155,16 +174,68 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         self.assertIn("observed_at_utc must be an exact UTC timestamp", joined)
         self.assertIn("civil date must not be upgraded", joined)
 
-    def test_data_revision_requires_explicit_prior_observation(self):
+    def test_exact_event_time_may_preserve_matching_native_local_time_and_iana_zone(self):
+        schema = self.opened_schema()
+        evidence = copy.deepcopy(self.evidence)
+        observations = copy.deepcopy(self.observations)
+        evidence["evidence"].append(self.evidence_row())
+        row = self.observation_row()
+        row["event_time"] = {
+            "precision": "EXACT_TIMESTAMP",
+            "event_at_utc": "2026-09-04T23:30:00Z",
+            "event_local": "2026-09-05T09:30:00",
+            "event_timezone": "Australia/Melbourne",
+        }
+        observations["observations"].append(row)
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
+        self.assertTrue(report.ok, report.errors)
+
+        observations["observations"][0]["event_time"]["event_timezone"] = "Asia/Tokyo"
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
+        self.assertIn("do not match event_at_utc", " ".join(report.errors))
+
+    def test_external_data_revision_does_not_require_synthetic_prior_live_observation(self):
+        schema = self.opened_schema()
+        evidence = copy.deepcopy(self.evidence)
+        observations = copy.deepcopy(self.observations)
+        evidence["evidence"].append(
+            self.evidence_row(roles=["FACTUAL_OBSERVATION", "CORRECTION_OR_REVISION"])
+        )
+        revision = self.observation_row()
+        revision["observation_type"] = "DATA_REVISION"
+        revision["revision_target_description"] = (
+            "Previously published real-change values for April-June 2026."
+        )
+        observations["observations"].append(revision)
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
+        self.assertTrue(report.ok, report.errors)
+
+        del observations["observations"][0]["revision_target_description"]
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
+        self.assertIn("DATA_REVISION requires revision_target_description", " ".join(report.errors))
+
+    def test_external_data_revision_requires_revision_evidence_role(self):
         schema = self.opened_schema()
         evidence = copy.deepcopy(self.evidence)
         observations = copy.deepcopy(self.observations)
         evidence["evidence"].append(self.evidence_row())
         revision = self.observation_row()
         revision["observation_type"] = "DATA_REVISION"
+        revision["revision_target_description"] = "Previously published estimate."
         observations["observations"].append(revision)
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
-        self.assertIn("DATA_REVISION requires revision_of_observation_id", " ".join(report.errors))
+        self.assertIn("CORRECTION_OR_REVISION role", " ".join(report.errors))
+
+    def test_correction_to_prior_live_observation_requires_explicit_reference(self):
+        schema = self.opened_schema()
+        evidence = copy.deepcopy(self.evidence)
+        observations = copy.deepcopy(self.observations)
+        evidence["evidence"].append(self.evidence_row())
+        corrected = self.observation_row()
+        corrected["verification_state"] = "CORRECTED"
+        observations["observations"].append(corrected)
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
+        self.assertIn("corrected/retracted live observation requires revision reference", " ".join(report.errors))
 
     def test_revision_history_is_append_only_and_acyclic(self):
         schema = self.opened_schema()
