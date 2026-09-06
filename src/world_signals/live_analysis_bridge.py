@@ -37,7 +37,7 @@ def production_live_input_count(reviews_dataset: dict[str, Any]) -> int:
             total += len(live_inputs)
         elif live_inputs is not None:
             # Invalid non-list values still count as a populated production field
-            # so a closed gate fails closed before shape validation can be bypassed.
+            # so a closed gate or population maximum cannot be bypassed by shape drift.
             total += 1
     return total
 
@@ -47,13 +47,12 @@ def validate_live_analysis_bridge(
     reviews_dataset: dict[str, Any],
     live_observations_dataset: dict[str, Any],
 ) -> LiveAnalysisBridgeValidationReport:
-    """Validate the prospective Live Intelligence -> Analysis input boundary.
+    """Validate the Live Intelligence -> Analysis input boundary.
 
-    AY deliberately supports a schema-level contract before production links are
-    opened. When production_live_inputs_allowed is false, any populated
-    ``live_inputs`` field fails closed. Tests may copy the schema and explicitly
-    open that gate to exercise the prospective referential/time semantics without
-    changing production data.
+    AY established the executable grammar with production population closed.
+    Later pressure-audited descendants may open a bounded population without
+    weakening immutable observation selection, time ordering, layer separation,
+    public-projection closure or upstream immutability.
     """
 
     errors: list[str] = []
@@ -63,8 +62,15 @@ def validate_live_analysis_bridge(
             ("Analysis schema must define live_input_policy",)
         )
 
+    mode = policy.get("mode")
+    allowed_modes = {
+        "FOUNDATION_ONLY_NO_PRODUCTION_LINKS",
+        "CONTROLLED_SINGLE_PRODUCTION_LINK",
+    }
+    if mode not in allowed_modes:
+        errors.append(f"Analysis live-input policy has unreviewed mode {mode!r}")
+
     required_policy_values = {
-        "mode": "FOUNDATION_ONLY_NO_PRODUCTION_LINKS",
         "identity_selector": "observation_id",
         "story_id_selector_allowed": False,
         "latest_selector_allowed": False,
@@ -83,12 +89,36 @@ def validate_live_analysis_bridge(
             )
 
     if policy.get("public_live_input_projection_allowed") is not False:
-        errors.append("AY must keep public Live input projection closed")
+        errors.append("Live input public projection must remain closed")
 
     production_allowed = policy.get("production_live_inputs_allowed")
     if production_allowed not in {True, False}:
         errors.append("production_live_inputs_allowed must be explicit boolean")
         production_allowed = False
+
+    max_total: int | None = None
+    max_per_review: int | None = None
+    if mode == "FOUNDATION_ONLY_NO_PRODUCTION_LINKS":
+        if production_allowed is not False:
+            errors.append("AY foundation mode requires production_live_inputs_allowed=false")
+    elif mode == "CONTROLLED_SINGLE_PRODUCTION_LINK":
+        if production_allowed is not True:
+            errors.append("controlled Live-input mode requires production_live_inputs_allowed=true")
+        max_total_raw = policy.get("maximum_production_live_inputs")
+        max_per_review_raw = policy.get("maximum_live_inputs_per_review")
+        if not isinstance(max_total_raw, int) or max_total_raw < 1:
+            errors.append("controlled Live-input mode requires positive maximum_production_live_inputs")
+        else:
+            max_total = max_total_raw
+        if not isinstance(max_per_review_raw, int) or max_per_review_raw < 1:
+            errors.append("controlled Live-input mode requires positive maximum_live_inputs_per_review")
+        else:
+            max_per_review = max_per_review_raw
+        same_anchor = policy.get("factual_input_requires_matching_canonical_occurrence")
+        if same_anchor not in {True, False}:
+            errors.append(
+                "factual_input_requires_matching_canonical_occurrence must be explicit boolean in controlled mode"
+            )
 
     required_input_fields = set(policy.get("required_input_fields") or [])
     allowed_input_fields = set(policy.get("allowed_input_fields") or [])
@@ -126,6 +156,10 @@ def validate_live_analysis_bridge(
             "AY production gate is closed: Analysis reviews may not populate live_inputs"
         )
         return LiveAnalysisBridgeValidationReport(tuple(errors))
+    if max_total is not None and populated_count > max_total:
+        errors.append(
+            f"production Live-input population {populated_count} exceeds reviewed maximum {max_total}"
+        )
 
     for review in reviews_dataset.get("reviews", []):
         analysis_id = review.get("analysis_id") or "<missing-analysis-id>"
@@ -135,6 +169,10 @@ def validate_live_analysis_bridge(
         if not isinstance(live_inputs, list):
             errors.append(f"{analysis_id}: live_inputs must be a list")
             continue
+        if max_per_review is not None and len(live_inputs) > max_per_review:
+            errors.append(
+                f"{analysis_id}: live_inputs count exceeds reviewed per-review maximum {max_per_review}"
+            )
 
         seen_in_review: set[str] = set()
         analysis_as_of = _exact_utc(review.get("analysis_as_of_utc"))
@@ -189,6 +227,23 @@ def validate_live_analysis_bridge(
             ):
                 errors.append(f"{label}: invalid or empty analysis_sections")
 
+            if (
+                observation is not None
+                and isinstance(roles, list)
+                and "FACTUAL_INPUT" in roles
+                and policy.get("factual_input_requires_matching_canonical_occurrence") is True
+            ):
+                review_occurrence = review.get("canonical_occurrence_id")
+                linked_occurrences = {
+                    link.get("occurrence_id")
+                    for link in (observation.get("canonical_links") or [])
+                    if isinstance(link, dict)
+                }
+                if review_occurrence not in linked_occurrences:
+                    errors.append(
+                        f"{label}: FACTUAL_INPUT Live observation must link to the Analysis canonical occurrence"
+                    )
+
             if observation is not None and analysis_as_of is not None:
                 observed_at = _exact_utc(observation.get("observed_at_utc"))
                 if observed_at is None:
@@ -206,12 +261,7 @@ def validate_live_analysis_bridge(
 def public_review_without_live_inputs(
     analysis_schema: dict[str, Any], review: dict[str, Any]
 ) -> dict[str, Any]:
-    """Return a public-safe review copy under the AY projection gate.
-
-    This helper is intentionally not a production-feed opener. It exists so the
-    bridge contract has an executable public-boundary rule before the first real
-    production Live input is admitted.
-    """
+    """Return a public-safe review copy under the Live-input projection gate."""
 
     policy = analysis_schema.get("live_input_policy") or {}
     public_row = deepcopy(review)

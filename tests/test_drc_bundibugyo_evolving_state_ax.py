@@ -19,6 +19,10 @@ assert spec.loader is not None
 spec.loader.exec_module(apply_ax)
 
 
+def version_tuple(raw: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class DRCBundibugyoEvolvingStateAXTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -62,13 +66,18 @@ class DRCBundibugyoEvolvingStateAXTests(unittest.TestCase):
         self.assertEqual(pre["live_intelligence_evidence_count"], 2)
         self.assertEqual(pre["live_intelligence_population_state"], "CONTROLLED_SINGLE_SPECIMEN")
 
-    def test_target_is_v03_three_observations_four_evidence_rows(self):
-        self.assertEqual(self.schema["version"], "0.3")
-        self.assertEqual(self.observations["version"], "0.3")
-        self.assertEqual(self.evidence["version"], "0.3")
-        self.assertEqual(self.observations["population_state"], "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN")
-        self.assertEqual(len(self.observations["observations"]), 3)
-        self.assertEqual(len(self.evidence["evidence"]), 4)
+    def test_ax_target_checkpoint_is_frozen_and_live_descendant_validates(self):
+        target = self.plan["target_state"]
+        self.assertEqual(target["live_intelligence_schema_version"], "0.3")
+        self.assertEqual(target["observation_count"], 3)
+        self.assertEqual(target["evidence_count"], 4)
+        self.assertEqual(target["live_intelligence_population_state"], "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN")
+
+        self.assertGreaterEqual(version_tuple(self.schema["version"]), (0, 3))
+        self.assertGreaterEqual(len(self.observations["observations"]), 3)
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 4)
+        self.assertEqual(self.observations["version"], self.schema["version"])
+        self.assertEqual(self.evidence["version"], self.schema["version"])
         report = self.validate()
         self.assertTrue(report.ok, report.errors)
 
@@ -167,26 +176,33 @@ class DRCBundibugyoEvolvingStateAXTests(unittest.TestCase):
         self.assertFalse(policy["automatic_clustering_allowed"])
         self.assertFalse(policy["story_id_required"])
 
-    def test_population_ceiling_rejects_fourth_observation(self):
+    def test_population_ceiling_rejects_growth_beyond_current_reviewed_policy(self):
+        self.assertEqual(self.plan["target_state"]["observation_count"], 3)
+        self.assertEqual(self.plan["target_state"]["evidence_count"], 4)
         policy = self.schema["population_policy"]
-        self.assertEqual(policy["mode"], "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN")
-        self.assertEqual(policy["maximum_observation_count"], 3)
-        self.assertEqual(policy["maximum_evidence_count"], 4)
+        max_observations = policy["maximum_observation_count"]
+        self.assertGreaterEqual(max_observations, 3)
+
         observations = copy.deepcopy(self.observations)
-        extra = copy.deepcopy(self.by_id["WSLI-HEALTH-COD-BVD-20260830-001"])
-        extra["observation_id"] = "WSLI-HEALTH-COD-BVD-EXTRA"
-        extra["state_update_of_observation_id"] = None
-        observations["observations"].append(extra)
+        template = copy.deepcopy(self.by_id["WSLI-HEALTH-COD-BVD-20260830-001"])
+        counter = 1
+        while len(observations["observations"]) <= max_observations:
+            extra = copy.deepcopy(template)
+            extra["observation_id"] = f"WSLI-HEALTH-COD-BVD-OVERFLOW-{counter}"
+            extra["state_update_of_observation_id"] = None
+            extra["revision_of_observation_id"] = None
+            observations["observations"].append(extra)
+            counter += 1
         report = self.validate(observations=observations)
         self.assertIn("observation population exceeds reviewed policy maximum", " ".join(report.errors))
 
-    def test_public_projection_stays_metadata_only(self):
+    def test_public_projection_stays_metadata_only_for_live_descendant(self):
         projection = public_live_intelligence_projection(self.schema, self.evidence, self.observations, self.canonical)
         meta = projection["metadata"]
-        self.assertEqual(meta["schema_version"], "0.3")
-        self.assertEqual(meta["population_mode"], "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN")
-        self.assertEqual(meta["internal_observation_count"], 3)
-        self.assertEqual(meta["internal_evidence_count"], 4)
+        self.assertEqual(meta["schema_version"], self.schema["version"])
+        self.assertEqual(meta["population_mode"], self.schema["population_policy"]["mode"])
+        self.assertEqual(meta["internal_observation_count"], len(self.observations["observations"]))
+        self.assertEqual(meta["internal_evidence_count"], len(self.evidence["evidence"]))
         self.assertEqual(meta["public_observation_count"], 0)
         self.assertFalse(meta["runtime_feed_claim"])
         self.assertEqual(projection["observations"], [])

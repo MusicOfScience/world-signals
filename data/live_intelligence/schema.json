@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.3",
+  "version": "0.4",
   "reference_date": "2026-09-06",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -205,8 +205,11 @@
     "A later as-of snapshot of a developing story is a new state observation, not a correction of the earlier snapshot unless the source explicitly corrects prior facts.",
     "Manual reviewed story IDs are grouping keys only; they are not Canonical occurrence identities, causal claims or analytical conclusions.",
     "State-as-of time is separate from event time, source publication time and WORLD SIGNALS observation time; civil dates may not be promoted to synthetic timestamps.",
-    "AX v0.3 allows only the AW Nepal specimen plus two reviewed DRC outbreak snapshots; a later pressure audit is required before any fourth observation or broader ingestion.",
-    "Public observation projection, automatic ingestion and automatic story clustering remain prohibited in AX v0.3."
+    "AX v0.3 is a frozen historical checkpoint of three observations and four evidence rows; legitimate later descendants may grow only through a separately pressure-audited contract.",
+    "AZ v0.4 adds exactly one reviewed ECONOMIC_DATA_OBSERVATION for Japan July 2026 FIES and does not convert the same release's retrospective April-June data-vintage note into synthetic prior Live history.",
+    "A scheduled Live economic-data observation may link OUTCOME_OF a real completed Canonical occurrence without changing Canonical identity, provenance or timing.",
+    "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in AZ v0.4.",
+    "A fifth Live observation or broader ingestion requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -219,15 +222,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+    "mode": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 3,
-    "maximum_evidence_count": 4,
+    "maximum_observation_count": 4,
+    "maximum_evidence_count": 6,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "AX opens only enough authority to preserve the AW Nepal specimen and add two reviewed as-of snapshots of one DRC Bundibugyo outbreak story. A later pressure audit is required before any fourth observation or broader ingestion."
+    "reason": "AZ adds exactly one reviewed Japan FIES economic-data observation with a real OUTCOME_OF Canonical link and two primary-official Live evidence rows. Further Live population requires another pressure audit."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -238,5 +241,15 @@
     "evidence_count": 2,
     "post_merge_main_sha": "721206169033eb0ceb695075d44fb38e7fa2edc3",
     "historical_contract": "AW v0.2 opened exactly one reviewed Nepal physical-shock specimen with two official evidence rows while public projection and automatic ingestion remained closed."
+  },
+  "ax_checkpoint": {
+    "schema_version": "0.3",
+    "observations_version": "0.3",
+    "evidence_version": "0.3",
+    "population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+    "observation_count": 3,
+    "evidence_count": 4,
+    "post_merge_main_sha": "0a7608ab56116d0f65ffd1492a3da87bcbf35f47",
+    "historical_contract": "AX v0.3 preserved the AW Nepal shock and added two reviewed DRC evolving-state snapshots while public projection, automatic ingestion and automatic story clustering remained closed."
   }
 }

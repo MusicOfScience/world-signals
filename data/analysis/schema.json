@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.5",
+  "version": "0.6",
   "reference_date": "2026-09-06",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
@@ -173,8 +173,10 @@
     "Live Intelligence inputs remain distinct from Analysis evidence; selecting a Live observation does not transitively migrate its evidence into the analytical evidence registry.",
     "Analysis may not mutate, revise, relabel or otherwise rewrite an upstream Live Intelligence observation through the input relationship.",
     "A developing Live story is consumed snapshot-by-snapshot: analyses requiring multiple states must identify each observation explicitly rather than infer a latest or complete story history.",
-    "AY keeps production Live Intelligence inputs and public Live-input projection closed; the schema and validator contract are established before the first populated relationship.",
-    "A future production Live Intelligence input requires a separate pressure audit and may not be opened merely because the AY contract validates hypothetical fixtures."
+    "AY v0.5 is the frozen production-closed bridge checkpoint; AZ is the first pressure-audited descendant to populate exactly one production Live Intelligence input.",
+    "In AZ, a FACTUAL_INPUT Live observation must explicitly link the same Canonical occurrence as the Analysis review; this role-specific requirement does not silently turn story identity into Canonical identity.",
+    "AZ permits at most one production Live input in total and at most one per review; public Live-input projection remains closed.",
+    "Further production Live-input population beyond the AZ bounded relationship requires another pressure audit."
   ],
   "market_measurement_policy": {
     "canonical_event_time_and_market_measurement_precision_are_independent": true,
@@ -220,8 +222,8 @@
     }
   },
   "live_input_policy": {
-    "mode": "FOUNDATION_ONLY_NO_PRODUCTION_LINKS",
-    "production_live_inputs_allowed": false,
+    "mode": "CONTROLLED_SINGLE_PRODUCTION_LINK",
+    "production_live_inputs_allowed": true,
     "public_live_input_projection_allowed": false,
     "identity_selector": "observation_id",
     "story_id_selector_allowed": false,
@@ -248,6 +250,9 @@
       "CONTEXT_OR_ALTERNATIVE_INPUT",
       "SECOND_ORDER_INPUT",
       "MARKET_OBSERVATION_INPUT"
-    ]
+    ],
+    "maximum_production_live_inputs": 1,
+    "maximum_live_inputs_per_review": 1,
+    "factual_input_requires_matching_canonical_occurrence": true
   }
 }
