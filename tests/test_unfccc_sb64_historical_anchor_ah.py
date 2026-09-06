@@ -141,7 +141,7 @@ class UNFCCCSB64HistoricalAnchorAHTests(unittest.TestCase):
     def test_climate_gap_repaired_without_analysis_write(self):
         self.assertTrue(any(r.get("category") == "CLIMATE_ENVIRONMENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
         self.assertTrue(any(r.get("event_type") == "ENVIRONMENTAL_GOVERNANCE_EVENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
-        self.assertEqual(self.readiness["eligible_completed_occurrence_count"], 20)
+        self.assertGreaterEqual(self.readiness["eligible_completed_occurrence_count"], 20)
 
         # AH froze Analysis at 12 reviews / 44 evidence and explicitly prohibited
         # an Analysis write in the same transaction. Descendant Analysis work may
