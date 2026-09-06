@@ -107,7 +107,7 @@ The `MARKET_DATA_RIGHTS` role makes the rights/reuse basis auditable in the Anal
 
 Non-exact source-reported rows remain valid and are not upgraded merely because their canonical event has an exact timestamp.
 
-The static build legitimately updates `docs/data/analysis.json` only to expose the new Analysis schema version and contract metadata; it does not create exact observations.
+The static build generates `docs/data/analysis.json` to expose the new Analysis schema version and contract metadata for verification. `/docs/` is git-ignored, so this is a generated build artefact rather than part of AK's repository mutation boundary; no exact observations are created.
 
 ## Guardrails
 
