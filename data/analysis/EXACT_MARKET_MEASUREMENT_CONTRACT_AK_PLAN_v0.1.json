@@ -55,6 +55,7 @@
         "OTHER_REVIEWED_REUSE_BASIS"
       ]
     },
+    "new_evidence_role": "MARKET_DATA_RIGHTS",
     "exact_timestamp_series_required_fields": [
       "market_series_id",
       "market_timezone",
@@ -63,6 +64,7 @@
       "before_observation_utc",
       "after_observation_utc",
       "data_use_basis",
+      "data_use_evidence_ref",
       "public_projection_permitted"
     ],
     "exact_timestamp_series_rules": {
@@ -74,6 +76,12 @@
       "market_timezone_must_be_valid_iana": true,
       "market_observation_evidence_role_required": true,
       "allowed_market_observation_evidence_classes": [
+        "PRIMARY_OFFICIAL",
+        "MARKET_DATA_PROVIDER"
+      ],
+      "data_use_basis_evidence_role_required": "MARKET_DATA_RIGHTS",
+      "data_use_evidence_ref_must_be_in_movement_evidence_refs": true,
+      "allowed_market_data_rights_evidence_classes": [
         "PRIMARY_OFFICIAL",
         "MARKET_DATA_PROVIDER"
       ],
@@ -130,6 +138,7 @@
     "canonical_event_time_implies_exact_market_precision": false,
     "newswire_intraday_description_is_exact_series": false,
     "licensed_internal_access_implies_public_redistribution": false,
+    "unproven_boolean_permission_is_sufficient_rights_provenance": false,
     "exact_series_may_backfill_missing_canonical_time": false,
     "first_exact_series_must_be_populated_in_this_tranche": false,
     "market_structure_gap_must_be_closed_in_this_tranche": false,
