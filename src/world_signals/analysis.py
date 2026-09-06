@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,30 @@ def _parse_iso(raw: str) -> bool:
         datetime.fromisoformat(raw.replace("Z", "+00:00"))
         return True
     except (TypeError, ValueError, AttributeError):
+        return False
+
+
+def _parse_exact_utc(raw: Any) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except (TypeError, ValueError, AttributeError):
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    if parsed.utcoffset() != timezone.utc.utcoffset(parsed):
+        return None
+    return parsed.astimezone(timezone.utc)
+
+
+def _valid_iana_timezone(raw: Any) -> bool:
+    if not isinstance(raw, str) or not raw.strip():
+        return False
+    try:
+        ZoneInfo(raw)
+        return True
+    except (ZoneInfoNotFoundError, ValueError):
         return False
 
 
@@ -239,6 +264,7 @@ def validate_analysis(
     allowed_representation = set(vocab.get("movement_representation", []))
     allowed_precision = set(vocab.get("measurement_precision", []))
     allowed_second_order = set(vocab.get("second_order_status", []))
+    allowed_market_data_use_basis = set(vocab.get("market_data_use_basis", []))
     required_post_lifecycle = population_policy.get("post_event_anchor_lifecycle", "COMPLETED")
 
     for review in reviews_dataset.get("reviews", []):
@@ -329,7 +355,8 @@ def validate_analysis(
             representation = movement.get("movement_representation")
             if representation not in allowed_representation:
                 errors.append(f"{analysis_id}/{movement_id}: invalid movement_representation")
-            if movement.get("measurement_precision") not in allowed_precision:
+            measurement_precision = movement.get("measurement_precision")
+            if measurement_precision not in allowed_precision:
                 errors.append(f"{analysis_id}/{movement_id}: invalid measurement_precision")
             if not movement.get("measurement_window"):
                 errors.append(f"{analysis_id}/{movement_id}: measurement_window required")
@@ -358,6 +385,122 @@ def validate_analysis(
                 if movement.get("measurement_precision") != "QUALITATIVE_ONLY":
                     errors.append(
                         f"{analysis_id}/{movement_id}: qualitative movement requires QUALITATIVE_ONLY precision"
+                    )
+
+            exact_fields = (
+                "market_series_id",
+                "market_timezone",
+                "series_granularity",
+                "event_anchor_utc",
+                "before_observation_utc",
+                "after_observation_utc",
+                "data_use_basis",
+                "data_use_evidence_ref",
+                "public_projection_permitted",
+            )
+            if measurement_precision == "EXACT_TIMESTAMP_SERIES":
+                if representation != "PRE_POST_VALUES":
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires PRE_POST_VALUES"
+                    )
+                if independently_reconstructed is not True:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires independently_reconstructed=true"
+                    )
+                for field in ("market_series_id", "series_granularity"):
+                    if not str(movement.get(field) or "").strip():
+                        errors.append(
+                            f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires {field}"
+                        )
+                if not _valid_iana_timezone(movement.get("market_timezone")):
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires a valid IANA market_timezone"
+                    )
+                if movement.get("data_use_basis") not in allowed_market_data_use_basis:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires a reviewed data_use_basis"
+                    )
+                if movement.get("public_projection_permitted") is not True:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires public_projection_permitted=true"
+                    )
+
+                event_anchor = _parse_exact_utc(movement.get("event_anchor_utc"))
+                before_observation = _parse_exact_utc(movement.get("before_observation_utc"))
+                after_observation = _parse_exact_utc(movement.get("after_observation_utc"))
+                if event_anchor is None:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires UTC event_anchor_utc"
+                    )
+                if before_observation is None:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires UTC before_observation_utc"
+                    )
+                if after_observation is None:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires UTC after_observation_utc"
+                    )
+
+                canonical_anchor = _parse_exact_utc(canonical.get("start_utc")) if canonical else None
+                if canonical_anchor is None:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires an existing canonical start_utc"
+                    )
+                elif event_anchor is not None and event_anchor != canonical_anchor:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: event_anchor_utc must equal canonical start_utc"
+                    )
+                if (
+                    before_observation is not None
+                    and event_anchor is not None
+                    and after_observation is not None
+                    and not (before_observation < event_anchor <= after_observation)
+                ):
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: exact observations must satisfy before < event anchor <= after"
+                    )
+
+                movement_evidence_refs = movement.get("evidence_refs") or []
+                exact_evidence = [
+                    evidence_by_id[ref]
+                    for ref in movement_evidence_refs
+                    if ref in evidence_by_id
+                ]
+                qualified_market_evidence = [
+                    row
+                    for row in exact_evidence
+                    if "MARKET_OBSERVATION" in (row.get("roles") or [])
+                    and row.get("evidence_class") in {"PRIMARY_OFFICIAL", "MARKET_DATA_PROVIDER"}
+                ]
+                if not qualified_market_evidence:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires MARKET_OBSERVATION evidence from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence"
+                    )
+
+                rights_ref = movement.get("data_use_evidence_ref")
+                if not isinstance(rights_ref, str) or not rights_ref.strip():
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: EXACT_TIMESTAMP_SERIES requires data_use_evidence_ref"
+                    )
+                elif rights_ref not in movement_evidence_refs:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: data_use_evidence_ref must be included in movement evidence_refs"
+                    )
+                else:
+                    rights_evidence = evidence_by_id.get(rights_ref)
+                    if (
+                        rights_evidence is None
+                        or "MARKET_DATA_RIGHTS" not in (rights_evidence.get("roles") or [])
+                        or rights_evidence.get("evidence_class") not in {"PRIMARY_OFFICIAL", "MARKET_DATA_PROVIDER"}
+                    ):
+                        errors.append(
+                            f"{analysis_id}/{movement_id}: data_use_evidence_ref must resolve to MARKET_DATA_RIGHTS evidence from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence"
+                        )
+            else:
+                unexpected_exact_fields = [field for field in exact_fields if field in movement]
+                if unexpected_exact_fields:
+                    errors.append(
+                        f"{analysis_id}/{movement_id}: exact-series-only fields require EXACT_TIMESTAMP_SERIES precision: {unexpected_exact_fields}"
                     )
 
         connection = review.get("what_appears_connected") or {}
