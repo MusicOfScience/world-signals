@@ -40,7 +40,7 @@ jobs:
           assert len(x['adapters']) == 8
           print('AT_IMD_NOT_LIVE_POLLED_OK')
           PY
-      - name: Read-only AT candidate simulation
+      - name: Read-only AT candidate simulation after repository import-path proof
         run: python scripts/apply_imd_heatwave_outlook_at.py --check
       - name: Targeted AT regressions
         run: python -m unittest tests.test_imd_heatwave_outlook_at -v
