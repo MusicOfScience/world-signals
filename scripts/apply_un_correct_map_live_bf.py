@@ -75,7 +75,7 @@ def find_by_id(rows: list[dict[str, Any]], key: str, value: str) -> dict[str, An
     return matches[0] if matches else None
 
 
-def assert_protected_state(plan: dict[str, Any]) -> None:
+def assert_protected_state(plan: dict[str, Any], *, exact_upstream: bool) -> None:
     pre = plan["pre_state"]
     canonical = load(CANONICAL_PATH)
     sources = load(SOURCES_PATH)
@@ -84,12 +84,20 @@ def assert_protected_state(plan: dict[str, Any]) -> None:
     reviews = load(REVIEWS_PATH)
     analysis_evidence = load(ANALYSIS_EVIDENCE_PATH)
 
-    require(canonical.get("version") == pre["canonical_registry_version"], "BF Canonical version drift")
-    require(len(canonical.get("records", [])) == pre["canonical_record_count"], "BF Canonical population drift")
-    require(sources.get("version") == pre["source_registry_version"], "BF Source Registry version drift")
-    require(len(sources.get("sources", [])) == pre["source_count"], "BF Source Registry population drift")
-    require(ledger.get("version") == pre["change_ledger_version"], "BF Change Ledger version drift")
-    require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "BF Change Ledger population drift")
+    if exact_upstream:
+        require(canonical.get("version") == pre["canonical_registry_version"], "BF Canonical version drift")
+        require(len(canonical.get("records", [])) == pre["canonical_record_count"], "BF Canonical population drift")
+        require(sources.get("version") == pre["source_registry_version"], "BF Source Registry version drift")
+        require(len(sources.get("sources", [])) == pre["source_count"], "BF Source Registry population drift")
+        require(ledger.get("version") == pre["change_ledger_version"], "BF Change Ledger version drift")
+        require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "BF Change Ledger population drift")
+    else:
+        require(version_at_least(canonical.get("version"), pre["canonical_registry_version"]), "BF descendant Canonical version regressed")
+        require(len(canonical.get("records", [])) >= pre["canonical_record_count"], "BF descendant Canonical population regressed")
+        require(version_at_least(sources.get("version"), pre["source_registry_version"]), "BF descendant Source Registry version regressed")
+        require(len(sources.get("sources", [])) >= pre["source_count"], "BF descendant Source Registry population regressed")
+        require(version_at_least(ledger.get("version"), pre["change_ledger_version"]), "BF descendant Change Ledger version regressed")
+        require(len(ledger.get("changes", [])) >= pre["change_ledger_count"], "BF descendant Change Ledger population regressed")
     require(version_at_least(analysis_schema.get("version"), pre["analysis_schema_version"]), "BF Analysis schema regressed")
     require(len(reviews.get("reviews", [])) >= pre["analysis_review_count"], "BF Analysis review population regressed")
     require(len(analysis_evidence.get("evidence", [])) >= pre["analysis_evidence_count"], "BF Analysis evidence population regressed")
@@ -124,7 +132,7 @@ def assert_preconditions(plan: dict[str, Any], payload: dict[str, Any]) -> bool:
         require(row.get("canonical_provenance_effect") == "NONE", "BF Live evidence cannot alter Canonical provenance")
         require(row.get("publication_time") == {"precision": "CIVIL_DATE", "published_date": "2026-09-04"}, "BF publication time must remain civil-date only")
 
-    assert_protected_state(plan)
+    assert_protected_state(plan, exact_upstream=not bool(present_observation))
 
     if not present_observation:
         require(schema.get("version") == pre["live_schema_version"], "BF Live schema prestate drift")
