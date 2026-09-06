@@ -14,8 +14,8 @@
     "change_ledger_count": 59,
     "biosecurity_overlay_version": "0.13",
     "biosecurity_overlay_checkpoint": {
-      "canonical_registry_version": "0.38",
-      "canonical_record_count": 688
+      "registry_version": "0.38",
+      "record_count": 688
     },
     "monitor_expectations_version": "0.10",
     "monitor_adapter_count": 8,
@@ -128,8 +128,8 @@
     "change_ledger_count": 60,
     "biosecurity_overlay_version": "0.14",
     "biosecurity_overlay_checkpoint": {
-      "canonical_registry_version": "0.39",
-      "canonical_record_count": 689
+      "registry_version": "0.39",
+      "record_count": 689
     },
     "monitor_expectations_version": "0.10",
     "monitor_adapter_count": 8,
