@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.40",
+  "version": "0.41",
   "reference_date": "2026-09-07",
   "record_count": 689,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
@@ -42760,7 +42760,7 @@
       "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
       "source_id": "WSSRC-COM-001",
       "primary_source_assertion_id": "WSA-e57ec413d7095a56",
-      "last_successful_assertion_id": "WSA-cddde6887f8083ca",
+      "last_successful_assertion_id": "WSA-c1f92a2fae083bf1",
       "status_history": [
         {
           "as_of": "2026-09-02",
@@ -42790,6 +42790,12 @@
           "role": "COMPLETION_FALLBACK_VERIFICATION_PRIMARY_PENDING",
           "source_locator": "https://www.reuters.com/business/energy/opec-set-keep-oil-output-policy-unchanged-sunday-sources-say-2026-09-06/",
           "primary_provenance_upgrade_state": "REQUIRED_WHEN_RETRIEVABLE"
+        },
+        {
+          "source_id": "WSSRC-COM-016",
+          "role": "OFFICIAL_PARTICIPATING_GOVERNMENT_COMPLETION_CONFIRMATION_PRIMARY_OPEC_PENDING",
+          "source_locator": "https://www.spa.gov.sa/en/N2669918",
+          "primary_opec_provenance_state": "REQUIRED_WHEN_RETRIEVABLE"
         }
       ],
       "intrinsic_importance": "HIGH",

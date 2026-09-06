@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-07",
-  "version": "1.82",
+  "version": "1.83",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10215,6 +10215,53 @@
         "No article text, market attribution or forward policy inference is retained."
       ],
       "notes": "Completion-only fallback provenance. WSSRC-COM-001 remains the governed OPEC schedule/decision authority. BE does not downgrade that primary authority and does not create a future occurrence from secondary reporting."
+    },
+    {
+      "source_id": "WSSRC-COM-016",
+      "institution": "Saudi Press Agency (SPA)",
+      "jurisdiction": "Saudi Arabia / OPEC+",
+      "domain": "energy_commodities",
+      "source_type": "official_government_news_agency_confirmation",
+      "endpoint_role": "Official participating-government confirmation of the 6 September 2026 seven-country OPEC+ review and announced October production decision; supporting completion provenance only, not competent OPEC issuing authority",
+      "authoritative_url": "https://www.spa.gov.sa/en/N2669918",
+      "information_supplied": "SPA records that Saudi Arabia, Russia, Iraq, Kuwait, Kazakhstan, Algeria and Oman met virtually on 6 September 2026 and decided to maintain September 2026 required production for October 2026. Used as official participating-government confirmation while competent OPEC primary outcome provenance remains pending.",
+      "future_schedule_horizon": "post-event official confirmation only; no future occurrence may be created from this source without separate competent schedule review",
+      "typical_advance_notice": "post-event official announcement",
+      "source_timezone": "Asia/Riyadh",
+      "timezone_scope": "PUBLICATION_NATIVE_ONLY_NOT_CANONICAL_EVENT_TIME",
+      "machine_readable_available": "HTML_OFFICIAL_NEWS_ARTICLE",
+      "parser_type": "MANUAL_OFFICIAL_PARTICIPATING_GOVERNMENT_CONFIRMATION",
+      "parser_version": null,
+      "verification_mode": "MANUAL_OFFICIAL_PARTICIPATING_GOVERNMENT_CONFIRMATION",
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "canonical_dependency_count": 0,
+      "canonical_provenance_use": "MANUAL_SUPPORTING_OFFICIAL_CONFIRMATION_ONLY",
+      "ingestion_permission": "MINIMAL_FACTUAL_METADATA_AND_LINK_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_NOT_REVIEWED",
+      "monitoring_readiness_status": "NOT_A_MONITOR_SOURCE",
+      "monitoring_priority_score": 0,
+      "monitoring_readiness_assessed_at": "2026-09-07",
+      "recommended_verification_cadence": "none; retain as reviewed supporting provenance and continue seeking competent OPEC primary outcome source",
+      "licence_review_status": "OFFICIAL_SOURCE_LINK_ONLY_RIGHTS_NOT_INFERRED",
+      "licence_constraints": "No broad republication or automated retrieval rights are inferred from public HTML availability; retain only minimal factual metadata, source identity and link.",
+      "redistribution_permission": "LINK_AND_MINIMAL_FACTUAL_METADATA_ONLY",
+      "rights_evidence_url": null,
+      "rights_summary": "BG uses SPA as a manually reviewed official participating-government confirmation. Public accessibility does not grant production automation or broad reuse rights.",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "rights_review_scope": "OPEC_BG_OFFICIAL_PARTICIPATING_GOVERNMENT_CONFIRMATION_MINIMAL_FACTUAL_PROVENANCE",
+      "rights_reviewed_at": "2026-09-07",
+      "backup_source": "WSSRC-COM-001",
+      "known_limitations": [
+        "SPA is an official Saudi government news agency but is not the competent OPEC issuing institution.",
+        "The SPA publication timestamp is source-publication time and must not be promoted to canonical event time.",
+        "Current accessible/indexed OPEC surfaces reviewed for BG did not expose the 6 September outcome; absence is not evidence that no OPEC statement exists.",
+        "The competent OPEC primary provenance requirement remains REQUIRED_WHEN_RETRIEVABLE.",
+        "Reuters WSSRC-COM-015 must remain preserved in historical provenance because it was the evidence used for BE completion.",
+        "The 4 October date in SPA is not forward-schedule authority for this source and BG creates no occurrence from it."
+      ],
+      "notes": "Official participating-government completion confirmation only. WSSRC-COM-001 remains the governed OPEC schedule/decision authority; Reuters fallback remains in history; competent OPEC outcome provenance remains pending."
     }
   ],
   "activation_backlog": [
