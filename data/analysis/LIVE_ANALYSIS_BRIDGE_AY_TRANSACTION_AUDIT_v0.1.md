@@ -61,3 +61,9 @@ SHA-256 equality against the transaction-start branch state was proved for Canon
 The controlled target passed the registry, Live Intelligence and Analysis validators; full repository unittest discovery; Python compilation; standing browser JavaScript checks; static-site build; exact target-state assertions; the exact-series zero invariant; the zero-production-Live-input invariant; and protected-dataset hash equality.
 
 The temporary transaction workflow removes itself after committing the reviewed target. Ordinary pull-request CI remains a separate post-transaction validation gate. Manual merge remains required.
+
+## Transport recovery
+
+The controlled transaction created the validated target commit `3106a1ac0a94885f388ce62a8137094dff05f31a` and its temporary-workflow self-removal descendant `695f7db67a2a119cf8c3ce267a93125212bd3f73` locally in the GitHub Actions runner. GitHub then rejected the runner's branch-ref update because the workflow token was not authorised to create or update the standing `.github/workflows/ci.yml` file. The rejection occurred after all substantive transaction checks and commits had succeeded; no partial target ref was published by that runner push.
+
+Both exact commit objects were retained by GitHub. The user-authorised repository connection then advanced `feature/post-ax-live-analysis-bridge-ay` by fast-forward from `29ea3b6179713161566c327a73c4933207cfbe1f` to the already-validated self-removal commit `695f7db67a2a119cf8c3ce267a93125212bd3f73`. No target reconstruction or file-by-file replay was used. This audit addendum records that transport path; a fresh final-head validation is required before the pull request is opened.
