@@ -1,0 +1,138 @@
+name: AZ final branch validation
+
+on:
+  push:
+    branches: [feature/post-ay-first-live-analysis-link-az]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact base and permanent diff under validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=bc8e588624e8a76f6847d7c80aef7e7fa5ecafa9
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          python - <<'PY'
+          import subprocess
+          expected={
+            '.github/workflows/az-final-branch-validation.yml',
+            'PROJECT_STATUS.md','ROADMAP.md',
+            'data/analysis/JAPAN_FIES_LIVE_ANALYSIS_AZ_PAYLOAD_v0.1.json',
+            'data/analysis/JAPAN_FIES_LIVE_ANALYSIS_AZ_PLAN_v0.1.json',
+            'data/analysis/JAPAN_FIES_LIVE_ANALYSIS_AZ_TRANSACTION_AUDIT_v0.1.md',
+            'data/analysis/POST_AY_PRESSURE_AUDIT_AZ_v0.1.md',
+            'data/analysis/event_reviews.json','data/analysis/evidence_registry.json','data/analysis/schema.json',
+            'data/live_intelligence/evidence_registry.json','data/live_intelligence/observations.json','data/live_intelligence/schema.json',
+            'scripts/apply_japan_fies_live_analysis_az.py',
+            'src/world_signals/live_analysis_bridge.py',
+            'tests/test_analysis_sample_audit_y.py',
+            'tests/test_drc_bundibugyo_evolving_state_ax.py',
+            'tests/test_imd_heatwave_outlook_analysis_au.py',
+            'tests/test_japan_fies_live_analysis_az.py',
+            'tests/test_live_analysis_bridge_ay.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only','origin/main...HEAD'],text=True).splitlines())
+          assert changed==expected,(changed,expected)
+          PY
+      - name: Validate AZ final state exhaustively
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_japan_fies_live_analysis_az.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+      - name: Prove final governed state and protected-layer identity to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          ROOT=Path('.')
+          sys.path.insert(0,str(ROOT/'src'))
+          from world_signals.live_analysis_bridge import production_live_input_count
+          def load(p): return json.loads((ROOT/p).read_text())
+          canonical=load('data/canonical/registry.json')
+          live_schema=load('data/live_intelligence/schema.json')
+          live_obs=load('data/live_intelligence/observations.json')
+          live_ev=load('data/live_intelligence/evidence_registry.json')
+          schema=load('data/analysis/schema.json')
+          reviews=load('data/analysis/event_reviews.json')
+          evidence=load('data/analysis/evidence_registry.json')
+          payload=load('data/analysis/JAPAN_FIES_LIVE_ANALYSIS_AZ_PAYLOAD_v0.1.json')
+          assert canonical['version']=='0.38' and len(canonical['records'])==688
+          assert live_schema['version']=='0.4'
+          assert live_obs['version']=='0.4' and len(live_obs['observations'])==4
+          assert live_ev['version']=='0.4' and len(live_ev['evidence'])==6
+          assert schema['version']=='0.6'
+          assert reviews['version']=='0.17' and len(reviews['reviews'])==21
+          assert evidence['version']=='0.17' and len(evidence['evidence'])==95
+          assert production_live_input_count(reviews)==1
+          policy=schema['live_input_policy']
+          assert policy['maximum_production_live_inputs']==1
+          assert policy['maximum_live_inputs_per_review']==1
+          assert policy['public_live_input_projection_allowed'] is False
+          review=next(r for r in reviews['reviews'] if r['analysis_id']=='WSAN-JP-FIES-202607-001')
+          assert review['canonical_occurrence_id']=='WSO-MAC-B-0041'
+          assert review['live_inputs']==payload['analysis_review']['live_inputs']
+          assert review['what_moved']==[]
+          assert review['canonical_release_utc'] is None
+          exact=sum(1 for r in reviews['reviews'] for m in (r.get('what_moved') or []) if m.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
+          assert exact==0
+          assert not (ROOT/'docs').exists()
+          PY
+          for p in \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json; do
+              test "$(git show origin/main:"$p" | sha256sum | cut -d' ' -f1)" = "$(sha256sum "$p" | cut -d' ' -f1)"
+          done
+          test -z "$(git diff --name-only)"
+      - name: Self-remove final validation workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/az-final-branch-validation.yml
+          git commit -m 'AZ: remove temporary final branch validation workflow'
+          git push origin HEAD:feature/post-ay-first-live-analysis-link-az
