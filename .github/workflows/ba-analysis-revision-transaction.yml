@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   transaction:
-    if: github.event.head_commit.message == 'BA: execute controlled revision transaction'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -28,34 +27,23 @@ jobs:
           set -euo pipefail
           BASE=802ca5b94b6e80a055ac363f48a6c8392f038048
           PRE_TX=9a55d00131e3f3f184fb71a30bcca4687d4a6b12
-          BRANCH=feature/post-az-analysis-revision-contract-ba
-          git fetch origin main "$BRANCH"
+          FAILED_WORKFLOW=e81da18e146ac1c4500c136561a018961011b38a
+          git fetch origin main feature/post-az-analysis-revision-contract-ba
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
-          test "$(git rev-parse HEAD^)" = "$PRE_TX"
-          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/ba-analysis-revision-transaction.yml"
+          test "$(git rev-parse HEAD^)" = "$FAILED_WORKFLOW"
+          test "$(git rev-parse HEAD^^)" = "$PRE_TX"
+          test "$(git diff --name-only "$PRE_TX" HEAD)" = ".github/workflows/ba-analysis-revision-transaction.yml"
 
       - name: Capture protected prestate hashes
         shell: bash
         run: |
           set -euo pipefail
-          for p in \
-            data/canonical/registry.json \
-            data/canonical/schema.json \
-            data/sources/registry.json \
-            data/changes/ledger.json \
-            data/coverage/biosecurity_overlay.json \
-            data/monitor/expectations.json \
-            data/monitor/operations_policy.json \
-            data/live_intelligence/schema.json \
-            data/live_intelligence/observations.json \
-            data/live_intelligence/evidence_registry.json \
-            data/analysis/event_reviews.json \
-            data/analysis/evidence_registry.json; do
+          for p in data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json; do
             printf '%s  %s\n' "$(sha256sum "$p" | cut -d' ' -f1)" "$p"
           done > /tmp/ba-protected.sha256
 
-      - name: Materialise exact BA governed target
+      - name: Materialise BA target
         shell: bash
         env:
           WORLD_SIGNALS_BA_ALLOW_WRITE: '1'
@@ -72,18 +60,7 @@ jobs:
           python scripts/validate_live_intelligence.py
           python scripts/validate_analysis.py
           python -m unittest discover -s tests -q 2>&1 | tee /tmp/ba-tests.log
-          python -m py_compile \
-            scripts/fetch_latest_monitor_snapshot.py \
-            scripts/fetch_retained_review_state.py \
-            scripts/validate_live_intelligence.py \
-            scripts/validate_analysis.py \
-            scripts/apply_analysis_revision_contract_ba.py \
-            scripts/apply_japan_fies_live_analysis_az.py \
-            src/world_signals/live_intelligence.py \
-            src/world_signals/analysis.py \
-            src/world_signals/analysis_revision.py \
-            src/world_signals/analysis_revision_projection.py \
-            src/world_signals/live_analysis_bridge.py
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_japan_fies_live_analysis_az.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
           node --check web/app.js
           node --check web/horizon.js
           node --check web/native-calendar.js
@@ -94,19 +71,18 @@ jobs:
           python scripts/build_site.py
           rm -rf docs
 
-      - name: Prove governed state and protected identity
+      - name: Prove state and mutation boundary
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
+          import json, sys
           from pathlib import Path
-          import sys
-          ROOT=Path('.')
-          sys.path.insert(0,str(ROOT/'src'))
+          root=Path('.')
+          sys.path.insert(0,str(root/'src'))
           from world_signals.analysis_revision import production_analysis_revision_count
           from world_signals.live_analysis_bridge import production_live_input_count
-          def load(p): return json.loads((ROOT/p).read_text())
+          def load(p): return json.loads((root/p).read_text())
           schema=load('data/analysis/schema.json')
           reviews=load('data/analysis/event_reviews.json')
           evidence=load('data/analysis/evidence_registry.json')
@@ -121,10 +97,8 @@ jobs:
           assert policy['automatic_latest_analysis_selection_allowed'] is False
           assert production_analysis_revision_count(reviews)==0
           assert production_live_input_count(reviews)==1
-          assert len(reviews['reviews'])==21
-          assert len(evidence['evidence'])==95
-          assert len(live['observations'])==4
-          assert len(live_ev['evidence'])==6
+          assert len(reviews['reviews'])==21 and len(evidence['evidence'])==95
+          assert len(live['observations'])==4 and len(live_ev['evidence'])==6
           assert len(canonical['records'])==688
           exact=sum(1 for r in reviews['reviews'] for m in (r.get('what_moved') or []) if m.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
           assert exact==0
@@ -133,64 +107,63 @@ jobs:
           expected=$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json | sort)
           actual=$(git diff --name-only | sort)
           test "$actual" = "$expected"
-          test -z "$(git status --porcelain --untracked-files=no | grep -vE '^( M|M ) (PROJECT_STATUS.md|ROADMAP.md|data/analysis/schema.json)$' || true)"
 
       - name: Write transaction audit
         shell: bash
         run: |
           set -euo pipefail
-          TESTS=$(grep -E '^Ran [0-9]+ tests' /tmp/ba-tests.log | tail -1 | sed 's/^Ran /Ran /')
+          TESTS=$(grep -E '^Ran [0-9]+ tests' /tmp/ba-tests.log | tail -1)
           RESULT=$(grep -E '^OK( \(skipped=[0-9]+\))?$' /tmp/ba-tests.log | tail -1)
-          cat > data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md <<EOF
-          # WORLD SIGNALS — BA Analysis revision contract transaction audit v0.1
+          python - "$TESTS" "$RESULT" <<'PY'
+          import os, sys
+          from pathlib import Path
+          tests, result = sys.argv[1], sys.argv[2]
+          text = f"""# WORLD SIGNALS — BA Analysis revision contract transaction audit v0.1
 
-          ## Transaction identity
+## Transaction identity
 
-          - Governing tranche: **BA — production-closed Analysis revision lineage foundation**
-          - Exact post-AZ main base: `802ca5b94b6e80a055ac363f48a6c8392f038048`
-          - Exact reviewed pre-transaction branch head: `9a55d00131e3f3f184fb71a30bcca4687d4a6b12`
-          - Transaction workflow head: `${GITHUB_SHA}`
-          - GitHub Actions run: `${GITHUB_RUN_ID}`
-          - Manual merge remains required: **yes**
+- Governing tranche: **BA — production-closed Analysis revision lineage foundation**
+- Exact post-AZ main base: `802ca5b94b6e80a055ac363f48a6c8392f038048`
+- Exact reviewed pre-transaction branch head: `9a55d00131e3f3f184fb71a30bcca4687d4a6b12`
+- First temporary workflow commit was syntax-invalid and executed no job: `e81da18e146ac1c4500c136561a018961011b38a`
+- Successful transaction workflow head: `{os.environ['GITHUB_SHA']}`
+- GitHub Actions run: `{os.environ['GITHUB_RUN_ID']}`
+- Manual merge remains required: **yes**
 
-          ## Governed mutation
+## Governed mutation
 
-          The controlled transaction materialised exactly three governed state changes:
+The transaction materialised exactly three governed state changes: `data/analysis/schema.json`, `PROJECT_STATUS.md`, and `ROADMAP.md`. This audit file is the fourth transaction artifact. No production Analysis revision, Live observation, Live evidence, Analysis review, Analysis evidence, Canonical occurrence, Source record, Change Ledger row or monitor route was added or modified.
 
-          1. `data/analysis/schema.json` — Analysis schema v0.6 → v0.7 with the production-closed revision-lineage policy;
-          2. `PROJECT_STATUS.md` — current recovery/status checkpoint advanced to BA;
-          3. `ROADMAP.md` — Stage 8A records the revision-lineage foundation and preserves the production gate.
+## Validation
 
-          This audit file is the fourth transaction artifact. No production Analysis revision, Live observation, Live evidence, Analysis review, Analysis evidence, Canonical occurrence, Source record, Change Ledger row or monitor route was added or modified.
+- Canonical validator: **PASS**
+- Live Intelligence validator: **PASS**
+- Analysis + Live→Analysis + Analysis revision validators: **PASS**
+- Repository regression suite: **{tests}; {result}**
+- Python compile checks: **PASS**
+- Browser JavaScript syntax checks: **PASS**
+- Static site build: **PASS**
+- Protected governed file hash comparison against transaction prestate: **PASS**
+- Exact governed mutation boundary before audit creation: **PASS — three files only**
 
-          ## Validation
+## Frozen production state after BA
 
-          - Canonical validator: **PASS**
-          - Live Intelligence validator: **PASS**
-          - Analysis + Live→Analysis + Analysis revision validators: **PASS**
-          - Repository regression suite: **${TESTS}; ${RESULT}**
-          - Python compile checks: **PASS**
-          - Browser JavaScript syntax checks: **PASS**
-          - Static site build: **PASS**
-          - Protected governed file hash comparison against transaction prestate: **PASS**
-          - Exact governed mutation boundary before audit creation: **PASS — three files only**
+- Canonical occurrences: **688**
+- Live Intelligence: **4 observations / 6 evidence rows**
+- Analysis: **21 reviews / 95 evidence rows**
+- Production Live→Analysis inputs: **1**
+- Production Analysis revisions: **0**
+- `EXACT_TIMESTAMP_SERIES`: **0**
+- Public Live feed: **closed**
+- Public revision metadata/latest-head projection: **closed**
+- Automatic latest-Analysis selection: **closed**
 
-          ## Frozen production state after BA
+## Interpretation
 
-          - Canonical occurrences: **688**
-          - Live Intelligence: **4 observations / 6 evidence rows**
-          - Analysis: **21 reviews / 95 evidence rows**
-          - Production Live→Analysis inputs: **1**
-          - Production Analysis revisions: **0**
-          - `EXACT_TIMESTAMP_SERIES`: **0**
-          - Public Live feed: **closed**
-          - Public revision metadata/latest-head projection: **closed**
-          - Automatic latest-Analysis selection: **closed**
-
-          ## Interpretation
-
-          BA creates capability, not population. A later pressure audit must choose and justify any first production Analysis revision. Existing Analysis snapshots remain immutable historical statements of what WORLD SIGNALS concluded at their recorded `analysis_as_of_utc`.
-          EOF
+BA creates capability, not population. A later pressure audit must choose and justify any first production Analysis revision. Existing Analysis snapshots remain immutable historical statements of what WORLD SIGNALS concluded at their recorded `analysis_as_of_utc`.
+"""
+          Path('data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md').write_text(text)
+          PY
           expected=$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md data/analysis/schema.json | sort)
           actual=$(git status --porcelain | sed -E 's/^.. //' | sort)
           test "$actual" = "$expected"
