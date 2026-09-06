@@ -101,8 +101,10 @@ jobs:
           python scripts/validate_registry.py
           python scripts/validate_analysis.py
           python -m unittest tests.test_eia_wpsr_adapter tests.test_eia_wpsr_monitor tests.test_monitor_coverage_audit -v
-      - name: Gate AL and P1A descendant contracts
-        run: python -m unittest tests.test_rba_fsr_monitor_alignment_al tests.test_source_governance_p1a -v
+      - name: Gate AL descendant contract
+        run: python -m unittest tests.test_rba_fsr_monitor_alignment_al -v
+      - name: Gate P1A descendant contract in repository discovery environment
+        run: python -m unittest discover -s tests -p 'test_source_governance_p1a.py' -v
       - name: Run full repository suite
         run: python -m unittest discover -s tests -v
       - name: Compile repository Python
