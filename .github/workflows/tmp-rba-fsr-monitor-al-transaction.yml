@@ -1,0 +1,165 @@
+name: WORLD SIGNALS AL RBA FSR alignment transaction
+
+on:
+  push:
+    branches:
+      - feature/post-ak-pressure-audit-al
+    paths:
+      - .github/workflows/tmp-rba-fsr-monitor-al-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-AK base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=72103267f90475b04c80129e03b41b605d4b7f58
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Prove read-only probes are gone
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e .github/workflows/tmp-post-ak-pressure-audit-al.yml
+          test ! -e .github/workflows/tmp-rba-fsr-monitor-al-preflight.yml
+
+      - name: Read-only fail-closed simulation
+        run: python scripts/apply_rba_fsr_monitor_alignment_al.py --check
+
+      - name: Exercise AL regression fixtures before write
+        run: python -m unittest tests.test_rba_fsr_monitor_alignment_al -v
+
+      - name: Controlled monitor-expectations write
+        env:
+          WORLD_SIGNALS_APPLY_RBA_FSR_MONITOR_ALIGNMENT_AL: '1'
+        run: python scripts/apply_rba_fsr_monitor_alignment_al.py --write
+
+      - name: Validate canonical registry after write
+        run: python scripts/validate_registry.py
+
+      - name: Validate Analysis layer after write
+        run: python scripts/validate_analysis.py
+
+      - name: Re-run AL regression fixtures against written state
+        run: python -m unittest tests.test_rba_fsr_monitor_alignment_al -v
+
+      - name: Run real live monitor and verify RBA alignment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_live_monitor.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('artifacts/live-monitor.json').read_text(encoding='utf-8'))
+          assert report.get('canonical_registry_version') == '0.37', report.get('canonical_registry_version')
+          assert report.get('source_registry_version') == '1.78', report.get('source_registry_version')
+          assert report.get('monitor_expectations_version') == '0.9', report.get('monitor_expectations_version')
+          assert report.get('canonical_unchanged') is True
+          assert report.get('candidate_count') == 0, report.get('review_candidates')
+          health = report.get('source_health_summary') or {}
+          assert health.get('degraded') == 0, health
+          assert health.get('all_expected_adapters_observed') is True, health
+          rba = [o for o in (report.get('observations') or []) if str(o.get('type') or '').startswith('RBA_')]
+          assert not [o for o in rba if o.get('type') == 'RBA_PUBLICATION_UNMATCHED'], rba
+          reflected = [o for o in rba if o.get('type') == 'RBA_PUBLICATION_ALREADY_REFLECTED']
+          assert len(reflected) == 1, rba
+          assert reflected[0].get('occurrence_id') == 'WSO-FIN-B-0004', reflected
+          print('AL_LIVE_RBA_ALIGNMENT_OK', json.dumps(reflected, sort_keys=True))
+          PY
+
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile repository Python
+        run: python -m compileall -q scripts src tests
+
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Build static site
+        run: python scripts/build_site.py
+
+      - name: Prove production exact-series population remains zero
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reviews = json.loads(Path('data/analysis/event_reviews.json').read_text(encoding='utf-8'))
+          exact = [
+              (review.get('analysis_id'), movement.get('movement_id'))
+              for review in reviews.get('reviews', [])
+              for movement in (review.get('what_moved') or [])
+              if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
+          ]
+          assert exact == [], exact
+          print('AL_EXACT_TIMESTAMP_SERIES_ROWS=0')
+          PY
+
+      - name: Audit protected datasets and exact write boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=72103267f90475b04c80129e03b41b605d4b7f58
+          git diff --exit-code "$BASE" -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+          python - <<'PY'
+          import subprocess
+          rows = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
+          changed = {row[3:] for row in rows if row.strip()}
+          expected = {
+              'data/monitor/expectations.json',
+              'data/monitor/RBA_FSR_MONITOR_ALIGNMENT_AL_TRANSACTION_AUDIT_v0.1.md',
+          }
+          assert changed == expected, {'expected': sorted(expected), 'actual': sorted(changed)}
+          print('AL_WORKTREE_MUTATION_BOUNDARY_OK', sorted(changed))
+          PY
+
+      - name: Commit reviewed transaction and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'WORLD SIGNALS transaction gate'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            data/monitor/expectations.json \
+            data/monitor/RBA_FSR_MONITOR_ALIGNMENT_AL_TRANSACTION_AUDIT_v0.1.md
+          git rm .github/workflows/tmp-rba-fsr-monitor-al-transaction.yml
+          git diff --cached --check
+          git commit -m 'AL: align RBA FSR monitor scope with canonical series'
+          git push origin HEAD:feature/post-ak-pressure-audit-al
