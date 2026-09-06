@@ -1,0 +1,109 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AW",
+  "operation": "CONTROLLED_LIVE_INTELLIGENCE_FIRST_SPECIMEN",
+  "base_sha": "4768c73532c4ba4038b30314079b85be64fbee01",
+  "reference_date": "2026-09-06",
+  "decision": "Open Live Intelligence from v0.1 foundation to v0.2 controlled single-specimen population using one Nepal physical-shock observation and two primary official evidence rows.",
+  "pre_state": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "canonical_schema_version": "0.52",
+    "source_registry_version": "1.80",
+    "source_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.16",
+    "analysis_review_count": 20,
+    "analysis_evidence_version": "0.16",
+    "analysis_evidence_count": 91,
+    "live_intelligence_schema_version": "0.1",
+    "live_intelligence_observation_count": 0,
+    "live_intelligence_evidence_count": 0,
+    "live_intelligence_population_state": "FOUNDATION_ONLY_NO_POPULATION"
+  },
+  "target_state": {
+    "live_intelligence_schema_version": "0.2",
+    "live_intelligence_observations_version": "0.2",
+    "live_intelligence_evidence_version": "0.2",
+    "live_intelligence_population_state": "CONTROLLED_SINGLE_SPECIMEN",
+    "observation_count": 1,
+    "evidence_count": 2,
+    "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
+    "observation_type": "PHYSICAL_SHOCK",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "canonical_link_count": 0,
+    "public_observation_count": 0,
+    "automatic_ingestion_allowed": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "schema_changes": {
+    "freeze_av_foundation_checkpoint": true,
+    "replace_live_foundation_gate_with_controlled_population_policy": true,
+    "required_evidence_publication_time": true,
+    "publication_time_precision": [
+      "EXACT_TIMESTAMP",
+      "CIVIL_DATE",
+      "UNKNOWN"
+    ],
+    "maximum_observation_count": 1,
+    "maximum_evidence_count": 2,
+    "public_observation_projection_allowed": false,
+    "automatic_story_clustering_allowed": false
+  },
+  "authorized_production_writes": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/live_intelligence/NEPAL_RASUWA_FLOOD_LIVE_INTELLIGENCE_AW_TRANSACTION_AUDIT_v0.1.md"
+  ],
+  "protected_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "source_research": [
+    {
+      "provider": "Government of Nepal — Ministry of Home Affairs",
+      "title": "Official Disaster Relief Appeal",
+      "url": "https://www.moha.gov.np/en/post/ha-ra-tha-ka-apa-l-11",
+      "use": "Primary event timestamp, affected districts and immediate government response."
+    },
+    {
+      "provider": "World Health Organization — Nepal",
+      "title": "WHO releases US$150 000 emergency funds to support Nepal’s flood response",
+      "url": "https://www.who.int/nepal/news/detail/30-08-2026-who-releases-us150-000-emergency-funds-to-support-nepal-s-flood-response",
+      "use": "Independent official confirmation and health-response context."
+    }
+  ],
+  "held_context": [
+    {
+      "provider": "United Nations in Nepal",
+      "date": "2026-09-04",
+      "title": "Nepal floods: UN and partners launch $49.6 million emergency appeal",
+      "reason_not_populated": "Distinct downstream institutional development; AW does not create a second observation or story identity."
+    },
+    {
+      "provider": "World Health Organization",
+      "subject": "DRC Bundibugyo Ebola outbreak",
+      "reason_not_populated": "Better reserved for a later repeated-state / revision / developing-story stress test."
+    }
+  ],
+  "write_gate": {
+    "environment_variable": "WORLD_SIGNALS_APPLY_LIVE_INTELLIGENCE_AW",
+    "required_value": "1",
+    "automatic_commit_allowed": false
+  },
+  "manual_merge_only": true
+}

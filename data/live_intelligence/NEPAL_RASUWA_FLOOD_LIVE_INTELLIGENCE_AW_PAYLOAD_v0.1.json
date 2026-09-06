@@ -1,0 +1,103 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AW",
+  "target_version": "0.2",
+  "reference_date": "2026-09-06",
+  "foundation_checkpoint": {
+    "schema_version": "0.1",
+    "observations_version": "0.1",
+    "evidence_version": "0.1",
+    "population_state": "FOUNDATION_ONLY_NO_POPULATION",
+    "observation_count": 0,
+    "evidence_count": 0,
+    "post_merge_main_sha": "4768c73532c4ba4038b30314079b85be64fbee01",
+    "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
+  },
+  "population_policy": {
+    "mode": "CONTROLLED_SINGLE_SPECIMEN",
+    "production_population_allowed": true,
+    "evidence_population_allowed": true,
+    "maximum_observation_count": 1,
+    "maximum_evidence_count": 2,
+    "automatic_ingestion_allowed": false,
+    "existing_analysis_evidence_migration_allowed": false,
+    "public_observation_projection_allowed": false,
+    "reason": "AW opens only enough population authority for one reviewed Nepal physical-shock specimen. A later pressure audit is required before any second observation or broader ingestion."
+  },
+  "publication_time_precision": [
+    "EXACT_TIMESTAMP",
+    "CIVIL_DATE",
+    "UNKNOWN"
+  ],
+  "evidence": [
+    {
+      "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of Nepal — Ministry of Home Affairs",
+      "title": "Official Disaster Relief Appeal",
+      "url": "https://www.moha.gov.np/en/post/ha-ra-tha-ka-apa-l-11",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-27"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary Nepal government evidence for the 26 August 2026 08:40 local Bhote Koshi flood timestamp, affected districts and immediate response."
+    },
+    {
+      "evidence_id": "WSEV-LI-NPL-FLOOD-WHO-20260830",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization — Nepal",
+      "title": "WHO releases US$150 000 emergency funds to support Nepal’s flood response",
+      "url": "https://www.who.int/nepal/news/detail/30-08-2026-who-releases-us150-000-emergency-funds-to-support-nepal-s-flood-response",
+      "roles": [
+        "SOURCE_CONFIRMATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-30"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official WHO confirmation of the 26 August floods and emergency health-response support."
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
+      "observed_at_utc": "2026-09-06T07:08:00Z",
+      "observation_type": "PHYSICAL_SHOCK",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Bhote Koshi flood strikes Rasuwa and neighbouring districts in Nepal",
+      "summary": "Nepal’s Ministry of Home Affairs records a major Bhote Koshi River flood at 08:40 local time on 26 August 2026, with severe impacts along riverbank areas in Rasuwa, Nuwakot, Dhading and Gorkha districts and immediate search, rescue and emergency relief operations. WHO subsequently confirmed emergency health-response support. Official assessment of the upstream physical trigger remained ongoing, so no causal mechanism is encoded in this observation.",
+      "domain_tags": [
+        "CLIMATE_PHYSICAL_RISK",
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Nepal"
+      ],
+      "regions": [
+        "South Asia"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-NPL-FLOOD-MOHA-20260827",
+        "WSEV-LI-NPL-FLOOD-WHO-20260830"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "event_at_utc": "2026-08-26T02:55:00Z",
+        "event_local": "2026-08-26T08:40:00",
+        "event_timezone": "Asia/Kathmandu"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    }
+  ]
+}

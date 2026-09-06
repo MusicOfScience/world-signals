@@ -1,9 +1,44 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
-  "population_state": "FOUNDATION_ONLY_NO_POPULATION",
-  "scope_note": "Evidence here will support factual Live Intelligence observations. It is separate from canonical provenance and Analysis evidence, and AV v0.1 intentionally contains no populated evidence rows.",
-  "evidence": []
+  "population_state": "CONTROLLED_SINGLE_SPECIMEN",
+  "scope_note": "Evidence supports reviewed factual Live Intelligence observations, remains separate from canonical provenance and Analysis evidence, and AW v0.2 is bounded to the first controlled specimen.",
+  "evidence": [
+    {
+      "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of Nepal — Ministry of Home Affairs",
+      "title": "Official Disaster Relief Appeal",
+      "url": "https://www.moha.gov.np/en/post/ha-ra-tha-ka-apa-l-11",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-27"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary Nepal government evidence for the 26 August 2026 08:40 local Bhote Koshi flood timestamp, affected districts and immediate response."
+    },
+    {
+      "evidence_id": "WSEV-LI-NPL-FLOOD-WHO-20260830",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization — Nepal",
+      "title": "WHO releases US$150 000 emergency funds to support Nepal’s flood response",
+      "url": "https://www.who.int/nepal/news/detail/30-08-2026-who-releases-us150-000-emergency-funds-to-support-nepal-s-flood-response",
+      "roles": [
+        "SOURCE_CONFIRMATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-30"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official WHO confirmation of the 26 August floods and emergency health-response support."
+    }
+  ]
 }

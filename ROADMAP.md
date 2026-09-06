@@ -69,7 +69,7 @@ The sample exercises macro data, monetary policy, institutions, elections, sover
 
 Further Analysis population is paused after AU because the remaining completed/unreviewed Japan macro release adds less immediate contract pressure than the missing Live Intelligence layer.
 
-## Stage 6 — Live Intelligence foundation — AV
+## Stage 6 — Live Intelligence foundation — DONE / AV
 
 AV establishes `data/live_intelligence/` as an executable but intentionally empty layer.
 
@@ -86,21 +86,15 @@ Foundation capabilities:
 - metadata-only static projection;
 - CI integration.
 
-**AV v0.1 deliberately prohibits production observation/evidence population.**
+**AV v0.1 deliberately prohibited production observation/evidence population; that frozen foundation checkpoint is preserved inside AW v0.2.**
 
-## Stage 7 — first Live Intelligence specimen — NEXT AFTER AV MERGE
+## Stage 7 — first Live Intelligence specimen — DONE / AW
 
-Run a fresh pressure audit after AV. Choose one real development because it stresses the contract, not because it is convenient or prominent.
+AW selected the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal after comparing physical-shock, health-emergency, geopolitical/policy, economic-revision and market-observation candidates. Selection was based on contract pressure and authoritative provenance rather than headline prominence.
 
-Candidate stress classes include:
+Live Intelligence v0.2 now contains exactly one reviewed internal `PHYSICAL_SHOCK` observation and two primary-official evidence rows. It preserves `Asia/Kathmandu` native time, permits zero Canonical links for a genuinely unscheduled shock, enforces civil-date publication precision for evidence, leaves the uncertain upstream trigger unresolved, creates no story identity and exposes zero public observations.
 
-- unscheduled physical shock;
-- health emergency;
-- geopolitical/policy development;
-- economic-data revision;
-- factual market observation linked to a canonical occurrence.
-
-The first specimen should test identity, revision, timing, provenance and rights semantics before the population gate is opened more broadly.
+The next pressure audit should decide whether repeated as-of state / revision / developing-story semantics now outrank prospective Live Intelligence → Analysis linkage. The 2026 DRC Bundibugyo Ebola outbreak is a strong candidate for that stress test, but is not pre-authorised for population.
 
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — LATER
 

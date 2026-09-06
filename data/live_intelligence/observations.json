@@ -1,8 +1,42 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
-  "population_state": "FOUNDATION_ONLY_NO_POPULATION",
-  "observations": []
+  "population_state": "CONTROLLED_SINGLE_SPECIMEN",
+  "observations": [
+    {
+      "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
+      "observed_at_utc": "2026-09-06T07:08:00Z",
+      "observation_type": "PHYSICAL_SHOCK",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Bhote Koshi flood strikes Rasuwa and neighbouring districts in Nepal",
+      "summary": "Nepal’s Ministry of Home Affairs records a major Bhote Koshi River flood at 08:40 local time on 26 August 2026, with severe impacts along riverbank areas in Rasuwa, Nuwakot, Dhading and Gorkha districts and immediate search, rescue and emergency relief operations. WHO subsequently confirmed emergency health-response support. Official assessment of the upstream physical trigger remained ongoing, so no causal mechanism is encoded in this observation.",
+      "domain_tags": [
+        "CLIMATE_PHYSICAL_RISK",
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Nepal"
+      ],
+      "regions": [
+        "South Asia"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-NPL-FLOOD-MOHA-20260827",
+        "WSEV-LI-NPL-FLOOD-WHO-20260830"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "event_at_utc": "2026-08-26T02:55:00Z",
+        "event_local": "2026-08-26T08:40:00",
+        "event_timezone": "Asia/Kathmandu"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    }
+  ]
 }
