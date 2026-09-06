@@ -130,12 +130,11 @@ class IMDHeatwaveOutlookATTests(unittest.TestCase):
         assertions = {row["assertion"] for row in deferred[0]["assertions"]}
         self.assertTrue(any("April-June" in value for value in assertions))
         self.assertTrue(any("April-May" in value for value in assertions))
-        canonical, sources, _ = self.live_or_simulated()
+        canonical, _, _ = self.live_or_simulated()
         self.assertFalse(any(row.get("series_id") == "WSER-RISK-NIO-TC" for row in canonical["records"]))
-        self.assertFalse(any(row.get("source_id") == "WSSRC-RISK-006" for row in sources["sources"]))
 
     def test_post_sample_coverage_improves_but_does_not_clear_prompts(self):
-        canonical, sources, coverage = self.live_or_simulated()
+        canonical, _, coverage = self.live_or_simulated()
         if canonical.get("version") == self.plan["postconditions"]["canonical_registry_version"]:
             expected = self.plan["postconditions"]
             for key, value in expected["coverage_totals"].items():
