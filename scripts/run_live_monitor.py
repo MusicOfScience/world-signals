@@ -20,6 +20,7 @@ from world_signals.adapters import (
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
     fetch_cellar_rdf_notice,
+    fetch_eia_wpsr_schedule,
     fetch_ons_upcoming_releases,
     fetch_rba_fsr,
     fetch_suin_rows,
@@ -37,6 +38,7 @@ from world_signals.legal_monitor import (
 from world_signals.live_monitor import (
     colombia_legal_input_review_candidate,
     cra_legal_rule_review_candidate,
+    eia_wpsr_schedule_review_candidate,
     rba_fsr_review_candidates,
 )
 
@@ -197,6 +199,30 @@ def main() -> int:
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
+
+    if "EIA_WPSR_SCHEDULE" in configs:
+        eia_config=configs["EIA_WPSR_SCHEDULE"]
+        try:
+            schedule,snap=fetch_eia_wpsr_schedule()
+            report["source_health"].append({
+                "adapter_id":"EIA_WPSR_SCHEDULE",
+                "source_id":eia_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":snap.as_dict(),
+                "schedule":schedule.as_dict(),
+                "completion_inference":"PROHIBITED",
+            })
+            candidate,observation=eia_wpsr_schedule_review_candidate(schedule,eia_config)
+            _append_candidate(report,candidate,observation)
+        except AdapterError as exc:
+            report["source_health"].append({
+                "adapter_id":"EIA_WPSR_SCHEDULE",
+                "source_id":eia_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "completion_inference":"PROHIBITED",
+            })
 
     try:
         ons_items,ons_snaps=fetch_ons_upcoming_releases(
