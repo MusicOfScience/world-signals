@@ -77,6 +77,6 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add PROJECT_STATUS.md ROADMAP.md data/coverage/POST_BB_CHECKPOINT_PRESSURE_AUDIT_BC_v0.1.md src/world_signals/checkpoint_contract.py scripts/validate_checkpoint_contracts.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_japan_fies_live_analysis_az.py tests/test_checkpoint_contract_bc.py tests/test_analysis_revision_contract_ba.py tests/test_japan_fies_live_analysis_az.py
           git commit -m "BC: formalize historical checkpoint descendant validation"
-          git rm scripts/bc_authoring_patch.py .github/workflows/bc-authoring-v2.yml
+          git rm -f scripts/bc_authoring_patch.py .github/workflows/bc-authoring-v2.yml
           git commit -m "BC: remove temporary authoring files"
           git push origin HEAD:feature/post-bb-checkpoint-contract-bc
