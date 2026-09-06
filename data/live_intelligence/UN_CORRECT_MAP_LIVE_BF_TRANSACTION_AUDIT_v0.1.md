@@ -6,8 +6,8 @@
 **BF branch transaction-start SHA:** `bb04298377658a2fc6fb3b5697f10941fa5be248`  
 **Temporary workflow activation SHA:** `aa5532409b79bb7a7aaf819bc34fff1a2cce3045`  
 **Successful preflight run:** `34043141267` — SUCCESS  
-**Transaction materialisation commit:** PENDING_LOCAL_COMMIT  
-**Temporary transaction workflow removal commit:** PENDING_LOCAL_COMMIT
+**Transaction materialisation commit:** `b86f411f0782149b2f2e28fee66d49fbece6fc19`  
+**Temporary transaction workflow removal commit:** `aa7709d1eea9db93cf070c6f567cfa2d75b459cb`
 
 ## Decision and provenance
 
@@ -89,4 +89,4 @@ Generated static-site output was treated as validation output and reverted/clean
 
 ## Transaction disposition
 
-The successful BF materialisation is permanent on this branch and is not reset after validation. The temporary transaction workflow is self-removed before the final branch head is pushed. BF remains **manual-merge only**. No auto-merge is authorised or performed.
+The successful BF materialisation is permanent on this branch and is not reset after validation. The temporary transaction workflow was removed in commit `aa7709d1eea9db93cf070c6f567cfa2d75b459cb` before the final branch head was pushed. BF remains **manual-merge only**. No auto-merge is authorised or performed.
