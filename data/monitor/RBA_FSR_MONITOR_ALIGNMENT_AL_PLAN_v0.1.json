@@ -1,0 +1,129 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AL",
+  "title": "RBA FSR monitor-to-canonical alignment repair",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "72103267f90475b04c80129e03b41b605d4b7f58",
+  "architecture_layer": "SOURCE_CHANGE_MONITOR",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.10",
+    "analysis_review_count": 14,
+    "analysis_evidence_version": "0.10",
+    "analysis_evidence_count": 54,
+    "monitor_expectations_version": "0.8",
+    "monitor_expectations_blob_sha": "f7fa9c816ce9f6ae0db3aaf2ba90d4aa537e08a9",
+    "monitor_adapter_count": 7,
+    "rba_adapter_id": "RBA_FSR_RSS",
+    "rba_source_id": "WSSRC-FIN-001",
+    "rba_occurrence_ids": [
+      "WSO-FIN-B-0001"
+    ],
+    "rba_series_id": "WSER-FIN-AU-RBA-FSR",
+    "required_canonical_occurrences": {
+      "WSO-FIN-B-0001": {
+        "lifecycle_status": "PLANNED",
+        "start_local": "2026-10-01T11:30:00",
+        "source_timezone": "Australia/Sydney",
+        "start_utc": "2026-10-01T01:30:00Z"
+      },
+      "WSO-FIN-B-0004": {
+        "lifecycle_status": "COMPLETED",
+        "start_local": "2026-03-19T11:30:00",
+        "source_timezone": "Australia/Sydney",
+        "start_utc": "2026-03-19T00:30:00Z"
+      }
+    },
+    "current_official_item": {
+      "title": "Financial Stability Review - March 2026",
+      "link": "https://www.rba.gov.au/publications/fsr/2026/mar/",
+      "publication_datetime": "2026-03-19T11:30:00+11:00",
+      "expected_pre_observation": "RBA_PUBLICATION_UNMATCHED"
+    }
+  },
+  "monitor_change": {
+    "from_version": "0.8",
+    "to_version": "0.9",
+    "adapter_id": "RBA_FSR_RSS",
+    "preserve_occurrence_ids": [
+      "WSO-FIN-B-0001"
+    ],
+    "add_occurrence_ids": [
+      "WSO-FIN-B-0004"
+    ],
+    "post_occurrence_ids": [
+      "WSO-FIN-B-0001",
+      "WSO-FIN-B-0004"
+    ],
+    "preserve_matching": {
+      "same_year": true,
+      "nearest_planned_occurrence_max_days": 75
+    },
+    "preserve_monitor_role": "PUBLICATION_COMPLETION_SENTINEL",
+    "preserve_automatic_commit_allowed": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.10",
+    "analysis_review_count": 14,
+    "analysis_evidence_version": "0.10",
+    "analysis_evidence_count": 54,
+    "monitor_expectations_version": "0.9",
+    "monitor_adapter_count": 7,
+    "rba_occurrence_ids": [
+      "WSO-FIN-B-0001",
+      "WSO-FIN-B-0004"
+    ],
+    "current_official_item_observation": "RBA_PUBLICATION_ALREADY_REFLECTED",
+    "current_official_item_review_candidate_count": 0,
+    "production_exact_timestamp_series_rows": 0
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/monitor/expectations.json",
+      "data/monitor/RBA_FSR_MONITOR_ALIGNMENT_AL_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json",
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json"
+    ]
+  },
+  "guardrails": {
+    "explicit_monitor_scope_remains_reviewed_configuration": true,
+    "dynamic_series_scope_expansion_prohibited_in_this_tranche": true,
+    "rss_absence_never_implies_event_state_change": true,
+    "official_feed_item_may_only_generate_review_candidate": true,
+    "canonical_mutation_allowed": false,
+    "source_registry_mutation_allowed": false,
+    "change_ledger_mutation_allowed": false,
+    "analysis_mutation_allowed": false,
+    "google_calendar_write": false,
+    "automatic_canonical_commit": false,
+    "auto_merge": false
+  }
+}

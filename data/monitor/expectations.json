@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.8",
+  "version": "0.9",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -9,7 +9,8 @@
       "adapter_id": "RBA_FSR_RSS",
       "source_id": "WSSRC-FIN-001",
       "canonical_occurrence_ids": [
-        "WSO-FIN-B-0001"
+        "WSO-FIN-B-0001",
+        "WSO-FIN-B-0004"
       ],
       "monitor_role": "PUBLICATION_COMPLETION_SENTINEL",
       "cadence": "DAILY",
