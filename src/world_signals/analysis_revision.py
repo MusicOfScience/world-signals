@@ -45,10 +45,13 @@ def _exact_utc(raw: Any) -> datetime | None:
 
 
 def _has_revision_metadata(review: dict[str, Any]) -> bool:
-    return any(
-        field in review and review.get(field) not in {None, ""}
-        for field in REVISION_FIELDS
-    )
+    for field in REVISION_FIELDS:
+        if field not in review:
+            continue
+        value = review.get(field)
+        if value is not None and value != "":
+            return True
+    return False
 
 
 def _live_input_ids(review: dict[str, Any]) -> set[str]:
