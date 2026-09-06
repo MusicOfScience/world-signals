@@ -1,6 +1,6 @@
 # WORLD SIGNALS — post-AT pressure audit AU v0.1
 
-**Reference date:** 2026-09-06  
+**Reference date:** 2026-09-06
 **Exact post-#75 main:** `03a8f87f17570c2520edadf78237ed07d946107a`
 
 ## Frozen live checkpoint

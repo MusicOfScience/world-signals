@@ -1,8 +1,8 @@
 # WORLD SIGNALS — IMD heatwave outlook Analysis AU research v0.1
 
-**Reference date:** 2026-09-06  
-**Exact base main:** `03a8f87f17570c2520edadf78237ed07d946107a`  
-**Target:** `WSO-RISK-A-0002`  
+**Reference date:** 2026-09-06
+**Exact base main:** `03a8f87f17570c2520edadf78237ed07d946107a`
+**Target:** `WSO-RISK-A-0002`
 **Architecture layer:** Analysis
 
 ## Research question
