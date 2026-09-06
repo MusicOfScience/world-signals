@@ -1,0 +1,216 @@
+name: BF committed-branch final validation
+on:
+  push:
+    branches: [feature/post-be-pressure-audit-bf]
+    paths:
+      - '.github/workflows/bf-final-branch-validation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Validate committed BF branch and self-remove
+        shell: bash
+        env:
+          BASE_SHA: 629ab595ecccaf86a92bbd8cdfdab4297496b298
+          TRANSACTION_HEAD_SHA: 7b817188371b8abcec7dd20cd98408ebcfeb27d5
+          BRANCH_NAME: feature/post-be-pressure-audit-bf
+          WORKFLOW_PATH: .github/workflows/bf-final-branch-validation.yml
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+
+          cleanup() {
+            status=$?
+            git reset --hard "$GITHUB_SHA"
+            git clean -fd
+            rm -f "$WORKFLOW_PATH"
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A "$WORKFLOW_PATH"
+            if ! git diff --cached --quiet; then
+              git commit -m 'BF: remove temporary final branch validation'
+              git push origin HEAD:"$BRANCH_NAME"
+            fi
+            exit "$status"
+          }
+          trap cleanup EXIT
+
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          test "$(git merge-base HEAD origin/main)" = "$BASE_SHA"
+          test "$(git rev-parse HEAD^)" = "$TRANSACTION_HEAD_SHA"
+          test "$GITHUB_REF_NAME" = "$BRANCH_NAME"
+
+          test ! -e .github/workflows/bf-un-correct-map-preflight.yml
+          test ! -e .github/workflows/bf-un-correct-map-transaction.yml
+          if find .github/workflows -maxdepth 1 -type f -name 'bf-*' ! -name 'bf-final-branch-validation.yml' | grep -q .; then
+            echo "Unexpected stray BF workflow present"
+            exit 1
+          fi
+
+          echo "== Exact permanent BF diff =="
+          python - <<'PY'
+          import subprocess
+          expected = {
+              "PROJECT_STATUS.md",
+              "ROADMAP.md",
+              "data/live_intelligence/POST_BE_PRESSURE_AUDIT_BF_v0.1.md",
+              "data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_PAYLOAD_v0.1.json",
+              "data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_PLAN_v0.1.json",
+              "data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_TRANSACTION_AUDIT_v0.1.md",
+              "data/live_intelligence/evidence_registry.json",
+              "data/live_intelligence/observations.json",
+              "data/live_intelligence/schema.json",
+              "scripts/apply_un_correct_map_live_bf.py",
+              "tests/test_un_correct_map_live_bf.py",
+              "tests/test_vietnam_myanmar_live_bd.py",
+          }
+          changed = set(subprocess.check_output(
+              ["git", "diff", "--name-only",
+               "629ab595ecccaf86a92bbd8cdfdab4297496b298...7b817188371b8abcec7dd20cd98408ebcfeb27d5"],
+              text=True
+          ).splitlines())
+          assert changed == expected, (changed, expected)
+          print("Permanent BF diff: PASS")
+          PY
+
+          echo "== Protected upstream/Analysis paths remain byte-identical to main =="
+          git diff --exit-code origin/main -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json
+
+          echo "== Exact BF target contract =="
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from world_signals.live_intelligence import public_live_intelligence_projection
+
+          load = lambda p: json.loads(Path(p).read_text(encoding="utf-8"))
+          schema = load("data/live_intelligence/schema.json")
+          obs = load("data/live_intelligence/observations.json")
+          ev = load("data/live_intelligence/evidence_registry.json")
+          canonical = load("data/canonical/registry.json")
+          payload = load("data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_PAYLOAD_v0.1.json")
+          plan = load("data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_PLAN_v0.1.json")
+
+          assert schema["version"] == "0.6"
+          policy = schema["population_policy"]
+          assert policy["mode"] == "CONTROLLED_INSTITUTIONAL_SPECIMEN"
+          assert policy["maximum_observation_count"] == 6
+          assert policy["maximum_evidence_count"] == 9
+          assert policy["automatic_ingestion_allowed"] is False
+          assert policy["public_observation_projection_allowed"] is False
+          assert len(obs["observations"]) == 6
+          assert len(ev["evidence"]) == 9
+
+          target_obs = payload["live_observation"]
+          matches = [x for x in obs["observations"] if x["observation_id"] == target_obs["observation_id"]]
+          assert matches == [target_obs]
+          for target_ev in payload["live_evidence"]:
+              matches = [x for x in ev["evidence"] if x["evidence_id"] == target_ev["evidence_id"]]
+              assert matches == [target_ev]
+
+          assert target_obs["canonical_links"] == []
+          assert target_obs["revision_of_observation_id"] is None
+          assert target_obs["event_time"] == {"precision": "CIVIL_DATE", "event_date": "2026-09-04"}
+          assert target_obs["automatic_canonical_commit"] is False
+          assert target_obs["google_calendar_write"] is False
+
+          gates = plan["gates"]
+          assert gates["automatic_canonical_commit"] is False
+          assert gates["google_calendar_write"] is False
+          assert gates["public_live_observation_projection"] is False
+          assert gates["second_live_analysis_link_authorised"] is False
+          assert gates["first_analysis_revision_authorised"] is False
+
+          public = public_live_intelligence_projection(schema, ev, obs, canonical)
+          assert public["observations"] == []
+
+          audit = Path("data/live_intelligence/UN_CORRECT_MAP_LIVE_BF_TRANSACTION_AUDIT_v0.1.md").read_text(encoding="utf-8")
+          for required in (
+              "34049594202",
+              "b86f411f0782149b2f2e28fee66d49fbece6fc19",
+              "aa7709d1eea9db93cf070c6f567cfa2d75b459cb",
+              "Ran 861 tests",
+              "0 public observations",
+              "manual-merge only",
+          ):
+              assert required in audit, required
+          print("Exact BF target/audit contract: PASS")
+          PY
+
+          echo "== BD descendant repair remains narrow and descendant-safe =="
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          text = Path("tests/test_vietnam_myanmar_live_bd.py").read_text(encoding="utf-8")
+          assert 'test_simulated_target_validates_and_preserves_bd_floor' in text
+          assert 'self.assertGreaterEqual(len(observations["observations"]), 5)' in text
+          assert 'self.assertGreaterEqual(len(evidence["evidence"]), 7)' in text
+          assert 'test_bd_contract_does_not_impose_descendant_analysis_ceiling' in text
+
+          stat = subprocess.check_output([
+              "git", "diff", "--numstat",
+              "629ab595ecccaf86a92bbd8cdfdab4297496b298...7b817188371b8abcec7dd20cd98408ebcfeb27d5",
+              "--", "tests/test_vietnam_myanmar_live_bd.py"
+          ], text=True).strip().split()
+          assert stat[:2] == ["17", "15"], stat
+          print("BD descendant repair: PASS")
+          PY
+
+          echo "== Validators =="
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+
+          echo "== Full suite =="
+          python -m unittest discover -s tests -v 2>&1 | tee /tmp/bf-final-suite.log
+          TEST_COUNT="$(grep -E '^Ran [0-9]+ tests?' /tmp/bf-final-suite.log | tail -1 | awk '{print $2}')"
+          test -n "$TEST_COUNT"
+          test "$TEST_COUNT" -ge 861
+          grep -Eq '^OK' /tmp/bf-final-suite.log
+
+          echo "== Compile and JS checks =="
+          python -m py_compile \
+            scripts/apply_un_correct_map_live_bf.py \
+            tests/test_un_correct_map_live_bf.py \
+            tests/test_vietnam_myanmar_live_bd.py
+          python -m compileall -q src scripts tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+          echo "== Static build =="
+          python scripts/build_site.py
+          git checkout -- docs 2>/dev/null || true
+          git clean -fd docs 2>/dev/null || true
+
+          git status --short
+          test -z "$(git status --porcelain)"
+          echo "BF_FINAL_VALIDATION_RUN_ID=$GITHUB_RUN_ID"
