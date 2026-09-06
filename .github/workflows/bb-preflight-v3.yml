@@ -1,0 +1,134 @@
+name: BB final read-only preflight
+
+on:
+  push:
+    branches:
+      - feature/post-ba-barmm-election-anchor-bb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bb-final-preflight-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prove exact post-BA ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          expected=b8c5372198e3141c4c3f79ace13083877447f71b
+          test "$(git rev-parse origin/main)" = "$expected"
+          test "$(git merge-base HEAD origin/main)" = "$expected"
+
+      - name: Validate untouched descendant
+        run: |
+          set -euo pipefail
+          python scripts/apply_analysis_revision_contract_ba.py --check-only
+          python scripts/apply_barmm_parliamentary_election_bb.py --check-only
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_analysis_revision_contract_ba.py scripts/apply_barmm_parliamentary_election_bb.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          python scripts/build_site.py
+          rm -rf docs
+
+      - name: Capture protected hashes
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/schema.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json > /tmp/bb-protected.sha256
+
+      - name: Materialise BB ephemerally
+        env:
+          WORLD_SIGNALS_BB_ALLOW_WRITE: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_barmm_parliamentary_election_bb.py --apply
+
+      - name: Validate ephemeral BB descendant
+        run: |
+          set -euo pipefail
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_analysis_revision_contract_ba.py scripts/apply_barmm_parliamentary_election_bb.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          python scripts/build_site.py
+          rm -rf docs
+
+      - name: Prove exact governed mutation boundary
+        run: |
+          set -euo pipefail
+          git diff --name-only | sort > /tmp/actual
+          printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json | sort > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          sha256sum -c /tmp/bb-protected.sha256
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          def load(p): return json.loads(Path(p).read_text())
+          c=load('data/canonical/registry.json'); s=load('data/sources/registry.json')
+          l=load('data/changes/ledger.json'); o=load('data/coverage/biosecurity_overlay.json')
+          lo=load('data/live_intelligence/observations.json'); le=load('data/live_intelligence/evidence_registry.json')
+          ar=load('data/analysis/event_reviews.json'); ae=load('data/analysis/evidence_registry.json')
+          assert c['version']=='0.39' and c['record_count']==689 and len(c['records'])==689
+          assert s['version']=='1.81' and len(s['sources'])==244
+          assert l['version']=='0.25' and len(l['changes'])==60
+          assert o['version']=='0.14' and o['canonical_checkpoint']=={'registry_version':'0.39','record_count':689}
+          assert len(lo['observations'])==4 and len(le['evidence'])==6
+          assert len(ar['reviews'])==21 and len(ae['evidence'])==95
+          row=c['records'][-1]; src=s['sources'][-1]; change=l['changes'][-1]
+          assert row['occurrence_id']=='WSO-EL-PH-BARMM-20260914'
+          assert row['start_local']=='2026-09-14' and row['start_utc'] is None
+          assert row['lifecycle_status']=='PLANNED' and row['election_milestone_type']=='POLL_GENERAL'
+          assert 'publication_bundle_type' not in row
+          assert src['source_id']=='WSSRC-EL-PH-001' and src['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert change['change_id']=='WSCHANGE-138c3977e91ced60d8' and change['change_type']=='FORWARD_OCCURRENCE_ADMISSION'
+          PY
+
+      - name: Restore governed changes
+        if: always()
+        run: |
+          git checkout -- PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json || true
+          rm -rf docs
+
+      - name: Prove clean restoration
+        if: always()
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+
+      - name: Self-remove temporary workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/bb-preflight-v3.yml
+          git commit -m "BB: remove final preflight workflow"
+          git push origin HEAD:feature/post-ba-barmm-election-anchor-bb
