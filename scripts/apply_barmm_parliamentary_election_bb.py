@@ -251,7 +251,6 @@ def build_occurrence(item: dict[str, Any], reference_date: str) -> dict[str, Any
         "resolution_evidence_assertion_id": None,
         "contingency_if_missed": None,
         "monitor_escalation_start": None,
-        "publication_bundle_type": "SINGLE_RELEASE",
         "render_cluster_key": None,
         "calendar_aggregation_policy": "STANDALONE",
         "election_process_id": item["election_process_id"],
@@ -514,7 +513,6 @@ def simulate(plan: dict[str, Any], committed_at: str = "2026-09-06T21:30:00+10:0
 
 
 def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
-    p = plan["preconditions"]
     post = plan["postconditions"]
     canonical_before = load(CANONICAL_PATH)
     sources_before = load(SOURCES_PATH)
@@ -553,6 +551,7 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     require(new_occurrence["time_precision"] == "DAY" and new_occurrence["all_day_semantics"] is True, "BB target civil-date precision mismatch")
     require(new_occurrence["election_process_id"] == "WSEP-PH-BARMM-2026", "BB election process identity mismatch")
     require(new_occurrence["election_milestone_type"] == "POLL_GENERAL", "BB target election milestone mismatch")
+    require("publication_bundle_type" not in new_occurrence, "BB election must not inherit publication-release semantics")
     require(new_source["canonical_dependency_count"] == 1, "BB source dependency helper mismatch")
     require(new_source["automated_monitoring_use"] == "PROHIBITED_OR_RIGHTS_HOLD", "BB target automation gate opened")
     require(new_source["monitor_endpoints"][0]["preferred_for_monitoring"] is False, "BB target source unexpectedly preferred for monitoring")
