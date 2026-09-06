@@ -5,12 +5,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.analysis import validate_analysis
+from world_signals.live_analysis_bridge import validate_live_analysis_bridge
 from world_signals.io import load_json
 
 schema = load_json(ROOT / "data/analysis/schema.json")
 evidence = load_json(ROOT / "data/analysis/evidence_registry.json")
 reviews = load_json(ROOT / "data/analysis/event_reviews.json")
 canonical = load_json(ROOT / "data/canonical/registry.json")
+live_observations = load_json(ROOT / "data/live_intelligence/observations.json")
 
 report = validate_analysis(schema, evidence, reviews, canonical)
 if not report.ok:
@@ -18,7 +20,14 @@ if not report.ok:
         print(f"ERROR: {error}", file=sys.stderr)
     raise SystemExit(1)
 
+bridge_report = validate_live_analysis_bridge(schema, reviews, live_observations)
+if not bridge_report.ok:
+    for error in bridge_report.errors:
+        print(f"ERROR: {error}", file=sys.stderr)
+    raise SystemExit(1)
+
 print(
     f"Validated {len(reviews.get('reviews', []))} analytical review(s), "
-    f"{len(evidence.get('evidence', []))} evidence record(s): PASS"
+    f"{len(evidence.get('evidence', []))} evidence record(s), "
+    "and prospective Live Intelligence input bridge: PASS"
 )

@@ -33,10 +33,13 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
         cls.reviews = load(REVIEWS_PATH)
         cls.evidence = load(EVIDENCE_PATH)
         source = ANALYSIS_IMPL_PATH.read_text(encoding="utf-8")
-        if cls.production_schema.get("version") == "0.3":
+        version = tuple(int(part) for part in cls.production_schema.get("version", "").split("."))
+        if version == (0, 3):
             cls.candidate_schema = transform_schema(cls.production_schema, cls.plan)
             cls.candidate_source = transform_analysis_source(source)
-        elif cls.production_schema.get("version") == "0.4":
+        elif version >= (0, 4):
+            # AK freezes the historical v0.3 -> v0.4 contract transition, not a
+            # permanent ceiling on legitimate later Analysis schema descendants.
             cls.candidate_schema = copy.deepcopy(cls.production_schema)
             cls.candidate_source = source
         else:
@@ -105,9 +108,15 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
     def errors_for(self, schema: dict, evidence: dict, reviews: dict, canonical: dict) -> tuple[str, ...]:
         return self.module.validate_analysis(schema, evidence, reviews, canonical).errors
 
-    def test_candidate_schema_is_v04_without_populating_exact_rows(self) -> None:
-        self.assertIn(self.production_schema["version"], {"0.3", "0.4"})
-        self.assertEqual(self.candidate_schema["version"], "0.4")
+    def test_candidate_schema_preserves_ak_contract_on_live_descendant(self) -> None:
+        production_version = tuple(int(part) for part in self.production_schema["version"].split("."))
+        candidate_version = tuple(int(part) for part in self.candidate_schema["version"].split("."))
+        self.assertGreaterEqual(production_version, (0, 3))
+        self.assertGreaterEqual(candidate_version, (0, 4))
+        if production_version == (0, 3):
+            self.assertEqual(self.candidate_schema["version"], "0.4")
+        else:
+            self.assertEqual(self.candidate_schema["version"], self.production_schema["version"])
         self.assertIn("MARKET_DATA_RIGHTS", self.candidate_schema["controlled_vocabularies"]["evidence_role"])
         exact_rows = [
             movement
