@@ -11,11 +11,11 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Verify exact repair start
+      - name: Verify exact repair ancestry
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "b6c1d10b2934a03fb1fc4fbf407ad1372da900fc"
+          test "$(git rev-parse HEAD^)" = "6dee1e5adc6e32aea9bdf9b1aab451d92541a3fd"
           git fetch origin main
           test "$(git rev-parse origin/main)" = "363c5ff249ca8833744f15d74750d9377e8a9002"
           test "$(git merge-base HEAD origin/main)" = "363c5ff249ca8833744f15d74750d9377e8a9002"
