@@ -54,7 +54,8 @@ The validator does **not** currently require an exact-series row to establish:
 - an event anchor copied from canonical state;
 - ordering of observations around that anchor;
 - a market-observation evidence row from a primary/exchange or market-data provider;
-- a reviewed data-use/reuse basis; or
+- a reviewed data-use/reuse basis;
+- provenance for that data-use/reuse basis; or
 - permission for the exact observations to enter the public Analysis projection.
 
 This is a material contract gap. The enum can currently imply more precision than the structure proves.
@@ -69,7 +70,7 @@ Authoritative exchange material confirms that high-frequency data can exist with
 - ASX states that historical data covering every ASX market is a data product and points users to licensing/access routes: https://www.asx.com.au/connectivity-and-data/information-services/price-data
 - ASX MarketSource is tick-by-tick, and direct ITCH access can carry nanosecond timestamps; direct and vendor access are explicit service arrangements: https://www.asx.com.au/connectivity-and-data/information-services/price-data/how-to-access-asx-price-data
 
-Therefore **data existence != access authority != reuse authority != public redistribution authority**. WORLD SIGNALS must preserve that separation before it ingests any exact market series.
+Therefore **data existence != access authority != reuse authority != public redistribution authority**. WORLD SIGNALS must preserve that separation before it ingests any exact market series. A boolean declaration of permission is not enough on its own: the permission/reuse basis must itself have inspectable provenance.
 
 ## Selection
 
@@ -99,9 +100,14 @@ For an exact-series movement, require all of the following:
 - non-empty `series_granularity`;
 - controlled `data_use_basis`;
 - `public_projection_permitted == true` for any exact observations stored in the public Analysis dataset;
-- at least one referenced `MARKET_OBSERVATION` evidence row whose evidence class is `PRIMARY_OFFICIAL` or `MARKET_DATA_PROVIDER`.
+- at least one referenced `MARKET_OBSERVATION` evidence row whose evidence class is `PRIMARY_OFFICIAL` or `MARKET_DATA_PROVIDER`;
+- a `data_use_evidence_ref` included in the movement's evidence references and resolving to a `MARKET_DATA_RIGHTS` evidence row from `PRIMARY_OFFICIAL` or `MARKET_DATA_PROVIDER` evidence.
+
+The `MARKET_DATA_RIGHTS` role makes the rights/reuse basis auditable in the Analysis evidence model. A bare `public_projection_permitted=true` assertion is insufficient.
 
 Non-exact source-reported rows remain valid and are not upgraded merely because their canonical event has an exact timestamp.
+
+The static build legitimately updates `docs/data/analysis.json` only to expose the new Analysis schema version and contract metadata; it does not create exact observations.
 
 ## Guardrails
 
@@ -109,6 +115,7 @@ Non-exact source-reported rows remain valid and are not upgraded merely because 
 - Exact market observations may **not** backfill or resolve missing canonical timing.
 - A newswire description of an intraday move is **not** an independently reconstructed exact series.
 - A licensed internal dataset is **not** automatically permitted in a public projection.
+- A bare permission boolean is **not** sufficient rights provenance.
 - `EXACT_TIMESTAMP_SERIES == 0` is an acceptable post-state; the objective is a defensible contract, not filling the enum.
 - The RBA FSR, SB64, WHA79, South Korean local elections and EU sanctions renewal remain legitimate later specimens; none is compulsory backlog.
 - The market-structure category gap remains open unless a genuinely useful historical anchor is independently justified.
