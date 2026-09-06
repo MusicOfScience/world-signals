@@ -78,11 +78,11 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
             "802ca5b94b6e80a055ac363f48a6c8392f038048",
         )
         self.assertEqual(self.target["analysis_schema"]["version"], "0.7")
-        self.assertEqual(production_analysis_revision_count(self.reviews), 0)
-        self.assertEqual(len(self.reviews["reviews"]), 21)
-        self.assertEqual(len(self.evidence["evidence"]), 95)
-        self.assertEqual(production_live_input_count(self.reviews), 1)
-        self.assertEqual(apply_ba.exact_series_count(self.reviews), 0)
+        self.assertEqual(self.plan["target_state"]["analysis_review_count"], 21)
+        self.assertEqual(self.plan["target_state"]["analysis_evidence_count"], 95)
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 21)
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 95)
+        self.assertGreaterEqual(production_live_input_count(self.reviews), 1)
 
     def test_status_helper_preserves_later_descendant_only_with_frozen_ba_invariants(self):
         current = apply_ba.STATUS_PATH.read_text(encoding="utf-8")
@@ -92,8 +92,8 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertEqual(apply_ba.target_status(descendant), descendant)
 
         malformed = descendant.replace(
-            "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
-            "- production Analysis revisions: **1 / gate OPEN**",
+            "BA adds a **production-closed Analysis revision-lineage contract**",
+            "BA historical architecture marker removed",
             1,
         )
         with self.assertRaises(SystemExit):
@@ -254,7 +254,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertFalse(metadata["public_revision_metadata_projection_allowed"])
         self.assertFalse(metadata["automatic_latest_analysis_selection_allowed"])
         self.assertFalse(metadata["derived_revision_head_projection_allowed"])
-        self.assertEqual(len(projection["reviews"]), 21)
+        self.assertEqual(len(projection["reviews"]), len(self.reviews["reviews"]))
 
     def test_read_only_simulation_protects_all_upstream_and_existing_population_paths(self):
         before = {path: stable_hash(ROOT / path) for path in self.plan["protected_paths"]}

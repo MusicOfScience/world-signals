@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.analysis import validate_analysis
+from world_signals.checkpoint_contract import validate_descendant_checkpoint, version_at_least
 from world_signals.analysis_revision import (
     production_analysis_revision_count,
     validate_analysis_revisions,
@@ -107,15 +108,35 @@ def target_revision_policy() -> dict[str, Any]:
 
 
 def target_analysis_schema(current: dict[str, Any]) -> dict[str, Any]:
-    if current.get("version") == "0.7":
-        target = deepcopy(current)
+    if current.get("version") != "0.6":
+        policy = current.get("analysis_revision_policy") or {}
+        required_fields = set(policy.get("required_revision_fields") or [])
         require(
-            target.get("analysis_revision_policy") == target_revision_policy(),
-            "BA live descendant has unexpected Analysis revision policy",
+            set(target_revision_policy()["required_revision_fields"]).issubset(required_fields),
+            "BA Analysis descendant lost required revision fields",
         )
-        return target
+        report = validate_descendant_checkpoint(
+            versions_at_least={
+                "BA Analysis schema": (current.get("version"), "0.7"),
+            },
+            exact_values={
+                "BA parent preservation": (policy.get("parent_snapshot_must_remain_present"), True),
+                "BA same Canonical occurrence": (policy.get("same_canonical_occurrence_required"), True),
+                "BA as-of advancement": (policy.get("analysis_as_of_must_strictly_advance"), True),
+                "BA cycle prohibition": (policy.get("cycles_prohibited"), True),
+                "BA Live/Analysis lineage separation": (policy.get("live_revision_and_analysis_revision_are_distinct"), True),
+                "BA upstream Canonical mutation": (policy.get("upstream_canonical_mutation_allowed"), False),
+                "BA upstream Live mutation": (policy.get("upstream_live_mutation_allowed"), False),
+                "BA upstream monitor mutation": (policy.get("upstream_monitor_mutation_allowed"), False),
+                "BA Calendar write": (policy.get("google_calendar_write_allowed"), False),
+            },
+        )
+        require(
+            report.ok,
+            "BA Analysis descendant contract failed: " + "; ".join(report.errors),
+        )
+        return deepcopy(current)
 
-    require(current.get("version") == "0.6", "BA Analysis schema requires v0.6 prestate")
     target = deepcopy(current)
     target["version"] = "0.7"
     target["reference_date"] = "2026-09-06"
@@ -133,19 +154,21 @@ def target_analysis_schema(current: dict[str, Any]) -> dict[str, Any]:
     target["guardrails"] = guardrails
     return target
 
-
 def target_status(current: str) -> str:
     old_header = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"
     new_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
     if old_header not in current and new_header not in current:
-        descendant_invariants = (
-            "- Analysis schema: **v0.7**",
-            "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
-            "BA adds a **production-closed Analysis revision-lineage contract**",
+        report = validate_descendant_checkpoint(
+            required_markers={
+                "BA PROJECT_STATUS descendant": (
+                    current,
+                    ["BA adds a **production-closed Analysis revision-lineage contract**"],
+                )
+            }
         )
         require(
-            all(marker in current for marker in descendant_invariants),
-            "BA status descendant is missing frozen BA invariants",
+            report.ok,
+            "BA status descendant is missing frozen BA architecture: " + "; ".join(report.errors),
         )
         return current
     text = current.replace(old_header, new_header, 1)
@@ -180,10 +203,9 @@ def target_status(current: str) -> str:
         text = text.replace(stale, replacement, 1)
     return text
 
-
 def target_roadmap(current: str) -> str:
     heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
-    if heading in current:
+    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:
         return current
     marker = "## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT"
     require(marker in current, "BA roadmap could not locate Stage 9 marker")
@@ -212,26 +234,46 @@ def assert_preconditions(plan: dict[str, Any]) -> None:
     reviews = load(REVIEWS_PATH)
     analysis_evidence = load(ANALYSIS_EVIDENCE_PATH)
 
-    require(canonical.get("version") == pre["canonical_registry_version"], "BA Canonical version drift")
-    require(len(canonical.get("records", [])) == pre["canonical_record_count"], "BA Canonical count drift")
-    require(sources.get("version") == pre["source_registry_version"], "BA Source version drift")
-    require(len(sources.get("sources", [])) == pre["source_count"], "BA Source count drift")
-    require(ledger.get("version") == pre["change_ledger_version"], "BA Change Ledger version drift")
-    require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "BA Change Ledger count drift")
-    require(expectations.get("version") == pre["monitor_expectations_version"], "BA monitor version drift")
-    require(len(expectations.get("adapters", [])) == pre["monitor_adapter_count"], "BA monitor adapter count drift")
-    require(live_schema.get("version") == pre["live_schema_version"], "BA Live schema drift")
-    require(len(live_observations.get("observations", [])) == pre["live_observation_count"], "BA Live observation count drift")
-    require(len(live_evidence.get("evidence", [])) == pre["live_evidence_count"], "BA Live evidence count drift")
-    require(reviews.get("version") == pre["analysis_reviews_version"], "BA Analysis reviews version drift")
-    require(len(reviews.get("reviews", [])) == pre["analysis_review_count"], "BA Analysis review count drift")
-    require(analysis_evidence.get("version") == pre["analysis_evidence_version"], "BA Analysis evidence version drift")
-    require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "BA Analysis evidence count drift")
-    require(production_live_input_count(reviews) == pre["production_live_input_count"], "BA production live-input drift")
-    require(production_analysis_revision_count(reviews) == 0, "BA requires zero pre-existing Analysis revisions")
-    require(exact_series_count(reviews) == pre["production_exact_timestamp_series_count"], "BA exact-series drift")
-    require(analysis_schema.get("version") in {"0.6", "0.7"}, "BA unexpected Analysis schema descendant")
+    materialised = version_at_least(analysis_schema.get("version"), "0.7")
+    if not materialised:
+        require(canonical.get("version") == pre["canonical_registry_version"], "BA Canonical version drift")
+        require(len(canonical.get("records", [])) == pre["canonical_record_count"], "BA Canonical count drift")
+        require(sources.get("version") == pre["source_registry_version"], "BA Source version drift")
+        require(len(sources.get("sources", [])) == pre["source_count"], "BA Source count drift")
+        require(ledger.get("version") == pre["change_ledger_version"], "BA Change Ledger version drift")
+        require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "BA Change Ledger count drift")
+        require(expectations.get("version") == pre["monitor_expectations_version"], "BA monitor version drift")
+        require(len(expectations.get("adapters", [])) == pre["monitor_adapter_count"], "BA monitor adapter count drift")
+        require(live_schema.get("version") == pre["live_schema_version"], "BA Live schema drift")
+        require(len(live_observations.get("observations", [])) == pre["live_observation_count"], "BA Live observation count drift")
+        require(len(live_evidence.get("evidence", [])) == pre["live_evidence_count"], "BA Live evidence count drift")
+        require(analysis_schema.get("version") == pre["analysis_schema_version"], "BA Analysis schema drift")
+        require(reviews.get("version") == pre["analysis_reviews_version"], "BA Analysis reviews version drift")
+        require(len(reviews.get("reviews", [])) == pre["analysis_review_count"], "BA Analysis review count drift")
+        require(analysis_evidence.get("version") == pre["analysis_evidence_version"], "BA Analysis evidence version drift")
+        require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "BA Analysis evidence count drift")
+        require(production_live_input_count(reviews) == pre["production_live_input_count"], "BA production live-input drift")
+        require(production_analysis_revision_count(reviews) == 0, "BA requires zero pre-existing Analysis revisions")
+        require(exact_series_count(reviews) == pre["production_exact_timestamp_series_count"], "BA exact-series drift")
+        return
 
+    report = validate_descendant_checkpoint(
+        versions_at_least={
+            "BA Analysis schema": (analysis_schema.get("version"), "0.7"),
+            "BA Analysis reviews": (reviews.get("version"), pre["analysis_reviews_version"]),
+            "BA Analysis evidence": (analysis_evidence.get("version"), pre["analysis_evidence_version"]),
+            "BA Live schema": (live_schema.get("version"), pre["live_schema_version"]),
+        },
+        counts_at_least={
+            "BA Analysis review population": (len(reviews.get("reviews", [])), pre["analysis_review_count"]),
+            "BA Analysis evidence population": (len(analysis_evidence.get("evidence", [])), pre["analysis_evidence_count"]),
+            "BA Live observation population": (len(live_observations.get("observations", [])), pre["live_observation_count"]),
+            "BA Live evidence population": (len(live_evidence.get("evidence", [])), pre["live_evidence_count"]),
+            "BA production Live inputs": (production_live_input_count(reviews), pre["production_live_input_count"]),
+        },
+    )
+    require(report.ok, "BA descendant precondition failed: " + "; ".join(report.errors))
+    target_analysis_schema(analysis_schema)
 
 def simulate() -> dict[str, Any]:
     return {
@@ -250,11 +292,31 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     live_evidence = load(LIVE_EVIDENCE_PATH)
     live_observations = load(LIVE_OBSERVATIONS_PATH)
 
-    require(schema.get("version") == "0.7", "BA target Analysis schema must be v0.7")
-    require(schema.get("analysis_revision_policy") == target_revision_policy(), "BA revision policy drift")
-    require(production_analysis_revision_count(reviews) == 0, "BA target must keep production Analysis revisions at zero")
-    require(production_live_input_count(reviews) == 1, "BA target must preserve exactly one production Live input")
-    require(exact_series_count(reviews) == 0, "BA target must preserve EXACT_TIMESTAMP_SERIES=0")
+    target_analysis_schema(schema)
+    exact_foundation = (
+        schema.get("version") == "0.7"
+        and len(reviews.get("reviews", [])) == 21
+        and len(evidence.get("evidence", [])) == 95
+        and production_analysis_revision_count(reviews) == 0
+        and production_live_input_count(reviews) == 1
+    )
+    if exact_foundation:
+        require(schema.get("analysis_revision_policy") == target_revision_policy(), "BA revision policy drift")
+        require(exact_series_count(reviews) == 0, "BA target must preserve EXACT_TIMESTAMP_SERIES=0")
+    else:
+        report = validate_descendant_checkpoint(
+            versions_at_least={
+                "BA target Analysis schema": (schema.get("version"), "0.7"),
+                "BA target reviews": (reviews.get("version"), "0.17"),
+                "BA target evidence": (evidence.get("version"), "0.17"),
+            },
+            counts_at_least={
+                "BA target review population": (len(reviews.get("reviews", [])), 21),
+                "BA target evidence population": (len(evidence.get("evidence", [])), 95),
+                "BA target production Live inputs": (production_live_input_count(reviews), 1),
+            },
+        )
+        require(report.ok, "BA target descendant failed: " + "; ".join(report.errors))
 
     core = validate_analysis(schema, evidence, reviews, canonical)
     require(core.ok, "BA target core Analysis validation failed: " + "; ".join(core.errors))
@@ -265,15 +327,13 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     live = validate_live_intelligence(live_schema, live_evidence, live_observations, canonical)
     require(live.ok, "BA target Live validation failed: " + "; ".join(live.errors))
 
-    require(
-        "production Analysis revisions: **0 / gate CLOSED" in target["status"],
-        "BA status target missing closed revision gate",
+    docs = validate_descendant_checkpoint(
+        required_markers={
+            "BA status": (target["status"], ["BA adds a **production-closed Analysis revision-lineage contract**"]),
+            "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
+        }
     )
-    require(
-        "Stage 8A — Analysis revision lineage" in target["roadmap"],
-        "BA roadmap target missing revision stage",
-    )
-
+    require(docs.ok, "BA target documentation drift: " + "; ".join(docs.errors))
 
 def write_target(target: dict[str, Any]) -> None:
     ANALYSIS_SCHEMA_PATH.write_text(dump(target["analysis_schema"]), encoding="utf-8")

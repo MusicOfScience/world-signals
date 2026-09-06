@@ -1,4 +1,4 @@
-# CURRENT RECOVERY OVERRIDE — POST-BA / BB BARMM CANONICAL COVERAGE REPAIR
+# CURRENT RECOVERY OVERRIDE — POST-BB / BC CHECKPOINT DESCENDANT CONTRACT
 
 **Effective checkpoint:** 2026-09-06
 **Exact post-BA main base:** `b8c5372198e3141c4c3f79ace13083877447f71b`
@@ -28,6 +28,8 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
+BC adds a **no-population historical-checkpoint / reviewed-descendant contract** after BB exposed repeated stale ceilings in older tranche tests and helpers. Before a tranche target exists, exact historical preconditions remain mandatory. After the target is materialised, the old helper validates only tranche-owned identity, relationship and structural invariants plus legitimate version/population floors; unrelated later Source, Change Ledger, monitor, Live or Analysis growth is not treated as drift. BC opens no production gate and changes no Canonical, Source, Change Ledger, Live or Analysis population.
+
 BB repairs an upstream Southeast Asian election-coverage omission before any further Live or Analysis population: one manually governed COMELEC source and the confirmed **14 September 2026 BARMM parliamentary-election polling day** are admitted to Source Registry / Canonical / Change Ledger. The occurrence remains `PLANNED`, uses `CIVIL_DATE` / day precision in `Asia/Manila`, and carries no fabricated UTC timestamp, outcome or market response. OPAPRU peace-process material informed significance screening but is not a second Canonical timing authority. Source automation remains held.
 
 BA adds a **production-closed Analysis revision-lineage contract** before any further Live or bridge population. A future revision must be a new immutable Analysis snapshot with an explicit direct parent, preserved prior snapshot, the same Canonical occurrence and a strictly later `analysis_as_of_utc`. Automatic latest-head selection, public revision metadata projection and all upstream writes remain closed. BA adds no production revision, no Live observation and no Analysis evidence.
@@ -40,7 +42,7 @@ The two DRC observations share one manually reviewed story key. The 30 August sn
 
 Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. The DRC story key is not a Canonical occurrence, causal claim or analytical conclusion. A fourth observation or broader ingestion requires another pressure audit.
 
-After BB, a fresh pressure audit must decide whether the now-anchored BARMM transition warrants downstream Live/Analysis work, whether another Live class creates greater contract pressure, or whether a genuinely evidence-driven first Analysis revision has emerged. No downstream population is pre-authorised by this coverage repair.
+After BC, a fresh pressure audit must decide whether the now-anchored BARMM transition warrants downstream Live/Analysis work, whether another Live class creates greater contract pressure, whether a second Live→Analysis relationship is justified, or whether a genuinely evidence-driven first Analysis revision has emerged. No downstream population is pre-authorised by BC.
 
 ## Current configured monitor cohort
 
