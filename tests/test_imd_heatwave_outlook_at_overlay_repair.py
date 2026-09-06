@@ -55,7 +55,7 @@ class IMDHeatwaveOutlookATOverlayRepairTests(unittest.TestCase):
     def test_repair_is_checkpoint_alignment_not_overlay_semantic_population(self):
         repair = self.plan["transaction_architecture_repair"]
         self.assertEqual(repair["trigger"], "FIRST_CONTROLLED_WRITE_FAILED_CLOSED_IN_FULL_REPOSITORY_SUITE")
-        self.assertIn("canonical_checkpoint", repair["finding"])
+        self.assertIn("Canonical checkpoint", repair["finding"])
         self.assertTrue(self.plan["safety"]["biosecurity_overlay_semantics_unchanged"])
         self.assertTrue(self.plan["safety"]["biosecurity_overlay_checkpoint_tracks_canonical"])
 
