@@ -1,0 +1,99 @@
+name: BE final clean-head branch audit
+
+on:
+  push:
+    branches: [feature/post-bd-opec-outcome-be]
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify ancestry and permanent diff
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          test "$(git merge-base HEAD origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          mapfile -t files < <(git diff --name-only origin/main...HEAD | grep -v '^.github/workflows/be-final-branch-audit.yml$' | sort)
+          expected=(PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/OPEC_FALLBACK_COMPLETION_BE_PLAN_v0.1.json data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md data/coverage/POST_BD_PRESSURE_AUDIT_BE_v0.1.md data/coverage/biosecurity_overlay.json data/sources/registry.json scripts/apply_opec_fallback_completion_be.py tests/test_barmm_parliamentary_election_bb.py tests/test_imd_heatwave_outlook_analysis_au.py tests/test_opec_fallback_completion_be.py)
+          test "${#files[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${files[$i]}" = "${expected[$i]}"; done
+          git diff --exit-code origin/main...HEAD -- data/canonical/schema.json data/monitor data/live_intelligence data/analysis
+      - name: Verify committed BE state and historical mutation scope
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          def old(path):
+              return json.loads(subprocess.check_output(['git','show',f'origin/main:{path}'],text=True))
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
+          o=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          c0=old('data/canonical/registry.json'); s0=old('data/sources/registry.json'); l0=old('data/changes/ledger.json'); o0=old('data/coverage/biosecurity_overlay.json')
+          assert (c['version'],len(c['records']))==('0.40',689)
+          assert (s['version'],len(s['sources']))==('1.82',245)
+          assert (l['version'],len(l['changes']))==('0.26',61)
+          assert o['version']=='0.15' and o['canonical_checkpoint']=={'registry_version':'0.40','record_count':689}
+          before={r['occurrence_id']:r for r in c0['records']}; after={r['occurrence_id']:r for r in c['records']}
+          changed=[oid for oid in before if before[oid]!=after[oid]]
+          assert changed==['WSO-COM-A-0001'], changed
+          b=before[changed[0]]; a=after[changed[0]]
+          fields={k for k in set(b)|set(a) if b.get(k)!=a.get(k)}
+          assert fields=={'lifecycle_status','last_verified_at','last_successful_assertion_id','status_history','related_documents'}, fields
+          assert a['lifecycle_status']=='COMPLETED' and a['certainty_status']=='CONFIRMED'
+          assert a['start_local']=='2026-09-06' and a['start_utc'] is None and a['source_timezone'] is None
+          assert a['source_id']=='WSSRC-COM-001' and a['series_id']=='WSER-COM-OPEC-VOL'
+          assert a['status_history'][-1]['primary_provenance_upgrade_state']=='REQUIRED_WHEN_RETRIEVABLE'
+          assert s['sources'][:-1]==s0['sources']
+          src=s['sources'][-1]
+          assert src['source_id']=='WSSRC-COM-015' and src['institution']=='Reuters' and src['canonical_dependency_count']==0
+          assert src['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert l['changes'][:-1]==l0['changes']
+          assert l['changes'][-1]['change_id']=='WSCHANGE-4730a5ef260b271967'
+          def semantics(x): return {k:v for k,v in x.items() if k not in {'version','canonical_checkpoint'}}
+          assert semantics(o)==semantics(o0)
+          assert not any(r.get('series_id')=='WSER-COM-OPEC-VOL' and str(r.get('start_local','')).startswith('2026-10-04') for r in c['records'])
+          audit=Path('data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md').read_text()
+          assert '83982d68dd1495a9896b95e6ffed5d765e38502a' in audit
+          assert '34040428256' in audit and '34040519856' in audit
+          PY
+      - name: Run full committed validation
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_opec_fallback_completion_be.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          git restore docs 2>/dev/null || true
+          test -z "$(git status --porcelain)"
+      - name: Self-remove final audit
+        if: always()
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/be-final-branch-audit.yml
+          git commit -m "BE: remove final clean-head branch audit"
+          git push origin HEAD:feature/post-bd-opec-outcome-be
