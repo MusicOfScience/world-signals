@@ -1,0 +1,90 @@
+name: BG OPEC official-confirmation preflight
+on:
+  push:
+    branches: [feature/post-bf-pressure-audit-bg]
+permissions:
+  contents: write
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BF ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "363c5ff249ca8833744f15d74750d9377e8a9002"
+          test "$(git merge-base HEAD origin/main)" = "363c5ff249ca8833744f15d74750d9377e8a9002"
+      - name: Snapshot protected paths
+        shell: bash
+        run: |
+          sha256sum data/canonical/schema.json data/monitor/expectations.json data/monitor/operations_policy.json data/monitor/review_candidate_state_contract.json data/monitor/review_decisions.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json > /tmp/bg-protected.sha
+      - name: Read-only BG simulation
+        run: python scripts/apply_opec_official_confirmation_bg.py --check-only
+      - name: Targeted BG and BE regression tests
+        run: python -m unittest tests.test_opec_official_confirmation_bg tests.test_opec_fallback_completion_be -v
+      - name: Full suite on untouched post-BF descendant
+        run: python -m unittest discover -s tests -v
+      - name: Materialise ephemeral BG target
+        env:
+          WORLD_SIGNALS_APPLY_OPEC_OFFICIAL_CONFIRMATION_BG: YES
+        run: python scripts/apply_opec_official_confirmation_bg.py --apply
+      - name: Validate ephemeral BG target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_opec_official_confirmation_bg.py --check-only
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_opec_official_confirmation_bg.py tests/test_opec_official_confirmation_bg.py tests/test_opec_fallback_completion_be.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Prove BG mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c /tmp/bg-protected.sha
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          canonical=json.loads(Path('data/canonical/registry.json').read_text()); sources=json.loads(Path('data/sources/registry.json').read_text()); ledger=json.loads(Path('data/changes/ledger.json').read_text()); overlay=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          assert canonical['version']=='0.41' and len(canonical['records'])==689
+          assert sources['version']=='1.83' and len(sources['sources'])==246
+          assert ledger['version']=='0.27' and len(ledger['changes'])==62
+          assert overlay['version']=='0.16' and overlay['canonical_checkpoint']=={'registry_version':'0.41','record_count':689}
+          row=[x for x in canonical['records'] if x['occurrence_id']=='WSO-COM-A-0001'][0]; docs={x['source_id']:x for x in row.get('related_documents',[])}
+          assert row['lifecycle_status']=='COMPLETED' and row['start_local']=='2026-09-06' and row['start_utc'] is None
+          assert 'WSSRC-COM-015' in docs and 'WSSRC-COM-016' in docs and docs['WSSRC-COM-016']['primary_opec_provenance_state']=='REQUIRED_WHEN_RETRIEVABLE'
+          spa=[x for x in sources['sources'] if x['source_id']=='WSSRC-COM-016'][0]
+          assert spa['canonical_dependency_count']==0 and spa['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert ledger['changes'][-1]['change_type']=='SOURCE_PROVENANCE_STRENGTHENING'
+          expected={'PROJECT_STATUS.md','ROADMAP.md','data/canonical/registry.json','data/sources/registry.json','data/changes/ledger.json','data/coverage/biosecurity_overlay.json'}
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()); assert changed==expected,(changed,expected)
+          print('BG mutation boundary: PASS')
+          PY
+      - name: Restore ephemeral writes and self-remove workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          rm -f .github/workflows/bg-opec-official-confirmation-preflight.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A .github/workflows/bg-opec-official-confirmation-preflight.yml
+          if ! git diff --cached --quiet; then git commit -m 'BG: remove temporary fail-closed preflight'; git push origin HEAD:feature/post-bf-pressure-audit-bg; fi
