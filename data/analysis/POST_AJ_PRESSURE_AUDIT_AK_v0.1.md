@@ -109,6 +109,12 @@ Non-exact source-reported rows remain valid and are not upgraded merely because 
 
 The static build generates `docs/data/analysis.json` to expose the new Analysis schema version and contract metadata for verification. `/docs/` is git-ignored, so this is a generated build artefact rather than part of AK's repository mutation boundary; no exact observations are created.
 
+## Fail-closed descendant-test repair
+
+The first controlled AK transaction reached the post-write full-suite gate after the schema write, canonical validation, Analysis validation and AK-specific synthetic tests had all passed. It then failed on exactly four historical tests because those tests did two different things in the same assertion block: they correctly froze their own tranche's schema decision at v0.3 **and** incorrectly required the current live descendant schema to remain exactly v0.3 forever.
+
+The affected tests were X, W, V and AA. Their historical plans and checkpoints remain untouched and continue to assert their exact v0.3 decisions. Only the live-descendant assertion was repaired to permit `current schema >= v0.3`; V additionally asserts its frozen `analysis_schema_evolution.to_version == 0.3`. No project-wide validation rule was weakened. This is precisely the distinction between a frozen historical tranche checkpoint and a non-fossilised descendant assertion.
+
 ## Guardrails
 
 - Canonical event time **does not** confer market-series precision.
@@ -117,5 +123,6 @@ The static build generates `docs/data/analysis.json` to expose the new Analysis 
 - A licensed internal dataset is **not** automatically permitted in a public projection.
 - A bare permission boolean is **not** sufficient rights provenance.
 - `EXACT_TIMESTAMP_SERIES == 0` is an acceptable post-state; the objective is a defensible contract, not filling the enum.
+- Historical tranche schema decisions remain frozen even when the live descendant schema legitimately advances.
 - The RBA FSR, SB64, WHA79, South Korean local elections and EU sanctions renewal remain legitimate later specimens; none is compulsory backlog.
 - The market-structure category gap remains open unless a genuinely useful historical anchor is independently justified.
