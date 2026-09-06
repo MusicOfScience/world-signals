@@ -1,0 +1,190 @@
+name: BE controlled OPEC fallback transaction
+
+on:
+  push:
+    branches: [feature/post-bd-opec-outcome-be]
+
+permissions:
+  contents: write
+
+jobs:
+  transact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact transaction ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          test "$(git merge-base HEAD origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          test -z "$(git status --porcelain)"
+          python scripts/apply_opec_fallback_completion_be.py --check-only
+      - name: Capture protected pre-transaction hashes
+        run: |
+          python - <<'PY' > /tmp/be-protected-before.json
+          import hashlib,json
+          from pathlib import Path
+          paths=[
+            'data/canonical/schema.json',
+            'data/monitor/expectations.json',
+            'data/monitor/operations_policy.json',
+            'data/monitor/review_candidate_state_contract.json',
+            'data/monitor/review_decisions.json',
+            'data/live_intelligence/schema.json',
+            'data/live_intelligence/observations.json',
+            'data/live_intelligence/evidence_registry.json',
+            'data/analysis/schema.json',
+            'data/analysis/event_reviews.json',
+            'data/analysis/evidence_registry.json',
+          ]
+          print(json.dumps({p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths},sort_keys=True))
+          PY
+      - name: Apply BE and validate full descendant
+        env:
+          WORLD_SIGNALS_APPLY_OPEC_FALLBACK_COMPLETION_BE: YES
+        run: |
+          set -euo pipefail
+          python scripts/apply_opec_fallback_completion_be.py --apply
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_opec_fallback_completion_be.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          git restore docs 2>/dev/null || true
+      - name: Prove target and mutation boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          before=json.loads(Path('/tmp/be-protected-before.json').read_text())
+          after={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in before}
+          assert before==after, [(p,before[p],after[p]) for p in before if before[p]!=after[p]]
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
+          o=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          row=next(x for x in c['records'] if x['occurrence_id']=='WSO-COM-A-0001')
+          source=next(x for x in s['sources'] if x['source_id']=='WSSRC-COM-015')
+          change=next(x for x in l['changes'] if x['change_id']=='WSCHANGE-4730a5ef260b271967')
+          assert (c['version'],len(c['records']))==('0.40',689)
+          assert (s['version'],len(s['sources']))==('1.82',245)
+          assert (l['version'],len(l['changes']))==('0.26',61)
+          assert o['version']=='0.15' and o['canonical_checkpoint']=={'registry_version':'0.40','record_count':689}
+          assert row['lifecycle_status']=='COMPLETED'
+          assert row['start_local']=='2026-09-06' and row['start_utc'] is None and row['source_timezone'] is None
+          assert row['source_id']=='WSSRC-COM-001' and row['series_id']=='WSER-COM-OPEC-VOL'
+          assert row['status_history'][-1]['primary_provenance_upgrade_state']=='REQUIRED_WHEN_RETRIEVABLE'
+          assert source['institution']=='Reuters' and source['canonical_dependency_count']==0
+          assert source['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert change['new_values']['primary_outcome_provenance_state']=='PENDING_PRIMARY_UPGRADE'
+          assert change['automatic_canonical_commit'] is False and change['google_calendar_write'] is False
+          assert not any(x.get('series_id')=='WSER-COM-OPEC-VOL' and str(x.get('start_local','')).startswith('2026-10-04') for x in c['records'])
+          print(json.dumps(after,sort_keys=True))
+          PY
+          mapfile -t changed < <(git diff --name-only | sort)
+          expected=(PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json)
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${changed[$i]}" = "${expected[$i]}"; done
+      - name: Write transaction audit and commit governed target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          before=json.loads(Path('/tmp/be-protected-before.json').read_text())
+          lines=[
+            '# WORLD SIGNALS — OPEC fallback completion BE transaction audit v0.1',
+            '',
+            '**Transaction date:** 2026-09-07  ',
+            '**Exact post-BD main base:** `e54dddbaa0d60a39babc2fa47c1f054954b5c9ac`  ',
+            f"**Transaction workflow run:** `{os.environ.get('GITHUB_RUN_ID')}`  ",
+            '**Governed target commit:** `TARGET_COMMIT_PENDING_CLEANUP`',
+            '',
+            '## Reviewed decision',
+            '',
+            '- Existing occurrence `WSO-COM-A-0001` is updated `PLANNED → COMPLETED`; stable occurrence/series identity is preserved.',
+            '- `WSSRC-COM-001` remains the governed OPEC schedule/decision authority.',
+            '- `WSSRC-COM-015` is a completion-only Reuters fallback because the competent 6 September OPEC outcome statement was not retrievable on the accessible/indexed OPEC surface at BE review time.',
+            '- The fallback does not become primary authority. Primary OPEC provenance remains `REQUIRED_WHEN_RETRIEVABLE` and the fallback remains in history after any later upgrade.',
+            '- The Reuters-reported 4 October meeting is not admitted to Canonical by BE.',
+            '',
+            '## Resulting governed state',
+            '',
+            '- Canonical Registry: **v0.40 / 689**',
+            '- Source Registry: **v1.82 / 245**',
+            '- Change Ledger: **v0.26 / 61**',
+            '- biosecurity overlay: **v0.15 @ Canonical v0.40 / 689**, checkpoint only; semantic overlay unchanged',
+            '- Source/Change Monitor: **v0.10 / 8 adapters**, unchanged',
+            '- Live Intelligence: **v0.5 / 5 observations / 7 evidence**, unchanged; public projection closed',
+            '- Analysis: **schema v0.7 / 21 reviews / 95 evidence**, unchanged',
+            '- completed Analysis-eligible occurrences: **22**; reviewed: **21**; one completed/unreviewed anchor is a consequence of lifecycle truth, not a population target',
+            '- production Live inputs: **1**; production Analysis revisions: **0**; production exact-timestamp series: **0**',
+            '- automatic Canonical commit: **OFF**; Google Calendar writes: **OFF**',
+            '',
+            '## Preflight history',
+            '',
+            '- Focused corrected gate `34040066955`: green.',
+            '- First full preflight `34040135323`: Canonical/Live/Analysis validators and the BE materialisation were green; two stale historical descendant regressions (BB and AU) blocked the suite; fail-safe cleanup removed all ephemeral writes.',
+            '- Descendant repair check `34040372849`: BB, AU and BE regressions green in both prestate and materialised BE descendant.',
+            '- Full read-only preflight v2 `34040428256`: untouched and ephemeral descendants, full test suite, static build, protected hashes and exact six-file mutation boundary all green.',
+            '',
+            '## Protected-layer SHA-256',
+            '',
+          ]
+          lines += [f'- `{p}`: `{digest}`' for p,digest in sorted(before.items())]
+          lines += [
+            '',
+            'The transaction changes no Canonical schema, monitor configuration/review-state contract, Live Intelligence data/schema or Analysis data/schema. The BB and AU test repairs are test-only descendant-safety changes and preserve their frozen historical checkpoints.',
+            '',
+            'Manual PR merge only. No auto-merge.',
+            '',
+          ]
+          Path('data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md').write_text('\n'.join(lines),encoding='utf-8')
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md
+          git commit -m "BE: complete 6 September OPEC+ review with bounded fallback provenance"
+          git push origin HEAD:feature/post-bd-opec-outcome-be
+          git rev-parse HEAD > /tmp/be-target-commit
+      - name: Record governed commit and remove transaction workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          if test -f /tmp/be-target-commit; then
+            target="$(cat /tmp/be-target-commit)"
+            python - "$target" <<'PY'
+          import sys
+          from pathlib import Path
+          p=Path('data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md')
+          text=p.read_text(encoding='utf-8').replace('TARGET_COMMIT_PENDING_CLEANUP',sys.argv[1])
+          p.write_text(text,encoding='utf-8')
+          PY
+            git add data/coverage/OPEC_FALLBACK_COMPLETION_BE_TRANSACTION_AUDIT_v0.1.md
+            git rm .github/workflows/be-controlled-transaction.yml
+            git commit -m "BE: record transaction commit and remove temporary workflow"
+            git push origin HEAD:feature/post-bd-opec-outcome-be
+          else
+            git reset --hard HEAD
+            git clean -fd
+            git rm .github/workflows/be-controlled-transaction.yml
+            git commit -m "BE: remove failed controlled transaction workflow"
+            git push origin HEAD:feature/post-bd-opec-outcome-be
+          fi
