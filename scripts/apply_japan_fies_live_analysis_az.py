@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.analysis import analysis_population_readiness, validate_analysis
+from world_signals.checkpoint_contract import validate_descendant_checkpoint, version_at_least
 from world_signals.live_analysis_bridge import (
     production_live_input_count,
     validate_live_analysis_bridge,
@@ -90,17 +91,19 @@ def assert_preconditions(plan: dict[str, Any]) -> None:
     reviews = load(REVIEWS_PATH)
     analysis_evidence = load(ANALYSIS_EVIDENCE_PATH)
 
-    require(canonical.get("version") == pre["canonical_registry_version"], "AZ Canonical version drift")
-    require(len(canonical.get("records", [])) == pre["canonical_record_count"], "AZ Canonical count drift")
-    require(sources.get("version") == pre["source_registry_version"], "AZ Source version drift")
-    require(len(sources.get("sources", [])) == pre["source_count"], "AZ Source count drift")
-    require(ledger.get("version") == pre["change_ledger_version"], "AZ Change Ledger version drift")
-    require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "AZ Change Ledger count drift")
-    require(expectations.get("version") == pre["monitor_expectations_version"], "AZ monitor version drift")
-    require(len(expectations.get("adapters", [])) == pre["monitor_adapter_count"], "AZ monitor adapter count drift")
+    selection = plan["selection"]
+    live_present = any(
+        row.get("observation_id") == selection["live_observation_id"]
+        for row in live_observations.get("observations", [])
+    )
+    analysis_present = any(
+        row.get("analysis_id") == selection["analysis_id"]
+        for row in reviews.get("reviews", [])
+    )
+    require(live_present == analysis_present, "AZ partial materialisation detected")
 
-    target = canonical_target(canonical, plan["selection"]["canonical_occurrence_id"])
-    require(target.get("series_id") == plan["selection"]["canonical_series_id"], "AZ target series drift")
+    target = canonical_target(canonical, selection["canonical_occurrence_id"])
+    require(target.get("series_id") == selection["canonical_series_id"], "AZ target series drift")
     require(target.get("jurisdiction") == "Japan", "AZ target jurisdiction drift")
     require((target.get("region") or target.get("broad_region")) == "East Asia", "AZ target region drift")
     require(target.get("category") == "MACROECONOMIC_RELEASE", "AZ target category drift")
@@ -111,49 +114,52 @@ def assert_preconditions(plan: dict[str, Any]) -> None:
     require(target.get("time_precision") == "DAY", "AZ target time precision drift")
     require(target.get("start_utc") is None, "AZ must not start from a fabricated Canonical UTC")
 
-    if live_schema.get("version") == pre["live_schema_version"]:
+    if not live_present:
+        require(canonical.get("version") == pre["canonical_registry_version"], "AZ Canonical version drift")
+        require(len(canonical.get("records", [])) == pre["canonical_record_count"], "AZ Canonical count drift")
+        require(sources.get("version") == pre["source_registry_version"], "AZ Source version drift")
+        require(len(sources.get("sources", [])) == pre["source_count"], "AZ Source count drift")
+        require(ledger.get("version") == pre["change_ledger_version"], "AZ Change Ledger version drift")
+        require(len(ledger.get("changes", [])) == pre["change_ledger_count"], "AZ Change Ledger count drift")
+        require(expectations.get("version") == pre["monitor_expectations_version"], "AZ monitor version drift")
+        require(len(expectations.get("adapters", [])) == pre["monitor_adapter_count"], "AZ monitor adapter count drift")
+        require(live_schema.get("version") == pre["live_schema_version"], "AZ Live schema drift")
         require(len(live_observations.get("observations", [])) == pre["live_observation_count"], "AZ Live observation count drift")
         require(len(live_evidence.get("evidence", [])) == pre["live_evidence_count"], "AZ Live evidence count drift")
-    else:
-        require(live_schema.get("version") == plan["target_state"]["live_schema_version"], "AZ unexpected Live schema descendant")
-
-    if analysis_schema.get("version") == pre["analysis_schema_version"]:
+        require(analysis_schema.get("version") == pre["analysis_schema_version"], "AZ Analysis schema drift")
         require(reviews.get("version") == pre["analysis_reviews_version"], "AZ reviews version drift")
         require(len(reviews.get("reviews", [])) == pre["analysis_review_count"], "AZ review count drift")
         require(analysis_evidence.get("version") == pre["analysis_evidence_version"], "AZ Analysis evidence version drift")
         require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "AZ Analysis evidence count drift")
         require(production_live_input_count(reviews) == pre["production_live_input_count"], "AZ live-input prestate drift")
-    else:
-        target_state = plan["target_state"]
-        try:
-            descendant_version = version_tuple(analysis_schema.get("version"))
-            az_version = version_tuple(target_state["analysis_schema_version"])
-        except (TypeError, ValueError):
-            descendant_version = ()
-            az_version = (0, 6)
-        require(
-            descendant_version >= az_version,
-            "AZ unexpected Analysis schema descendant",
-        )
-        require(reviews.get("version") == target_state["analysis_reviews_version"], "AZ descendant reviews version drift")
-        require(len(reviews.get("reviews", [])) == target_state["analysis_review_count"], "AZ descendant review count drift")
-        require(analysis_evidence.get("version") == target_state["analysis_evidence_version"], "AZ descendant Analysis evidence version drift")
-        require(len(analysis_evidence.get("evidence", [])) == target_state["analysis_evidence_count"], "AZ descendant Analysis evidence count drift")
-        require(production_live_input_count(reviews) == target_state["production_live_input_count"], "AZ descendant live-input population drift")
-        live_input_policy = analysis_schema.get("live_input_policy") or {}
-        require(live_input_policy.get("mode") == "CONTROLLED_SINGLE_PRODUCTION_LINK", "AZ descendant bridge mode drift")
-        require(live_input_policy.get("maximum_production_live_inputs") == 1, "AZ descendant live-input maximum drift")
-        require(live_input_policy.get("maximum_live_inputs_per_review") == 1, "AZ descendant per-review live-input maximum drift")
-        require(live_input_policy.get("factual_input_requires_matching_canonical_occurrence") is True, "AZ descendant same-anchor gate drift")
-        require(live_input_policy.get("public_live_input_projection_allowed") is False, "AZ descendant public Live-input projection opened")
+        require(exact_series_count(reviews) == pre["production_exact_timestamp_series_count"], "AZ exact-series prestate drift")
+        return
 
-    require(exact_series_count(reviews) == pre["production_exact_timestamp_series_count"], "AZ exact-series prestate drift")
-
+    post = plan["target_state"]
+    report = validate_descendant_checkpoint(
+        versions_at_least={
+            "AZ Live schema": (live_schema.get("version"), post["live_schema_version"]),
+            "AZ Analysis schema": (analysis_schema.get("version"), post["analysis_schema_version"]),
+            "AZ reviews dataset": (reviews.get("version"), post["analysis_reviews_version"]),
+            "AZ evidence dataset": (analysis_evidence.get("version"), post["analysis_evidence_version"]),
+        },
+        counts_at_least={
+            "AZ Live observations": (len(live_observations.get("observations", [])), post["live_observation_count"]),
+            "AZ Live evidence": (len(live_evidence.get("evidence", [])), post["live_evidence_count"]),
+            "AZ Analysis reviews": (len(reviews.get("reviews", [])), post["analysis_review_count"]),
+            "AZ Analysis evidence": (len(analysis_evidence.get("evidence", [])), post["analysis_evidence_count"]),
+            "AZ production Live inputs": (production_live_input_count(reviews), post["production_live_input_count"]),
+        },
+    )
+    require(report.ok, "AZ descendant precondition failed: " + "; ".join(report.errors))
 
 def target_live_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
-    if current.get("version") == "0.4":
+    if current.get("version") != "0.3":
+        require(
+            version_at_least(current.get("version"), "0.4"),
+            "AZ Live schema requires v0.3 prestate or v0.4+ reviewed descendant",
+        )
         return deepcopy(current)
-    require(current.get("version") == "0.3", "AZ Live schema requires v0.3 prestate")
     target = deepcopy(current)
     target["version"] = "0.4"
     target["reference_date"] = "2026-09-06"
@@ -165,7 +171,7 @@ def target_live_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[st
         "observation_count": 3,
         "evidence_count": 4,
         "post_merge_main_sha": "0a7608ab56116d0f65ffd1492a3da87bcbf35f47",
-        "historical_contract": "AX v0.3 preserved the AW Nepal shock and added two reviewed DRC evolving-state snapshots while public projection, automatic ingestion and automatic story clustering remained closed."
+        "historical_contract": "AX v0.3 preserved the AW Nepal shock and added two reviewed DRC evolving-state snapshots while public projection, automatic ingestion and automatic story clustering remained closed.",
     }
     target["population_policy"] = {
         "mode": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
@@ -176,10 +182,11 @@ def target_live_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[st
         "automatic_ingestion_allowed": False,
         "existing_analysis_evidence_migration_allowed": False,
         "public_observation_projection_allowed": False,
-        "reason": "AZ adds exactly one reviewed Japan FIES economic-data observation with a real OUTCOME_OF Canonical link and two primary-official Live evidence rows. Further Live population requires another pressure audit."
+        "reason": "AZ adds exactly one reviewed Japan FIES economic-data observation with a real OUTCOME_OF Canonical link and two primary-official Live evidence rows. Further Live population requires another pressure audit.",
     }
     guardrails = [
-        item for item in (target.get("guardrails") or [])
+        item
+        for item in (target.get("guardrails") or [])
         if not item.startswith("AX v0.3 allows only")
         and not item.startswith("Public observation projection, automatic ingestion")
     ]
@@ -188,7 +195,7 @@ def target_live_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[st
         "AZ v0.4 adds exactly one reviewed ECONOMIC_DATA_OBSERVATION for Japan July 2026 FIES and does not convert the same release's retrospective April-June data-vintage note into synthetic prior Live history.",
         "A scheduled Live economic-data observation may link OUTCOME_OF a real completed Canonical occurrence without changing Canonical identity, provenance or timing.",
         "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in AZ v0.4.",
-        "A fifth Live observation or broader ingestion requires another pressure audit."
+        "A fifth Live observation or broader ingestion requires another pressure audit.",
     ]
     for item in additions:
         if item not in guardrails:
@@ -196,44 +203,42 @@ def target_live_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[st
     target["guardrails"] = guardrails
     return target
 
-
 def target_live_observations(current: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     target = deepcopy(current)
-    ids = {row.get("observation_id") for row in target.get("observations", [])}
     row = deepcopy(payload["live_observation"])
-    if row["observation_id"] not in ids:
-        require(len(target.get("observations", [])) == 3, "AZ expected exactly three pre-existing Live observations")
-        target["observations"].append(row)
+    ids = {item.get("observation_id") for item in target.get("observations", [])}
+    if row["observation_id"] in ids:
+        return target
+    require(len(target.get("observations", [])) == 3, "AZ expected exactly three pre-existing Live observations")
+    target["observations"].append(row)
     target["version"] = "0.4"
     target["reference_date"] = "2026-09-06"
     target["population_state"] = "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN"
     target["scope_note"] = "Bounded reviewed internal Live Intelligence store: AW Nepal shock, AX DRC evolving-state pair, and one AZ Japan FIES Canonical-linked economic-data specimen. Public projection and automatic ingestion remain closed."
     return target
 
-
 def target_live_evidence(current: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     target = deepcopy(current)
+    payload_ids = {row["evidence_id"] for row in payload["live_evidence"]}
     existing = {row.get("evidence_id") for row in target.get("evidence", [])}
+    present = payload_ids & existing
+    if present == payload_ids:
+        return target
+    require(not present, "AZ partial Live evidence materialisation detected")
+    require(len(target.get("evidence", [])) == 4, "AZ expected exactly four pre-existing Live evidence rows")
     for row in payload["live_evidence"]:
-        if row["evidence_id"] not in existing:
-            target["evidence"].append(deepcopy(row))
-            existing.add(row["evidence_id"])
+        target["evidence"].append(deepcopy(row))
     target["version"] = "0.4"
     target["reference_date"] = "2026-09-06"
     target["population_state"] = "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN"
     target["scope_note"] = "Evidence supports the bounded reviewed Live store through AZ. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed."
     return target
 
-
 def target_analysis_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
     raw_version = current.get("version")
     if raw_version != "0.5":
-        try:
-            parsed = tuple(int(part) for part in str(raw_version).split("."))
-        except (TypeError, ValueError):
-            parsed = ()
         require(
-            parsed >= (0, 6),
+            version_at_least(raw_version, "0.6"),
             "AZ Analysis schema requires v0.5 prestate or v0.6+ reviewed descendant",
         )
         return deepcopy(current)
@@ -271,27 +276,30 @@ def target_analysis_schema(current: dict[str, Any], plan: dict[str, Any]) -> dic
 
 def target_reviews(current: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     target = deepcopy(current)
-    ids = {row.get("analysis_id") for row in target.get("reviews", [])}
     row = deepcopy(payload["analysis_review"])
-    if row["analysis_id"] not in ids:
-        require(len(target.get("reviews", [])) == 20, "AZ expected 20 Analysis reviews prestate")
-        target["reviews"].append(row)
+    ids = {item.get("analysis_id") for item in target.get("reviews", [])}
+    if row["analysis_id"] in ids:
+        return target
+    require(len(target.get("reviews", [])) == 20, "AZ expected 20 Analysis reviews prestate")
+    target["reviews"].append(row)
     target["version"] = "0.17"
     target["reference_date"] = "2026-09-06"
     return target
-
 
 def target_analysis_evidence(current: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     target = deepcopy(current)
-    ids = {row.get("evidence_id") for row in target.get("evidence", [])}
+    payload_ids = {row["evidence_id"] for row in payload["analysis_evidence"]}
+    existing = {row.get("evidence_id") for row in target.get("evidence", [])}
+    present = payload_ids & existing
+    if present == payload_ids:
+        return target
+    require(not present, "AZ partial Analysis evidence materialisation detected")
+    require(len(target.get("evidence", [])) == 91, "AZ expected 91 Analysis evidence rows prestate")
     for row in payload["analysis_evidence"]:
-        if row["evidence_id"] not in ids:
-            target["evidence"].append(deepcopy(row))
-            ids.add(row["evidence_id"])
+        target["evidence"].append(deepcopy(row))
     target["version"] = "0.17"
     target["reference_date"] = "2026-09-06"
     return target
-
 
 def target_status(current: str) -> str:
     az_title = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"
@@ -304,17 +312,17 @@ def target_status(current: str) -> str:
             current.startswith("# CURRENT RECOVERY OVERRIDE — POST-"),
             "AZ PROJECT_STATUS title drift",
         )
-        require(
-            "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**" in current,
-            "AZ PROJECT_STATUS descendant lost Live v0.4 checkpoint",
+        report = validate_descendant_checkpoint(
+            required_markers={
+                "AZ PROJECT_STATUS descendant": (
+                    current,
+                    ["AZ exercises the first **production Live Intelligence → Analysis relationship**"],
+                )
+            }
         )
         require(
-            "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**" in current,
-            "AZ PROJECT_STATUS descendant lost Analysis v0.17 population",
-        )
-        require(
-            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**" in current,
-            "AZ PROJECT_STATUS descendant lost first production Live input",
+            report.ok,
+            "AZ PROJECT_STATUS descendant lost AZ architecture: " + "; ".join(report.errors),
         )
         return current
 
@@ -351,7 +359,7 @@ def target_status(current: str) -> str:
     return text.replace(old, new, 1)
 
 def target_roadmap(current: str) -> str:
-    if "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current:
+    if "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current or "AZ then pressure-audited and populated exactly one relationship" in current:
         return current
     text = current.replace(
         "Current bounded population is three observations and four primary-official evidence rows.",
@@ -432,68 +440,99 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     reviews = target["reviews"]
     analysis_evidence = target["analysis_evidence"]
 
-    require(live_schema.get("version") == post["live_schema_version"], "AZ target Live schema mismatch")
-    require(len(live_observations.get("observations", [])) == post["live_observation_count"], "AZ target Live observation count mismatch")
-    require(len(live_evidence.get("evidence", [])) == post["live_evidence_count"], "AZ target Live evidence count mismatch")
-    require(live_observations.get("population_state") == post["live_population_state"], "AZ target Live population state mismatch")
-    raw_analysis_version = analysis_schema.get("version")
-    raw_az_version = post["analysis_schema_version"]
-    try:
-        analysis_version = tuple(int(part) for part in str(raw_analysis_version).split("."))
-        az_version = tuple(int(part) for part in str(raw_az_version).split("."))
-    except (TypeError, ValueError):
-        analysis_version = ()
-        az_version = (0, 6)
-    require(
-        analysis_version >= az_version,
-        "AZ target Analysis schema must preserve v0.6 or a reviewed descendant",
+    exact_az_checkpoint = (
+        live_schema.get("version") == post["live_schema_version"]
+        and len(live_observations.get("observations", [])) == post["live_observation_count"]
+        and len(live_evidence.get("evidence", [])) == post["live_evidence_count"]
+        and analysis_schema.get("version") == post["analysis_schema_version"]
+        and len(reviews.get("reviews", [])) == post["analysis_review_count"]
+        and len(analysis_evidence.get("evidence", [])) == post["analysis_evidence_count"]
+        and production_live_input_count(reviews) == post["production_live_input_count"]
     )
-    require(reviews.get("version") == post["analysis_reviews_version"], "AZ target review version mismatch")
-    require(len(reviews.get("reviews", [])) == post["analysis_review_count"], "AZ target review count mismatch")
-    require(analysis_evidence.get("version") == post["analysis_evidence_version"], "AZ target evidence version mismatch")
-    require(len(analysis_evidence.get("evidence", [])) == post["analysis_evidence_count"], "AZ target evidence count mismatch")
-    require(production_live_input_count(reviews) == post["production_live_input_count"], "AZ target production live-input count mismatch")
-    require(exact_series_count(reviews) == post["production_exact_timestamp_series_count"], "AZ target exact-series mismatch")
+    if exact_az_checkpoint:
+        require(live_observations.get("population_state") == post["live_population_state"], "AZ target Live population state mismatch")
+        policy = analysis_schema["live_input_policy"]
+        require(policy["mode"] == "CONTROLLED_SINGLE_PRODUCTION_LINK", "AZ target bridge mode mismatch")
+        require(policy["maximum_production_live_inputs"] == 1, "AZ target max live-input mismatch")
+        require(policy["maximum_live_inputs_per_review"] == 1, "AZ target per-review max mismatch")
+        require(policy["public_live_input_projection_allowed"] is False, "AZ public bridge projection opened")
+        require(live_schema["population_policy"]["public_observation_projection_allowed"] is False, "AZ public Live projection opened")
+        require(exact_series_count(reviews) == post["production_exact_timestamp_series_count"], "AZ target exact-series mismatch")
+    else:
+        report = validate_descendant_checkpoint(
+            versions_at_least={
+                "AZ target Live schema": (live_schema.get("version"), post["live_schema_version"]),
+                "AZ target Analysis schema": (analysis_schema.get("version"), post["analysis_schema_version"]),
+                "AZ target reviews": (reviews.get("version"), post["analysis_reviews_version"]),
+                "AZ target evidence": (analysis_evidence.get("version"), post["analysis_evidence_version"]),
+            },
+            counts_at_least={
+                "AZ target Live observations": (len(live_observations.get("observations", [])), post["live_observation_count"]),
+                "AZ target Live evidence": (len(live_evidence.get("evidence", [])), post["live_evidence_count"]),
+                "AZ target Analysis reviews": (len(reviews.get("reviews", [])), post["analysis_review_count"]),
+                "AZ target Analysis evidence": (len(analysis_evidence.get("evidence", [])), post["analysis_evidence_count"]),
+                "AZ target production Live inputs": (production_live_input_count(reviews), post["production_live_input_count"]),
+            },
+        )
+        require(report.ok, "AZ target descendant failed: " + "; ".join(report.errors))
 
     policy = analysis_schema["live_input_policy"]
-    require(policy["mode"] == "CONTROLLED_SINGLE_PRODUCTION_LINK", "AZ target bridge mode mismatch")
-    require(policy["maximum_production_live_inputs"] == 1, "AZ target max live-input mismatch")
-    require(policy["maximum_live_inputs_per_review"] == 1, "AZ target per-review max mismatch")
-    require(policy["factual_input_requires_matching_canonical_occurrence"] is True, "AZ target same-anchor gate missing")
-    require(policy["public_live_input_projection_allowed"] is False, "AZ public bridge projection opened")
-    require(live_schema["population_policy"]["public_observation_projection_allowed"] is False, "AZ public Live projection opened")
+    require(
+        policy.get("factual_input_requires_matching_canonical_occurrence") is True,
+        "AZ descendant same-anchor gate missing",
+    )
 
     new_live = [
-        row for row in live_observations["observations"]
+        row
+        for row in live_observations["observations"]
         if row.get("observation_id") == plan["selection"]["live_observation_id"]
     ]
     require(len(new_live) == 1, "AZ target Live observation missing/duplicated")
     require(new_live[0].get("observation_type") == "ECONOMIC_DATA_OBSERVATION", "AZ must not relabel July FIES as DATA_REVISION")
     require(new_live[0].get("revision_of_observation_id") is None, "AZ must not invent Live revision ancestry")
-    require(new_live[0].get("canonical_links") == [{"occurrence_id": "WSO-MAC-B-0041", "relationship": "OUTCOME_OF"}], "AZ Live canonical link drift")
+    require(
+        new_live[0].get("canonical_links")
+        == [{"occurrence_id": "WSO-MAC-B-0041", "relationship": "OUTCOME_OF"}],
+        "AZ Live canonical link drift",
+    )
 
     review = next(
-        row for row in reviews["reviews"]
+        row
+        for row in reviews["reviews"]
         if row.get("analysis_id") == plan["selection"]["analysis_id"]
     )
     require(review.get("what_moved") == [], "AZ must not manufacture market movement")
     require(review.get("what_surprised", {}).get("status") == "DOWNSIDE", "AZ surprise status drift")
     require(review.get("canonical_release_utc") is None, "AZ must preserve unresolved Canonical release UTC")
-    require(review.get("live_inputs") == [{
-        "observation_id": plan["selection"]["live_observation_id"],
-        "roles": ["FACTUAL_INPUT"],
-        "analysis_sections": ["what_happened", "what_surprised", "what_may_be_noise", "alternative_explanations"],
-    }], "AZ production Live-input relationship drift")
-
-    public = public_live_intelligence_projection(
-        live_schema, live_evidence, live_observations, load(CANONICAL_PATH)
+    require(
+        review.get("live_inputs")
+        == [
+            {
+                "observation_id": plan["selection"]["live_observation_id"],
+                "roles": ["FACTUAL_INPUT"],
+                "analysis_sections": [
+                    "what_happened",
+                    "what_surprised",
+                    "what_may_be_noise",
+                    "alternative_explanations",
+                ],
+            }
+        ],
+        "AZ inaugural production Live-input relationship drift",
     )
-    require(public["metadata"]["public_observation_count"] == 0, "AZ public Live observation projection must remain zero")
-    require(public["observations"] == [], "AZ public Live observation rows must remain empty")
+
+    if exact_az_checkpoint:
+        public = public_live_intelligence_projection(
+            live_schema, live_evidence, live_observations, load(CANONICAL_PATH)
+        )
+        require(
+            public["metadata"]["public_observation_count"] == 0,
+            "AZ public Live observation projection must remain zero at frozen checkpoint",
+        )
+        require(public["observations"] == [], "AZ public Live observation rows must remain empty at frozen checkpoint")
 
     readiness = analysis_population_readiness(analysis_schema, reviews, load(CANONICAL_PATH))
-    require(readiness["reviewed_occurrence_count"] == 21, "AZ reviewed occurrence count mismatch")
-
+    require(readiness["reviewed_occurrence_count"] >= 21, "AZ reviewed occurrence floor lost")
 
 def write_target(target: dict[str, Any]) -> None:
     LIVE_SCHEMA_PATH.write_text(dump(target["live_schema"]), encoding="utf-8")

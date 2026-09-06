@@ -65,6 +65,12 @@ A generic platform-independent candidate-to-canonical commit/rollback tool remai
 
 Automatic canonical commit remains prohibited.
 
+### BC — historical checkpoint / reviewed descendant contract — DONE / NO POPULATION
+
+BC formalises the distinction between exact historical transaction prestates and legitimate reviewed descendants. A materialised tranche keeps its frozen historical checkpoint, but later validation is limited to invariants that tranche owns: stable IDs/relationships, structural rules and explicit version/population floors. Unrelated later registry counts, monitor cohorts and temporary population caps are not permanent ceilings.
+
+BA and AZ helpers now remain exact before first materialisation and become read-only/idempotent on reviewed descendants rather than downgrading later dataset versions or populations. BC adds no Canonical, Source, Change Ledger, Live or Analysis rows and opens no production/public gate.
+
 ## Stage 5 — Analysis foundation and controlled sample — DONE / PAUSED FOR AUDIT
 
 Analysis schema `v0.4` currently supports 20 reviewed post-event specimens, 91 analytical evidence rows and 18 reviewed event types.

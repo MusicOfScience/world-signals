@@ -111,17 +111,17 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         )
         self.assertGreaterEqual(analysis_version, (0, 6))
         self.assertEqual(self.target["reviews"]["version"], "0.17")
-        self.assertEqual(len(self.target["reviews"]["reviews"]), 21)
-        self.assertEqual(self.target["analysis_evidence"]["version"], "0.17")
-        self.assertEqual(len(self.target["analysis_evidence"]["evidence"]), 95)
-        self.assertEqual(production_live_input_count(self.target["reviews"]), 1)
-        policy = self.target["analysis_schema"]["live_input_policy"]
-        self.assertEqual(policy["maximum_production_live_inputs"], 1)
-        self.assertEqual(policy["maximum_live_inputs_per_review"], 1)
-        self.assertFalse(policy["public_live_input_projection_allowed"])
-        self.assertFalse(
-            self.target["live_schema"]["population_policy"]["public_observation_projection_allowed"]
+        self.assertGreaterEqual(len(self.target["reviews"]["reviews"]), 21)
+        evidence_version = tuple(
+            int(part) for part in self.target["analysis_evidence"]["version"].split(".")
         )
+        self.assertGreaterEqual(evidence_version, (0, 17))
+        self.assertGreaterEqual(len(self.target["analysis_evidence"]["evidence"]), 95)
+        self.assertGreaterEqual(production_live_input_count(self.target["reviews"]), 1)
+        self.assertEqual(post["maximum_production_live_inputs"], 1)
+        self.assertEqual(post["maximum_live_inputs_per_review"], 1)
+        self.assertFalse(post["public_live_input_projection_allowed"])
+        self.assertFalse(post["public_live_observation_projection_allowed"])
         self.assertEqual(post["analysis_evidence_count"], 95)
 
     def test_new_live_row_is_economic_outcome_not_revision(self):
@@ -256,18 +256,23 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         self.assertTrue(any("must link to the Analysis canonical occurrence" in error for error in report.errors))
 
     def test_second_production_input_fails_population_cap(self):
+        schema = deepcopy(self.target["analysis_schema"])
+        policy = schema["live_input_policy"]
+        policy["mode"] = "CONTROLLED_SINGLE_PRODUCTION_LINK"
+        policy["maximum_production_live_inputs"] = 1
+        policy["maximum_live_inputs_per_review"] = 1
+        policy["public_live_input_projection_allowed"] = False
+        source_row = self.analysis_by_id["WSAN-JP-FIES-202607-001"]
         reviews = deepcopy(self.target["reviews"])
-        row = next(
-            item for item in reviews["reviews"]
-            if item["analysis_id"] == "WSAN-JP-FIES-202607-001"
-        )
+        reviews["reviews"] = [deepcopy(source_row)]
+        row = reviews["reviews"][0]
         row["live_inputs"].append({
             "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
             "roles": ["CONTEXT_OR_ALTERNATIVE_INPUT"],
             "analysis_sections": ["alternative_explanations"],
         })
         report = validate_live_analysis_bridge(
-            self.target["analysis_schema"], reviews, self.target["live_observations"]
+            schema, reviews, self.target["live_observations"]
         )
         self.assertFalse(report.ok)
         joined = " ".join(report.errors)
@@ -299,8 +304,8 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         self.assertEqual(apply_az.target_status(descendant), descendant)
 
         malformed = descendant.replace(
-            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**",
-            "- production `live_inputs`: **2 / reviewed maximum 2 / public projection OPEN**",
+            "AZ exercises the first **production Live Intelligence → Analysis relationship**",
+            "AZ historical relationship marker removed",
             1,
         )
         with self.assertRaises(SystemExit):
@@ -309,9 +314,9 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         readiness = analysis_population_readiness(
             self.target["analysis_schema"], self.target["reviews"], self.canonical
         )
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 21)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 21)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 18)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 21)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 21)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 18)
         audit_text = (ROOT / "data/analysis/POST_AY_PRESSURE_AUDIT_AZ_v0.1.md").read_text(encoding="utf-8")
         self.assertIn("not an ex-post surprise", audit_text)
         self.assertIn("Coverage diagnostics remain prompts rather than quotas", audit_text)
