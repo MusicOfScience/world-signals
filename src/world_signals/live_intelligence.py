@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from typing import Any
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,27 @@ def _civil_date(raw: Any) -> date | None:
     try:
         return date.fromisoformat(raw)
     except ValueError:
+        return None
+
+
+def _local_datetime(raw: Any) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except (TypeError, ValueError, AttributeError):
+        return None
+    if parsed.tzinfo is not None:
+        return None
+    return parsed
+
+
+def _iana_timezone(raw: Any) -> ZoneInfo | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        return ZoneInfo(raw)
+    except (ZoneInfoNotFoundError, ValueError):
         return None
 
 
@@ -95,6 +117,20 @@ def validate_live_intelligence(
         errors.append("Live Intelligence must permit optional canonical links")
     if boundary.get("unscheduled_observation_without_canonical_occurrence_allowed") is not True:
         errors.append("Live Intelligence must permit unscheduled observations without canonical IDs")
+
+    monitor_bridge = schema.get("monitor_bridge_policy") or {}
+    if monitor_bridge.get("automatic_promotion_from_monitor_candidate") is not False:
+        errors.append("Live Intelligence must prohibit automatic promotion from monitor candidates")
+    if monitor_bridge.get("positive_monitor_evidence_requires_separate_live_evidence_record") is not True:
+        errors.append("Live Intelligence monitor bridge must require separate live evidence")
+    if monitor_bridge.get("monitor_review_candidate_is_not_live_intelligence_observation") is not True:
+        errors.append("Monitor review candidates must remain distinct from Live Intelligence observations")
+
+    grouping = schema.get("story_grouping_policy") or {}
+    if grouping.get("automatic_clustering_allowed") is not False:
+        errors.append("Live Intelligence v0.1 must prohibit automatic story clustering")
+    if grouping.get("future_story_identity_requires_pressure_audited_contract") is not True:
+        errors.append("Future Live Intelligence story identity must require a pressure-audited contract")
 
     foundation = schema.get("foundation_population_policy") or {}
     observations = observations_dataset.get("observations") or []
@@ -210,10 +246,21 @@ def validate_live_intelligence(
             errors.append(f"{observation_id}: unknown revision_of_observation_id {revision_ref}")
         if revision_ref == observation_id and revision_ref is not None:
             errors.append(f"{observation_id}: observation cannot revise itself")
-        if row.get("observation_type") == "DATA_REVISION" and not revision_ref:
-            errors.append(f"{observation_id}: DATA_REVISION requires revision_of_observation_id")
+        if row.get("observation_type") == "DATA_REVISION":
+            if not str(row.get("revision_target_description") or "").strip():
+                errors.append(f"{observation_id}: DATA_REVISION requires revision_target_description")
+            revision_evidence = [
+                evidence_by_id[ref]
+                for ref in refs
+                if ref in evidence_by_id
+                and "CORRECTION_OR_REVISION" in (evidence_by_id[ref].get("roles") or [])
+            ]
+            if not revision_evidence:
+                errors.append(
+                    f"{observation_id}: DATA_REVISION requires evidence with CORRECTION_OR_REVISION role"
+                )
         if row.get("verification_state") in {"CORRECTED", "RETRACTED"} and not revision_ref:
-            errors.append(f"{observation_id}: corrected/retracted observation requires revision reference")
+            errors.append(f"{observation_id}: corrected/retracted live observation requires revision reference")
 
         event_time = row.get("event_time")
         if event_time is not None:
@@ -224,8 +271,30 @@ def validate_live_intelligence(
                 if precision not in allowed_time_precision:
                     errors.append(f"{observation_id}: invalid event_time precision {precision}")
                 if precision == "EXACT_TIMESTAMP":
-                    if _exact_utc(event_time.get("event_at_utc")) is None:
+                    event_utc = _exact_utc(event_time.get("event_at_utc"))
+                    if event_utc is None:
                         errors.append(f"{observation_id}: exact event_time requires event_at_utc in UTC")
+                    local_raw = event_time.get("event_local")
+                    timezone_raw = event_time.get("event_timezone")
+                    if (local_raw is None) != (timezone_raw is None):
+                        errors.append(
+                            f"{observation_id}: event_local and event_timezone must be supplied together"
+                        )
+                    if local_raw is not None and timezone_raw is not None:
+                        local_dt = _local_datetime(local_raw)
+                        zone = _iana_timezone(timezone_raw)
+                        if local_dt is None:
+                            errors.append(
+                                f"{observation_id}: event_local must be an offset-free ISO local datetime"
+                            )
+                        if zone is None:
+                            errors.append(f"{observation_id}: event_timezone must be a valid IANA timezone")
+                        if local_dt is not None and zone is not None and event_utc is not None:
+                            resolved_utc = local_dt.replace(tzinfo=zone).astimezone(timezone.utc)
+                            if resolved_utc != event_utc:
+                                errors.append(
+                                    f"{observation_id}: event_local/event_timezone do not match event_at_utc"
+                                )
                 elif precision == "CIVIL_DATE":
                     if _civil_date(event_time.get("event_date")) is None:
                         errors.append(f"{observation_id}: civil event_time requires YYYY-MM-DD event_date")
