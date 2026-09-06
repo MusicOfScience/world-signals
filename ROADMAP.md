@@ -121,6 +121,14 @@ BE repairs the existing 6 September 2026 OPEC+ voluntary-adjustment review from 
 
 BE creates no 4 October occurrence from secondary reporting, no sixth Live observation and no Analysis mutation. The repair raises the completed Analysis-eligible pool to 22 and leaves one completed/unreviewed OPEC anchor for a future pressure audit; queue completion is not the objective.
 
+
+### BF — sixth Live institutional specimen — DONE / BOUNDED
+
+BF selects the 4 September 2026 UN General Assembly adoption of A/RES/80/307, ‘Correct the Map’, as the sixth pressure-audited Live observation. It is stored as `INSTITUTIONAL_DEVELOPMENT` with two primary-official evidence rows: the UN adoption/vote record and African Union institutional context. The observation has zero Canonical links; no specific scheduled Canonical resolution-adoption identity is manufactured.
+
+The UN record fixes the 114th plenary meeting and 164–1–6 vote. The AU confirms Togo's role on behalf of the African Group and the Africa-led implementation framing. BF records only those institutional facts: it does not imply a compulsory single world map, territorial or sovereignty change, economic effect, market response or broader causal consequence. Event and source-publication precision remain `CIVIL_DATE`.
+
+Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. A seventh Live observation requires another pressure audit.
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
 AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.

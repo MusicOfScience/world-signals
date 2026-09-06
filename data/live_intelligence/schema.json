@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.5",
-  "reference_date": "2026-09-06",
+  "version": "0.6",
+  "reference_date": "2026-09-07",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
     "CANONICAL_REGISTRY",
@@ -214,7 +214,12 @@
     "BD preserves the 5 September summit as CIVIL_DATE event time while retaining the source's independently explicit publication timestamp; publication time is not event time.",
     "BD makes no causal, strategic-alignment, legitimacy, conflict-effect or market-attribution claim.",
     "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in BD v0.5.",
-    "A sixth Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit."
+    "BD v0.5 remains the frozen five-observation/seven-evidence checkpoint; BF is the separately pressure-audited sixth observation.",
+    "BF v0.6 adds one primary-confirmed UN General Assembly INSTITUTIONAL_DEVELOPMENT for adoption of A/RES/80/307 with two primary-official evidence rows and zero Canonical links.",
+    "BF records the institutional adoption and vote without implying a compulsory single world map, territorial or sovereignty change, or economic/market consequence.",
+    "BF preserves event and source-publication timing at CIVIL_DATE because no source-native clock time is required for the reviewed factual claim.",
+    "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in BF v0.6.",
+    "A seventh Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -227,15 +232,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
+    "mode": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 5,
-    "maximum_evidence_count": 7,
+    "maximum_observation_count": 6,
+    "maximum_evidence_count": 9,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "BD adds exactly one pressure-audited Vietnam-Myanmar GEOPOLITICAL_DEVELOPMENT with one primary-official evidence row and zero Canonical links."
+    "reason": "BF adds exactly one pressure-audited UN General Assembly INSTITUTIONAL_DEVELOPMENT with two primary-official evidence rows and zero Canonical links."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -266,5 +271,15 @@
     "evidence_count": 6,
     "post_merge_main_sha": "802ca5b94b6e80a055ac363f48a6c8392f038048",
     "historical_contract": "AZ v0.4 preserved AW/AX and added the first Canonical-linked economic-data Live observation, with public projection and automatic ingestion closed."
+  },
+  "bd_checkpoint": {
+    "schema_version": "0.5",
+    "observations_version": "0.5",
+    "evidence_version": "0.5",
+    "population_state": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
+    "observation_count": 5,
+    "evidence_count": 7,
+    "post_merge_main_sha": "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac",
+    "historical_contract": "BD v0.5 preserved AW/AX/AZ and added one reviewed Vietnam-Myanmar GEOPOLITICAL_DEVELOPMENT with zero Canonical links while all public/automatic gates remained closed."
   }
 }

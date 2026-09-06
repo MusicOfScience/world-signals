@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.5",
-  "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through BD. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
+  "version": "0.6",
+  "reference_date": "2026-09-07",
+  "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through BF. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -125,6 +125,40 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary Government of Viet Nam report published at 16:16 GMT+7 on 5 September 2026 (09:16 UTC). It states that the leaders agreed to make defence and security cooperation a key pillar of bilateral relations and identifies specific cooperation areas. The article publication clock time is not treated as the summit event time."
+    },
+    {
+      "evidence_id": "WSEV-LI-UNGA-CORRECTMAP-UN-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations General Assembly",
+      "title": "General Assembly adopts text to ‘Correct the Map’, among other resolutions — GA/12779",
+      "url": "https://press.un.org/en/2026/ga12779.doc.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary UN meeting-coverage evidence for adoption on 4 September 2026 at the General Assembly's 114th plenary meeting. The draft A/80/L.104 was adopted as A/RES/80/307 by recorded vote 164 in favour, 1 against and 6 abstentions. No publication clock time is promoted from this civil-date source surface."
+    },
+    {
+      "evidence_id": "WSEV-LI-UNGA-CORRECTMAP-AU-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "African Union Commission",
+      "title": "Communiqué of the Chairperson of the African Union Commission on the Adoption of the ‘Correct The Map’ Resolution",
+      "url": "https://au.int/en/pressreleases/20260904/communique-auc-chairperson-adoption-correct-map-resolution",
+      "roles": [
+        "SOURCE_CONFIRMATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary African Union evidence confirming the Africa-led institutional initiative, Togo's role on behalf of the African Group, and the AU Commission's stated intention to support implementation. The evidence is contextual confirmation, not authority for the UN vote record itself."
     }
   ]
 }
