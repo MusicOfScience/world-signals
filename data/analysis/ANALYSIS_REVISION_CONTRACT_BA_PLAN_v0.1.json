@@ -1,0 +1,95 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BA",
+  "reference_date": "2026-09-06",
+  "exact_base_main_sha": "802ca5b94b6e80a055ac363f48a6c8392f038048",
+  "purpose": "Establish a production-closed Analysis revision-lineage contract before further Live Intelligence or Live-to-Analysis population.",
+  "selected_pressure": "ANALYSIS_REVISION_LINEAGE_FOUNDATION",
+  "pre_state": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "source_registry_version": "1.80",
+    "source_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "live_schema_version": "0.4",
+    "live_observation_count": 4,
+    "live_evidence_count": 6,
+    "analysis_schema_version": "0.6",
+    "analysis_reviews_version": "0.17",
+    "analysis_review_count": 21,
+    "analysis_evidence_version": "0.17",
+    "analysis_evidence_count": 95,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 0,
+    "production_exact_timestamp_series_count": 0
+  },
+  "target_state": {
+    "analysis_schema_version": "0.7",
+    "analysis_revision_mode": "FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS",
+    "production_analysis_revisions_allowed": false,
+    "production_analysis_revision_count": 0,
+    "public_analysis_revision_metadata_projection_allowed": false,
+    "automatic_latest_analysis_selection_allowed": false,
+    "future_production_revision_requires_pressure_audit": true,
+    "live_observation_count": 4,
+    "analysis_review_count": 21,
+    "analysis_evidence_count": 95,
+    "production_live_input_count": 1,
+    "production_exact_timestamp_series_count": 0
+  },
+  "revision_fields": [
+    "revision_of_analysis_id",
+    "analysis_revision_kind",
+    "analysis_revision_reason"
+  ],
+  "allowed_revision_kinds": [
+    "FACTUAL_CORRECTION",
+    "NEW_EVIDENCE",
+    "NEW_LIVE_EVIDENCE",
+    "METHODOLOGICAL_REASSESSMENT",
+    "CAUSAL_REASSESSMENT",
+    "SCOPE_OR_FRAMING_UPDATE"
+  ],
+  "guardrails": {
+    "parent_snapshot_must_remain_present": true,
+    "same_canonical_occurrence_required": true,
+    "analysis_as_of_must_strictly_advance": true,
+    "cycles_prohibited": true,
+    "branching_prohibited_in_first_controlled_mode": true,
+    "new_live_evidence_revision_requires_novel_live_input": true,
+    "live_observation_does_not_automatically_create_revision": true,
+    "live_revision_and_analysis_revision_are_distinct": true,
+    "upstream_mutation_allowed": false,
+    "automatic_latest_analysis_selection_allowed": false,
+    "public_revision_head_collapse_allowed": false
+  },
+  "governed_target_write_paths": [
+    "data/analysis/schema.json",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md"
+  ],
+  "protected_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "public_projection": {
+    "existing_analysis_projection_semantics_unchanged_at_zero_revisions": true,
+    "revision_lineage_metadata_hidden_while_gate_closed": true,
+    "derived_latest_head_not_publicly_selected": true
+  },
+  "manual_merge_only": true,
+  "auto_merge_allowed": false
+}

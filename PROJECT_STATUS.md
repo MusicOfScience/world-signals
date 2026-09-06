@@ -1,4 +1,4 @@
-# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK
+# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION
 
 **Effective checkpoint:** 2026-09-06
 **Exact post-#78 main base:** `721206169033eb0ceb695075d44fb38e7fa2edc3`
@@ -16,16 +16,19 @@ This override supersedes stale "current" counts in the historical body below whi
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
 - Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**
-- Analysis schema: **v0.6**
+- Analysis schema: **v0.7**
 - Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
 - completed/unreviewed Analysis-eligible occurrences: **0** (not a population target)
 - production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**
+- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
 - automatic canonical commit: **OFF / gate closed**
 - Google Calendar writes: **OFF**
 
 ## Current architecture decision
+
+BA adds a **production-closed Analysis revision-lineage contract** before any further Live or bridge population. A future revision must be a new immutable Analysis snapshot with an explicit direct parent, preserved prior snapshot, the same Canonical occurrence and a strictly later `analysis_as_of_utc`. Automatic latest-head selection, public revision metadata projection and all upstream writes remain closed. BA adds no production revision, no Live observation and no Analysis evidence.
 
 AZ exercises the first **production Live Intelligence → Analysis relationship** with one bounded Japan July 2026 FIES specimen. The Live row is an `ECONOMIC_DATA_OBSERVATION` linked `OUTCOME_OF` the already-completed Canonical occurrence `WSO-MAC-B-0041`; the Analysis packet selects that immutable observation as `FACTUAL_INPUT`. Live and Analysis evidence remain separate, public Live-input projection remains closed, and no market movement is manufactured. The same release's April–June CPI-rebase revisions are retained as data-vintage context rather than synthetic prior Live history. Further bridge population requires another pressure audit.
 
@@ -35,7 +38,7 @@ The two DRC observations share one manually reviewed story key. The 30 August sn
 
 Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. The DRC story key is not a Canonical occurrence, causal claim or analytical conclusion. A fourth observation or broader ingestion requires another pressure audit.
 
-The next audit should decide whether prospective Live Intelligence → Analysis linkage now creates more architectural value than another isolated Live specimen. Japan household spending remains a valid held Analysis specimen, not a queue-completion obligation.
+After BA, another pressure audit must decide whether the first real Analysis revision, a fifth Live observation, or a second production Live→Analysis relationship creates the highest marginal contract pressure. None is a population quota.
 
 ## Current configured monitor cohort
 

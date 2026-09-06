@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.6",
+  "version": "0.7",
   "reference_date": "2026-09-06",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
@@ -176,7 +176,10 @@
     "AY v0.5 is the frozen production-closed bridge checkpoint; AZ is the first pressure-audited descendant to populate exactly one production Live Intelligence input.",
     "In AZ, a FACTUAL_INPUT Live observation must explicitly link the same Canonical occurrence as the Analysis review; this role-specific requirement does not silently turn story identity into Canonical identity.",
     "AZ permits at most one production Live input in total and at most one per review; public Live-input projection remains closed.",
-    "Further production Live-input population beyond the AZ bounded relationship requires another pressure audit."
+    "Further production Live-input population beyond the AZ bounded relationship requires another pressure audit.",
+    "BA v0.7 introduces a prospective Analysis revision-lineage contract while production revisions remain closed and the existing 21 reviewed snapshots remain unchanged.",
+    "A future Analysis revision must be a new immutable analysis_id with an explicit direct parent, preserved parent snapshot, same Canonical occurrence and strictly later analysis_as_of_utc; silent in-place analytical history rewrite is prohibited.",
+    "Live observations never automatically revise Analysis, Live revision/state-update lineage remains distinct from Analysis revision lineage, automatic latest-Analysis selection remains prohibited, and further production revision population requires another pressure audit."
   ],
   "market_measurement_policy": {
     "canonical_event_time_and_market_measurement_precision_are_independent": true,
@@ -254,5 +257,43 @@
     "maximum_production_live_inputs": 1,
     "maximum_live_inputs_per_review": 1,
     "factual_input_requires_matching_canonical_occurrence": true
+  },
+  "analysis_revision_policy": {
+    "mode": "FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS",
+    "production_analysis_revisions_allowed": false,
+    "public_revision_metadata_projection_allowed": false,
+    "required_revision_fields": [
+      "revision_of_analysis_id",
+      "analysis_revision_kind",
+      "analysis_revision_reason"
+    ],
+    "allowed_revision_fields": [
+      "revision_of_analysis_id",
+      "analysis_revision_kind",
+      "analysis_revision_reason"
+    ],
+    "allowed_revision_kinds": [
+      "FACTUAL_CORRECTION",
+      "NEW_EVIDENCE",
+      "NEW_LIVE_EVIDENCE",
+      "METHODOLOGICAL_REASSESSMENT",
+      "CAUSAL_REASSESSMENT",
+      "SCOPE_OR_FRAMING_UPDATE"
+    ],
+    "parent_snapshot_must_remain_present": true,
+    "same_canonical_occurrence_required": true,
+    "analysis_as_of_must_strictly_advance": true,
+    "cycles_prohibited": true,
+    "branching_prohibited_in_first_controlled_mode": true,
+    "new_live_evidence_revision_requires_novel_live_input": true,
+    "live_observation_does_not_automatically_create_revision": true,
+    "live_revision_and_analysis_revision_are_distinct": true,
+    "upstream_canonical_mutation_allowed": false,
+    "upstream_live_mutation_allowed": false,
+    "upstream_monitor_mutation_allowed": false,
+    "google_calendar_write_allowed": false,
+    "automatic_latest_analysis_selection_allowed": false,
+    "public_revision_head_collapse_allowed": false,
+    "future_production_revision_requires_pressure_audit": true
   }
 }

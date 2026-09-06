@@ -104,7 +104,12 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         self.assertEqual(self.target["live_schema"]["version"], "0.4")
         self.assertEqual(len(self.target["live_observations"]["observations"]), 4)
         self.assertEqual(len(self.target["live_evidence"]["evidence"]), 6)
-        self.assertEqual(self.target["analysis_schema"]["version"], "0.6")
+        # AZ introduced Analysis schema v0.6; descendants may advance the schema
+        # while preserving AZ-owned Live→Analysis population and bridge invariants.
+        analysis_version = tuple(
+            int(part) for part in self.target["analysis_schema"]["version"].split(".")
+        )
+        self.assertGreaterEqual(analysis_version, (0, 6))
         self.assertEqual(self.target["reviews"]["version"], "0.17")
         self.assertEqual(len(self.target["reviews"]["reviews"]), 21)
         self.assertEqual(self.target["analysis_evidence"]["version"], "0.17")
