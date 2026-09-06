@@ -1,0 +1,45 @@
+name: WORLD SIGNALS AR monitor coverage exercise
+
+on:
+  push:
+    branches:
+      - feature/post-aq-pressure-audit-ar
+    paths:
+      - .github/workflows/tmp-monitor-coverage-exercise-ar.yml
+
+permissions:
+  contents: read
+
+jobs:
+  exercise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-72 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=2c215ce4d3ff70001af4733fce797f166bab2a46
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+      - name: Run monitor coverage audit
+        run: python scripts/run_monitor_coverage_audit.py
+      - name: Run monitor coverage tests
+        run: python -m unittest tests.test_monitor_coverage_audit -v
+      - name: Re-run canonical coverage audit after runner alignment
+        run: python scripts/run_coverage_audit.py
+      - name: Run canonical coverage tests
+        run: python -m unittest tests.test_coverage -v
+      - name: Clean transient artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf artifacts/coverage artifacts/monitor
+          test -z "$(git status --porcelain=v1)"
+          echo AR_AUDIT_EXERCISE_CLEAN
