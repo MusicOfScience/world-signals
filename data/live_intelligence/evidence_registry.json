@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.3",
+  "version": "0.4",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
-  "scope_note": "Evidence supports a bounded reviewed Live Intelligence store: the AW Nepal shock plus two AX DRC Bundibugyo as-of snapshots. It remains separate from Canonical provenance and Analysis evidence.",
+  "population_state": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through AZ. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -73,6 +73,41 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary WHO African Region evidence for the later DRC outbreak state as of 30 August 2026: 6,100 confirmed cases, 2,950 confirmed deaths, CFR 48.4%, 60 health zones and six provinces."
+    },
+    {
+      "evidence_id": "WSEV-LI-JP-FIES-STATGO-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "title": "Summary of the Latest Month on Family Income and Expenditure Survey — July 2026",
+      "url": "https://www.stat.go.jp/english/data/kakei/156.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official July 2026 FIES outcome surface: two-or-more-person household consumption expenditure JPY 301,245, nominal y/y -1.5%, real y/y -3.6%; workers' household income JPY 689,476, real y/y -3.8%. The page states release on 4 September 2026 and supplies no release clock time."
+    },
+    {
+      "evidence_id": "WSEV-LI-JP-FIES-REVISION-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "title": "Family Income and Expenditure Survey monthly results — July 2026",
+      "url": "https://www.stat.go.jp/data/kakei/sokuhou/tsuki/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "CORRECTION_OR_REVISION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official monthly table reports July real consumption y/y -3.6% and seasonally adjusted m/m +0.5%. It explicitly states that April-June 2026 real-change figures were retrospectively revised with the CPI 2025-base revision."
     }
   ]
 }

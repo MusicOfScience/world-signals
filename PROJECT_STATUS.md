@@ -1,4 +1,4 @@
-# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION
+# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK
 
 **Effective checkpoint:** 2026-09-06
 **Exact post-#78 main base:** `721206169033eb0ceb695075d44fb38e7fa2edc3`
@@ -15,18 +15,19 @@ This override supersedes stale "current" counts in the historical body below whi
 - biosecurity overlay: **v0.13 @ canonical v0.38 / 688**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.3 / 3 reviewed internal observations / 4 primary-official evidence rows / public observation projection CLOSED**
-- Analysis schema: **v0.5**
-- Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**
+- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**
+- Analysis schema: **v0.6**
+- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
-- sole completed/unreviewed occurrence: **`WSO-MAC-B-0041`**
+- completed/unreviewed Analysis-eligible occurrences: **0** (not a population target)
+- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
 - automatic canonical commit: **OFF / gate closed**
 - Google Calendar writes: **OFF**
 
 ## Current architecture decision
 
-AY establishes a **production-closed prospective Live Intelligence → Analysis input contract**. Analysis may eventually select immutable Live `observation_id` values as factual inputs, but AY leaves production `live_inputs` at **0**, public Live-input projection closed, and all 20 existing Analysis reviews / 91 evidence rows unchanged. Story IDs, latest-state selectors, automatic story expansion, transitive Live-evidence migration and upstream Live mutation are prohibited. A later pressure audit is required before the first real populated relationship.
+AZ exercises the first **production Live Intelligence → Analysis relationship** with one bounded Japan July 2026 FIES specimen. The Live row is an `ECONOMIC_DATA_OBSERVATION` linked `OUTCOME_OF` the already-completed Canonical occurrence `WSO-MAC-B-0041`; the Analysis packet selects that immutable observation as `FACTUAL_INPUT`. Live and Analysis evidence remain separate, public Live-input projection remains closed, and no market movement is manufactured. The same release's April–June CPI-rebase revisions are retained as data-vintage context rather than synthetic prior Live history. Further bridge population requires another pressure audit.
 
 AX has now exercised repeated as-of state and developing-story semantics without opening a general feed. Live Intelligence v0.3 preserves the AW Nepal shock and adds two primary-confirmed WHO snapshots of the 2026 DRC Bundibugyo outbreak, giving three internal observations and four primary-official evidence rows in total.
 

@@ -94,15 +94,15 @@ AW selected the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal after compari
 
 AX then selected the 2026 DRC Bundibugyo outbreak because successive WHO snapshots stress a different contract boundary: **state evolution is not revision**. Live Intelligence v0.3 preserves the Nepal row and adds two DRC `HEALTH_EMERGENCY` observations sharing one manually reviewed story key. The 30 August state points to the 26 August state with `state_update_of_observation_id`, while both retain null revision links.
 
-AX also makes state-as-of time explicit and distinct from event, publication and WORLD SIGNALS observation time. Manual story identity is a grouping key only; automatic clustering, public projection and continuous ingestion remain closed. Current bounded population is three observations and four primary-official evidence rows.
+AX also makes state-as-of time explicit and distinct from event, publication and WORLD SIGNALS observation time. Manual story identity is a grouping key only; automatic clustering, public projection and continuous ingestion remain closed. AX's frozen checkpoint is three observations and four primary-official evidence rows. AZ v0.4 adds one separately pressure-audited Japan economic-data observation and two primary-official evidence rows, taking the current bounded internal population to four observations and six evidence rows.
 
-Before any fourth observation, run another pressure audit. The next high-value candidate is prospective Live Intelligence → Analysis linkage rather than automatic continuation of the DRC story.
+AZ completed the required pre-fourth-observation audit before adding the Japan FIES specimen. Before any fifth observation or broader ingestion, run another pressure audit.
 
-## Stage 8 — prospective Live Intelligence → Analysis linkage — AY FOUNDATION DONE / PRODUCTION CLOSED
+## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
-AY establishes the executable bridge contract without populating a production relationship. Analysis may prospectively select immutable Live `observation_id` values as factual inputs while keeping those inputs distinct from Analysis evidence and prohibiting any rewrite of upstream Live records.
+AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.
 
-The target relationship remains:
+The relationship remains:
 
 `factual observation -> optional canonical context -> analytical interpretation`
 
@@ -110,7 +110,7 @@ not:
 
 `headline -> inferred cause -> rewritten event`.
 
-AY admits no story selector, latest-state lookup or automatic story expansion: a developing story must be referenced snapshot-by-snapshot. Production `live_inputs` remain exactly zero and public Live-input projection remains closed. A later pressure audit must select and authorise the first real production relationship.
+Live evidence is not transitively migrated into Analysis evidence, upstream Live records remain immutable, and story/latest selectors remain prohibited. The inaugural factual input must share the review's Canonical occurrence. Production `live_inputs` are capped at one and public Live-input projection remains closed. Another pressure audit is required before any second production relationship.
 
 ## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT
 

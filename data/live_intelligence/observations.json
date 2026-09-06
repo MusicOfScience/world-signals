@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.3",
+  "version": "0.4",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+  "population_state": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -99,6 +99,37 @@
       "state_update_of_observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-MAC-JPN-FIES-202607-001",
+      "observed_at_utc": "2026-09-06T08:36:00Z",
+      "observation_type": "ECONOMIC_DATA_OBSERVATION",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Japan July 2026 household spending fell 3.6% in real year-on-year terms",
+      "summary": "Statistics Bureau of Japan reported July 2026 two-or-more-person household consumption expenditure of JPY 301,245, down 3.6% year on year in real terms; the official monthly table also reports a seasonally adjusted 0.5% rise from June. The same 4 September release cycle retrospectively revised April-June 2026 real-change figures following the CPI 2025-base revision. This row records the July outcome and that contemporaneous data-vintage context; it is not a DATA_REVISION observation and does not invent prior Live Intelligence history.",
+      "domain_tags": [
+        "ECONOMICS"
+      ],
+      "jurisdictions": [
+        "Japan"
+      ],
+      "regions": [
+        "East Asia"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-JP-FIES-STATGO-20260904",
+        "WSEV-LI-JP-FIES-REVISION-20260904"
+      ],
+      "canonical_links": [
+        {
+          "occurrence_id": "WSO-MAC-B-0041",
+          "relationship": "OUTCOME_OF"
+        }
+      ],
+      "revision_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
-  ]
+  ],
+  "scope_note": "Bounded reviewed internal Live Intelligence store: AW Nepal shock, AX DRC evolving-state pair, and one AZ Japan FIES Canonical-linked economic-data specimen. Public projection and automatic ingestion remain closed."
 }
