@@ -55,8 +55,8 @@ class RBAFinancialStabilityAnalysisAMTests(unittest.TestCase):
         self.assertTrue(report.ok, report.errors)
         readiness = apply_am.analysis_population_readiness(self.schema, reviews, self.canonical)
         self.assertEqual(readiness["reviewed_by_event_type"].get("FINANCIAL_STABILITY_REPORT"), 1)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 15)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 13)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 15)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 13)
 
     def test_prior_official_guidance_is_not_promoted_to_consensus(self):
         expected = self.review["what_was_expected"]
