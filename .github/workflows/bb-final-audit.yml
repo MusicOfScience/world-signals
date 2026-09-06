@@ -1,0 +1,121 @@
+name: BB final clean-head audit
+
+on:
+  push:
+    branches:
+      - feature/post-ba-barmm-election-anchor-bb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prove exact post-BA ancestry and final 17-file manifest
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          expected_base=b8c5372198e3141c4c3f79ace13083877447f71b
+          test "$(git rev-parse origin/main)" = "$expected_base"
+          test "$(git merge-base HEAD origin/main)" = "$expected_base"
+          git diff --name-only origin/main...HEAD | grep -v '^.github/workflows/bb-final-audit.yml$' | sort > /tmp/actual
+          cat > /tmp/expected <<'EOF'
+          PROJECT_STATUS.md
+          ROADMAP.md
+          data/canonical/registry.json
+          data/changes/ledger.json
+          data/coverage/BARMM_PARLIAMENTARY_ELECTION_BB_PLAN_v0.1.json
+          data/coverage/BARMM_PARLIAMENTARY_ELECTION_BB_RESEARCH_v0.1.md
+          data/coverage/BARMM_PARLIAMENTARY_ELECTION_BB_TRANSACTION_AUDIT_v0.1.md
+          data/coverage/POST_BA_PRESSURE_AUDIT_BB_v0.1.md
+          data/coverage/biosecurity_overlay.json
+          data/sources/registry.json
+          scripts/apply_analysis_revision_contract_ba.py
+          scripts/apply_barmm_parliamentary_election_bb.py
+          scripts/apply_japan_fies_live_analysis_az.py
+          tests/test_analysis_revision_contract_ba.py
+          tests/test_barmm_parliamentary_election_bb.py
+          tests/test_japan_fies_live_analysis_az.py
+          tests/test_live_intelligence_foundation_av.py
+          EOF
+          sed -i 's/^          //' /tmp/expected
+          sort -o /tmp/expected /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+
+      - name: Validate exact materialised BB state
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          ledger=json.loads(Path('data/changes/ledger.json').read_text())
+          overlay=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          live_schema=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          live_obs=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          live_ev=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          analysis_schema=json.loads(Path('data/analysis/schema.json').read_text())
+          reviews=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          analysis_ev=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert canonical['version']=='0.39' and canonical['record_count']==689 and len(canonical['records'])==689
+          assert sources['version']=='1.81' and len(sources['sources'])==244
+          assert ledger['version']=='0.25' and len(ledger['changes'])==60
+          assert overlay['version']=='0.14' and overlay['canonical_checkpoint']=={'registry_version':'0.39','record_count':689}
+          assert live_schema['version']=='0.4' and len(live_obs['observations'])==4 and len(live_ev['evidence'])==6
+          assert analysis_schema['version']=='0.7' and len(reviews['reviews'])==21 and len(analysis_ev['evidence'])==95
+          rows=[r for r in canonical['records'] if r.get('occurrence_id')=='WSO-EL-PH-BARMM-20260914']
+          assert len(rows)==1
+          row=rows[0]
+          assert row['series_id']=='WSER-EL-PH-BARMM-PE'
+          assert row['timing_type']=='CIVIL_DATE'
+          assert row['start_local']=='2026-09-14'
+          assert row['source_timezone']=='Asia/Manila'
+          assert row['start_utc'] is None and row['end_utc'] is None
+          assert row['time_precision']=='DAY' and row['all_day_semantics'] is True
+          assert row['lifecycle_status']=='PLANNED' and row['certainty_status']=='CONFIRMED'
+          assert row['election_milestone_type']=='POLL_GENERAL'
+          assert row['source_id']=='WSSRC-EL-PH-001'
+          assert row['observed_market_response'] is None
+          assert 'publication_bundle_type' not in row
+          source=next(r for r in sources['sources'] if r.get('source_id')=='WSSRC-EL-PH-001')
+          assert source['canonical_dependency_count']==1
+          assert source['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert source['monitoring_readiness_status']=='RIGHTS_AUDIT_REQUIRED'
+          assert source['verification_mode']=='RIGHTS_HELD_MANUAL_ONLY'
+          change=next(r for r in ledger['changes'] if r.get('change_id')=='WSCHANGE-138c3977e91ced60d8')
+          assert change['change_type']=='FORWARD_OCCURRENCE_ADMISSION'
+          assert change['registry_version_before']=='0.38' and change['registry_version_after']=='0.39'
+          PY
+
+      - name: Validate repository completely after transaction
+        run: |
+          set -euo pipefail
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_japan_fies_live_analysis_az.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_barmm_parliamentary_election_bb.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          python scripts/build_site.py
+          rm -rf docs
+          test -z "$(git status --porcelain)"
+
+      - name: Self-remove final audit workflow
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/bb-final-audit.yml
+          git commit -m "BB: remove final clean-head audit workflow"
+          git push origin HEAD:feature/post-ba-barmm-election-anchor-bb
