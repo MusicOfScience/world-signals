@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.13",
+  "version": "0.14",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1452,6 +1452,148 @@
         "The separate report series preserves SBSTA's legal/institutional identity rather than merging it into SBI."
       ],
       "analytical_use": "FORMAL_SESSION_REPORT_AND_DECISION_CHAIN",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-ARCHIVE-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Governing Bodies",
+      "title": "WHA79 governing-body archive, journals, resolutions and decisions",
+      "url": "https://apps.who.int/gb/e/e_WHA79.html",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 was held from 18 to 23 May 2026 and has a formal archive of journals, resolutions, decisions and recorded-vote outcomes.",
+        "The archive shows that WHA79 contained many legally and substantively distinct decisions rather than one unitary outcome.",
+        "The archive is the controlling first-party decision record for the Assembly-level analysis."
+      ],
+      "analytical_use": "AUTHORITATIVE_ASSEMBLY_DECISION_RECORD",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-CLOSE-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "Seventy-ninth World Health Assembly daily update: 23 May 2026",
+      "url": "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
+      "published_at": "2026-05-23",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHO states that Member States adopted more than 20 decisions and 13 resolutions during WHA79.",
+        "WHO records the closing of the Assembly on 23 May 2026.",
+        "The update summarises technical, political and administrative outputs without making decision count a scalar impact metric."
+      ],
+      "analytical_use": "POST_EVENT_CLOSURE_AND_OUTPUT_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-PABS-PREWHA-20260501",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "WHO Member States agree to extend negotiations on Pathogen Access and Benefit Sharing annex",
+      "url": "https://www.who.int/news/item/01-05-2026-who-member-states-agree-to-extend-negotiations-on-pathogen-access-and-benefit-sharing-annex",
+      "published_at": "2026-05-01",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Before WHA79, WHO stated that PABS negotiations had progressed but additional time was needed.",
+        "WHO stated that WHA79 would be asked to consider continuing the IGWG work and submitting the outcome to WHA80 or an earlier special session.",
+        "This is official prior guidance for the PABS workstream, not an aggregate forecast for all WHA79 decisions."
+      ],
+      "analytical_use": "PRE_EVENT_OFFICIAL_PROCESS_GUIDANCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Resolutions Portal",
+      "title": "WHA79(7): Outcome of the IGWG in relation to the Article 12 PABS Annex",
+      "url": "https://resolutionsportal.who.int/akn?query=%2Fakn%2Fun%2Fstatement%2Fdeliberation%2Fwhowha%2F2026-05-22%2Fwha79-7%2Feng%40%2F%21main",
+      "published_at": "2026-05-22",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 decided that the IGWG shall continue its work and prioritise drafting and negotiating the PABS Annex.",
+        "The decision requires the outcome to be submitted to WHA80 or, if necessary, an earlier special session in 2026.",
+        "Continuation of negotiation is distinct from adoption of the Annex and from later signature, ratification or implementation of the Pandemic Agreement."
+      ],
+      "analytical_use": "FORMAL_CONTINUATION_DECISION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-GHA-DECISION-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Governing Bodies",
+      "title": "WHA79(20): Reform of the global health architecture and the UN80 Initiative",
+      "url": "https://apps.who.int/gb/ebwha/pdf_files/WHA79/A79_%2820%29-en.pdf",
+      "published_at": "2026-05-23",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 established the proposed joint process to support reforms of the global health architecture.",
+        "The decision specifies later task-force, consultation, interim-report and final-report stages extending into WHA80 in 2027.",
+        "Establishment of the reform process is not evidence that the intended reform outcomes were already achieved at WHA79."
+      ],
+      "analytical_use": "FORMAL_PROCESS_ESTABLISHMENT_DECISION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-AMR-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "World Health Assembly adopts updated Global Action Plan on antimicrobial resistance 2026-2036",
+      "url": "https://www.who.int/news/item/25-05-2026-the-world-health-assembly-adopts-updated-global-action-plan-on-antimicrobial-resistance-%282026-2036%29",
+      "published_at": "2026-05-25",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHO states that Member States at WHA79 adopted the updated Global Action Plan on antimicrobial resistance 2026-2036 on 23 May 2026.",
+        "The plan provides a One Health framework intended to guide coordinated action over the following decade.",
+        "Formal plan adoption does not itself establish implementation or realised health outcomes."
+      ],
+      "analytical_use": "FORMAL_PLAN_ADOPTION_REFERENCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-PABS-IGWG7-20260720",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "WHO Member States continue negotiations on the Pathogen Access and Benefit Sharing Annex",
+      "url": "https://www.who.int/news/item/20-07-2026-who-member-states-continue-negotiations-on-the-pathogen-access-and-benefit-sharing-annex",
+      "published_at": "2026-07-20",
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The seventh IGWG meeting took place on 6-17 July 2026 after WHA79 continued the negotiating mandate.",
+        "WHO reported that negotiations advanced but further discussions remained necessary to finalise the PABS Annex.",
+        "WHO scheduled an eighth IGWG meeting for 14-18 September 2026, showing continuing process propagation without substantive completion by the AP reference date."
+      ],
+      "analytical_use": "OBSERVED_POST_WHA_PROCESS_PROPAGATION",
       "canonical_provenance_effect": "NONE"
     }
   ]
