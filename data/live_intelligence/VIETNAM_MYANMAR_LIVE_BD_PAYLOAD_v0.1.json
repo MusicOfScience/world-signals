@@ -1,0 +1,55 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BD",
+  "target_version": "0.5",
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-VNM-MMR-VGP-20260905",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of Viet Nam — Government News",
+      "title": "Viet Nam, Myanmar agree to transform defense-security cooperation into key pillar of bilateral ties",
+      "url": "https://en.baochinhphu.vn/viet-nam-myanmar-agree-to-transform-defense-security-cooperation-into-key-pillar-of-bilateral-ties-111260905161629675.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "published_at_utc": "2026-09-05T09:16:00Z"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary Government of Viet Nam report published at 16:16 GMT+7 on 5 September 2026 (09:16 UTC). It states that the leaders agreed to make defence and security cooperation a key pillar of bilateral relations and identifies specific cooperation areas. The article publication clock time is not treated as the summit event time."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-GEO-VNM-MMR-SECURITY-20260905-001",
+    "observed_at_utc": "2026-09-06T12:47:00Z",
+    "observation_type": "GEOPOLITICAL_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "Viet Nam and Myanmar agree to make defence-security cooperation a key pillar of bilateral ties",
+    "summary": "The Government of Viet Nam reported that, during talks in Ha Noi on 5 September 2026, General Secretary and President To Lam and Myanmar President Min Aung Hlaing agreed to make defence and security cooperation a key pillar of bilateral relations. The official account says the two sides will expand young-officer training and exchanges, search-and-rescue and disaster-response cooperation, information exchange, and coordination against transnational crime, drug trafficking, human trafficking, high-tech crime and online fraud, while reaffirming that neither country's territory should be used against the other. This observation records the official bilateral development without inferring regional alignment, regime legitimacy, conflict effects or market consequences.",
+    "domain_tags": [
+      "GEOPOLITICS",
+      "POLITICS",
+      "INSTITUTIONS"
+    ],
+    "jurisdictions": [
+      "Vietnam",
+      "Myanmar"
+    ],
+    "regions": [
+      "Southeast Asia"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-VNM-MMR-VGP-20260905"
+    ],
+    "canonical_links": [],
+    "revision_of_observation_id": null,
+    "event_time": {
+      "precision": "CIVIL_DATE",
+      "event_date": "2026-09-05"
+    },
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  }
+}
