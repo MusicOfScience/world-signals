@@ -1,0 +1,54 @@
+name: WORLD SIGNALS AW current-state documentation refresh
+
+on:
+  push:
+    branches:
+      - feature/post-av-pressure-audit-aw
+    paths:
+      - .github/workflows/tmp-live-intelligence-aw-docs-refresh.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feature/post-av-pressure-audit-aw
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove current AW production state and apply documentation patch
+        run: |
+          test "$(git merge-base HEAD 4768c73532c4ba4038b30314079b85be64fbee01)" = "4768c73532c4ba4038b30314079b85be64fbee01"
+          python scripts/validate_live_intelligence.py
+          python scripts/tmp_patch_aw_docs.py
+          git diff --check
+      - name: Validate docs against executable state
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest tests.test_live_intelligence_foundation_av -v
+          python -m unittest tests.test_nepal_rasuwa_flood_live_intelligence_aw -v
+          python scripts/build_site.py
+          grep -q 'v0.2' README.md
+          grep -q '1 reviewed internal observation' README.md
+          grep -q 'POST-AV / AW CONTROLLED LIVE INTELLIGENCE' PROJECT_STATUS.md
+          grep -q 'DONE / AW' ROADMAP.md
+          grep -q 'DONE: AW — Nepal flood' ARCHITECTURE.md
+      - name: Commit documentation and self-remove helpers
+        env:
+          BRANCH: feature/post-av-pressure-audit-aw
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md ARCHITECTURE.md ROADMAP.md PROJECT_STATUS.md
+          git commit -m "AW: refresh Live Intelligence current-state documentation"
+          git push origin HEAD:$BRANCH
+          git rm .github/workflows/tmp-live-intelligence-aw-docs-refresh.yml scripts/tmp_patch_aw_docs.py
+          git commit -m "AW: remove documentation refresh helpers"
+          git push origin HEAD:$BRANCH
