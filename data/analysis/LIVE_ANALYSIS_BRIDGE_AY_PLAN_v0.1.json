@@ -93,7 +93,9 @@
     "data/analysis/LIVE_ANALYSIS_BRIDGE_AY_PLAN_v0.1.json",
     "src/world_signals/live_analysis_bridge.py",
     "scripts/apply_live_analysis_bridge_ay.py",
+    "scripts/apply_ak_descendant_repair_ay.py",
     "tests/test_live_analysis_bridge_ay.py",
+    "tests/test_ak_descendant_repair_ay.py",
     "data/analysis/LIVE_ANALYSIS_BRIDGE_AY_TRANSACTION_AUDIT_v0.1.md"
   ],
   "temporary_workflow_policy": {
