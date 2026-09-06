@@ -3,7 +3,7 @@
 **Transaction date:** 2026-09-07  
 **Exact post-BD main base:** `e54dddbaa0d60a39babc2fa47c1f054954b5c9ac`  
 **Transaction workflow run:** `34040519856`  
-**Governed target commit:** `TARGET_COMMIT_PENDING_CLEANUP`
+**Governed target commit:** `83982d68dd1495a9896b95e6ffed5d765e38502a`
 
 ## Reviewed decision
 
