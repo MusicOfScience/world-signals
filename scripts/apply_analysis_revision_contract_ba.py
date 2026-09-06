@@ -137,10 +137,17 @@ def target_analysis_schema(current: dict[str, Any]) -> dict[str, Any]:
 def target_status(current: str) -> str:
     old_header = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"
     new_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
-    require(
-        old_header in current or new_header in current,
-        "BA status header does not match reviewed prestate or target",
-    )
+    if old_header not in current and new_header not in current:
+        descendant_invariants = (
+            "- Analysis schema: **v0.7**",
+            "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
+            "BA adds a **production-closed Analysis revision-lineage contract**",
+        )
+        require(
+            all(marker in current for marker in descendant_invariants),
+            "BA status descendant is missing frozen BA invariants",
+        )
+        return current
     text = current.replace(old_header, new_header, 1)
     text = text.replace("- Analysis schema: **v0.6**", "- Analysis schema: **v0.7**", 1)
 

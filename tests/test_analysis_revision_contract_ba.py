@@ -84,6 +84,22 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertEqual(production_live_input_count(self.reviews), 1)
         self.assertEqual(apply_ba.exact_series_count(self.reviews), 0)
 
+    def test_status_helper_preserves_later_descendant_only_with_frozen_ba_invariants(self):
+        historical = self.target["status"]
+        ba_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
+        descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
+        self.assertIn(ba_header, historical)
+        descendant = historical.replace(ba_header, descendant_header, 1)
+        self.assertEqual(apply_ba.target_status(descendant), descendant)
+
+        malformed = descendant.replace(
+            "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
+            "- production Analysis revisions: **1 / gate OPEN**",
+            1,
+        )
+        with self.assertRaises(SystemExit):
+            apply_ba.target_status(malformed)
+
     def test_ba_target_core_analysis_and_revision_contract_validate(self):
         core = validate_analysis(
             self.target["analysis_schema"],
