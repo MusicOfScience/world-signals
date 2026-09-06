@@ -1,4 +1,5 @@
 name: WORLD SIGNALS AR coverage and monitor audit preflight
+# rerun after Markdown hygiene repair
 
 on:
   push:
