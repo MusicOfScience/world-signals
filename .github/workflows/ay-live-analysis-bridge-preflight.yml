@@ -1,7 +1,8 @@
 name: AY Live-to-Analysis bridge preflight
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [feature/post-ax-live-analysis-bridge-ay]
 
 permissions:
   contents: write
@@ -10,4 +11,120 @@ jobs:
   preflight:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "AY preflight temporarily paused while the fail-closed AK descendant assertion is repaired."
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-79 base ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=0a7608ab56116d0f65ffd1492a3da87bcbf35f47
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+      - name: Check-only AY simulation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_live_analysis_bridge_ay.py --check-only
+          python scripts/apply_ak_descendant_repair_ay.py --check-only
+      - name: Validate untouched post-AX descendant
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/apply_live_analysis_bridge_ay.py \
+            scripts/apply_ak_descendant_repair_ay.py \
+            src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Materialise AY ephemerally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_live_analysis_bridge_ay.py --apply
+          python scripts/apply_ak_descendant_repair_ay.py --apply
+      - name: Validate AY target exhaustively
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_live_analysis_bridge_ay.py \
+            scripts/apply_ak_descendant_repair_ay.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Prove ephemeral mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/expected <<'EOF'
+          .github/workflows/ci.yml
+          PROJECT_STATUS.md
+          ROADMAP.md
+          data/analysis/schema.json
+          scripts/build_site.py
+          scripts/validate_analysis.py
+          tests/test_exact_market_measurement_contract_ak.py
+          EOF
+          git diff --name-only | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          for p in \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json; do
+              test -z "$(git diff -- "$p")"
+          done
+      - name: Restore exact committed branch state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
+      - name: Self-remove preflight workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/ay-live-analysis-bridge-preflight.yml
+          git commit -m "AY: remove temporary bridge preflight workflow"
+          git push origin HEAD:${GITHUB_REF_NAME}
