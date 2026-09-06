@@ -134,7 +134,16 @@ class UNFCCCSB64HistoricalAnchorAHTests(unittest.TestCase):
 
     def test_overlay_semantics_are_unchanged(self):
         if self.is_post:
-            self.assertEqual(self.post_overlay["canonical_checkpoint"]["registry_version"], "0.37")
+            checkpoint = self.post_overlay["canonical_checkpoint"]
+            self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), version_tuple("0.37"))
+            self.assertGreaterEqual(checkpoint["record_count"], 687)
+            self.assertEqual(
+                checkpoint,
+                {
+                    "registry_version": self.post_registry["version"],
+                    "record_count": len(self.post_registry["records"]),
+                },
+            )
         else:
             self.assertEqual(overlay_semantics(self.overlay), overlay_semantics(self.post_overlay))
 
