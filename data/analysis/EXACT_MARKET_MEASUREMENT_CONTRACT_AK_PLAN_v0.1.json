@@ -88,6 +88,19 @@
       "analytical_market_evidence_may_not_resolve_canonical_time": true
     }
   },
+  "descendant_test_repairs": {
+    "classification": "STALE_LIVE_DESCENDANT_ASSERTIONS",
+    "trigger": "The first controlled AK transaction passed schema write and both validators, then failed closed in the full suite because four historical tests asserted that the current descendant schema must remain exactly v0.3.",
+    "principle": "Historical tranche plans continue to freeze their exact schema decisions and checkpoints. Only assertions about the later live descendant schema are changed from equality with v0.3 to version >= v0.3, so legitimate later schema evolution is not fossilised.",
+    "files": [
+      "tests/test_formal_standards_analysis_x.py",
+      "tests/test_japan_sovereign_financing_analysis_aa.py",
+      "tests/test_nonmarket_institutional_analysis_w.py",
+      "tests/test_source_native_fiscal_analysis_v.py"
+    ],
+    "frozen_historical_schema_target_preserved": "0.3",
+    "project_wide_rules_weakened": false
+  },
   "postconditions": {
     "canonical_registry_version": "0.37",
     "canonical_record_count": 687,
@@ -130,7 +143,11 @@
     "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_PLAN_v0.1.json",
     "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_TRANSACTION_AUDIT_v0.1.md",
     "scripts/apply_exact_market_measurement_contract_ak.py",
-    "tests/test_exact_market_measurement_contract_ak.py"
+    "tests/test_exact_market_measurement_contract_ak.py",
+    "tests/test_formal_standards_analysis_x.py",
+    "tests/test_japan_sovereign_financing_analysis_aa.py",
+    "tests/test_nonmarket_institutional_analysis_w.py",
+    "tests/test_source_native_fiscal_analysis_v.py"
   ],
   "generated_verification_only": [
     "docs/data/analysis.json"
@@ -144,6 +161,8 @@
     "first_exact_series_must_be_populated_in_this_tranche": false,
     "market_structure_gap_must_be_closed_in_this_tranche": false,
     "completed_analysis_frontier_is_fifo_backlog": false,
+    "historical_checkpoint_may_be_rewritten_for_descendant_compatibility": false,
+    "project_wide_rules_may_be_weakened_to_make_tests_pass": false,
     "google_calendar_write": false,
     "auto_merge": false
   }
