@@ -1,0 +1,169 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "EXACT_MARKET_MEASUREMENT_CONTRACT_AK",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "53e98457b70aa0dda4da490d5fe3210ce333ecae",
+  "architecture_position": "ANALYSIS_METHODOLOGY",
+  "selection": {
+    "selected_pressure": "EXACT_MARKET_MEASUREMENT_CONTRACT",
+    "reason": "EXACT_TIMESTAMP_SERIES is selectable in Analysis schema v0.3 without an exact-series-specific proof contract; no production exact-series rows yet depend on the weak state.",
+    "deferred_not_rejected": [
+      "WSO-FIN-B-0004",
+      "WSO-CLIM-UNFCCC-SB64-202606",
+      "WSO-EL-KR-LGE-20260603",
+      "WSO-HEALTH-WHA-079",
+      "WSO-TRD-EU-RU-SANC-20260625",
+      "WSO-MAC-B-0041",
+      "CORPORATE_FINANCIAL_MARKET_STRUCTURE historical anchor reconnaissance"
+    ]
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.3",
+    "analysis_schema_blob_sha": "e3ab6e9cce1deb898603b9b8402f62024e4ea14d",
+    "analysis_validator_blob_sha": "5858bd7e459e8fdd19bd3cee83decf85a7226ce9",
+    "analysis_reviews_version": "0.10",
+    "analysis_review_count": 14,
+    "analysis_evidence_version": "0.10",
+    "analysis_evidence_count": 54,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 14,
+    "reviewed_event_type_diversity": 12,
+    "market_movement_row_count": 10,
+    "exact_timestamp_series_row_count": 0
+  },
+  "schema_change": {
+    "from_version": "0.3",
+    "to_version": "0.4",
+    "new_controlled_vocabulary": {
+      "market_data_use_basis": [
+        "OPEN_REUSE_TERMS",
+        "LICENSED_REUSE_TERMS",
+        "USER_AUTHORISED_REUSE",
+        "OTHER_REVIEWED_REUSE_BASIS"
+      ]
+    },
+    "new_evidence_role": "MARKET_DATA_RIGHTS",
+    "exact_timestamp_series_required_fields": [
+      "market_series_id",
+      "market_timezone",
+      "series_granularity",
+      "event_anchor_utc",
+      "before_observation_utc",
+      "after_observation_utc",
+      "data_use_basis",
+      "data_use_evidence_ref",
+      "public_projection_permitted"
+    ],
+    "exact_timestamp_series_rules": {
+      "movement_representation": "PRE_POST_VALUES",
+      "independently_reconstructed": true,
+      "canonical_start_utc_required": true,
+      "event_anchor_must_equal_canonical_start_utc": true,
+      "observation_order": "before_observation_utc < event_anchor_utc <= after_observation_utc",
+      "market_timezone_must_be_valid_iana": true,
+      "market_observation_evidence_role_required": true,
+      "allowed_market_observation_evidence_classes": [
+        "PRIMARY_OFFICIAL",
+        "MARKET_DATA_PROVIDER"
+      ],
+      "data_use_basis_evidence_role_required": "MARKET_DATA_RIGHTS",
+      "data_use_evidence_ref_must_be_in_movement_evidence_refs": true,
+      "allowed_market_data_rights_evidence_classes": [
+        "PRIMARY_OFFICIAL",
+        "MARKET_DATA_PROVIDER"
+      ],
+      "public_projection_permitted_must_be_true": true,
+      "analytical_market_evidence_may_not_resolve_canonical_time": true
+    }
+  },
+  "descendant_test_repairs": {
+    "classification": "STALE_LIVE_DESCENDANT_ASSERTIONS",
+    "trigger": "The first controlled AK transaction passed schema write and both validators, then failed closed in the full suite because four historical tests asserted that the current descendant schema must remain exactly v0.3.",
+    "principle": "Historical tranche plans continue to freeze their exact schema decisions and checkpoints. Only assertions about the later live descendant schema are changed from equality with v0.3 to version >= v0.3, so legitimate later schema evolution is not fossilised.",
+    "files": [
+      "tests/test_formal_standards_analysis_x.py",
+      "tests/test_japan_sovereign_financing_analysis_aa.py",
+      "tests/test_nonmarket_institutional_analysis_w.py",
+      "tests/test_source_native_fiscal_analysis_v.py"
+    ],
+    "frozen_historical_schema_target_preserved": "0.3",
+    "project_wide_rules_weakened": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.10",
+    "analysis_review_count": 14,
+    "analysis_evidence_version": "0.10",
+    "analysis_evidence_count": 54,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 14,
+    "reviewed_event_type_diversity": 12,
+    "market_movement_row_count": 10,
+    "exact_timestamp_series_row_count": 0,
+    "generated_public_analysis_projection_schema_version": "0.4"
+  },
+  "protected_unchanged": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "intended_mutation_boundary": [
+    "data/analysis/schema.json",
+    "src/world_signals/analysis.py",
+    "data/analysis/POST_AJ_PRESSURE_AUDIT_AK_v0.1.md",
+    "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_PLAN_v0.1.json",
+    "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_TRANSACTION_AUDIT_v0.1.md",
+    "scripts/apply_exact_market_measurement_contract_ak.py",
+    "tests/test_exact_market_measurement_contract_ak.py",
+    "tests/test_formal_standards_analysis_x.py",
+    "tests/test_japan_sovereign_financing_analysis_aa.py",
+    "tests/test_nonmarket_institutional_analysis_w.py",
+    "tests/test_source_native_fiscal_analysis_v.py"
+  ],
+  "generated_verification_only": [
+    "docs/data/analysis.json"
+  ],
+  "guardrails": {
+    "canonical_event_time_implies_exact_market_precision": false,
+    "newswire_intraday_description_is_exact_series": false,
+    "licensed_internal_access_implies_public_redistribution": false,
+    "unproven_boolean_permission_is_sufficient_rights_provenance": false,
+    "exact_series_may_backfill_missing_canonical_time": false,
+    "first_exact_series_must_be_populated_in_this_tranche": false,
+    "market_structure_gap_must_be_closed_in_this_tranche": false,
+    "completed_analysis_frontier_is_fifo_backlog": false,
+    "historical_checkpoint_may_be_rewritten_for_descendant_compatibility": false,
+    "project_wide_rules_may_be_weakened_to_make_tests_pass": false,
+    "google_calendar_write": false,
+    "auto_merge": false
+  }
+}

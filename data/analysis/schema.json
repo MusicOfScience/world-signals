@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.3",
+  "version": "0.4",
   "reference_date": "2026-09-06",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
@@ -109,7 +109,8 @@
       "EXPECTATION_BENCHMARK",
       "MARKET_OBSERVATION",
       "CONTEXT_OR_ALTERNATIVE",
-      "SECOND_ORDER_OBSERVATION"
+      "SECOND_ORDER_OBSERVATION",
+      "MARKET_DATA_RIGHTS"
     ],
     "movement_type": [
       "POLICY_PROBABILITY_REPRICING",
@@ -137,6 +138,12 @@
       "OBSERVED",
       "PLAUSIBLE_WATCH_ITEM",
       "NOT_ESTABLISHED"
+    ],
+    "market_data_use_basis": [
+      "OPEN_REUSE_TERMS",
+      "LICENSED_REUSE_TERMS",
+      "USER_AUTHORISED_REUSE",
+      "OTHER_REVIEWED_REUSE_BASIS"
     ]
   },
   "guardrails": [
@@ -155,6 +162,55 @@
     "Analysis population readiness must report geographic and event-type anchor gaps. A missing Global South completed occurrence is a population constraint, not permission to manufacture historical canonical records.",
     "Public Analysis projections must preserve canonical temporal semantics needed to interpret the referenced occurrence, including source-native calendar labels and unresolved-conversion status where present.",
     "A Gregorian date or clock time appearing only in analytical evidence must never resolve, replace or backfill missing canonical Gregorian or UTC timing.",
-    "The public Analysis layer must render unresolved canonical time as unresolved rather than infer a date from reporting chronology."
-  ]
+    "The public Analysis layer must render unresolved canonical time as unresolved rather than infer a date from reporting chronology.",
+    "Canonical event timing and market-measurement precision are independent: an exact canonical release timestamp never upgrades a market observation to EXACT_TIMESTAMP_SERIES.",
+    "EXACT_TIMESTAMP_SERIES requires an independently reconstructed pre/post series with explicit UTC observations ordered around an event_anchor_utc copied from canonical start_utc; analytical evidence may not resolve or replace missing canonical timing.",
+    "EXACT_TIMESTAMP_SERIES requires explicit market-series identity, valid IANA market timezone, series granularity and MARKET_OBSERVATION evidence from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence.",
+    "An exact-series data-use basis and public-projection permission must be provenance-backed by a referenced MARKET_DATA_RIGHTS evidence row from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence; a bare permission boolean is insufficient.",
+    "Exact market observations may enter the public Analysis dataset only when public_projection_permitted is explicitly true and the rights evidence supports that use; internal access or licensing alone does not establish redistribution permission.",
+    "The absence of EXACT_TIMESTAMP_SERIES rows is acceptable and must never be treated as a quota to populate."
+  ],
+  "market_measurement_policy": {
+    "canonical_event_time_and_market_measurement_precision_are_independent": true,
+    "exact_timestamp_series": {
+      "population_required": false,
+      "required_fields": [
+        "market_series_id",
+        "market_timezone",
+        "series_granularity",
+        "event_anchor_utc",
+        "before_observation_utc",
+        "after_observation_utc",
+        "data_use_basis",
+        "data_use_evidence_ref",
+        "public_projection_permitted"
+      ],
+      "movement_representation": "PRE_POST_VALUES",
+      "independently_reconstructed": true,
+      "canonical_start_utc_required": true,
+      "event_anchor_must_equal_canonical_start_utc": true,
+      "observation_order": "before_observation_utc < event_anchor_utc <= after_observation_utc",
+      "market_timezone_must_be_valid_iana": true,
+      "market_observation_evidence_role_required": true,
+      "allowed_market_observation_evidence_classes": [
+        "PRIMARY_OFFICIAL",
+        "MARKET_DATA_PROVIDER"
+      ],
+      "data_use_basis_required": true,
+      "data_use_evidence_role_required": "MARKET_DATA_RIGHTS",
+      "data_use_evidence_ref_must_be_in_movement_evidence_refs": true,
+      "allowed_market_data_rights_evidence_classes": [
+        "PRIMARY_OFFICIAL",
+        "MARKET_DATA_PROVIDER"
+      ],
+      "public_projection_permitted_must_be_true": true,
+      "exact_only_fields_prohibited_for_other_precision": true
+    },
+    "rights_boundary": {
+      "data_existence_does_not_establish_access_authority": true,
+      "access_authority_does_not_establish_redistribution_authority": true,
+      "licensed_internal_use_does_not_establish_public_projection_permission": true,
+      "public_projection_permission_requires_provenance_backed_rights_evidence": true
+    }
+  }
 }

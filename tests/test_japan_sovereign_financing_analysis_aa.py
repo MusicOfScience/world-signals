@@ -17,6 +17,10 @@ def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
+def version_tuple(raw: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class JapanSovereignFinancingAnalysisAATests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -50,8 +54,8 @@ class JapanSovereignFinancingAnalysisAATests(unittest.TestCase):
         self.assertEqual((pre["analysis_evidence_version"], pre["analysis_evidence_count"]), ("0.7", 40))
         self.assertEqual((post["analysis_reviews_version"], post["analysis_review_count"]), ("0.8", 12))
         self.assertEqual((post["analysis_evidence_version"], post["analysis_evidence_count"]), ("0.8", 44))
-        self.assertEqual(self.schema["version"], "0.3")
         self.assertEqual(self.plan["schema_decision"]["version_unchanged"], "0.3")
+        self.assertGreaterEqual(version_tuple(self.schema["version"]), version_tuple("0.3"))
         for key in (
             "canonical_mutation", "source_registry_mutation", "change_ledger_mutation",
             "biosecurity_overlay_mutation", "analysis_schema_mutation", "monitor_configuration_mutation",
