@@ -98,17 +98,19 @@ AX also makes state-as-of time explicit and distinct from event, publication and
 
 Before any fourth observation, run another pressure audit. The next high-value candidate is prospective Live Intelligence → Analysis linkage rather than automatic continuation of the DRC story.
 
-## Stage 8 — prospective Live Intelligence → Analysis linkage — LATER
+## Stage 8 — prospective Live Intelligence → Analysis linkage — AY FOUNDATION DONE / PRODUCTION CLOSED
 
-Once the Live Intelligence contract survives a real specimen, test whether Analysis can reference factual Live observations without copying them into analytical evidence or allowing Analysis to rewrite upstream observations.
+AY establishes the executable bridge contract without populating a production relationship. Analysis may prospectively select immutable Live `observation_id` values as factual inputs while keeping those inputs distinct from Analysis evidence and prohibiting any rewrite of upstream Live records.
 
-The target relationship is:
+The target relationship remains:
 
 `factual observation -> optional canonical context -> analytical interpretation`
 
 not:
 
 `headline -> inferred cause -> rewritten event`.
+
+AY admits no story selector, latest-state lookup or automatic story expansion: a developing story must be referenced snapshot-by-snapshot. Production `live_inputs` remain exactly zero and public Live-input projection remains closed. A later pressure audit must select and authorise the first real production relationship.
 
 ## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT
 

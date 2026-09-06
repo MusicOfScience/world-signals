@@ -1,4 +1,4 @@
-# CURRENT RECOVERY OVERRIDE — POST-AW / AX EVOLVING-STATE LIVE INTELLIGENCE
+# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION
 
 **Effective checkpoint:** 2026-09-06
 **Exact post-#78 main base:** `721206169033eb0ceb695075d44fb38e7fa2edc3`
@@ -16,7 +16,7 @@ This override supersedes stale "current" counts in the historical body below whi
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
 - Live Intelligence: **v0.3 / 3 reviewed internal observations / 4 primary-official evidence rows / public observation projection CLOSED**
-- Analysis schema: **v0.4**
+- Analysis schema: **v0.5**
 - Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
 - sole completed/unreviewed occurrence: **`WSO-MAC-B-0041`**
@@ -25,6 +25,8 @@ This override supersedes stale "current" counts in the historical body below whi
 - Google Calendar writes: **OFF**
 
 ## Current architecture decision
+
+AY establishes a **production-closed prospective Live Intelligence → Analysis input contract**. Analysis may eventually select immutable Live `observation_id` values as factual inputs, but AY leaves production `live_inputs` at **0**, public Live-input projection closed, and all 20 existing Analysis reviews / 91 evidence rows unchanged. Story IDs, latest-state selectors, automatic story expansion, transitive Live-evidence migration and upstream Live mutation are prohibited. A later pressure audit is required before the first real populated relationship.
 
 AX has now exercised repeated as-of state and developing-story semantics without opening a general feed. Live Intelligence v0.3 preserves the AW Nepal shock and adds two primary-confirmed WHO snapshots of the 2026 DRC Bundibugyo outbreak, giving three internal observations and four primary-official evidence rows in total.
 

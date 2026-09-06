@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.4",
+  "version": "0.5",
   "reference_date": "2026-09-06",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
@@ -168,7 +168,13 @@
     "EXACT_TIMESTAMP_SERIES requires explicit market-series identity, valid IANA market timezone, series granularity and MARKET_OBSERVATION evidence from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence.",
     "An exact-series data-use basis and public-projection permission must be provenance-backed by a referenced MARKET_DATA_RIGHTS evidence row from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER evidence; a bare permission boolean is insufficient.",
     "Exact market observations may enter the public Analysis dataset only when public_projection_permitted is explicitly true and the rights evidence supports that use; internal access or licensing alone does not establish redistribution permission.",
-    "The absence of EXACT_TIMESTAMP_SERIES rows is acceptable and must never be treated as a quota to populate."
+    "The absence of EXACT_TIMESTAMP_SERIES rows is acceptable and must never be treated as a quota to populate.",
+    "A prospective Live Intelligence input is selected by immutable observation_id, never by story_id, latest-state lookup or automatic story expansion.",
+    "Live Intelligence inputs remain distinct from Analysis evidence; selecting a Live observation does not transitively migrate its evidence into the analytical evidence registry.",
+    "Analysis may not mutate, revise, relabel or otherwise rewrite an upstream Live Intelligence observation through the input relationship.",
+    "A developing Live story is consumed snapshot-by-snapshot: analyses requiring multiple states must identify each observation explicitly rather than infer a latest or complete story history.",
+    "AY keeps production Live Intelligence inputs and public Live-input projection closed; the schema and validator contract are established before the first populated relationship.",
+    "A future production Live Intelligence input requires a separate pressure audit and may not be opened merely because the AY contract validates hypothetical fixtures."
   ],
   "market_measurement_policy": {
     "canonical_event_time_and_market_measurement_precision_are_independent": true,
@@ -212,5 +218,36 @@
       "licensed_internal_use_does_not_establish_public_projection_permission": true,
       "public_projection_permission_requires_provenance_backed_rights_evidence": true
     }
+  },
+  "live_input_policy": {
+    "mode": "FOUNDATION_ONLY_NO_PRODUCTION_LINKS",
+    "production_live_inputs_allowed": false,
+    "public_live_input_projection_allowed": false,
+    "identity_selector": "observation_id",
+    "story_id_selector_allowed": false,
+    "latest_selector_allowed": false,
+    "automatic_story_expansion_allowed": false,
+    "transitive_live_evidence_migration_allowed": false,
+    "upstream_live_mutation_allowed": false,
+    "one_live_observation_may_support_multiple_analyses": true,
+    "multiple_story_snapshots_require_explicit_observation_ids": true,
+    "analysis_as_of_must_not_predate_live_observed_at": true,
+    "future_production_population_requires_pressure_audit": true,
+    "required_input_fields": [
+      "observation_id",
+      "roles",
+      "analysis_sections"
+    ],
+    "allowed_input_fields": [
+      "observation_id",
+      "roles",
+      "analysis_sections"
+    ],
+    "allowed_roles": [
+      "FACTUAL_INPUT",
+      "CONTEXT_OR_ALTERNATIVE_INPUT",
+      "SECOND_ORDER_INPUT",
+      "MARKET_OBSERVATION_INPUT"
+    ]
   }
 }

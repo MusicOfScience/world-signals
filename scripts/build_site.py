@@ -12,6 +12,7 @@ from world_signals.runtime_projection import unavailable_runtime_projection
 from world_signals.biosecurity_projection import public_biosecurity_projection
 from world_signals.live_intelligence import public_live_intelligence_projection, validate_live_intelligence
 from world_signals.analysis import public_analysis_projection, validate_analysis
+from world_signals.live_analysis_bridge import validate_live_analysis_bridge
 
 reg=load_json(ROOT/"data/canonical/registry.json")
 src=load_json(ROOT/"data/sources/registry.json")
@@ -36,6 +37,9 @@ if not live_report.ok:
 analysis_report=validate_analysis(analysis_schema,analysis_evidence,analysis_reviews,reg)
 if not analysis_report.ok:
     raise SystemExit("Analysis validation failed: "+"; ".join(analysis_report.errors))
+bridge_report=validate_live_analysis_bridge(analysis_schema,analysis_reviews,live_observations)
+if not bridge_report.ok:
+    raise SystemExit("Live → Analysis bridge validation failed: "+"; ".join(bridge_report.errors))
 
 docs=ROOT/"docs"
 docs.mkdir(exist_ok=True)
