@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.26",
+  "version": "0.27",
   "reference_date": "2026-09-07",
   "changes": [
     {
@@ -1867,6 +1867,46 @@
       "committed_at": "2026-09-07T00:52:22+10:00",
       "registry_version_before": "0.39",
       "registry_version_after": "0.40",
+      "canonical_mutation_committed": true,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    },
+    {
+      "change_id": "WSCHANGE-5c0629586cdf3ce7",
+      "occurrence_id": "WSO-COM-A-0001",
+      "change_type": "SOURCE_PROVENANCE_STRENGTHENING",
+      "old_values": {
+        "lifecycle_status": "COMPLETED",
+        "last_successful_assertion_id": "WSA-cddde6887f8083ca",
+        "completion_provenance_source_id": "WSSRC-COM-015",
+        "primary_opec_provenance_state": "REQUIRED_WHEN_RETRIEVABLE"
+      },
+      "new_values": {
+        "lifecycle_status": "COMPLETED",
+        "last_successful_assertion_id": "WSA-c1f92a2fae083bf1",
+        "official_confirmation_source_id": "WSSRC-COM-016",
+        "official_confirmation_source_url": "https://www.spa.gov.sa/en/N2669918",
+        "official_confirmation_source_class": "OFFICIAL_PARTICIPATING_GOVERNMENT_CONFIRMATION",
+        "reuters_fallback_preserved": true,
+        "primary_opec_provenance_state": "REQUIRED_WHEN_RETRIEVABLE"
+      },
+      "source_assertion_id": "WSA-c1f92a2fae083bf1",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-07T04:24:13+10:00",
+      "review_basis": [
+        "https://www.spa.gov.sa/en/N2669918",
+        "https://www.opec.org/pr-detail/1854611-2-august-2026.html",
+        "https://www.opec.org/press-releases.html",
+        "Newly available Saudi Press Agency official evidence confirms that the seven participating OPEC+ countries met on 6 September 2026 and announced unchanged October production requirements. This materially improves completion provenance relative to the Reuters fallback but does not satisfy the competent OPEC-primary requirement.",
+        "SPA is official participating-government confirmation, not the competent OPEC issuing authority.",
+        "Reuters WSSRC-COM-015 remains preserved as the evidence used for BE lifecycle completion.",
+        "SPA publication time is publication metadata only and does not become canonical event time.",
+        "No future occurrence is created from SPA and all automatic-write gates remain closed."
+      ],
+      "commit_mode": "REVIEWED_OFFICIAL_CONFIRMATION_PROVENANCE_STRENGTHENING_BG",
+      "committed_at": "2026-09-07T04:24:13+10:00",
+      "registry_version_before": "0.40",
+      "registry_version_after": "0.41",
       "canonical_mutation_committed": true,
       "automatic_canonical_commit": false,
       "google_calendar_write": false
