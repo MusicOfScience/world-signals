@@ -126,7 +126,7 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         observations["observations"].append(row)
         self.assertTrue(self.validate(schema=schema, evidence=evidence, observations=observations).ok)
 
-        observations["observations"][0]["canonical_links"][0]["occurrence_id"] = "WSO-DOES-NOT-EXIST"
+        row["canonical_links"][0]["occurrence_id"] = "WSO-DOES-NOT-EXIST"
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertIn("unknown canonical occurrence", " ".join(report.errors))
 
@@ -211,7 +211,7 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertTrue(report.ok, report.errors)
 
-        observations["observations"][0]["event_time"]["event_timezone"] = "Asia/Tokyo"
+        row["event_time"]["event_timezone"] = "Asia/Tokyo"
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertIn("do not match event_at_utc", " ".join(report.errors))
 
@@ -231,7 +231,7 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertTrue(report.ok, report.errors)
 
-        del observations["observations"][0]["revision_target_description"]
+        del revision["revision_target_description"]
         report = self.validate(schema=schema, evidence=evidence, observations=observations)
         self.assertIn("DATA_REVISION requires revision_target_description", " ".join(report.errors))
 
