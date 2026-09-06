@@ -43,7 +43,7 @@ class OpecFallbackCompletionBETests(unittest.TestCase):
         self.assertIn("OPEC 6 September lifecycle completion — SELECTED", text)
         self.assertIn("Create the Reuters-reported 4 October next meeting — REJECTED", text)
         self.assertIn("reputable newswire when primary material is unavailable", text)
-        self.assertIn("not a population target", text)
+        self.assertIn("not a target to fill", text)
 
     def test_pre_or_post_state_has_stable_opec_identity(self):
         if self._is_pre_state():
@@ -92,7 +92,8 @@ class OpecFallbackCompletionBETests(unittest.TestCase):
         self.assertEqual(source["canonical_dependency_count"], 0)
         self.assertEqual(source["automated_monitoring_use"], "PROHIBITED_OR_RIGHTS_HOLD")
         self.assertIn("no future occurrence", source["future_schedule_horizon"].lower())
-        self.assertIn("primary OPEC provenance", source["notes"])
+        limitations = " ".join(source.get("known_limitations", []))
+        self.assertIn("primary OPEC provenance", limitations)
         self.assertNotEqual(source["source_id"], self.plan["selection"]["schedule_source_id"])
 
     def test_completion_history_marks_primary_provenance_pending(self):
@@ -161,7 +162,6 @@ class OpecFallbackCompletionBETests(unittest.TestCase):
             self.assertIn('"mode": "CHECK_ONLY"', proc.stdout)
             self.assertIn('"primary_provenance_upgrade_state": "REQUIRED_WHEN_RETRIEVABLE"', proc.stdout)
         else:
-            # The helper is intentionally fail-closed after the transaction rather than silently reapplying it.
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("BE PRECONDITION FAILED", proc.stderr + proc.stdout)
 
