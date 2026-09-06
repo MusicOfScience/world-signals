@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.11",
+  "version": "0.12",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1189,6 +1189,163 @@
         "The article establishes a heavily contaminated same-session market environment and does not supply an independently reconstructed 11:30 AEDT FSR event window."
       ],
       "analytical_use": "CONTEXT_AND_SOURCE_REPORTED_MARKET_OBSERVATION_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-NEC-WINNERS-202606",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "National Election Commission of the Republic of Korea",
+      "host_or_distribution": "National Election Commission Policy & Pledge portal",
+      "title": "9th Nationwide Simultaneous Local Elections — elected-candidate/winner portal",
+      "url": "https://policy.nec.go.kr/plc/main/initUMAMain.do",
+      "published_at": "2026-06",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The NEC winner/elected-candidate surface establishes that the 9th Nationwide Simultaneous Local Elections produced elected candidates and were completed as an electoral process.",
+        "The official surface represents many local contests rather than a single national partisan outcome.",
+        "This Analysis evidence does not alter the canonical source identity or timing already established upstream."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_PROCESS_COMPLETION_REFERENCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-REUTERS-RESULT-20260604",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "South Korea Lee's ruling party sweeps local elections, but loses Seoul mayor race",
+      "url": "https://www.reuters.com/world/asia-pacific/south-korea-ruling-party-sweeps-most-seats-local-elections-faces-losing-seoul-2026-06-03/",
+      "published_at": "2026-06-04",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported that the Democratic Party won 12 of 16 major mayoral/provincial contests and the People Power Party won four.",
+        "The PPP retained Seoul under incumbent Oh Se-hoon while the DP won Busan.",
+        "The report also identifies local and national political context relevant to interpreting the distributed result."
+      ],
+      "analytical_use": "RESULT_AGGREGATION_AND_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-YONHAP-RESULT-20260604",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "Yonhap News Agency",
+      "host_or_distribution": "Yonhap News Agency",
+      "title": "Ruling party wins landslide in local elections despite losing Seoul to incumbent mayor",
+      "url": "https://en.yna.co.kr/view/AEN20260602008360315",
+      "published_at": "2026-06-04",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Yonhap independently reported the 12-to-4 split across the 16 major mayoral and gubernatorial contests.",
+        "Yonhap reported DP victory in Busan and PPP retention of Seoul.",
+        "The corroboration supports the aggregate contest-class description without turning the full nationwide election into a single result."
+      ],
+      "analytical_use": "RESULT_CORROBORATION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-REUTERS-PRECONTEXT-20260508",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "South Korea heads to local elections under shadow of disgraced former president",
+      "url": "https://www.reuters.com/world/asia-pacific/south-korea-heads-local-elections-under-shadow-disgraced-former-president-2026-05-08/",
+      "published_at": "2026-05-08",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported that analysts expected the conservatives to suffer a severe or landslide defeat in the June local elections.",
+        "The PPP entered the election controlling 12 of 16 major local governments, while late-April Gallup Korea support was reported at 46 percent for the DP versus 21 percent for the PPP and 64 percent approval for President Lee.",
+        "The report establishes directional pre-election political context but does not provide an exact contest-distribution forecast."
+      ],
+      "analytical_use": "DIRECTIONAL_EXPECTATION_AND_CONTEXT_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-REUTERS-EXITPOLL-20260603",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "South Korea ruling party set for local election gains, exit poll shows",
+      "url": "https://www.reuters.com/world/asia-pacific/south-koreans-vote-local-elections-seen-gauge-president-lees-first-year-2026-06-03/",
+      "published_at": "2026-06-03",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The joint broadcasters' post-vote exit poll projected the DP ahead in 11 of 16 major mayoral/provincial races and projected a DP Seoul win.",
+        "Because the exit poll was produced after voting, it is observation context rather than an ex-ante expectation benchmark.",
+        "The difference between exit-poll projection and final result illustrates post-vote uncertainty without creating pre-event forecast error."
+      ],
+      "analytical_use": "POST_VOTE_OBSERVATION_CONTEXT_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-YONHAP-BALLOTS-20260608",
+      "evidence_class": "REPUTABLE_MEDIA",
+      "provider": "Yonhap News Agency",
+      "host_or_distribution": "Yonhap News Agency",
+      "title": "NEC says supplemental ballots sent to 140 polling stations; voting interrupted at 26",
+      "url": "https://www.yna.co.kr/view/AKR20260608178651001",
+      "published_at": "2026-06-08",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "Yonhap reported the NEC's updated accounting that supplemental ballots were sent to 140 of 14,288 polling stations.",
+        "The supplemental papers were actually used at 91 polling stations and voting was temporarily interrupted then resumed at 26.",
+        "The NEC established an external fact-finding committee to examine ballot printing, allocation, supply management and response procedures."
+      ],
+      "analytical_use": "NEC_REPORTED_ADMINISTRATION_FACTS_AND_SECOND_ORDER_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-REUTERS-CONSEQUENCES-20260612",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "How South Korea's ballot shortage spurred turnout of thousands to defend democracy",
+      "url": "https://www.reuters.com/world/asia-pacific/how-south-koreas-ballot-shortage-spurred-turnout-thousands-defend-democracy-2026-06-12/",
+      "published_at": "2026-06-12",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "Reuters documented sustained protests and rerun demands following the ballot shortages.",
+        "The report recorded the resignation of NEC chief Rho Tae-ak and President Lee's investigation and reform response.",
+        "It also documents fraud allegations and pre-existing mistrust as political claims/context rather than adjudicated findings."
+      ],
+      "analytical_use": "OBSERVED_INSTITUTIONAL_AND_PUBLIC_RESPONSE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-KR-LGE-REUTERS-REFORM-20260619",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "South Korea's Lee calls for overhaul of election management after flawed vote",
+      "url": "https://www.reuters.com/world/asia-pacific/south-koreas-lee-calls-overhaul-election-management-after-flawed-vote-2026-06-19/",
+      "published_at": "2026-06-19",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "President Lee called for major reform of election management after the ballot-paper shortage controversy.",
+        "He ordered a probe involving prosecutors and police and raised possible legal or constitutional reform if political agreement existed.",
+        "The report supports an observed institutional-response chain while not establishing that the administration failure caused the partisan election result."
+      ],
+      "analytical_use": "OBSERVED_POLICY_AND_INSTITUTIONAL_RESPONSE",
       "canonical_provenance_effect": "NONE"
     }
   ]
