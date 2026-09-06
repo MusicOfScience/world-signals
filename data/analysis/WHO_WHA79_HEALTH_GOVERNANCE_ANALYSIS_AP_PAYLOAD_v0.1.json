@@ -1,0 +1,301 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "WHO_WHA79_HEALTH_GOVERNANCE_ANALYSIS_AP",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "reviews": [
+    {
+      "analysis_id": "WSAN-HEALTH-WHA79-20260523-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-06T02:10:00Z",
+      "canonical_occurrence_id": "WSO-HEALTH-WHA-079",
+      "canonical_series_id": "WSER-HEALTH-WHA",
+      "canonical_event_type": "HEALTH_GOVERNANCE_EVENT",
+      "canonical_institution": "World Health Organization",
+      "canonical_release_utc": null,
+      "scope": "Seventy-ninth World Health Assembly, 18-23 May 2026: heterogeneous constitutional decisions spanning PABS negotiation continuation, global-health-architecture reform process establishment, antimicrobial-resistance plan adoption and other health-governance outputs, with later institutional follow-through kept separate from implementation and health effects",
+      "what_happened": {
+        "summary": "The Seventy-ninth World Health Assembly met in Geneva from 18-23 May 2026 and closed after adopting more than 20 decisions and 13 resolutions. Those outputs were institutionally heterogeneous rather than one synthetic outcome. WHA79(7) continued the Intergovernmental Working Group's mandate to draft and negotiate the Pandemic Agreement's Pathogen Access and Benefit Sharing Annex for submission to WHA80 or, if necessary, an earlier special session; it did not adopt the Annex. WHA79(20) established a one-year, Member State-led, WHO-hosted joint process on global-health-architecture reform with later reporting stages. WHA79 also adopted the updated Global Action Plan on antimicrobial resistance 2026-2036. Assembly completion therefore records closure of the constitutional meeting, not completion or implementation of every process and plan it authorised.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-WHO-WHA79-ARCHIVE-20260523",
+          "WSEV-WHO-WHA79-CLOSE-20260523",
+          "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+          "WSEV-WHO-WHA79-GHA-DECISION-20260523",
+          "WSEV-WHO-WHA79-AMR-20260523"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "WHO stated on 1 May, before WHA79, that PABS negotiations had progressed but required additional time and that the Assembly would be asked to consider continuing the IGWG mandate. This is strong official prior guidance for the PABS workstream only. It is not an aggregate forecast for WHA79's resolution count, the fate of every agenda item, the adoption of the AMR plan, or the global-health-architecture decision.",
+        "benchmarks": [
+          {
+            "metric": "pabs_pre_wha_process_status",
+            "value": "ADDITIONAL_TIME_NEEDED_AND_WHA79_TO_CONSIDER_CONTINUED_IGWG_WORK",
+            "unit": "qualitative_institutional_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-WHO-PABS-PREWHA-20260501"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-WHO-PABS-PREWHA-20260501",
+          "WSEV-WHO-WHA79-ARCHIVE-20260523"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No defensible aggregate pre-event consensus benchmark has been established for the heterogeneous WHA79 decision set. PABS continuation was signalled in advance by WHO and therefore should not be relabelled as a negative surprise simply because the Annex remained unfinished. Adoption of the AMR plan and establishment of the global-health-architecture process are substantively important institutional outcomes, but without decision-specific ex-ante benchmarks AP does not manufacture positive surprise from adoption itself.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-WHO-PABS-PREWHA-20260501",
+          "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+          "WSEV-WHO-WHA79-GHA-DECISION-20260523",
+          "WSEV-WHO-WHA79-AMR-20260523"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "WHA79 created documentary institutional dependencies rather than a single causal outcome. WHA79(7) continued the PABS negotiating mandate, and the seventh IGWG subsequently met on 6-17 July under that continuing process; WHO reported after the meeting that negotiations had advanced but still required further discussion. WHA79(20) separately established a one-year global-health-architecture reform process with later reporting and decision stages. These are observed legal and operational continuities. They do not establish that the PABS Annex is complete, that the Pandemic Agreement has been ratified or operationalised, or that global-health-architecture reform objectives have already been achieved.",
+        "evidence_refs": [
+          "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+          "WSEV-WHO-PABS-IGWG7-20260720",
+          "WSEV-WHO-WHA79-GHA-DECISION-20260523"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Using the number of WHA79 decisions and resolutions as a scalar success or impact score would erase large differences in legal form, subject matter, implementation burden and substantive importance across the Assembly's outputs.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-ARCHIVE-20260523",
+            "WSEV-WHO-WHA79-CLOSE-20260523"
+          ]
+        },
+        {
+          "summary": "Assembly closure on 23 May is evidence that WHA79 completed; it is not evidence that the PABS Annex, global-health-architecture reform, AMR implementation or every other workstream completed on that date.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-CLOSE-20260523",
+            "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+            "WSEV-WHO-WHA79-GHA-DECISION-20260523"
+          ]
+        },
+        {
+          "summary": "WHA79(7) continued negotiations on the PABS Annex. Treating continuation as Annex adoption, Pandemic Agreement ratification, entry into force or full implementation would collapse several legally distinct stages.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+            "WSEV-WHO-PABS-IGWG7-20260720"
+          ]
+        },
+        {
+          "summary": "Adoption of the 2026-2036 AMR action plan is a formal normative and governance output. It does not by itself establish national implementation, financing, antimicrobial-use change, resistance reduction or improved health outcomes.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-AMR-20260523"
+          ]
+        },
+        {
+          "summary": "Establishing the global-health-architecture joint process is not equivalent to completing reform. Its own decision text creates later consultation, reporting and decision stages.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-GHA-DECISION-20260523"
+          ]
+        },
+        {
+          "summary": "Health emergencies discussed during WHA79 are part of the policy environment and agenda. Their temporal overlap with the Assembly is not evidence that WHA79 caused the outbreaks or subsequent epidemiological outcomes.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-ARCHIVE-20260523",
+            "WSEV-WHO-WHA79-CLOSE-20260523"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Continued PABS negotiation can reflect the normal difficulty of consensus-based treaty drafting and unresolved distributive or technical questions rather than a simple institutional failure. The July meeting's continued work is consistent with both genuine progress and persistent disagreement.",
+          "evidence_refs": [
+            "WSEV-WHO-PABS-PREWHA-20260501",
+            "WSEV-WHO-PABS-IGWG7-20260720"
+          ]
+        },
+        {
+          "summary": "Pressure to reform the global health architecture predates WHA79 and reflects overlapping mandates, financing constraints, country-ownership concerns and broader UN80 reform. Later reform activity should therefore not be narrated as caused solely by the Assembly's 23 May decision.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-GHA-DECISION-20260523"
+          ]
+        },
+        {
+          "summary": "Implementation of adopted health plans depends on later Member State decisions, financing, institutional capacity and coordination. Uneven later implementation would not mean the plan was not formally adopted at WHA79, while formal adoption does not guarantee implementation success.",
+          "evidence_refs": [
+            "WSEV-WHO-WHA79-AMR-20260523"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "OBSERVED",
+        "summary": "An observed second-order institutional effect of WHA79 is the continuation of the PABS negotiating process into the seventh IGWG meeting on 6-17 July 2026. WHO reported after that meeting that negotiations advanced but further discussions remained necessary, and an eighth meeting was scheduled for September. The observed effect is process propagation under the continued mandate; substantive Annex agreement, signature, ratification and implementation remain unresolved future stages.",
+        "evidence_refs": [
+          "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+          "WSEV-WHO-PABS-IGWG7-20260720"
+        ]
+      },
+      "falsifiers": [
+        "If WHO corrects or supersedes the cited WHA79 decision or resolution texts, AP's description of the formal outputs must follow the authoritative correction.",
+        "If authoritative evidence establishes that the PABS Annex itself was adopted at WHA79 rather than continued for negotiation, the continuation-versus-adoption analysis must be revised.",
+        "If a competent contemporaneous pre-event benchmark is identified for specific WHA79 decisions, the NOT_ESTABLISHED surprise classification should be reassessed at the appropriate decision level rather than by inventing an aggregate Assembly forecast.",
+        "If the official July IGWG record is materially revised, the observed second-order PABS propagation must be updated.",
+        "If a later special World Health Assembly or WHA80 adopts, amends or rejects the PABS Annex, that later action should update process follow-through without rewriting WHA79's historical continuation decision.",
+        "If authoritative evidence establishes that WHA79(20) did not create the described global-health-architecture reform process or materially changes its reporting chain, the operational-dependency analysis must be revised.",
+        "If upstream canonical evidence changes WHA79's lifecycle, source-native date range, timezone or null-UTC semantics, AP must inherit the canonical correction rather than resolve timing inside Analysis.",
+        "If qualified event-specific market evidence later satisfies WORLD SIGNALS timing, rights and attribution contracts, the empty what_moved section may be revisited without manufacturing a single canonical WHA79 timestamp."
+      ],
+      "analytical_conclusion": "WHA79 completed as a six-day constitutional World Health Assembly, but its formal outputs should not be collapsed into one synthetic success or failure. The Assembly adopted plans, established processes and continued unresolved negotiations at the same time. The clearest example is PABS: WHO had already signalled that more negotiating time was needed, WHA79(7) continued the IGWG mandate, and a later July IGWG meeting demonstrably carried that process forward while substantive agreement remained unfinished. WHA79(20) established future global-health-architecture reform machinery rather than completing reform, while adoption of the AMR 2026-2036 plan is an institutional output rather than evidence of realised health effects. Aggregate surprise is therefore NOT_ESTABLISHED, no event-specific market response is manufactured, and later institutional propagation is recorded without confusing continuation, adoption, implementation and impact.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "WSEV-WHO-WHA79-ARCHIVE-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Governing Bodies",
+      "title": "WHA79 governing-body archive, journals, resolutions and decisions",
+      "url": "https://apps.who.int/gb/e/e_WHA79.html",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 was held from 18 to 23 May 2026 and has a formal archive of journals, resolutions, decisions and recorded-vote outcomes.",
+        "The archive shows that WHA79 contained many legally and substantively distinct decisions rather than one unitary outcome.",
+        "The archive is the controlling first-party decision record for the Assembly-level analysis."
+      ],
+      "analytical_use": "AUTHORITATIVE_ASSEMBLY_DECISION_RECORD",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-CLOSE-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "Seventy-ninth World Health Assembly daily update: 23 May 2026",
+      "url": "https://www.who.int/news/item/23-05-2026-seventy-ninth-world-health-assembly---daily-update--23-may-2026",
+      "published_at": "2026-05-23",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHO states that Member States adopted more than 20 decisions and 13 resolutions during WHA79.",
+        "WHO records the closing of the Assembly on 23 May 2026.",
+        "The update summarises technical, political and administrative outputs without making decision count a scalar impact metric."
+      ],
+      "analytical_use": "POST_EVENT_CLOSURE_AND_OUTPUT_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-PABS-PREWHA-20260501",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "WHO Member States agree to extend negotiations on Pathogen Access and Benefit Sharing annex",
+      "url": "https://www.who.int/news/item/01-05-2026-who-member-states-agree-to-extend-negotiations-on-pathogen-access-and-benefit-sharing-annex",
+      "published_at": "2026-05-01",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Before WHA79, WHO stated that PABS negotiations had progressed but additional time was needed.",
+        "WHO stated that WHA79 would be asked to consider continuing the IGWG work and submitting the outcome to WHA80 or an earlier special session.",
+        "This is official prior guidance for the PABS workstream, not an aggregate forecast for all WHA79 decisions."
+      ],
+      "analytical_use": "PRE_EVENT_OFFICIAL_PROCESS_GUIDANCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Resolutions Portal",
+      "title": "WHA79(7): Outcome of the IGWG in relation to the Article 12 PABS Annex",
+      "url": "https://resolutionsportal.who.int/akn?query=%2Fakn%2Fun%2Fstatement%2Fdeliberation%2Fwhowha%2F2026-05-22%2Fwha79-7%2Feng%40%2F%21main",
+      "published_at": "2026-05-22",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 decided that the IGWG shall continue its work and prioritise drafting and negotiating the PABS Annex.",
+        "The decision requires the outcome to be submitted to WHA80 or, if necessary, an earlier special session in 2026.",
+        "Continuation of negotiation is distinct from adoption of the Annex and from later signature, ratification or implementation of the Pandemic Agreement."
+      ],
+      "analytical_use": "FORMAL_CONTINUATION_DECISION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-GHA-DECISION-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO Governing Bodies",
+      "title": "WHA79(20): Reform of the global health architecture and the UN80 Initiative",
+      "url": "https://apps.who.int/gb/ebwha/pdf_files/WHA79/A79_%2820%29-en.pdf",
+      "published_at": "2026-05-23",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHA79 established the proposed joint process to support reforms of the global health architecture.",
+        "The decision specifies later task-force, consultation, interim-report and final-report stages extending into WHA80 in 2027.",
+        "Establishment of the reform process is not evidence that the intended reform outcomes were already achieved at WHA79."
+      ],
+      "analytical_use": "FORMAL_PROCESS_ESTABLISHMENT_DECISION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-WHA79-AMR-20260523",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "World Health Assembly adopts updated Global Action Plan on antimicrobial resistance 2026-2036",
+      "url": "https://www.who.int/news/item/25-05-2026-the-world-health-assembly-adopts-updated-global-action-plan-on-antimicrobial-resistance-%282026-2036%29",
+      "published_at": "2026-05-25",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "WHO states that Member States at WHA79 adopted the updated Global Action Plan on antimicrobial resistance 2026-2036 on 23 May 2026.",
+        "The plan provides a One Health framework intended to guide coordinated action over the following decade.",
+        "Formal plan adoption does not itself establish implementation or realised health outcomes."
+      ],
+      "analytical_use": "FORMAL_PLAN_ADOPTION_REFERENCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-WHO-PABS-IGWG7-20260720",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "host_or_distribution": "WHO News",
+      "title": "WHO Member States continue negotiations on the Pathogen Access and Benefit Sharing Annex",
+      "url": "https://www.who.int/news/item/20-07-2026-who-member-states-continue-negotiations-on-the-pathogen-access-and-benefit-sharing-annex",
+      "published_at": "2026-07-20",
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The seventh IGWG meeting took place on 6-17 July 2026 after WHA79 continued the negotiating mandate.",
+        "WHO reported that negotiations advanced but further discussions remained necessary to finalise the PABS Annex.",
+        "WHO scheduled an eighth IGWG meeting for 14-18 September 2026, showing continuing process propagation without substantive completion by the AP reference date."
+      ],
+      "analytical_use": "OBSERVED_POST_WHA_PROCESS_PROPAGATION",
+      "canonical_provenance_effect": "NONE"
+    }
+  ]
+}
