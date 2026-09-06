@@ -308,10 +308,10 @@ def validate_targets(plan: dict[str, Any], targets: dict[Path, str]) -> None:
     require(policy.get("maximum_evidence_count") == 7, "BD evidence cap mismatch")
     require(policy.get("automatic_ingestion_allowed") is False, "BD automatic ingestion must remain closed")
     require(policy.get("public_observation_projection_allowed") is False, "BD public projection must remain closed")
-    public = public_live_intelligence_projection(schema, evidence, observations)
+    public = public_live_intelligence_projection(schema, evidence, observations, canonical)
     require(public.get("observations") == [], "BD public projection leaked observations")
     assert_protected_current_state(plan)
-    analysis_report = validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(REVIEWS_PATH), load(ANALYSIS_EVIDENCE_PATH), canonical)
+    analysis_report = validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(ANALYSIS_EVIDENCE_PATH), load(REVIEWS_PATH), canonical)
     require(analysis_report.ok, "BD protected Analysis validation failed: " + "; ".join(analysis_report.errors))
 
 

@@ -38,7 +38,7 @@ class VietnamMyanmarLiveBDTests(unittest.TestCase):
         return validate_live_intelligence(schema, evidence, observations, self.canonical)
 
     def test_plan_freezes_exact_post_bc_prestate_and_bounded_target(self):
-        self.assertEqual(self.plan["exact_base_main_sha"], "667d0fbcc92f9374a070c31b70fb5fa5f0f01431")
+        self.assertEqual(self.plan["exact_base_main_sha"], "667d0fbcc92f937b0cb609d619b664a2a97e8165")
         self.assertEqual(self.plan["pre_state"]["live_schema_version"], "0.4")
         self.assertEqual(self.plan["pre_state"]["live_observation_count"], 4)
         self.assertEqual(self.plan["pre_state"]["live_evidence_count"], 6)
@@ -101,7 +101,7 @@ class VietnamMyanmarLiveBDTests(unittest.TestCase):
         self.assertEqual(policy["maximum_evidence_count"], 7)
         self.assertFalse(policy["automatic_ingestion_allowed"])
         self.assertFalse(policy["public_observation_projection_allowed"])
-        public = public_live_intelligence_projection(schema, evidence, observations)
+        public = public_live_intelligence_projection(schema, evidence, observations, self.canonical)
         self.assertEqual(public["observations"], [])
 
     def test_population_overflow_fails_closed(self):
