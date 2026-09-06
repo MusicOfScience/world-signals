@@ -134,14 +134,23 @@ class UNFCCCSB64HistoricalAnchorAHTests(unittest.TestCase):
 
     def test_overlay_semantics_are_unchanged(self):
         if self.is_post:
-            self.assertEqual(self.post_overlay["canonical_checkpoint"]["registry_version"], "0.37")
+            checkpoint = self.post_overlay["canonical_checkpoint"]
+            self.assertGreaterEqual(version_tuple(checkpoint["registry_version"]), version_tuple("0.37"))
+            self.assertGreaterEqual(checkpoint["record_count"], 687)
+            self.assertEqual(
+                checkpoint,
+                {
+                    "registry_version": self.post_registry["version"],
+                    "record_count": len(self.post_registry["records"]),
+                },
+            )
         else:
             self.assertEqual(overlay_semantics(self.overlay), overlay_semantics(self.post_overlay))
 
     def test_climate_gap_repaired_without_analysis_write(self):
         self.assertTrue(any(r.get("category") == "CLIMATE_ENVIRONMENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
         self.assertTrue(any(r.get("event_type") == "ENVIRONMENTAL_GOVERNANCE_EVENT" and r.get("lifecycle_status") == "COMPLETED" for r in self.post_registry["records"]))
-        self.assertEqual(self.readiness["eligible_completed_occurrence_count"], 20)
+        self.assertGreaterEqual(self.readiness["eligible_completed_occurrence_count"], 20)
 
         # AH froze Analysis at 12 reviews / 44 evidence and explicitly prohibited
         # an Analysis write in the same transaction. Descendant Analysis work may

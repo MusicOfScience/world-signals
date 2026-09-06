@@ -50,7 +50,9 @@ class AustralianTropicalCycloneSeasonAnalysisAJTests(unittest.TestCase):
 
     def test_plan_is_exact_post_64_and_selects_completed_physical_risk_window(self):
         self.assertEqual(self.plan["base_main_sha"], "c85db2ec3a675a749acb8201705fb6f1f85de27d")
-        self.assertEqual((self.canonical["version"], len(self.canonical["records"])), ("0.37", 687))
+        pre = self.plan["preconditions"]
+        self.assertEqual((pre["canonical_registry_version"], pre["canonical_record_count"]), ("0.37", 687))
+        self.assertGreaterEqual(len(self.canonical["records"]), pre["canonical_record_count"])
         self.assertEqual(self.target["category"], "PHYSICAL_CLIMATE_RISK")
         self.assertEqual(self.target["event_type"], "PHYSICAL_RISK_WINDOW")
         self.assertEqual(self.target["lifecycle_status"], "COMPLETED")
@@ -155,7 +157,7 @@ class AustralianTropicalCycloneSeasonAnalysisAJTests(unittest.TestCase):
         report = validate_analysis(self.schema, post_evidence, post_reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
         readiness = analysis_population_readiness(self.schema, post_reviews, self.canonical)
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 20)
+        self.assertGreaterEqual(readiness["eligible_completed_occurrence_count"], 20)
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], self.plan["postconditions"]["reviewed_event_type_diversity"])
         self.assertEqual(readiness["reviewed_by_event_type"].get("PHYSICAL_RISK_WINDOW"), 1)

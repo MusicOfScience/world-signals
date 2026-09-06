@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.37",
+  "version": "0.38",
   "reference_date": "2026-09-06",
-  "record_count": 687,
+  "record_count": 688,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56503,6 +56503,99 @@
       "derivation_sources": [
         "WSSRC-CLIM-005"
       ]
+    },
+    {
+      "occurrence_id": "WSO-RISK-A-0002",
+      "series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+      "external_source_id": null,
+      "canonical_name": "IMD updated hot-weather and heatwave outlook — April–June 2026",
+      "short_calendar_title": "India heatwave outlook — Apr–Jun 2026",
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "subcategory": "seasonal_heatwave_outlook_release",
+      "jurisdiction": "India",
+      "region": "South Asia",
+      "institution": "India Meteorological Department",
+      "event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+      "record_class": "OCCURRENCE",
+      "certainty_status": "CONFIRMED",
+      "activation_mode": "EXPLICITLY_SCHEDULED",
+      "lifecycle_status": "COMPLETED",
+      "condition_state": "NOT_REQUIRED",
+      "condition_description": null,
+      "trigger_source_id": null,
+      "trigger_assertion_id": null,
+      "triggered_at": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-03-31",
+      "end_local": null,
+      "source_timezone": "Asia/Kolkata",
+      "start_utc": null,
+      "end_utc": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "publication_datetime": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "reference_period": "April–June 2026 hot-weather and heatwave outlook; April 2026 rainfall and temperature outlook",
+      "time_status": "NOT_APPLICABLE",
+      "time_basis": "NOT_APPLICABLE",
+      "source_id": "WSSRC-RISK-005",
+      "primary_source_assertion_id": "WSA-AT-c0ed19147e504dbe",
+      "last_successful_assertion_id": "WSA-AT-c0ed19147e504dbe",
+      "status_history": [
+        {
+          "as_of": "2026-09-06",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "evidence": "Dated first-party IMD press release published 31 March 2026."
+        }
+      ],
+      "first_announced_at": null,
+      "first_discovered_at": "2026-09-06",
+      "last_verified_at": "2026-09-06",
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "parent_occurrence_id": null,
+      "related_occurrence_ids": [],
+      "related_documents": [
+        {
+          "document_type": "OFFICIAL_PRESS_RELEASE",
+          "source_id": "WSSRC-RISK-005",
+          "title": "Updated Seasonal outlook for hot weather season (April to June) 2026 and Monthly Outlook for April 2026 for the Rainfall and Temperature"
+        }
+      ],
+      "intrinsic_importance": "HIGH",
+      "expected_market_sensitivity": "LOW",
+      "geopolitical_sensitivity": "LOW",
+      "transmission_channels": [
+        "public_health",
+        "water_resources",
+        "power_demand",
+        "essential_services",
+        "critical_infrastructure",
+        "agriculture_food",
+        "resource_management"
+      ],
+      "render_policy": "INCLUDE",
+      "visibility_tier": "ANALYST",
+      "signal_object_class": "SCHEDULED_INFORMATION_CATALYST",
+      "publication_time_semantics": "DATE_ONLY",
+      "physical_shock_routing": "NO_SHOCK_IN_THIS_RECORD",
+      "observed_market_response": null,
+      "expected_market_sensitivity_basis": "The outlook is a system-relevant risk-information catalyst with potential power, agriculture, water and health transmission; no event-specific market response is asserted.",
+      "publication_bundle_type": "SOURCE_BUNDLE",
+      "data_products": [
+        "Seasonal maximum/minimum temperature outlook — April–June 2026",
+        "Heatwave-days outlook — April–June 2026 and April 2026",
+        "Monthly rainfall and temperature outlook — April 2026"
+      ],
+      "render_cluster_key": null,
+      "calendar_aggregation_policy": "STANDALONE_INFORMATION_CATALYST",
+      "coverage_program_id": "WSCP-SOUTH-ASIA-PHYSICAL-RISK-AT",
+      "coverage_repair_reason": "DOMAIN_DIVERSIFICATION_CORRECTION",
+      "selection_rationale": "Adds a distinct South Asian heat-risk information catalyst from the competent national meteorological authority; does not create a hazard-season window or future recurrence.",
+      "future_schedule_deferred": true,
+      "notes": "Publication event only. April-June is forecast/reference scope, not occurrence timing. Forecast verification, realized heatwave impacts and market response are outside this canonical record."
     }
   ]
 }

@@ -1,0 +1,223 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "IMD_HEATWAVE_OUTLOOK_AT_PLAN",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "92bf6cba7506483dd861680924879b1ded0f4ddc",
+  "coverage_program_id": "WSCP-SOUTH-ASIA-PHYSICAL-RISK-AT",
+  "purpose": "Admit one completed India Meteorological Department physical-risk outlook publication as a discrete information catalyst, improving South Asian and heat-risk breadth without manufacturing a hazard window or future recurrence.",
+  "selection": {
+    "status": "SELECTED_AFTER_POST_AS_PRESSURE_AUDIT",
+    "occurrence_id": "WSO-RISK-A-0002",
+    "series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+    "source_id": "WSSRC-RISK-005",
+    "event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+    "signal_object_class": "SCHEDULED_INFORMATION_CATALYST"
+  },
+  "transaction_architecture_repair": {
+    "trigger": "FIRST_CONTROLLED_WRITE_FAILED_CLOSED_IN_FULL_REPOSITORY_SUITE",
+    "finding": "The noncanonical biosecurity overlay carries an exact Canonical checkpoint and therefore cannot remain byte-identical when Canonical advances.",
+    "repair": "Advance only the overlay artifact version and canonical_checkpoint in the same controlled transaction; preserve systems, relationships, canonical memberships, candidate nodes, principles and notes exactly.",
+    "historical_checkpoint_policy": "The failed write committed no governed state. Existing historical tranche checkpoints remain frozen; live descendants must align checkpoint-bound overlays with the live Canonical registry."
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "canonical_schema_version": "0.52",
+    "source_registry_version": "1.79",
+    "source_registry_count": 242,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.15",
+    "analysis_review_count": 19,
+    "analysis_evidence_version": "0.15",
+    "analysis_evidence_count": 85,
+    "required_absent_occurrence_ids": ["WSO-RISK-A-0002"],
+    "required_absent_series_ids": ["WSER-RISK-IN-HEAT-OUTLOOK"],
+    "required_absent_source_ids": ["WSSRC-RISK-005"]
+  },
+  "source_plan": {
+    "source_id": "WSSRC-RISK-005",
+    "institution": "India Meteorological Department",
+    "jurisdiction": "India",
+    "region": "South Asia",
+    "domain": "physical_climate_risk",
+    "source_type": "official_seasonal_weather_and_heatwave_outlook",
+    "endpoint_role": "Dated IMD seasonal hot-weather, heatwave, rainfall and temperature outlook publication",
+    "authoritative_url": "https://mausam.imd.gov.in/pdfs/heatcolduser/heat_outlook.pdf",
+    "backup_source": "https://mausam.imd.gov.in/",
+    "rights_evidence_url": "https://mausam.imd.gov.in/imd_latest/contents/disclaimer.php",
+    "information_supplied": "First-party dated 31 March 2026 release containing the updated April-June 2026 hot-weather outlook, dedicated heatwave outlook and April 2026 rainfall/temperature outlook.",
+    "future_schedule_horizon": "No authoritative 2027 publication date established; no future occurrence may be generated from historical cadence.",
+    "typical_advance_notice": "Historical/operational cadence context only; not a future schedule assertion.",
+    "machine_readable_available": "PDF/HTML",
+    "source_timezone": "Asia/Kolkata",
+    "parser_type": "MANUAL_PDF_PROVENANCE",
+    "recommended_verification_cadence": "Manual review when a new official seasonal outlook is published or explicitly scheduled.",
+    "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+    "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+    "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+    "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+    "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+    "licence_constraints": "IMD/MoES publication and website surfaces carry copyright notices; no unrestricted production automation or redistribution grant was established for this route.",
+    "ingestion_permission": "CURATED_FACTUAL_METADATA_MANUAL_REFERENCE_ALLOWED_CONSERVATIVELY",
+    "licence_review_status": "NO_POSITIVE_PRODUCTION_AUTOMATION_GRANT_ESTABLISHED",
+    "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_SEPARATELY_AUTHORISED_ROUTE",
+    "redistribution_permission": "NO_SITE_WIDE_REUSE_GRANT_ESTABLISHED_CURATED_FACTUAL_METADATA_ONLY",
+    "rights_summary": "Official factual release metadata are retained conservatively for manual authoritative reference; no platform-independent production polling right is inferred.",
+    "automation_summary": "No scheduled polling. Future publications require manual re-verification unless an authorised machine route is separately reviewed.",
+    "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+    "monitoring_priority_score": 360,
+    "canonical_dependency_count": 1,
+    "rights_reviewed_at": "2026-09-06",
+    "monitoring_readiness_assessed_at": "2026-09-06",
+    "last_successful_research_verification_at": "2026-09-06",
+    "known_limitations": [
+      "The publication is a forecast/outlook information catalyst, not the heatwave itself.",
+      "The April-June forecast period is not the occurrence timing range.",
+      "No 2027 publication date is inferred from operational cadence.",
+      "No production automated retrieval permission was established in this tranche."
+    ],
+    "notes": "Operational governance classification for WORLD SIGNALS; not a legal opinion. RSMC New Delhi copyright terms are not automatically imputed to the separate mausam.imd.gov.in surface."
+  },
+  "series": {
+    "series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+    "source_id": "WSSRC-RISK-005",
+    "canonical_series_name": "India IMD seasonal hot-weather and heatwave outlook releases",
+    "series_identity_rule": "One occurrence per materially distinct official IMD seasonal hot-weather/heatwave outlook publication; forecast period and publication date are separate facts.",
+    "event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+    "signal_object_class": "SCHEDULED_INFORMATION_CATALYST",
+    "population_horizon_policy": "OBSERVED_CURRENT_YEAR_SAMPLE_ONLY_NO_FUTURE_CADENCE_INFERENCE"
+  },
+  "occurrence": {
+    "occurrence_id": "WSO-RISK-A-0002",
+    "series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+    "source_id": "WSSRC-RISK-005",
+    "canonical_name": "IMD updated hot-weather and heatwave outlook — April–June 2026",
+    "short_calendar_title": "India heatwave outlook — Apr–Jun 2026",
+    "category": "PHYSICAL_CLIMATE_RISK",
+    "subcategory": "seasonal_heatwave_outlook_release",
+    "jurisdiction": "India",
+    "region": "South Asia",
+    "institution": "India Meteorological Department",
+    "event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+    "record_class": "OCCURRENCE",
+    "certainty_status": "CONFIRMED",
+    "activation_mode": "EXPLICITLY_SCHEDULED",
+    "lifecycle_status": "COMPLETED",
+    "timing_type": "CIVIL_DATE",
+    "start_local": "2026-03-31",
+    "source_timezone": "Asia/Kolkata",
+    "time_precision": "DAY",
+    "all_day_semantics": true,
+    "reference_period": "April–June 2026 hot-weather and heatwave outlook; April 2026 rainfall and temperature outlook",
+    "signal_object_class": "SCHEDULED_INFORMATION_CATALYST",
+    "publication_time_semantics": "DATE_ONLY",
+    "physical_shock_routing": "NO_SHOCK_IN_THIS_RECORD",
+    "publication_bundle_type": "SOURCE_BUNDLE",
+    "data_products": [
+      "Seasonal maximum/minimum temperature outlook — April–June 2026",
+      "Heatwave-days outlook — April–June 2026 and April 2026",
+      "Monthly rainfall and temperature outlook — April 2026"
+    ]
+  },
+  "deferred_candidate": {
+    "candidate_id": "WSFR-RISK-NIO-TC",
+    "series_id": "WSER-RISK-NIO-TC",
+    "state": "OFFICIAL_SOURCE_DEFINITION_CONFLICT",
+    "current_operational_plan": "TCP-21 Edition 2025",
+    "competing_accessible_boundaries": [
+      "April-June and October-December",
+      "April-May and October-December"
+    ],
+    "rule": "Do not populate until current competent official evidence resolves the first-phase boundary or explicitly supports a less precise canonical representation."
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "canonical_schema_version": "0.52",
+    "source_registry_version": "1.80",
+    "source_registry_count": 243,
+    "biosecurity_overlay_version": "0.13",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.38",
+      "record_count": 688
+    },
+    "new_occurrence_count": 1,
+    "new_series_count": 1,
+    "new_source_count": 1,
+    "coverage_totals": {
+      "occurrence_count": 688,
+      "unique_series_count": 202,
+      "unique_institution_count": 127,
+      "unique_source_count": 160,
+      "monetary_plus_macro_occurrence_count": 443
+    },
+    "south_asia": {
+      "occurrence_count": 29,
+      "unique_series_count": 9,
+      "unique_institution_count": 7,
+      "unique_source_count": 7,
+      "unique_category_count": 4
+    },
+    "physical_climate_risk": {
+      "occurrence_count": 7,
+      "unique_series_count": 4,
+      "unique_institution_count": 4,
+      "unique_source_count": 4
+    },
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.15",
+    "analysis_review_count": 19,
+    "analysis_evidence_version": "0.15",
+    "analysis_evidence_count": 85,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "production_exact_timestamp_series_rows": 0,
+    "scheduled_live_monitor_change": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "controlled_write_paths": [
+      "data/canonical/registry.json",
+      "data/sources/registry.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/coverage/IMD_HEATWAVE_OUTLOOK_AT_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/schema.json",
+      "data/changes/ledger.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json",
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json"
+    ],
+    "overlay_allowed_change": "VERSION_AND_CANONICAL_CHECKPOINT_ONLY"
+  },
+  "safety": {
+    "elapsed_date_never_implies_completion": true,
+    "completion_basis": "DIRECT_DATED_FIRST_PARTY_PUBLICATION",
+    "forecast_period_is_not_occurrence_timing": true,
+    "no_future_cadence_inference": true,
+    "north_indian_ocean_conflict_remains_deferred": true,
+    "source_rights_gate_separate_from_factual_provenance": true,
+    "biosecurity_overlay_semantics_unchanged": true,
+    "biosecurity_overlay_checkpoint_tracks_canonical": true,
+    "no_monitor_promotion": true,
+    "no_analysis_population": true,
+    "no_google_calendar_write": true,
+    "no_automatic_canonical_commit": true
+  }
+}
