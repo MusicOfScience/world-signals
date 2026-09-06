@@ -95,12 +95,14 @@ jobs:
           assert candidates==[], candidates
           print('AS_EIA_LIVE_ROUTE_OK')
           PY
-      - name: Validate governed layers
+      - name: Validate governed layers and AS contracts
         shell: bash
         run: |
           python scripts/validate_registry.py
           python scripts/validate_analysis.py
           python -m unittest tests.test_eia_wpsr_adapter tests.test_eia_wpsr_monitor tests.test_monitor_coverage_audit -v
+      - name: Gate AL and P1A descendant contracts
+        run: python -m unittest tests.test_rba_fsr_monitor_alignment_al tests.test_source_governance_p1a -v
       - name: Run full repository suite
         run: python -m unittest discover -s tests -v
       - name: Compile repository Python
