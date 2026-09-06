@@ -29,6 +29,17 @@ jobs:
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base "$BASE" HEAD)" = "$BASE"
           git diff --check "$BASE"...HEAD
+      - name: Prove IMD source remains outside live monitor configuration
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert all(a.get('source_id') != 'WSSRC-RISK-005' for a in x.get('adapters', []))
+          assert x['version'] == '0.10'
+          assert len(x['adapters']) == 8
+          print('AT_IMD_NOT_LIVE_POLLED_OK')
+          PY
       - name: Read-only AT candidate simulation
         run: python scripts/apply_imd_heatwave_outlook_at.py --check
       - name: Targeted AT regressions
