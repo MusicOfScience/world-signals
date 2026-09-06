@@ -1,0 +1,160 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "SOUTH_KOREA_LOCAL_ELECTION_ANALYSIS_AN",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "d9dc06da84608f74297f94c426ab77706d9223e0",
+  "purpose": "Review South Korea's completed 3 June 2026 nationwide simultaneous local elections as the first Analysis ELECTION_MILESTONE specimen, preserving the distributed nature of the electoral outcomes, the difference between directional political expectations and a defensible result forecast, and the distinction between partisan results and the observed institutional consequences of ballot-paper administration failures.",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.11",
+    "analysis_review_count": 15,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.11",
+    "analysis_evidence_count": 59,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 15,
+    "reviewed_event_type_diversity": 13,
+    "required_target_occurrence_id": "WSO-EL-KR-LGE-20260603",
+    "required_target_series_id": "WSER-EL-KR-LGE",
+    "required_target_category": "ELECTIONS_GOVERNANCE",
+    "required_target_event_type": "ELECTION_MILESTONE",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_start_local": "2026-06-03",
+    "required_target_source_timezone": "Asia/Seoul",
+    "required_target_start_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_absent_analysis_ids": [
+      "WSAN-KR-LGE-20260603-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-EL-KR-LGE-20260603",
+    "selection_rationale": [
+      "Adds the first reviewed ELECTION_MILESTONE and therefore a political-electoral process object not yet represented in the Analysis sample.",
+      "Adds East Asian political-process analysis after prior East Asian Analysis concentrated on Japanese sovereign finance.",
+      "Tests aggregation discipline because the canonical object contains many simultaneous local contests and cannot be reduced to a synthetic national winner or popular-vote mandate.",
+      "Tests expectation discipline because broad pre-election polling and analyst commentary establish direction but not an exact 12-of-16 result forecast, while the broadcasters' exit poll is post-vote observation rather than an ex-ante benchmark.",
+      "Tests second-order institutional analysis because ballot-paper shortages produced observed protest, investigation, leadership and reform consequences that must remain separate from partisan-result causality.",
+      "No schema evolution is justified because existing v0.4 surprise, connection, second-order and empty-market-response semantics can represent the specimen without information loss."
+    ],
+    "held_occurrence_ids": [
+      "WSO-CLIM-UNFCCC-SB64-202606",
+      "WSO-HEALTH-WHA-079",
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "hold_rationale": "The remaining completed anchors remain a choice set. AN selects election aggregation and institutional-consequence pressure, not FIFO completion or taxonomy quota filling."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.4",
+    "reason": "Existing Analysis v0.4 supports NOT_ESTABLISHED surprise, OTHER_DEFENSIBLE_EXPECTATION, empty what_moved, OBSERVED_ASSOCIATION with explicit alternatives, OBSERVED second-order effects and falsifiers. Existing reviewed MIXED specimens demonstrate that multi-dimensional outcomes can be decomposed into comparison rows when a competent benchmark exists; AN has no need to invent an aggregate election surprise."
+  },
+  "new_analysis_id": "WSAN-KR-LGE-20260603-001",
+  "new_evidence_ids": [
+    "WSEV-KR-LGE-NEC-WINNERS-202606",
+    "WSEV-KR-LGE-REUTERS-RESULT-20260604",
+    "WSEV-KR-LGE-YONHAP-RESULT-20260604",
+    "WSEV-KR-LGE-REUTERS-PRECONTEXT-20260508",
+    "WSEV-KR-LGE-REUTERS-EXITPOLL-20260603",
+    "WSEV-KR-LGE-YONHAP-BALLOTS-20260608",
+    "WSEV-KR-LGE-REUTERS-CONSEQUENCES-20260612",
+    "WSEV-KR-LGE-REUTERS-REFORM-20260619"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.12",
+    "analysis_review_count": 16,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.12",
+    "analysis_evidence_count": 67,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 16,
+    "reviewed_event_type_diversity": 14,
+    "reviewed_election_milestone_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-CLIM-UNFCCC-SB64-202606",
+      "WSO-HEALTH-WHA-079",
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json",
+      "data/analysis/SOUTH_KOREA_LOCAL_ELECTION_ANALYSIS_AN_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json"
+    ]
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "nationwide_simultaneous_election_is_single_national_result": false,
+    "major_mayoral_provincial_12_of_16_is_complete_election_result": false,
+    "party_polling_is_exact_seat_forecast": false,
+    "post_vote_exit_poll_is_pre_event_expectation": false,
+    "ballot_shortage_establishes_fraud": false,
+    "ballot_shortage_automatically_invalidates_reported_winners": false,
+    "ballot_shortage_is_proven_cause_of_partisan_result": false,
+    "protests_and_reform_are_caused_by_dp_12_of_16_result": false,
+    "polling_hours_resolve_canonical_utc": false,
+    "early_voting_redefines_canonical_election_day": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "market_structure_gap_must_be_filled_next": false,
+    "auto_merge": false
+  }
+}
