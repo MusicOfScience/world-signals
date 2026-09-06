@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-06",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -23,13 +23,6 @@
     "unscheduled_observation_without_canonical_occurrence_allowed": true,
     "live_evidence_may_resolve_missing_canonical_time": false,
     "source_failure_or_absence_may_create_live_fact": false
-  },
-  "foundation_population_policy": {
-    "production_population_allowed": false,
-    "evidence_population_allowed": false,
-    "reason": "AV establishes the executable contract only. A later pressure-audited specimen must stress the model before population opens.",
-    "existing_analysis_evidence_migration_allowed": false,
-    "public_observation_projection_allowed": false
   },
   "pre_analysis_semantics": {
     "current_state": "A derived as-of view over verified observations. It is not a separate causal conclusion and is not persisted as an authoritative truth object in v0.1.",
@@ -110,6 +103,11 @@
       "CIVIL_DATE",
       "RANGE",
       "UNKNOWN"
+    ],
+    "publication_time_precision": [
+      "EXACT_TIMESTAMP",
+      "CIVIL_DATE",
+      "UNKNOWN"
     ]
   },
   "required_evidence_fields": [
@@ -119,7 +117,8 @@
     "title",
     "url",
     "roles",
-    "canonical_provenance_effect"
+    "canonical_provenance_effect",
+    "publication_time"
   ],
   "required_observation_fields": [
     "observation_id",
@@ -169,10 +168,10 @@
     "corrected_or_retracted_live_observation_requires_revision_reference": true
   },
   "public_projection_policy": {
-    "foundation_metadata_projection_allowed": true,
     "observation_projection_allowed": false,
     "runtime_feed_claim_allowed": false,
-    "market_data_projection_requires_separate_rights_contract": true
+    "market_data_projection_requires_separate_rights_contract": true,
+    "metadata_projection_allowed": true
   },
   "guardrails": [
     "Live Intelligence stores evidence-backed factual observations, not causal interpretation.",
@@ -187,8 +186,31 @@
     "An external data revision may be observed without inventing a historical Live Intelligence row that never existed.",
     "Repeated reports do not automatically become one story, one causal signal or one canonical event.",
     "Market observations may be factual observations, but attribution of a move to a catalyst belongs in Analysis.",
-    "Foundation v0.1 intentionally rejects production population until a later real-world specimen stress-tests identity, revision, rights and grouping semantics.",
     "Existing Analysis evidence is not retroactively migrated merely to populate this layer.",
-    "Automatic canonical commit and Google Calendar write remain prohibited."
-  ]
+    "Automatic canonical commit and Google Calendar write remain prohibited.",
+    "Evidence source-publication time uses explicit precision and may not be upgraded from a civil date to a fabricated clock time.",
+    "AW v0.2 opens only a controlled single-specimen population; a later pressure audit is required before any second observation or broader ingestion.",
+    "Public observation projection and runtime-feed claims remain prohibited in the controlled first-specimen state."
+  ],
+  "foundation_checkpoint": {
+    "schema_version": "0.1",
+    "observations_version": "0.1",
+    "evidence_version": "0.1",
+    "population_state": "FOUNDATION_ONLY_NO_POPULATION",
+    "observation_count": 0,
+    "evidence_count": 0,
+    "post_merge_main_sha": "4768c73532c4ba4038b30314079b85be64fbee01",
+    "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
+  },
+  "population_policy": {
+    "mode": "CONTROLLED_SINGLE_SPECIMEN",
+    "production_population_allowed": true,
+    "evidence_population_allowed": true,
+    "maximum_observation_count": 1,
+    "maximum_evidence_count": 2,
+    "automatic_ingestion_allowed": false,
+    "existing_analysis_evidence_migration_allowed": false,
+    "public_observation_projection_allowed": false,
+    "reason": "AW opens only enough population authority for one reviewed Nepal physical-shock specimen. A later pressure audit is required before any second observation or broader ingestion."
+  }
 }
