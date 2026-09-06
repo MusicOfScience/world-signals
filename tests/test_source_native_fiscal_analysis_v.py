@@ -58,7 +58,7 @@ class SourceNativeFiscalAnalysisVTests(unittest.TestCase):
 
     def test_v_contract_schema_is_explicit_and_fail_closed(self):
         self.assertGreaterEqual(version_tuple(self.schema["version"]), version_tuple("0.3"))
-        self.assertEqual(self.plan["analysis_schema_evolution"]["target_schema_version"], "0.3")
+        self.assertEqual(self.plan["analysis_schema_evolution"]["to_version"], "0.3")
         policy = self.schema["temporal_context_policy"]
         for key, value in self.plan["analysis_schema_evolution"]["new_policy"].items():
             self.assertIs(policy[key], value)
