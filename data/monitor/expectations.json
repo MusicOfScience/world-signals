@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.9",
+  "version": "0.10",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -419,6 +419,154 @@
       "elapsed_policy": "DO_NOT_PRESENCE_CHECK_ELAPSED_OCCURRENCES_AGAINST_UPCOMING_FEED",
       "datetime_change_policy": "GENERATE_REVIEW_CANDIDATE_REQUIRE_OFFICIAL_HTML_VERIFICATION",
       "certainty_policy": "RSS_HAS_NO_CONFIRMED_PROVISIONAL_FIELD_DO_NOT_CHANGE_CERTAINTY_FROM_RSS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EIA_WPSR_SCHEDULE",
+      "source_id": "WSSRC-COM-003",
+      "canonical_occurrence_ids": [
+        "WSO-COM-A-0013",
+        "WSO-COM-A-0014",
+        "WSO-COM-A-0015",
+        "WSO-COM-A-0016",
+        "WSO-COM-A-0017",
+        "WSO-COM-A-0018",
+        "WSO-COM-A-0019",
+        "WSO-COM-A-0020",
+        "WSO-COM-A-0021",
+        "WSO-COM-A-0022",
+        "WSO-COM-A-0023",
+        "WSO-COM-A-0024",
+        "WSO-COM-A-0025",
+        "WSO-COM-A-0026",
+        "WSO-COM-A-0027",
+        "WSO-COM-A-0028"
+      ],
+      "monitor_role": "PUBLICATION_SCHEDULE_RULE_AND_EXCEPTION_SENTINEL",
+      "cadence": "DAILY",
+      "endpoint": {
+        "url": "https://www.eia.gov/petroleum/supply/weekly/schedule.php",
+        "transport": "HTML_RULE_TABLE",
+        "source_timezone": "America/New_York"
+      },
+      "baseline": {
+        "observed_at": "2026-09-06T03:30:54Z",
+        "schedule_sha256": "8f972e877fdd56dd836f6a0cc7bc0abea73c21bfd01dd8bbc3b784ea7eacec87",
+        "schedule": {
+          "standard_release_day": "Wednesday",
+          "standard_release_time_local": "10:30",
+          "standard_time_semantics": "AFTER",
+          "source_timezone": "America/New_York",
+          "holiday_exceptions": [
+            {
+              "week_ending": "2024-12-27",
+              "alternate_release_date": "2025-01-02",
+              "release_day": "Thursday",
+              "release_time_local": "11:00",
+              "holiday": "New Year's Day"
+            },
+            {
+              "week_ending": "2025-01-17",
+              "alternate_release_date": "2025-01-23",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Martin Luther King Jr. Day / Inauguration"
+            },
+            {
+              "week_ending": "2025-02-14",
+              "alternate_release_date": "2025-02-20",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "President's Day"
+            },
+            {
+              "week_ending": "2025-05-23",
+              "alternate_release_date": "2025-05-29",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Memorial Day"
+            },
+            {
+              "week_ending": "2025-08-29",
+              "alternate_release_date": "2025-09-04",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Labor Day"
+            },
+            {
+              "week_ending": "2025-10-10",
+              "alternate_release_date": "2025-10-16",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Columbus Day"
+            },
+            {
+              "week_ending": "2025-11-07",
+              "alternate_release_date": "2025-11-13",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Veterans Day"
+            },
+            {
+              "week_ending": "2025-12-19",
+              "alternate_release_date": "2025-12-29",
+              "release_day": "Monday",
+              "release_time_local": "17:00",
+              "holiday": "Christmas"
+            },
+            {
+              "week_ending": "2026-01-16",
+              "alternate_release_date": "2026-01-22",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Martin Luther King Jr. Day"
+            },
+            {
+              "week_ending": "2026-02-13",
+              "alternate_release_date": "2026-02-19",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "President's Day"
+            },
+            {
+              "week_ending": "2026-05-22",
+              "alternate_release_date": "2026-05-28",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Memorial Day"
+            },
+            {
+              "week_ending": "2026-09-04",
+              "alternate_release_date": "2026-09-10",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Labor Day"
+            },
+            {
+              "week_ending": "2026-10-09",
+              "alternate_release_date": "2026-10-15",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Columbus Day"
+            },
+            {
+              "week_ending": "2026-11-06",
+              "alternate_release_date": "2026-11-12",
+              "release_day": "Thursday",
+              "release_time_local": "12:00",
+              "holiday": "Veterans Day"
+            }
+          ],
+          "schedule_sha256": "8f972e877fdd56dd836f6a0cc7bc0abea73c21bfd01dd8bbc3b784ea7eacec87"
+        }
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "schedule_change_policy": "GENERATE_REVIEW_CANDIDATE_REQUIRE_AUTHORITATIVE_EIA_REVERIFICATION",
+      "completion_policy": "SCHEDULE_PAGE_MUST_NOT_COMPLETE_OCCURRENCES",
+      "elapsed_policy": "DO_NOT_INFER_COMPLETION_FROM_ELAPSED_SCHEDULE_TIME",
+      "publication_index_policy": "CORROBORATION_ONLY_INDEX_LAG_KNOWN",
+      "time_semantics_policy": "PRESERVE_SOURCE_AFTER_SEMANTICS_DO_NOT_UPGRADE_TO_EXACT",
+      "test_format_policy": "DO_NOT_DEPEND_ON_PROVISIONAL_WPSR_TEST_JSON_OR_CSV",
       "automatic_commit_allowed": false
     }
   ]
