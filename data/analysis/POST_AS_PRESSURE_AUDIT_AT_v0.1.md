@@ -1,6 +1,6 @@
 # WORLD SIGNALS — post-AS pressure audit AT v0.1
 
-**Reference date:** 2026-09-06  
+**Reference date:** 2026-09-06
 **Exact post-#74 main:** `92bf6cba7506483dd861680924879b1ded0f4ddc`
 
 ## Frozen checkpoint
