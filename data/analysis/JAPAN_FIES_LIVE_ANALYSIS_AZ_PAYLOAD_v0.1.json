@@ -1,0 +1,337 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AZ",
+  "reference_date": "2026-09-06",
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-JP-FIES-STATGO-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "title": "Summary of the Latest Month on Family Income and Expenditure Survey — July 2026",
+      "url": "https://www.stat.go.jp/english/data/kakei/156.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official July 2026 FIES outcome surface: two-or-more-person household consumption expenditure JPY 301,245, nominal y/y -1.5%, real y/y -3.6%; workers' household income JPY 689,476, real y/y -3.8%. The page states release on 4 September 2026 and supplies no release clock time."
+    },
+    {
+      "evidence_id": "WSEV-LI-JP-FIES-REVISION-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "title": "Family Income and Expenditure Survey monthly results — July 2026",
+      "url": "https://www.stat.go.jp/data/kakei/sokuhou/tsuki/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "CORRECTION_OR_REVISION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official monthly table reports July real consumption y/y -3.6% and seasonally adjusted m/m +0.5%. It explicitly states that April-June 2026 real-change figures were retrospectively revised with the CPI 2025-base revision."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-MAC-JPN-FIES-202607-001",
+    "observed_at_utc": "2026-09-06T08:36:00Z",
+    "observation_type": "ECONOMIC_DATA_OBSERVATION",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "Japan July 2026 household spending fell 3.6% in real year-on-year terms",
+    "summary": "Statistics Bureau of Japan reported July 2026 two-or-more-person household consumption expenditure of JPY 301,245, down 3.6% year on year in real terms; the official monthly table also reports a seasonally adjusted 0.5% rise from June. The same 4 September release cycle retrospectively revised April-June 2026 real-change figures following the CPI 2025-base revision. This row records the July outcome and that contemporaneous data-vintage context; it is not a DATA_REVISION observation and does not invent prior Live Intelligence history.",
+    "domain_tags": [
+      "ECONOMICS"
+    ],
+    "jurisdictions": [
+      "Japan"
+    ],
+    "regions": [
+      "East Asia"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-JP-FIES-STATGO-20260904",
+      "WSEV-LI-JP-FIES-REVISION-20260904"
+    ],
+    "canonical_links": [
+      {
+        "occurrence_id": "WSO-MAC-B-0041",
+        "relationship": "OUTCOME_OF"
+      }
+    ],
+    "revision_of_observation_id": null,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "analysis_evidence": [
+    {
+      "evidence_id": "WSEV-JP-FIES-STATGO-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "host_or_distribution": "Statistics Bureau of Japan",
+      "title": "Summary of the Latest Month on Family Income and Expenditure Survey — July 2026",
+      "url": "https://www.stat.go.jp/english/data/kakei/156.htm",
+      "published_at": "2026-09-04",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "July 2026 two-or-more-person household monthly consumption expenditure was JPY 301,245.",
+        "Nominal consumption expenditure was down 1.5% year on year and real consumption expenditure was down 3.6% year on year.",
+        "Workers' household monthly income was JPY 689,476, down 3.8% year on year in real terms.",
+        "The page identifies the July 2026 survey as released on 4 September 2026 without supplying a clock time."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "Civil-date publication evidence only; it does not resolve the Canonical release to a clock time or UTC timestamp."
+    },
+    {
+      "evidence_id": "WSEV-JP-FIES-REVISION-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Statistics Bureau of Japan",
+      "host_or_distribution": "Statistics Bureau of Japan",
+      "title": "Family Income and Expenditure Survey monthly results — July 2026",
+      "url": "https://www.stat.go.jp/data/kakei/sokuhou/tsuki/",
+      "published_at": "2026-09-04",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "July 2026 real consumption expenditure was down 3.6% year on year and up 0.5% month on month on a seasonally adjusted basis.",
+        "The Statistics Bureau explicitly identifies April, May and June 2026 real-change figures as retrospectively revised because of the CPI 2025-base revision.",
+        "The revised monthly sequence shown is April -0.5% y/y and +1.5% m/m SA; May -0.4% and +3.5%; June -3.3% and -6.3%; July -3.6% and +0.5%."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "Used to preserve data-vintage/revision context. It does not create a synthetic prior Live observation or alter Canonical provenance."
+    },
+    {
+      "evidence_id": "WSEV-JP-FIES-REUTERS-20260904",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Japan July household spending falls at fastest pace in 2-1/2 years",
+      "url": "https://www.reuters.com/world/asia-pacific/japan-year-on-year-household-spending-drops-8-straight-months-2026-09-03/",
+      "published_at": "2026-09-04",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported a market forecast for real household spending of -1.6% year on year versus the actual -3.6%.",
+        "Reuters reported a seasonally adjusted month-on-month expectation of +2.6% versus the actual +0.5%.",
+        "Reuters described the year-on-year fall as the eighth consecutive monthly decline and the steepest since January 2024.",
+        "Reuters reported consumer selectivity amid higher living costs and noted household-spending data as relevant context ahead of the Bank of Japan meeting."
+      ],
+      "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "Analytical benchmark/context only. The Reuters URL date reflects its web publication path and is not used to retime the Canonical 4 September Asia/Tokyo release."
+    }
+  ],
+  "analysis_review": {
+    "analysis_id": "WSAN-JP-FIES-202607-001",
+    "review_state": "REVIEWED_SAMPLE",
+    "review_phase": "POST_EVENT",
+    "analysis_as_of_utc": "2026-09-06T08:38:00Z",
+    "canonical_occurrence_id": "WSO-MAC-B-0041",
+    "canonical_series_id": "WSER-MAC-JP-HHSPEND",
+    "canonical_event_type": "DATA_RELEASE",
+    "canonical_institution": "Statistics Bureau of Japan",
+    "canonical_release_utc": null,
+    "scope": "July 2026 Japan Family Income and Expenditure Survey release, reported expectations, and contemporaneous CPI 2025-base data-vintage context",
+    "what_happened": {
+      "summary": "The Statistics Bureau reported that July 2026 consumption expenditure for two-or-more-person households averaged JPY 301,245, down 1.5% year on year in nominal terms and 3.6% in real terms. The Japanese monthly table reports a 0.5% seasonally adjusted rise from June. It also flags retrospective revisions to April-June 2026 real-change figures following the CPI 2025-base revision.",
+      "actuals": [
+        {
+          "metric": "consumption_expenditure",
+          "value": 301245,
+          "unit": "JPY_per_household_month",
+          "evidence_refs": [
+            "WSEV-JP-FIES-STATGO-20260904"
+          ]
+        },
+        {
+          "metric": "real_consumption_yoy",
+          "value": -3.6,
+          "unit": "percent",
+          "evidence_refs": [
+            "WSEV-JP-FIES-STATGO-20260904",
+            "WSEV-JP-FIES-REVISION-20260904"
+          ]
+        },
+        {
+          "metric": "real_consumption_mom_sa",
+          "value": 0.5,
+          "unit": "percent",
+          "evidence_refs": [
+            "WSEV-JP-FIES-REVISION-20260904"
+          ]
+        },
+        {
+          "metric": "real_workers_household_income_yoy",
+          "value": -3.8,
+          "unit": "percent",
+          "evidence_refs": [
+            "WSEV-JP-FIES-STATGO-20260904"
+          ]
+        }
+      ],
+      "evidence_refs": [
+        "WSEV-JP-FIES-STATGO-20260904",
+        "WSEV-JP-FIES-REVISION-20260904"
+      ]
+    },
+    "what_was_expected": {
+      "summary": "Reuters reported market expectations of a 1.6% year-on-year decline in real household spending and a 2.6% seasonally adjusted month-on-month increase. Those reported forecasts are retained as the ex-ante benchmark, while the packet separately flags that the release implemented a pre-announced CPI 2025-base retrospective revision, so historical-vintage comparisons should not be assumed perfectly homogeneous.",
+      "benchmarks": [
+        {
+          "metric": "real_consumption_yoy",
+          "value": -1.6,
+          "unit": "percent",
+          "benchmark_type": "MARKET_FORECAST",
+          "evidence_refs": [
+            "WSEV-JP-FIES-REUTERS-20260904"
+          ]
+        },
+        {
+          "metric": "real_consumption_mom_sa",
+          "value": 2.6,
+          "unit": "percent",
+          "benchmark_type": "MARKET_FORECAST",
+          "evidence_refs": [
+            "WSEV-JP-FIES-REUTERS-20260904"
+          ]
+        }
+      ],
+      "evidence_refs": [
+        "WSEV-JP-FIES-REUTERS-20260904",
+        "WSEV-JP-FIES-REVISION-20260904"
+      ]
+    },
+    "what_surprised": {
+      "status": "DOWNSIDE",
+      "summary": "On the Reuters-reported consensus basis, both the year-on-year and seasonally adjusted month-on-month readings were weaker than expected. The classification is a release-versus-benchmark data surprise only; it is not a claim that the CPI rebasing itself was surprising or that the release caused a market or policy move.",
+      "comparisons": [
+        {
+          "comparison_kind": "QUANTITATIVE",
+          "metric": "real_consumption_yoy",
+          "actual": -3.6,
+          "expected": -1.6,
+          "difference_percentage_points": -2.0
+        },
+        {
+          "comparison_kind": "QUANTITATIVE",
+          "metric": "real_consumption_mom_sa",
+          "actual": 0.5,
+          "expected": 2.6,
+          "difference_percentage_points": -2.1
+        }
+      ],
+      "evidence_refs": [
+        "WSEV-JP-FIES-STATGO-20260904",
+        "WSEV-JP-FIES-REVISION-20260904",
+        "WSEV-JP-FIES-REUTERS-20260904"
+      ]
+    },
+    "what_moved": [],
+    "what_appears_connected": {
+      "interaction_type": "POLICY_RESPONSE_CONTEXT",
+      "causal_status": "NOT_A_CAUSAL_CLAIM",
+      "confidence": "MEDIUM",
+      "summary": "Weak household spending is relevant to the Bank of Japan's assessment of demand and inflation persistence, and Reuters placed the release in that policy context. This packet does not claim the July FIES release caused any BOJ decision, rate repricing, yen move or bond-market move.",
+      "evidence_refs": [
+        "WSEV-JP-FIES-REUTERS-20260904"
+      ]
+    },
+    "what_may_be_noise": [
+      {
+        "summary": "The year-on-year headline is one monthly household-survey estimate and should not be treated as a complete measure of aggregate private consumption.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-STATGO-20260904"
+        ]
+      },
+      {
+        "summary": "The July month-on-month reading follows a sharp revised June decline, so one-month direction should not be extrapolated mechanically.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REVISION-20260904"
+        ]
+      },
+      {
+        "summary": "April-June real-change figures were retrospectively revised with the CPI 2025-base change; comparisons across stored or quoted vintages can differ even when the underlying survey month is unchanged.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REVISION-20260904"
+        ]
+      },
+      {
+        "summary": "The Reuters consensus is a defensible expectation benchmark, but this packet cannot independently reconstruct each forecaster's exact methodological vintage after the rebasing announcement.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REUTERS-20260904",
+          "WSEV-JP-FIES-REVISION-20260904"
+        ]
+      }
+    ],
+    "alternative_explanations": [
+      {
+        "summary": "Higher living costs may have shifted household composition of spending and restrained real outlays even where nominal wage gains remained sizeable.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REUTERS-20260904"
+        ]
+      },
+      {
+        "summary": "Category-level weakness in food and transportation can produce a soft aggregate month without implying uniform contraction across all household spending categories.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REUTERS-20260904"
+        ]
+      },
+      {
+        "summary": "Part of apparent historical deterioration or improvement can reflect the revised CPI deflator and data vintage rather than a new change in nominal household behaviour.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-REVISION-20260904"
+        ]
+      },
+      {
+        "summary": "Monthly sampling and seasonal volatility may explain part of the gap between the July reading and the reported consensus; persistence requires subsequent releases.",
+        "evidence_refs": [
+          "WSEV-JP-FIES-STATGO-20260904"
+        ]
+      }
+    ],
+    "second_order_effects": {
+      "status": "NOT_ESTABLISHED",
+      "summary": "The release may inform later BOJ, fiscal or consumption assessments, but no distinct second-order policy, market or political consequence is established in this packet."
+    },
+    "falsifiers": [
+      "If Statistics Bureau later corrects the July 2026 real spending figures, the factual outcome and surprise calculation must be revised while preserving the prior as-of evidence trail.",
+      "If a stronger pre-release benchmark shows the Reuters-reported consensus was not comparable to the released 2025-base series, the surprise confidence or classification should be reduced.",
+      "If subsequent household-spending releases rebound materially, claims of persistent consumption weakness should be weakened.",
+      "If national accounts or broader consumption indicators diverge strongly from FIES, the inference from this survey to aggregate household demand should be narrowed.",
+      "If high-quality market evidence shows a contemporaneous asset-price reaction, that may justify a later what_moved row; its current absence must not be filled by inference.",
+      "If BOJ communications explicitly downplay household-spending weakness relative to other indicators, the policy-context weight should be reduced."
+    ],
+    "analytical_conclusion": "The July FIES release was weaker than the Reuters-reported consensus on both year-on-year and seasonally adjusted month-on-month real spending. The result is useful evidence of household-demand softness, but it sits inside a known CPI 2025-base revision boundary and does not by itself establish a market reaction, a BOJ policy response or a persistent consumption trend.",
+    "live_inputs": [
+      {
+        "observation_id": "WSLI-MAC-JPN-FIES-202607-001",
+        "roles": [
+          "FACTUAL_INPUT"
+        ],
+        "analysis_sections": [
+          "what_happened",
+          "what_surprised",
+          "what_may_be_noise",
+          "alternative_explanations"
+        ]
+      }
+    ],
+    "canonical_mutation_prohibited": true,
+    "google_calendar_write": false
+  }
+}
