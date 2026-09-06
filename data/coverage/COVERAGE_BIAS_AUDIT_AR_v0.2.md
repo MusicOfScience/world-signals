@@ -1,8 +1,8 @@
 # WORLD SIGNALS — reviewed coverage and bias audit AR v0.2
 
-**Checkpoint:** exact post-#72 `main` `2c215ce4d3ff70001af4733fce797f166bab2a46`  
-**Canonical registry:** v0.37 / 687 occurrences  
-**Coverage engine:** v0.3  
+**Checkpoint:** exact post-#72 `main` `2c215ce4d3ff70001af4733fce797f166bab2a46`
+**Canonical registry:** v0.37 / 687 occurrences
+**Coverage engine:** v0.3
 **Nature:** reviewed interpretation of reproducible canonical coverage metrics; no population authority
 
 ## Why this refresh exists
