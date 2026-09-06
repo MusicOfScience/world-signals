@@ -1,0 +1,168 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "IMD_HEATWAVE_OUTLOOK_ANALYSIS_AU",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "03a8f87f17570c2520edadf78237ed07d946107a",
+  "purpose": "Review the completed 31 March 2026 IMD seasonal hot-weather and heatwave outlook as the first Analysis PHYSICAL_RISK_OUTLOOK_RELEASE specimen, separating publication, prior official guidance, later forecast updates and operational weather context without manufacturing forecast skill, surprise, market response or causality.",
+  "preconditions": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "source_registry_version": "1.80",
+    "source_record_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.13",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.38",
+      "record_count": 688
+    },
+    "monitor_expectations_version": "0.10",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.15",
+    "analysis_review_count": 19,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.15",
+    "analysis_evidence_count": 85,
+    "eligible_completed_occurrence_count": 21,
+    "reviewed_occurrence_count": 19,
+    "reviewed_event_type_diversity": 17,
+    "required_target_occurrence_id": "WSO-RISK-A-0002",
+    "required_target_series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+    "required_target_source_id": "WSSRC-RISK-005",
+    "required_target_category": "PHYSICAL_CLIMATE_RISK",
+    "required_target_event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+    "required_target_signal_object_class": "SCHEDULED_INFORMATION_CATALYST",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_timing_type": "CIVIL_DATE",
+    "required_target_start_local": "2026-03-31",
+    "required_target_source_timezone": "Asia/Kolkata",
+    "required_target_start_utc": null,
+    "required_target_end_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_target_publication_time_semantics": "DATE_ONLY",
+    "required_target_physical_shock_routing": "NO_SHOCK_IN_THIS_RECORD",
+    "required_absent_analysis_ids": [
+      "WSAN-RISK-IMD-HEAT-OUTLOOK-20260331-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-RISK-A-0002",
+    "selection_rationale": [
+      "Adds the first reviewed PHYSICAL_RISK_OUTLOOK_RELEASE and a South Asian physical-risk information-catalyst specimen.",
+      "Tests seasonal forecast publication versus the physical hazard itself.",
+      "Tests prior official guidance with a non-identical forecast window without manufacturing a forecast-error comparison.",
+      "Tests later monthly and operational forecast products as forecast-evolution and observation context rather than verification proof.",
+      "Tests explicit preparedness/transmission channels without upgrading them to realised second-order effects.",
+      "Adds event-type diversity while keeping market response empty where event-specific evidence is absent."
+    ],
+    "held_occurrence_ids": [
+      "WSO-MAC-B-0041"
+    ],
+    "hold_rationale": "Japan July 2026 household spending remains a legitimate future DATA_RELEASE specimen and now carries an important 4 September CPI-rebase data-vintage warning. Its canonical identity is unchanged, and repeated macro/data-release semantics currently add less marginal contract value than the first physical-risk outlook review."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.4",
+    "reason": "Analysis v0.4 already represents OFFICIAL_PRIOR_GUIDANCE, NOT_ESTABLISHED surprise, empty market response, OBSERVATION_CONTEXT, NOT_A_CAUSAL_CLAIM, PLAUSIBLE_WATCH_ITEM second-order effects, alternatives and falsifiers. The pressure is forecast-horizon and causality discipline rather than missing schema capacity."
+  },
+  "new_analysis_id": "WSAN-RISK-IMD-HEAT-OUTLOOK-20260331-001",
+  "new_evidence_ids": [
+    "WSEV-IMD-HEAT-OUTLOOK-20260331",
+    "WSEV-IMD-HEAT-PRIOR-20260228",
+    "WSEV-IMD-HEAT-MAY-OUTLOOK-20260501",
+    "WSEV-IMD-HEAT-LATEMAY-ARCHIVE-20260529",
+    "WSEV-IMD-HEAT-JUNE-OUTLOOK-20260529",
+    "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "source_registry_version": "1.80",
+    "source_record_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.13",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.38",
+      "record_count": 688
+    },
+    "monitor_expectations_version": "0.10",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.16",
+    "analysis_review_count": 20,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.38",
+      "record_count": 688
+    },
+    "analysis_evidence_version": "0.16",
+    "analysis_evidence_count": 91,
+    "eligible_completed_occurrence_count": 21,
+    "reviewed_occurrence_count": 20,
+    "reviewed_event_type_diversity": 18,
+    "reviewed_physical_risk_outlook_release_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-MAC-B-0041"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json",
+      "data/analysis/IMD_HEATWAVE_OUTLOOK_ANALYSIS_AU_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json"
+    ]
+  },
+  "descendant_checkpoint_repair": {
+    "file": "tests/test_eu_russia_sanctions_analysis_aq.py",
+    "historical_aq_checkpoint_unchanged": true,
+    "live_descendant_change": "Permit reviewed count >=19, event-type diversity >=17, Analysis review/evidence versions >=0.15 and evidence count >=85, while retaining exactly one SANCTIONS_PROCESS contribution and leaving AQ plan/payload/exact transform frozen.",
+    "reason": "AQ remains historically exact at its own post-state, but its live descendant assertions must permit legitimate AU Analysis growth."
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "forecast_period_equals_occurrence_timing": false,
+    "hazard_equals_publication_event": false,
+    "prior_mam_guidance_equals_matched_amj_benchmark": false,
+    "forecast_evolution_equals_surprise": false,
+    "later_monthly_forecast_equals_verifying_observation": false,
+    "spatial_overlap_equals_skill_score": false,
+    "later_heatwave_equals_forecast_success": false,
+    "later_abatement_equals_forecast_failure": false,
+    "publication_causes_heatwave": false,
+    "publication_causes_preparedness_or_impacts": false,
+    "same_period_market_move_is_publication_response": false,
+    "analytical_evidence_resolves_missing_canonical_utc": false,
+    "future_recurrence_inferred_from_cadence": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "japan_revision_requires_canonical_retiming": false,
+    "prior_aq_live_count_is_permanent_ceiling": false,
+    "auto_merge": false
+  }
+}
