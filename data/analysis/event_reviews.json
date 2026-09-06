@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.12",
+  "version": "0.13",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
     "registry_version": "0.37",
@@ -2441,6 +2441,151 @@
         "If upstream canonical evidence changes the stable occurrence's lifecycle, timing semantics or identity, AN must follow the canonical correction rather than resolve it within Analysis."
       ],
       "analytical_conclusion": "South Korea's 3 June local elections produced a broad Democratic Party advance across the 16 major mayoral/provincial contests, including Busan, while the opposition retained Seoul. That direction was broadly anticipated, but the reviewed pre-election evidence does not support an exact result forecast, so WORLD SIGNALS does not manufacture an aggregate surprise score. The more analytically distinctive development was the separate ballot-paper administration failure: later NEC accounting found supplemental supply at 140 polling stations, actual use at 91 and temporary interruption/resumption at 26. The failure was followed by protests, NEC leadership consequences, investigation and reform pressure. Those institutional effects are connected to election administration, not proof that ballot shortages caused the partisan result, constituted fraud, or automatically invalidated winners. No defensible election-specific market response is established.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-CLIM-UNFCCC-SB64-202606-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-06T01:50:00Z",
+      "canonical_occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+      "canonical_series_id": "WSER-CLIM-UNFCCC-SB",
+      "canonical_event_type": "ENVIRONMENTAL_GOVERNANCE_EVENT",
+      "canonical_institution": "UNFCCC",
+      "canonical_release_utc": null,
+      "scope": "UNFCCC June Climate Meetings (SB64), 8-18 June 2026: mixed negotiating progress, unresolved divides, separate SBI/SBSTA legal identities, and the distinction between subsidiary-body draft outputs and later higher-body adoption",
+      "what_happened": {
+        "summary": "The UNFCCC June Climate Meetings (SB64) in Bonn closed on 18 June 2026 after the legally distinct SBI 64 and SBSTA 64 sessions met from 8-18 June. UNFCCC's own Q2 synthesis describes the substantive outcome as mixed: good headway on several key issues and inadequate progress on others, while the Executive Secretary's closing statement records significant remaining divides and intersessional work. On 28 August UNFCCC published the formal SBI and SBSTA post-session reports; their addenda contain draft decisions forwarded for consideration and adoption by higher UNFCCC decision bodies. Those forwarded drafts are process outputs, not evidence that the higher bodies had already adopted them.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-UNFCCC-SB64-EVENT-20260618",
+          "WSEV-UNFCCC-SB64-CLOSE-20260618",
+          "WSEV-UNFCCC-SB64-Q2-2026",
+          "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+          "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The official SBI 64 and SBSTA 64 session pages and agendas established a broad portfolio of negotiating, implementation and mandated-dialogue work for 8-18 June. That official scope is a defensible description of what the subsidiary bodies were tasked to work on, but it is not a forecast that all agenda items, or any specified share of them, would be resolved by the closing plenary.",
+        "benchmarks": [
+          {
+            "metric": "official_session_scope_and_mandated_workstreams",
+            "value": "SBI64_AND_SBSTA64_TO_CONDUCT_DISTINCT_NEGOTIATING_IMPLEMENTATION_AND_MANDATED_WORKSTREAMS_WITHOUT_A_PROMISED_RESOLUTION_RATE",
+            "unit": "qualitative_institutional_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+              "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+          "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "UNFCCC's post-event description of mixed results does not itself establish a MIXED surprise. No reviewed pre-event source provides a defensible forecast for how many agenda items, draft decisions or workstreams should have been completed or resolved at SB64. Significant remaining divides are substantively important, but without an ex-ante comparison basis AO does not manufacture forecast error from them.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-UNFCCC-SB64-Q2-2026",
+          "WSEV-UNFCCC-SB64-CLOSE-20260618",
+          "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+          "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The formal SBI 64 and SBSTA 64 outputs are operationally connected to later UNFCCC decision stages because their post-session addenda explicitly forward draft decisions for consideration and adoption by the relevant higher bodies. This is a documentary institutional dependency: forwarding creates future-decision inputs, but it does not establish that COP, CMP or CMA will adopt the drafts unchanged, or at all, and it is not a causal claim about emissions, climate impacts, investment or markets.",
+        "evidence_refs": [
+          "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+          "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Reducing SB64 to a binary success/failure label would erase the official record of simultaneous progress in some workstreams and inadequate progress or continuing divides in others.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SB64-Q2-2026",
+            "WSEV-UNFCCC-SB64-CLOSE-20260618"
+          ]
+        },
+        {
+          "summary": "The phrase 'mixed results' is an outcome characterisation, not evidence that the event produced a MIXED surprise relative to expectations. Surprise remains unestablished without a pre-event benchmark.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SB64-Q2-2026"
+          ]
+        },
+        {
+          "summary": "Counting agenda items, revised texts or forwarded draft decisions as a scalar score of negotiating success would impose a metric the official record does not supply and would ignore differences in legal and substantive importance across workstreams.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+            "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+          ]
+        },
+        {
+          "summary": "The Executive Secretary's closing statement is authoritative institutional context but is not itself a consensus decision text adopted by Parties. AO does not substitute it for the formal SBI/SBSTA reports.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SB64-CLOSE-20260618",
+            "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+            "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+          ]
+        },
+        {
+          "summary": "The 28 August publication date of the formal post-session reports is documentation chronology, not a new date for the 8-18 June canonical occurrence.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+            "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Uneven progress across SB64 may reflect genuine substantive differences among Parties rather than a single failure of process or political will. Different agenda items entered Bonn at different levels of maturity and distributive conflict.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SB64-CLOSE-20260618",
+            "WSEV-UNFCCC-SB64-Q2-2026"
+          ]
+        },
+        {
+          "summary": "Consensus procedures and deliberate sequencing across subsidiary-body, intersessional and higher decision-body stages can leave text unresolved at SB64 even when the process is functioning as designed. Chronological continuation alone does not distinguish deadlock from staged negotiation.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+            "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+          ]
+        },
+        {
+          "summary": "An Executive Secretary emphasis on areas of progress may reflect institutional agenda-setting and communication priorities; the formal subsidiary-body reports are therefore retained as the controlling record of what was procedurally forwarded or left for later work.",
+          "evidence_refs": [
+            "WSEV-UNFCCC-SB64-CLOSE-20260618",
+            "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+            "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "OBSERVED",
+        "summary": "An observed second-order institutional effect of SB64 is the conversion of subsidiary-body work into formal future-decision inputs: the SBI 64 and SBSTA 64 post-session addenda forward draft decisions to the relevant higher UNFCCC bodies for consideration and adoption. The forwarding itself is observed; subsequent adoption, amendment, rejection or deferral remains unresolved and must be tracked at the later decision stage rather than imputed back into SB64.",
+        "evidence_refs": [
+          "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+          "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+        ]
+      },
+      "falsifiers": [
+        "If authoritative SBI 64 or SBSTA 64 reports materially revise the documented post-session outputs, AO's description of the forwarded decision chain must be updated.",
+        "If a competent contemporaneous pre-event forecast is identified that specifies measurable expected agreement or resolution outcomes for SB64, the NOT_ESTABLISHED surprise classification should be reassessed against that benchmark.",
+        "If any draft decision AO describes as merely forwarded is shown by an authoritative record to have been formally adopted by the relevant higher body during SB64 itself, the forwarding-versus-adoption distinction must be corrected.",
+        "If later COP/CMP/CMA decisions adopt, amend, reject or defer the forwarded drafts, AO's second-order follow-through should be updated at that later decision stage without rewriting the historical SB64 record.",
+        "If authoritative evidence establishes that the SB64 umbrella legally constituted a single merged subsidiary-body session rather than distinct SBI 64 and SBSTA 64 sessions, the institutional-identity analysis must be revised.",
+        "If upstream canonical evidence changes the stable occurrence's lifecycle, source-native window, timezone or null-UTC semantics, AO must follow the canonical correction rather than resolve timing inside Analysis.",
+        "If reliable event-specific market evidence establishes a distinct SB64 response and satisfies WORLD SIGNALS market-measurement provenance and timing contracts, the empty what_moved section may be revisited without manufacturing a canonical UTC endpoint."
+      ],
+      "analytical_conclusion": "SB64 completed as a ten-day UNFCCC negotiating and implementation process, but completion did not mean substantive resolution. UNFCCC's own post-event account is mixed: progress occurred in several areas while significant divides and inadequate progress remained elsewhere. The strongest institutional signal is the decision chain, not a binary success score: legally distinct SBI 64 and SBSTA 64 produced formal post-session reports and forwarded draft decisions to higher UNFCCC bodies. Those drafts are observed future-decision inputs, not already-adopted COP/CMP/CMA outcomes. Because no defensible pre-event resolution forecast has been established, WORLD SIGNALS does not convert the mixed substantive outcome into a synthetic MIXED surprise. No event-specific market response is manufactured.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.12",
+  "version": "0.13",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1346,6 +1346,112 @@
         "The report supports an observed institutional-response chain while not establishing that the administration failure caused the partisan election result."
       ],
       "analytical_use": "OBSERVED_POLICY_AND_INSTITUTIONAL_RESPONSE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-UNFCCC-SB64-EVENT-20260618",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "UNFCCC",
+      "host_or_distribution": "UN Climate Change",
+      "title": "June Climate Meetings (SB64) official event page",
+      "url": "https://unfccc.int/sb64",
+      "published_at": "2026-06-18",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The UN June Climate Meetings (SB64) were held in Bonn from 8 to 18 June 2026.",
+        "The official page recorded on 18 June that the June Climate Meetings had officially closed.",
+        "The page links the distinct SBI 64 and SBSTA 64 session surfaces rather than establishing one merged legal body."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_PROCESS_COMPLETION_REFERENCE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-UNFCCC-SB64-CLOSE-20260618",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "UNFCCC",
+      "host_or_distribution": "UN Climate Change",
+      "title": "Written statement of UNFCCC Executive Secretary on closing of UN June Climate Meetings (SB64)",
+      "url": "https://unfccc.int/news/written-statement-of-unfccc-executive-secretary-on-closing-of-un-june-climate-meetings-sb64",
+      "published_at": "2026-06-18",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Executive Secretary stated that significant divides and significant intersessional work remained at closure.",
+        "The statement identified progress in key areas, including steps on just transition.",
+        "The statement is institutional interpretation/context rather than a Party-adopted consensus decision text."
+      ],
+      "analytical_use": "POST_EVENT_INSTITUTIONAL_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-UNFCCC-SB64-Q2-2026",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "UNFCCC",
+      "host_or_distribution": "UN Climate Change",
+      "title": "UN Climate Change Quarterly Update: Q2 2026",
+      "url": "https://unfccc.int/about-us/reports-highlights/quarterly-updates/un-climate-change-quarterly-update-q2-2026",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "UNFCCC characterises SB64 as delivering mixed results and progress, with good headway on several key issues and inadequate progress on others.",
+        "The update identifies progress on just transition, Action for Climate Empowerment and implementation of global stocktake outcomes, alongside work on finance, technology and capacity-building.",
+        "This is a post-event synthesis and not an ex-ante surprise benchmark."
+      ],
+      "analytical_use": "AUTHORITATIVE_POST_EVENT_SYNTHESIS",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "UNFCCC Subsidiary Body for Implementation",
+      "host_or_distribution": "UN Climate Change",
+      "title": "SBI 64 session page and post-session reports",
+      "url": "https://unfccc.int/event/sbi-64",
+      "published_at": "2026-08-28",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "EXPECTATION_BENCHMARK",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "SBI 64 is a distinct subsidiary-body session held in Bonn from 8 to 18 June 2026 with its own agenda and mandated workstreams.",
+        "UNFCCC published FCCC/SBI/2026/15 and addenda on 28 August 2026.",
+        "FCCC/SBI/2026/15/Add.1 contains draft decisions forwarded for consideration and adoption by the relevant higher UNFCCC bodies.",
+        "Forwarding a draft is a future-decision input and does not itself establish later adoption."
+      ],
+      "analytical_use": "FORMAL_SESSION_REPORT_AND_DECISION_CHAIN",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-UNFCCC-SBSTA64-REPORTS-20260828",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "UNFCCC Subsidiary Body for Scientific and Technological Advice",
+      "host_or_distribution": "UN Climate Change",
+      "title": "SBSTA 64 session page and post-session reports",
+      "url": "https://unfccc.int/event/sbsta-64",
+      "published_at": "2026-08-28",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "EXPECTATION_BENCHMARK",
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "SBSTA 64 is a distinct subsidiary-body session held in Bonn from 8 to 18 June 2026 with its own agenda and workstreams.",
+        "UNFCCC published FCCC/SBSTA/2026/5 and FCCC/SBSTA/2026/5/Add.1 on 28 August 2026.",
+        "The addendum contains draft decisions forwarded for consideration and adoption by the relevant higher UNFCCC bodies.",
+        "The separate report series preserves SBSTA's legal/institutional identity rather than merging it into SBI."
+      ],
+      "analytical_use": "FORMAL_SESSION_REPORT_AND_DECISION_CHAIN",
       "canonical_provenance_effect": "NONE"
     }
   ]
