@@ -1,11 +1,11 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.15",
+  "version": "0.16",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
-    "registry_version": "0.37",
-    "record_count": 687
+    "registry_version": "0.38",
+    "record_count": 688
   },
   "reviews": [
     {
@@ -2889,6 +2889,182 @@
         "If evidence establishes realised effects of the annual cadence on rollover risk, compliance behaviour or investment decisions, the PLAUSIBLE_WATCH_ITEM second-order classification can be upgraded only with the supporting evidence."
       ],
       "analytical_conclusion": "The 25 June 2026 EU sanctions event is best understood as a binding legal-continuity decision whose twelve-month horizon had already been politically signalled. The first annual renewal after six-month rollovers is institutionally notable, but novelty is not a surprise benchmark. The legal act extends the in-force horizon through 31 July 2027 while remaining distinct from both the earlier political agreement and the future renewal boundary. A later 21st sanctions package shows that legal continuity does not freeze policy content, but AQ does not reverse that relationship into a causal claim. No event-specific market response is established; contemporaneous energy markets had powerful alternative geopolitical drivers. AQ therefore records NOT_ESTABLISHED surprise, empty market movement, a high-confidence legal/operational dependency without causal attribution, and only plausible second-order implications from the longer renewal cadence.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-RISK-IMD-HEAT-OUTLOOK-20260331-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-06T06:20:00Z",
+      "canonical_occurrence_id": "WSO-RISK-A-0002",
+      "canonical_series_id": "WSER-RISK-IN-HEAT-OUTLOOK",
+      "canonical_event_type": "PHYSICAL_RISK_OUTLOOK_RELEASE",
+      "canonical_institution": "India Meteorological Department",
+      "canonical_release_utc": null,
+      "scope": "31 March 2026 IMD April-June hot-weather and heatwave outlook as a physical-risk information catalyst, with prior official guidance and later monthly/operational forecast context kept distinct from forecast verification, realised impact, market response and causality",
+      "what_happened": {
+        "summary": "On 31 March 2026 the India Meteorological Department published an updated seasonal hot-weather outlook for April-June 2026 together with an April monthly rainfall and temperature outlook. The product forecast above-normal heatwave days across parts of eastern, central and northwestern India and the southeast peninsula and identified potential public-health, water, power-demand, essential-service, infrastructure/resource-management and agricultural channels. The canonical event is the publication on 31 March; April-June is forecast scope, not occurrence timing, and the release is not itself a heatwave shock.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-IMD-HEAT-OUTLOOK-20260331"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "IMD's 28 February 2026 March-May outlook had already signalled above-normal heatwave days across broad parts of eastern/east-central India, the southeast peninsula and some northwestern/west-central areas. That is defensible official prior guidance showing elevated seasonal heat risk was already on the institutional radar. It is not a matched forecast-error benchmark for the 31 March update because the reference window changes from March-May to April-June and the later product also contains April-specific detail.",
+        "benchmarks": [
+          {
+            "metric": "prior_official_seasonal_heatwave_guidance",
+            "value": "ELEVATED_HEATWAVE_DAY_RISK_ALREADY_SIGNALED_FOR_MARCH_MAY_2026",
+            "unit": "qualitative_official_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-IMD-HEAT-PRIOR-20260228"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-IMD-HEAT-PRIOR-20260228"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "AU does not establish a directional or scalar surprise for the 31 March outlook. The February and March products use overlapping but non-identical seasonal windows and spatial detail, and no reviewed pre-release benchmark predicts the 31 March update at matching temporal and geographic resolution. Forecast evolution is therefore not converted into a synthetic forecast-error or surprise score.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-IMD-HEAT-PRIOR-20260228",
+          "WSEV-IMD-HEAT-OUTLOOK-20260331"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "OBSERVATION_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The 31 March seasonal outlook is documentarily connected to a continuing IMD forecast-and-warning system: IMD subsequently issued May and June monthly heatwave outlooks and shorter-horizon releases describing continuing, changing and at times abating heatwave conditions across different regions. Those later products provide forecast-evolution and operational-weather context for the April-June risk period. They do not establish that the March seasonal forecast was globally correct, do not show that the publication caused later forecasts or heatwaves, and do not supply a matched verifying dataset or skill metric.",
+        "evidence_refs": [
+          "WSEV-IMD-HEAT-MAY-OUTLOOK-20260501",
+          "WSEV-IMD-HEAT-LATEMAY-ARCHIVE-20260529",
+          "WSEV-IMD-HEAT-JUNE-OUTLOOK-20260529",
+          "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The April-June forecast window is not the occurrence timing window. Treating the seasonal reference period as though the canonical event lasted three months would collapse an information release into the physical-risk period it describes.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        },
+        {
+          "summary": "The 28 February March-May guidance and the 31 March April-June update are not identical forecast targets. Direct subtraction or hit/miss comparison would manufacture commensurability that the source products do not provide.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-PRIOR-20260228",
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        },
+        {
+          "summary": "A later monthly outlook is another forecast made with newer information, not a verifying observation for the earlier seasonal outlook.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-MAY-OUTLOOK-20260501",
+            "WSEV-IMD-HEAT-JUNE-OUTLOOK-20260529"
+          ]
+        },
+        {
+          "summary": "Selected spatial overlap between the seasonal map and later state-level heatwave conditions does not establish a national seasonal skill score without a defined verifying dataset, geographic aggregation rule and metric.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331",
+            "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+          ]
+        },
+        {
+          "summary": "The late-May abatement of prevailing heatwave conditions in parts of northwest and central India does not by itself falsify a probabilistic April-June seasonal anomaly outlook; different horizons, regions and aggregation rules are involved.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-LATEMAY-ARCHIVE-20260529"
+          ]
+        },
+        {
+          "summary": "Late-June heatwave conditions in some regions do not by themselves prove that the March seasonal outlook succeeded. A rigorous skill claim requires a complete verifying observation set and predeclared metric.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+          ]
+        },
+        {
+          "summary": "Heatwaves are physical atmospheric events. The publication does not cause them, and temporal sequence from publication to later weather cannot be reversed into a causal mechanism.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331",
+            "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+          ]
+        },
+        {
+          "summary": "IMD's stated public-health, water, power and agricultural risk channels are prospective transmission channels and preparedness concerns. They are not evidence that those impacts or responses were realised because of the publication.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        },
+        {
+          "summary": "Any same-period movement in heat-sensitive markets, power demand or agricultural prices would require independent event-specific measurement and attribution evidence; none is manufactured in AU.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        },
+        {
+          "summary": "The canonical occurrence has date-only precision. Analytical evidence about later products must not invent a clock time or UTC timestamp for the 31 March publication.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Later regional heatwave conditions reflect evolving atmospheric, land-surface and ocean-climate drivers; they are physical-weather outcomes, not consequences of publishing the March outlook.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331",
+            "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+          ]
+        },
+        {
+          "summary": "Differences between the March seasonal outlook and May or June monthly outlooks can reflect updated initial conditions, model information and shorter forecast horizons rather than error in either product.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-MAY-OUTLOOK-20260501",
+            "WSEV-IMD-HEAT-JUNE-OUTLOOK-20260529"
+          ]
+        },
+        {
+          "summary": "India's large spatial heterogeneity means selected matches or mismatches at state or subregional level can overstate the quality of a national seasonal assessment if the full verifying field is not analysed.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331",
+            "WSEV-IMD-HEAT-JUNE-OPS-20260621"
+          ]
+        },
+        {
+          "summary": "Any realised public-health, electricity, water or agricultural outcome would also depend on exposure, adaptation, infrastructure, policy response and local conditions, not the meteorological outlook alone.",
+          "evidence_refs": [
+            "WSEV-IMD-HEAT-OUTLOOK-20260331"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "IMD explicitly identifies public-health, water-resource, power-demand, essential-service, infrastructure/resource-management and agricultural channels and recommends preparedness measures. These make subsequent institutional response and sectoral stress legitimate watch items. AU does not claim those effects were realised, quantify them, or attribute them to the publication without separate outcome evidence.",
+        "evidence_refs": [
+          "WSEV-IMD-HEAT-OUTLOOK-20260331",
+          "WSEV-IMD-HEAT-PRIOR-20260228"
+        ]
+      },
+      "falsifiers": [
+        "If IMD corrects or withdraws the 31 March 2026 release in a way that changes the historical publication content, AU must follow the authoritative record.",
+        "If upstream Canonical evidence changes the target lifecycle, civil date, timezone, event type, signal-object class or null-UTC semantics, AU must inherit that correction rather than resolve timing inside Analysis.",
+        "If a competent pre-release forecast or benchmark for the exact 31 March update is identified, the NOT_ESTABLISHED surprise classification should be reassessed against that benchmark.",
+        "If a rigorous verifying observation dataset and predeclared spatial/temporal skill metric are obtained for the April-June seasonal heatwave-day forecast, AU may add a forecast-skill assessment rather than infer one from later warnings.",
+        "If evidence establishes that the February and March products were intended by IMD as directly comparable forecasts for the same target window and metric, the current non-comparability guardrail should be revised.",
+        "If later monthly products are formally documented as corrections to an erroneous March product rather than routine updates, the forecast-evolution interpretation should be revised.",
+        "If qualified evidence demonstrates realised public-health, water, power, infrastructure or agricultural responses attributable to the information release, second-order status may be upgraded only for the evidenced response.",
+        "If qualified event-specific market evidence satisfying WORLD SIGNALS timing, rights and attribution contracts is obtained, the empty what_moved section may be revisited.",
+        "If evidence shows that the 21 June operational release does not describe heatwave conditions within the April-June reference period as represented here, it must be removed from observational context.",
+        "If a future IMD publication date is authoritatively scheduled, it should be handled as a separate Canonical occurrence and must not be inferred from this historical cadence."
+      ],
+      "analytical_conclusion": "The 31 March 2026 IMD release is best understood as a seasonal physical-risk information catalyst embedded in a continuing forecast and warning system. Earlier official guidance had already signalled elevated heat risk, but its March-May window is not a matched benchmark for the later April-June update, so AU does not manufacture forecast surprise. May and June products and late-season heatwave releases demonstrate forecast evolution and operational weather context, not a scalar validation of the March seasonal product. The outlook names important health, water, power, infrastructure and agricultural transmission channels, which remain plausible watch items rather than realised effects. No event-specific market response or causal claim is established. AU therefore records NOT_ESTABLISHED surprise, empty market movement, high-confidence observation context without causality, and explicit falsifiers for any future forecast-skill or impact analysis.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }

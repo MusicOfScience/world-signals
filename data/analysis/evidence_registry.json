@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.15",
+  "version": "0.16",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1710,6 +1710,122 @@
         "The later package is a distinct act and is not treated as an effect caused by the 25 June renewal."
       ],
       "analytical_use": "POST_RENEWAL_POLICY_CALIBRATION_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-OUTLOOK-20260331",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department / Ministry of Earth Sciences",
+      "title": "Updated Seasonal outlook for hot weather season (April to June) 2026 and Monthly Outlook for April 2026 for the Rainfall and Temperature",
+      "url": "https://internal.imd.gov.in/press_release/20260331_pr_4854.pdf",
+      "published_at": "2026-03-31",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "IMD published the updated April-June 2026 hot-weather outlook on 31 March 2026.",
+        "The release forecast above-normal heatwave days over parts of eastern, central and northwestern India and the southeast peninsula during April-June.",
+        "The release identifies public-health, water, power-demand, essential-service, infrastructure/resource-management and agricultural risk channels and preparedness measures."
+      ],
+      "analytical_use": "TARGET_OUTCOME_AND_TRANSMISSION_CHANNELS",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-PRIOR-20260228",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department / Ministry of Earth Sciences",
+      "title": "Seasonal outlook for the hot weather season March to May 2026 and Monthly Outlook for March 2026",
+      "url": "https://internal.imd.gov.in/press_release/20260228_pr_4773.pdf",
+      "published_at": "2026-02-28",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Before the 31 March update, IMD had already forecast above-normal heatwave days over broad parts of east/east-central India, the southeast peninsula and some northwest/west-central areas for March-May 2026.",
+        "The prior product uses a March-May reference window and therefore is official prior guidance rather than a matched April-June forecast-error benchmark.",
+        "The prior release also identifies public-health, water, power-demand and essential-service risk channels."
+      ],
+      "analytical_use": "OFFICIAL_PRIOR_GUIDANCE_NOT_MATCHED_FORECAST_ERROR",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-MAY-OUTLOOK-20260501",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department / Ministry of Earth Sciences",
+      "title": "Monthly Outlook for the Temperature and Rainfall during May 2026",
+      "url": "https://internal.imd.gov.in/press_release/20260501_pr_4941.pdf",
+      "published_at": "2026-05-01",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "IMD issued a May-specific temperature, rainfall and heatwave outlook after the March seasonal product.",
+        "The May outlook expected above-normal heatwave days over parts of Himalayan foothills, east-coast states, Gujarat and Maharashtra.",
+        "The monthly product is subsequent forecast information, not a verifying observation for the March seasonal forecast."
+      ],
+      "analytical_use": "SUBSEQUENT_MONTHLY_FORECAST_EVOLUTION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-LATEMAY-ARCHIVE-20260529",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department press-release archive",
+      "title": "IMD late-May 2026 heatwave operational press-release sequence",
+      "url": "https://internal.imd.gov.in/pages/press_release_mausam.php",
+      "published_at": "2026-05-29",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The IMD archive records repeated late-May heatwave/severe-heatwave continuation releases for central, northwestern and eastern India.",
+        "A 29 May release states that the prevailing heatwave had abated from most parts of northwest India and was likely to abate from most of central India.",
+        "The sequence shows operational weather conditions changing within the seasonal reference period; it is not a national seasonal forecast-skill score."
+      ],
+      "analytical_use": "SHORT_HORIZON_OPERATIONAL_WEATHER_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-JUNE-OUTLOOK-20260529",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department / Ministry of Earth Sciences",
+      "title": "Monthly rainfall and temperature outlook for June 2026 — heatwave outlook section",
+      "url": "https://internal.imd.gov.in/section/nhac/dynamic/heatwave_monthly_outlook.pdf",
+      "published_at": "2026-05-29",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The June outlook expected above-normal heatwave days over many parts of several northern, eastern, central and peninsular states, with below-normal heatwave days likely in Rajasthan and Jharkhand.",
+        "The June product demonstrates continuing monthly forecast evolution inside the broader April-June seasonal reference period.",
+        "It is not treated as a verifying observation for the March seasonal product."
+      ],
+      "analytical_use": "SUBSEQUENT_JUNE_FORECAST_EVOLUTION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-IMD-HEAT-JUNE-OPS-20260621",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "India Meteorological Department",
+      "host_or_distribution": "India Meteorological Department / Ministry of Earth Sciences",
+      "title": "IMD operational press release — 21 June 2026",
+      "url": "https://mausam.imd.gov.in/Forecast/marquee_data/Press%20Release%2021-06-2026.pdf",
+      "published_at": "2026-06-21",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The late-June operational release describes heatwave conditions in isolated pockets across several states during the forecast interval and severe heatwave conditions in isolated pockets of Vidarbha for part of the period.",
+        "The release supplies later operational weather context within the April-June reference period.",
+        "A short-horizon operational release is not a complete verifying dataset or skill metric for the March seasonal forecast."
+      ],
+      "analytical_use": "LATE_SEASON_OPERATIONAL_WEATHER_CONTEXT",
       "canonical_provenance_effect": "NONE"
     }
   ]
