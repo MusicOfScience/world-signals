@@ -1,0 +1,185 @@
+name: BD final clean-head audit v2
+
+on:
+  push:
+    branches:
+      - feature/post-bc-vietnam-live-bd
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify exact ancestry and permanent diff surface
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          base=667d0fbcc92f937b0cb609d619b664a2a97e8165
+          test "$(git rev-parse origin/main)" = "$base"
+          test "$(git merge-base HEAD origin/main)" = "$base"
+          test -z "$(git status --porcelain)"
+          python - <<'PY'
+          import subprocess
+          expected={
+            'PROJECT_STATUS.md',
+            'ROADMAP.md',
+            'data/live_intelligence/POST_BC_PRESSURE_AUDIT_BD_v0.1.md',
+            'data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_PAYLOAD_v0.1.json',
+            'data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_PLAN_v0.1.json',
+            'data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_TRANSACTION_AUDIT_v0.1.md',
+            'data/live_intelligence/evidence_registry.json',
+            'data/live_intelligence/observations.json',
+            'data/live_intelligence/schema.json',
+            'scripts/apply_analysis_revision_contract_ba.py',
+            'scripts/apply_barmm_parliamentary_election_bb.py',
+            'scripts/apply_japan_fies_live_analysis_az.py',
+            'scripts/apply_vietnam_myanmar_live_bd.py',
+            'tests/test_analysis_revision_contract_ba.py',
+            'tests/test_barmm_parliamentary_election_bb.py',
+            'tests/test_checkpoint_contract_bc.py',
+            'tests/test_japan_fies_live_analysis_az.py',
+            'tests/test_vietnam_myanmar_live_bd.py',
+            '.github/workflows/bd-final-clean-head-audit-v2.yml',
+          }
+          actual=set(subprocess.check_output(['git','diff','--name-only','origin/main...HEAD'], text=True).splitlines())
+          if actual != expected:
+              raise SystemExit(f'BD permanent diff mismatch: actual={sorted(actual)} expected={sorted(expected)}')
+          print('BD permanent diff surface: PASS')
+          PY
+          test "$(find .github/workflows -maxdepth 1 -type f -name 'bd-*' | wc -l)" -eq 1
+          test -z "$(find scripts -maxdepth 1 -type f -name 'bd_*patch*' -print -quit)"
+
+      - name: Verify final governed BD state and audit provenance
+        run: |
+          set -euo pipefail
+          python scripts/apply_vietnam_myanmar_live_bd.py --check-only
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          plan=json.loads(Path('data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_PLAN_v0.1.json').read_text())
+          schema=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          observations=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          evidence=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          assert schema['version']=='0.5'
+          assert len(observations['observations'])==5
+          assert len(evidence['evidence'])==7
+          assert observations['population_state']=='CONTROLLED_GEOPOLITICAL_SPECIMEN'
+          row=next(x for x in observations['observations'] if x['observation_id']=='WSLI-GEO-VNM-MMR-SECURITY-20260905-001')
+          assert row['canonical_links']==[]
+          assert row['event_time']=={'precision':'CIVIL_DATE','event_date':'2026-09-05'}
+          assert row['revision_of_observation_id'] is None
+          assert row['automatic_canonical_commit'] is False
+          assert row['google_calendar_write'] is False
+          ev=next(x for x in evidence['evidence'] if x['evidence_id']=='WSEV-LI-VNM-MMR-VGP-20260905')
+          assert ev['evidence_class']=='PRIMARY_OFFICIAL'
+          assert ev['publication_time']['precision']=='EXACT_TIMESTAMP'
+          assert ev['publication_time']['published_at_utc']=='2026-09-05T09:16:00Z'
+          population=schema['population_policy']
+          assert population['mode']=='CONTROLLED_GEOPOLITICAL_SPECIMEN'
+          assert population['maximum_observation_count']==5
+          assert population['maximum_evidence_count']==7
+          assert population['automatic_ingestion_allowed'] is False
+          assert population['public_observation_projection_allowed'] is False
+          assert schema['story_grouping_policy']['automatic_clustering_allowed'] is False
+          assert schema['public_projection_policy']['observation_projection_allowed'] is False
+          assert schema['layer_boundary']['canonical_mutation_allowed'] is False
+          assert schema['layer_boundary']['calendar_mutation_allowed'] is False
+          assert schema['layer_boundary']['analysis_mutation_allowed'] is False
+          audit=Path('data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_TRANSACTION_AUDIT_v0.1.md').read_text()
+          required=[
+            '`667d0fbcc92f937b0cb609d619b664a2a97e8165`',
+            '`34037302511`',
+            '`df3b1b464407204b9bfe200d39ae279310fd9cea`',
+            '`69ac527a1436075ad328f85fd8dc9f7ef3ce386c`',
+            '`canonical_links`',
+            '`CONTEXT_FOR`',
+            '`EXACT_TIMESTAMP_SERIES`',
+            '`CONTROLLED_GEOPOLITICAL_SPECIMEN`',
+            '`data/live_intelligence/schema.json`',
+            '`feature/post-bc-vietnam-live-bd`',
+            '839 tests with 39 skipped',
+            'unquoted shell heredoc',
+          ]
+          missing=[x for x in required if x not in audit]
+          if missing:
+              raise SystemExit(f'BD audit provenance markers missing: {missing}')
+          assert plan['manual_merge_only'] is True
+          assert plan['gates']['automatic_canonical_commit'] is False
+          assert plan['gates']['google_calendar_write'] is False
+          assert plan['gates']['public_live_observation_projection'] is False
+          assert plan['gates']['sixth_live_observation_requires_new_pressure_audit'] is True
+          print('BD final governed state and audit provenance: PASS')
+          PY
+
+      - name: Prove every protected layer byte-identical to main
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          plan=json.loads(Path('data/live_intelligence/VIETNAM_MYANMAR_LIVE_BD_PLAN_v0.1.json').read_text())
+          for path in plan['protected_paths']:
+              main_bytes=subprocess.check_output(['git','show',f'origin/main:{path}'])
+              branch_bytes=Path(path).read_bytes()
+              if main_bytes != branch_bytes:
+                  raise SystemExit(f'BD protected path differs from main: {path}')
+          print('BD protected layers byte-identical to main: PASS')
+          PY
+
+      - name: Run complete clean-head repository validation
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python scripts/validate_checkpoint_contracts.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/validate_checkpoint_contracts.py \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_japan_fies_live_analysis_az.py \
+            scripts/apply_barmm_parliamentary_election_bb.py \
+            scripts/apply_vietnam_myanmar_live_bd.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            src/world_signals/live_analysis_bridge.py \
+            src/world_signals/checkpoint_contract.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
+
+      - name: Self-remove final audit workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/bd-final-clean-head-audit-v2.yml
+          git commit -m "BD: remove temporary final clean-head audit v2"
+          git push origin HEAD:feature/post-bc-vietnam-live-bd
