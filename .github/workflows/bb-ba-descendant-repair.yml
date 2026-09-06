@@ -1,0 +1,110 @@
+name: BB BA descendant-status repair
+
+on:
+  push:
+    branches:
+      - feature/post-ba-barmm-election-anchor-bb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prove exact post-BA ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          expected=b8c5372198e3141c4c3f79ace13083877447f71b
+          test "$(git rev-parse origin/main)" = "$expected"
+          test "$(git merge-base HEAD origin/main)" = "$expected"
+
+      - name: Apply narrow BA descendant-status repair
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          helper = Path('scripts/apply_analysis_revision_contract_ba.py')
+          text = helper.read_text(encoding='utf-8')
+          old = '''    require(
+              old_header in current or new_header in current,
+              "BA status header does not match reviewed prestate or target",
+          )
+          text = current.replace(old_header, new_header, 1)
+          '''
+          new = '''    if old_header not in current and new_header not in current:
+              descendant_invariants = (
+                  "- Analysis schema: **v0.7**",
+                  "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
+                  "BA adds a **production-closed Analysis revision-lineage contract**",
+              )
+              require(
+                  all(marker in current for marker in descendant_invariants),
+                  "BA status descendant is missing frozen BA invariants",
+              )
+              return current
+          text = current.replace(old_header, new_header, 1)
+          '''
+          if old not in text:
+              raise SystemExit('BA helper repair target drift')
+          helper.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          tests = Path('tests/test_analysis_revision_contract_ba.py')
+          text = tests.read_text(encoding='utf-8')
+          anchor = '''    def test_ba_target_core_analysis_and_revision_contract_validate(self):
+          '''
+          addition = '''    def test_status_helper_preserves_later_descendant_only_with_frozen_ba_invariants(self):
+              historical = self.target["status"]
+              ba_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
+              descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
+              self.assertIn(ba_header, historical)
+              descendant = historical.replace(ba_header, descendant_header, 1)
+              self.assertEqual(apply_ba.target_status(descendant), descendant)
+
+              malformed = descendant.replace(
+                  "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
+                  "- production Analysis revisions: **1 / gate OPEN**",
+                  1,
+              )
+              with self.assertRaises(SystemExit):
+                  apply_ba.target_status(malformed)
+
+          '''
+          if addition not in text:
+              if anchor not in text:
+                  raise SystemExit('BA test insertion target drift')
+              text = text.replace(anchor, addition + anchor, 1)
+          tests.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Validate narrow repair
+        run: |
+          set -euo pipefail
+          python -m unittest tests.test_analysis_revision_contract_ba tests.test_barmm_parliamentary_election_bb -v
+          python -m py_compile scripts/apply_analysis_revision_contract_ba.py scripts/apply_barmm_parliamentary_election_bb.py
+          python scripts/apply_analysis_revision_contract_ba.py --check-only
+          python scripts/apply_barmm_parliamentary_election_bb.py --check-only
+
+      - name: Commit only permanent repair and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/apply_analysis_revision_contract_ba.py tests/test_analysis_revision_contract_ba.py
+          git diff --cached --name-only | sort > /tmp/actual
+          printf '%s\n' scripts/apply_analysis_revision_contract_ba.py tests/test_analysis_revision_contract_ba.py | sort > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          git commit -m "BB: make BA status helper descendant-safe"
+          git rm .github/workflows/bb-ba-descendant-repair.yml
+          git commit -m "BB: remove temporary BA repair workflow"
+          git push origin HEAD:feature/post-ba-barmm-election-anchor-bb
