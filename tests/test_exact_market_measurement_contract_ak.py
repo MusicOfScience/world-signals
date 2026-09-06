@@ -60,7 +60,10 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
             "after_value": 57.0,
             "measurement_precision": "EXACT_TIMESTAMP_SERIES",
             "independently_reconstructed": True,
-            "evidence_refs": ["WSEV-AK-SYNTHETIC-MARKET-SERIES"],
+            "evidence_refs": [
+                "WSEV-AK-SYNTHETIC-MARKET-SERIES",
+                "WSEV-AK-SYNTHETIC-MARKET-RIGHTS",
+            ],
             "market_series_id": "AK.SYNTHETIC.RBA_PROBABILITY",
             "market_timezone": "Australia/Sydney",
             "series_granularity": "1 minute",
@@ -68,6 +71,7 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
             "before_observation_utc": "2026-09-02T01:29:00Z",
             "after_observation_utc": "2026-09-02T01:31:00Z",
             "data_use_basis": "OPEN_REUSE_TERMS",
+            "data_use_evidence_ref": "WSEV-AK-SYNTHETIC-MARKET-RIGHTS",
             "public_projection_permitted": True,
         })
         evidence["evidence"].append({
@@ -83,6 +87,19 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
             "analytical_use": "SYNTHETIC_TEST_FIXTURE_ONLY",
             "canonical_provenance_effect": "NONE",
         })
+        evidence["evidence"].append({
+            "evidence_id": "WSEV-AK-SYNTHETIC-MARKET-RIGHTS",
+            "evidence_class": "MARKET_DATA_PROVIDER",
+            "provider": "Synthetic AK validation fixture",
+            "host_or_distribution": "Synthetic AK validation fixture",
+            "title": "Synthetic market-data reuse terms used only for contract validation",
+            "url": "https://example.invalid/world-signals-ak-synthetic-market-rights",
+            "published_at": "2026-09-06T00:00:00Z",
+            "roles": ["MARKET_DATA_RIGHTS"],
+            "supports": ["Synthetic public-projection permission for validator testing only."],
+            "analytical_use": "SYNTHETIC_TEST_FIXTURE_ONLY",
+            "canonical_provenance_effect": "NONE",
+        })
         return schema, evidence, reviews, canonical, movement
 
     def errors_for(self, schema: dict, evidence: dict, reviews: dict, canonical: dict) -> tuple[str, ...]:
@@ -91,6 +108,7 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
     def test_candidate_schema_is_v04_without_populating_exact_rows(self) -> None:
         self.assertIn(self.production_schema["version"], {"0.3", "0.4"})
         self.assertEqual(self.candidate_schema["version"], "0.4")
+        self.assertIn("MARKET_DATA_RIGHTS", self.candidate_schema["controlled_vocabularies"]["evidence_role"])
         exact_rows = [
             movement
             for review in self.reviews["reviews"]
@@ -118,6 +136,7 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
             "before_observation_utc",
             "after_observation_utc",
             "data_use_basis",
+            "data_use_evidence_ref",
             "public_projection_permitted",
         ):
             movement.pop(field, None)
@@ -127,6 +146,7 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
         self.assertIn("requires independently_reconstructed=true", joined)
         self.assertIn("requires market_series_id", joined)
         self.assertIn("requires UTC event_anchor_utc", joined)
+        self.assertIn("requires data_use_evidence_ref", joined)
 
     def test_event_anchor_must_equal_canonical_start_utc(self) -> None:
         schema, evidence, reviews, canonical, movement = self.exact_fixture()
@@ -146,6 +166,22 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
         synthetic["evidence_class"] = "REPUTABLE_NEWSWIRE"
         errors = self.errors_for(schema, evidence, reviews, canonical)
         self.assertTrue(any("MARKET_OBSERVATION evidence from PRIMARY_OFFICIAL or MARKET_DATA_PROVIDER" in error for error in errors), errors)
+
+    def test_exact_series_requires_provenance_backed_market_data_rights(self) -> None:
+        schema, evidence, reviews, canonical, movement = self.exact_fixture()
+        rights = next(row for row in evidence["evidence"] if row["evidence_id"] == "WSEV-AK-SYNTHETIC-MARKET-RIGHTS")
+        rights["roles"] = ["CONTEXT_OR_ALTERNATIVE"]
+        errors = self.errors_for(schema, evidence, reviews, canonical)
+        self.assertTrue(any("data_use_evidence_ref must resolve to MARKET_DATA_RIGHTS evidence" in error for error in errors), errors)
+        movement["data_use_evidence_ref"] = "WSEV-AK-SYNTHETIC-MARKET-SERIES"
+        errors = self.errors_for(schema, evidence, reviews, canonical)
+        self.assertTrue(any("data_use_evidence_ref must resolve to MARKET_DATA_RIGHTS evidence" in error for error in errors), errors)
+
+    def test_data_use_evidence_ref_must_be_in_movement_evidence_refs(self) -> None:
+        schema, evidence, reviews, canonical, movement = self.exact_fixture()
+        movement["evidence_refs"] = ["WSEV-AK-SYNTHETIC-MARKET-SERIES"]
+        errors = self.errors_for(schema, evidence, reviews, canonical)
+        self.assertTrue(any("data_use_evidence_ref must be included in movement evidence_refs" in error for error in errors), errors)
 
     def test_exact_series_requires_explicit_public_projection_permission(self) -> None:
         schema, evidence, reviews, canonical, movement = self.exact_fixture()
