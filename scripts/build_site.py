@@ -11,7 +11,9 @@ from world_signals.operations import operations_projection
 from world_signals.runtime_projection import unavailable_runtime_projection
 from world_signals.biosecurity_projection import public_biosecurity_projection
 from world_signals.live_intelligence import public_live_intelligence_projection, validate_live_intelligence
-from world_signals.analysis import public_analysis_projection, validate_analysis
+from world_signals.analysis import validate_analysis
+from world_signals.analysis_revision import validate_analysis_revisions
+from world_signals.analysis_revision_projection import public_analysis_projection_with_revision_contract
 from world_signals.live_analysis_bridge import validate_live_analysis_bridge
 
 reg=load_json(ROOT/"data/canonical/registry.json")
@@ -37,6 +39,9 @@ if not live_report.ok:
 analysis_report=validate_analysis(analysis_schema,analysis_evidence,analysis_reviews,reg)
 if not analysis_report.ok:
     raise SystemExit("Analysis validation failed: "+"; ".join(analysis_report.errors))
+revision_report=validate_analysis_revisions(analysis_schema,analysis_reviews)
+if not revision_report.ok:
+    raise SystemExit("Analysis revision validation failed: "+"; ".join(revision_report.errors))
 bridge_report=validate_live_analysis_bridge(analysis_schema,analysis_reviews,live_observations)
 if not bridge_report.ok:
     raise SystemExit("Live → Analysis bridge validation failed: "+"; ".join(bridge_report.errors))
@@ -101,7 +106,9 @@ dump_json(docs/"data/biosecurity.json",biosecurity_projection)
 live_projection=public_live_intelligence_projection(live_schema,live_evidence,live_observations,reg)
 dump_json(docs/"data/live_intelligence.json",live_projection)
 
-analysis_projection=public_analysis_projection(analysis_schema,analysis_evidence,analysis_reviews,reg)
+analysis_projection=public_analysis_projection_with_revision_contract(
+    analysis_schema,analysis_evidence,analysis_reviews,reg
+)
 dump_json(docs/"data/analysis.json",analysis_projection)
 
 runtime_path=ROOT/"artifacts/latest-monitor-public.json"
