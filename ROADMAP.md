@@ -112,6 +112,14 @@ not:
 
 Live evidence is not transitively migrated into Analysis evidence, upstream Live records remain immutable, and story/latest selectors remain prohibited. The inaugural factual input must share the review's Canonical occurrence. Production `live_inputs` are capped at one and public Live-input projection remains closed. Another pressure audit is required before any second production relationship.
 
+## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED
+
+BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot. Production revision population remains zero.
+
+A future revision must be a new immutable `analysis_id` linked by `revision_of_analysis_id`, preserve the parent row, remain on the same Canonical occurrence and advance `analysis_as_of_utc`. Revision kind and reason are explicit. Cycles and first-mode branching are prohibited. `NEW_LIVE_EVIDENCE` revisions must identify at least one novel immutable Live observation relative to the parent.
+
+Live observations never automatically revise Analysis. Live correction/state-update lineage and Analysis revision lineage remain separate. No public latest-head collapse or revision-metadata projection is opened by BA. The first production Analysis revision requires another pressure audit.
+
 ## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT
 
 Do not build a high-volume news ingest by default. Expansion must establish:
