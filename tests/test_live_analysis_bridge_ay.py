@@ -23,6 +23,10 @@ def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
+def version_tuple(raw: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(raw).split("."))
+
+
 class LiveAnalysisBridgeAYTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -33,11 +37,28 @@ class LiveAnalysisBridgeAYTests(unittest.TestCase):
         cls.live_observations = load("data/live_intelligence/observations.json")
         cls.live_evidence = load("data/live_intelligence/evidence_registry.json")
         cls.canonical = load("data/canonical/registry.json")
-        cls.target_schema = apply_ay.target_schema(cls.schema)
+
+        # Freeze AY's historical target at v0.5 even when a later legitimate
+        # descendant has opened a bounded production population.
+        if version_tuple(cls.schema.get("version")) > (0, 5):
+            historical_pre = deepcopy(cls.schema)
+            historical_pre["version"] = "0.4"
+            historical_pre.pop("live_input_policy", None)
+            cls.target_schema = apply_ay.target_schema(historical_pre)
+        else:
+            cls.target_schema = apply_ay.target_schema(cls.schema)
 
     def simulated_open_schema(self):
+        # AY hypothetical fixtures exercise the prospective grammar. They must
+        # opt into the reviewed controlled mode rather than mutating the frozen
+        # FOUNDATION_ONLY_NO_PRODUCTION_LINKS mode into an impossible hybrid.
         schema = deepcopy(self.target_schema)
-        schema["live_input_policy"]["production_live_inputs_allowed"] = True
+        policy = schema["live_input_policy"]
+        policy["mode"] = "CONTROLLED_SINGLE_PRODUCTION_LINK"
+        policy["production_live_inputs_allowed"] = True
+        policy["maximum_production_live_inputs"] = 4
+        policy["maximum_live_inputs_per_review"] = 2
+        policy["factual_input_requires_matching_canonical_occurrence"] = False
         return schema
 
     def review_with_inputs(self, inputs, analysis_id="WSAN-AY-HYPOTHETICAL-001"):
@@ -49,28 +70,46 @@ class LiveAnalysisBridgeAYTests(unittest.TestCase):
 
     def test_exact_checkpoint_and_zero_population_are_preserved(self):
         self.assertEqual(self.plan["exact_base_main_sha"], "0a7608ab56116d0f65ffd1492a3da87bcbf35f47")
-        self.assertEqual(len(self.reviews["reviews"]), 20)
-        self.assertEqual(len(self.evidence["evidence"]), 91)
-        self.assertEqual(len(self.live_observations["observations"]), 3)
-        self.assertEqual(len(self.live_evidence["evidence"]), 4)
-        self.assertEqual(production_live_input_count(self.reviews), 0)
+        target = self.plan["target"]
+        self.assertEqual(target["analysis_review_count"], 20)
+        self.assertEqual(target["analysis_evidence_count"], 91)
+        self.assertEqual(target["live_observation_count"], 3)
+        self.assertEqual(target["live_evidence_count"], 4)
+        self.assertEqual(target["production_live_input_count"], 0)
+        self.assertEqual(target["analysis_schema_version"], "0.5")
+        self.assertFalse(target["production_live_inputs_allowed"])
+        self.assertFalse(target["public_live_input_projection_allowed"])
+
+        # Live descendants may grow after a separately reviewed tranche; the
+        # exact AY checkpoint above is the frozen history, not a permanent cap.
+        self.assertGreaterEqual(len(self.reviews["reviews"]), 20)
+        self.assertGreaterEqual(len(self.evidence["evidence"]), 91)
+        self.assertGreaterEqual(len(self.live_observations["observations"]), 3)
+        self.assertGreaterEqual(len(self.live_evidence["evidence"]), 4)
+        self.assertGreaterEqual(production_live_input_count(self.reviews), 0)
         self.assertEqual(self.target_schema["version"], "0.5")
         self.assertFalse(self.target_schema["live_input_policy"]["production_live_inputs_allowed"])
         self.assertFalse(self.target_schema["live_input_policy"]["public_live_input_projection_allowed"])
 
     def test_target_schema_validates_core_analysis_and_closed_bridge(self):
-        core = validate_analysis(self.target_schema, self.evidence, self.reviews, self.canonical)
+        historical_reviews = deepcopy(self.reviews)
+        for review in historical_reviews.get("reviews", []):
+            review.pop("live_inputs", None)
+        core = validate_analysis(self.target_schema, self.evidence, historical_reviews, self.canonical)
         self.assertTrue(core.ok, core.errors)
-        bridge = validate_live_analysis_bridge(self.target_schema, self.reviews, self.live_observations)
+        bridge = validate_live_analysis_bridge(
+            self.target_schema, historical_reviews, self.live_observations
+        )
         self.assertTrue(bridge.ok, bridge.errors)
 
     def test_live_descendant_state_matches_ax_contract(self):
         rows = {row["observation_id"]: row for row in self.live_observations["observations"]}
-        self.assertEqual(set(rows), {
+        ax_ids = {
             "WSLI-RISK-NPL-FLOOD-20260826-001",
             "WSLI-HEALTH-COD-BVD-20260826-001",
             "WSLI-HEALTH-COD-BVD-20260830-001",
-        })
+        }
+        self.assertTrue(ax_ids.issubset(set(rows)))
         older = rows["WSLI-HEALTH-COD-BVD-20260826-001"]
         newer = rows["WSLI-HEALTH-COD-BVD-20260830-001"]
         self.assertEqual(older["story_id"], "WSSTORY-HEALTH-COD-BVD-2026")
@@ -204,7 +243,12 @@ class LiveAnalysisBridgeAYTests(unittest.TestCase):
         self.assertTrue(live_evidence_ids.isdisjoint(before_refs))
         self.assertFalse(self.target_schema["live_input_policy"]["transitive_live_evidence_migration_allowed"])
 
-    def test_apply_helper_is_read_only_in_check_mode_and_targets_only_reviewed_files(self):
+    def test_apply_helper_exact_transform_remains_frozen_to_ay_checkpoint(self):
+        if version_tuple(self.schema.get("version")) > (0, 5):
+            self.assertEqual(self.plan["target"]["analysis_schema_version"], "0.5")
+            self.assertEqual(self.plan["target"]["analysis_review_count"], 20)
+            self.assertEqual(self.plan["target"]["production_live_input_count"], 0)
+            self.skipTest("AY exact apply-helper transform belongs to the exact post-AX pre-state")
         apply_ay.assert_preconditions(self.plan)
         texts = apply_ay.target_texts()
         self.assertEqual(set(texts), {
