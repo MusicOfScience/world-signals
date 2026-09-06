@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.2",
+  "version": "0.3",
   "reference_date": "2026-09-06",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -40,6 +40,10 @@
     "canonical_change_candidate_is_not_live_intelligence_observation": true
   },
   "story_grouping_policy": {
+    "manual_reviewed_story_id_allowed": true,
+    "story_id_is_not_canonical_identity": true,
+    "story_id_is_not_causal_claim": true,
+    "repeated_state_observations_may_share_story_id": true,
     "automatic_clustering_allowed": false,
     "story_id_required": false,
     "repeated_reports_do_not_imply_single_story": true,
@@ -108,6 +112,11 @@
       "EXACT_TIMESTAMP",
       "CIVIL_DATE",
       "UNKNOWN"
+    ],
+    "state_as_of_precision": [
+      "EXACT_TIMESTAMP",
+      "CIVIL_DATE",
+      "UNKNOWN"
     ]
   },
   "required_evidence_fields": [
@@ -158,14 +167,18 @@
     "exact_timestamp_requires_utc": true,
     "authoritative_local_event_time_should_be_preserved_when_available": true,
     "local_event_time_requires_iana_timezone_when_supplied": true,
-    "civil_date_must_not_be_upgraded_to_clock_time": true
+    "civil_date_must_not_be_upgraded_to_clock_time": true,
+    "state_as_of_time_is_distinct_from_event_publication_and_observation_time": true,
+    "civil_state_as_of_must_not_be_upgraded_to_clock_time": true
   },
   "revision_policy": {
     "prior_live_observation_preserved_when_revised": true,
     "silent_history_rewrite_prohibited": true,
     "external_data_revision_does_not_require_prior_live_observation": true,
     "data_revision_requires_revision_target_description": true,
-    "corrected_or_retracted_live_observation_requires_revision_reference": true
+    "corrected_or_retracted_live_observation_requires_revision_reference": true,
+    "state_update_is_not_revision": true,
+    "state_update_preserves_prior_snapshot": true
   },
   "public_projection_policy": {
     "observation_projection_allowed": false,
@@ -189,8 +202,11 @@
     "Existing Analysis evidence is not retroactively migrated merely to populate this layer.",
     "Automatic canonical commit and Google Calendar write remain prohibited.",
     "Evidence source-publication time uses explicit precision and may not be upgraded from a civil date to a fabricated clock time.",
-    "AW v0.2 opens only a controlled single-specimen population; a later pressure audit is required before any second observation or broader ingestion.",
-    "Public observation projection and runtime-feed claims remain prohibited in the controlled first-specimen state."
+    "A later as-of snapshot of a developing story is a new state observation, not a correction of the earlier snapshot unless the source explicitly corrects prior facts.",
+    "Manual reviewed story IDs are grouping keys only; they are not Canonical occurrence identities, causal claims or analytical conclusions.",
+    "State-as-of time is separate from event time, source publication time and WORLD SIGNALS observation time; civil dates may not be promoted to synthetic timestamps.",
+    "AX v0.3 allows only the AW Nepal specimen plus two reviewed DRC outbreak snapshots; a later pressure audit is required before any fourth observation or broader ingestion.",
+    "Public observation projection, automatic ingestion and automatic story clustering remain prohibited in AX v0.3."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -203,14 +219,24 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_SINGLE_SPECIMEN",
+    "mode": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 1,
-    "maximum_evidence_count": 2,
+    "maximum_observation_count": 3,
+    "maximum_evidence_count": 4,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "AW opens only enough population authority for one reviewed Nepal physical-shock specimen. A later pressure audit is required before any second observation or broader ingestion."
+    "reason": "AX opens only enough authority to preserve the AW Nepal specimen and add two reviewed as-of snapshots of one DRC Bundibugyo outbreak story. A later pressure audit is required before any fourth observation or broader ingestion."
+  },
+  "aw_checkpoint": {
+    "schema_version": "0.2",
+    "observations_version": "0.2",
+    "evidence_version": "0.2",
+    "population_state": "CONTROLLED_SINGLE_SPECIMEN",
+    "observation_count": 1,
+    "evidence_count": 2,
+    "post_merge_main_sha": "721206169033eb0ceb695075d44fb38e7fa2edc3",
+    "historical_contract": "AW v0.2 opened exactly one reviewed Nepal physical-shock specimen with two official evidence rows while public projection and automatic ingestion remained closed."
   }
 }

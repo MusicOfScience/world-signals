@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.2",
+  "version": "0.3",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_SINGLE_SPECIMEN",
-  "scope_note": "Evidence supports reviewed factual Live Intelligence observations, remains separate from canonical provenance and Analysis evidence, and AW v0.2 is bounded to the first controlled specimen.",
+  "population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+  "scope_note": "Evidence supports a bounded reviewed Live Intelligence store: the AW Nepal shock plus two AX DRC Bundibugyo as-of snapshots. It remains separate from Canonical provenance and Analysis evidence.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -39,6 +39,40 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Official WHO confirmation of the 26 August floods and emergency health-response support."
+    },
+    {
+      "evidence_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "title": "Ebola disease caused by Bundibugyo virus - Democratic Republic of the Congo — Disease Outbreak News 616",
+      "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON616",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-28"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary WHO evidence for the DRC outbreak state as of 26 August 2026: 5,794 confirmed cases, 2,786 confirmed deaths, CFR 48.1%, 60 health zones and six provinces."
+    },
+    {
+      "evidence_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization — Regional Office for Africa",
+      "title": "Ebola Bundibugyo Virus Disease Outbreak Democratic Republic of the Congo | Uganda Weekly External Situation Report 16, data as of 30 August 2026",
+      "url": "https://afro.who.int/countries/uganda/publication/ebola-bundibugyo-virus-disease-outbreak-democratic-republic-congo-uganda-weekly-external-situation",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-30"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary WHO African Region evidence for the later DRC outbreak state as of 30 August 2026: 6,100 confirmed cases, 2,950 confirmed deaths, CFR 48.4%, 60 health zones and six provinces."
     }
   ]
 }

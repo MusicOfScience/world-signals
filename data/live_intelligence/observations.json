@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.2",
+  "version": "0.3",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_SINGLE_SPECIMEN",
+  "population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -35,6 +35,68 @@
         "event_local": "2026-08-26T08:40:00",
         "event_timezone": "Asia/Kathmandu"
       },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+      "observed_at_utc": "2026-09-06T07:40:00Z",
+      "observation_type": "HEALTH_EMERGENCY",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "DRC Bundibugyo outbreak reaches 5,794 confirmed cases as of 26 August",
+      "summary": "WHO reported that, as of 26 August 2026, the Democratic Republic of the Congo had recorded 5,794 confirmed Bundibugyo virus disease cases including 2,786 confirmed deaths, a crude case fatality ratio of 48.1%, across 60 health zones in six provinces. This row preserves that dated epidemiological state and does not infer causes of transmission or response effectiveness.",
+      "domain_tags": [
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "regions": [
+        "Central Africa"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-COD-BVD-WHO-DON616-20260828"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+      "state_as_of": {
+        "precision": "CIVIL_DATE",
+        "as_of_date": "2026-08-26"
+      },
+      "state_update_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+      "observed_at_utc": "2026-09-06T07:41:00Z",
+      "observation_type": "HEALTH_EMERGENCY",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "DRC Bundibugyo outbreak reaches 6,100 confirmed cases as of 30 August",
+      "summary": "WHO African Region reported that, as of 30 August 2026, the Democratic Republic of the Congo had recorded 6,100 confirmed Bundibugyo virus disease cases including 2,950 confirmed deaths, a crude case fatality ratio of 48.4%, across 60 health zones in six provinces. This is a later state of the same developing outbreak, not a correction or retraction of the 26 August snapshot.",
+      "domain_tags": [
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "regions": [
+        "Central Africa"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+      "state_as_of": {
+        "precision": "CIVIL_DATE",
+        "as_of_date": "2026-08-30"
+      },
+      "state_update_of_observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
       "automatic_canonical_commit": false,
       "google_calendar_write": false
     }
