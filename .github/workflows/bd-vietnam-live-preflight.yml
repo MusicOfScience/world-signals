@@ -1,0 +1,120 @@
+name: BD Vietnam-Myanmar Live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bc-vietnam-live-bd
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact post-BC ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          base=667d0fbcc92f937b0cb609d619b664a2a97e8165
+          test "$(git rev-parse origin/main)" = "$base"
+          test "$(git merge-base HEAD origin/main)" = "$base"
+      - name: Compile and simulate BD read-only
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/apply_vietnam_myanmar_live_bd.py tests/test_vietnam_myanmar_live_bd.py
+          python scripts/apply_vietnam_myanmar_live_bd.py --check-only
+      - name: Validate untouched descendant completely
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python scripts/validate_checkpoint_contracts.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q src scripts tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Materialise ephemeral BD target
+        run: |
+          set -euo pipefail
+          python scripts/apply_vietnam_myanmar_live_bd.py --apply
+      - name: Prove exact ephemeral mutation boundary and target
+        run: |
+          set -euo pipefail
+          git diff --name-only | sort > /tmp/actual
+          cat > /tmp/expected <<'EOF'
+          PROJECT_STATUS.md
+          ROADMAP.md
+          data/live_intelligence/evidence_registry.json
+          data/live_intelligence/observations.json
+          data/live_intelligence/schema.json
+          EOF
+          sed -i 's/^          //' /tmp/expected
+          sort -o /tmp/expected /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          git diff --exit-code HEAD -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          load=lambda p: json.loads(Path(p).read_text(encoding='utf-8'))
+          s=load('data/live_intelligence/schema.json')
+          o=load('data/live_intelligence/observations.json')
+          e=load('data/live_intelligence/evidence_registry.json')
+          a=load('data/analysis/event_reviews.json')
+          assert s['version']=='0.5'
+          assert len(o['observations'])==5
+          assert len(e['evidence'])==7
+          assert s['population_policy']['maximum_observation_count']==5
+          assert s['population_policy']['maximum_evidence_count']==7
+          assert s['population_policy']['automatic_ingestion_allowed'] is False
+          assert s['population_policy']['public_observation_projection_allowed'] is False
+          row=next(x for x in o['observations'] if x['observation_id']=='WSLI-GEO-VNM-MMR-SECURITY-20260905-001')
+          assert row['canonical_links']==[]
+          assert row['event_time']=={'precision':'CIVIL_DATE','event_date':'2026-09-05'}
+          ev=next(x for x in e['evidence'] if x['evidence_id']=='WSEV-LI-VNM-MMR-VGP-20260905')
+          assert ev['publication_time']=={'precision':'EXACT_TIMESTAMP','published_at_utc':'2026-09-05T09:16:00Z'}
+          assert sum(len(r.get('live_inputs') or []) for r in a['reviews'])==1
+          assert sum(1 for r in a['reviews'] if r.get('revision_of_analysis_id'))==0
+          PY
+      - name: Validate ephemeral BD descendant completely
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python scripts/validate_checkpoint_contracts.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q src scripts tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Restore and self-remove preflight workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/bd-vietnam-live-preflight.yml
+          git commit -m "BD: remove temporary read-only preflight workflow"
+          git push origin HEAD:feature/post-bc-vietnam-live-bd
