@@ -39,7 +39,7 @@ jobs:
           for old, new in replacements:
               if old not in text:
                   raise SystemExit(f'BC authoring escape anchor missing: {old!r}')
-              text = text.replace(old, new, 1)
+              text = text.replace(old, new)
           path.write_text(text, encoding='utf-8')
           PY
       - name: Apply BC authoring patch
