@@ -1,0 +1,124 @@
+name: WORLD SIGNALS AL post-AK pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-ak-pressure-audit-al
+    paths:
+      - .github/workflows/tmp-post-ak-pressure-audit-al.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-AK base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=72103267f90475b04c80129e03b41b605d4b7f58
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Run current read-only live monitor
+        run: python scripts/run_live_monitor.py
+
+      - name: Audit current Analysis pressure
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import sys
+          from collections import Counter
+          from pathlib import Path
+
+          sys.path.insert(0, 'src')
+          from world_signals.analysis import analysis_population_readiness, validate_analysis
+
+          def load(path):
+              return json.loads(Path(path).read_text(encoding='utf-8'))
+
+          canonical = load('data/canonical/registry.json')
+          sources = load('data/sources/registry.json')
+          ledger = load('data/changes/ledger.json')
+          overlay = load('data/coverage/biosecurity_overlay.json')
+          schema = load('data/analysis/schema.json')
+          reviews = load('data/analysis/event_reviews.json')
+          evidence = load('data/analysis/evidence_registry.json')
+          monitor = load('artifacts/live-monitor.json')
+
+          report = validate_analysis(schema, evidence, reviews, canonical)
+          assert report.ok, report.errors
+          readiness = analysis_population_readiness(schema, reviews, canonical)
+
+          records = canonical.get('records', [])
+          reviewed = {r.get('occurrence_id') for r in reviews.get('reviews', [])}
+          eligible = [r for r in records if r.get('lifecycle_status') == 'COMPLETED' and r.get('analysis_eligible') is True]
+          unreviewed = [r for r in eligible if r.get('occurrence_id') not in reviewed]
+          exact = [
+              (review.get('analysis_id'), movement.get('movement_id'))
+              for review in reviews.get('reviews', [])
+              for movement in (review.get('what_moved') or [])
+              if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
+          ]
+
+          print('AL_POST_AK_STATE')
+          print('canonical', canonical.get('version'), len(records))
+          print('sources', sources.get('version'), len(sources.get('sources', [])))
+          print('ledger', ledger.get('version'), len(ledger.get('changes', [])))
+          print('overlay', overlay.get('version'), overlay.get('canonical_checkpoint'))
+          print('schema', schema.get('version'))
+          print('reviews', reviews.get('version'), len(reviews.get('reviews', [])))
+          print('evidence', evidence.get('version'), len(evidence.get('evidence', [])))
+          print('readiness', json.dumps(readiness, sort_keys=True))
+          print('exact_rows', len(exact), exact)
+          print('live_monitor_status', monitor.get('status'))
+          print('live_monitor_candidates', monitor.get('candidate_count'))
+          print('live_monitor_health', json.dumps(monitor.get('source_health_summary') or {}, sort_keys=True))
+          print('live_monitor_observations', json.dumps(monitor.get('observations') or [], sort_keys=True))
+          print('unreviewed_count', len(unreviewed))
+          for row in unreviewed:
+              print('UNREVIEWED', json.dumps({
+                  'occurrence_id': row.get('occurrence_id'),
+                  'series_id': row.get('series_id'),
+                  'category': row.get('category'),
+                  'event_type': row.get('event_type'),
+                  'institution': row.get('institution'),
+                  'region': row.get('region'),
+                  'start_local': row.get('start_local'),
+                  'timezone': row.get('timezone'),
+                  'start_utc': row.get('start_utc'),
+                  'timing_precision': row.get('timing_precision'),
+              }, sort_keys=True))
+
+          completed_categories = Counter(r.get('category') for r in eligible)
+          reviewed_event_types = Counter(
+              next((c.get('event_type') for c in records if c.get('occurrence_id') == rid), None)
+              for rid in reviewed
+          )
+          print('completed_category_histogram', json.dumps(completed_categories, sort_keys=True))
+          print('reviewed_event_type_histogram', json.dumps(reviewed_event_types, sort_keys=True))
+          PY
+
+      - name: Upload read-only audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-post-ak-pressure-audit-al-${{ github.run_id }}
+          path: |
+            artifacts/live-monitor.json
+            review_candidates/live
+          if-no-files-found: error
+          retention-days: 30
