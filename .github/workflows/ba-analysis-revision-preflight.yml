@@ -1,4 +1,4 @@
-name: BA Analysis revision preflight
+name: BA AZ status descendant repair
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  preflight:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -25,128 +25,63 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
-      - name: Validate untouched post-AZ descendant
+      - name: Apply exact narrow AZ status descendant repair
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/validate_registry.py
-          python scripts/validate_live_intelligence.py
-          python scripts/validate_analysis.py
-          python -m unittest discover -s tests -v
-          python -m py_compile \
-            scripts/fetch_latest_monitor_snapshot.py \
-            scripts/fetch_retained_review_state.py \
-            scripts/validate_live_intelligence.py \
-            scripts/validate_analysis.py \
-            scripts/apply_analysis_revision_contract_ba.py \
-            scripts/apply_japan_fies_live_analysis_az.py \
-            src/world_signals/live_intelligence.py \
-            src/world_signals/analysis.py \
-            src/world_signals/analysis_revision.py \
-            src/world_signals/analysis_revision_projection.py \
-            src/world_signals/live_analysis_bridge.py
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-          python scripts/build_site.py
-          rm -rf docs
-          test -z "$(git status --porcelain --untracked-files=no)"
-      - name: Materialise BA target ephemerally
-        shell: bash
-        run: |
-          set -euo pipefail
-          WORLD_SIGNALS_BA_ALLOW_WRITE=1 python scripts/apply_analysis_revision_contract_ba.py --apply
-      - name: Validate materialised BA target exhaustively
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/validate_registry.py
-          python scripts/validate_live_intelligence.py
-          python scripts/validate_analysis.py
-          python -m unittest discover -s tests -v
-          python -m py_compile \
-            scripts/fetch_latest_monitor_snapshot.py \
-            scripts/fetch_retained_review_state.py \
-            scripts/validate_live_intelligence.py \
-            scripts/validate_analysis.py \
-            scripts/apply_analysis_revision_contract_ba.py \
-            scripts/apply_japan_fies_live_analysis_az.py \
-            src/world_signals/live_intelligence.py \
-            src/world_signals/analysis.py \
-            src/world_signals/analysis_revision.py \
-            src/world_signals/analysis_revision_projection.py \
-            src/world_signals/live_analysis_bridge.py
-          node --check web/app.js
-          node --check web/horizon.js
-          node --check web/native-calendar.js
-          node --check web/history.js
-          node --check web/operations.js
-          node --check web/biosecurity.js
-          node --check web/analysis.js
-          python scripts/build_site.py
-          rm -rf docs
-      - name: Prove exact BA boundary and protected identity
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/apply_analysis_revision_contract_ba.py --check-only
           python - <<'PY'
-          import json, subprocess, sys
+          from pathlib import Path
+          p=Path('scripts/apply_japan_fies_live_analysis_az.py')
+          text=p.read_text()
+          old='''def target_status(current: str) -> str:\n    if "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK" in current:\n        return current\n    require("# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION" in current, "AZ PROJECT_STATUS title drift")\n'''
+          new='''def target_status(current: str) -> str:\n    if "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK" in current:\n        return current\n    ba_title = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"\n    if ba_title in current:\n        require(\n            "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**" in current,\n            "AZ PROJECT_STATUS BA descendant lost Live v0.4 checkpoint",\n        )\n        require(\n            "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**" in current,\n            "AZ PROJECT_STATUS BA descendant lost Analysis v0.17 population",\n        )\n        require(\n            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**" in current,\n            "AZ PROJECT_STATUS BA descendant lost first production Live input",\n        )\n        return current\n    require("# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION" in current, "AZ PROJECT_STATUS title drift")\n'''
+          assert text.count(old)==1, text.count(old)
+          patched=text.replace(old,new,1)
+          assert patched.count(new)==1
+          p.write_text(patched)
+          PY
+          test "$(git diff --name-only)" = "scripts/apply_japan_fies_live_analysis_az.py"
+          python -m py_compile scripts/apply_japan_fies_live_analysis_az.py
+          python -m unittest tests.test_japan_fies_live_analysis_az -v
+      - name: Prove exact AZ status transform and BA descendant pass-through
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import sys
           from pathlib import Path
           ROOT=Path('.')
-          sys.path.insert(0,str(ROOT/'src'))
-          from world_signals.analysis_revision import production_analysis_revision_count
-          from world_signals.live_analysis_bridge import production_live_input_count
-          def load(p): return json.loads((ROOT/p).read_text())
-          schema=load('data/analysis/schema.json')
-          reviews=load('data/analysis/event_reviews.json')
-          evidence=load('data/analysis/evidence_registry.json')
-          live=load('data/live_intelligence/observations.json')
-          canonical=load('data/canonical/registry.json')
-          assert schema['version']=='0.7'
-          policy=schema['analysis_revision_policy']
-          assert policy['mode']=='FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS'
-          assert policy['production_analysis_revisions_allowed'] is False
-          assert policy['public_revision_metadata_projection_allowed'] is False
-          assert policy['automatic_latest_analysis_selection_allowed'] is False
-          assert production_analysis_revision_count(reviews)==0
-          assert production_live_input_count(reviews)==1
-          assert len(reviews['reviews'])==21 and len(evidence['evidence'])==95
-          assert len(live['observations'])==4 and len(canonical['records'])==688
-          exact=sum(1 for r in reviews['reviews'] for m in (r.get('what_moved') or []) if m.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
-          assert exact==0
-          expected={'data/analysis/schema.json','PROJECT_STATUS.md','ROADMAP.md'}
-          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
-          assert changed==expected,(changed,expected)
-          assert not (ROOT/'docs').exists()
+          sys.path.insert(0,str(ROOT/'scripts'))
+          import apply_japan_fies_live_analysis_az as az
+          current=(ROOT/'PROJECT_STATUS.md').read_text()
+          assert '# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK' in current
+          assert az.target_status(current)==current
+          ba=current.replace(
+              '# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK',
+              '# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION',
+              1,
+          )
+          ba=ba.replace('- Analysis schema: **v0.6**','- Analysis schema: **v0.7**',1)
+          live_line='- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**\n'
+          ba=ba.replace(live_line,live_line+'- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**\n',1)
+          assert az.target_status(ba)==ba
+          broken=ba.replace('4 reviewed internal observations','999 reviewed internal observations',1)
+          try:
+              az.target_status(broken)
+          except SystemExit:
+              pass
+          else:
+              raise AssertionError('AZ helper accepted BA descendant without inherited Live checkpoint')
           PY
-          for p in \
-            data/canonical/registry.json \
-            data/canonical/schema.json \
-            data/sources/registry.json \
-            data/changes/ledger.json \
-            data/coverage/biosecurity_overlay.json \
-            data/monitor/expectations.json \
-            data/monitor/operations_policy.json \
-            data/live_intelligence/schema.json \
-            data/live_intelligence/observations.json \
-            data/live_intelligence/evidence_registry.json \
-            data/analysis/event_reviews.json \
-            data/analysis/evidence_registry.json; do
-              test "$(git show HEAD:"$p" | sha256sum | cut -d' ' -f1)" = "$(sha256sum "$p" | cut -d' ' -f1)"
-          done
-      - name: Restore target and self-remove preflight
+      - name: Commit repair and self-remove workflow
         shell: bash
         run: |
           set -euo pipefail
-          git checkout -- data/analysis/schema.json PROJECT_STATUS.md ROADMAP.md
-          test -z "$(git diff --name-only)"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/apply_japan_fies_live_analysis_az.py
+          test "$(git diff --cached --name-only)" = "scripts/apply_japan_fies_live_analysis_az.py"
+          git commit -m 'BA: relax stale AZ status descendant ceiling'
           git rm .github/workflows/ba-analysis-revision-preflight.yml
-          git commit -m 'BA: remove temporary revision preflight workflow'
+          git commit -m 'BA: remove temporary AZ status repair workflow'
           git push origin HEAD:feature/post-az-analysis-revision-contract-ba
