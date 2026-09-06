@@ -1,0 +1,175 @@
+name: WORLD SIGNALS AP WHA79 health governance analysis transaction
+
+on:
+  push:
+    branches:
+      - feature/post-ao-pressure-audit-ap
+    paths:
+      - .github/workflows/tmp-who-wha79-health-governance-analysis-ap-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-70 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=fb795411b217a05a94874e06f30fa44d7fc3ff8d
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Prove read-only preflight workflow is gone
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e .github/workflows/tmp-who-wha79-health-governance-analysis-ap-preflight.yml
+
+      - name: Read-only fail-closed AP simulation
+        run: python scripts/apply_who_wha79_health_governance_analysis_ap.py --check
+
+      - name: Run AP regressions before write
+        run: python -m unittest tests.test_who_wha79_health_governance_analysis_ap -v
+
+      - name: Prove repaired AO descendant checkpoint before write
+        run: python -m unittest tests.test_unfccc_sb64_climate_governance_analysis_ao -v
+
+      - name: Controlled Analysis write
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_AP: '1'
+        run: python scripts/apply_who_wha79_health_governance_analysis_ap.py --write
+
+      - name: Validate canonical registry after write
+        run: python scripts/validate_registry.py
+
+      - name: Validate Analysis layer after write
+        run: python scripts/validate_analysis.py
+
+      - name: Re-run AP regressions against written state
+        run: python -m unittest tests.test_who_wha79_health_governance_analysis_ap -v
+
+      - name: Re-prove AO descendant checkpoint against AP state
+        run: python -m unittest tests.test_unfccc_sb64_climate_governance_analysis_ao -v
+
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile repository Python
+        run: python -m compileall -q scripts src tests
+
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Build static site and verify AP Analysis projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          projection = json.loads(Path('docs/data/analysis.json').read_text(encoding='utf-8'))
+          metadata = projection.get('metadata') or {}
+          assert metadata.get('schema_version') == '0.4', metadata
+          assert metadata.get('review_count') == 18, metadata
+          target = next(
+              (row for row in projection.get('reviews', []) if row.get('analysis_id') == 'WSAN-HEALTH-WHA79-20260523-001'),
+              None,
+          )
+          assert target is not None
+          assert target.get('what_moved') == [], target.get('what_moved')
+          assert (target.get('what_surprised') or {}).get('status') == 'NOT_ESTABLISHED'
+          assert (target.get('what_appears_connected') or {}).get('interaction_type') == 'LEGAL_OR_OPERATIONAL_DEPENDENCY'
+          assert (target.get('what_appears_connected') or {}).get('causal_status') == 'NOT_A_CAUSAL_CLAIM'
+          assert (target.get('second_order_effects') or {}).get('status') == 'OBSERVED'
+          canonical = target.get('canonical') or {}
+          assert canonical.get('event_type') == 'HEALTH_GOVERNANCE_EVENT', canonical
+          assert canonical.get('start_local') == '2026-05-18', canonical
+          assert canonical.get('end_local') == '2026-05-23', canonical
+          assert canonical.get('source_timezone') == 'Europe/Zurich', canonical
+          assert canonical.get('start_utc') is None, canonical
+          assert canonical.get('end_utc') is None, canonical
+          print('AP_PUBLIC_ANALYSIS_PROJECTION_OK')
+          PY
+
+      - name: Prove production exact-series population remains zero
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reviews = json.loads(Path('data/analysis/event_reviews.json').read_text(encoding='utf-8'))
+          exact = [
+              (review.get('analysis_id'), movement.get('movement_id'))
+              for review in reviews.get('reviews', [])
+              for movement in (review.get('what_moved') or [])
+              if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
+          ]
+          assert exact == [], exact
+          print('AP_EXACT_TIMESTAMP_SERIES_ROWS=0')
+          PY
+
+      - name: Audit protected datasets and exact write boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=fb795411b217a05a94874e06f30fa44d7fc3ff8d
+          git diff --exit-code "$BASE" -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+          python - <<'PY'
+          import subprocess
+          rows = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
+          changed = {row[3:] for row in rows if row.strip()}
+          expected = {
+              'data/analysis/event_reviews.json',
+              'data/analysis/evidence_registry.json',
+              'data/analysis/WHO_WHA79_HEALTH_GOVERNANCE_ANALYSIS_AP_TRANSACTION_AUDIT_v0.1.md',
+          }
+          assert changed == expected, {'expected': sorted(expected), 'actual': sorted(changed)}
+          print('AP_WORKTREE_MUTATION_BOUNDARY_OK', sorted(changed))
+          PY
+
+      - name: Commit reviewed transaction and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'WORLD SIGNALS transaction gate'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/analysis/WHO_WHA79_HEALTH_GOVERNANCE_ANALYSIS_AP_TRANSACTION_AUDIT_v0.1.md
+          git rm .github/workflows/tmp-who-wha79-health-governance-analysis-ap-transaction.yml
+          git diff --cached --check
+          git commit -m 'AP: add WHO WHA79 health-governance analysis specimen'
+          git push origin HEAD:feature/post-ao-pressure-audit-ap
