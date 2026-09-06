@@ -1,0 +1,89 @@
+name: WORLD SIGNALS AN South Korea election analysis preflight
+
+on:
+  push:
+    branches:
+      - feature/post-am-pressure-audit-an
+    paths:
+      - .github/workflows/tmp-south-korea-local-election-analysis-an-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-68 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=d9dc06da84608f74297f94c426ab77706d9223e0
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Read-only fail-closed AN simulation
+        run: python scripts/apply_south_korea_local_election_analysis_an.py --check
+
+      - name: Exercise AN regressions
+        run: python -m unittest tests.test_south_korea_local_election_analysis_an -v
+
+      - name: Validate current canonical registry
+        run: python scripts/validate_registry.py
+
+      - name: Validate current Analysis layer
+        run: python scripts/validate_analysis.py
+
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile repository Python
+        run: python -m compileall -q scripts src tests
+
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Build current static site and prove no premature AN publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          projection = json.loads(Path('docs/data/analysis.json').read_text(encoding='utf-8'))
+          metadata = projection.get('metadata') or {}
+          assert metadata.get('schema_version') == '0.4', metadata
+          assert metadata.get('review_count') == 15, metadata
+          assert not any(
+              row.get('analysis_id') == 'WSAN-KR-LGE-20260603-001'
+              for row in projection.get('reviews', [])
+          )
+          print('AN_PREFLIGHT_CURRENT_PROJECTION_OK')
+          PY
+
+      - name: Prove preflight made no tracked mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain=v1)"
+          echo AN_PREFLIGHT_WORKTREE_CLEAN
