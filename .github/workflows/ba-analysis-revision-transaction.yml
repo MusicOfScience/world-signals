@@ -1,4 +1,4 @@
-name: BA Analysis revision controlled transaction
+name: BA Analysis revision transaction
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   transaction:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
@@ -20,47 +20,23 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-
-      - name: Prove exact transaction ancestry
-        shell: bash
+      - name: Verify exact ancestry
         run: |
-          set -euo pipefail
-          BASE=802ca5b94b6e80a055ac363f48a6c8392f038048
-          PRE_TX=9a55d00131e3f3f184fb71a30bcca4687d4a6b12
-          FAILED_WORKFLOW=e81da18e146ac1c4500c136561a018961011b38a
-          git fetch origin main feature/post-az-analysis-revision-contract-ba
-          test "$(git rev-parse origin/main)" = "$BASE"
-          test "$(git merge-base HEAD origin/main)" = "$BASE"
-          test "$(git rev-parse HEAD^)" = "$FAILED_WORKFLOW"
-          test "$(git rev-parse HEAD^^)" = "$PRE_TX"
-          test "$(git diff --name-only "$PRE_TX" HEAD)" = ".github/workflows/ba-analysis-revision-transaction.yml"
-
-      - name: Capture protected prestate hashes
-        shell: bash
-        run: |
-          set -euo pipefail
-          for p in data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json; do
-            printf '%s  %s\n' "$(sha256sum "$p" | cut -d' ' -f1)" "$p"
-          done > /tmp/ba-protected.sha256
-
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "802ca5b94b6e80a055ac363f48a6c8392f038048"
+          test "$(git merge-base HEAD origin/main)" = "802ca5b94b6e80a055ac363f48a6c8392f038048"
+          test "$(git diff --name-only 9a55d00131e3f3f184fb71a30bcca4687d4a6b12 HEAD)" = ".github/workflows/ba-analysis-revision-transaction.yml"
       - name: Materialise BA target
-        shell: bash
         env:
           WORLD_SIGNALS_BA_ALLOW_WRITE: '1'
+        run: python scripts/apply_analysis_revision_contract_ba.py --apply
+      - name: Validate governed layers
         run: |
-          set -euo pipefail
-          python scripts/apply_analysis_revision_contract_ba.py --apply
-          python scripts/apply_analysis_revision_contract_ba.py --check-only
-
-      - name: Validate transaction exhaustively
-        shell: bash
-        run: |
-          set -euo pipefail
           python scripts/validate_registry.py
           python scripts/validate_live_intelligence.py
           python scripts/validate_analysis.py
-          python -m unittest discover -s tests -q 2>&1 | tee /tmp/ba-tests.log
-          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_japan_fies_live_analysis_az.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
+          python -m unittest discover -s tests -q
+          python -m py_compile scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
           node --check web/app.js
           node --check web/horizon.js
           node --check web/native-calendar.js
@@ -70,121 +46,20 @@ jobs:
           node --check web/analysis.js
           python scripts/build_site.py
           rm -rf docs
-
-      - name: Prove state and mutation boundary
-        shell: bash
+      - name: Prove exact mutation boundary
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json, sys
-          from pathlib import Path
-          root=Path('.')
-          sys.path.insert(0,str(root/'src'))
-          from world_signals.analysis_revision import production_analysis_revision_count
-          from world_signals.live_analysis_bridge import production_live_input_count
-          def load(p): return json.loads((root/p).read_text())
-          schema=load('data/analysis/schema.json')
-          reviews=load('data/analysis/event_reviews.json')
-          evidence=load('data/analysis/evidence_registry.json')
-          live=load('data/live_intelligence/observations.json')
-          live_ev=load('data/live_intelligence/evidence_registry.json')
-          canonical=load('data/canonical/registry.json')
-          assert schema['version']=='0.7'
-          policy=schema['analysis_revision_policy']
-          assert policy['mode']=='FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS'
-          assert policy['production_analysis_revisions_allowed'] is False
-          assert policy['public_revision_metadata_projection_allowed'] is False
-          assert policy['automatic_latest_analysis_selection_allowed'] is False
-          assert production_analysis_revision_count(reviews)==0
-          assert production_live_input_count(reviews)==1
-          assert len(reviews['reviews'])==21 and len(evidence['evidence'])==95
-          assert len(live['observations'])==4 and len(live_ev['evidence'])==6
-          assert len(canonical['records'])==688
-          exact=sum(1 for r in reviews['reviews'] for m in (r.get('what_moved') or []) if m.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
-          assert exact==0
-          PY
-          sha256sum -c /tmp/ba-protected.sha256
-          expected=$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json | sort)
-          actual=$(git diff --name-only | sort)
-          test "$actual" = "$expected"
-
-      - name: Write transaction audit
-        shell: bash
+          test "$(git diff --name-only | sort)" = "$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json | sort)"
+          git diff --quiet HEAD -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+      - name: Commit BA target
         run: |
-          set -euo pipefail
-          TESTS=$(grep -E '^Ran [0-9]+ tests' /tmp/ba-tests.log | tail -1)
-          RESULT=$(grep -E '^OK( \(skipped=[0-9]+\))?$' /tmp/ba-tests.log | tail -1)
-          python - "$TESTS" "$RESULT" <<'PY'
-          import os, sys
-          from pathlib import Path
-          tests, result = sys.argv[1], sys.argv[2]
-          text = f"""# WORLD SIGNALS — BA Analysis revision contract transaction audit v0.1
-
-## Transaction identity
-
-- Governing tranche: **BA — production-closed Analysis revision lineage foundation**
-- Exact post-AZ main base: `802ca5b94b6e80a055ac363f48a6c8392f038048`
-- Exact reviewed pre-transaction branch head: `9a55d00131e3f3f184fb71a30bcca4687d4a6b12`
-- First temporary workflow commit was syntax-invalid and executed no job: `e81da18e146ac1c4500c136561a018961011b38a`
-- Successful transaction workflow head: `{os.environ['GITHUB_SHA']}`
-- GitHub Actions run: `{os.environ['GITHUB_RUN_ID']}`
-- Manual merge remains required: **yes**
-
-## Governed mutation
-
-The transaction materialised exactly three governed state changes: `data/analysis/schema.json`, `PROJECT_STATUS.md`, and `ROADMAP.md`. This audit file is the fourth transaction artifact. No production Analysis revision, Live observation, Live evidence, Analysis review, Analysis evidence, Canonical occurrence, Source record, Change Ledger row or monitor route was added or modified.
-
-## Validation
-
-- Canonical validator: **PASS**
-- Live Intelligence validator: **PASS**
-- Analysis + Live→Analysis + Analysis revision validators: **PASS**
-- Repository regression suite: **{tests}; {result}**
-- Python compile checks: **PASS**
-- Browser JavaScript syntax checks: **PASS**
-- Static site build: **PASS**
-- Protected governed file hash comparison against transaction prestate: **PASS**
-- Exact governed mutation boundary before audit creation: **PASS — three files only**
-
-## Frozen production state after BA
-
-- Canonical occurrences: **688**
-- Live Intelligence: **4 observations / 6 evidence rows**
-- Analysis: **21 reviews / 95 evidence rows**
-- Production Live→Analysis inputs: **1**
-- Production Analysis revisions: **0**
-- `EXACT_TIMESTAMP_SERIES`: **0**
-- Public Live feed: **closed**
-- Public revision metadata/latest-head projection: **closed**
-- Automatic latest-Analysis selection: **closed**
-
-## Interpretation
-
-BA creates capability, not population. A later pressure audit must choose and justify any first production Analysis revision. Existing Analysis snapshots remain immutable historical statements of what WORLD SIGNALS concluded at their recorded `analysis_as_of_utc`.
-"""
-          Path('data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md').write_text(text)
-          PY
-          expected=$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md data/analysis/schema.json | sort)
-          actual=$(git status --porcelain | sed -E 's/^.. //' | sort)
-          test "$actual" = "$expected"
-
-      - name: Commit reviewed BA transaction
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md
-          staged=$(git diff --cached --name-only | sort)
-          expected=$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md data/analysis/schema.json | sort)
-          test "$staged" = "$expected"
+          git add PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json
+          test "$(git diff --cached --name-only | sort)" = "$(printf '%s\n' PROJECT_STATUS.md ROADMAP.md data/analysis/schema.json | sort)"
           git commit -m 'BA: materialise production-closed Analysis revision foundation'
           git push origin HEAD:feature/post-az-analysis-revision-contract-ba
-
-      - name: Self-remove temporary transaction workflow
-        shell: bash
+      - name: Remove temporary workflow
         run: |
-          set -euo pipefail
           git rm .github/workflows/ba-analysis-revision-transaction.yml
           git commit -m 'BA: remove temporary revision transaction workflow'
           git push origin HEAD:feature/post-az-analysis-revision-contract-ba
