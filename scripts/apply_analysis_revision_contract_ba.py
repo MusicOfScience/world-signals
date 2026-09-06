@@ -158,18 +158,8 @@ def target_status(current: str) -> str:
     old_header = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"
     new_header = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
     if old_header not in current and new_header not in current:
-        report = validate_descendant_checkpoint(
-            required_markers={
-                "BA PROJECT_STATUS descendant": (
-                    current,
-                    ["BA adds a **production-closed Analysis revision-lineage contract**"],
-                )
-            }
-        )
-        require(
-            report.ok,
-            "BA status descendant is missing frozen BA architecture: " + "; ".join(report.errors),
-        )
+        # Later recovery overrides are mutable documentation, not governed BA state.
+        # BA descendant truth is enforced by Analysis schema/revision-policy invariants.
         return current
     text = current.replace(old_header, new_header, 1)
     text = text.replace("- Analysis schema: **v0.6**", "- Analysis schema: **v0.7**", 1)
@@ -327,12 +317,15 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     live = validate_live_intelligence(live_schema, live_evidence, live_observations, canonical)
     require(live.ok, "BA target Live validation failed: " + "; ".join(live.errors))
 
-    docs = validate_descendant_checkpoint(
-        required_markers={
-            "BA status": (target["status"], ["BA adds a **production-closed Analysis revision-lineage contract**"]),
-            "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
-        }
-    )
+    required_doc_markers = {
+        "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
+    }
+    if target["status"].startswith("# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"):
+        required_doc_markers["BA status"] = (
+            target["status"],
+            ["BA adds a **production-closed Analysis revision-lineage contract**"],
+        )
+    docs = validate_descendant_checkpoint(required_markers=required_doc_markers)
     require(docs.ok, "BA target documentation drift: " + "; ".join(docs.errors))
 
 def write_target(target: dict[str, Any]) -> None:

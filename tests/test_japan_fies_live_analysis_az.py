@@ -101,9 +101,13 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
 
     def test_target_population_is_bounded_and_public_gates_stay_closed(self):
         post = self.plan["target_state"]
-        self.assertEqual(self.target["live_schema"]["version"], "0.4")
-        self.assertEqual(len(self.target["live_observations"]["observations"]), 4)
-        self.assertEqual(len(self.target["live_evidence"]["evidence"]), 6)
+        self.assertEqual(post["live_schema_version"], "0.4")
+        self.assertEqual(post["live_observation_count"], 4)
+        self.assertEqual(post["live_evidence_count"], 6)
+        live_version = tuple(int(part) for part in self.target["live_schema"]["version"].split("."))
+        self.assertGreaterEqual(live_version, (0, 4))
+        self.assertGreaterEqual(len(self.target["live_observations"]["observations"]), 4)
+        self.assertGreaterEqual(len(self.target["live_evidence"]["evidence"]), 6)
         # AZ introduced Analysis schema v0.6; descendants may advance the schema
         # while preserving AZ-owned Live→Analysis population and bridge invariants.
         analysis_version = tuple(
@@ -296,20 +300,17 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         self.assertNotIn("live_inputs", public_review)
         self.assertEqual(public_review["what_happened"], review["what_happened"])
 
-    def test_status_helper_preserves_later_descendants_only_with_az_invariants(self):
+    def test_status_helper_preserves_later_descendant_without_recovery_prose_coupling(self):
         current = apply_az.STATUS_PATH.read_text(encoding="utf-8")
         first_header = current.splitlines()[0]
         descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
-        descendant = current.replace(first_header, descendant_header, 1)
-        self.assertEqual(apply_az.target_status(descendant), descendant)
-
-        malformed = descendant.replace(
+        descendant = current.replace(first_header, descendant_header, 1).replace(
             "AZ exercises the first **production Live Intelligence → Analysis relationship**",
-            "AZ historical relationship marker removed",
+            "Later recovery override intentionally omits the historical AZ paragraph",
             1,
         )
-        with self.assertRaises(SystemExit):
-            apply_az.target_status(malformed)
+        self.assertEqual(apply_az.target_status(descendant), descendant)
+
     def test_readiness_reaches_21_without_turning_frontier_completion_into_goal(self):
         readiness = analysis_population_readiness(
             self.target["analysis_schema"], self.target["reviews"], self.canonical

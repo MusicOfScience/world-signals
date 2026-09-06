@@ -108,6 +108,13 @@ AX also makes state-as-of time explicit and distinct from event, publication and
 
 AZ completed the required pre-fourth-observation audit before adding the Japan FIES specimen. Before any fifth observation or broader ingestion, run another pressure audit.
 
+
+### BD — fifth Live geopolitical specimen — DONE / BOUNDED
+
+BD selects the 5 September 2026 Vietnam-Myanmar defence/security agreement as the fifth pressure-audited Live observation. It is stored as `GEOPOLITICAL_DEVELOPMENT` with one primary Government of Viet Nam evidence row and **zero Canonical links**: an unscheduled current development does not acquire a synthetic Canonical identity merely to make downstream linkage easier.
+
+The official article supplies an exact publication time, preserved independently, but describes the leaders' meeting only as occurring on 5 September / Saturday morning. BD therefore keeps event time at `CIVIL_DATE` and does not fabricate a summit timestamp. Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Calendar writes remain closed. A sixth Live observation requires another pressure audit.
+
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
 AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.

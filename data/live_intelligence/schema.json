@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.4",
+  "version": "0.5",
   "reference_date": "2026-09-06",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -209,7 +209,12 @@
     "AZ v0.4 adds exactly one reviewed ECONOMIC_DATA_OBSERVATION for Japan July 2026 FIES and does not convert the same release's retrospective April-June data-vintage note into synthetic prior Live history.",
     "A scheduled Live economic-data observation may link OUTCOME_OF a real completed Canonical occurrence without changing Canonical identity, provenance or timing.",
     "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in AZ v0.4.",
-    "A fifth Live observation or broader ingestion requires another pressure audit."
+    "AZ v0.4 remains the frozen four-observation/six-evidence checkpoint; BD is the separately pressure-audited fifth observation.",
+    "BD v0.5 adds one primary-confirmed Vietnam-Myanmar GEOPOLITICAL_DEVELOPMENT with zero Canonical links; absence of a scheduled Canonical identity is not repaired by invention.",
+    "BD preserves the 5 September summit as CIVIL_DATE event time while retaining the source's independently explicit publication timestamp; publication time is not event time.",
+    "BD makes no causal, strategic-alignment, legitimacy, conflict-effect or market-attribution claim.",
+    "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in BD v0.5.",
+    "A sixth Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -222,15 +227,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
+    "mode": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 4,
-    "maximum_evidence_count": 6,
+    "maximum_observation_count": 5,
+    "maximum_evidence_count": 7,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "AZ adds exactly one reviewed Japan FIES economic-data observation with a real OUTCOME_OF Canonical link and two primary-official Live evidence rows. Further Live population requires another pressure audit."
+    "reason": "BD adds exactly one pressure-audited Vietnam-Myanmar GEOPOLITICAL_DEVELOPMENT with one primary-official evidence row and zero Canonical links."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -251,5 +256,15 @@
     "evidence_count": 4,
     "post_merge_main_sha": "0a7608ab56116d0f65ffd1492a3da87bcbf35f47",
     "historical_contract": "AX v0.3 preserved the AW Nepal shock and added two reviewed DRC evolving-state snapshots while public projection, automatic ingestion and automatic story clustering remained closed."
+  },
+  "az_checkpoint": {
+    "schema_version": "0.4",
+    "observations_version": "0.4",
+    "evidence_version": "0.4",
+    "population_state": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
+    "observation_count": 4,
+    "evidence_count": 6,
+    "post_merge_main_sha": "802ca5b94b6e80a055ac363f48a6c8392f038048",
+    "historical_contract": "AZ v0.4 preserved AW/AX and added the first Canonical-linked economic-data Live observation, with public projection and automatic ingestion closed."
   }
 }

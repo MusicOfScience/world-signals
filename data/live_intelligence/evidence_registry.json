@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.4",
+  "version": "0.5",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through AZ. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
+  "population_state": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through BD. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -108,6 +108,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Official monthly table reports July real consumption y/y -3.6% and seasonally adjusted m/m +0.5%. It explicitly states that April-June 2026 real-change figures were retrospectively revised with the CPI 2025-base revision."
+    },
+    {
+      "evidence_id": "WSEV-LI-VNM-MMR-VGP-20260905",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of Viet Nam — Government News",
+      "title": "Viet Nam, Myanmar agree to transform defense-security cooperation into key pillar of bilateral ties",
+      "url": "https://en.baochinhphu.vn/viet-nam-myanmar-agree-to-transform-defense-security-cooperation-into-key-pillar-of-bilateral-ties-111260905161629675.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "published_at_utc": "2026-09-05T09:16:00Z"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary Government of Viet Nam report published at 16:16 GMT+7 on 5 September 2026 (09:16 UTC). It states that the leaders agreed to make defence and security cooperation a key pillar of bilateral relations and identifies specific cooperation areas. The article publication clock time is not treated as the summit event time."
     }
   ]
 }

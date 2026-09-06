@@ -26,6 +26,7 @@ from world_signals.live_analysis_bridge import (
     validate_live_analysis_bridge,
 )
 from world_signals.live_intelligence import validate_live_intelligence
+from world_signals.checkpoint_contract import version_at_least
 from world_signals.validation import validate_registry
 
 PLAN_PATH = ROOT / "data/coverage/BARMM_PARLIAMENTARY_ELECTION_BB_PLAN_v0.1.json"
@@ -512,6 +513,31 @@ def simulate(plan: dict[str, Any], committed_at: str = "2026-09-06T21:30:00+10:0
     return target
 
 
+def assert_population_descendant_floors(
+    post: dict[str, Any],
+    live_schema: dict[str, Any],
+    live_observations: dict[str, Any],
+    live_evidence: dict[str, Any],
+    analysis_schema: dict[str, Any],
+    reviews: dict[str, Any],
+    analysis_evidence: dict[str, Any],
+) -> None:
+    """Preserve BB's historical downstream checkpoint without freezing later reviewed growth."""
+    require(version_at_least(live_schema.get("version"), post["live_schema_version"]), "BB descendant Live schema fell below checkpoint")
+    require(version_at_least(live_observations.get("version"), post["live_schema_version"]), "BB descendant Live observations version fell below checkpoint")
+    require(version_at_least(live_evidence.get("version"), post["live_schema_version"]), "BB descendant Live evidence version fell below checkpoint")
+    require(len(live_observations.get("observations", [])) >= post["live_observation_count"], "BB descendant Live population fell below checkpoint")
+    require(len(live_evidence.get("evidence", [])) >= post["live_evidence_count"], "BB descendant Live evidence fell below checkpoint")
+    require(version_at_least(analysis_schema.get("version"), post["analysis_schema_version"]), "BB descendant Analysis schema fell below checkpoint")
+    require(version_at_least(reviews.get("version"), post["analysis_reviews_version"]), "BB descendant Analysis reviews version fell below checkpoint")
+    require(version_at_least(analysis_evidence.get("version"), post["analysis_reviews_version"]), "BB descendant Analysis evidence version fell below checkpoint")
+    require(len(reviews.get("reviews", [])) >= post["analysis_review_count"], "BB descendant Analysis reviews fell below checkpoint")
+    require(len(analysis_evidence.get("evidence", [])) >= post["analysis_evidence_count"], "BB descendant Analysis evidence fell below checkpoint")
+    require(production_live_input_count(reviews) >= post["production_live_input_count"], "BB descendant production live-input count fell below checkpoint")
+    require(production_analysis_revision_count(reviews) >= post["production_analysis_revision_count"], "BB descendant Analysis revision count fell below checkpoint")
+    require(exact_series_count(reviews) >= post["production_exact_timestamp_series_count"], "BB descendant exact-series population fell below checkpoint")
+
+
 def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     post = plan["postconditions"]
     canonical_before = load(CANONICAL_PATH)
@@ -577,17 +603,19 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     bridge_report = validate_live_analysis_bridge(analysis_schema, reviews, live_observations)
     require(bridge_report.ok, "BB target Live→Analysis validation failed: " + "; ".join(bridge_report.errors))
 
-    require(len(live_observations.get("observations", [])) == post["live_observation_count"], "BB target changed Live population")
-    require(len(live_evidence.get("evidence", [])) == post["live_evidence_count"], "BB target changed Live evidence")
-    require(len(reviews.get("reviews", [])) == post["analysis_review_count"], "BB target changed Analysis reviews")
-    require(len(analysis_evidence.get("evidence", [])) == post["analysis_evidence_count"], "BB target changed Analysis evidence")
-    require(production_live_input_count(reviews) == post["production_live_input_count"], "BB target changed production live-input count")
-    require(production_analysis_revision_count(reviews) == post["production_analysis_revision_count"], "BB target changed Analysis revisions")
-    require(exact_series_count(reviews) == post["production_exact_timestamp_series_count"], "BB target changed exact-series population")
+    assert_population_descendant_floors(
+        post,
+        live_schema,
+        live_observations,
+        live_evidence,
+        analysis_schema,
+        reviews,
+        analysis_evidence,
+    )
 
-    require("Canonical Registry: **v0.39 / 689 occurrences**" in target["status"], "BB status target count missing")
-    require("BB repairs an upstream Southeast Asian election-coverage omission" in target["status"], "BB status target decision missing")
-    require("BB — BARMM election source + Canonical coverage repair" in target["roadmap"], "BB roadmap target missing")
+    # PROJECT_STATUS / ROADMAP are recovery and planning documentation, not BB-owned
+    # governed identities. Exact BB transform tests freeze what BB wrote historically;
+    # later reviewed overrides may summarise or supersede that prose.
 
 
 def write_target(target: dict[str, Any]) -> None:

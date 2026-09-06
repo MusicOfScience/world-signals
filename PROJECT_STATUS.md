@@ -1,8 +1,7 @@
-# CURRENT RECOVERY OVERRIDE — POST-BB / BC CHECKPOINT DESCENDANT CONTRACT
+# CURRENT RECOVERY OVERRIDE — POST-BC / BD FIFTH LIVE SPECIMEN
 
 **Effective checkpoint:** 2026-09-06
-**Exact post-BA main base:** `b8c5372198e3141c4c3f79ace13083877447f71b`
-**AX branch:** `feature/post-aw-pressure-audit-ax`
+**Exact post-BC main base:** `667d0fbcc92f937b0cb609d619b664a2a97e8165`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
@@ -15,12 +14,12 @@ This override supersedes stale "current" counts in the historical body below whi
 - biosecurity overlay: **v0.14 @ canonical v0.39 / 689**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**
+- Live Intelligence: **v0.5 / 5 reviewed internal observations / 7 primary-official evidence rows / public observation projection CLOSED**
 - Analysis schema: **v0.7**
 - Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
 - completed/unreviewed Analysis-eligible occurrences: **0** (not a population target)
-- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**
+- production `live_inputs`: **1 / public projection CLOSED**
 - production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
 - automatic canonical commit: **OFF / gate closed**
@@ -28,21 +27,11 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-BC adds a **no-population historical-checkpoint / reviewed-descendant contract** after BB exposed repeated stale ceilings in older tranche tests and helpers. Before a tranche target exists, exact historical preconditions remain mandatory. After the target is materialised, the old helper validates only tranche-owned identity, relationship and structural invariants plus legitimate version/population floors; unrelated later Source, Change Ledger, monitor, Live or Analysis growth is not treated as drift. BC opens no production gate and changes no Canonical, Source, Change Ledger, Live or Analysis population.
+BD adds the fifth pressure-audited Live observation: a **primary-confirmed 5 September 2026 Vietnam-Myanmar geopolitical development** sourced to the Government of Viet Nam. It has zero Canonical links because no scheduled Canonical identity exists and none is manufactured. The summit event is retained at civil-date precision while the source's independently explicit publication timestamp is preserved separately. No causal, strategic-alignment, legitimacy, conflict-effect or market-attribution claim is encoded.
 
-BB repairs an upstream Southeast Asian election-coverage omission before any further Live or Analysis population: one manually governed COMELEC source and the confirmed **14 September 2026 BARMM parliamentary-election polling day** are admitted to Source Registry / Canonical / Change Ledger. The occurrence remains `PLANNED`, uses `CIVIL_DATE` / day precision in `Asia/Manila`, and carries no fabricated UTC timestamp, outcome or market response. OPAPRU peace-process material informed significance screening but is not a second Canonical timing authority. Source automation remains held.
+BC remains the reviewed historical-checkpoint / legitimate-descendant contract. BB remains the bounded BARMM election Canonical coverage repair. BA's Analysis revision-lineage grammar remains production-closed. AZ's inaugural Live-to-Analysis relationship remains the only production `live_input`.
 
-BA adds a **production-closed Analysis revision-lineage contract** before any further Live or bridge population. A future revision must be a new immutable Analysis snapshot with an explicit direct parent, preserved prior snapshot, the same Canonical occurrence and a strictly later `analysis_as_of_utc`. Automatic latest-head selection, public revision metadata projection and all upstream writes remain closed. BA adds no production revision, no Live observation and no Analysis evidence.
-
-AZ exercises the first **production Live Intelligence → Analysis relationship** with one bounded Japan July 2026 FIES specimen. The Live row is an `ECONOMIC_DATA_OBSERVATION` linked `OUTCOME_OF` the already-completed Canonical occurrence `WSO-MAC-B-0041`; the Analysis packet selects that immutable observation as `FACTUAL_INPUT`. Live and Analysis evidence remain separate, public Live-input projection remains closed, and no market movement is manufactured. The same release's April–June CPI-rebase revisions are retained as data-vintage context rather than synthetic prior Live history. Further bridge population requires another pressure audit.
-
-AX has now exercised repeated as-of state and developing-story semantics without opening a general feed. Live Intelligence v0.3 preserves the AW Nepal shock and adds two primary-confirmed WHO snapshots of the 2026 DRC Bundibugyo outbreak, giving three internal observations and four primary-official evidence rows in total.
-
-The two DRC observations share one manually reviewed story key. The 30 August snapshot explicitly state-updates the 26 August snapshot while both retain `revision_of_observation_id = null`: a later cumulative state does not make the earlier as-of state false. `state_as_of` is separate from source publication time, event time and WORLD SIGNALS observation time, and civil dates are not upgraded to fabricated timestamps.
-
-Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. The DRC story key is not a Canonical occurrence, causal claim or analytical conclusion. A fourth observation or broader ingestion requires another pressure audit.
-
-After BC, a fresh pressure audit must decide whether the now-anchored BARMM transition warrants downstream Live/Analysis work, whether another Live class creates greater contract pressure, whether a second Live→Analysis relationship is justified, or whether a genuinely evidence-driven first Analysis revision has emerged. No downstream population is pre-authorised by BC.
+Public Live observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. A sixth Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit.
 
 ## Current configured monitor cohort
 
@@ -55,7 +44,6 @@ Eight configured adapters: RBA FSR; Colombia SUIN/Socrata; EU CRA/Cellar; three 
 3. `data/canonical/registry.json`, `data/sources/registry.json`, `data/monitor/*`, `data/live_intelligence/*`, `data/analysis/*`
 4. latest pressure/transaction audits
 5. current `main` SHA and Actions runs
-
 ---
 
 # WORLD SIGNALS — project status / branch-recovery checkpoint
