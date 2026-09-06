@@ -57,6 +57,9 @@ jobs:
       - name: Re-run AN regressions against written state
         run: python -m unittest tests.test_south_korea_local_election_analysis_an -v
 
+      - name: Prove repaired AM descendant checkpoint preserves FSR contribution and permits growth
+        run: python -m unittest tests.test_rba_financial_stability_analysis_am -v
+
       - name: Run full repository suite
         run: python -m unittest discover -s tests -v
 
