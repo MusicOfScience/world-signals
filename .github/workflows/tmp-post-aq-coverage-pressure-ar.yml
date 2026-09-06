@@ -39,7 +39,7 @@ jobs:
           set -euo pipefail
           python - <<'PY'
           import json
-          from collections import Counter, defaultdict
+          from collections import Counter
           from pathlib import Path
 
           root = Path('.')
@@ -109,6 +109,57 @@ jobs:
           }
           print('AR_PRESSURE_SNAPSHOT')
           print(json.dumps(out, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Print monitor route candidate pool
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+
+          canonical = json.loads(Path('data/canonical/registry.json').read_text())
+          sources = json.loads(Path('data/sources/registry.json').read_text())
+          expectations = json.loads(Path('data/monitor/expectations.json').read_text())
+          configured_source_ids = {a.get('source_id') for a in expectations.get('adapters', [])}
+          uses = defaultdict(list)
+          for row in canonical.get('records', []):
+              sid = row.get('source_id')
+              if sid:
+                  uses[sid].append(row)
+
+          interesting = {
+              'PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE',
+              'ENDPOINT_TEST_PRIORITY',
+              'PILOT_VALIDATED_NO_AUTO_COMMIT',
+              'PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING',
+          }
+          rows = []
+          for source in sources.get('sources', []):
+              status = source.get('monitoring_readiness_status')
+              if status not in interesting:
+                  continue
+              sid = source.get('source_id')
+              source_uses = uses.get(sid, [])
+              rows.append({
+                  'source_id': sid,
+                  'institution': source.get('institution'),
+                  'jurisdiction': source.get('jurisdiction'),
+                  'domain': source.get('domain'),
+                  'monitoring_readiness_status': status,
+                  'automated_monitoring_use': source.get('automated_monitoring_use'),
+                  'verification_mode': source.get('verification_mode'),
+                  'already_configured_monitor_source': sid in configured_source_ids,
+                  'canonical_occurrence_count': len(source_uses),
+                  'regions': sorted({r.get('region') for r in source_uses if r.get('region')}),
+                  'categories': sorted({r.get('category') for r in source_uses if r.get('category')}),
+                  'series_ids': sorted({r.get('series_id') for r in source_uses if r.get('series_id')}),
+              })
+          rows.sort(key=lambda x: (x['monitoring_readiness_status'], x['source_id'] or ''))
+          print('AR_MONITOR_ROUTE_CANDIDATES')
+          print(json.dumps(rows, indent=2, ensure_ascii=False))
           PY
 
       - name: Validate coverage mechanics
