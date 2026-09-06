@@ -39,7 +39,7 @@ def main() -> int:
 
     totals=audit["totals"]
     md=[
-        "# WORLD SIGNALS — coverage and bias audit v0.1",
+        f"# WORLD SIGNALS — coverage and bias audit v{audit['version']}",
         "",
         f"Canonical registry: **v{audit['canonical_registry_version']}**  ",
         f"Occurrences: **{totals['occurrence_count']}**  ",
@@ -70,6 +70,37 @@ def main() -> int:
         md.append(
             f"| `{row['series_id']}` | {row['occurrence_count']} | {row['region']} | {row['category']} | {row['institution']} |"
         )
+
+    readiness=audit["source_readiness"]
+    md += [
+        "",
+        "## Source-governance readiness",
+        "",
+        "These states describe the current canonical source dependencies. They do not create monitoring permission or population authority.",
+        "",
+        f"Unique used source IDs: **{readiness['unique_used_source_count']}**.",
+        "",
+    ]
+    for label,count in readiness["monitoring_readiness_status_counts"].items():
+        md.append(f"- {label}: {count}")
+    missing=readiness["source_ids_missing_from_source_registry"]
+    md += [
+        f"- Source IDs missing from Source Registry: **{', '.join(missing) if missing else 'none'}**.",
+        "",
+        "## Calendar-projection readiness",
+        "",
+    ]
+    calendar=audit["calendar_projection_readiness"]
+    md.append(f"Source-native occurrences with unresolved authoritative Gregorian conversion: **{calendar['source_native_unresolved_occurrence_count']}**.")
+    if calendar["source_native_unresolved_occurrence_ids"]:
+        md.append("")
+        for occurrence_id in calendar["source_native_unresolved_occurrence_ids"]:
+            md.append(f"- `{occurrence_id}`")
+    md += [
+        "",
+        calendar["note"],
+    ]
+
     flags=audit["diagnostic_flags"]
     md += [
         "",
@@ -82,13 +113,14 @@ def main() -> int:
         "",
         "## Next analytical step",
         "",
-        "Review the low-diversity regions/categories institution-by-institution against the Charter's systemic-importance standard. Add only missing high-value series with defensible primary sources; do not populate to equalise counts.",
+        "Review low-diversity regions/categories institution-by-institution against the Charter's systemic-importance standard and source-governance constraints. Add only missing high-value series with defensible primary sources; do not populate to equalise counts.",
         "",
     ]
     MD_OUT.write_text("\n".join(md),encoding="utf-8")
 
     print(json.dumps({
         "status":"PASS",
+        "coverage_dataset_version":audit["version"],
         "canonical_registry_version":audit["canonical_registry_version"],
         "occurrence_count":totals["occurrence_count"],
         "unique_series_count":totals["unique_series_count"],
@@ -98,6 +130,8 @@ def main() -> int:
         "regions_with_fewer_than_10_unique_series":flags["regions_with_fewer_than_10_unique_series"],
         "regions_with_fewer_than_8_unique_institutions":flags["regions_with_fewer_than_8_unique_institutions"],
         "categories_with_fewer_than_5_unique_series":flags["categories_with_fewer_than_5_unique_series"],
+        "source_readiness":readiness,
+        "calendar_projection_readiness":calendar,
         "top_regions":audit["by_region"],
         "top_categories":audit["by_category"],
         "top_high_frequency_series":audit["high_frequency_series"][:15],
