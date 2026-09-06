@@ -32,9 +32,15 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
         cls.canonical = load(CANONICAL_PATH)
         cls.reviews = load(REVIEWS_PATH)
         cls.evidence = load(EVIDENCE_PATH)
-        cls.candidate_schema = transform_schema(cls.production_schema, cls.plan)
         source = ANALYSIS_IMPL_PATH.read_text(encoding="utf-8")
-        cls.candidate_source = transform_analysis_source(source)
+        if cls.production_schema.get("version") == "0.3":
+            cls.candidate_schema = transform_schema(cls.production_schema, cls.plan)
+            cls.candidate_source = transform_analysis_source(source)
+        elif cls.production_schema.get("version") == "0.4":
+            cls.candidate_schema = copy.deepcopy(cls.production_schema)
+            cls.candidate_source = source
+        else:
+            raise AssertionError(f"unexpected Analysis schema version {cls.production_schema.get('version')}")
         cls.module = load_candidate_module(cls.candidate_source)
 
     def exact_fixture(self) -> tuple[dict, dict, dict, dict, dict]:
@@ -82,8 +88,8 @@ class ExactMarketMeasurementContractAKTests(unittest.TestCase):
     def errors_for(self, schema: dict, evidence: dict, reviews: dict, canonical: dict) -> tuple[str, ...]:
         return self.module.validate_analysis(schema, evidence, reviews, canonical).errors
 
-    def test_candidate_schema_upgrades_contract_without_populating_exact_rows(self) -> None:
-        self.assertEqual(self.production_schema["version"], "0.3")
+    def test_candidate_schema_is_v04_without_populating_exact_rows(self) -> None:
+        self.assertIn(self.production_schema["version"], {"0.3", "0.4"})
         self.assertEqual(self.candidate_schema["version"], "0.4")
         exact_rows = [
             movement
