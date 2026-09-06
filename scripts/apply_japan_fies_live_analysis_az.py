@@ -205,9 +205,17 @@ def target_live_evidence(current: dict[str, Any], payload: dict[str, Any]) -> di
 
 
 def target_analysis_schema(current: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
-    if current.get("version") == "0.6":
+    raw_version = current.get("version")
+    if raw_version != "0.5":
+        try:
+            parsed = tuple(int(part) for part in str(raw_version).split("."))
+        except (TypeError, ValueError):
+            parsed = ()
+        require(
+            parsed >= (0, 6),
+            "AZ Analysis schema requires v0.5 prestate or v0.6+ reviewed descendant",
+        )
         return deepcopy(current)
-    require(current.get("version") == "0.5", "AZ Analysis schema requires v0.5 prestate")
     target = deepcopy(current)
     target["version"] = "0.6"
     target["reference_date"] = "2026-09-06"
