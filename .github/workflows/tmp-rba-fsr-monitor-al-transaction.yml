@@ -123,6 +123,18 @@ jobs:
           print('AL_EXACT_TIMESTAMP_SERIES_ROWS=0')
           PY
 
+      - name: Clean verified runtime-only monitor outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f artifacts/live-monitor.json
+          tracked="$(git ls-files -- artifacts review_candidates)"
+          test -z "$tracked"
+          rm -rf artifacts review_candidates
+          test ! -e artifacts
+          test ! -e review_candidates
+          echo 'AL_RUNTIME_OUTPUTS_CLEANED_AFTER_VERIFICATION'
+
       - name: Audit protected datasets and exact write boundary
         shell: bash
         run: |
