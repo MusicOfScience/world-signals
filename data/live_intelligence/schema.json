@@ -1,0 +1,168 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "LIVE_INTELLIGENCE_SCHEMA",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "architecture_position": "LIVE_INTELLIGENCE",
+  "upstream_layers": [
+    "CANONICAL_REGISTRY",
+    "SOURCE_CHANGE_MONITOR"
+  ],
+  "downstream_layers": [
+    "ANALYSIS"
+  ],
+  "purpose": "Govern factual current-development observations before analytical interpretation, without mutating Canonical, Calendar, Source/Change Monitor or Analysis state.",
+  "layer_boundary": {
+    "canonical_mutation_allowed": false,
+    "calendar_mutation_allowed": false,
+    "source_monitor_mutation_allowed": false,
+    "analysis_mutation_allowed": false,
+    "causal_interpretation_allowed": false,
+    "market_move_attribution_allowed": false,
+    "observation_may_link_zero_or_more_canonical_occurrences": true,
+    "unscheduled_observation_without_canonical_occurrence_allowed": true,
+    "live_evidence_may_resolve_missing_canonical_time": false,
+    "source_failure_or_absence_may_create_live_fact": false
+  },
+  "foundation_population_policy": {
+    "production_population_allowed": false,
+    "evidence_population_allowed": false,
+    "reason": "AV establishes the executable contract only. A later pressure-audited specimen must stress the model before population opens.",
+    "existing_analysis_evidence_migration_allowed": false,
+    "public_observation_projection_allowed": false
+  },
+  "controlled_vocabularies": {
+    "observation_type": [
+      "OFFICIAL_ANNOUNCEMENT",
+      "ECONOMIC_DATA_OBSERVATION",
+      "DATA_REVISION",
+      "MARKET_OBSERVATION",
+      "POLICY_DEVELOPMENT",
+      "GEOPOLITICAL_DEVELOPMENT",
+      "PHYSICAL_SHOCK",
+      "HEALTH_EMERGENCY",
+      "INSTITUTIONAL_DEVELOPMENT",
+      "OTHER_REVIEWED_DEVELOPMENT"
+    ],
+    "verification_state": [
+      "PRIMARY_CONFIRMED",
+      "MULTI_SOURCE_CORROBORATED",
+      "REPORTED_UNCONFIRMED",
+      "CONFLICTING_REPORTS",
+      "CORRECTED",
+      "RETRACTED"
+    ],
+    "domain_tag": [
+      "ECONOMICS",
+      "POLITICS",
+      "GEOPOLITICS",
+      "MARKETS",
+      "TRADE",
+      "COMMODITIES",
+      "CLIMATE_PHYSICAL_RISK",
+      "HEALTH_BIOSECURITY",
+      "INSTITUTIONS"
+    ],
+    "evidence_class": [
+      "PRIMARY_OFFICIAL",
+      "REPUTABLE_NEWSWIRE",
+      "REPUTABLE_MEDIA",
+      "MARKET_DATA_PROVIDER",
+      "ACADEMIC_OR_INSTITUTIONAL",
+      "OTHER_REVIEWED"
+    ],
+    "evidence_role": [
+      "FACTUAL_OBSERVATION",
+      "SOURCE_CONFIRMATION",
+      "MARKET_OBSERVATION",
+      "CORRECTION_OR_REVISION",
+      "CONTEXT_ONLY"
+    ],
+    "canonical_relationship": [
+      "OUTCOME_OF",
+      "CONTEXT_FOR",
+      "AFFECTS_EXPECTATION_FOR",
+      "RESPONSE_OBSERVATION_FOR",
+      "COINCIDENT_WITH"
+    ],
+    "event_time_precision": [
+      "EXACT_TIMESTAMP",
+      "CIVIL_DATE",
+      "RANGE",
+      "UNKNOWN"
+    ]
+  },
+  "required_evidence_fields": [
+    "evidence_id",
+    "evidence_class",
+    "provider",
+    "title",
+    "url",
+    "roles",
+    "canonical_provenance_effect"
+  ],
+  "required_observation_fields": [
+    "observation_id",
+    "observed_at_utc",
+    "observation_type",
+    "verification_state",
+    "headline",
+    "summary",
+    "domain_tags",
+    "jurisdictions",
+    "regions",
+    "evidence_refs",
+    "canonical_links",
+    "revision_of_observation_id",
+    "automatic_canonical_commit",
+    "google_calendar_write"
+  ],
+  "prohibited_analysis_fields": [
+    "what_was_expected",
+    "what_surprised",
+    "what_moved",
+    "what_appears_connected",
+    "what_may_be_noise",
+    "alternative_explanations",
+    "second_order_effects",
+    "falsifiers",
+    "causal_status",
+    "confidence",
+    "analytical_conclusion"
+  ],
+  "time_policy": {
+    "observed_at_utc_is_system_observation_time_not_event_time": true,
+    "source_publication_time_belongs_to_evidence": true,
+    "real_world_event_time_is_optional_and_separate": true,
+    "melbourne_time_never_canonicalised": true,
+    "canonical_time_may_not_be_backfilled_from_live_evidence": true,
+    "exact_timestamp_requires_utc": true,
+    "civil_date_must_not_be_upgraded_to_clock_time": true
+  },
+  "revision_policy": {
+    "prior_observation_preserved": true,
+    "silent_history_rewrite_prohibited": true,
+    "data_revision_requires_revision_reference": true,
+    "corrected_or_retracted_observation_requires_revision_reference": true
+  },
+  "public_projection_policy": {
+    "foundation_metadata_projection_allowed": true,
+    "observation_projection_allowed": false,
+    "runtime_feed_claim_allowed": false,
+    "market_data_projection_requires_separate_rights_contract": true
+  },
+  "guardrails": [
+    "Live Intelligence stores factual observations, not causal interpretation.",
+    "A Live Intelligence observation may exist without a canonical occurrence when the development is genuinely unscheduled.",
+    "A canonical link must resolve to a real occurrence when one is supplied.",
+    "Source failure, source absence and parser failure are Source/Change Monitor states and cannot themselves create Live Intelligence facts.",
+    "Live Intelligence evidence cannot change canonical provenance or resolve missing canonical timing.",
+    "Observation time, source publication time and real-world event time are distinct concepts.",
+    "Revisions and corrections preserve prior observations and link to them explicitly.",
+    "Repeated reports do not automatically become one causal signal or one canonical event.",
+    "Market observations may be factual observations, but attribution of a move to a catalyst belongs in Analysis.",
+    "Foundation v0.1 intentionally rejects production population until a later real-world specimen stress-tests identity, revision and rights semantics.",
+    "Existing Analysis evidence is not retroactively migrated merely to populate this layer.",
+    "Automatic canonical commit and Google Calendar write remain prohibited."
+  ]
+}
