@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 import sys
@@ -142,29 +143,57 @@ class BarmmParliamentaryElectionBBTests(unittest.TestCase):
             apply_bb.overlay_semantics(self.pre_overlay),
         )
 
-    def test_live_and_analysis_populations_are_not_touched(self) -> None:
+    def test_historical_downstream_checkpoint_is_exact_but_later_reviewed_growth_is_allowed(self) -> None:
         post = self.plan["postconditions"]
+        self.assertEqual(post["live_schema_version"], "0.4")
+        self.assertEqual(post["live_observation_count"], 4)
+        self.assertEqual(post["live_evidence_count"], 6)
+        self.assertEqual(post["analysis_schema_version"], "0.7")
+        self.assertEqual(post["analysis_reviews_version"], "0.17")
+        self.assertEqual(post["analysis_review_count"], 21)
+        self.assertEqual(post["analysis_evidence_count"], 95)
+        self.assertEqual(post["production_live_input_count"], 1)
+        self.assertEqual(post["production_analysis_revision_count"], 0)
+        self.assertEqual(post["production_exact_timestamp_series_count"], 0)
+
+        live_schema = apply_bb.load(apply_bb.LIVE_SCHEMA_PATH)
         live_observations = apply_bb.load(apply_bb.LIVE_OBSERVATIONS_PATH)
         live_evidence = apply_bb.load(apply_bb.LIVE_EVIDENCE_PATH)
+        analysis_schema = apply_bb.load(apply_bb.ANALYSIS_SCHEMA_PATH)
         reviews = apply_bb.load(apply_bb.ANALYSIS_REVIEWS_PATH)
         analysis_evidence = apply_bb.load(apply_bb.ANALYSIS_EVIDENCE_PATH)
-        self.assertEqual(len(live_observations["observations"]), post["live_observation_count"])
-        self.assertEqual(len(live_evidence["evidence"]), post["live_evidence_count"])
-        self.assertEqual(len(reviews["reviews"]), post["analysis_review_count"])
-        self.assertEqual(len(analysis_evidence["evidence"]), post["analysis_evidence_count"])
-        self.assertEqual(apply_bb.production_live_input_count(reviews), 1)
-        self.assertEqual(apply_bb.production_analysis_revision_count(reviews), 0)
-        self.assertEqual(apply_bb.exact_series_count(reviews), 0)
+        apply_bb.assert_population_descendant_floors(
+            post, live_schema, live_observations, live_evidence, analysis_schema, reviews, analysis_evidence
+        )
 
-    def test_status_and_roadmap_advance_without_downstream_pre_authorisation(self) -> None:
-        status = self.target["status"]
-        roadmap = self.target["roadmap"]
-        self.assertIn("Canonical Registry: **v0.39 / 689 occurrences**", status)
-        self.assertIn("Source Registry: **v1.81 / 244 sources**", status)
-        self.assertIn("reviewed Change Ledger: **v0.25 / 60 entries**", status)
-        self.assertIn("No downstream population is pre-authorised", status)
-        self.assertIn("BB — BARMM election source + Canonical coverage repair", roadmap)
-        self.assertIn("no polling clock time, UTC timestamp, result or market response is invented", roadmap)
+        future_schema = copy.deepcopy(live_schema)
+        future_schema["version"] = "0.5"
+        future_observations = copy.deepcopy(live_observations)
+        future_observations["version"] = "0.5"
+        future_observations["observations"].append(copy.deepcopy(future_observations["observations"][0]))
+        future_evidence = copy.deepcopy(live_evidence)
+        future_evidence["version"] = "0.5"
+        future_evidence["evidence"].append(copy.deepcopy(future_evidence["evidence"][0]))
+        apply_bb.assert_population_descendant_floors(
+            post, future_schema, future_observations, future_evidence, analysis_schema, reviews, analysis_evidence
+        )
+
+        below = copy.deepcopy(live_observations)
+        below["observations"] = below["observations"][: post["live_observation_count"] - 1]
+        with self.assertRaises(SystemExit):
+            apply_bb.assert_population_descendant_floors(
+                post, live_schema, below, live_evidence, analysis_schema, reviews, analysis_evidence
+            )
+
+    def test_bb_plan_freezes_no_downstream_pre_authorisation_without_current_status_coupling(self) -> None:
+        gates = self.plan["gates"]
+        self.assertFalse(gates["monitor_adapter_added"])
+        self.assertFalse(gates["live_observation_added"])
+        self.assertFalse(gates["analysis_review_or_revision_added"])
+        self.assertFalse(gates["automatic_canonical_commit"])
+        self.assertFalse(gates["google_calendar_write"])
+        self.assertFalse(gates["utc_timestamp_fabricated"])
+        self.assertFalse(gates["future_event_marked_completed"])
 
     def test_plan_keeps_opapru_context_out_of_canonical_source_population(self) -> None:
         self.assertEqual(self.plan["source"]["source_id"], "WSSRC-EL-PH-001")
