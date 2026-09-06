@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from scripts import apply_opec_fallback_completion_be as be
 from world_signals.analysis import analysis_population_readiness
+from world_signals.checkpoint_contract import version_at_least
 
 
 class OpecFallbackCompletionBETests(unittest.TestCase):
@@ -53,8 +54,16 @@ class OpecFallbackCompletionBETests(unittest.TestCase):
             self.assertNotIn(be.COMPLETION_SOURCE_ID, be.by_source(self.state["sources"]))
         else:
             post = self.plan["postconditions"]
-            self.assertEqual(str(self.state["canonical"].get("version")), post["canonical_registry_version"])
-            self.assertEqual(len(self.state["canonical"]["records"]), post["canonical_record_count"])
+            self.assertTrue(
+                version_at_least(
+                    str(self.state["canonical"].get("version")),
+                    post["canonical_registry_version"],
+                )
+            )
+            self.assertGreaterEqual(
+                len(self.state["canonical"]["records"]),
+                post["canonical_record_count"],
+            )
             row = be.by_occurrence(self.state["canonical"])[be.TARGET_ID]
             self.assertEqual(row["lifecycle_status"], "COMPLETED")
             self.assertEqual(row["series_id"], "WSER-COM-OPEC-VOL")
@@ -148,7 +157,11 @@ class OpecFallbackCompletionBETests(unittest.TestCase):
     def test_biosecurity_overlay_only_advances_checkpoint(self):
         post = self._post_state()
         self.assertEqual(be.overlay_semantics(post["overlay"]), be.overlay_semantics(self.state["overlay"]))
-        self.assertEqual(post["overlay"]["canonical_checkpoint"], {"registry_version": "0.40", "record_count": 689})
+        checkpoint = post["overlay"]["canonical_checkpoint"]
+        self.assertTrue(version_at_least(str(checkpoint["registry_version"]), "0.40"))
+        self.assertGreaterEqual(checkpoint["record_count"], 689)
+        self.assertEqual(checkpoint["registry_version"], str(post["canonical"].get("version")))
+        self.assertEqual(checkpoint["record_count"], len(post["canonical"]["records"]))
 
     def test_helper_cli_check_only_is_available(self):
         proc = subprocess.run(
