@@ -57,6 +57,12 @@ jobs:
       - name: Re-run AM regressions against written state
         run: python -m unittest tests.test_rba_financial_stability_analysis_am -v
 
+      - name: Prove repaired descendant checkpoints preserve history and permit growth
+        run: |
+          python -m unittest \
+            tests.test_australian_tropical_cyclone_season_analysis_aj \
+            tests.test_rba_fsr_monitor_alignment_al -v
+
       - name: Run full repository suite
         run: python -m unittest discover -s tests -v
 
