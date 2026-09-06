@@ -96,7 +96,7 @@ class EURussiaSanctionsAnalysisAQTests(unittest.TestCase):
         connection = self.review["what_appears_connected"]["summary"]
         joined_noise = " ".join(row["summary"] for row in self.review["what_may_be_noise"])
         self.assertIn("21st sanctions package", connection)
-        self.assertIn("does not freeze the content", joined_noise)
+        self.assertIn("does not mean its content is fixed until that date", joined_noise)
         self.assertFalse(self.plan["guardrails"]["renewal_freezes_policy_content_until_2027"])
         self.assertFalse(self.plan["guardrails"]["later_sanctions_package_is_caused_by_renewal"])
 
