@@ -1,0 +1,155 @@
+name: AY final branch validation
+
+on:
+  push:
+    branches: [feature/post-ax-live-analysis-bridge-ay]
+
+permissions:
+  contents: write
+
+jobs:
+  final-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact main ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=0a7608ab56116d0f65ffd1492a3da87bcbf35f47
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+      - name: Run governed validators
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+      - name: Run full repository regressions
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_live_analysis_bridge_ay.py \
+            scripts/apply_ak_descendant_repair_ay.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/live_analysis_bridge.py
+      - name: Validate browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site
+        run: python scripts/build_site.py
+      - name: Prove governed target state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          ROOT=Path('.')
+          sys.path.insert(0, str(ROOT/'src'))
+          from world_signals.live_analysis_bridge import production_live_input_count
+          def load(p): return json.loads((ROOT/p).read_text())
+          schema=load('data/analysis/schema.json')
+          reviews=load('data/analysis/event_reviews.json')
+          evidence=load('data/analysis/evidence_registry.json')
+          live_schema=load('data/live_intelligence/schema.json')
+          live=load('data/live_intelligence/observations.json')
+          live_ev=load('data/live_intelligence/evidence_registry.json')
+          canonical=load('data/canonical/registry.json')
+          assert schema['version']=='0.5'
+          p=schema['live_input_policy']
+          assert p['mode']=='FOUNDATION_ONLY_NO_PRODUCTION_LINKS'
+          assert p['production_live_inputs_allowed'] is False
+          assert p['public_live_input_projection_allowed'] is False
+          assert p['identity_selector']=='observation_id'
+          assert p['story_id_selector_allowed'] is False
+          assert p['latest_selector_allowed'] is False
+          assert p['automatic_story_expansion_allowed'] is False
+          assert p['transitive_live_evidence_migration_allowed'] is False
+          assert p['upstream_live_mutation_allowed'] is False
+          assert reviews['version']=='0.16' and len(reviews['reviews'])==20
+          assert evidence['version']=='0.16' and len(evidence['evidence'])==91
+          assert live_schema['version']=='0.3'
+          assert len(live['observations'])==3 and len(live_ev['evidence'])==4
+          assert canonical['version']=='0.38' and len(canonical['records'])==688
+          assert production_live_input_count(reviews)==0
+          exact=sum(1 for r in reviews['reviews'] for m in (r.get('what_moved') or []) if m.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
+          assert exact==0
+          PY
+      - name: Prove protected governed datasets unchanged from main
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json; do
+              test -z "$(git diff origin/main...HEAD -- "$p")"
+          done
+      - name: Prove exact final diff including only this temporary workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/expected <<'EOF'
+          .github/workflows/ay-final-branch-validation.yml
+          .github/workflows/ci.yml
+          PROJECT_STATUS.md
+          ROADMAP.md
+          data/analysis/LIVE_ANALYSIS_BRIDGE_AY_PLAN_v0.1.json
+          data/analysis/LIVE_ANALYSIS_BRIDGE_AY_TRANSACTION_AUDIT_v0.1.md
+          data/analysis/POST_AX_PRESSURE_AUDIT_AY_v0.1.md
+          data/analysis/schema.json
+          scripts/apply_ak_descendant_repair_ay.py
+          scripts/apply_live_analysis_bridge_ay.py
+          scripts/build_site.py
+          scripts/validate_analysis.py
+          src/world_signals/live_analysis_bridge.py
+          tests/test_ak_descendant_repair_ay.py
+          tests/test_exact_market_measurement_contract_ak.py
+          tests/test_live_analysis_bridge_ay.py
+          EOF
+          git diff --name-only origin/main...HEAD | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+          test ! -e .github/workflows/ay-live-analysis-bridge-preflight.yml
+          test ! -e .github/workflows/ay-live-analysis-bridge-transaction.yml
+      - name: Self-remove final validation workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/ay-final-branch-validation.yml
+          git commit -m "AY: remove temporary final validation workflow"
+          git push origin HEAD:${GITHUB_REF_NAME}
