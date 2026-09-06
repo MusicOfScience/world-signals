@@ -1,0 +1,200 @@
+name: BB AZ descendant repair v3
+
+on:
+  push:
+    branches:
+      - feature/post-ba-barmm-election-anchor-bb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prove exact post-BA ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          expected=b8c5372198e3141c4c3f79ace13083877447f71b
+          test "$(git rev-parse origin/main)" = "$expected"
+          test "$(git merge-base HEAD origin/main)" = "$expected"
+
+      - name: Structurally repair AZ descendant guards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          script = Path('scripts/apply_japan_fies_live_analysis_az.py')
+          text = script.read_text(encoding='utf-8')
+          lines = text.splitlines()
+          hits = [i for i, line in enumerate(lines) if 'AZ unexpected Analysis schema descendant' in line]
+          if len(hits) != 1:
+              raise SystemExit(f'expected one AZ schema descendant guard, found {len(hits)}')
+          i = hits[0]
+          if i == 0 or lines[i - 1].strip() != 'else:':
+              raise SystemExit('AZ schema descendant guard no longer follows else branch')
+          indent = lines[i - 1][:-len(lines[i - 1].lstrip())]
+          body = indent + '    '
+          repl = [
+              indent + 'else:',
+              body + 'target_state = plan["target_state"]',
+              body + 'try:',
+              body + '    descendant_version = version_tuple(analysis_schema.get("version"))',
+              body + '    az_version = version_tuple(target_state["analysis_schema_version"])',
+              body + 'except (TypeError, ValueError):',
+              body + '    descendant_version = ()',
+              body + '    az_version = (0, 6)',
+              body + 'require(',
+              body + '    descendant_version >= az_version,',
+              body + '    "AZ unexpected Analysis schema descendant",',
+              body + ')',
+              body + 'require(reviews.get("version") == target_state["analysis_reviews_version"], "AZ descendant reviews version drift")',
+              body + 'require(len(reviews.get("reviews", [])) == target_state["analysis_review_count"], "AZ descendant review count drift")',
+              body + 'require(analysis_evidence.get("version") == target_state["analysis_evidence_version"], "AZ descendant Analysis evidence version drift")',
+              body + 'require(len(analysis_evidence.get("evidence", [])) == target_state["analysis_evidence_count"], "AZ descendant Analysis evidence count drift")',
+              body + 'require(production_live_input_count(reviews) == target_state["production_live_input_count"], "AZ descendant live-input population drift")',
+              body + 'live_input_policy = analysis_schema.get("live_input_policy") or {}',
+              body + 'require(live_input_policy.get("mode") == "CONTROLLED_SINGLE_PRODUCTION_LINK", "AZ descendant bridge mode drift")',
+              body + 'require(live_input_policy.get("maximum_production_live_inputs") == 1, "AZ descendant live-input maximum drift")',
+              body + 'require(live_input_policy.get("maximum_live_inputs_per_review") == 1, "AZ descendant per-review live-input maximum drift")',
+              body + 'require(live_input_policy.get("factual_input_requires_matching_canonical_occurrence") is True, "AZ descendant same-anchor gate drift")',
+              body + 'require(live_input_policy.get("public_live_input_projection_allowed") is False, "AZ descendant public Live-input projection opened")',
+          ]
+          lines[i - 1:i + 1] = repl
+          text = '\n'.join(lines) + '\n'
+
+          start = text.index('def target_status(current: str) -> str:\n')
+          end = text.index('\ndef target_roadmap(current: str) -> str:\n', start)
+          replacement = '\n'.join([
+              'def target_status(current: str) -> str:',
+              '    az_title = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"',
+              '    ay_title = "# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION"',
+              '    if az_title in current:',
+              '        return current',
+              '',
+              '    if ay_title not in current:',
+              '        require(',
+              '            current.startswith("# CURRENT RECOVERY OVERRIDE — POST-"),',
+              '            "AZ PROJECT_STATUS title drift",',
+              '        )',
+              '        require(',
+              '            "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**" in current,',
+              '            "AZ PROJECT_STATUS descendant lost Live v0.4 checkpoint",',
+              '        )',
+              '        require(',
+              '            "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**" in current,',
+              '            "AZ PROJECT_STATUS descendant lost Analysis v0.17 population",',
+              '        )',
+              '        require(',
+              '            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**" in current,',
+              '            "AZ PROJECT_STATUS descendant lost first production Live input",',
+              '        )',
+              '        return current',
+              '',
+              '    text = current.replace(ay_title, az_title, 1)',
+              '    text = text.replace(',
+              '        "- Live Intelligence: **v0.3 / 3 reviewed internal observations / 4 primary-official evidence rows / public observation projection CLOSED**",',
+              '        "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**",',
+              '        1,',
+              '    )',
+              '    text = text.replace("- Analysis schema: **v0.5**", "- Analysis schema: **v0.6**", 1)',
+              '    text = text.replace(',
+              '        "- Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**",',
+              '        "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**",',
+              '        1,',
+              '    )',
+              '    text = text.replace(',
+              '        "- sole completed/unreviewed occurrence: **`WSO-MAC-B-0041`**",',
+              '        "- completed/unreviewed Analysis-eligible occurrences: **0** (not a population target)",',
+              '        1,',
+              '    )',
+              '    text = text.replace(',
+              '        "- production `EXACT_TIMESTAMP_SERIES`: **0**",',
+              '        "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**\\n- production `EXACT_TIMESTAMP_SERIES`: **0**",',
+              '        1,',
+              '    )',
+              '    old = (',
+              '        "AY establishes a **production-closed prospective Live Intelligence → Analysis input contract**. "',
+              '        "Analysis may eventually select immutable Live `observation_id` values as factual inputs, but AY leaves production `live_inputs` at **0**, public Live-input projection closed, and all 20 existing Analysis reviews / 91 evidence rows unchanged. Story IDs, latest-state selectors, automatic story expansion, transitive Live-evidence migration and upstream Live mutation are prohibited. A later pressure audit is required before the first real populated relationship.\\n\\n"',
+              '    )',
+              '    new = (',
+              '        "AZ exercises the first **production Live Intelligence → Analysis relationship** with one bounded Japan July 2026 FIES specimen. The Live row is an `ECONOMIC_DATA_OBSERVATION` linked `OUTCOME_OF` the already-completed Canonical occurrence `WSO-MAC-B-0041`; the Analysis packet selects that immutable observation as `FACTUAL_INPUT`. Live and Analysis evidence remain separate, public Live-input projection remains closed, and no market movement is manufactured. The same release\'s April–June CPI-rebase revisions are retained as data-vintage context rather than synthetic prior Live history. Further bridge population requires another pressure audit.\\n\\n"',
+              '    )',
+              '    require(old in text, "AZ PROJECT_STATUS AY decision paragraph drift")',
+              '    return text.replace(old, new, 1)',
+              '',
+          ])
+          text = text[:start] + replacement + text[end:]
+          script.write_text(text, encoding='utf-8')
+
+          test = Path('tests/test_japan_fies_live_analysis_az.py')
+          t = test.read_text(encoding='utf-8')
+          marker = '    def test_readiness_reaches_21_without_turning_frontier_completion_into_goal(self):\n'
+          if marker not in t:
+              raise SystemExit('AZ descendant regression insertion point drift')
+          method = '\n'.join([
+              '    def test_status_helper_preserves_later_descendants_only_with_az_invariants(self):',
+              '        current = apply_az.STATUS_PATH.read_text(encoding="utf-8")',
+              '        first_header = current.splitlines()[0]',
+              '        descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"',
+              '        descendant = current.replace(first_header, descendant_header, 1)',
+              '        self.assertEqual(apply_az.target_status(descendant), descendant)',
+              '',
+              '        malformed = descendant.replace(',
+              '            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**",',
+              '            "- production `live_inputs`: **2 / reviewed maximum 2 / public projection OPEN**",',
+              '            1,',
+              '        )',
+              '        with self.assertRaises(SystemExit):',
+              '            apply_az.target_status(malformed)',
+              '',
+          ])
+          test.write_text(t.replace(marker, method + marker, 1), encoding='utf-8')
+          PY
+
+      - name: Validate repaired AZ helper on post-BA state
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/apply_japan_fies_live_analysis_az.py tests/test_japan_fies_live_analysis_az.py
+          python -m unittest tests.test_japan_fies_live_analysis_az tests.test_analysis_revision_contract_ba tests.test_barmm_parliamentary_election_bb -v
+          python scripts/apply_japan_fies_live_analysis_az.py --check-only
+          python scripts/apply_barmm_parliamentary_election_bb.py --check-only
+
+      - name: Validate same contracts after ephemeral BB
+        env:
+          WORLD_SIGNALS_BB_ALLOW_WRITE: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_barmm_parliamentary_election_bb.py --apply
+          python -m unittest tests.test_japan_fies_live_analysis_az tests.test_analysis_revision_contract_ba tests.test_barmm_parliamentary_election_bb -v
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+
+      - name: Restore ephemeral governed files
+        if: always()
+        run: |
+          git checkout -- PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json || true
+          rm -rf docs
+
+      - name: Commit only AZ repair and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/apply_japan_fies_live_analysis_az.py tests/test_japan_fies_live_analysis_az.py
+          git diff --cached --name-only | sort > /tmp/actual
+          printf '%s\n' scripts/apply_japan_fies_live_analysis_az.py tests/test_japan_fies_live_analysis_az.py | sort > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          git commit -m "BB: make AZ descendant checks invariant-based"
+          git rm .github/workflows/bb-az-descendant-repair-v3.yml
+          git commit -m "BB: remove temporary AZ descendant repair v3"
+          git push origin HEAD:feature/post-ba-barmm-election-anchor-bb
