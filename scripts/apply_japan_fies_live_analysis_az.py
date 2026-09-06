@@ -414,7 +414,18 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     require(len(live_observations.get("observations", [])) == post["live_observation_count"], "AZ target Live observation count mismatch")
     require(len(live_evidence.get("evidence", [])) == post["live_evidence_count"], "AZ target Live evidence count mismatch")
     require(live_observations.get("population_state") == post["live_population_state"], "AZ target Live population state mismatch")
-    require(analysis_schema.get("version") == post["analysis_schema_version"], "AZ target Analysis schema mismatch")
+    raw_analysis_version = analysis_schema.get("version")
+    raw_az_version = post["analysis_schema_version"]
+    try:
+        analysis_version = tuple(int(part) for part in str(raw_analysis_version).split("."))
+        az_version = tuple(int(part) for part in str(raw_az_version).split("."))
+    except (TypeError, ValueError):
+        analysis_version = ()
+        az_version = (0, 6)
+    require(
+        analysis_version >= az_version,
+        "AZ target Analysis schema must preserve v0.6 or a reviewed descendant",
+    )
     require(reviews.get("version") == post["analysis_reviews_version"], "AZ target review version mismatch")
     require(len(reviews.get("reviews", [])) == post["analysis_review_count"], "AZ target review count mismatch")
     require(analysis_evidence.get("version") == post["analysis_evidence_version"], "AZ target evidence version mismatch")
