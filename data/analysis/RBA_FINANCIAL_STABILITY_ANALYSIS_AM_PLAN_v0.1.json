@@ -115,10 +115,29 @@
     "google_calendar_write": false
   },
   "mutation_boundary": {
-    "permanent_write_paths": [
+    "transaction_write_paths": [
       "data/analysis/event_reviews.json",
       "data/analysis/evidence_registry.json",
       "data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "permanent_support_paths": [
+      "data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_RESEARCH_v0.1.md",
+      "data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_PLAN_v0.1.json",
+      "data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_PAYLOAD_v0.1.json",
+      "scripts/apply_rba_financial_stability_analysis_am.py",
+      "tests/test_rba_financial_stability_analysis_am.py"
+    ],
+    "descendant_test_repairs": [
+      {
+        "path": "tests/test_australian_tropical_cyclone_season_analysis_aj.py",
+        "historical_checkpoint_preserved": "AJ exact transform remains v0.10 / 14 reviews, v0.10 / 54 evidence and 12 reviewed event types.",
+        "live_descendant_repair": "Live reviewed-count and event-type-diversity assertions become lower bounds while the AJ occurrence and PHYSICAL_RISK_WINDOW contribution remain exact."
+      },
+      {
+        "path": "tests/test_rba_fsr_monitor_alignment_al.py",
+        "historical_checkpoint_preserved": "AL plan postcondition remains Analysis v0.10 / 14 at the monitor-only transaction boundary.",
+        "live_descendant_repair": "Live Analysis version and review count may advance beyond the AL boundary while AL's exact-series-zero and protected-Analysis mutation contract remain enforced."
+      }
     ],
     "protected_unchanged_paths": [
       "data/canonical/registry.json",
