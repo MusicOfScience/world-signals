@@ -1,0 +1,87 @@
+name: BB repair AV projection descendant boundary v2
+
+on:
+  push:
+    branches:
+      - feature/post-ba-barmm-election-anchor-bb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prove exact post-BA ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          expected=b8c5372198e3141c4c3f79ace13083877447f71b
+          test "$(git rev-parse origin/main)" = "$expected"
+          test "$(git merge-base HEAD origin/main)" = "$expected"
+
+      - name: Repair only AV live projection checkpoint assertions by line identity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('tests/test_live_intelligence_foundation_av.py')
+          lines = path.read_text(encoding='utf-8').splitlines()
+          version_old = 'self.assertEqual(metadata["canonical_registry_version_at_build"], "0.38")'
+          count_old = 'self.assertEqual(metadata["canonical_record_count_at_build"], 688)'
+          v_hits = [i for i, line in enumerate(lines) if line.strip() == version_old]
+          c_hits = [i for i, line in enumerate(lines) if line.strip() == count_old]
+          if len(v_hits) != 1 or len(c_hits) != 1:
+              raise SystemExit(f'AV projection lines drift: version={v_hits} count={c_hits}')
+          vi, ci = v_hits[0], c_hits[0]
+          v_indent = lines[vi][:-len(lines[vi].lstrip())]
+          c_indent = lines[ci][:-len(lines[ci].lstrip())]
+          lines[vi] = v_indent + 'self.assertEqual(metadata["canonical_registry_version_at_build"], self.canonical["version"])'
+          lines[ci] = c_indent + 'self.assertEqual(metadata["canonical_record_count_at_build"], self.canonical["record_count"])'
+          path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+
+      - name: Validate AV repair on untouched post-BA descendant
+        run: |
+          set -euo pipefail
+          python -m py_compile tests/test_live_intelligence_foundation_av.py
+          python -m unittest tests.test_live_intelligence_foundation_av tests.test_barmm_parliamentary_election_bb -v
+          python scripts/apply_barmm_parliamentary_election_bb.py --check-only
+          python scripts/validate_live_intelligence.py
+
+      - name: Validate AV repair on ephemeral BB descendant
+        env:
+          WORLD_SIGNALS_BB_ALLOW_WRITE: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_barmm_parliamentary_election_bb.py --apply
+          python -m unittest tests.test_live_intelligence_foundation_av tests.test_barmm_parliamentary_election_bb -v
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+
+      - name: Restore ephemeral governed files
+        if: always()
+        run: |
+          git checkout -- PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json || true
+          rm -rf docs
+
+      - name: Commit only AV test repair and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add tests/test_live_intelligence_foundation_av.py
+          git diff --cached --name-only | sort > /tmp/actual
+          printf '%s\n' tests/test_live_intelligence_foundation_av.py | sort > /tmp/expected
+          diff -u /tmp/expected /tmp/actual
+          git commit -m "BB: make AV public projection checkpoint descendant-safe"
+          git rm .github/workflows/bb-av-descendant-repair-v2.yml
+          git commit -m "BB: remove temporary AV descendant repair workflow v2"
+          git push origin HEAD:feature/post-ba-barmm-election-anchor-bb
