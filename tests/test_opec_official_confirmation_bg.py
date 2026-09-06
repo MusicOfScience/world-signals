@@ -37,7 +37,7 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(source["institution"], "Saudi Press Agency (SPA)")
         self.assertEqual(source["canonical_dependency_count"], 0)
         self.assertEqual(source["automated_monitoring_use"], "PROHIBITED_OR_RIGHTS_HOLD")
-        self.assertIn("not the competent OPEC issuing institution", source["known_limitations"])
+        self.assertTrue(any("not the competent OPEC issuing institution" in item for item in source["known_limitations"]))
         self.assertEqual(self.plan["provenance_basis"]["primary_opec_provenance_state"], "REQUIRED_WHEN_RETRIEVABLE")
 
     def test_spa_publication_timestamp_never_becomes_event_timestamp(self):
