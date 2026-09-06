@@ -1,0 +1,133 @@
+name: WORLD SIGNALS AX DRC evolving-state preflight
+
+on:
+  push:
+    branches:
+      - feature/post-aw-pressure-audit-ax
+    paths:
+      - .github/workflows/tmp-live-intelligence-ax-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-78 ancestry and workflow hygiene
+        run: |
+          BASE=721206169033eb0ceb695075d44fb38e7fa2edc3
+          test "$(git merge-base HEAD $BASE)" = "$BASE"
+          test "$(find .github/workflows -maxdepth 1 -type f -name 'tmp-*' | wc -l)" -eq 1
+          test ! -e scripts/tmp_patch_live_intelligence_ax.py
+          git diff --check $BASE..HEAD
+      - name: Prove protected upstream and Live production data unchanged before transaction
+        run: |
+          BASE=721206169033eb0ceb695075d44fb38e7fa2edc3
+          for path in \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json; do
+              git diff --exit-code $BASE..HEAD -- "$path"
+          done
+      - name: Validate untouched production pre-state
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+      - name: Prove guarded write fails closed without explicit environment gate
+        run: |
+          if python scripts/apply_drc_bundibugyo_evolving_state_ax.py --write > /tmp/ax-blocked.txt 2>&1; then
+            cat /tmp/ax-blocked.txt
+            exit 1
+          fi
+          grep -q 'WORLD_SIGNALS_APPLY_LIVE_INTELLIGENCE_AX=1' /tmp/ax-blocked.txt
+          git diff --exit-code
+      - name: Run read-only AX target simulation
+        run: python scripts/apply_drc_bundibugyo_evolving_state_ax.py
+      - name: Run AV AW and AX regressions on pre-state
+        run: |
+          python -m unittest tests.test_live_intelligence_foundation_av -v
+          python -m unittest tests.test_nepal_rasuwa_flood_live_intelligence_aw -v
+          python -m unittest tests.test_drc_bundibugyo_evolving_state_ax -v
+      - name: Run full repository suite on untouched pre-state
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python and check browser JavaScript
+        run: |
+          python -m py_compile scripts/apply_drc_bundibugyo_evolving_state_ax.py scripts/validate_live_intelligence.py src/world_signals/live_intelligence.py scripts/build_site.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Materialize target locally and validate v0.3
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          p=Path('scripts/apply_drc_bundibugyo_evolving_state_ax.py')
+          spec=importlib.util.spec_from_file_location('ax',p)
+          ax=importlib.util.module_from_spec(spec); spec.loader.exec_module(ax)
+          plan=ax.load(ax.PLAN_PATH); payload=ax.load(ax.PAYLOAD_PATH)
+          schema, observations, evidence=ax.transform(plan,payload)
+          ax.write(ax.LIVE_SCHEMA_PATH,schema)
+          ax.write(ax.LIVE_OBSERVATIONS_PATH,observations)
+          ax.write(ax.LIVE_EVIDENCE_PATH,evidence)
+          PY
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest tests.test_live_intelligence_foundation_av -v
+          python -m unittest tests.test_nepal_rasuwa_flood_live_intelligence_aw -v
+          python -m unittest tests.test_drc_bundibugyo_evolving_state_ax -v
+          python -m unittest discover -s tests -v
+      - name: Build ephemeral target and prove private curated-store projection
+        run: |
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          live=json.loads(Path('docs/data/live_intelligence.json').read_text())
+          meta=live['metadata']
+          assert meta['projection_type']=='LIVE_INTELLIGENCE_CURATED_STORE_NOT_RUNTIME_FEED', meta
+          assert meta['schema_version']=='0.3', meta
+          assert meta['population_state']=='CONTROLLED_MULTI_SNAPSHOT_SPECIMEN', meta
+          assert meta['population_mode']=='CONTROLLED_MULTI_SNAPSHOT_SPECIMEN', meta
+          assert meta['internal_observation_count']==3, meta
+          assert meta['internal_evidence_count']==4, meta
+          assert meta['public_observation_count']==0, meta
+          assert meta['canonical_registry_version_at_build']=='0.38', meta
+          assert meta['canonical_record_count_at_build']==688, meta
+          assert meta['runtime_feed_claim'] is False, meta
+          assert live['observations']==[], live
+          summary=json.loads(Path('docs/data/source_summary.json').read_text())
+          assert summary['live_intelligence_schema_version']=='0.3', summary
+          assert summary['live_intelligence_population_state']=='CONTROLLED_MULTI_SNAPSHOT_SPECIMEN', summary
+          assert summary['live_intelligence_internal_observation_count']==3, summary
+          assert summary['live_intelligence_public_observation_count']==0, summary
+          assert summary['analysis_review_count']==20, summary
+          print('AX ephemeral target build proof PASS')
+          PY
+      - name: Restore pre-state and prove read-only cleanliness
+        run: |
+          git checkout -- data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json
+          git diff --exit-code
+          git status --porcelain --untracked-files=no
