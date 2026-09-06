@@ -1,6 +1,6 @@
 # WORLD SIGNALS — DRC Bundibugyo evolving-state Live Intelligence AX research v0.1
 
-**Research date:** 2026-09-06  
+**Research date:** 2026-09-06
 **Selected class:** evolving health emergency / repeated as-of state
 
 ## Primary official source sequence
