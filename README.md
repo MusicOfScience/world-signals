@@ -8,7 +8,7 @@ The repository is the operational implementation. `WORLD_SIGNALS_PROJECT_CHARTER
 
 ## Current checkpoint
 
-Post-#77 / AW controlled Live Intelligence checkpoint:
+Post-#78 / AX evolving-state Live Intelligence checkpoint:
 
 - Canonical Registry: **v0.38 — 688 occurrences**
 - Canonical schema: **v0.52**
@@ -16,7 +16,7 @@ Post-#77 / AW controlled Live Intelligence checkpoint:
 - reviewed Change Ledger: **v0.24 — 59 entries**
 - Source/Change Monitor expectations: **v0.10 — 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.2 — 1 reviewed internal observation / 2 primary-official evidence rows; public observation projection closed**
+- Live Intelligence: **v0.3 — 3 reviewed internal observations / 4 primary-official evidence rows; public observation projection closed**
 - Analysis schema: **v0.4**
 - Analysis: **v0.16 — 20 reviews / 91 evidence rows / 18 reviewed event types**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
@@ -53,7 +53,7 @@ The layers are deliberately separate:
 1. **Canonical Registry** — authoritative event identities, lifecycle and timing.
 2. **Calendar** — disposable human-facing projection from Canonical.
 3. **Source / Change Monitor** — authoritative-source verification, source health and review candidates.
-4. **Live Intelligence** — factual current-development observations; AW v0.2 contains one controlled internal specimen and still exposes zero public observations.
+4. **Live Intelligence** — factual current-development observations; AX v0.3 contains three controlled internal observations across the Nepal shock and one manually grouped DRC evolving-outbreak story, while still exposing zero public observations.
 5. **Analysis** — expectations, surprise, market response, connections, alternatives, second-order effects and falsifiers.
 
 The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state. Live Intelligence is **not** Analysis. A source failure or absence cannot itself cancel, complete or reschedule an event, and it cannot itself create a Live Intelligence fact.
@@ -72,7 +72,7 @@ Current visible layers include:
 - **Change history** — reviewed canonical ledger showing what changed and why.
 - **Analysis** — reviewed post-event analytical specimens linked to canonical occurrences.
 
-AW emits `docs/data/live_intelligence.json` as **curated-store metadata only**. The repository contains one reviewed internal observation, but the projection still contains zero public observations and makes no claim to be a current-news or runtime intelligence feed.
+AX emits `docs/data/live_intelligence.json` as **curated-store metadata only**. The repository contains three reviewed internal observations and four evidence rows, but the projection still contains zero public observations and makes no claim to be a current-news or runtime intelligence feed.
 
 ## Monitoring and review state
 
@@ -93,19 +93,22 @@ Review-candidate identity is separate from monitor-run identity. Stable `WSRV-*`
 
 ## Live Intelligence controlled population
 
-AV v0.1 established the zero-population contract. AW v0.2 opens it only far enough for one reviewed physical-shock specimen: the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal.
+AV v0.1 established the zero-population contract. AW v0.2 admitted one reviewed Nepal physical-shock specimen. AX v0.3 adds two successive WHO snapshots of the 2026 DRC Bundibugyo outbreak to test evolving-state semantics without opening broad ingestion.
 
 The controlled state:
 
-- preserves the unscheduled flood without fabricating a Canonical occurrence;
-- preserves the authoritative `Asia/Kathmandu` local time `08:40` and matching `02:55Z`;
-- keeps WORLD SIGNALS observation time separate from real-world event time;
-- adds explicit evidence publication-time precision so civil publication dates cannot be upgraded to invented clock times;
-- contains exactly one internal observation and two primary-official evidence rows;
-- leaves the uncertain upstream physical trigger unresolved rather than promoting a preliminary mechanism into fact;
-- creates no story ID and does not automatically fold the later UN appeal into the shock;
-- prohibits causal interpretation, market-move attribution, Analysis-evidence migration and automatic ingestion;
+- preserves the Nepal shock unchanged, without fabricating a Canonical occurrence;
+- preserves the authoritative Nepal `Asia/Kathmandu` local time `08:40` and matching `02:55Z`;
+- adds two DRC `HEALTH_EMERGENCY` observations sharing one manually reviewed story key;
+- preserves the 26 August and 30 August DRC epidemiological states as separate observations rather than silently overwriting the earlier snapshot;
+- keeps `state_update_of_observation_id` distinct from `revision_of_observation_id`: later state is not automatically a correction of earlier history;
+- separates state-as-of time, evidence publication time, event time and WORLD SIGNALS observation time, preserving civil-date precision where that is all the source supplies;
+- treats the story key only as a reviewed grouping identity, never as a Canonical event, causal claim or analytical conclusion;
+- prohibits automatic story clustering, causal interpretation, market-move attribution, Analysis-evidence migration and automatic ingestion;
+- contains exactly three internal observations and four primary-official evidence rows;
 - keeps public observation projection closed at zero.
+
+Any fourth observation, continuous outbreak ingestion or broader Live population requires another pressure audit.
 
 ## Analysis state
 

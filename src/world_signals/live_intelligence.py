@@ -88,6 +88,38 @@ def _cycle_in_revision_graph(observations: list[dict[str, Any]]) -> bool:
     return False
 
 
+def _cycle_in_state_update_graph(observations: list[dict[str, Any]]) -> bool:
+    parent = {
+        row.get("observation_id"): row.get("state_update_of_observation_id")
+        for row in observations
+        if row.get("observation_id") and row.get("state_update_of_observation_id")
+    }
+    for start in parent:
+        seen: set[str] = set()
+        current = start
+        while current in parent:
+            if current in seen:
+                return True
+            seen.add(current)
+            current = parent[current]
+    return False
+
+
+def _state_as_of_value(raw: Any) -> tuple[str, Any] | None:
+    if not isinstance(raw, dict):
+        return None
+    precision = raw.get("precision")
+    if precision == "CIVIL_DATE":
+        value = _civil_date(raw.get("as_of_date"))
+        return (precision, value) if value is not None else None
+    if precision == "EXACT_TIMESTAMP":
+        value = _exact_utc(raw.get("as_of_at_utc"))
+        return (precision, value) if value is not None else None
+    if precision == "UNKNOWN":
+        return (precision, None)
+    return None
+
+
 def validate_live_intelligence(
     schema: dict[str, Any],
     evidence_registry: dict[str, Any],
@@ -131,6 +163,11 @@ def validate_live_intelligence(
         errors.append("Live Intelligence must prohibit automatic story clustering unless a later reviewed contract explicitly opens it")
     if grouping.get("future_story_identity_requires_pressure_audited_contract") is not True:
         errors.append("Future Live Intelligence story identity must require a pressure-audited contract")
+    if grouping.get("manual_reviewed_story_id_allowed") is True:
+        if grouping.get("story_id_is_not_canonical_identity") is not True:
+            errors.append("Manual Live Intelligence story IDs must not become Canonical identities")
+        if grouping.get("story_id_is_not_causal_claim") is not True:
+            errors.append("Manual Live Intelligence story IDs must not become causal claims")
 
     observations = observations_dataset.get("observations") or []
     evidence = evidence_registry.get("evidence") or []
@@ -182,6 +219,7 @@ def validate_live_intelligence(
     allowed_relationships = set(vocab.get("canonical_relationship") or [])
     allowed_time_precision = set(vocab.get("event_time_precision") or [])
     allowed_publication_time_precision = set(vocab.get("publication_time_precision") or [])
+    allowed_state_as_of_precision = set(vocab.get("state_as_of_precision") or [])
     required_evidence_fields = set(schema.get("required_evidence_fields") or [])
     required_observation_fields = set(schema.get("required_observation_fields") or [])
     prohibited_analysis_fields = set(schema.get("prohibited_analysis_fields") or [])
@@ -242,6 +280,11 @@ def validate_live_intelligence(
     observation_id_set = set(observation_ids)
     if len(observation_ids) != len(observation_id_set):
         errors.append("duplicate Live Intelligence observation_id")
+    observations_by_id = {
+        row.get("observation_id"): row
+        for row in observations
+        if row.get("observation_id")
+    }
 
     for row in observations:
         observation_id = row.get("observation_id") or "<missing-observation-id>"
@@ -308,6 +351,59 @@ def validate_live_intelligence(
         if row.get("verification_state") in {"CORRECTED", "RETRACTED"} and not revision_ref:
             errors.append(f"{observation_id}: corrected/retracted live observation requires revision reference")
 
+        story_id = row.get("story_id")
+        if story_id is not None:
+            if grouping.get("manual_reviewed_story_id_allowed") is not True:
+                errors.append(f"{observation_id}: story_id requires reviewed manual story-identity policy")
+            if not isinstance(story_id, str) or not story_id.strip():
+                errors.append(f"{observation_id}: story_id must be a non-empty string")
+
+        state_as_of = row.get("state_as_of")
+        if state_as_of is not None:
+            if not isinstance(state_as_of, dict):
+                errors.append(f"{observation_id}: state_as_of must be an object when supplied")
+            else:
+                precision = state_as_of.get("precision")
+                if precision not in allowed_state_as_of_precision:
+                    errors.append(f"{observation_id}: invalid state_as_of precision {precision}")
+                elif precision == "EXACT_TIMESTAMP":
+                    if _exact_utc(state_as_of.get("as_of_at_utc")) is None:
+                        errors.append(f"{observation_id}: exact state_as_of requires as_of_at_utc in UTC")
+                    if state_as_of.get("as_of_date") is not None:
+                        errors.append(f"{observation_id}: exact state_as_of must not also carry as_of_date")
+                elif precision == "CIVIL_DATE":
+                    if _civil_date(state_as_of.get("as_of_date")) is None:
+                        errors.append(f"{observation_id}: civil state_as_of requires YYYY-MM-DD as_of_date")
+                    if state_as_of.get("as_of_at_utc") is not None:
+                        errors.append(f"{observation_id}: civil state-as-of date must not be upgraded to as_of_at_utc")
+                elif precision == "UNKNOWN":
+                    if state_as_of.get("as_of_at_utc") is not None or state_as_of.get("as_of_date") is not None:
+                        errors.append(f"{observation_id}: UNKNOWN state_as_of may not carry precise state fields")
+
+        state_update_ref = row.get("state_update_of_observation_id")
+        if state_update_ref is not None:
+            if state_update_ref not in observation_id_set:
+                errors.append(f"{observation_id}: unknown state_update_of_observation_id {state_update_ref}")
+            elif state_update_ref == observation_id:
+                errors.append(f"{observation_id}: observation cannot be a state update of itself")
+            else:
+                prior = observations_by_id[state_update_ref]
+                prior_story = prior.get("story_id")
+                if not story_id or not prior_story or story_id != prior_story:
+                    errors.append(f"{observation_id}: state update must reference an earlier observation in the same story")
+                current_state = _state_as_of_value(state_as_of)
+                prior_state = _state_as_of_value(prior.get("state_as_of"))
+                if current_state is None or prior_state is None:
+                    errors.append(f"{observation_id}: state update requires valid state_as_of on both observations")
+                elif current_state[0] != prior_state[0]:
+                    errors.append(f"{observation_id}: state update comparison requires matching state_as_of precision")
+                elif current_state[1] is None or prior_state[1] is None:
+                    errors.append(f"{observation_id}: state update requires orderable state_as_of values")
+                elif current_state[1] <= prior_state[1]:
+                    errors.append(f"{observation_id}: state update must have a later state_as_of than its target")
+            if revision_ref is not None:
+                errors.append(f"{observation_id}: state evolution must not also use revision_of_observation_id")
+
         event_time = row.get("event_time")
         if event_time is not None:
             if not isinstance(event_time, dict):
@@ -368,6 +464,8 @@ def validate_live_intelligence(
 
     if _cycle_in_revision_graph(observations):
         errors.append("Live Intelligence revision graph contains a cycle")
+    if _cycle_in_state_update_graph(observations):
+        errors.append("Live Intelligence state-update graph contains a cycle")
 
     return LiveIntelligenceValidationReport(tuple(errors))
 

@@ -1,0 +1,74 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AX",
+  "title": "DRC Bundibugyo evolving-state Live Intelligence specimen",
+  "base_sha": "721206169033eb0ceb695075d44fb38e7fa2edc3",
+  "reference_date": "2026-09-06",
+  "pre_state": {
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "canonical_schema_version": "0.52",
+    "source_registry_version": "1.80",
+    "source_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.16",
+    "analysis_review_count": 20,
+    "analysis_evidence_version": "0.16",
+    "analysis_evidence_count": 91,
+    "live_intelligence_schema_version": "0.2",
+    "live_intelligence_observation_count": 1,
+    "live_intelligence_evidence_count": 2,
+    "live_intelligence_population_state": "CONTROLLED_SINGLE_SPECIMEN"
+  },
+  "target_state": {
+    "live_intelligence_schema_version": "0.3",
+    "observation_count": 3,
+    "evidence_count": 4,
+    "live_intelligence_population_state": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+    "new_story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+    "new_observation_ids": [
+      "WSLI-HEALTH-COD-BVD-20260826-001",
+      "WSLI-HEALTH-COD-BVD-20260830-001"
+    ],
+    "public_observation_count": 0,
+    "automatic_ingestion": false,
+    "automatic_story_clustering": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "protected_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "controlled_write_paths": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/live_intelligence/DRC_BUNDIBUGYO_EVOLVING_STATE_AX_TRANSACTION_AUDIT_v0.1.md"
+  ],
+  "contract_requirements": [
+    "state evolution must remain distinct from revision/correction",
+    "state_as_of civil dates must not be upgraded to synthetic timestamps",
+    "manual reviewed story identity may group repeated observations",
+    "story identity must not become canonical identity or causal attribution",
+    "state-update target must exist and belong to the same story",
+    "state-update state_as_of must be later than the prior snapshot",
+    "revision_of_observation_id must remain null for non-corrective state evolution",
+    "Nepal AW observation and evidence must remain unchanged",
+    "public observation projection remains closed",
+    "automatic story clustering remains closed"
+  ],
+  "manual_merge_only": true
+}
