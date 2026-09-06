@@ -1,0 +1,114 @@
+name: BF UN Correct Map Live preflight
+on:
+  push:
+    branches: [feature/post-be-pressure-audit-bf]
+permissions:
+  contents: write
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BE ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "629ab595ecccaf86a92bbd8cdfdab4297496b298"
+          test "$(git merge-base HEAD origin/main)" = "629ab595ecccaf86a92bbd8cdfdab4297496b298"
+      - name: Snapshot protected paths
+        shell: bash
+        run: |
+          sha256sum \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json > /tmp/bf-protected.sha
+      - name: Read-only BF simulation
+        run: python scripts/apply_un_correct_map_live_bf.py --check-only
+      - name: BF and BD regression tests on untouched descendant
+        run: python -m unittest tests.test_un_correct_map_live_bf tests.test_vietnam_myanmar_live_bd -v
+      - name: Full suite on untouched descendant
+        run: python -m unittest discover -s tests -v
+      - name: Materialise ephemeral BF target
+        env:
+          WORLD_SIGNALS_APPLY_UN_CORRECT_MAP_LIVE_BF: YES
+        run: python scripts/apply_un_correct_map_live_bf.py --apply
+      - name: Validate ephemeral BF target exhaustively
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_un_correct_map_live_bf.py tests/test_un_correct_map_live_bf.py tests/test_vietnam_myanmar_live_bd.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Prove BF mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_un_correct_map_live_bf.py --check-only
+          sha256sum -c /tmp/bf-protected.sha
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          schema=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          obs=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          ev=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          assert schema['version']=='0.6'
+          assert schema['population_policy']['mode']=='CONTROLLED_INSTITUTIONAL_SPECIMEN'
+          assert schema['population_policy']['maximum_observation_count']==6
+          assert schema['population_policy']['maximum_evidence_count']==9
+          assert schema['population_policy']['automatic_ingestion_allowed'] is False
+          assert schema['population_policy']['public_observation_projection_allowed'] is False
+          assert len(obs['observations'])==6
+          assert len(ev['evidence'])==9
+          row=[x for x in obs['observations'] if x['observation_id']=='WSLI-INST-UNGA-CORRECTMAP-20260904-001'][0]
+          assert row['observation_type']=='INSTITUTIONAL_DEVELOPMENT'
+          assert row['canonical_links']==[]
+          assert row['event_time']=={'precision':'CIVIL_DATE','event_date':'2026-09-04'}
+          assert row['revision_of_observation_id'] is None
+          expected={
+            'PROJECT_STATUS.md','ROADMAP.md',
+            'data/live_intelligence/schema.json',
+            'data/live_intelligence/observations.json',
+            'data/live_intelligence/evidence_registry.json',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected, (changed, expected)
+          print('BF mutation boundary: PASS')
+          PY
+      - name: Restore ephemeral writes and self-remove workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          rm -f .github/workflows/bf-un-correct-map-preflight.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A .github/workflows/bf-un-correct-map-preflight.yml
+          if ! git diff --cached --quiet; then
+            git commit -m 'BF: remove temporary fail-closed preflight'
+            git push origin HEAD:feature/post-be-pressure-audit-bf
+          fi
