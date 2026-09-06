@@ -3,11 +3,13 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
-from src.world_signals.live_intelligence import (
+from world_signals.live_intelligence import (
     public_live_intelligence_projection,
     validate_live_intelligence,
 )
