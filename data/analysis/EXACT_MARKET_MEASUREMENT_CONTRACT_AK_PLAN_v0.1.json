@@ -41,7 +41,8 @@
     "reviewed_occurrence_count": 14,
     "reviewed_event_type_diversity": 12,
     "market_movement_row_count": 10,
-    "exact_timestamp_series_row_count": 0
+    "exact_timestamp_series_row_count": 0,
+    "public_analysis_projection_schema_version": "0.3"
   },
   "schema_change": {
     "from_version": "0.3",
@@ -101,7 +102,8 @@
     "reviewed_occurrence_count": 14,
     "reviewed_event_type_diversity": 12,
     "market_movement_row_count": 10,
-    "exact_timestamp_series_row_count": 0
+    "exact_timestamp_series_row_count": 0,
+    "public_analysis_projection_schema_version": "0.4"
   },
   "protected_unchanged": [
     "data/canonical/registry.json",
@@ -117,6 +119,7 @@
   "intended_mutation_boundary": [
     "data/analysis/schema.json",
     "src/world_signals/analysis.py",
+    "docs/data/analysis.json",
     "data/analysis/POST_AJ_PRESSURE_AUDIT_AK_v0.1.md",
     "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_PLAN_v0.1.json",
     "data/analysis/EXACT_MARKET_MEASUREMENT_CONTRACT_AK_TRANSACTION_AUDIT_v0.1.md",
