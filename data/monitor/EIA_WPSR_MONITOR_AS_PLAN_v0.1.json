@@ -1,0 +1,84 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AS",
+  "plan_version": "0.1",
+  "checkpoint_main_sha": "4b25bb452f3def253cf86254e5ad6abdbe8b9f13",
+  "objective": "Promote one bounded read-only EIA WPSR schedule-rule sentinel after live endpoint/parser validation, without creating publication-completion authority or mutating Canonical.",
+  "prestate": {
+    "canonical_registry": ["0.37", 687],
+    "source_registry": ["1.78", 242],
+    "monitor_expectations": ["0.9", 7],
+    "analysis_reviews": ["0.15", 19],
+    "analysis_evidence": ["0.15", 85],
+    "production_exact_timestamp_series": 0
+  },
+  "target": {
+    "source_id": "WSSRC-COM-003",
+    "series_id": "WSER-COM-EIA-WPSR",
+    "adapter_id": "EIA_WPSR_SCHEDULE",
+    "canonical_occurrence_ids": [
+      "WSO-COM-A-0013",
+      "WSO-COM-A-0014",
+      "WSO-COM-A-0015",
+      "WSO-COM-A-0016",
+      "WSO-COM-A-0017",
+      "WSO-COM-A-0018",
+      "WSO-COM-A-0019",
+      "WSO-COM-A-0020",
+      "WSO-COM-A-0021",
+      "WSO-COM-A-0022",
+      "WSO-COM-A-0023",
+      "WSO-COM-A-0024",
+      "WSO-COM-A-0025",
+      "WSO-COM-A-0026",
+      "WSO-COM-A-0027",
+      "WSO-COM-A-0028"
+    ],
+    "baseline_schedule_sha256": "8f972e877fdd56dd836f6a0cc7bc0abea73c21bfd01dd8bbc3b784ea7eacec87",
+    "live_validation_run_id": 34009176451,
+    "live_validation_job_id": 101421838658
+  },
+  "poststate": {
+    "canonical_registry": ["0.37", 687],
+    "source_registry": ["1.79", 242],
+    "monitor_expectations": ["0.10", 8],
+    "monitor_coverage": {
+      "configured_adapter_count": 8,
+      "unique_monitor_source_count": 7,
+      "scoped_occurrence_count": 43,
+      "scoped_series_count": 11,
+      "scoped_institution_count": 6,
+      "scoped_region_count": 4,
+      "scoped_category_count": 6
+    },
+    "analysis_reviews": ["0.15", 19],
+    "analysis_evidence": ["0.15", 85],
+    "production_exact_timestamp_series": 0
+  },
+  "semantic_contract": {
+    "source_timezone": "America/New_York",
+    "standard_release_time_semantics": "AFTER",
+    "schedule_change_is_review_evidence_only": true,
+    "elapsed_time_is_not_completion": true,
+    "schedule_page_is_not_completion_evidence": true,
+    "publication_index_is_corroboration_only": true,
+    "test_json_csv_are_not_production_dependencies": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "permitted_data_mutations": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "data/monitor/EIA_WPSR_MONITOR_AS_TRANSACTION_AUDIT_v0.1.md"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/changes/ledger.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "data/monitor/operations_policy.json"
+  ],
+  "selection_discipline": "This route is selected for marginal contract/domain/region diversity and reviewed source readiness; it is not quota filling."
+}

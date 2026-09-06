@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,11 +41,55 @@ class RbaFsrMonitorAlignmentALTests(unittest.TestCase):
         cls.apply = load_apply_module()
 
     def candidate_expectations(self) -> dict:
+        """Return AL's repaired scope while allowing later monitor descendants.
+
+        AL's historical transform remains exact at v0.8 -> v0.9. Live descendants
+        may legitimately advance the monitor dataset version or add adapters, but
+        must preserve AL's explicit RBA scope and matching semantics.
+        """
         version = self.expectations.get("version")
         if version == self.plan["monitor_change"]["from_version"]:
             return self.apply.transform(self.expectations, self.plan)
-        self.assertEqual(version, self.plan["monitor_change"]["to_version"])
+        self.assertGreaterEqual(
+            version_tuple(version),
+            version_tuple(self.plan["monitor_change"]["to_version"]),
+        )
         return copy.deepcopy(self.expectations)
+
+    def assert_live_descendant_preserves_al_contract(self, candidate: dict) -> None:
+        self.assertGreaterEqual(
+            version_tuple(candidate["version"]),
+            version_tuple(self.plan["monitor_change"]["to_version"]),
+        )
+        self.assertFalse(candidate["automatic_canonical_commit"])
+        self.assertFalse(candidate["google_calendar_write"])
+        cfg = self.apply.adapter(candidate)
+        self.assertEqual(
+            cfg["canonical_occurrence_ids"],
+            ["WSO-FIN-B-0001", "WSO-FIN-B-0004"],
+        )
+        self.assertEqual(
+            cfg["matching"],
+            {"same_year": True, "nearest_planned_occurrence_max_days": 75},
+        )
+        self.assertFalse(cfg["automatic_commit_allowed"])
+
+        march_candidates, march_observations = self.apply.rba_fsr_review_candidates(
+            self.canonical["records"], [self.apply.current_march_item(self.plan)], cfg
+        )
+        self.assertEqual(march_candidates, [])
+        self.assertEqual(len(march_observations), 1)
+        self.assertEqual(march_observations[0]["type"], "RBA_PUBLICATION_ALREADY_REFLECTED")
+        self.assertEqual(march_observations[0]["occurrence_id"], "WSO-FIN-B-0004")
+
+        october_candidates, october_observations = self.apply.rba_fsr_review_candidates(
+            self.canonical["records"], [self.apply.october_item()], cfg
+        )
+        self.assertEqual(october_observations, [])
+        self.assertEqual(len(october_candidates), 1)
+        self.assertEqual(october_candidates[0]["occurrence_id"], "WSO-FIN-B-0001")
+        self.assertEqual(october_candidates[0]["diff_type"], "LIFECYCLE_CHANGED")
+        self.assertFalse(october_candidates[0]["automatic_commit_allowed"])
 
     def test_plan_is_frozen_to_exact_post_ak_main(self):
         self.assertEqual(
@@ -81,7 +126,10 @@ class RbaFsrMonitorAlignmentALTests(unittest.TestCase):
 
     def test_candidate_scope_resolves_march_and_preserves_october(self):
         candidate = self.candidate_expectations()
-        self.apply.validate_candidate(self.plan, self.canonical, candidate)
+        if candidate.get("version") == self.plan["monitor_change"]["to_version"]:
+            self.apply.validate_candidate(self.plan, self.canonical, candidate)
+        else:
+            self.assert_live_descendant_preserves_al_contract(candidate)
         cfg = self.apply.adapter(candidate)
         self.assertEqual(
             cfg["canonical_occurrence_ids"],
