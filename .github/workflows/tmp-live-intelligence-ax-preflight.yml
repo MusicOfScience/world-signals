@@ -1,4 +1,4 @@
-name: WORLD SIGNALS AX DRC evolving-state preflight
+name: WORLD SIGNALS AX DRC evolving-state preflight v2
 
 on:
   push:
