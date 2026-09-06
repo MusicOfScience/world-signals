@@ -1,4 +1,4 @@
-name: WORLD SIGNALS AU IMD outlook Analysis read-only preflight
+name: WORLD SIGNALS AU IMD outlook Analysis read-only preflight v2
 
 on:
   push:
@@ -30,6 +30,7 @@ jobs:
           test "$(git merge-base "$BASE" HEAD)" = "$BASE"
           git diff --check "$BASE"...HEAD
           test ! -e .github/workflows/tmp-au-descendant-repair.yml
+          test ! -e .github/workflows/tmp-au-whitespace-cleanup.yml
           test ! -e .github/workflows/tmp-imd-heatwave-analysis-au-transaction.yml
       - name: Read-only AU simulation
         run: python scripts/apply_imd_heatwave_outlook_analysis_au.py --check
