@@ -1,0 +1,280 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "EU_RUSSIA_SANCTIONS_ANALYSIS_AQ",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "reviews": [
+    {
+      "analysis_id": "WSAN-EU-RU-SANC-20260625-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-06T02:20:00Z",
+      "canonical_occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+      "canonical_series_id": "WSER-TRD-EU-RU-SANC",
+      "canonical_event_type": "SANCTIONS_PROCESS",
+      "canonical_institution": "Council of the European Union",
+      "canonical_release_utc": null,
+      "scope": "25 June 2026 EU economic-sanctions renewal against Russia: separation of pre-adoption political agreement, binding legal adoption, the resulting in-force horizon to 31 July 2027, later sanctions-package calibration and the distinct future renewal boundary, without manufacturing event-specific market response or causality",
+      "what_happened": {
+        "summary": "On 25 June 2026 the Council of the European Union renewed the economic restrictive measures concerning Russia's destabilising actions in Ukraine for a further twelve months, through 31 July 2027. Council Decision (CFSP) 2026/1437 is the binding legal act: it amended Article 9(1) of Decision 2014/512/CFSP to state that the measures apply until 31 July 2027 and enters into force the day following Official Journal publication. The legal adoption is a civil-date event in the canonical registry; the Council press release's 19:45 publication timestamp is not promoted into a decision clock. The 31 July 2027 renewal/expiry boundary remains a separate future canonical occurrence.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+          "WSEV-EU-SANC-EURLEX-20261437"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "Reuters reported on 18 June 2026, one week before the binding Council act, that EU leaders had agreed to renew the sanctions for another twelve months. That contemporaneous political agreement is a defensible expectation for the direction and duration of the subsequent legal adoption. It is not the binding legal act itself, not a market-consensus probability and not an exact decision-time benchmark.",
+        "benchmarks": [
+          {
+            "metric": "pre_adoption_political_agreement",
+            "value": "EU_LEADERS_AGREED_TWELVE_MONTH_RENEWAL",
+            "unit": "qualitative_political_agreement",
+            "benchmark_type": "OTHER_DEFENSIBLE_EXPECTATION",
+            "evidence_refs": [
+              "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+          "WSEV-EU-SANC-EUCO-CONTEXT-20260618"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "The twelve-month renewal was institutionally novel relative to the previous six-month rollover cadence, but novelty is not the same thing as surprise. The twelve-month direction and horizon had already been publicly reported as politically agreed on 18 June. AQ has not established a competent probability or market-consensus benchmark for the remaining legal-execution risk on 25 June, so it does not manufacture an upside, downside or numeric surprise from the formal adoption itself.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+          "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+          "WSEV-EU-SANC-EURLEX-20261437"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The 25 June legal act establishes a documentary legal dependency between the renewal decision and the continuing in-force horizon through 31 July 2027. That horizon does not freeze the content of the sanctions regime: the Council later adopted a 21st sanctions package on 23 July with additional designations and measures. These are related acts within the same sanctions framework, not a causal chain in which the June renewal is asserted to have caused the July package. The future 31 July 2027 renewal/expiry boundary is likewise a separate legal-policy decision point rather than a delayed completion of the June event.",
+        "evidence_refs": [
+          "WSEV-EU-SANC-EURLEX-20261437",
+          "WSEV-EU-SANC-COUNCIL-21ST-20260723",
+          "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The Council press release's 19:45 timestamp is publication time. Treating it as the legal-adoption clock would manufacture canonical precision not supplied by the competent decision record.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+            "WSEV-EU-SANC-EURLEX-20261437"
+          ]
+        },
+        {
+          "summary": "The 18 June political agreement and the 25 June binding legal act are different institutional stages. Political agreement is useful expectation evidence but does not itself put the legal amendment into force.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+            "WSEV-EU-SANC-EURLEX-20261437"
+          ]
+        },
+        {
+          "summary": "The first full-year renewal after six-month rollovers is an institutional cadence change. It does not by itself establish that the formal 25 June adoption surprised policymakers, markets or regulated firms.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+            "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625"
+          ]
+        },
+        {
+          "summary": "Renewing the legal framework through 31 July 2027 does not mean its content is fixed until that date. The later 21st package demonstrates continuing amendment and calibration inside the annual horizon.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-COUNCIL-21ST-20260723",
+            "WSEV-EU-SANC-EURLEX-20261437"
+          ]
+        },
+        {
+          "summary": "The 31 July 2027 boundary is a future renewal/expiry decision point, not the date on which the 25 June 2026 legal adoption completes and not proof that sanctions will terminate automatically.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+            "WSEV-EU-SANC-EURLEX-20261437"
+          ]
+        },
+        {
+          "summary": "Large oil-price movement around the renewal cannot be treated as an EU-sanctions response merely because it was temporally adjacent. Reuters identified changing Iran and Strait of Hormuz supply expectations as major contemporaneous drivers.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-REUTERS-OIL-CONTEXT-20260624"
+          ]
+        },
+        {
+          "summary": "Later shadow-fleet enforcement or sanctions-package actions are part of the wider policy environment. Temporal sequence after 25 June does not establish that the annual renewal caused those actions or their economic consequences.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+            "WSEV-EU-SANC-COUNCIL-21ST-20260723"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Changes in energy prices, European risk assets or exchange rates around the renewal could reflect the Russia-Ukraine war, Iran and Strait of Hormuz supply expectations, global rates and growth conditions, or other geopolitical developments rather than the Council's formal legal renewal.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-REUTERS-OIL-CONTEXT-20260624"
+          ]
+        },
+        {
+          "summary": "Later changes in the sanctions regime can arise from separate political decisions about enforcement, circumvention, energy revenues, the shadow fleet or additional packages. They should not be attributed mechanically to the length of the June renewal.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+            "WSEV-EU-SANC-COUNCIL-21ST-20260723"
+          ]
+        },
+        {
+          "summary": "Any later change in the economic effectiveness of sanctions depends on enforcement, circumvention, third-country trade, Russian adaptation, commodity markets and allied policy, not legal duration alone.",
+          "evidence_refs": [
+            "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+            "WSEV-EU-SANC-COUNCIL-21ST-20260723"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "Moving from a six-month rollover cadence to a twelve-month legal horizon plausibly reduces the frequency of formal renewal decision points and lengthens the visible period of legal-policy continuity for firms, financial institutions and governments. It may shift some political and operational attention toward enforcement, circumvention and substantive package amendments rather than semiannual rollover risk. AQ does not claim these effects are realised or caused by the renewal. The July 21st package only demonstrates that policy recalibration remained active within the annual horizon.",
+        "evidence_refs": [
+          "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+          "WSEV-EU-SANC-COUNCIL-21ST-20260723"
+        ]
+      },
+      "falsifiers": [
+        "If the Council or EUR-Lex corrects, repeals or supersedes the cited legal text in a way that changes the historical 25 June 2026 renewal, AQ must follow the authoritative legal record.",
+        "If competent contemporaneous evidence establishes that EU leaders had not in fact politically agreed the twelve-month renewal by 18 June, the pre-adoption expectation analysis must be revised.",
+        "If a defensible pre-adoption probability or market-consensus benchmark is identified, the NOT_ESTABLISHED surprise classification should be reassessed against that benchmark.",
+        "If qualified event-specific market evidence satisfying WORLD SIGNALS timing, rights and attribution contracts is obtained, the empty what_moved section may be revisited.",
+        "If upstream canonical evidence changes the target lifecycle, temporal role, civil date, timezone or null-UTC semantics, AQ must inherit that correction rather than resolve timing inside Analysis.",
+        "If authoritative legal interpretation establishes that Decision (CFSP) 2026/1437 did not extend the relevant measures through 31 July 2027 as described, the legal-continuity analysis must be revised.",
+        "If later evidence shows the 21st package was legally part of the same 25 June adoption rather than a distinct later act, the renewal-versus-calibration distinction must be revised.",
+        "If the sanctions are suspended, repealed or materially replaced before 31 July 2027, that later event must be recorded independently and must not rewrite the historical fact of the 25 June renewal.",
+        "If evidence establishes realised effects of the annual cadence on rollover risk, compliance behaviour or investment decisions, the PLAUSIBLE_WATCH_ITEM second-order classification can be upgraded only with the supporting evidence."
+      ],
+      "analytical_conclusion": "The 25 June 2026 EU sanctions event is best understood as a binding legal-continuity decision whose twelve-month horizon had already been politically signalled. The first annual renewal after six-month rollovers is institutionally notable, but novelty is not a surprise benchmark. The legal act extends the in-force horizon through 31 July 2027 while remaining distinct from both the earlier political agreement and the future renewal boundary. A later 21st sanctions package shows that legal continuity does not freeze policy content, but AQ does not reverse that relationship into a causal claim. No event-specific market response is established; contemporaneous energy markets had powerful alternative geopolitical drivers. AQ therefore records NOT_ESTABLISHED surprise, empty market movement, a high-confidence legal/operational dependency without causal attribution, and only plausible second-order implications from the longer renewal cadence.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Council of the European Union",
+      "host_or_distribution": "Consilium",
+      "title": "Russia's war of aggression against Ukraine: Council extends economic sanctions for another year",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/",
+      "published_at": "2026-06-25",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Council states that it renewed the economic restrictive measures on 25 June 2026 for a further twelve months, until 31 July 2027.",
+        "The Council states that the renewal followed agreement by EU leaders at the June European Council.",
+        "The press release describes the continuing sanctions framework and the EU's readiness to take additional measures."
+      ],
+      "analytical_use": "OFFICIAL_RENEWAL_OUTCOME_AND_POLICY_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-EURLEX-20261437",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Union",
+      "host_or_distribution": "EUR-Lex",
+      "title": "Council Decision (CFSP) 2026/1437 of 25 June 2026 amending Decision 2014/512/CFSP concerning restrictive measures in view of Russia's actions destabilising the situation in Ukraine",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1437",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The binding Council decision was done at Brussels on 25 June 2026.",
+        "Article 1 amends Article 9(1) so that the measures apply until 31 July 2027.",
+        "Article 2 provides that the decision enters into force on the day following publication in the Official Journal."
+      ],
+      "analytical_use": "BINDING_LEGAL_ACT_AND_IN_FORCE_HORIZON",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "EU leaders agree to renew Russia sanctions for 12 months",
+      "url": "https://www.reuters.com/world/europe/eu-leaders-agree-renew-russia-sanctions-12-months-2026-06-18/",
+      "published_at": "2026-06-18",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Before the 25 June binding act, Reuters reported that EU leaders had agreed to renew the sanctions for another twelve months.",
+        "Reuters described the annual renewal as the first full-year rollover after previous six-month renewals.",
+        "The report supplies a contemporaneous political-agreement benchmark, not a binding legal act or market-consensus probability."
+      ],
+      "analytical_use": "PRE_ADOPTION_POLITICAL_AGREEMENT_BENCHMARK",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Council",
+      "host_or_distribution": "Consilium",
+      "title": "European Council conclusions on Ukraine and security and defence, 18 June 2026",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/18/european-council-conclusions-on-ukraine-and-security-and-defence-18-june-2026/",
+      "published_at": "2026-06-18",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The European Council documented continuing pressure on Russia, including energy revenues, the shadow fleet, banking constraints and enforcement.",
+        "The conclusions called for swift adoption of a further sanctions package.",
+        "This is wider policy context and is not promoted into the binding 25 June renewal act."
+      ],
+      "analytical_use": "PRE_ADOPTION_POLICY_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-REUTERS-OIL-CONTEXT-20260624",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Oil prices extend decline on expectations of smoother crude flows via Hormuz",
+      "url": "https://www.reuters.com/business/energy/oil-prices-extend-decline-expectations-smoother-crude-flows-via-hormuz-2026-06-24/",
+      "published_at": "2026-06-24",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported substantial oil-price declines immediately before the Council renewal.",
+        "The reported drivers centred on changing expectations about Strait of Hormuz crude flows and Iran-related supply conditions.",
+        "This supplies a strong contemporaneous alternative driver and does not establish an EU-renewal market response."
+      ],
+      "analytical_use": "MARKET_CONTEXT_AND_ALTERNATIVE_DRIVER",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-COUNCIL-21ST-20260723",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Council of the European Union",
+      "host_or_distribution": "Consilium",
+      "title": "21st package of sanctions: EU hits Russian energy, financial services and crypto hard",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/07/23/21st-package-of-sanctions-eu-hits-russian-energy-financial-services-and-crypto-hard/",
+      "published_at": "2026-07-23",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Council adopted a later 21st sanctions package with additional designations and measures affecting energy, financial services, crypto and the shadow fleet.",
+        "The later package demonstrates that the sanctions regime remained capable of amendment and calibration inside the annual legal horizon.",
+        "The later package is a distinct act and is not treated as an effect caused by the 25 June renewal."
+      ],
+      "analytical_use": "POST_RENEWAL_POLICY_CALIBRATION_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    }
+  ]
+}
