@@ -84,20 +84,16 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertGreaterEqual(len(self.evidence["evidence"]), 95)
         self.assertGreaterEqual(production_live_input_count(self.reviews), 1)
 
-    def test_status_helper_preserves_later_descendant_only_with_frozen_ba_invariants(self):
+    def test_status_helper_preserves_later_descendant_without_recovery_prose_coupling(self):
         current = apply_ba.STATUS_PATH.read_text(encoding="utf-8")
         first_header = current.splitlines()[0]
         descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
-        descendant = current.replace(first_header, descendant_header, 1)
-        self.assertEqual(apply_ba.target_status(descendant), descendant)
-
-        malformed = descendant.replace(
+        descendant = current.replace(first_header, descendant_header, 1).replace(
             "BA adds a **production-closed Analysis revision-lineage contract**",
-            "BA historical architecture marker removed",
+            "Later recovery override intentionally omits the historical BA paragraph",
             1,
         )
-        with self.assertRaises(SystemExit):
-            apply_ba.target_status(malformed)
+        self.assertEqual(apply_ba.target_status(descendant), descendant)
 
     def test_ba_target_core_analysis_and_revision_contract_validate(self):
         core = validate_analysis(

@@ -91,22 +91,18 @@ class CheckpointContractBCTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             apply_ba.target_analysis_schema(malformed)
 
-    def test_ba_status_descendant_is_keyed_to_architecture_marker_not_zero_revision_ceiling(self):
+    def test_ba_status_descendant_is_not_keyed_to_historical_recovery_prose(self):
         current = apply_ba.STATUS_PATH.read_text(encoding="utf-8")
         future = current.replace(
             "- production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**",
             "- production Analysis revisions: **1 / reviewed maximum 1 / public revision metadata projection CLOSED**",
             1,
-        )
-        self.assertEqual(apply_ba.target_status(future), future)
-
-        malformed = future.replace(
+        ).replace(
             "BA adds a **production-closed Analysis revision-lineage contract**",
-            "BA historical paragraph removed",
+            "Later recovery override intentionally omits BA historical prose",
             1,
         )
-        with self.assertRaises(SystemExit):
-            apply_ba.target_status(malformed)
+        self.assertEqual(apply_ba.target_status(future), future)
 
     def test_az_materialised_targets_do_not_downgrade_later_reviewed_versions_or_populations(self):
         payload = load(apply_az.PAYLOAD_PATH)
@@ -162,23 +158,18 @@ class CheckpointContractBCTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             apply_az.target_reviews(without_az, payload)
 
-    def test_az_status_descendant_preserves_first_relationship_without_freezing_cap(self):
+    def test_az_status_descendant_is_not_keyed_to_historical_recovery_prose(self):
         current = apply_az.STATUS_PATH.read_text(encoding="utf-8")
         future = current.replace(
             "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**",
             "- production `live_inputs`: **2 / reviewed maximum 2 / public projection CLOSED**",
             1,
-        )
-        self.assertEqual(apply_az.target_status(future), future)
-
-        malformed = future.replace(
+        ).replace(
             "AZ exercises the first **production Live Intelligence → Analysis relationship**",
-            "AZ historical relationship marker removed",
+            "Later recovery override intentionally omits AZ historical prose",
             1,
         )
-        with self.assertRaises(SystemExit):
-            apply_az.target_status(malformed)
-
+        self.assertEqual(apply_az.target_status(future), future)
 
 if __name__ == "__main__":
     unittest.main()
