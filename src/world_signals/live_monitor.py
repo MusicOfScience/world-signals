@@ -91,6 +91,57 @@ def rba_fsr_review_candidates(records: list[dict], items: Iterable[object], conf
     return candidates,observations
 
 
+def eia_wpsr_schedule_review_candidate(schedule: object, config: dict) -> tuple[dict | None, dict]:
+    """Compare EIA WPSR release-rule semantics with the reviewed baseline.
+
+    This is a schedule/change sentinel only. It cannot establish publication
+    completion and must never convert elapsed schedule time into lifecycle state.
+    """
+    current=schedule.as_dict() if hasattr(schedule,"as_dict") else dict(schedule)
+    baseline=(config.get("baseline") or {}).get("schedule") or {}
+    baseline_hash=(config.get("baseline") or {}).get("schedule_sha256") or baseline.get("schedule_sha256")
+    current_hash=current.get("schedule_sha256") or stable_hash(current)
+
+    if baseline_hash and current_hash == baseline_hash:
+        return None,{
+            "type":"EIA_WPSR_SCHEDULE_NO_CHANGE",
+            "schedule_sha256":current_hash,
+            "standard_release_day":current.get("standard_release_day"),
+            "standard_release_time_local":current.get("standard_release_time_local"),
+            "standard_time_semantics":current.get("standard_time_semantics"),
+            "holiday_exception_count":len(current.get("holiday_exceptions") or []),
+            "completion_inference":"PROHIBITED",
+        }
+
+    payload={
+        "standard_release_day":current.get("standard_release_day"),
+        "standard_release_time_local":current.get("standard_release_time_local"),
+        "standard_time_semantics":current.get("standard_time_semantics"),
+        "source_timezone":current.get("source_timezone"),
+        "holiday_exceptions":current.get("holiday_exceptions") or [],
+        "schedule_sha256":current_hash,
+    }
+    candidate_hash=stable_hash(payload)
+    candidate={
+        "candidate_id":"WSRC-EIA-WPSR-"+candidate_hash[:16],
+        "candidate_type":"PUBLICATION_SCHEDULE_RULE_OR_EXCEPTION_CHANGED",
+        "source_id":config.get("source_id"),
+        "occurrence_ids":config.get("canonical_occurrence_ids") or [],
+        "old_value":baseline,
+        "new_value":payload,
+        "review_state":"PENDING_AUTHORITATIVE_EIA_SCHEDULE_REVIEW",
+        "candidate_origin":"LIVE_READ_ONLY_MONITOR",
+        "completion_inference":"PROHIBITED",
+        "automatic_commit_allowed":False,
+    }
+    return candidate,{
+        "type":"EIA_WPSR_SCHEDULE_CHANGED",
+        "baseline_hash":baseline_hash,
+        "current_hash":current_hash,
+        "completion_inference":"PROHIBITED",
+    }
+
+
 def colombia_legal_input_review_candidate(rows: list[dict], config: dict) -> tuple[dict | None, dict]:
     """Compare the typed SUIN inventory row with a frozen baseline.
 
