@@ -43,6 +43,13 @@ from .cellar_metadata import (
     parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
 )
+from .eia_wpsr import (
+    EIA_WPSR_SCHEDULE_URL,
+    EIA_WPSR_TIMEZONE,
+    EIAWPSRSchedule,
+    fetch_eia_wpsr_schedule,
+    parse_eia_wpsr_schedule_html,
+)
 from .kenya_law import (
     KENYA_PFM_BASELINE_2025_11_04,
     KENYA_PFM_CURRENT,
@@ -83,6 +90,9 @@ __all__ = [
     "CRA_ELI_CURRENT",
     "ELILegalState",
     "CellarLegalTopology",
+    "EIA_WPSR_SCHEDULE_URL",
+    "EIA_WPSR_TIMEZONE",
+    "EIAWPSRSchedule",
     "FetchSnapshot",
     "KENYA_PFM_BASELINE_2025_11_04",
     "KENYA_PFM_CURRENT",
@@ -102,6 +112,7 @@ __all__ = [
     "fetch_cellar_celex_document",
     "fetch_cellar_identifier_notice",
     "fetch_cellar_rdf_notice",
+    "fetch_eia_wpsr_schedule",
     "fetch_eli_current_document",
     "fetch_cra_article_71",
     "fetch_kenya_budget_policy_rule_baseline",
@@ -119,6 +130,7 @@ __all__ = [
     "parse_cra_article_71",
     "parse_cellar_identifier_notice",
     "parse_cellar_legal_relation_diagnostics",
+    "parse_eia_wpsr_schedule_html",
     "parse_eli_current_state",
     "parse_kenya_budget_policy_rule",
     "parse_ons_release_calendar_rss",
