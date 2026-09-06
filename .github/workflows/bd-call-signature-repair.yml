@@ -1,0 +1,77 @@
+name: BD call-signature repair
+
+on:
+  push:
+    branches:
+      - feature/post-bc-vietnam-live-bd
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Patch exact helper and test call signatures
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          helper = Path('scripts/apply_vietnam_myanmar_live_bd.py')
+          text = helper.read_text(encoding='utf-8')
+          patches = [
+              (
+                  'public_live_intelligence_projection(schema, evidence, observations)',
+                  'public_live_intelligence_projection(schema, evidence, observations, canonical)',
+              ),
+              (
+                  'validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(REVIEWS_PATH), load(ANALYSIS_EVIDENCE_PATH), canonical)',
+                  'validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(ANALYSIS_EVIDENCE_PATH), load(REVIEWS_PATH), canonical)',
+              ),
+          ]
+          for old, new in patches:
+              if text.count(old) != 1:
+                  raise SystemExit(f'helper repair anchor count for {old!r}: {text.count(old)}')
+              text = text.replace(old, new, 1)
+          helper.write_text(text, encoding='utf-8')
+
+          test = Path('tests/test_vietnam_myanmar_live_bd.py')
+          text = test.read_text(encoding='utf-8')
+          old = 'public_live_intelligence_projection(schema, evidence, observations)'
+          new = 'public_live_intelligence_projection(schema, evidence, observations, self.canonical)'
+          if text.count(old) != 1:
+              raise SystemExit(f'test repair anchor count: {text.count(old)}')
+          test.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Verify repaired read-only BD contract
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/apply_vietnam_myanmar_live_bd.py tests/test_vietnam_myanmar_live_bd.py
+          python scripts/apply_vietnam_myanmar_live_bd.py --check-only
+          python -m unittest tests.test_vietnam_myanmar_live_bd -v
+      - name: Commit permanent signature repair
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/apply_vietnam_myanmar_live_bd.py tests/test_vietnam_myanmar_live_bd.py
+          git commit -m "BD: align helper with current validator signatures"
+      - name: Restore on failure and self-remove repair workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git reset --hard HEAD
+          git clean -fd
+          git rm .github/workflows/bd-call-signature-repair.yml
+          git commit -m "BD: remove temporary call-signature repair workflow"
+          git push origin HEAD:feature/post-bc-vietnam-live-bd
