@@ -97,7 +97,9 @@ jobs:
           from pathlib import Path
 
           projection = json.loads(Path('docs/data/analysis.json').read_text(encoding='utf-8'))
-          assert projection.get('schema_version') == '0.4', projection.get('schema_version')
+          metadata = projection.get('metadata') or {}
+          assert metadata.get('schema_version') == '0.4', metadata.get('schema_version')
+          assert metadata.get('review_count') == 14, metadata.get('review_count')
           assert len(projection.get('reviews', [])) == 14, len(projection.get('reviews', []))
           print('AK_GENERATED_PROJECTION_OK schema=0.4 reviews=14')
           PY
