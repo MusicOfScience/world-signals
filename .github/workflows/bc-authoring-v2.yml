@@ -32,14 +32,14 @@ jobs:
           path = Path('scripts/bc_authoring_patch.py')
           text = path.read_text(encoding='utf-8')
           replacements = [
-              ('CLOSED**\\n"', 'CLOSED**\\\\n"'),
-              ('decision\\n\\n"', 'decision\\\\n\\\\n"'),
-              ('evidence.\\n\\n"', 'evidence.\\\\n\\\\n"'),
+              ('CLOSED**\\n"', 'CLOSED**\\\\n"', 2),
+              ('decision\\n\\n"', 'decision\\\\n\\\\n"', 1),
+              ('evidence.\\n\\n"', 'evidence.\\\\n\\\\n"', 1),
           ]
-          for old, new in replacements:
-              if old not in text:
-                  raise SystemExit(f'BC authoring escape anchor missing: {old!r}')
-              text = text.replace(old, new)
+          for old, new, count in replacements:
+              if text.count(old) < count:
+                  raise SystemExit(f'BC authoring escape anchor count too small: {old!r}')
+              text = text.replace(old, new, count)
           path.write_text(text, encoding='utf-8')
           PY
       - name: Apply BC authoring patch
