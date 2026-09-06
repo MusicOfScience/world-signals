@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.25",
-  "reference_date": "2026-09-06",
+  "version": "0.26",
+  "reference_date": "2026-09-07",
   "changes": [
     {
       "change_id": "WSCHANGE-b5a5e064f7f9e408b8",
@@ -1830,6 +1830,46 @@
       "registry_version_before": "0.38",
       "registry_version_after": "0.39",
       "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-4730a5ef260b271967",
+      "occurrence_id": "WSO-COM-A-0001",
+      "change_type": "LIFECYCLE_AND_CERTAINTY_UPDATE",
+      "old_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "PLANNED",
+        "last_verified_at": "2026-09-02",
+        "last_successful_assertion_id": "WSA-e57ec413d7095a56"
+      },
+      "new_values": {
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "COMPLETED",
+        "last_verified_at": "2026-09-07",
+        "last_successful_assertion_id": "WSA-cddde6887f8083ca",
+        "completion_source_id": "WSSRC-COM-015",
+        "completion_source_url": "https://www.reuters.com/business/energy/opec-set-keep-oil-output-policy-unchanged-sunday-sources-say-2026-09-06/",
+        "completion_source_class": "REPUTABLE_NEWSWIRE_FALLBACK",
+        "primary_outcome_provenance_state": "PENDING_PRIMARY_UPGRADE"
+      },
+      "source_assertion_id": "WSA-cddde6887f8083ca",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-07T00:52:22+10:00",
+      "review_basis": [
+        "https://www.opec.org/pr-detail/611-2-august-2026.html",
+        "https://www.reuters.com/business/energy/opec-set-keep-oil-output-policy-unchanged-sunday-sources-say-2026-09-06/",
+        "Existing scheduled OPEC+ occurrence marked completed after reviewed post-event fallback verification. Reuters reports that the seven-country group met on 6 September and says the unchanged October policy was announced in a group statement. Completion is not inferred from elapsed time. The competent OPEC primary outcome statement was not retrievable on the accessible/indexed primary surface at review time and remains a provenance-upgrade requirement.",
+        "Charter source hierarchy permits a highly reputable newswire when primary material is unavailable; the fallback is explicitly not promoted to primary authority.",
+        "Stable occurrence, series and schedule-source identities are preserved.",
+        "Source-native civil-date/day precision and null UTC fields are preserved; no clock time is inferred.",
+        "The Reuters-reported 4 October next-meeting date is not admitted by this transaction."
+      ],
+      "commit_mode": "REVIEWED_FALLBACK_LIFECYCLE_REPAIR_BE",
+      "committed_at": "2026-09-07T00:52:22+10:00",
+      "registry_version_before": "0.39",
+      "registry_version_after": "0.40",
+      "canonical_mutation_committed": true,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ]
 }

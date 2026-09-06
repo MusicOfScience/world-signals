@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
-  "reference_date": "2026-09-06",
-  "version": "1.81",
+  "reference_date": "2026-09-07",
+  "version": "1.82",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10169,6 +10169,52 @@
           "preferred_for_monitoring": false
         }
       ]
+    },
+    {
+      "source_id": "WSSRC-COM-015",
+      "institution": "Reuters",
+      "jurisdiction": "OPEC+",
+      "domain": "energy_commodities",
+      "source_type": "reputable_newswire_fallback",
+      "endpoint_role": "Completion-only secondary verification of the 6 September 2026 OPEC+ voluntary-adjustment review when the competent primary outcome statement is not retrievable",
+      "authoritative_url": "https://www.reuters.com/business/energy/opec-set-keep-oil-output-policy-unchanged-sunday-sources-say-2026-09-06/",
+      "information_supplied": "Reuters reports that the seven participating OPEC+ countries met on 6 September 2026 and, citing the group's statement, kept October output policy unchanged. Used only to establish that the scheduled review occurred; not primary OPEC provenance and not forward schedule authority.",
+      "future_schedule_horizon": "post-event fallback completion only; no future occurrence may be created from this source",
+      "typical_advance_notice": "post-event reporting",
+      "source_timezone": null,
+      "timezone_scope": "EVENT_LOCAL_OR_PUBLICATION_NATIVE_NOT_CANONICAL_EVENT_TIME",
+      "machine_readable_available": "HTML_NEWS_ARTICLE",
+      "parser_type": "MANUAL_REPUTABLE_NEWSWIRE_FALLBACK_VERIFICATION",
+      "parser_version": null,
+      "verification_mode": "MANUAL_SECONDARY_FALLBACK_REVIEW",
+      "runtime_health_state": "MANUAL_RESEARCH_VERIFIED",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "canonical_dependency_count": 0,
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "ingestion_permission": "MINIMAL_FACTUAL_METADATA_AND_LINK_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_PROHIBITED_FOR_BE",
+      "monitoring_readiness_status": "NOT_A_MONITOR_SOURCE",
+      "monitoring_priority_score": 0,
+      "monitoring_readiness_assessed_at": "2026-09-07",
+      "recommended_verification_cadence": "none; replace or supplement with primary OPEC provenance when retrievable",
+      "licence_review_status": "SECONDARY_NEWSWIRE_LINK_ONLY_NO_CONTENT_REPUBLICATION",
+      "licence_constraints": "No Reuters article text is stored or republished; only minimal factual attribution, URL and the reviewed lifecycle proposition are retained.",
+      "redistribution_permission": "LINK_AND_MINIMAL_FACTUAL_METADATA_ONLY",
+      "rights_evidence_url": null,
+      "rights_summary": "BE makes no claim of broad Reuters reuse or automated retrieval rights. The source object governs one manually reviewed fallback provenance use only.",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "rights_review_scope": "OPEC_BE_SECONDARY_FALLBACK_MINIMAL_FACTUAL_PROVENANCE",
+      "rights_reviewed_at": "2026-09-07",
+      "backup_source": "WSSRC-COM-001",
+      "known_limitations": [
+        "Reuters is a reputable secondary newswire, not the competent OPEC primary source.",
+        "At BE review time the accessible/indexed OPEC press-release surface did not expose the 6 September outcome statement; this absence is not evidence that no statement exists.",
+        "Reuters says the group acted 'in a statement', so primary OPEC provenance should replace or supplement this fallback when retrievable.",
+        "The Reuters-reported 4 October next-meeting date is not admitted to Canonical by BE.",
+        "No article text, market attribution or forward policy inference is retained."
+      ],
+      "notes": "Completion-only fallback provenance. WSSRC-COM-001 remains the governed OPEC schedule/decision authority. BE does not downgrade that primary authority and does not create a future occurrence from secondary reporting."
     }
   ],
   "activation_backlog": [

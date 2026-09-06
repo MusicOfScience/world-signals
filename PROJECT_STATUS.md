@@ -1,24 +1,24 @@
-# CURRENT RECOVERY OVERRIDE — POST-BC / BD FIFTH LIVE SPECIMEN
+# CURRENT RECOVERY OVERRIDE — POST-BD / BE OPEC FALLBACK LIFECYCLE COMPLETION
 
-**Effective checkpoint:** 2026-09-06
-**Exact post-BC main base:** `667d0fbcc92f937b0cb609d619b664a2a97e8165`
+**Effective checkpoint:** 2026-09-07
+**Exact post-BD main base:** `e54dddbaa0d60a39babc2fa47c1f054954b5c9ac`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
 ## Current governed state
 
-- Canonical Registry: **v0.39 / 689 occurrences**
+- Canonical Registry: **v0.40 / 689 occurrences**
 - Canonical schema: **v0.52**
-- Source Registry: **v1.81 / 244 sources**
-- reviewed Change Ledger: **v0.25 / 60 entries**
-- biosecurity overlay: **v0.14 @ canonical v0.39 / 689**
+- Source Registry: **v1.82 / 245 sources**
+- reviewed Change Ledger: **v0.26 / 61 entries**
+- biosecurity overlay: **v0.15 @ canonical v0.40 / 689**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
 - Live Intelligence: **v0.5 / 5 reviewed internal observations / 7 primary-official evidence rows / public observation projection CLOSED**
 - Analysis schema: **v0.7**
 - Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**
-- completed Analysis-eligible occurrences: **21**
-- completed/unreviewed Analysis-eligible occurrences: **0** (not a population target)
+- completed Analysis-eligible occurrences: **22**
+- completed/unreviewed Analysis-eligible occurrences: **1** (`WSO-COM-A-0001`; not a population target)
 - production `live_inputs`: **1 / public projection CLOSED**
 - production Analysis revisions: **0 / gate CLOSED / public revision metadata projection CLOSED**
 - production `EXACT_TIMESTAMP_SERIES`: **0**
@@ -27,11 +27,11 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-BD adds the fifth pressure-audited Live observation: a **primary-confirmed 5 September 2026 Vietnam-Myanmar geopolitical development** sourced to the Government of Viet Nam. It has zero Canonical links because no scheduled Canonical identity exists and none is manufactured. The summit event is retained at civil-date precision while the source's independently explicit publication timestamp is preserved separately. No causal, strategic-alignment, legitimacy, conflict-effect or market-attribution claim is encoded.
+BE repairs one upstream lifecycle state: the already-scheduled **6 September 2026 OPEC+ voluntary-adjustment review** (`WSO-COM-A-0001`) moves `PLANNED → COMPLETED` after reviewed post-event verification. The competent OPEC primary outcome statement was not retrievable on the accessible/indexed primary surface at review time, so BE uses one tightly bounded Reuters completion-only fallback source under the Charter's reputable-newswire tier. The fallback is explicitly secondary and primary OPEC outcome provenance remains a future reviewed upgrade requirement.
 
-BC remains the reviewed historical-checkpoint / legitimate-descendant contract. BB remains the bounded BARMM election Canonical coverage repair. BA's Analysis revision-lineage grammar remains production-closed. AZ's inaugural Live-to-Analysis relationship remains the only production `live_input`.
+BE does **not** create the Reuters-reported 4 October meeting, add a sixth Live observation, populate a second Live→Analysis link, open Analysis revision production, infer any event clock time, or change monitor configuration. `WSSRC-COM-001` remains the OPEC schedule/decision authority; `WSSRC-COM-015` has zero Canonical dependencies and no forward-schedule or automation authority.
 
-Public Live observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. A sixth Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit.
+BD remains the fifth pressure-audited Live specimen. BC remains the historical-checkpoint / legitimate-descendant contract. BA's Analysis revision-lineage grammar remains production-closed. AZ's inaugural Live-to-Analysis relationship remains the only production `live_input`.
 
 ## Current configured monitor cohort
 

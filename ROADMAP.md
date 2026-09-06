@@ -115,6 +115,12 @@ BD selects the 5 September 2026 Vietnam-Myanmar defence/security agreement as th
 
 The official article supplies an exact publication time, preserved independently, but describes the leaders' meeting only as occurring on 5 September / Saturday morning. BD therefore keeps event time at `CIVIL_DATE` and does not fabricate a summit timestamp. Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Calendar writes remain closed. A sixth Live observation requires another pressure audit.
 
+### BE — OPEC fallback lifecycle completion — DONE / PRIMARY PROVENANCE UPGRADE PENDING
+
+BE repairs the existing 6 September 2026 OPEC+ voluntary-adjustment review from `PLANNED` to `COMPLETED` using one reviewed Reuters completion-only fallback because the competent OPEC outcome statement was not retrievable on the accessible/indexed primary surface at review time. The fallback does not displace `WSSRC-COM-001` as OPEC schedule/decision authority and is retained explicitly as secondary provenance pending a later primary-source upgrade.
+
+BE creates no 4 October occurrence from secondary reporting, no sixth Live observation and no Analysis mutation. The repair raises the completed Analysis-eligible pool to 22 and leaves one completed/unreviewed OPEC anchor for a future pressure audit; queue completion is not the objective.
+
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
 AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.

@@ -146,7 +146,12 @@ class IMDHeatwaveOutlookAnalysisAUTests(unittest.TestCase):
         self.assertEqual(readiness["reviewed_by_event_type"].get("PHYSICAL_RISK_OUTLOOK_RELEASE"), 1)
         self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 20)
         self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 18)
-        self.assertEqual(readiness["eligible_completed_occurrence_count"], 21)
+        # AU freezes the historical eligible-completed checkpoint at 21; later reviewed
+        # Canonical lifecycle growth may legitimately increase that population.
+        self.assertGreaterEqual(
+            readiness["eligible_completed_occurrence_count"],
+            self.plan["preconditions"]["eligible_completed_occurrence_count"],
+        )
         self.assertGreaterEqual(version_tuple(reviews["version"]), (0, 16))
         self.assertEqual(reviews["canonical_checkpoint"], {"registry_version": "0.38", "record_count": 688})
         self.assertGreaterEqual(version_tuple(evidence["version"]), (0, 16))
