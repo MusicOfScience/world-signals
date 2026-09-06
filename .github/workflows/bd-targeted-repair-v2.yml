@@ -1,0 +1,79 @@
+name: BD targeted repair v2
+
+on:
+  push:
+    branches:
+      - feature/post-bc-vietnam-live-bd
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Patch exact BD call signatures and base-SHA assertion
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          helper = Path('scripts/apply_vietnam_myanmar_live_bd.py')
+          text = helper.read_text(encoding='utf-8')
+          patches = [
+              ('public_live_intelligence_projection(schema, evidence, observations)',
+               'public_live_intelligence_projection(schema, evidence, observations, canonical)'),
+              ('validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(REVIEWS_PATH), load(ANALYSIS_EVIDENCE_PATH), canonical)',
+               'validate_analysis(load(ANALYSIS_SCHEMA_PATH), load(ANALYSIS_EVIDENCE_PATH), load(REVIEWS_PATH), canonical)'),
+          ]
+          for old, new in patches:
+              if text.count(old) != 1:
+                  raise SystemExit(f'helper anchor count {text.count(old)} for {old!r}')
+              text = text.replace(old, new, 1)
+          helper.write_text(text, encoding='utf-8')
+
+          test = Path('tests/test_vietnam_myanmar_live_bd.py')
+          text = test.read_text(encoding='utf-8')
+          patches = [
+              ('public_live_intelligence_projection(schema, evidence, observations)',
+               'public_live_intelligence_projection(schema, evidence, observations, self.canonical)'),
+              ('667d0fbcc92f9374a070c31b70fb5fa5f0f01431',
+               '667d0fbcc92f937b0cb609d619b664a2a97e8165'),
+          ]
+          for old, new in patches:
+              if text.count(old) != 1:
+                  raise SystemExit(f'test anchor count {text.count(old)} for {old!r}')
+              text = text.replace(old, new, 1)
+          test.write_text(text, encoding='utf-8')
+          PY
+      - name: Verify complete targeted BD contract
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/apply_vietnam_myanmar_live_bd.py tests/test_vietnam_myanmar_live_bd.py
+          python scripts/apply_vietnam_myanmar_live_bd.py --check-only
+          python -m unittest tests.test_vietnam_myanmar_live_bd -v
+      - name: Commit permanent targeted repairs
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/apply_vietnam_myanmar_live_bd.py tests/test_vietnam_myanmar_live_bd.py
+          git commit -m "BD: align helper signatures and frozen base assertion"
+      - name: Restore on failure and self-remove workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git reset --hard HEAD
+          git clean -fd
+          git rm .github/workflows/bd-targeted-repair-v2.yml
+          git commit -m "BD: remove temporary targeted repair workflow v2"
+          git push origin HEAD:feature/post-bc-vietnam-live-bd
