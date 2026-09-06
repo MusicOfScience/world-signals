@@ -1,0 +1,76 @@
+name: WORLD SIGNALS AS EIA WPSR route pressure probe
+
+on:
+  push:
+    branches:
+      - feature/post-ar-pressure-audit-as
+    paths:
+      - .github/workflows/tmp-post-ar-eia-pressure-as.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-73 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=4b25bb452f3def253cf86254e5ad6abdbe8b9f13
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+      - name: Inspect exact EIA source and canonical dependency state
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('.')
+          src=json.loads((root/'data/sources/registry.json').read_text())
+          can=json.loads((root/'data/canonical/registry.json').read_text())
+          exp=json.loads((root/'data/monitor/expectations.json').read_text())
+          rec=next(x for x in src['sources'] if x.get('source_id')=='WSSRC-COM-003')
+          occ=[x for x in can['records'] if x.get('source_id')=='WSSRC-COM-003' or x.get('series_id')=='WSER-COM-EIA-WPSR']
+          print(json.dumps({
+            'source_registry_version':src.get('version'),
+            'source_record':rec,
+            'canonical_registry_version':can.get('version'),
+            'wpsr_occurrences':[{k:x.get(k) for k in ['occurrence_id','series_id','canonical_name','event_type','lifecycle_status','start_local','start_utc','source_timezone','source_id']} for x in occ],
+            'monitor_expectations_version':exp.get('version'),
+            'configured_adapter_ids':[x.get('adapter_id') for x in exp.get('adapters',[])],
+          },indent=2,ensure_ascii=False))
+          PY
+      - name: Probe official WPSR publication page conservatively
+        shell: bash
+        run: |
+          python - <<'PY'
+          from urllib.request import Request,urlopen
+          from hashlib import sha256
+          import re
+          url='https://www.eia.gov/petroleum/supply/weekly/index.php'
+          req=Request(url,headers={'User-Agent':'WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)'})
+          with urlopen(req,timeout=30) as r:
+              body=r.read()
+              ctype=r.headers.get('Content-Type')
+              status=r.status
+              final=r.geturl()
+          text=body.decode('utf-8','replace')
+          patterns={
+            'week_ending':r'Data for week ending\s*([^<\n]+)',
+            'release_date':r'Release Date:\s*([^<\n]+)',
+            'next_release_date':r'Next Release Date:\s*([^<\n]+)',
+          }
+          found={k:(re.search(p,text,re.I).group(1).strip() if re.search(p,text,re.I) else None) for k,p in patterns.items()}
+          print({'status':status,'final_url':final,'content_type':ctype,'bytes':len(body),'sha256':sha256(body).hexdigest(),'fields':found})
+          if status != 200 or not all(found.values()):
+              raise SystemExit('EIA WPSR stable publication fields not all found')
+          PY
