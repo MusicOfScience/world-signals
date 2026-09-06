@@ -1,0 +1,63 @@
+name: BE pressure-window diagnostic
+on:
+  push:
+    branches: [feature/post-bd-opec-outcome-be]
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Inspect immediate canonical pressure window
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          sm={x.get('source_id'):x for x in s.get('sources',[])}
+          rows=[]
+          for r in c.get('records',[]):
+              d=str(r.get('start_local') or '')[:10]
+              if '2026-09-05' <= d <= '2026-09-10':
+                  rows.append(r)
+          rows.sort(key=lambda r:(str(r.get('start_local')),str(r.get('occurrence_id'))))
+          print('WINDOW_COUNT',len(rows))
+          for r in rows:
+              out={k:r.get(k) for k in [
+                  'occurrence_id','series_id','title','jurisdiction','region',
+                  'certainty_status','lifecycle_status','start_local','end_local',
+                  'source_timezone','start_precision','start_utc','source_id',
+                  'intrinsic_importance','expected_market_sensitivity','analysis_eligible',
+                  'last_verified_at','last_successful_assertion_id'
+              ]}
+              print('\nOCCURRENCE',json.dumps(out,sort_keys=True))
+              src=sm.get(r.get('source_id'))
+              if src:
+                  print('SOURCE',json.dumps({k:src.get(k) for k in [
+                    'source_id','institution','source_type','authoritative_url','endpoint_role',
+                    'verification_mode','automated_monitoring_use','automation_rights',
+                    'runtime_health_state','last_successful_research_verification_at','notes'
+                  ]},sort_keys=True))
+          print('\nREUTERS_SOURCE_MATCHES')
+          for src in s.get('sources',[]):
+              if 'reuters' in json.dumps(src).lower():
+                  print(json.dumps(src,sort_keys=True))
+          print('\nOCT4_OPEC_MATCHES')
+          for r in c.get('records',[]):
+              if 'OPEC' in str(r.get('title','')) and str(r.get('start_local','')).startswith('2026-10-04'):
+                  print(json.dumps(r,sort_keys=True))
+          PY
+      - name: Self-remove diagnostic
+        if: always()
+        run: |
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/be-pressure-window-diagnostic.yml
+          git commit -m "BE: remove temporary pressure-window diagnostic"
+          git push origin HEAD:feature/post-bd-opec-outcome-be
