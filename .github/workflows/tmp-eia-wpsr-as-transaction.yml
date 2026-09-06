@@ -1,0 +1,160 @@
+name: WORLD SIGNALS AS EIA WPSR controlled transaction
+
+on:
+  push:
+    branches:
+      - feature/post-ar-pressure-audit-as
+    paths:
+      - .github/workflows/tmp-eia-wpsr-as-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-73 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=4b25bb452f3def253cf86254e5ad6abdbe8b9f13
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          git diff --check "$BASE"...HEAD
+          test ! -e .github/workflows/tmp-post-ar-eia-pressure-as.yml
+          test ! -e .github/workflows/tmp-eia-wpsr-as-preflight.yml
+      - name: Controlled AS state write
+        env:
+          WORLD_SIGNALS_APPLY_MONITOR_AS: '1'
+        run: python scripts/apply_eia_wpsr_monitor_as.py
+      - name: Prove exact transaction mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain=v1 | sed 's/^...//' | sort)
+          printf '%s\n' "${changed[@]}"
+          expected=(
+            data/monitor/EIA_WPSR_MONITOR_AS_TRANSACTION_AUDIT_v0.1.md
+            data/monitor/expectations.json
+            data/sources/registry.json
+          )
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${changed[$i]}" = "${expected[$i]}"; done
+      - name: Recompute post-AS monitor coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_monitor_coverage_audit.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('artifacts/monitor/monitor-coverage-audit.json').read_text())
+          assert x['totals']=={
+            'configured_adapter_count':8,
+            'unique_monitor_source_count':7,
+            'scoped_occurrence_count':43,
+            'scoped_series_count':11,
+            'scoped_institution_count':6,
+            'scoped_region_count':4,
+            'scoped_category_count':6,
+          }, x['totals']
+          eia=next(a for a in x['adapter_inventory'] if a['adapter_id']=='EIA_WPSR_SCHEDULE')
+          assert eia['regions']==['Cross-regional / Global']
+          assert eia['categories']==['ENERGY_COMMODITIES']
+          print('AS_MONITOR_COVERAGE_OK')
+          PY
+      - name: Run real post-AS live monitor and verify EIA route
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_live_monitor.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('artifacts/live-monitor.json').read_text())
+          assert x['monitor_expectations_version']=='0.10'
+          assert x['source_registry_version']=='1.79'
+          assert x['canonical_unchanged'] is True
+          assert x['source_health_summary']['expected_adapter_entries']==8
+          assert x['source_health_summary']['all_expected_adapters_observed'] is True
+          health=next(h for h in x['source_health'] if h['adapter_id']=='EIA_WPSR_SCHEDULE')
+          assert health['state']=='HEALTHY', health
+          assert health['completion_inference']=='PROHIBITED'
+          obs=[o for o in x['observations'] if o.get('type','').startswith('EIA_WPSR_')]
+          assert len(obs)==1 and obs[0]['type']=='EIA_WPSR_SCHEDULE_NO_CHANGE', obs
+          assert obs[0]['schedule_sha256']=='8f972e877fdd56dd836f6a0cc7bc0abea73c21bfd01dd8bbc3b784ea7eacec87'
+          candidates=[c for c in x['review_candidates'] if c.get('source_id')=='WSSRC-COM-003']
+          assert candidates==[], candidates
+          print('AS_EIA_LIVE_ROUTE_OK')
+          PY
+      - name: Validate governed layers
+        shell: bash
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_analysis.py
+          python -m unittest tests.test_eia_wpsr_adapter tests.test_eia_wpsr_monitor tests.test_monitor_coverage_audit -v
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile repository Python
+        run: python -m compileall -q src scripts tests
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          for f in web/*.js; do node --check "$f"; done
+      - name: Build static site
+        run: python scripts/build_site.py
+      - name: Prove exact-series zero and protected base layers unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=4b25bb452f3def253cf86254e5ad6abdbe8b9f13
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ev=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert [x for x in ev.get('evidence',[]) if x.get('evidence_type')=='EXACT_TIMESTAMP_SERIES']==[]
+          print('EXACT_TIMESTAMP_SERIES=0')
+          PY
+          for p in \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/changes/ledger.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/monitor/operations_policy.json; do
+            test -z "$(git diff "$BASE" -- "$p")"
+          done
+      - name: Clean generated artifacts and re-prove transaction boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf artifacts review_candidates/live site _site public
+          mapfile -t changed < <(git status --porcelain=v1 | sed 's/^...//' | sort)
+          expected=(
+            data/monitor/EIA_WPSR_MONITOR_AS_TRANSACTION_AUDIT_v0.1.md
+            data/monitor/expectations.json
+            data/sources/registry.json
+          )
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${changed[$i]}" = "${expected[$i]}"; done
+      - name: Commit controlled state and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add data/sources/registry.json data/monitor/expectations.json data/monitor/EIA_WPSR_MONITOR_AS_TRANSACTION_AUDIT_v0.1.md
+          git commit -m "AS: promote EIA WPSR schedule sentinel"
+          git push origin HEAD:feature/post-ar-pressure-audit-as
+          git rm .github/workflows/tmp-eia-wpsr-as-transaction.yml
+          git commit -m "AS: remove controlled transaction workflow"
+          git push origin HEAD:feature/post-ar-pressure-audit-as
