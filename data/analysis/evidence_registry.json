@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.10",
+  "version": "0.11",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1087,6 +1087,108 @@
         "These contextual climate observations are not themselves a quantified attribution of the season's cyclone activity or impacts."
       ],
       "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-RBA-FSR-OFFICIAL-20260319",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Reserve Bank of Australia",
+      "host_or_distribution": "Reserve Bank of Australia",
+      "title": "Financial Stability Review — March 2026",
+      "url": "https://www.rba.gov.au/publications/fsr/2026/mar/",
+      "published_at": "2026-03-19",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The RBA assessed risks to the global financial system as having increased amid escalation of conflict in the Middle East and sharp movements in global financial markets.",
+        "The RBA assessed Australia's financial system as well placed to handle a challenging and uncertain global environment.",
+        "The page identifies heightened operational, cyber and security disruption risk and emphasises continued resilience and prudent lending standards."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-RBA-FSR-ASSESSMENT-20260318",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Reserve Bank of Australia",
+      "host_or_distribution": "Reserve Bank of Australia",
+      "title": "Financial Stability Assessment — Financial Stability Review March 2026",
+      "url": "https://www.rba.gov.au/publications/fsr/2026/mar/financial-stability-assessment.html",
+      "published_at": "2026-03-19",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE",
+        "SECOND_ORDER_OBSERVATION"
+      ],
+      "supports": [
+        "The Review was finalised on 18 March 2026 while the Middle East conflict was evolving rapidly.",
+        "The RBA states that escalation of the conflict sparked a substantial increase in volatility after a lengthy period of unusually low risk premia.",
+        "The RBA identifies leverage and concentration in global markets, sovereign-debt repricing, NBFI amplification, cyber and operational risks and multiple channels through which severe global stress could affect Australia.",
+        "The identified transmission channels are conditional financial-stability mechanisms, not outcomes caused by publication of the Review."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-RBA-FSR-PRIOR-20251002",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Reserve Bank of Australia",
+      "host_or_distribution": "Reserve Bank of Australia",
+      "title": "Financial Stability Assessment — Financial Stability Review October 2025",
+      "url": "https://www.rba.gov.au/publications/fsr/2025/oct/financial-stability-assessment.html",
+      "published_at": "2025-10-02",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The October 2025 Review already assessed global financial-stability risks as elevated and highlighted sovereign debt, low risk premia, NBFI leverage and liquidity mismatches, operational and cyber vulnerabilities, and China-related spillover risks.",
+        "It described market volatility as having subsided from the April episode, providing an institutional baseline for comparison with March 2026.",
+        "This prior official assessment is context and prior guidance, not evidence of a consensus forecast for the March 2026 FSR's exact contents."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-RBA-RATE-CONTEXT-20260317",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Australia central bank hikes rates to 10-month high as Iran war stokes inflation risk",
+      "url": "https://www.reuters.com/world/asia-pacific/australias-central-bank-raises-rates-again-knife-edge-decision-2026-03-17/",
+      "published_at": "2026-03-17",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE",
+        "MARKET_OBSERVATION"
+      ],
+      "supports": [
+        "The RBA raised the cash rate by 25 basis points to 4.10 percent on 17 March in a 5-4 decision.",
+        "Reuters reported Australian-dollar, bond-futures and policy-path repricing around that decision and Governor Bullock's explanation.",
+        "The report identifies domestic inflation and the Middle East oil shock as major contemporaneous drivers, establishing material Australia-specific market information before the FSR release."
+      ],
+      "analytical_use": "CONTEXT_AND_SOURCE_REPORTED_MARKET_OBSERVATION_ONLY",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-AU-MARKETS-CONTEXT-20260319",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Euro and yen gain, pushing dollar index lower following central bank decisions",
+      "url": "https://www.reuters.com/world/asia-pacific/yen-under-pressure-focus-turns-boj-after-fed-holds-2026-03-19/",
+      "published_at": "2026-03-19",
+      "roles": [
+        "MARKET_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported broad FX moves on 19 March after multiple major central-bank decisions and continuing Middle East-driven oil volatility.",
+        "It reported the Australian dollar higher on the day while foregrounding Australian labour data and the RBA's earlier tightening cycle, not the Financial Stability Review as the driver.",
+        "The article establishes a heavily contaminated same-session market environment and does not supply an independently reconstructed 11:30 AEDT FSR event window."
+      ],
+      "analytical_use": "CONTEXT_AND_SOURCE_REPORTED_MARKET_OBSERVATION_ONLY",
       "canonical_provenance_effect": "NONE"
     }
   ]
