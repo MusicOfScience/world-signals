@@ -1,0 +1,142 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "AX",
+  "target_version": "0.3",
+  "reference_date": "2026-09-06",
+  "aw_checkpoint": {
+    "schema_version": "0.2",
+    "observations_version": "0.2",
+    "evidence_version": "0.2",
+    "population_state": "CONTROLLED_SINGLE_SPECIMEN",
+    "observation_count": 1,
+    "evidence_count": 2,
+    "post_merge_main_sha": "721206169033eb0ceb695075d44fb38e7fa2edc3",
+    "historical_contract": "AW v0.2 opened exactly one reviewed Nepal physical-shock specimen with two official evidence rows while public projection and automatic ingestion remained closed."
+  },
+  "population_policy": {
+    "mode": "CONTROLLED_MULTI_SNAPSHOT_SPECIMEN",
+    "production_population_allowed": true,
+    "evidence_population_allowed": true,
+    "maximum_observation_count": 3,
+    "maximum_evidence_count": 4,
+    "automatic_ingestion_allowed": false,
+    "existing_analysis_evidence_migration_allowed": false,
+    "public_observation_projection_allowed": false,
+    "reason": "AX opens only enough authority to preserve the AW Nepal specimen and add two reviewed as-of snapshots of one DRC Bundibugyo outbreak story. A later pressure audit is required before any fourth observation or broader ingestion."
+  },
+  "state_as_of_precision": [
+    "EXACT_TIMESTAMP",
+    "CIVIL_DATE",
+    "UNKNOWN"
+  ],
+  "story_policy_patch": {
+    "manual_reviewed_story_id_allowed": true,
+    "story_id_is_not_canonical_identity": true,
+    "story_id_is_not_causal_claim": true,
+    "repeated_state_observations_may_share_story_id": true,
+    "automatic_clustering_allowed": false,
+    "story_id_required": false,
+    "repeated_reports_do_not_imply_single_story": true,
+    "future_story_identity_requires_pressure_audited_contract": true
+  },
+  "observations": [
+    {
+      "observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+      "observed_at_utc": "2026-09-06T07:40:00Z",
+      "observation_type": "HEALTH_EMERGENCY",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "DRC Bundibugyo outbreak reaches 5,794 confirmed cases as of 26 August",
+      "summary": "WHO reported that, as of 26 August 2026, the Democratic Republic of the Congo had recorded 5,794 confirmed Bundibugyo virus disease cases including 2,786 confirmed deaths, a crude case fatality ratio of 48.1%, across 60 health zones in six provinces. This row preserves that dated epidemiological state and does not infer causes of transmission or response effectiveness.",
+      "domain_tags": [
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "regions": [
+        "Central Africa"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-COD-BVD-WHO-DON616-20260828"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+      "state_as_of": {
+        "precision": "CIVIL_DATE",
+        "as_of_date": "2026-08-26"
+      },
+      "state_update_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+      "observed_at_utc": "2026-09-06T07:41:00Z",
+      "observation_type": "HEALTH_EMERGENCY",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "DRC Bundibugyo outbreak reaches 6,100 confirmed cases as of 30 August",
+      "summary": "WHO African Region reported that, as of 30 August 2026, the Democratic Republic of the Congo had recorded 6,100 confirmed Bundibugyo virus disease cases including 2,950 confirmed deaths, a crude case fatality ratio of 48.4%, across 60 health zones in six provinces. This is a later state of the same developing outbreak, not a correction or retraction of the 26 August snapshot.",
+      "domain_tags": [
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "regions": [
+        "Central Africa"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+      "state_as_of": {
+        "precision": "CIVIL_DATE",
+        "as_of_date": "2026-08-30"
+      },
+      "state_update_of_observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization",
+      "title": "Ebola disease caused by Bundibugyo virus - Democratic Republic of the Congo — Disease Outbreak News 616",
+      "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON616",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-28"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary WHO evidence for the DRC outbreak state as of 26 August 2026: 5,794 confirmed cases, 2,786 confirmed deaths, CFR 48.1%, 60 health zones and six provinces."
+    },
+    {
+      "evidence_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "World Health Organization — Regional Office for Africa",
+      "title": "Ebola Bundibugyo Virus Disease Outbreak Democratic Republic of the Congo | Uganda Weekly External Situation Report 16, data as of 30 August 2026",
+      "url": "https://afro.who.int/countries/uganda/publication/ebola-bundibugyo-virus-disease-outbreak-democratic-republic-congo-uganda-weekly-external-situation",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-30"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary WHO African Region evidence for the later DRC outbreak state as of 30 August 2026: 6,100 confirmed cases, 2,950 confirmed deaths, CFR 48.4%, 60 health zones and six provinces."
+    }
+  ]
+}
