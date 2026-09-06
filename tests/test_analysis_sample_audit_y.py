@@ -38,9 +38,9 @@ class AnalysisSampleAuditYTests(unittest.TestCase):
     def test_y_historical_frontier_is_frozen_without_making_queue_completion_a_goal(self):
         frozen_frontier = self.frozen["eligible_unreviewed_frontier"]
         self.assertEqual([row["occurrence_id"] for row in frozen_frontier], ["WSO-ddb70f8ff05a58fb"])
-        for report in (self.frozen, self.live):
-            self.assertIn("QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE", {row["finding"] for row in report["findings"]})
-            self.assertIn("not quotas", report["next_stage"]["anti_quota_note"])
+        frozen_findings = {row["finding"] for row in self.frozen["findings"]}
+        self.assertIn("QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE", frozen_findings)
+        self.assertIn("not quotas", self.frozen["next_stage"]["anti_quota_note"])
 
         # Y freezes the historical frontier at its own checkpoint. A descendant
         # Analysis tranche may legitimately review a frozen frontier member, in
@@ -50,6 +50,19 @@ class AnalysisSampleAuditYTests(unittest.TestCase):
         live_reviewed_ids = set(self.live["readiness"]["reviewed_occurrence_ids"])
         self.assertIn(boc_id, live_frontier_ids | live_reviewed_ids)
         self.assertFalse(boc_id in live_frontier_ids and boc_id in live_reviewed_ids)
+
+        live_findings = {row["finding"] for row in self.live["findings"]}
+        self.assertIn("not quotas", self.live["next_stage"]["anti_quota_note"])
+        if live_frontier_ids:
+            self.assertIn("QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE", live_findings)
+        else:
+            # A later reviewed tranche may exhaust the current completed/unreviewed
+            # frontier. That does not retroactively make queue completion Y's goal,
+            # nor should the live audit manufacture a queue warning when no queue
+            # remains. The controlled-expansion non-representativeness warning must
+            # still survive.
+            self.assertNotIn("QUEUE_COMPLETION_IS_NOT_THE_OBJECTIVE", live_findings)
+            self.assertIn("CONTROLLED_EXPANSION_GATE_IS_NOT_REPRESENTATIVE_COVERAGE", live_findings)
 
     def test_readiness_gate_is_minimum_not_representativeness_claim(self):
         frozen = self.frozen["readiness"]
