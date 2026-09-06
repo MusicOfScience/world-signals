@@ -35,7 +35,7 @@ jobs:
       - name: Run current read-only live monitor
         run: python scripts/run_live_monitor.py
 
-      - name: Audit current Analysis pressure
+      - name: Audit current Analysis and monitor pressure
         shell: bash
         run: |
           set -euo pipefail
@@ -58,6 +58,7 @@ jobs:
           schema = load('data/analysis/schema.json')
           reviews = load('data/analysis/event_reviews.json')
           evidence = load('data/analysis/evidence_registry.json')
+          expectations = load('data/monitor/expectations.json')
           monitor = load('artifacts/live-monitor.json')
 
           report = validate_analysis(schema, evidence, reviews, canonical)
@@ -65,8 +66,14 @@ jobs:
           readiness = analysis_population_readiness(schema, reviews, canonical)
 
           records = canonical.get('records', [])
-          reviewed = {r.get('occurrence_id') for r in reviews.get('reviews', [])}
-          eligible = [r for r in records if r.get('lifecycle_status') == 'COMPLETED' and r.get('analysis_eligible') is True]
+          reviewed = {
+              r.get('canonical_occurrence_id')
+              for r in reviews.get('reviews', [])
+              if r.get('review_state') in {'REVIEWED_SAMPLE', 'REVIEWED'}
+              and r.get('review_phase') == 'POST_EVENT'
+              and r.get('canonical_occurrence_id')
+          }
+          eligible = [r for r in records if r.get('lifecycle_status') == 'COMPLETED']
           unreviewed = [r for r in eligible if r.get('occurrence_id') not in reviewed]
           exact = [
               (review.get('analysis_id'), movement.get('movement_id'))
@@ -74,6 +81,13 @@ jobs:
               for movement in (review.get('what_moved') or [])
               if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
           ]
+
+          rba_config = next(
+              a for a in expectations.get('adapters', [])
+              if a.get('adapter_id') == 'RBA_FSR_RSS'
+          )
+          rba_ids = set(rba_config.get('canonical_occurrence_ids') or [])
+          rba_series = [r for r in records if r.get('series_id') == 'WSER-FIN-AU-RBA-FSR']
 
           print('AL_POST_AK_STATE')
           print('canonical', canonical.get('version'), len(records))
@@ -88,7 +102,22 @@ jobs:
           print('live_monitor_status', monitor.get('status'))
           print('live_monitor_candidates', monitor.get('candidate_count'))
           print('live_monitor_health', json.dumps(monitor.get('source_health_summary') or {}, sort_keys=True))
-          print('live_monitor_observations', json.dumps(monitor.get('observations') or [], sort_keys=True))
+          print('rba_monitor_occurrence_ids', sorted(rba_ids))
+          print('rba_canonical_series', json.dumps([
+              {
+                  'occurrence_id': r.get('occurrence_id'),
+                  'canonical_name': r.get('canonical_name'),
+                  'lifecycle_status': r.get('lifecycle_status'),
+                  'start_local': r.get('start_local'),
+                  'source_timezone': r.get('source_timezone'),
+                  'start_utc': r.get('start_utc'),
+              }
+              for r in rba_series
+          ], sort_keys=True))
+          print('rba_monitor_observations', json.dumps([
+              o for o in (monitor.get('observations') or [])
+              if str(o.get('type') or '').startswith('RBA_')
+          ], sort_keys=True))
           print('unreviewed_count', len(unreviewed))
           for row in unreviewed:
               print('UNREVIEWED', json.dumps({
@@ -97,16 +126,16 @@ jobs:
                   'category': row.get('category'),
                   'event_type': row.get('event_type'),
                   'institution': row.get('institution'),
-                  'region': row.get('region'),
+                  'region': row.get('region') or row.get('broad_region'),
                   'start_local': row.get('start_local'),
-                  'timezone': row.get('timezone'),
+                  'source_timezone': row.get('source_timezone'),
                   'start_utc': row.get('start_utc'),
-                  'timing_precision': row.get('timing_precision'),
+                  'time_precision': row.get('time_precision'),
               }, sort_keys=True))
 
           completed_categories = Counter(r.get('category') for r in eligible)
           reviewed_event_types = Counter(
-              next((c.get('event_type') for c in records if c.get('occurrence_id') == rid), None)
+              next((c.get('event_type') for c in records if c.get('occurrence_id') == rid), 'UNSPECIFIED')
               for rid in reviewed
           )
           print('completed_category_histogram', json.dumps(completed_categories, sort_keys=True))
