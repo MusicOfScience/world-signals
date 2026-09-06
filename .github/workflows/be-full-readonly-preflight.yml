@@ -1,0 +1,130 @@
+name: BE full read-only descendant preflight
+
+on:
+  push:
+    branches: [feature/post-bd-opec-outcome-be]
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BD ancestry and clean branch
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          test "$(git merge-base HEAD origin/main)" = "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac"
+          test -z "$(git status --porcelain)"
+      - name: Validate untouched BE authoring descendant
+        run: |
+          set -euo pipefail
+          python scripts/apply_opec_fallback_completion_be.py --check-only
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+      - name: Capture protected hashes
+        run: |
+          python - <<'PY' > /tmp/be-protected-before.json
+          import hashlib,json
+          from pathlib import Path
+          paths=[
+            'data/canonical/schema.json',
+            'data/monitor/expectations.json',
+            'data/monitor/operations_policy.json',
+            'data/monitor/review_candidate_state_contract.json',
+            'data/monitor/review_decisions.json',
+            'data/live_intelligence/schema.json',
+            'data/live_intelligence/observations.json',
+            'data/live_intelligence/evidence_registry.json',
+            'data/analysis/schema.json',
+            'data/analysis/event_reviews.json',
+            'data/analysis/evidence_registry.json',
+          ]
+          print(json.dumps({p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths},sort_keys=True))
+          PY
+      - name: Materialise ephemeral BE target
+        env:
+          WORLD_SIGNALS_APPLY_OPEC_FALLBACK_COMPLETION_BE: YES
+        run: |
+          set -euo pipefail
+          python scripts/apply_opec_fallback_completion_be.py --apply
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          l=json.loads(Path('data/changes/ledger.json').read_text())
+          o=json.loads(Path('data/coverage/biosecurity_overlay.json').read_text())
+          row=next(x for x in c['records'] if x['occurrence_id']=='WSO-COM-A-0001')
+          src=next(x for x in s['sources'] if x['source_id']=='WSSRC-COM-015')
+          assert (c['version'],len(c['records']))==('0.40',689)
+          assert (s['version'],len(s['sources']))==('1.82',245)
+          assert (l['version'],len(l['changes']))==('0.26',61)
+          assert o['version']=='0.15' and o['canonical_checkpoint']=={'registry_version':'0.40','record_count':689}
+          assert row['lifecycle_status']=='COMPLETED' and row['certainty_status']=='CONFIRMED'
+          assert row['start_local']=='2026-09-06' and row['start_utc'] is None and row['source_timezone'] is None
+          assert row['series_id']=='WSER-COM-OPEC-VOL' and row['source_id']=='WSSRC-COM-001'
+          assert row['status_history'][-1]['primary_provenance_upgrade_state']=='REQUIRED_WHEN_RETRIEVABLE'
+          assert src['institution']=='Reuters' and src['canonical_dependency_count']==0
+          assert src['automated_monitoring_use']=='PROHIBITED_OR_RIGHTS_HOLD'
+          assert not any(x.get('series_id')=='WSER-COM-OPEC-VOL' and str(x.get('start_local','')).startswith('2026-10-04') for x in c['records'])
+          PY
+          mapfile -t changed < <(git diff --name-only | sort)
+          printf '%s\n' "${changed[@]}"
+          expected=(PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json)
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${changed[$i]}" = "${expected[$i]}"; done
+      - name: Validate ephemeral BE target exhaustively
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_opec_fallback_completion_be.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          git restore docs 2>/dev/null || true
+      - name: Prove protected layers and exact mutation boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          before=json.loads(Path('/tmp/be-protected-before.json').read_text())
+          after={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in before}
+          assert before==after, [(p,before[p],after[p]) for p in before if before[p]!=after[p]]
+          print('BE protected-layer hashes unchanged')
+          PY
+          mapfile -t changed < <(git diff --name-only | sort)
+          expected=(PROJECT_STATUS.md ROADMAP.md data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/sources/registry.json)
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for i in "${!expected[@]}"; do test "${changed[$i]}" = "${expected[$i]}"; done
+          git diff --exit-code -- data/canonical/schema.json data/monitor data/live_intelligence data/analysis
+      - name: Restore ephemeral state and self-remove preflight
+        if: always()
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/be-full-readonly-preflight.yml
+          git commit -m "BE: remove full read-only descendant preflight"
+          git push origin HEAD:feature/post-bd-opec-outcome-be
