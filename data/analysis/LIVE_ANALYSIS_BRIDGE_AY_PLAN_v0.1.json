@@ -55,6 +55,17 @@
       "MARKET_OBSERVATION_INPUT"
     ]
   },
+  "descendant_test_repairs": {
+    "classification": "STALE_LIVE_DESCENDANT_ASSERTION",
+    "discovered_by": "AY read-only preflight run 34021514723",
+    "file": "tests/test_exact_market_measurement_contract_ak.py",
+    "trigger": "The untouched post-AX descendant passes the full suite at Analysis schema v0.4, but the ephemeral legitimate AY v0.5 descendant fails because the AK regression harness treats v0.4 as a permanent maximum rather than the historical AK contract floor.",
+    "historical_ak_target_preserved": "0.4",
+    "repair": "Keep the exact AK v0.3-to-v0.4 transformation path unchanged; when the live Analysis schema is v0.4 or later, exercise the AK exact-market contract against an unmodified copy of that live descendant and assert schema >= v0.4 rather than schema == v0.4.",
+    "precedent": "AK itself repaired four older tests under the same freeze-history-not-descendants rule; EXACT_MARKET_MEASUREMENT_CONTRACT_AK_PLAN_v0.1.json records that precedent.",
+    "project_wide_rules_weakened": false,
+    "ak_exact_market_contract_weakened": false
+  },
   "protected_paths": [
     "data/canonical/registry.json",
     "data/canonical/schema.json",
@@ -74,7 +85,8 @@
     "scripts/build_site.py",
     ".github/workflows/ci.yml",
     "PROJECT_STATUS.md",
-    "ROADMAP.md"
+    "ROADMAP.md",
+    "tests/test_exact_market_measurement_contract_ak.py"
   ],
   "new_permanent_files": [
     "data/analysis/POST_AX_PRESSURE_AUDIT_AY_v0.1.md",
