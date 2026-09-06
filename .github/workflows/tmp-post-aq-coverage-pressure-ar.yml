@@ -1,0 +1,125 @@
+name: WORLD SIGNALS AR post-AQ coverage pressure probe
+
+on:
+  push:
+    branches:
+      - feature/post-aq-pressure-audit-ar
+    paths:
+      - .github/workflows/tmp-post-aq-coverage-pressure-ar.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-72 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=2c215ce4d3ff70001af4733fce797f166bab2a46
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+
+      - name: Recompute current coverage audit
+        run: python scripts/run_coverage_audit.py
+
+      - name: Print AR pressure snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+
+          root = Path('.')
+          audit = json.loads((root/'artifacts/coverage/coverage-audit.json').read_text())
+          canonical = json.loads((root/'data/canonical/registry.json').read_text())
+          sources = json.loads((root/'data/sources/registry.json').read_text())
+          reviews = json.loads((root/'data/analysis/event_reviews.json').read_text())
+          expectations = json.loads((root/'data/monitor/expectations.json').read_text())
+
+          records = canonical['records']
+          by_id = {r['occurrence_id']: r for r in records}
+          reviewed_ids = {r['canonical_occurrence_id'] for r in reviews['reviews']}
+          completed = [r for r in records if r.get('lifecycle_status') == 'COMPLETED']
+          unreviewed_completed = [r for r in completed if r['occurrence_id'] not in reviewed_ids]
+
+          reviewed_records = [by_id[x] for x in reviewed_ids if x in by_id]
+          review_regions = Counter(r.get('region') for r in reviewed_records)
+          review_categories = Counter(r.get('category') for r in reviewed_records)
+          review_types = Counter(r.get('event_type') for r in reviewed_records)
+          completed_categories = Counter(r.get('category') for r in completed)
+
+          source_by_id = {s['source_id']: s for s in sources.get('sources', [])}
+          focus_regions = {'Africa','South Asia','Southeast Asia'}
+          focus_categories = {'PHYSICAL_CLIMATE_RISK','HEALTH_BIOSECURITY','ENERGY_COMMODITIES','CORPORATE_FINANCIAL_MARKET_STRUCTURE'}
+          focus_records = [r for r in records if r.get('region') in focus_regions or r.get('category') in focus_categories]
+          focus_source_ids = sorted({r.get('source_id') for r in focus_records if r.get('source_id')})
+          focus_readiness = Counter((source_by_id.get(sid) or {}).get('monitoring_readiness_status','MISSING') for sid in focus_source_ids)
+
+          monitored_ids = sorted({oid for a in expectations.get('adapters', []) for oid in a.get('canonical_occurrence_ids', [])})
+          monitored_records = [by_id[oid] for oid in monitored_ids if oid in by_id]
+          monitor_regions = Counter(r.get('region') for r in monitored_records)
+          monitor_categories = Counter(r.get('category') for r in monitored_records)
+
+          focus_region_rows = {r['region']: r for r in audit['by_region'] if r['region'] in focus_regions}
+          focus_category_rows = {r['category']: r for r in audit['by_category'] if r['category'] in focus_categories}
+
+          out = {
+              'coverage_dataset_version': audit['version'],
+              'canonical_version': audit['canonical_registry_version'],
+              'totals': audit['totals'],
+              'diagnostic_flags': audit['diagnostic_flags'],
+              'source_readiness': audit['source_readiness'],
+              'calendar_projection_readiness': audit['calendar_projection_readiness'],
+              'focus_regions': focus_region_rows,
+              'focus_categories': focus_category_rows,
+              'focus_source_readiness': dict(sorted(focus_readiness.items())),
+              'analysis_review_count': len(reviewed_records),
+              'analysis_review_regions': dict(sorted(review_regions.items())),
+              'analysis_review_categories': dict(sorted(review_categories.items())),
+              'analysis_review_event_types': dict(sorted(review_types.items())),
+              'completed_occurrence_count': len(completed),
+              'completed_categories': dict(sorted(completed_categories.items())),
+              'completed_unreviewed': [
+                  {
+                      'occurrence_id': r['occurrence_id'],
+                      'name': r.get('canonical_name'),
+                      'region': r.get('region'),
+                      'category': r.get('category'),
+                      'event_type': r.get('event_type'),
+                  }
+                  for r in unreviewed_completed
+              ],
+              'monitor_adapter_count': len(expectations.get('adapters', [])),
+              'monitor_occurrence_scope_count': len(monitored_records),
+              'monitor_regions': dict(sorted(monitor_regions.items())),
+              'monitor_categories': dict(sorted(monitor_categories.items())),
+          }
+          print('AR_PRESSURE_SNAPSHOT')
+          print(json.dumps(out, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Validate coverage mechanics
+        run: |
+          python scripts/validate_registry.py
+          python -m unittest tests.test_coverage -v
+
+      - name: Remove generated artifacts and prove tracked tree clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf artifacts/coverage
+          test -z "$(git status --porcelain=v1)"
+          echo AR_PROBE_TRACKED_TREE_CLEAN
