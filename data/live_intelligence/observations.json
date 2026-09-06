@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.5",
-  "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
+  "version": "0.6",
+  "reference_date": "2026-09-07",
+  "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -160,7 +160,35 @@
       },
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-INST-UNGA-CORRECTMAP-20260904-001",
+      "observed_at_utc": "2026-09-06T15:26:00Z",
+      "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "UN General Assembly adopts Africa-led ‘Correct the Map’ resolution by 164–1–6",
+      "summary": "On 4 September 2026, the United Nations General Assembly adopted resolution A/RES/80/307, ‘Correct the map: rebalancing global cartographic representation and promoting equitable representation of the world's regions, particularly Africa’, at its 114th plenary meeting. The UN records a vote of 164 in favour, 1 against and 6 abstentions. The African Union Commission describes the initiative as championed by Togo on behalf of the African Group and encourages institutions, education systems, publishers and digital platforms to progressively use cartographic representations that more accurately reflect relative land areas. This observation records the institutional adoption only: it does not claim that the resolution imposes a compulsory single world map, alters borders or sovereignty, or establishes an economic, political or market consequence.",
+      "domain_tags": [
+        "INSTITUTIONS",
+        "POLITICS"
+      ],
+      "jurisdictions": [],
+      "regions": [
+        "Global"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-UNGA-CORRECTMAP-UN-20260904",
+        "WSEV-LI-UNGA-CORRECTMAP-AU-20260904"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "CIVIL_DATE",
+        "event_date": "2026-09-04"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through BD: AW Nepal physical shock, AX DRC evolving-state pair, AZ Japan FIES economic data, and one Vietnam-Myanmar geopolitical development. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through BF: AW Nepal physical shock, AX DRC evolving-state pair, AZ Japan FIES economic data, BD Vietnam-Myanmar geopolitical development, and one UN General Assembly institutional development. Public projection and automatic ingestion remain closed."
 }

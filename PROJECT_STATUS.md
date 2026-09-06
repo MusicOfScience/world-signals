@@ -1,7 +1,7 @@
-# CURRENT RECOVERY OVERRIDE — POST-BD / BE OPEC FALLBACK LIFECYCLE COMPLETION
+# CURRENT RECOVERY OVERRIDE — POST-BE / BF SIXTH LIVE INSTITUTIONAL SPECIMEN
 
 **Effective checkpoint:** 2026-09-07
-**Exact post-BD main base:** `e54dddbaa0d60a39babc2fa47c1f054954b5c9ac`
+**Exact post-BE main base:** `629ab595ecccaf86a92bbd8cdfdab4297496b298`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
@@ -14,7 +14,7 @@ This override supersedes stale "current" counts in the historical body below whi
 - biosecurity overlay: **v0.15 @ canonical v0.40 / 689**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.5 / 5 reviewed internal observations / 7 primary-official evidence rows / public observation projection CLOSED**
+- Live Intelligence: **v0.6 / 6 reviewed internal observations / 9 primary-official evidence rows / public observation projection CLOSED**
 - Analysis schema: **v0.7**
 - Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **22**
@@ -27,11 +27,13 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-BE repairs one upstream lifecycle state: the already-scheduled **6 September 2026 OPEC+ voluntary-adjustment review** (`WSO-COM-A-0001`) moves `PLANNED → COMPLETED` after reviewed post-event verification. The competent OPEC primary outcome statement was not retrievable on the accessible/indexed primary surface at review time, so BE uses one tightly bounded Reuters completion-only fallback source under the Charter's reputable-newswire tier. The fallback is explicitly secondary and primary OPEC outcome provenance remains a future reviewed upgrade requirement.
+BF adds the sixth pressure-audited Live observation: the **4 September 2026 UN General Assembly adoption of A/RES/80/307, ‘Correct the Map’**, stored as a primary-confirmed `INSTITUTIONAL_DEVELOPMENT`. Two primary-official evidence rows preserve the UN vote/adoption record and African Union institutional context. The observation has zero Canonical links because no scheduled Canonical occurrence is manufactured for the specific resolution adoption.
 
-BE does **not** create the Reuters-reported 4 October meeting, add a sixth Live observation, populate a second Live→Analysis link, open Analysis revision production, infer any event clock time, or change monitor configuration. `WSSRC-COM-001` remains the OPEC schedule/decision authority; `WSSRC-COM-015` has zero Canonical dependencies and no forward-schedule or automation authority.
+BF does not claim that the resolution mandates one compulsory world map, changes borders or sovereignty, or establishes an economic, political or market consequence. Event and source-publication timing remain at civil-date precision. No Analysis packet, second Live→Analysis link or Analysis revision is created.
 
-BD remains the fifth pressure-audited Live specimen. BC remains the historical-checkpoint / legitimate-descendant contract. BA's Analysis revision-lineage grammar remains production-closed. AZ's inaugural Live-to-Analysis relationship remains the only production `live_input`.
+BE's OPEC lifecycle repair and pending primary-provenance upgrade remain unchanged. BD remains the fifth Live specimen; AZ remains the only production `live_input`; BA's Analysis revision grammar remains production-closed.
+
+Public Live observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. A seventh Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit.
 
 ## Current configured monitor cohort
 

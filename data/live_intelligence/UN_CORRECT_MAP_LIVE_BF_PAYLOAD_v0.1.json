@@ -1,0 +1,69 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BF",
+  "target_version": "0.6",
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-UNGA-CORRECTMAP-UN-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations General Assembly",
+      "title": "General Assembly adopts text to ‘Correct the Map’, among other resolutions — GA/12779",
+      "url": "https://press.un.org/en/2026/ga12779.doc.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary UN meeting-coverage evidence for adoption on 4 September 2026 at the General Assembly's 114th plenary meeting. The draft A/80/L.104 was adopted as A/RES/80/307 by recorded vote 164 in favour, 1 against and 6 abstentions. No publication clock time is promoted from this civil-date source surface."
+    },
+    {
+      "evidence_id": "WSEV-LI-UNGA-CORRECTMAP-AU-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "African Union Commission",
+      "title": "Communiqué of the Chairperson of the African Union Commission on the Adoption of the ‘Correct The Map’ Resolution",
+      "url": "https://au.int/en/pressreleases/20260904/communique-auc-chairperson-adoption-correct-map-resolution",
+      "roles": [
+        "SOURCE_CONFIRMATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary African Union evidence confirming the Africa-led institutional initiative, Togo's role on behalf of the African Group, and the AU Commission's stated intention to support implementation. The evidence is contextual confirmation, not authority for the UN vote record itself."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-INST-UNGA-CORRECTMAP-20260904-001",
+    "observed_at_utc": "2026-09-06T15:26:00Z",
+    "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "UN General Assembly adopts Africa-led ‘Correct the Map’ resolution by 164–1–6",
+    "summary": "On 4 September 2026, the United Nations General Assembly adopted resolution A/RES/80/307, ‘Correct the map: rebalancing global cartographic representation and promoting equitable representation of the world's regions, particularly Africa’, at its 114th plenary meeting. The UN records a vote of 164 in favour, 1 against and 6 abstentions. The African Union Commission describes the initiative as championed by Togo on behalf of the African Group and encourages institutions, education systems, publishers and digital platforms to progressively use cartographic representations that more accurately reflect relative land areas. This observation records the institutional adoption only: it does not claim that the resolution imposes a compulsory single world map, alters borders or sovereignty, or establishes an economic, political or market consequence.",
+    "domain_tags": [
+      "INSTITUTIONS",
+      "POLITICS"
+    ],
+    "jurisdictions": [],
+    "regions": [
+      "Global"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-UNGA-CORRECTMAP-UN-20260904",
+      "WSEV-LI-UNGA-CORRECTMAP-AU-20260904"
+    ],
+    "canonical_links": [],
+    "revision_of_observation_id": null,
+    "event_time": {
+      "precision": "CIVIL_DATE",
+      "event_date": "2026-09-04"
+    },
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  }
+}
