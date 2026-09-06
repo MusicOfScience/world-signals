@@ -1,0 +1,167 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "WHO_WHA79_HEALTH_GOVERNANCE_ANALYSIS_AP",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "fb795411b217a05a94874e06f30fa44d7fc3ff8d",
+  "purpose": "Review the completed 18-23 May 2026 Seventy-ninth World Health Assembly as the first Analysis HEALTH_GOVERNANCE_EVENT specimen, preserving heterogeneous decision semantics across plan adoption, process establishment and continued negotiation, and tracking later institutional propagation without converting governance outputs into realised health effects.",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.13",
+    "analysis_review_count": 17,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.13",
+    "analysis_evidence_count": 72,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 17,
+    "reviewed_event_type_diversity": 15,
+    "required_target_occurrence_id": "WSO-HEALTH-WHA-079",
+    "required_target_series_id": "WSER-HEALTH-WHA",
+    "required_target_source_id": "WSSRC-HEALTH-001",
+    "required_target_category": "HEALTH_BIOSECURITY",
+    "required_target_event_type": "HEALTH_GOVERNANCE_EVENT",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_timing_type": "MULTI_DAY_LOCAL",
+    "required_target_start_local": "2026-05-18",
+    "required_target_end_local": "2026-05-23",
+    "required_target_source_timezone": "Europe/Zurich",
+    "required_target_start_utc": null,
+    "required_target_end_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_absent_analysis_ids": [
+      "WSAN-HEALTH-WHA79-20260523-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-HEALTH-WHA-079",
+    "selection_rationale": [
+      "Adds the first reviewed HEALTH_GOVERNANCE_EVENT and first HEALTH_BIOSECURITY Analysis specimen.",
+      "Tests a constitutional meeting with heterogeneous formal outputs rather than a single scalar outcome.",
+      "Tests verb discipline: WHA79 adopted an AMR plan, established global-health-architecture reform machinery, and continued PABS negotiations; these acts are institutionally distinct.",
+      "Tests completion versus implementation: closing the Assembly does not imply implementation of its resolutions or plans.",
+      "Tests continuation versus completion: WHA79(7) continued the PABS negotiating mandate and did not adopt the Annex.",
+      "Tests observed process propagation because IGWG7 subsequently met in July under the continued mandate while substantive PABS negotiations remained unfinished.",
+      "Fresh first-party WHO sources provide high-quality evidence without upstream canonical mutation."
+    ],
+    "held_occurrence_ids": [
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "hold_rationale": "The remaining completed anchors stay a choice set. AP selects health-governance object diversity and decision-semantic pressure, not FIFO completion or taxonomy quota filling."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.4",
+    "reason": "Existing Analysis v0.4 can represent aggregate surprise as NOT_ESTABLISHED, official prior guidance, empty market response, legal or operational dependency, observed institutional propagation, alternatives and falsifiers. The challenge is disciplined interpretation, not missing representational capacity."
+  },
+  "new_analysis_id": "WSAN-HEALTH-WHA79-20260523-001",
+  "new_evidence_ids": [
+    "WSEV-WHO-WHA79-ARCHIVE-20260523",
+    "WSEV-WHO-WHA79-CLOSE-20260523",
+    "WSEV-WHO-PABS-PREWHA-20260501",
+    "WSEV-WHO-WHA79-PABS-DECISION-20260522",
+    "WSEV-WHO-WHA79-GHA-DECISION-20260523",
+    "WSEV-WHO-WHA79-AMR-20260523",
+    "WSEV-WHO-PABS-IGWG7-20260720"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.14",
+    "analysis_review_count": 18,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.14",
+    "analysis_evidence_count": 79,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 18,
+    "reviewed_event_type_diversity": 16,
+    "reviewed_health_governance_event_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json",
+      "data/analysis/WHO_WHA79_HEALTH_GOVERNANCE_ANALYSIS_AP_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json"
+    ]
+  },
+  "descendant_checkpoint_repair": {
+    "file": "tests/test_unfccc_sb64_climate_governance_analysis_ao.py",
+    "historical_ao_checkpoint_unchanged": true,
+    "live_descendant_change": "Replace exact live reviewed-count/diversity ceilings 17/15 with lower bounds >=17/>=15 while retaining exactly one ENVIRONMENTAL_GOVERNANCE_EVENT contribution.",
+    "reason": "AO's frozen post-AO checkpoint remains historically exact, but its live descendant test must permit legitimate later Analysis growth."
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "assembly_completion_implies_resolution_implementation": false,
+    "decision_count_is_scalar_success_metric": false,
+    "pabs_continuation_equals_pabs_annex_adoption": false,
+    "pabs_continuation_equals_pandemic_agreement_ratification": false,
+    "gha_process_establishment_equals_reform_completion": false,
+    "amr_plan_adoption_equals_health_effect": false,
+    "official_pre_event_process_guidance_is_aggregate_consensus_forecast": false,
+    "same_period_health_emergency_is_caused_by_assembly": false,
+    "later_igwg_meeting_retimes_wha79": false,
+    "analytical_evidence_resolves_missing_canonical_utc": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "market_structure_gap_must_be_filled_next": false,
+    "prior_ao_live_count_is_permanent_ceiling": false,
+    "auto_merge": false
+  }
+}
