@@ -1,0 +1,45 @@
+name: WORLD SIGNALS AU whitespace cleanup
+
+on:
+  push:
+    branches:
+      - feature/post-at-pressure-audit-au
+    paths:
+      - .github/workflows/tmp-au-whitespace-cleanup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Remove trailing whitespace only from AU support files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          paths = [
+              Path('data/analysis/POST_AT_PRESSURE_AUDIT_AU_v0.1.md'),
+              Path('data/analysis/IMD_HEATWAVE_OUTLOOK_ANALYSIS_AU_RESEARCH_v0.1.md'),
+          ]
+          for p in paths:
+              text = p.read_text(encoding='utf-8')
+              cleaned = '\n'.join(line.rstrip() for line in text.splitlines()) + '\n'
+              p.write_text(cleaned, encoding='utf-8')
+          PY
+          git diff --check
+      - name: Commit cleanup and self-remove
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/tmp-au-whitespace-cleanup.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/analysis/POST_AT_PRESSURE_AUDIT_AU_v0.1.md data/analysis/IMD_HEATWAVE_OUTLOOK_ANALYSIS_AU_RESEARCH_v0.1.md .github/workflows/tmp-au-whitespace-cleanup.yml
+          git commit -m "AU: clean support-file whitespace"
+          git push origin HEAD:feature/post-at-pressure-audit-au
