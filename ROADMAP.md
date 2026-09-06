@@ -28,6 +28,10 @@ The repository can:
 
 Calendar/Pages remain disposable projections.
 
+### BB — BARMM election source + Canonical coverage repair — DONE / BOUNDED
+
+BB corrects a documented upstream omission before any further Live/Analysis expansion: the 14 September 2026 BARMM parliamentary-election polling day is admitted from competent COMELEC evidence together with one manually governed source record and one reviewed Change Ledger admission. The occurrence remains a planned civil-date `ELECTION_MILESTONE`; no polling clock time, UTC timestamp, result or market response is invented. COMELEC automation remains on rights/endpoint hold, and OPAPRU context is not promoted into a second timing authority.
+
 ## Stage 2 — heterogeneous Source / Change Monitor, review-only — DONE / EXPANDING CAUTIOUSLY
 
 Eight configured adapters currently exercise materially different source contracts:

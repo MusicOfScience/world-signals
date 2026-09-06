@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.24",
+  "version": "0.25",
   "reference_date": "2026-09-06",
   "changes": [
     {
@@ -1787,6 +1787,48 @@
       "committed_at": "2026-09-06T09:01:11+10:00",
       "registry_version_before": "0.36",
       "registry_version_after": "0.37",
+      "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-138c3977e91ced60d8",
+      "occurrence_id": "WSO-EL-PH-BARMM-20260914",
+      "change_type": "FORWARD_OCCURRENCE_ADMISSION",
+      "old_values": {
+        "canonical_presence": false
+      },
+      "new_values": {
+        "canonical_presence": true,
+        "series_id": "WSER-EL-PH-BARMM-PE",
+        "source_id": "WSSRC-EL-PH-001",
+        "certainty_status": "CONFIRMED",
+        "lifecycle_status": "PLANNED",
+        "category": "ELECTIONS_GOVERNANCE",
+        "subcategory": "regional_parliamentary_election",
+        "event_type": "ELECTION_MILESTONE",
+        "timing_type": "CIVIL_DATE",
+        "start_local": "2026-09-14",
+        "source_timezone": "Asia/Manila",
+        "start_utc": null,
+        "time_precision": "DAY",
+        "election_process_id": "WSEP-PH-BARMM-2026",
+        "election_milestone_type": "POLL_GENERAL",
+        "election_date_basis": "EXPLICIT_ELECTORAL_AUTHORITY_SCHEDULE"
+      },
+      "source_assertion_id": "WSA-BB-1cd890ce4343004e",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-06T22:09:42+10:00",
+      "review_basis": [
+        "https://www.comelec.gov.ph/php-tpls-attachments/2025BARMMPE/260513_BARMMPE_TentativeCLC/_REGIONAL.pdf",
+        "COMELEC is the competent electoral authority and the official document header identifies the September 14, 2026 BARMM Parliamentary Elections.",
+        "The event is admitted prospectively as PLANNED; completion is not inferred from the future date or from elapsed time.",
+        "The election is a civil-date milestone. BB does not infer polling hours, a midnight timestamp or start_utc.",
+        "OPAPRU material informed significance screening but is not promoted into a second Canonical timing authority.",
+        "Candidate-level content is not ingested or republished; source automation remains held pending a separate rights/endpoint review."
+      ],
+      "commit_mode": "REVIEWED_BARMM_PARLIAMENTARY_ELECTION_BB",
+      "committed_at": "2026-09-06T22:09:42+10:00",
+      "registry_version_before": "0.38",
+      "registry_version_after": "0.39",
       "canonical_mutation_committed": true
     }
   ]

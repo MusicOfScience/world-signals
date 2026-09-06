@@ -1,18 +1,18 @@
-# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION
+# CURRENT RECOVERY OVERRIDE — POST-BA / BB BARMM CANONICAL COVERAGE REPAIR
 
 **Effective checkpoint:** 2026-09-06
-**Exact post-#78 main base:** `721206169033eb0ceb695075d44fb38e7fa2edc3`
+**Exact post-BA main base:** `b8c5372198e3141c4c3f79ace13083877447f71b`
 **AX branch:** `feature/post-aw-pressure-audit-ax`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
 ## Current governed state
 
-- Canonical Registry: **v0.38 / 688 occurrences**
+- Canonical Registry: **v0.39 / 689 occurrences**
 - Canonical schema: **v0.52**
-- Source Registry: **v1.80 / 243 sources**
-- reviewed Change Ledger: **v0.24 / 59 entries**
-- biosecurity overlay: **v0.13 @ canonical v0.38 / 688**
+- Source Registry: **v1.81 / 244 sources**
+- reviewed Change Ledger: **v0.25 / 60 entries**
+- biosecurity overlay: **v0.14 @ canonical v0.39 / 689**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
 - Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**
@@ -28,6 +28,8 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
+BB repairs an upstream Southeast Asian election-coverage omission before any further Live or Analysis population: one manually governed COMELEC source and the confirmed **14 September 2026 BARMM parliamentary-election polling day** are admitted to Source Registry / Canonical / Change Ledger. The occurrence remains `PLANNED`, uses `CIVIL_DATE` / day precision in `Asia/Manila`, and carries no fabricated UTC timestamp, outcome or market response. OPAPRU peace-process material informed significance screening but is not a second Canonical timing authority. Source automation remains held.
+
 BA adds a **production-closed Analysis revision-lineage contract** before any further Live or bridge population. A future revision must be a new immutable Analysis snapshot with an explicit direct parent, preserved prior snapshot, the same Canonical occurrence and a strictly later `analysis_as_of_utc`. Automatic latest-head selection, public revision metadata projection and all upstream writes remain closed. BA adds no production revision, no Live observation and no Analysis evidence.
 
 AZ exercises the first **production Live Intelligence → Analysis relationship** with one bounded Japan July 2026 FIES specimen. The Live row is an `ECONOMIC_DATA_OBSERVATION` linked `OUTCOME_OF` the already-completed Canonical occurrence `WSO-MAC-B-0041`; the Analysis packet selects that immutable observation as `FACTUAL_INPUT`. Live and Analysis evidence remain separate, public Live-input projection remains closed, and no market movement is manufactured. The same release's April–June CPI-rebase revisions are retained as data-vintage context rather than synthetic prior Live history. Further bridge population requires another pressure audit.
@@ -38,7 +40,7 @@ The two DRC observations share one manually reviewed story key. The 30 August sn
 
 Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. The DRC story key is not a Canonical occurrence, causal claim or analytical conclusion. A fourth observation or broader ingestion requires another pressure audit.
 
-After BA, another pressure audit must decide whether the first real Analysis revision, a fifth Live observation, or a second production Live→Analysis relationship creates the highest marginal contract pressure. None is a population quota.
+After BB, a fresh pressure audit must decide whether the now-anchored BARMM transition warrants downstream Live/Analysis work, whether another Live class creates greater contract pressure, or whether a genuinely evidence-driven first Analysis revision has emerged. No downstream population is pre-authorised by this coverage repair.
 
 ## Current configured monitor cohort
 

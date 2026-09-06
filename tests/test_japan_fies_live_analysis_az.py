@@ -291,6 +291,20 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
         self.assertNotIn("live_inputs", public_review)
         self.assertEqual(public_review["what_happened"], review["what_happened"])
 
+    def test_status_helper_preserves_later_descendants_only_with_az_invariants(self):
+        current = apply_az.STATUS_PATH.read_text(encoding="utf-8")
+        first_header = current.splitlines()[0]
+        descendant_header = "# CURRENT RECOVERY OVERRIDE — POST-BA / BB SYNTHETIC DESCENDANT"
+        descendant = current.replace(first_header, descendant_header, 1)
+        self.assertEqual(apply_az.target_status(descendant), descendant)
+
+        malformed = descendant.replace(
+            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**",
+            "- production `live_inputs`: **2 / reviewed maximum 2 / public projection OPEN**",
+            1,
+        )
+        with self.assertRaises(SystemExit):
+            apply_az.target_status(malformed)
     def test_readiness_reaches_21_without_turning_frontier_completion_into_goal(self):
         readiness = analysis_population_readiness(
             self.target["analysis_schema"], self.target["reviews"], self.canonical
