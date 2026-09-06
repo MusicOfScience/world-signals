@@ -1,0 +1,41 @@
+name: WORLD SIGNALS AW AV descendant test repair
+
+on:
+  push:
+    branches:
+      - feature/post-av-pressure-audit-aw
+    paths:
+      - .github/workflows/tmp-live-intelligence-aw-av-test-repair.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feature/post-av-pressure-audit-aw
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply narrow descendant repair
+        run: |
+          python scripts/tmp_patch_av_descendant_aw.py
+          git diff --check
+          python -m unittest tests.test_live_intelligence_foundation_av -v
+          python scripts/apply_nepal_rasuwa_flood_live_intelligence_aw.py
+      - name: Commit repair and self-remove helpers
+        env:
+          BRANCH: feature/post-av-pressure-audit-aw
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/test_live_intelligence_foundation_av.py
+          git commit -m "AW: repair AV synthetic tests for populated descendants"
+          git push origin HEAD:$BRANCH
+          git rm .github/workflows/tmp-live-intelligence-aw-av-test-repair.yml scripts/tmp_patch_av_descendant_aw.py
+          git commit -m "AW: remove AV descendant repair helpers"
+          git push origin HEAD:$BRANCH
