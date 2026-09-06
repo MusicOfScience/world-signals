@@ -1,6 +1,6 @@
 # WORLD SIGNALS — post-AW Live Intelligence pressure audit AX v0.1
 
-**Base:** post-#78 `main` at `721206169033eb0ceb695075d44fb38e7fa2edc3`  
+**Base:** post-#78 `main` at `721206169033eb0ceb695075d44fb38e7fa2edc3`
 **Reference date:** 2026-09-06
 
 ## Question
