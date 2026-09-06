@@ -1,0 +1,114 @@
+name: WORLD SIGNALS AV Live Intelligence foundation preflight
+
+on:
+  push:
+    branches:
+      - feature/post-au-pressure-audit-av
+    paths:
+      - .github/workflows/tmp-live-intelligence-av-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Prove exact post-76 ancestry and workflow hygiene
+        run: |
+          BASE=a487eaecd6c08e9692a42ce6ffed2dea1e455879
+          test "$(git merge-base HEAD $BASE)" = "$BASE"
+          test ! -e .github/workflows/tmp-av-project-status-refresh.yml
+          test ! -e scripts/tmp_prepend_project_status_av.py
+          test "$(find .github/workflows -maxdepth 1 -type f -name 'tmp-*' | wc -l)" -eq 1
+          git diff --check $BASE..HEAD
+      - name: Prove protected governed datasets unchanged
+        run: |
+          BASE=a487eaecd6c08e9692a42ce6ffed2dea1e455879
+          git diff --exit-code $BASE..HEAD -- data/canonical/registry.json
+          git diff --exit-code $BASE..HEAD -- data/canonical/schema.json
+          git diff --exit-code $BASE..HEAD -- data/sources/registry.json
+          git diff --exit-code $BASE..HEAD -- data/changes/ledger.json
+          git diff --exit-code $BASE..HEAD -- data/coverage/biosecurity_overlay.json
+          git diff --exit-code $BASE..HEAD -- data/monitor/expectations.json
+          git diff --exit-code $BASE..HEAD -- data/monitor/operations_policy.json
+          git diff --exit-code $BASE..HEAD -- data/analysis/schema.json
+          git diff --exit-code $BASE..HEAD -- data/analysis/event_reviews.json
+          git diff --exit-code $BASE..HEAD -- data/analysis/evidence_registry.json
+      - name: Validate Canonical, Live Intelligence and Analysis
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+      - name: Run AV foundation regressions
+        run: python -m unittest tests.test_live_intelligence_foundation_av -v
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python
+        run: |
+          python -m py_compile scripts/validate_live_intelligence.py src/world_signals/live_intelligence.py scripts/build_site.py scripts/validate_analysis.py src/world_signals/analysis.py
+      - name: Check browser JavaScript
+        run: |
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site and prove metadata-only Live Intelligence projection
+        run: |
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          live=json.loads(Path('docs/data/live_intelligence.json').read_text())
+          meta=live['metadata']
+          assert meta['projection_type']=='LIVE_INTELLIGENCE_FOUNDATION_NOT_RUNTIME_FEED', meta
+          assert meta['schema_version']=='0.1', meta
+          assert meta['internal_observation_count']==0, meta
+          assert meta['internal_evidence_count']==0, meta
+          assert meta['public_observation_count']==0, meta
+          assert meta['canonical_registry_version_at_build']=='0.38', meta
+          assert meta['canonical_record_count_at_build']==688, meta
+          assert meta['runtime_feed_claim'] is False, meta
+          assert meta['automatic_canonical_commit'] is False, meta
+          assert meta['google_calendar_write'] is False, meta
+          assert live['observations']==[], live
+          summary=json.loads(Path('docs/data/source_summary.json').read_text())
+          assert summary['configured_live_monitor_routes']==8, summary
+          assert summary['live_intelligence_schema_version']=='0.1', summary
+          assert summary['live_intelligence_population_state']=='FOUNDATION_ONLY_NO_POPULATION', summary
+          assert summary['live_intelligence_internal_observation_count']==0, summary
+          assert summary['live_intelligence_public_observation_count']==0, summary
+          assert summary['analysis_review_count']==20, summary
+          print('AV static projection proof PASS')
+          PY
+      - name: Prove foundation and existing production invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          live_schema=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          live_obs=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          live_ev=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          reviews=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          assert live_schema['foundation_population_policy']['production_population_allowed'] is False
+          assert live_schema['foundation_population_policy']['evidence_population_allowed'] is False
+          assert live_schema['foundation_population_policy']['existing_analysis_evidence_migration_allowed'] is False
+          assert live_obs['observations']==[]
+          assert live_ev['evidence']==[]
+          exact=sum(1 for review in reviews['reviews'] for movement in (review.get('what_moved') or []) if movement.get('measurement_precision')=='EXACT_TIMESTAMP_SERIES')
+          assert exact==0, exact
+          print('AV foundation gate and exact-series zero PASS')
+          PY
+      - name: Prove build created no tracked mutation
+        run: |
+          git diff --exit-code
+          git status --porcelain --untracked-files=no
