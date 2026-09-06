@@ -1,0 +1,160 @@
+name: WORLD SIGNALS AM RBA FSR analysis transaction
+
+on:
+  push:
+    branches:
+      - feature/post-al-pressure-audit-am
+    paths:
+      - .github/workflows/tmp-rba-fsr-analysis-am-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-AL base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=fd8b69b5edf95a1c7d14c1e236e1a2e8891c74f9
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Prove read-only preflight workflow is gone
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e .github/workflows/tmp-rba-fsr-analysis-am-preflight.yml
+
+      - name: Read-only fail-closed simulation
+        run: python scripts/apply_rba_financial_stability_analysis_am.py --check
+
+      - name: Exercise AM regressions before write
+        run: python -m unittest tests.test_rba_financial_stability_analysis_am -v
+
+      - name: Controlled Analysis write
+        env:
+          WORLD_SIGNALS_APPLY_ANALYSIS_AM: '1'
+        run: python scripts/apply_rba_financial_stability_analysis_am.py --write
+
+      - name: Validate canonical registry after write
+        run: python scripts/validate_registry.py
+
+      - name: Validate Analysis layer after write
+        run: python scripts/validate_analysis.py
+
+      - name: Re-run AM regressions against written state
+        run: python -m unittest tests.test_rba_financial_stability_analysis_am -v
+
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile repository Python
+        run: python -m compileall -q scripts src tests
+
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Build static site and verify Analysis projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          projection = json.loads(Path('docs/data/analysis.json').read_text(encoding='utf-8'))
+          metadata = projection.get('metadata') or {}
+          assert metadata.get('schema_version') == '0.4', metadata
+          assert metadata.get('review_count') == 15, metadata
+          target = next((r for r in projection.get('reviews', []) if r.get('analysis_id') == 'WSAN-AU-RBA-FSR-20260319-001'), None)
+          assert target is not None
+          assert target.get('what_moved') == [], target.get('what_moved')
+          assert (target.get('what_surprised') or {}).get('status') == 'NOT_ESTABLISHED'
+          assert (target.get('what_appears_connected') or {}).get('causal_status') == 'NOT_A_CAUSAL_CLAIM'
+          canonical = target.get('canonical') or {}
+          assert canonical.get('event_type') == 'FINANCIAL_STABILITY_REPORT', canonical
+          assert canonical.get('start_utc') == '2026-03-19T00:30:00Z', canonical
+          print('AM_PUBLIC_ANALYSIS_PROJECTION_OK')
+          PY
+
+      - name: Prove production exact-series population remains zero
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reviews = json.loads(Path('data/analysis/event_reviews.json').read_text(encoding='utf-8'))
+          exact = [
+              (review.get('analysis_id'), movement.get('movement_id'))
+              for review in reviews.get('reviews', [])
+              for movement in (review.get('what_moved') or [])
+              if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
+          ]
+          assert exact == [], exact
+          print('AM_EXACT_TIMESTAMP_SERIES_ROWS=0')
+          PY
+
+      - name: Audit protected datasets and exact write boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=fd8b69b5edf95a1c7d14c1e236e1a2e8891c74f9
+          git diff --exit-code "$BASE" -- \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/analysis/schema.json
+          python - <<'PY'
+          import subprocess
+          rows = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
+          changed = {row[3:] for row in rows if row.strip()}
+          expected = {
+              'data/analysis/event_reviews.json',
+              'data/analysis/evidence_registry.json',
+              'data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_TRANSACTION_AUDIT_v0.1.md',
+          }
+          assert changed == expected, {'expected': sorted(expected), 'actual': sorted(changed)}
+          print('AM_WORKTREE_MUTATION_BOUNDARY_OK', sorted(changed))
+          PY
+
+      - name: Commit reviewed transaction and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'WORLD SIGNALS transaction gate'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            data/analysis/RBA_FINANCIAL_STABILITY_ANALYSIS_AM_TRANSACTION_AUDIT_v0.1.md
+          git rm .github/workflows/tmp-rba-fsr-analysis-am-transaction.yml
+          git diff --cached --check
+          git commit -m 'AM: add RBA financial-stability analysis specimen'
+          git push origin HEAD:feature/post-al-pressure-audit-am
