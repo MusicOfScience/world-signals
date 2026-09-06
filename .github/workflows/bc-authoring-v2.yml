@@ -25,6 +25,23 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "c853f0ca40ff8974a070c31b70fb5fa5f0f01431"
           test "$(git merge-base HEAD origin/main)" = "c853f0ca40ff8974a070c31b70fb5fa5f0f01431"
+      - name: Repair embedded generated-Python newline escapes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/bc_authoring_patch.py')
+          text = path.read_text(encoding='utf-8')
+          replacements = [
+              ('CLOSED**\\n"', 'CLOSED**\\\\n"'),
+              ('decision\\n\\n"', 'decision\\\\n\\\\n"'),
+              ('evidence.\\n\\n"', 'evidence.\\\\n\\\\n"'),
+          ]
+          for old, new in replacements:
+              if old not in text:
+                  raise SystemExit(f'BC authoring escape anchor missing: {old!r}')
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
       - name: Apply BC authoring patch
         run: python scripts/bc_authoring_patch.py
       - name: Run focused BC contracts
