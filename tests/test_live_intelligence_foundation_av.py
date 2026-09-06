@@ -303,8 +303,8 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         self.assertEqual(metadata["schema_version"], self.schema["version"])
         self.assertEqual(metadata["internal_observation_count"], len(self.observations["observations"]))
         self.assertEqual(metadata["public_observation_count"], 0)
-        self.assertEqual(metadata["canonical_registry_version_at_build"], "0.38")
-        self.assertEqual(metadata["canonical_record_count_at_build"], 688)
+        self.assertEqual(metadata["canonical_registry_version_at_build"], self.canonical["version"])
+        self.assertEqual(metadata["canonical_record_count_at_build"], self.canonical["record_count"])
         self.assertFalse(metadata["runtime_feed_claim"])
         self.assertEqual(projection["observations"], [])
 
