@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.14",
+  "version": "0.15",
   "reference_date": "2026-09-06",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1594,6 +1594,122 @@
         "WHO scheduled an eighth IGWG meeting for 14-18 September 2026, showing continuing process propagation without substantive completion by the AP reference date."
       ],
       "analytical_use": "OBSERVED_POST_WHA_PROCESS_PROPAGATION",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Council of the European Union",
+      "host_or_distribution": "Consilium",
+      "title": "Russia's war of aggression against Ukraine: Council extends economic sanctions for another year",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/25/russia-s-war-of-aggression-against-ukraine-council-extends-economic-sanctions-for-another-year/",
+      "published_at": "2026-06-25",
+      "roles": [
+        "OFFICIAL_OUTCOME",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Council states that it renewed the economic restrictive measures on 25 June 2026 for a further twelve months, until 31 July 2027.",
+        "The Council states that the renewal followed agreement by EU leaders at the June European Council.",
+        "The press release describes the continuing sanctions framework and the EU's readiness to take additional measures."
+      ],
+      "analytical_use": "OFFICIAL_RENEWAL_OUTCOME_AND_POLICY_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-EURLEX-20261437",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Union",
+      "host_or_distribution": "EUR-Lex",
+      "title": "Council Decision (CFSP) 2026/1437 of 25 June 2026 amending Decision 2014/512/CFSP concerning restrictive measures in view of Russia's actions destabilising the situation in Ukraine",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1437",
+      "published_at": null,
+      "roles": [
+        "OFFICIAL_OUTCOME"
+      ],
+      "supports": [
+        "The binding Council decision was done at Brussels on 25 June 2026.",
+        "Article 1 amends Article 9(1) so that the measures apply until 31 July 2027.",
+        "Article 2 provides that the decision enters into force on the day following publication in the Official Journal."
+      ],
+      "analytical_use": "BINDING_LEGAL_ACT_AND_IN_FORCE_HORIZON",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "EU leaders agree to renew Russia sanctions for 12 months",
+      "url": "https://www.reuters.com/world/europe/eu-leaders-agree-renew-russia-sanctions-12-months-2026-06-18/",
+      "published_at": "2026-06-18",
+      "roles": [
+        "EXPECTATION_BENCHMARK",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Before the 25 June binding act, Reuters reported that EU leaders had agreed to renew the sanctions for another twelve months.",
+        "Reuters described the annual renewal as the first full-year rollover after previous six-month renewals.",
+        "The report supplies a contemporaneous political-agreement benchmark, not a binding legal act or market-consensus probability."
+      ],
+      "analytical_use": "PRE_ADOPTION_POLITICAL_AGREEMENT_BENCHMARK",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Council",
+      "host_or_distribution": "Consilium",
+      "title": "European Council conclusions on Ukraine and security and defence, 18 June 2026",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/06/18/european-council-conclusions-on-ukraine-and-security-and-defence-18-june-2026/",
+      "published_at": "2026-06-18",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The European Council documented continuing pressure on Russia, including energy revenues, the shadow fleet, banking constraints and enforcement.",
+        "The conclusions called for swift adoption of a further sanctions package.",
+        "This is wider policy context and is not promoted into the binding 25 June renewal act."
+      ],
+      "analytical_use": "PRE_ADOPTION_POLICY_CONTEXT",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-REUTERS-OIL-CONTEXT-20260624",
+      "evidence_class": "REPUTABLE_NEWSWIRE",
+      "provider": "Reuters",
+      "host_or_distribution": "Reuters",
+      "title": "Oil prices extend decline on expectations of smoother crude flows via Hormuz",
+      "url": "https://www.reuters.com/business/energy/oil-prices-extend-decline-expectations-smoother-crude-flows-via-hormuz-2026-06-24/",
+      "published_at": "2026-06-24",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "Reuters reported substantial oil-price declines immediately before the Council renewal.",
+        "The reported drivers centred on changing expectations about Strait of Hormuz crude flows and Iran-related supply conditions.",
+        "This supplies a strong contemporaneous alternative driver and does not establish an EU-renewal market response."
+      ],
+      "analytical_use": "MARKET_CONTEXT_AND_ALTERNATIVE_DRIVER",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-EU-SANC-COUNCIL-21ST-20260723",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Council of the European Union",
+      "host_or_distribution": "Consilium",
+      "title": "21st package of sanctions: EU hits Russian energy, financial services and crypto hard",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/07/23/21st-package-of-sanctions-eu-hits-russian-energy-financial-services-and-crypto-hard/",
+      "published_at": "2026-07-23",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The Council adopted a later 21st sanctions package with additional designations and measures affecting energy, financial services, crypto and the shadow fleet.",
+        "The later package demonstrates that the sanctions regime remained capable of amendment and calibration inside the annual legal horizon.",
+        "The later package is a distinct act and is not treated as an effect caused by the 25 June renewal."
+      ],
+      "analytical_use": "POST_RENEWAL_POLICY_CALIBRATION_CONTEXT",
       "canonical_provenance_effect": "NONE"
     }
   ]
