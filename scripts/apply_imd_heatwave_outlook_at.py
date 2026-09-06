@@ -7,12 +7,14 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
-from src.world_signals.coverage import build_coverage_audit
-from src.world_signals.validation import validate_registry
+from world_signals.coverage import build_coverage_audit
+from world_signals.validation import validate_registry
 
 PLAN_PATH = ROOT / "data/coverage/IMD_HEATWAVE_OUTLOOK_AT_PLAN_v0.1.json"
 CANONICAL_PATH = ROOT / "data/canonical/registry.json"
