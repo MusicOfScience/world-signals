@@ -1,21 +1,30 @@
 # Executable architecture
 
-## Why code starts now
+## Governing rule
 
-The project has enough stable invariants to encode in software: stable identities, event/source separation, source-health quarantine, lifecycle/certainty vocabularies, review-only changes, timezone semantics and fail-closed monitor behaviour.
+`WORLD_SIGNALS_PROJECT_CHARTER.md` is authoritative. The executable repository implements its layers as separate governed contracts rather than one blended event/news database.
+
+Current post-#76 / AV foundation state:
+
+- Canonical `v0.38 / 688`;
+- Source Registry `v1.80 / 243`;
+- Source/Change Monitor expectations `v0.10 / 8 adapters`;
+- Live Intelligence `v0.1 / 0 observations / 0 evidence`, foundation gate closed;
+- Analysis `v0.16 / 20 reviews / 91 evidence` on schema `v0.4`;
+- automatic canonical commit OFF;
+- Google Calendar writes OFF.
 
 ## Runtime layers
 
-1. **Canonical Registry** — versioned JSON committed to the repository.
-2. **Build / Projection** — validates canonical data and emits browser-safe derived JSON.
-3. **Calendar / Web UX** — static HTML/CSS/JS served by GitHub Pages. Calendar, Event index and Monitor routes are projections only.
-4. **Source / Change Monitor** — read-only Python adapters fetch and parse official sources, snapshot payload hashes, normalize evidence and compare against canonical occurrences or monitored legal inputs.
-5. **Source Health** — transport/parser state is recorded independently of event state. Failure or absence cannot itself cancel, complete or reschedule an occurrence.
-6. **Review Queue** — candidate JSON artefacts; human/review logic approves or rejects.
-7. **Commit Tool** — future guarded transaction that applies approved changes after identity/provenance validation. Automatic use remains disabled.
-8. **Live Intelligence / Analysis** — separate stores and views, not embedded into calendar timing fields.
+1. **Canonical Registry** — versioned authoritative event identities, lifecycle and timing.
+2. **Calendar / Web projection** — derived read-only rendering; never the database.
+3. **Source / Change Monitor** — read-only adapters inspect authoritative sources, source health and candidate changes.
+4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
+5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
 
-## Current executable source-monitor contract
+Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
+
+## Source / Change Monitor contract
 
 ```text
 official endpoint
@@ -40,38 +49,95 @@ source absence -> event completion
 parser success -> canonical write
 ```
 
-The scheduled GitHub monitor runs with `contents: read` permission. It hashes the canonical registry before and after each run and fails if those bytes change.
+The scheduled GitHub monitor runs with `contents: read` permission. It protects canonical bytes and cannot make direct canonical changes.
 
-### Current live pilots
+### Current configured adapter cohort
 
-**RBA Financial Stability Review RSS/RDF**
+`data/monitor/expectations.json` v0.10 configures eight heterogeneous adapters:
 
-The adapter executes against the official RBA XML feed. The real feed uses namespaced RDF/RSS rather than assuming a single RSS 2.0 shape, and regression tests cover both. Positive publication evidence may create a review candidate for the existing FSR occurrence; an empty, stale or failed feed cannot alter event state.
+1. **RBA Financial Stability Review RSS/RDF** — publication-completion sentinel.
+2. **Colombia SUIN / Socrata Decree 111/1996** — typed legal-instrument sentinel with manual clause verification.
+3. **EU Cyber Resilience Act Article 71 / Cellar** — legal-rule baseline and topology sentinel.
+4. **EU CBAM verifier-report milestone** — legal milestone / Cellar topology sentinel.
+5. **EU CBAM certificate-sale milestone** — amending-rule / parent-act topology sentinel.
+6. **EU CBAM annual declaration / surrender deadline** — recurring legal-rule / topology sentinel.
+7. **ONS release-calendar RSS** — publication schedule/date-change sentinel with official HTML verification requirement.
+8. **EIA Weekly Petroleum Status Report schedule** — energy/publication-schedule sentinel.
 
-**Colombia SUIN / Socrata legal-instrument sentinel**
+Configuration does not mean every governed source is automation-cleared. Source rights, endpoint health, parser validation and route authority remain distinct gates.
 
-The adapter executes against the official Datos Abiertos Socrata API. Legal identity is typed: instrument type + number + year. This matters because number `111` and year `1996` identify more than one legal instrument in the inventory. The monitor therefore watches `DECRETO 111/1996` specifically. Inventory changes produce a legal-input review candidate and require clause-level SUIN verification before any derived budget rule can change.
+## Live Intelligence foundation
+
+AV introduces the first executable Live Intelligence contract at `data/live_intelligence/`.
+
+```text
+current development / observation
+        |
+        v
+FACTUAL OBSERVATION
+  - identity
+  - verification state
+  - domains / geography
+  - evidence
+  - optional canonical links
+  - separate observation/event/publication time
+  - explicit revision history
+        |
+        v
+ANALYSIS may later interpret it
+```
+
+The AV v0.1 foundation is deliberately **zero-population**. Its validator rejects production observations and evidence until a later pressure-audited specimen explicitly opens the population gate.
+
+Live Intelligence is not a synonym for the Source/Change Monitor. The monitor asks whether governed authoritative inputs changed; Live Intelligence records consequential factual developments in the world. A monitor parser failure is not a Live Intelligence fact.
+
+Live Intelligence is also not Analysis. It may record a factual market observation, shock, announcement or revision, but it may not claim what was expected, what surprised, what caused a move or which interpretation is preferred.
+
+Unscheduled physical shocks, health emergencies and geopolitical developments can therefore exist without inventing scheduled Canonical occurrences. If a Live observation references Canonical, the occurrence ID must resolve.
+
+## Analysis contract
+
+Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
+
+- what happened;
+- what was expected;
+- what surprised;
+- what moved;
+- what appears connected;
+- what may be noise;
+- alternatives;
+- second-order effects;
+- falsifiers.
+
+Analysis evidence is not retrospectively migrated to Live Intelligence. Historical analytical packets remain frozen in their governed layer.
 
 ## Static UX and runtime truth
 
-GitHub Pages cannot honestly claim current monitor health merely because the last build was green. The web **Monitor routes** view therefore exposes configured routes, scope, cadence and permitted inference only. Runtime source health and review candidates remain timestamped GitHub Actions artefacts until a separate, provenance-safe status-publication mechanism is designed.
+GitHub Pages cannot honestly claim current monitor health merely because a build was green. The Monitor view exposes configured routes, while runtime source health and review candidates remain timestamped evidence.
+
+Likewise, AV emits `docs/data/live_intelligence.json` only as **foundation metadata**. It contains zero public observations and explicitly states that it is not a runtime feed. A browser Live Intelligence surface should not be introduced until a later population contract is proven.
 
 ## GitHub is an execution shell, not the architecture
 
-GitHub Actions runs validation and monitors, GitHub Pages hosts the read-only UI, and pull requests/commits provide review and audit history. The core Python, JSON contracts and static web output remain portable to another CI/host.
+GitHub Actions runs validation and monitors, GitHub Pages hosts read-only projections, and pull requests/commits provide review and audit history. The Python/JSON contracts remain portable to another CI/host. GitHub Actions artefacts are evidence surfaces, not canonical storage.
 
-## Promotion path
+## Current promotion path
 
 ```text
-Research artifacts
-  -> executable read-only registry + calendar UX       [DONE]
-  -> fixture monitor + review candidates              [DONE]
-  -> live source adapters, review-only                [ACTIVE: RBA + Colombia]
-  -> scheduled source-health + candidate monitoring   [DONE for pilot routes]
-  -> broader heterogeneous adapter population         [NEXT]
-  -> reviewed commit transaction + rollback           [guarded next stage]
-  -> optional calendar export                         [later]
-  -> narrowly evaluated auto-commit classes           [only if evidence gate opens]
+Research / taxonomy / source governance                    [ONGOING]
+  -> executable Canonical Registry + read-only UX           [DONE]
+  -> review-candidate / source-health contracts              [DONE]
+  -> heterogeneous live Source/Change adapters, review-only  [DONE: 8 configured]
+  -> scheduled monitor execution / retained evidence         [DONE]
+  -> controlled Analysis foundation + diverse sample         [DONE: 20 reviews / 18 event types]
+  -> Live Intelligence executable zero-population foundation [AV]
+  -> first pressure-audited Live Intelligence specimen       [NEXT AFTER AV MERGE]
+  -> test prospective Live Intelligence -> Analysis linkage  [LATER, IF CONTRACT SURVIVES]
+  -> broader Live Intelligence population                    [ONLY AFTER AUDIT]
+  -> optional calendar export                                [LATER]
+  -> narrow auto-commit classes                              [ONLY IF EMPIRICAL GATE OPENS]
 ```
 
-The remaining automatic-commit evidence gap is intentionally empirical: WORLD SIGNALS still needs a prospective reschedule observed across its own snapshots and an explicit cancellation of an already-canonical occurrence before that gate can even be reconsidered.
+A generic guarded reviewed commit/rollback mechanism remains an architectural objective; existing controlled tranche transactions demonstrate the safety pattern but do not open blanket automation authority.
+
+The automatic-canonical-commit gate remains closed. Before it can even be reconsidered, WORLD SIGNALS still requires real prospective evidence including a reschedule detected against a prior canonical snapshot and an explicit cancellation of an already-canonical occurrence, under the governed review process.

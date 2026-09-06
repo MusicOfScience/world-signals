@@ -1,65 +1,142 @@
 # WORLD SIGNALS — code promotion roadmap
 
-## Stage 0 — research architecture (completed enough to encode)
+This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages are architectural capabilities, not a licence for bulk population.
 
-Research artifacts define the canonical schema, lifecycle, source rights, monitor state machine, conflict rules, rollback expectations and coverage discipline.
+## Stage 0 — research architecture and source governance — ACTIVE / MATURE
 
-## Stage 1 — executable read-only thin slice (THIS REPOSITORY)
+Implemented foundations include:
 
-**Can do**
-- load and validate the canonical registry;
+- canonical identity, lifecycle, certainty and time semantics;
+- source registry and rights/automation separation;
+- conflict and provenance rules;
+- coverage audits and noncanonical analytical overlays;
+- change history and review-candidate contracts;
+- fail-closed validation and controlled transaction patterns.
+
+Research remains continuous because future schedules, institutions, rights and endpoints change.
+
+## Stage 1 — executable Canonical Registry and read-only web projection — DONE
+
+The repository can:
+
+- validate the canonical registry;
 - enrich events from the source registry;
-- build a static searchable/filterable web projection;
-- deploy that projection to GitHub Pages;
-- run CI validation;
-- compare a source assertion with a canonical occurrence;
-- emit a review candidate without mutating canonical state.
+- build browser-safe projections;
+- render Calendar, Event Index, Operations, Change History and Analysis views;
+- deploy via GitHub Actions / Pages;
+- preserve source-native and UTC timing without making Melbourne canonical.
 
-**Cannot do**
-- live scheduled crawling;
-- automatic canonical writes;
-- Google Calendar writes;
-- causal/market analysis in calendar objects.
+Calendar/Pages remain disposable projections.
 
-## Stage 2 — live adapters, still review-only
+## Stage 2 — heterogeneous Source / Change Monitor, review-only — DONE / EXPANDING CAUTIOUSLY
 
-Add one adapter per validated source family, e.g.:
-- ONS RSS/calendar;
-- RBA RSS;
-- EUR-Lex/CELLAR;
-- Colombia Socrata inventory + SUIN clause verification;
-- EIA data-product surface.
+Eight configured adapters currently exercise materially different source contracts:
 
-Each adapter implements:
+- RBA FSR RSS/RDF;
+- Colombia SUIN / Socrata legal sentinel;
+- EU Cyber Resilience Act / Cellar;
+- three EU CBAM legal-rule routes;
+- ONS release-calendar RSS;
+- EIA WPSR schedule.
 
-`fetch -> snapshot -> parse -> assert`
+Shared pattern:
 
-The shared engine then performs:
+`fetch -> snapshot -> parse -> assert -> match -> diff -> review candidate`
 
-`match -> diff -> review candidate`
+No adapter receives automatic canonical-write authority. Route presence does not erase source-specific rights, endpoint and parser gates.
 
-No adapter receives write access to canonical JSON.
+## Stage 3 — scheduled monitoring and retained operational evidence — DONE
 
-## Stage 3 — guarded reviewed commit transaction
+GitHub Actions executes the governed monitor cohort on a schedule under read-only repository permissions. Runtime source health, review candidates and retained review-state evidence remain distinct from Canonical state.
 
-Implement an explicit command/tool:
+Source failure, parser failure and absence are never event cancellations/completions/reschedules.
 
-`candidate -> human approval -> apply to clone -> validate protected identity -> write change ledger -> atomic canonical replacement -> rebuild site`
+## Stage 4 — controlled reviewed transactions — PARTIALLY IMPLEMENTED / GUARDED
 
-Every commit must be reversible from the ledger/snapshot.
+WORLD SIGNALS already uses exact-prestate, fail-closed controlled transactions for reviewed tranches. These prove a safety pattern:
 
-## Stage 4 — scheduled monitoring
+`reviewed proposal -> exact prestate -> controlled mutation -> validators -> full suite -> mutation audit -> reviewed PR`
 
-Enable GitHub Actions `schedule` only for routes that pass endpoint/parser and rights gates. Workflows produce review artifacts or pull requests. Schedule cadence is source-specific; not every source needs hourly polling.
+A generic platform-independent candidate-to-canonical commit/rollback tool remains a future consolidation task. Existing tranche scripts do not constitute blanket commit authority.
 
-## Stage 5 — calendar projection/export
+Automatic canonical commit remains prohibited.
 
-Generate ICS/Google Calendar output from canonical records. Calendar remains disposable/rebuildable output; deleting a calendar never deletes canonical data.
+## Stage 5 — Analysis foundation and controlled sample — DONE / PAUSED FOR AUDIT
 
-## Stage 6 — Live Intelligence / Analysis
+Analysis schema `v0.4` currently supports 20 reviewed post-event specimens, 91 analytical evidence rows and 18 reviewed event types.
 
-Store observations, surprises, revisions and market-response evidence in separate datasets. Join them to occurrence IDs in the UX without embedding them into event timing.
+The sample exercises macro data, monetary policy, institutions, elections, sovereign financing, physical-risk windows/outlooks, financial stability, climate governance, health governance and sanctions without treating review count as representativeness.
 
-## Stage 7 — evaluate narrow auto-commit classes
+Further Analysis population is paused after AU because the remaining completed/unreviewed Japan macro release adds less immediate contract pressure than the missing Live Intelligence layer.
 
-Only reconsider after prospective reschedule/cancellation evidence and executed heterogeneous endpoint parsers satisfy the commit gate. Even then, auto-commit should begin with a very narrow evidence class, not blanket permissions.
+## Stage 6 — Live Intelligence foundation — AV
+
+AV establishes `data/live_intelligence/` as an executable but intentionally empty layer.
+
+Foundation capabilities:
+
+- factual current-development observation identity;
+- explicit verification state;
+- evidence registry separate from canonical and analytical provenance;
+- optional canonical links;
+- unscheduled observations without fabricated canonical identities;
+- separate observation time, publication time and event time;
+- append-only revision/correction relationships;
+- validation that rejects causal/analytical fields;
+- metadata-only static projection;
+- CI integration.
+
+**AV v0.1 deliberately prohibits production observation/evidence population.**
+
+## Stage 7 — first Live Intelligence specimen — NEXT AFTER AV MERGE
+
+Run a fresh pressure audit after AV. Choose one real development because it stresses the contract, not because it is convenient or prominent.
+
+Candidate stress classes include:
+
+- unscheduled physical shock;
+- health emergency;
+- geopolitical/policy development;
+- economic-data revision;
+- factual market observation linked to a canonical occurrence.
+
+The first specimen should test identity, revision, timing, provenance and rights semantics before the population gate is opened more broadly.
+
+## Stage 8 — prospective Live Intelligence → Analysis linkage — LATER
+
+Once the Live Intelligence contract survives a real specimen, test whether Analysis can reference factual Live observations without copying them into analytical evidence or allowing Analysis to rewrite upstream observations.
+
+The target relationship is:
+
+`factual observation -> optional canonical context -> analytical interpretation`
+
+not:
+
+`headline -> inferred cause -> rewritten event`.
+
+## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT
+
+Do not build a high-volume news ingest by default. Expansion must establish:
+
+- source families and rights;
+- observation identity/deduplication;
+- correction/retraction handling;
+- geographic/domain balance;
+- noise controls;
+- retention and provenance;
+- separation of current observation from analytical inference.
+
+Platform independence remains mandatory.
+
+## Stage 10 — calendar export — LATER
+
+Generate ICS/Google Calendar output from Canonical only. Calendar remains rebuildable output; deleting an export never deletes canonical data.
+
+## Stage 11 — evaluate narrow auto-commit classes — GATE CLOSED
+
+Only reconsider after the empirical commit gate is met, including prospective evidence of:
+
+- a reschedule detected against a prior canonical snapshot on the same stable occurrence; and
+- an explicit cancellation of an existing canonical occurrence from positive authoritative evidence.
+
+Even if that evidence arrives, any first auto-commit class must be narrow and separately authorised. No blanket automation follows from monitor or parser maturity.

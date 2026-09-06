@@ -1,0 +1,9 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "population_state": "FOUNDATION_ONLY_NO_POPULATION",
+  "scope_note": "Evidence here will support factual Live Intelligence observations. It is separate from canonical provenance and Analysis evidence, and AV v0.1 intentionally contains no populated evidence rows.",
+  "evidence": []
+}
