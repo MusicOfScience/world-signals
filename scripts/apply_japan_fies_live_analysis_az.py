@@ -124,7 +124,28 @@ def assert_preconditions(plan: dict[str, Any]) -> None:
         require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "AZ Analysis evidence count drift")
         require(production_live_input_count(reviews) == pre["production_live_input_count"], "AZ live-input prestate drift")
     else:
-        require(analysis_schema.get("version") == plan["target_state"]["analysis_schema_version"], "AZ unexpected Analysis schema descendant")
+        target_state = plan["target_state"]
+        try:
+            descendant_version = version_tuple(analysis_schema.get("version"))
+            az_version = version_tuple(target_state["analysis_schema_version"])
+        except (TypeError, ValueError):
+            descendant_version = ()
+            az_version = (0, 6)
+        require(
+            descendant_version >= az_version,
+            "AZ unexpected Analysis schema descendant",
+        )
+        require(reviews.get("version") == target_state["analysis_reviews_version"], "AZ descendant reviews version drift")
+        require(len(reviews.get("reviews", [])) == target_state["analysis_review_count"], "AZ descendant review count drift")
+        require(analysis_evidence.get("version") == target_state["analysis_evidence_version"], "AZ descendant Analysis evidence version drift")
+        require(len(analysis_evidence.get("evidence", [])) == target_state["analysis_evidence_count"], "AZ descendant Analysis evidence count drift")
+        require(production_live_input_count(reviews) == target_state["production_live_input_count"], "AZ descendant live-input population drift")
+        live_input_policy = analysis_schema.get("live_input_policy") or {}
+        require(live_input_policy.get("mode") == "CONTROLLED_SINGLE_PRODUCTION_LINK", "AZ descendant bridge mode drift")
+        require(live_input_policy.get("maximum_production_live_inputs") == 1, "AZ descendant live-input maximum drift")
+        require(live_input_policy.get("maximum_live_inputs_per_review") == 1, "AZ descendant per-review live-input maximum drift")
+        require(live_input_policy.get("factual_input_requires_matching_canonical_occurrence") is True, "AZ descendant same-anchor gate drift")
+        require(live_input_policy.get("public_live_input_projection_allowed") is False, "AZ descendant public Live-input projection opened")
 
     require(exact_series_count(reviews) == pre["production_exact_timestamp_series_count"], "AZ exact-series prestate drift")
 
@@ -273,29 +294,31 @@ def target_analysis_evidence(current: dict[str, Any], payload: dict[str, Any]) -
 
 
 def target_status(current: str) -> str:
-    if "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK" in current:
+    az_title = "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK"
+    ay_title = "# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION"
+    if az_title in current:
         return current
-    ba_title = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
-    if ba_title in current:
+
+    if ay_title not in current:
+        require(
+            current.startswith("# CURRENT RECOVERY OVERRIDE — POST-"),
+            "AZ PROJECT_STATUS title drift",
+        )
         require(
             "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**" in current,
-            "AZ PROJECT_STATUS BA descendant lost Live v0.4 checkpoint",
+            "AZ PROJECT_STATUS descendant lost Live v0.4 checkpoint",
         )
         require(
             "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**" in current,
-            "AZ PROJECT_STATUS BA descendant lost Analysis v0.17 population",
+            "AZ PROJECT_STATUS descendant lost Analysis v0.17 population",
         )
         require(
             "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**" in current,
-            "AZ PROJECT_STATUS BA descendant lost first production Live input",
+            "AZ PROJECT_STATUS descendant lost first production Live input",
         )
         return current
-    require("# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION" in current, "AZ PROJECT_STATUS title drift")
-    text = current.replace(
-        "# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION",
-        "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK",
-        1,
-    )
+
+    text = current.replace(ay_title, az_title, 1)
     text = text.replace(
         "- Live Intelligence: **v0.3 / 3 reviewed internal observations / 4 primary-official evidence rows / public observation projection CLOSED**",
         "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**",
@@ -326,7 +349,6 @@ def target_status(current: str) -> str:
     )
     require(old in text, "AZ PROJECT_STATUS AY decision paragraph drift")
     return text.replace(old, new, 1)
-
 
 def target_roadmap(current: str) -> str:
     if "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current:
