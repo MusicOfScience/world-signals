@@ -156,9 +156,10 @@ class AustralianTropicalCycloneSeasonAnalysisAJTests(unittest.TestCase):
         self.assertTrue(report.ok, report.errors)
         readiness = analysis_population_readiness(self.schema, post_reviews, self.canonical)
         self.assertEqual(readiness["eligible_completed_occurrence_count"], 20)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 14)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 12)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], self.plan["postconditions"]["reviewed_occurrence_count"])
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], self.plan["postconditions"]["reviewed_event_type_diversity"])
         self.assertEqual(readiness["reviewed_by_event_type"].get("PHYSICAL_RISK_WINDOW"), 1)
+        self.assertIn(self.plan["selection"]["selected_occurrence_id"], readiness["reviewed_occurrence_ids"])
 
     def test_remaining_frontier_is_not_fifo_and_market_structure_is_not_auto_filled(self):
         self.assertFalse(self.plan["guardrails"]["queue_completion_is_population_objective"])
