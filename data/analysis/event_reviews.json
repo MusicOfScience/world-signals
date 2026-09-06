@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.10",
+  "version": "0.11",
   "reference_date": "2026-09-06",
   "canonical_checkpoint": {
     "registry_version": "0.37",
@@ -2118,6 +2118,148 @@
         "If a competent attribution study quantifies the contribution of anthropogenic climate change or a specific climate driver to the 2025-26 Australian cyclone season, AJ's current NOT_A_CAUSAL_CLAIM context may be revisited only with that evidence."
       ],
       "analytical_conclusion": "The 2025-26 Australian tropical cyclone season was active: 11 Australian-region cyclones, seven severe systems and four cyclone-strength mainland landfalls. Yet the reviewed Bureau pre-season material supplies climatology and risk guidance, not a season-specific numerical forecast, so 11 versus an average of 10 is not promoted into a directional surprise. The season is analytically important as a physical-risk window, but its cyclone counts do not themselves establish damage, market movement or climate attribution. Those claims require separately specified shock, exposure and causal evidence.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-AU-RBA-FSR-20260319-001",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-06T01:15:00Z",
+      "canonical_occurrence_id": "WSO-FIN-B-0004",
+      "canonical_series_id": "WSER-FIN-AU-RBA-FSR",
+      "canonical_event_type": "FINANCIAL_STABILITY_REPORT",
+      "canonical_institution": "Reserve Bank of Australia",
+      "canonical_release_utc": "2026-03-19T00:30:00Z",
+      "scope": "RBA March 2026 Financial Stability Review: change in global-risk assessment versus prior official guidance, resilience of the Australian financial system, and the distinction between common geopolitical market drivers and any event-specific market response",
+      "what_happened": {
+        "summary": "The RBA's March 2026 Financial Stability Review judged that risks to the global financial system had increased in a rapidly evolving geopolitical environment. It identified sharply higher market volatility after escalation of conflict in the Middle East, together with leverage and concentration vulnerabilities in global markets and heightened operational, cyber and security risks. At the same time, the RBA assessed Australia's financial system as well placed to handle a challenging and uncertain environment, with banks well capitalised and liquid and most households and businesses reasonably resilient.",
+        "actuals": [
+          {
+            "metric": "global_financial_stability_risk_assessment",
+            "value": "RISKS_INCREASED_AND_ELEVATED",
+            "unit": "qualitative_official_assessment",
+            "evidence_refs": [
+              "WSEV-AU-RBA-FSR-OFFICIAL-20260319",
+              "WSEV-AU-RBA-FSR-ASSESSMENT-20260318"
+            ]
+          },
+          {
+            "metric": "australian_financial_system_resilience_assessment",
+            "value": "WELL_PLACED_TO_HANDLE_CHALLENGING_UNCERTAIN_ENVIRONMENT",
+            "unit": "qualitative_official_assessment",
+            "evidence_refs": [
+              "WSEV-AU-RBA-FSR-OFFICIAL-20260319"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-RBA-FSR-OFFICIAL-20260319",
+          "WSEV-AU-RBA-FSR-ASSESSMENT-20260318"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "No competent contemporaneous pre-publication consensus for the exact contents of the March 2026 Financial Stability Review is established in the reviewed evidence. The October 2025 FSR is retained only as prior official guidance: it already described global financial-stability risks as elevated and highlighted sovereign-debt, low-risk-premia, NBFI leverage/liquidity, operational/cyber and China-related vulnerabilities, while noting that earlier market volatility had subsided. That prior assessment is an institutional baseline, not a forecast of the March report's precise tone or ranking of risks.",
+        "benchmarks": [
+          {
+            "metric": "prior_official_global_financial_stability_assessment",
+            "value": "ELEVATED_RISKS_WITH_RELATIVELY_STABLE_MARKETS_AFTER_PRIOR_VOLATILITY_SUBSIDED",
+            "unit": "qualitative_official_prior_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-AU-RBA-FSR-PRIOR-20251002"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-AU-RBA-FSR-PRIOR-20251002"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "The March Review describes a clear deterioration in realised global risk conditions relative to the October 2025 baseline, including sharply higher volatility associated with the Middle East conflict. AM does not classify that change as a directional surprise because the reviewed material does not establish a competent pre-publication consensus for the March FSR's contents. A change in the state of the world, or in an institution's assessment of it, is not itself forecast error.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-AU-RBA-FSR-ASSESSMENT-20260318",
+          "WSEV-AU-RBA-FSR-PRIOR-20251002"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "COMMON_DRIVER_CONTEXT",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The escalation of conflict in the Middle East and associated oil and market volatility are common-driver context connecting the RBA's heightened financial-stability assessment with contemporaneous global and Australian market stress. The RBA explicitly describes the volatility as already underway when the Review was finalised. Reuters' same-day market reporting foregrounds oil, labour data, global central-bank decisions, broad US-dollar moves and the RBA's two-day-old rate increase rather than the FSR publication. AM therefore does not reverse the causal arrow and claim that the FSR caused the markets it was assessing.",
+        "evidence_refs": [
+          "WSEV-AU-RBA-FSR-ASSESSMENT-20260318",
+          "WSEV-AU-RBA-RATE-CONTEXT-20260317",
+          "WSEV-AU-MARKETS-CONTEXT-20260319"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "The Australian dollar's same-day movement on 19 March spans labour-market data, broad US-dollar moves, several major central-bank decisions and continuing oil/geopolitical shocks. Treating that daily move as an FSR reaction would overstate event specificity.",
+          "evidence_refs": [
+            "WSEV-AU-MARKETS-CONTEXT-20260319"
+          ]
+        },
+        {
+          "summary": "The March report's stronger language relative to October reflects realised deterioration in geopolitical and market conditions. Without a pre-publication forecast for the report's contents, the tonal difference is not a measured surprise.",
+          "evidence_refs": [
+            "WSEV-AU-RBA-FSR-ASSESSMENT-20260318",
+            "WSEV-AU-RBA-FSR-PRIOR-20251002"
+          ]
+        },
+        {
+          "summary": "The Review identifies vulnerabilities and transmission channels under stress scenarios. Those warnings are conditional risk analysis, not predictions that a financial crisis will occur.",
+          "evidence_refs": [
+            "WSEV-AU-RBA-FSR-ASSESSMENT-20260318"
+          ]
+        },
+        {
+          "summary": "The RBA's assessment that Australia's financial system is well placed to handle shocks does not imply that losses, funding pressure, cyber disruption or trade spillovers are impossible. Resilience and vulnerability can coexist.",
+          "evidence_refs": [
+            "WSEV-AU-RBA-FSR-OFFICIAL-20260319",
+            "WSEV-AU-RBA-FSR-ASSESSMENT-20260318"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "The RBA had raised the cash rate by 25 basis points to 4.10% only two days earlier in a 5-4 decision. Reuters reported immediate Australian-dollar, bond-futures and policy-path repricing around that monetary-policy event, leaving substantial Australia-specific information already in prices before the FSR release.",
+          "evidence_refs": [
+            "WSEV-AU-RBA-RATE-CONTEXT-20260317"
+          ]
+        },
+        {
+          "summary": "On 19 March, the Fed, ECB, BoJ, BoE, SNB and BoC decisions, broad US-dollar moves and Australian labour-market data were all active market inputs. Any same-session Australian FX or rates move is therefore heavily contaminated by non-FSR information.",
+          "evidence_refs": [
+            "WSEV-AU-MARKETS-CONTEXT-20260319"
+          ]
+        },
+        {
+          "summary": "Oil prices above US$100 and the rapidly evolving Middle East conflict were direct global macro-financial drivers in their own right and are explicitly identified by the RBA as part of the risk environment. They can move Australian and global markets independently of publication of the Review.",
+          "evidence_refs": [
+            "WSEV-AU-RBA-FSR-ASSESSMENT-20260318",
+            "WSEV-AU-MARKETS-CONTEXT-20260319"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "PLAUSIBLE_WATCH_ITEM",
+        "summary": "If the global stress environment persists or intensifies, the RBA identifies plausible transmission channels to Australia including higher funding costs, restricted liquidity and market access, asset-price losses, tighter credit, operational or cyber disruption and trade or China-related spillovers. These are prospective channels from the underlying stress environment, not observed consequences caused by publication of the FSR itself.",
+        "evidence_refs": [
+          "WSEV-AU-RBA-FSR-ASSESSMENT-20260318"
+        ]
+      },
+      "falsifiers": [
+        "If a competent contemporaneous pre-publication source establishes a defensible consensus or explicit forecast for the March 2026 FSR's risk assessment that AM has omitted, the NOT_ESTABLISHED surprise classification must be reassessed against that evidence.",
+        "If independently licensed and redistribution-authorised high-frequency Australian FX, rates or equity data around 11:30 AEDT show a discrete FSR-specific repricing that survives reasonable controls for same-time news, AM's empty market-response section may be revisited under the exact-market contract.",
+        "If credible contemporaneous reporting explicitly identifies the March FSR publication, rather than labour data, monetary policy, global central banks, oil or the Middle East conflict, as a material driver of an Australian market move, the common-driver-only interpretation should be narrowed.",
+        "If the RBA revises the March 2026 FSR, its release timing or its assessment of Australian-system resilience, AM's factual description must be updated without changing the canonical occurrence identity unless upstream canonical evidence itself changes.",
+        "If later realised stress shows one of the RBA's prospective transmission channels occurring, that outcome should be analysed as a separate event or subsequent evidence rather than retroactively treating publication of the March FSR as its cause."
+      ],
+      "analytical_conclusion": "The March 2026 RBA Financial Stability Review materially sharpened the assessment of global risk as Middle East conflict and market volatility intensified, while still judging the Australian financial system resilient. The October 2025 Review provides prior institutional context but not a forecast of the March report, so the change in tone is not promoted into a measured surprise. Nor does the exact 11:30 AEDT publication time justify assigning same-day Australian market moves to the FSR: the reviewed evidence identifies stronger contemporaneous drivers and supplies no independent event-window series. The defensible connection is common-driver context, with the geopolitical and energy shock shaping both the RBA assessment and market conditions.",
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
     }

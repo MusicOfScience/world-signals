@@ -18,6 +18,10 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def version_tuple(version: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in version.split("."))
+
+
 def load_apply_module():
     spec = importlib.util.spec_from_file_location("apply_rba_fsr_monitor_alignment_al", SCRIPT_PATH)
     module = importlib.util.module_from_spec(spec)
@@ -110,7 +114,10 @@ class RbaFsrMonitorAlignmentALTests(unittest.TestCase):
         self.assertTrue(self.plan["guardrails"]["dynamic_series_scope_expansion_prohibited_in_this_tranche"])
 
     def test_analysis_population_and_exact_series_remain_untouched(self):
-        self.assertEqual((self.reviews["version"], len(self.reviews["reviews"])), ("0.10", 14))
+        post = self.plan["postconditions"]
+        self.assertEqual((post["analysis_reviews_version"], post["analysis_review_count"]), ("0.10", 14))
+        self.assertGreaterEqual(version_tuple(self.reviews["version"]), version_tuple(post["analysis_reviews_version"]))
+        self.assertGreaterEqual(len(self.reviews["reviews"]), post["analysis_review_count"])
         exact = [
             (review.get("analysis_id"), movement.get("movement_id"))
             for review in self.reviews["reviews"]
