@@ -281,7 +281,7 @@ def render_audit(plan: dict[str, Any], coverage: dict[str, Any], protected_befor
     post = plan["postconditions"]
     return f"""# WORLD SIGNALS — IMD heatwave outlook AT transaction audit v0.1
 
-**Executed:** 2026-09-06  
+**Executed:** 2026-09-06
 **Exact base:** `{plan['base_main_sha']}`
 
 ## Controlled mutation
