@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.4",
+  "version": "0.5",
   "reference_date": "2026-09-06",
-  "population_state": "CONTROLLED_CANONICAL_LINKED_ECONOMIC_SPECIMEN",
+  "population_state": "CONTROLLED_GEOPOLITICAL_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -129,7 +129,38 @@
       "revision_of_observation_id": null,
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-GEO-VNM-MMR-SECURITY-20260905-001",
+      "observed_at_utc": "2026-09-06T12:47:00Z",
+      "observation_type": "GEOPOLITICAL_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Viet Nam and Myanmar agree to make defence-security cooperation a key pillar of bilateral ties",
+      "summary": "The Government of Viet Nam reported that, during talks in Ha Noi on 5 September 2026, General Secretary and President To Lam and Myanmar President Min Aung Hlaing agreed to make defence and security cooperation a key pillar of bilateral relations. The official account says the two sides will expand young-officer training and exchanges, search-and-rescue and disaster-response cooperation, information exchange, and coordination against transnational crime, drug trafficking, human trafficking, high-tech crime and online fraud, while reaffirming that neither country's territory should be used against the other. This observation records the official bilateral development without inferring regional alignment, regime legitimacy, conflict effects or market consequences.",
+      "domain_tags": [
+        "GEOPOLITICS",
+        "POLITICS",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Vietnam",
+        "Myanmar"
+      ],
+      "regions": [
+        "Southeast Asia"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-VNM-MMR-VGP-20260905"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "CIVIL_DATE",
+        "event_date": "2026-09-05"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store: AW Nepal shock, AX DRC evolving-state pair, and one AZ Japan FIES Canonical-linked economic-data specimen. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through BD: AW Nepal physical shock, AX DRC evolving-state pair, AZ Japan FIES economic data, and one Vietnam-Myanmar geopolitical development. Public projection and automatic ingestion remain closed."
 }
