@@ -1,0 +1,76 @@
+name: BA final branch validation
+
+on:
+  push:
+    branches:
+      - feature/post-az-analysis-revision-contract-ba
+    paths:
+      - .github/workflows/ba-final-branch-validation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact final-validation ancestry
+        run: |
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "802ca5b94b6e80a055ac363f48a6c8392f038048"
+          test "$(git merge-base HEAD origin/main)" = "802ca5b94b6e80a055ac363f48a6c8392f038048"
+          test "$(git rev-parse HEAD^)" = "a10de8862fc1caf929e2f5fa11a5391932ef37a1"
+      - name: Validate final BA state
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python scripts/apply_analysis_revision_contract_ba.py --check-only
+          python -m unittest discover -s tests -q
+          python -m py_compile scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+      - name: Prove protected production population unchanged
+        run: |
+          git diff --quiet origin/main HEAD -- data/canonical/registry.json data/canonical/schema.json data/sources/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/expectations.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+      - name: Prove exact final diff
+        run: |
+          expected=$(printf '%s\n' \
+            .github/workflows/ba-final-branch-validation.yml \
+            .github/workflows/ci.yml \
+            PROJECT_STATUS.md \
+            ROADMAP.md \
+            data/analysis/ANALYSIS_REVISION_CONTRACT_BA_PLAN_v0.1.json \
+            data/analysis/ANALYSIS_REVISION_CONTRACT_BA_TRANSACTION_AUDIT_v0.1.md \
+            data/analysis/POST_AZ_PRESSURE_AUDIT_BA_v0.1.md \
+            data/analysis/schema.json \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_japan_fies_live_analysis_az.py \
+            scripts/build_site.py \
+            scripts/validate_analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            tests/test_analysis_revision_contract_ba.py \
+            tests/test_japan_fies_live_analysis_az.py | sort)
+          actual=$(git diff --name-only origin/main...HEAD | sort)
+          test "$actual" = "$expected"
+      - name: Remove temporary final-validation workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/ba-final-branch-validation.yml
+          git commit -m 'BA: remove temporary final validation workflow'
+          git push origin HEAD:feature/post-az-analysis-revision-contract-ba
