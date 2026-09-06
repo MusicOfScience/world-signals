@@ -36,6 +36,7 @@ APPROVED = {
     "WSSRC-CLIM-001",
 }
 HELD = "WSSRC-EL-BR-001"
+EIA = "WSSRC-COM-003"
 
 
 class P1AGovernanceMigrationTests(unittest.TestCase):
@@ -53,6 +54,34 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
     def _version_tuple(value: str) -> tuple[int, ...]:
         return tuple(int(part) for part in str(value).split("."))
 
+    def _assert_reviewed_eia_descendant_clearance(self, row: dict) -> None:
+        """Allow only the later AS route-specific promotion of P1A's EIA hold.
+
+        P1A remains historically correct: at its checkpoint the WPSR schedule
+        endpoint still required review. A descendant may clear that one field
+        only when the later route-specific governance evidence is explicit and
+        still preserves all automatic-write prohibitions.
+        """
+        self.assertEqual(row.get("automated_monitoring_use"), "CLEARED")
+        self.assertEqual(
+            row.get("automated_monitoring_scope"),
+            "EIA_WPSR_SCHEDULE_READ_ONLY_SENTINEL_ONLY",
+        )
+        self.assertEqual(
+            row.get("monitoring_activation_status"),
+            "PILOT_READ_ONLY_SCHEDULE_SENTINEL_NO_AUTO_COMMIT",
+        )
+        self.assertEqual(row.get("live_adapter_id"), "EIA_WPSR_SCHEDULE")
+        self.assertEqual(row.get("monitoring_readiness_status"), "PILOT_VALIDATED_NO_AUTO_COMMIT")
+        self.assertEqual(row.get("verification_mode"), "AUTOMATED_PILOT")
+        self.assertEqual(row.get("monitor_parser_type"), "HTML_RULE_TABLE_SEMANTIC_SCHEDULE_SENTINEL")
+        self.assertEqual(row.get("monitor_parser_version"), "eia-wpsr-schedule-0.1")
+        self.assertEqual(
+            row.get("monitor_route_baseline_sha256"),
+            "8f972e877fdd56dd836f6a0cc7bc0abea73c21bfd01dd8bbc3b784ea7eacec87",
+        )
+        self.assertIn("does not confer publication-completion authority", row.get("monitor_route_scope_note", ""))
+
     def _assert_completed_source_state(self, source_registry: dict) -> None:
         self.assertGreaterEqual(
             self._version_tuple(str(source_registry.get("version"))),
@@ -62,7 +91,11 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
         by_id = MIGRATION._sources_by_id(source_registry)
         for source_id, spec in self.plan["source_updates"].items():
             for field, value in spec["set"].items():
-                self.assertEqual(by_id[source_id].get(field), value)
+                actual = by_id[source_id].get(field)
+                if source_id == EIA and field == "automated_monitoring_use" and actual != value:
+                    self._assert_reviewed_eia_descendant_clearance(by_id[source_id])
+                    continue
+                self.assertEqual(actual, value)
         assert_held_sources_compatible(
             self, source_registry, {HELD},
             self.plan["preconditions"]["required_missing_governance_fields"],
