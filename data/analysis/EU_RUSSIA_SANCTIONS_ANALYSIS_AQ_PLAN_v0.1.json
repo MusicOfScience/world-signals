@@ -1,0 +1,164 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "EU_RUSSIA_SANCTIONS_ANALYSIS_AQ",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "c7381ff684e6aeb8c458cdf5eb1740ef6a8a8e3b",
+  "purpose": "Review the completed 25 June 2026 EU economic-sanctions renewal as the first Analysis SANCTIONS_PROCESS specimen, separating pre-adoption political agreement, binding legal adoption, the in-force legal horizon, later sanctions calibration and the future renewal boundary without manufacturing surprise, market response or causality.",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.14",
+    "analysis_review_count": 18,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.14",
+    "analysis_evidence_count": 79,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 18,
+    "reviewed_event_type_diversity": 16,
+    "required_target_occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+    "required_target_series_id": "WSER-TRD-EU-RU-SANC",
+    "required_target_source_id": "WSSRC-TRD-004",
+    "required_target_category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+    "required_target_event_type": "SANCTIONS_PROCESS",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_trade_policy_temporal_role": "LEGAL_ADOPTION",
+    "required_target_trade_measure_state": "IN_FORCE",
+    "required_target_timing_type": "CIVIL_DATE",
+    "required_target_start_local": "2026-06-25",
+    "required_target_source_timezone": "Europe/Brussels",
+    "required_target_start_utc": null,
+    "required_target_end_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_absent_analysis_ids": [
+      "WSAN-EU-RU-SANC-20260625-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-TRD-EU-RU-SANC-20260625",
+    "selection_rationale": [
+      "Adds the first reviewed SANCTIONS_PROCESS and first TRADE_SANCTIONS_INDUSTRIAL_POLICY Analysis specimen.",
+      "Tests political agreement versus binding legal adoption: EU leaders publicly agreed the twelve-month extension before the Council adopted the binding act.",
+      "Tests institutional novelty versus surprise: a first full-year renewal after six-month rollovers is notable but was pre-signalled before formal adoption.",
+      "Tests legal adoption versus future expiry/renewal boundary: 25 June 2026 and 31 July 2027 are distinct canonical objects.",
+      "Tests legal continuity versus policy-content freeze: the later 21st sanctions package changed the regime within the annual horizon.",
+      "Tests contemporaneous-market contamination: large oil moves around the date had strong Iran/Strait of Hormuz drivers and are not promoted to an EU-renewal response.",
+      "Fresh Council, EUR-Lex, European Council and Reuters evidence supports the analysis without upstream canonical mutation."
+    ],
+    "held_occurrence_ids": [
+      "WSO-MAC-B-0041"
+    ],
+    "hold_rationale": "Japan household spending remains a legitimate future macro specimen. AQ selects sanctions/legal-continuity object diversity, not queue exhaustion. The CORPORATE_FINANCIAL_MARKET_STRUCTURE completed-anchor gap also remains real but is not auto-filled by a mechanical historical expiry."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.4",
+    "reason": "Analysis v0.4 already represents NOT_ESTABLISHED surprise, OTHER_DEFENSIBLE_EXPECTATION benchmarks, empty market response, LEGAL_OR_OPERATIONAL_DEPENDENCY, NOT_A_CAUSAL_CLAIM, PLAUSIBLE_WATCH_ITEM second-order effects, alternatives and falsifiers. The challenge is stage and causality discipline rather than missing schema capacity."
+  },
+  "new_analysis_id": "WSAN-EU-RU-SANC-20260625-001",
+  "new_evidence_ids": [
+    "WSEV-EU-SANC-COUNCIL-RENEWAL-20260625",
+    "WSEV-EU-SANC-EURLEX-20261437",
+    "WSEV-EU-SANC-REUTERS-AGREEMENT-20260618",
+    "WSEV-EU-SANC-EUCO-CONTEXT-20260618",
+    "WSEV-EU-SANC-REUTERS-OIL-CONTEXT-20260624",
+    "WSEV-EU-SANC-COUNCIL-21ST-20260723"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.15",
+    "analysis_review_count": 19,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.15",
+    "analysis_evidence_count": 85,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 19,
+    "reviewed_event_type_diversity": 17,
+    "reviewed_sanctions_process_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-MAC-B-0041"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json",
+      "data/analysis/EU_RUSSIA_SANCTIONS_ANALYSIS_AQ_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json"
+    ]
+  },
+  "descendant_checkpoint_repair": {
+    "file": "tests/test_who_wha79_health_governance_analysis_ap.py",
+    "historical_ap_checkpoint_unchanged": true,
+    "live_descendant_change": "Permit reviewed count >=18, event-type diversity >=16, Analysis review/evidence versions >=0.14 and evidence count >=79, while retaining exactly one HEALTH_GOVERNANCE_EVENT contribution and leaving AP plan/payload/exact transform frozen.",
+    "reason": "AP remains historically exact at its own post-state, but its live descendant assertions must permit legitimate AQ Analysis growth."
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "political_agreement_equals_binding_legal_adoption": false,
+    "press_release_publication_time_equals_decision_time": false,
+    "annual_cadence_novelty_equals_surprise": false,
+    "legal_adoption_equals_future_expiry_boundary": false,
+    "renewal_freezes_policy_content_until_2027": false,
+    "later_sanctions_package_is_caused_by_renewal": false,
+    "same_period_oil_move_is_renewal_response": false,
+    "expiry_boundary_implies_automatic_termination": false,
+    "analytical_evidence_resolves_missing_canonical_utc": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "market_structure_gap_must_be_filled_next": false,
+    "prior_ap_live_count_is_permanent_ceiling": false,
+    "auto_merge": false
+  }
+}
