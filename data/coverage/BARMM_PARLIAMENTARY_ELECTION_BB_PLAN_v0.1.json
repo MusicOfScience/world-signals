@@ -1,0 +1,176 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BB",
+  "reference_date": "2026-09-06",
+  "exact_base_main_sha": "b8c5372198e3141c4c3f79ace13083877447f71b",
+  "purpose": "Repair the missing 2026 BARMM parliamentary-election source and Canonical polling-day anchor before any downstream Live or Analysis expansion.",
+  "preconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.38",
+    "canonical_record_count": 688,
+    "source_registry_version": "1.80",
+    "source_record_count": 243,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.13",
+    "biosecurity_overlay_checkpoint": {
+      "canonical_registry_version": "0.38",
+      "canonical_record_count": 688
+    },
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "live_schema_version": "0.4",
+    "live_observation_count": 4,
+    "live_evidence_count": 6,
+    "analysis_schema_version": "0.7",
+    "analysis_reviews_version": "0.17",
+    "analysis_review_count": 21,
+    "analysis_evidence_count": 95,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 0,
+    "production_exact_timestamp_series_count": 0,
+    "required_absent_occurrence_ids": [
+      "WSO-EL-PH-BARMM-20260914"
+    ],
+    "required_absent_series_ids": [
+      "WSER-EL-PH-BARMM-PE"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-EL-PH-001"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-138c3977e91ced60d8"
+    ]
+  },
+  "source": {
+    "source_id": "WSSRC-EL-PH-001",
+    "institution": "Commission on Elections (COMELEC), Philippines",
+    "jurisdiction": "Philippines",
+    "domain": "elections_governance",
+    "endpoint_role": "BARMM parliamentary-election official materials and schedule verification",
+    "authoritative_url": "https://www.comelec.gov.ph/php-tpls-attachments/2025BARMMPE/260513_BARMMPE_TentativeCLC/_REGIONAL.pdf",
+    "canonical_domain": "comelec.gov.ph",
+    "source_type": "NATIONAL_ELECTION_BODY",
+    "authority_class": "OFFICIAL_ELECTION_SOURCE",
+    "information_supplied": "Official BARMM parliamentary-election materials including the certified candidate list whose header identifies the 14 September 2026 election date.",
+    "source_timezone": "Asia/Manila",
+    "parser_type": "MANUAL_OFFICIAL_ELECTION_PORTAL_VERIFICATION",
+    "canonical_provenance_use": "APPROVED_MANUAL_FACTUAL_PROVENANCE",
+    "automated_monitoring_use": "NOT_AUTHORISED_IN_BB",
+    "verification_mode": "MANUAL_PRIMARY_OFFICIAL",
+    "rights": {
+      "licence_constraints": "NO_UNRESTRICTED_SITE_WIDE_REUSE_OR_PRODUCTION_AUTOMATION_GRANT_IDENTIFIED; MINIMAL FACTUAL REFERENCE ONLY",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "RIGHTS_AUDIT_REQUIRED_NO_UNRESTRICTED_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY_NO_CANDIDATE_CONTENT_REPUBLICATION",
+      "rights_evidence_url": null,
+      "rights_summary": "Official electoral-authority provenance is retained conservatively. BB infers no blanket crawler, database-reuse or redistribution right from official/public status and does not ingest candidate-level content.",
+      "automation_fields_ready": false,
+      "automation_blockers": [
+        "No separate production automated-retrieval permission established in BB.",
+        "No stable machine-readable schedule endpoint selected or validated in BB.",
+        "Certified-candidate material contains personal/candidate data and an explicit privacy notice; candidate content is out of scope."
+      ]
+    }
+  },
+  "occurrence": {
+    "occurrence_id": "WSO-EL-PH-BARMM-20260914",
+    "series_id": "WSER-EL-PH-BARMM-PE",
+    "canonical_name": "2026 BARMM Parliamentary Election — Polling Day",
+    "short_calendar_title": "BARMM parliamentary election",
+    "category": "ELECTIONS_GOVERNANCE",
+    "subcategory": "regional_parliamentary_election",
+    "jurisdiction": "Bangsamoro Autonomous Region in Muslim Mindanao, Philippines",
+    "region": "Southeast Asia",
+    "institution": "Commission on Elections (COMELEC), Philippines",
+    "event_type": "ELECTION_MILESTONE",
+    "record_class": "OCCURRENCE",
+    "certainty_status": "CONFIRMED",
+    "activation_mode": "EXPLICITLY_SCHEDULED",
+    "lifecycle_status": "PLANNED",
+    "source_id": "WSSRC-EL-PH-001",
+    "source_url": "https://www.comelec.gov.ph/php-tpls-attachments/2025BARMMPE/260513_BARMMPE_TentativeCLC/_REGIONAL.pdf",
+    "primary_source_assertion_id": "WSA-BB-1cd890ce4343004e",
+    "timing": {
+      "timing_type": "CIVIL_DATE",
+      "start_local": "2026-09-14",
+      "end_local": null,
+      "source_timezone": "Asia/Manila",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY",
+      "all_day_semantics": true,
+      "time_status": "DATE_ONLY_CONFIRMED",
+      "time_basis": "PRIMARY_OFFICIAL_ELECTION_MATERIAL",
+      "publication_time_semantics": "DATE_ONLY"
+    },
+    "intrinsic_importance": "HIGH",
+    "expected_market_sensitivity": "LOW",
+    "geopolitical_sensitivity": "HIGH",
+    "transmission_channels": [
+      "regional governance transition",
+      "Bangsamoro peace-process political track",
+      "security and institutional stability",
+      "regional development and public administration"
+    ],
+    "render_policy": "SHOW",
+    "visibility_tier": "CORE",
+    "change_id": "WSCHANGE-138c3977e91ced60d8"
+  },
+  "postconditions": {
+    "canonical_schema_version": "0.52",
+    "canonical_registry_version": "0.39",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.81",
+    "source_record_count": 244,
+    "change_ledger_version": "0.25",
+    "change_ledger_count": 60,
+    "biosecurity_overlay_version": "0.14",
+    "biosecurity_overlay_checkpoint": {
+      "canonical_registry_version": "0.39",
+      "canonical_record_count": 689
+    },
+    "monitor_expectations_version": "0.10",
+    "monitor_adapter_count": 8,
+    "live_schema_version": "0.4",
+    "live_observation_count": 4,
+    "live_evidence_count": 6,
+    "analysis_schema_version": "0.7",
+    "analysis_reviews_version": "0.17",
+    "analysis_review_count": 21,
+    "analysis_evidence_count": 95,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 0,
+    "production_exact_timestamp_series_count": 0
+  },
+  "allowed_governed_mutations": [
+    "data/canonical/registry.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md"
+  ],
+  "protected_population_files": [
+    "data/canonical/schema.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "monitor_adapter_added": false,
+    "live_observation_added": false,
+    "analysis_review_or_revision_added": false,
+    "candidate_level_content_ingested": false,
+    "utc_timestamp_fabricated": false,
+    "future_event_marked_completed": false
+  }
+}
