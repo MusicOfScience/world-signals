@@ -1,0 +1,168 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "UNFCCC_SB64_CLIMATE_GOVERNANCE_ANALYSIS_AO",
+  "version": "0.1",
+  "reference_date": "2026-09-06",
+  "base_main_sha": "35bcb5616e99c7fce58f82cfc14bfed901929f3a",
+  "purpose": "Review the completed 8-18 June 2026 UNFCCC June Climate Meetings (SB64) as the first Analysis ENVIRONMENTAL_GOVERNANCE_EVENT specimen, preserving separate SBI/SBSTA legal identities, distinguishing meeting closure from substantive resolution, and treating forwarded draft decisions as observed process outputs rather than already-adopted higher-body decisions.",
+  "preconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.12",
+    "analysis_review_count": 16,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.12",
+    "analysis_evidence_count": 67,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 16,
+    "reviewed_event_type_diversity": 14,
+    "required_target_occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+    "required_target_series_id": "WSER-CLIM-UNFCCC-SB",
+    "required_target_source_id": "WSSRC-CLIM-005",
+    "required_target_category": "CLIMATE_ENVIRONMENT",
+    "required_target_event_type": "ENVIRONMENTAL_GOVERNANCE_EVENT",
+    "required_target_lifecycle": "COMPLETED",
+    "required_target_timing_type": "MULTI_DAY_LOCAL",
+    "required_target_start_local": "2026-06-08",
+    "required_target_end_local": "2026-06-18",
+    "required_target_source_timezone": "Europe/Berlin",
+    "required_target_start_utc": null,
+    "required_target_end_utc": null,
+    "required_target_time_precision": "DAY",
+    "required_absent_analysis_ids": [
+      "WSAN-CLIM-UNFCCC-SB64-202606-001"
+    ],
+    "required_pre_analysis_exact_timestamp_series_rows": 0,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "selection": {
+    "selected_occurrence_id": "WSO-CLIM-UNFCCC-SB64-202606",
+    "selection_rationale": [
+      "Adds the first reviewed ENVIRONMENTAL_GOVERNANCE_EVENT and first climate-treaty-governance Analysis specimen.",
+      "Adds a genuinely global institution and complements, rather than duplicates, the existing physical-climate-risk specimen.",
+      "Tests closure versus substantive-resolution discipline: the meeting completed while significant divides and intersessional work remained.",
+      "Tests legal/institutional identity because the SB64 umbrella contains legally distinct SBI 64 and SBSTA 64 sessions.",
+      "Tests decision-chain semantics because August post-session addenda contain draft decisions forwarded for later consideration/adoption; forwarding must not be rewritten as adoption.",
+      "Tests outcome-versus-surprise discipline because UNFCCC characterises the result as mixed, but mixed substantive content does not imply a MIXED surprise without an ex-ante benchmark.",
+      "Fresh first-party SBI/SBSTA reports published 28 August 2026 materially strengthen post-event evidence without requiring upstream canonical mutation."
+    ],
+    "held_occurrence_ids": [
+      "WSO-HEALTH-WHA-079",
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "hold_rationale": "The remaining completed anchors remain a choice set. AO selects climate-governance process semantics and new first-party post-session evidence, not FIFO completion or taxonomy quota filling."
+  },
+  "schema_decision": {
+    "version_unchanged": "0.4",
+    "reason": "Existing Analysis v0.4 can represent a substantively mixed institutional outcome while leaving surprise NOT_ESTABLISHED, preserve legal/operational dependency without causal inference, allow empty market response, and distinguish observed process propagation from future adoption. No representational failure justifies schema migration."
+  },
+  "new_analysis_id": "WSAN-CLIM-UNFCCC-SB64-202606-001",
+  "new_evidence_ids": [
+    "WSEV-UNFCCC-SB64-EVENT-20260618",
+    "WSEV-UNFCCC-SB64-CLOSE-20260618",
+    "WSEV-UNFCCC-SB64-Q2-2026",
+    "WSEV-UNFCCC-SBI64-REPORTS-20260828",
+    "WSEV-UNFCCC-SBSTA64-REPORTS-20260828"
+  ],
+  "postconditions": {
+    "canonical_registry_version": "0.37",
+    "canonical_record_count": 687,
+    "source_registry_version": "1.78",
+    "source_record_count": 242,
+    "change_ledger_version": "0.24",
+    "change_ledger_count": 59,
+    "biosecurity_overlay_version": "0.12",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "monitor_expectations_version": "0.9",
+    "analysis_schema_version": "0.4",
+    "analysis_reviews_version": "0.13",
+    "analysis_review_count": 17,
+    "analysis_reviews_canonical_checkpoint": {
+      "registry_version": "0.37",
+      "record_count": 687
+    },
+    "analysis_evidence_version": "0.13",
+    "analysis_evidence_count": 72,
+    "eligible_completed_occurrence_count": 20,
+    "reviewed_occurrence_count": 17,
+    "reviewed_event_type_diversity": 15,
+    "reviewed_environmental_governance_event_occurrence_count": 1,
+    "post_analysis_exact_timestamp_series_rows": 0,
+    "broad_population_state": "READY_FOR_CONTROLLED_EXPANSION",
+    "remaining_eligible_unreviewed_occurrence_ids": [
+      "WSO-HEALTH-WHA-079",
+      "WSO-MAC-B-0041",
+      "WSO-TRD-EU-RU-SANC-20260625"
+    ],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "mutation_boundary": {
+    "permanent_write_paths": [
+      "data/analysis/event_reviews.json",
+      "data/analysis/evidence_registry.json",
+      "data/analysis/UNFCCC_SB64_CLIMATE_GOVERNANCE_ANALYSIS_AO_TRANSACTION_AUDIT_v0.1.md"
+    ],
+    "protected_unchanged_paths": [
+      "data/canonical/registry.json",
+      "data/canonical/schema.json",
+      "data/sources/registry.json",
+      "data/changes/ledger.json",
+      "data/coverage/biosecurity_overlay.json",
+      "data/monitor/expectations.json",
+      "data/monitor/operations_policy.json",
+      "data/analysis/schema.json"
+    ]
+  },
+  "descendant_checkpoint_repair": {
+    "file": "tests/test_south_korea_local_election_analysis_an.py",
+    "historical_an_checkpoint_unchanged": true,
+    "live_descendant_change": "Replace exact live reviewed-count/diversity ceilings 16/14 with lower bounds >=16/>=14 while retaining exactly one ELECTION_MILESTONE contribution.",
+    "reason": "AN's frozen post-AN checkpoint remains historically exact, but its live descendant test must permit legitimate later Analysis growth."
+  },
+  "guardrails": {
+    "canonical_mutation": false,
+    "source_registry_mutation": false,
+    "change_ledger_mutation": false,
+    "biosecurity_overlay_mutation": false,
+    "analysis_schema_mutation": false,
+    "monitor_configuration_mutation": false,
+    "calendar_write": false,
+    "automatic_canonical_commit": false,
+    "sb64_umbrella_merges_sbi64_and_sbsta64": false,
+    "meeting_completion_implies_negotiation_success": false,
+    "meeting_completion_implies_all_agenda_items_resolved": false,
+    "mixed_substantive_outcome_is_mixed_surprise": false,
+    "draft_decision_forwarded_equals_adopted_decision": false,
+    "forwarding_guarantees_later_adoption_unchanged": false,
+    "executive_secretary_statement_is_consensus_decision_text": false,
+    "agenda_or_draft_count_is_scalar_progress_metric": false,
+    "post_session_report_publication_retimes_event": false,
+    "closing_update_clock_resolves_canonical_end_utc": false,
+    "analytical_evidence_resolves_missing_canonical_utc": false,
+    "empty_market_response_is_missing_work": false,
+    "queue_completion_is_population_objective": false,
+    "market_structure_gap_must_be_filled_next": false,
+    "prior_an_live_count_is_permanent_ceiling": false,
+    "auto_merge": false
+  }
+}
