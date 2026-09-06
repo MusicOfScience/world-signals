@@ -1,6 +1,6 @@
 # WORLD SIGNALS — IMD hot-weather / heatwave outlook AT research v0.1
 
-**Research date:** 2026-09-06  
+**Research date:** 2026-09-06
 **Exact base main:** `92bf6cba7506483dd861680924879b1ded0f4ddc`
 
 ## Research question
