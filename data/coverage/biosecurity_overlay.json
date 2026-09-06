@@ -1,11 +1,11 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "BIOSECURITY_CROSS_DOMAIN_OVERLAY",
-  "version": "0.13",
+  "version": "0.14",
   "layer": "ANALYTICAL_COVERAGE_OVERLAY_NONCANONICAL",
   "canonical_checkpoint": {
-    "registry_version": "0.38",
-    "record_count": 688
+    "registry_version": "0.39",
+    "record_count": 689
   },
   "principles": {
     "non_exclusive": true,

@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-06",
-  "version": "1.80",
+  "version": "1.81",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10111,6 +10111,64 @@
         "No production automated retrieval permission was established in this tranche."
       ],
       "notes": "Operational governance classification for WORLD SIGNALS; not a legal opinion. RSMC New Delhi copyright terms are not automatically imputed to the separate mausam.imd.gov.in surface."
+    },
+    {
+      "source_id": "WSSRC-EL-PH-001",
+      "institution": "Commission on Elections (COMELEC), Philippines",
+      "jurisdiction": "Philippines",
+      "domain": "elections_governance",
+      "endpoint_role": "BARMM parliamentary-election official materials and schedule verification",
+      "authoritative_url": "https://www.comelec.gov.ph/php-tpls-attachments/2025BARMMPE/260513_BARMMPE_TentativeCLC/_REGIONAL.pdf",
+      "source_type": "official_election_material",
+      "information_supplied": "Official BARMM parliamentary-election materials including the certified candidate list whose header identifies the 14 September 2026 election date.",
+      "future_schedule_horizon": "event-specific 2026 BARMM parliamentary-election cycle",
+      "typical_advance_notice": "event-specific official materials published ahead of polling day",
+      "machine_readable_available": "PDF/HTML",
+      "source_timezone": "Asia/Manila",
+      "recommended_verification_cadence": "manual weekly until polling day; post-event lifecycle verification separately",
+      "activation_status": "ACTIVE_MANUAL_PROVENANCE_ONLY",
+      "parser_type": "MANUAL_OFFICIAL_ELECTION_PORTAL_VERIFICATION",
+      "known_limitations": [
+        "The certified-candidate PDF is used only for the election-date fact in its official header; candidate-level content is out of scope.",
+        "The source supports a civil polling date but BB does not infer polling hours or a canonical clock timestamp.",
+        "Public accessibility and official status do not establish unrestricted production crawler permission.",
+        "No separate production automated-retrieval permission established in BB.",
+        "No stable machine-readable schedule endpoint selected or validated in BB.",
+        "Certified-candidate material contains personal/candidate data and an explicit privacy notice; candidate content is out of scope."
+      ],
+      "backup_source": null,
+      "notes": "COMELEC is the competent polling-date authority for this BB occurrence. OPAPRU contextual material informed significance screening but is not a second Canonical timing authority.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+      "licence_constraints": "NO_UNRESTRICTED_SITE_WIDE_REUSE_OR_PRODUCTION_AUTOMATION_GRANT_IDENTIFIED; MINIMAL FACTUAL REFERENCE ONLY",
+      "ingestion_permission": "CURATED_PUBLIC_FACTS_MANUAL_REFERENCE_ONLY",
+      "licence_review_status": "RIGHTS_AUDIT_REQUIRED_NO_UNRESTRICTED_REUSE_GRANT_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD_PENDING_PERMISSION_OR_ENDPOINT_ROUTE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY_NO_CANDIDATE_CONTENT_REPUBLICATION",
+      "rights_evidence_url": null,
+      "rights_summary": "Official electoral-authority provenance is retained conservatively. BB infers no blanket crawler, database-reuse or redistribution right from official/public status and does not ingest candidate-level content.",
+      "automation_summary": "BB authorises manual first-party factual provenance only. No stable production endpoint or automated retrieval permission is established.",
+      "rights_reviewed_at": "2026-09-06",
+      "rights_review_scope": "BARMM_PARLIAMENTARY_ELECTION_BB_FACTUAL_PROVENANCE_AND_AUTOMATION_SEPARATED",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not a legal opinion.",
+      "monitoring_readiness_status": "RIGHTS_AUDIT_REQUIRED",
+      "monitoring_priority_score": 220,
+      "canonical_dependency_count": 1,
+      "monitoring_readiness_assessed_at": "2026-09-06",
+      "last_successful_research_verification_at": "2026-09-06",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "official_barmm_election_material",
+          "url": "https://www.comelec.gov.ph/php-tpls-attachments/2025BARMMPE/260513_BARMMPE_TentativeCLC/_REGIONAL.pdf",
+          "transport": "PDF",
+          "completeness_scope": "EVENT_DATE_FACT_ONLY_CANDIDATE_CONTENT_EXCLUDED",
+          "preferred_for_monitoring": false
+        }
+      ]
     }
   ],
   "activation_backlog": [
