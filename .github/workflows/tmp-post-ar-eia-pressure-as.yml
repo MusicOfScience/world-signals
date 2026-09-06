@@ -44,33 +44,29 @@ jobs:
             'source_registry_version':src.get('version'),
             'source_record':rec,
             'canonical_registry_version':can.get('version'),
-            'wpsr_occurrences':[{k:x.get(k) for k in ['occurrence_id','series_id','canonical_name','event_type','lifecycle_status','start_local','start_utc','source_timezone','source_id']} for x in occ],
+            'wpsr_occurrence_ids':[x.get('occurrence_id') for x in occ],
             'monitor_expectations_version':exp.get('version'),
             'configured_adapter_ids':[x.get('adapter_id') for x in exp.get('adapters',[])],
           },indent=2,ensure_ascii=False))
           PY
-      - name: Probe official WPSR publication page conservatively
+      - name: Exercise official WPSR schedule parser
         shell: bash
         run: |
           python - <<'PY'
-          from urllib.request import Request,urlopen
-          from hashlib import sha256
-          import re
-          url='https://www.eia.gov/petroleum/supply/weekly/index.php'
-          req=Request(url,headers={'User-Agent':'WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)'})
-          with urlopen(req,timeout=30) as r:
-              body=r.read()
-              ctype=r.headers.get('Content-Type')
-              status=r.status
-              final=r.geturl()
-          text=body.decode('utf-8','replace')
-          patterns={
-            'week_ending':r'Data for week ending\s*([^<\n]+)',
-            'release_date':r'Release Date:\s*([^<\n]+)',
-            'next_release_date':r'Next Release Date:\s*([^<\n]+)',
-          }
-          found={k:(re.search(p,text,re.I).group(1).strip() if re.search(p,text,re.I) else None) for k,p in patterns.items()}
-          print({'status':status,'final_url':final,'content_type':ctype,'bytes':len(body),'sha256':sha256(body).hexdigest(),'fields':found})
-          if status != 200 or not all(found.values()):
-              raise SystemExit('EIA WPSR stable publication fields not all found')
+          from pathlib import Path
+          import json,sys
+          sys.path.insert(0,str(Path('src').resolve()))
+          from world_signals.adapters import fetch_eia_wpsr_schedule
+          rule,snap=fetch_eia_wpsr_schedule()
+          print(json.dumps({'snapshot':snap.as_dict(),'rule':rule.as_dict()},indent=2,ensure_ascii=False))
+          if rule.standard_release_day != 'Wednesday':
+              raise SystemExit('unexpected EIA WPSR standard release day')
+          if rule.standard_release_time_local != '10:30':
+              raise SystemExit('unexpected EIA WPSR standard release time')
+          if rule.standard_time_semantics != 'AFTER':
+              raise SystemExit('EIA WPSR time semantics lost')
+          if not any(x['week_ending']=='2026-09-04' and x['alternate_release_date']=='2026-09-10' and x['release_time_local']=='12:00' for x in rule.holiday_exceptions):
+              raise SystemExit('2026 Labor Day exception not parsed')
           PY
+      - name: Run adapter regressions
+        run: python -m unittest tests.test_eia_wpsr_adapter -v
