@@ -8,8 +8,8 @@ if marker in text:
 
 block = """# CURRENT RECOVERY OVERRIDE — POST-AU / AV FOUNDATION
 
-**Effective checkpoint:** 2026-09-06  
-**Exact post-#76 main base:** `a487eaecd6c08e9692a42ce6ffed2dea1e455879`  
+**Effective checkpoint:** 2026-09-06
+**Exact post-#76 main base:** `a487eaecd6c08e9692a42ce6ffed2dea1e455879`
 **AV branch:** `feature/post-au-pressure-audit-av`
 
 This override supersedes stale \"current\" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
