@@ -4,12 +4,12 @@
 
 `WORLD_SIGNALS_PROJECT_CHARTER.md` is authoritative. The executable repository implements its layers as separate governed contracts rather than one blended event/news database.
 
-Current post-#77 / AW controlled Live Intelligence state:
+Current post-#78 / AX evolving-state Live Intelligence state:
 
 - Canonical `v0.38 / 688`;
 - Source Registry `v1.80 / 243`;
 - Source/Change Monitor expectations `v0.10 / 8 adapters`;
-- Live Intelligence `v0.2 / 1 internal observation / 2 evidence`, controlled single-specimen gate; public observations `0`;
+- Live Intelligence `v0.3 / 3 internal observations / 4 evidence`, controlled multi-snapshot gate; public observations `0`;
 - Analysis `v0.16 / 20 reviews / 91 evidence` on schema `v0.4`;
 - automatic canonical commit OFF;
 - Google Calendar writes OFF.
@@ -68,7 +68,7 @@ Configuration does not mean every governed source is automation-cleared. Source 
 
 ## Live Intelligence controlled population
 
-AV introduced the executable Live Intelligence contract at `data/live_intelligence/`; AW v0.2 admits the first reviewed internal specimen without opening broad ingestion.
+AV introduced the executable Live Intelligence contract at `data/live_intelligence/`; AW v0.2 admitted the first reviewed internal specimen, and AX v0.3 adds a bounded evolving-state story test without opening broad ingestion.
 
 ```text
 current development / observation
@@ -87,7 +87,7 @@ FACTUAL OBSERVATION
 ANALYSIS may later interpret it
 ```
 
-The frozen AV v0.1 checkpoint remains recorded inside the v0.2 schema. AW opens production only under `CONTROLLED_SINGLE_SPECIMEN`: maximum one observation and two evidence rows, automatic ingestion disabled, story clustering disabled and public observation projection closed.
+The frozen AV v0.1 and AW v0.2 checkpoints remain recorded inside the v0.3 schema. AX uses `CONTROLLED_MULTI_SNAPSHOT_SPECIMEN`: maximum three observations and four evidence rows, automatic ingestion disabled, automatic story clustering disabled and public observation projection closed. The DRC observations demonstrate that a later state snapshot is not automatically a correction of the earlier snapshot, and that a manual story key is only a grouping identity.
 
 Live Intelligence is not a synonym for the Source/Change Monitor. The monitor asks whether governed authoritative inputs changed; Live Intelligence records consequential factual developments in the world. A monitor parser failure is not a Live Intelligence fact.
 
@@ -115,7 +115,7 @@ Analysis evidence is not retrospectively migrated to Live Intelligence. Historic
 
 GitHub Pages cannot honestly claim current monitor health merely because a build was green. The Monitor view exposes configured routes, while runtime source health and review candidates remain timestamped evidence.
 
-Likewise, AW emits `docs/data/live_intelligence.json` only as **curated-store metadata**. It reports one internal observation and two internal evidence rows while exposing zero public observations and explicitly stating that it is not a runtime feed. A browser Live Intelligence feed is not authorised by this tranche.
+Likewise, AX emits `docs/data/live_intelligence.json` only as **curated-store metadata**. It reports three internal observations and four internal evidence rows while exposing zero public observations and explicitly stating that it is not a runtime feed. A browser Live Intelligence feed is not authorised by this tranche.
 
 ## GitHub is an execution shell, not the architecture
 
@@ -132,7 +132,8 @@ Research / taxonomy / source governance                    [ONGOING]
   -> controlled Analysis foundation + diverse sample         [DONE: 20 reviews / 18 event types]
   -> Live Intelligence executable zero-population foundation [DONE: AV]
   -> first pressure-audited Live Intelligence specimen       [DONE: AW — Nepal flood]
-  -> test prospective Live Intelligence -> Analysis linkage  [LATER, IF CONTRACT SURVIVES]
+  -> evolving-state / manual story semantics                  [DONE: AX — DRC Bundibugyo]
+  -> test prospective Live Intelligence -> Analysis linkage  [NEXT AUDIT CANDIDATE]
   -> broader Live Intelligence population                    [ONLY AFTER AUDIT]
   -> optional calendar export                                [LATER]
   -> narrow auto-commit classes                              [ONLY IF EMPIRICAL GATE OPENS]

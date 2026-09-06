@@ -1,8 +1,8 @@
-# CURRENT RECOVERY OVERRIDE — POST-AV / AW CONTROLLED LIVE INTELLIGENCE
+# CURRENT RECOVERY OVERRIDE — POST-AW / AX EVOLVING-STATE LIVE INTELLIGENCE
 
 **Effective checkpoint:** 2026-09-06
-**Exact post-#77 main base:** `4768c73532c4ba4038b30314079b85be64fbee01`
-**AW branch:** `feature/post-av-pressure-audit-aw`
+**Exact post-#78 main base:** `721206169033eb0ceb695075d44fb38e7fa2edc3`
+**AX branch:** `feature/post-aw-pressure-audit-ax`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
@@ -15,7 +15,7 @@ This override supersedes stale "current" counts in the historical body below whi
 - biosecurity overlay: **v0.13 @ canonical v0.38 / 688**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.2 / 1 reviewed internal observation / 2 primary-official evidence rows / public observation projection CLOSED**
+- Live Intelligence: **v0.3 / 3 reviewed internal observations / 4 primary-official evidence rows / public observation projection CLOSED**
 - Analysis schema: **v0.4**
 - Analysis: **v0.16 / 20 reviews / 91 evidence / 18 reviewed event types**
 - completed Analysis-eligible occurrences: **21**
@@ -26,11 +26,13 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-AW has exercised the Live Intelligence contract with its first real specimen without opening a general feed. Live Intelligence v0.2 contains one internally curated physical-shock observation for the 26 August 2026 Nepal Bhote Koshi / Rasuwa flood and exactly two primary-official evidence rows. Public observation projection, automatic ingestion, story clustering, automatic Canonical commit and Google Calendar writes remain closed.
+AX has now exercised repeated as-of state and developing-story semantics without opening a general feed. Live Intelligence v0.3 preserves the AW Nepal shock and adds two primary-confirmed WHO snapshots of the 2026 DRC Bundibugyo outbreak, giving three internal observations and four primary-official evidence rows in total.
 
-The specimen has no fabricated Canonical occurrence or link. Native `Asia/Kathmandu` event time is preserved as `2026-08-26T08:40:00` / `2026-08-26T02:55:00Z`; evidence publication dates remain civil-date precision; the uncertain upstream physical trigger is deliberately not asserted as cause.
+The two DRC observations share one manually reviewed story key. The 30 August snapshot explicitly state-updates the 26 August snapshot while both retain `revision_of_observation_id = null`: a later cumulative state does not make the earlier as-of state false. `state_as_of` is separate from source publication time, event time and WORLD SIGNALS observation time, and civil dates are not upgraded to fabricated timestamps.
 
-The next pressure audit should determine whether Live Intelligence now needs repeated as-of state / revision / developing-story semantics before prospective Live Intelligence → Analysis linkage. The 2026 DRC Bundibugyo Ebola outbreak is a strong candidate but is not pre-authorised. Japan household spending remains a valid held Analysis specimen, not a queue-completion obligation.
+Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. The DRC story key is not a Canonical occurrence, causal claim or analytical conclusion. A fourth observation or broader ingestion requires another pressure audit.
+
+The next audit should decide whether prospective Live Intelligence → Analysis linkage now creates more architectural value than another isolated Live specimen. Japan household spending remains a valid held Analysis specimen, not a queue-completion obligation.
 
 ## Current configured monitor cohort
 

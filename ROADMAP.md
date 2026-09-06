@@ -86,15 +86,17 @@ Foundation capabilities:
 - metadata-only static projection;
 - CI integration.
 
-**AV v0.1 deliberately prohibited production observation/evidence population; that frozen foundation checkpoint is preserved inside AW v0.2.**
+**AV v0.1 deliberately prohibited production observation/evidence population; that frozen foundation checkpoint remains preserved through AW v0.2 and AX v0.3.**
 
-## Stage 7 — first Live Intelligence specimen — DONE / AW
+## Stage 7 — controlled Live Intelligence specimens — DONE / AW + AX
 
-AW selected the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal after comparing physical-shock, health-emergency, geopolitical/policy, economic-revision and market-observation candidates. Selection was based on contract pressure and authoritative provenance rather than headline prominence.
+AW selected the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal after comparing physical-shock, health-emergency, geopolitical/policy, economic-revision and market-observation candidates. Live Intelligence v0.2 proved unscheduled identity, native event time, civil-date publication precision and zero Canonical links without opening public projection.
 
-Live Intelligence v0.2 now contains exactly one reviewed internal `PHYSICAL_SHOCK` observation and two primary-official evidence rows. It preserves `Asia/Kathmandu` native time, permits zero Canonical links for a genuinely unscheduled shock, enforces civil-date publication precision for evidence, leaves the uncertain upstream trigger unresolved, creates no story identity and exposes zero public observations.
+AX then selected the 2026 DRC Bundibugyo outbreak because successive WHO snapshots stress a different contract boundary: **state evolution is not revision**. Live Intelligence v0.3 preserves the Nepal row and adds two DRC `HEALTH_EMERGENCY` observations sharing one manually reviewed story key. The 30 August state points to the 26 August state with `state_update_of_observation_id`, while both retain null revision links.
 
-The next pressure audit should decide whether repeated as-of state / revision / developing-story semantics now outrank prospective Live Intelligence → Analysis linkage. The 2026 DRC Bundibugyo Ebola outbreak is a strong candidate for that stress test, but is not pre-authorised for population.
+AX also makes state-as-of time explicit and distinct from event, publication and WORLD SIGNALS observation time. Manual story identity is a grouping key only; automatic clustering, public projection and continuous ingestion remain closed. Current bounded population is three observations and four primary-official evidence rows.
+
+Before any fourth observation, run another pressure audit. The next high-value candidate is prospective Live Intelligence → Analysis linkage rather than automatic continuation of the DRC story.
 
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — LATER
 
