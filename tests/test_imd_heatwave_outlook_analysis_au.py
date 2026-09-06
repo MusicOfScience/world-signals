@@ -138,19 +138,26 @@ class IMDHeatwaveOutlookAnalysisAUTests(unittest.TestCase):
         self.assertGreaterEqual(len(self.review["alternative_explanations"]), 4)
         self.assertGreaterEqual(len(self.review["falsifiers"]), 10)
 
-    def test_live_or_simulated_poststate_validates_and_adds_outlook_type(self):
+    def test_live_or_simulated_poststate_validates_and_preserves_au_checkpoint(self):
         reviews, evidence = self._live_or_simulated()
         report = apply_au.validate_analysis(self.schema, evidence, reviews, self.canonical)
         self.assertTrue(report.ok, report.errors)
         readiness = apply_au.analysis_population_readiness(self.schema, reviews, self.canonical)
         self.assertEqual(readiness["reviewed_by_event_type"].get("PHYSICAL_RISK_OUTLOOK_RELEASE"), 1)
-        self.assertEqual(readiness["reviewed_occurrence_count"], 20)
-        self.assertEqual(readiness["reviewed_event_type_diversity"], 18)
+        self.assertGreaterEqual(readiness["reviewed_occurrence_count"], 20)
+        self.assertGreaterEqual(readiness["reviewed_event_type_diversity"], 18)
         self.assertEqual(readiness["eligible_completed_occurrence_count"], 21)
-        self.assertEqual(reviews["version"], "0.16")
+        self.assertGreaterEqual(version_tuple(reviews["version"]), (0, 16))
         self.assertEqual(reviews["canonical_checkpoint"], {"registry_version": "0.38", "record_count": 688})
-        self.assertEqual(evidence["version"], "0.16")
-        self.assertEqual(len(evidence["evidence"]), 91)
+        self.assertGreaterEqual(version_tuple(evidence["version"]), (0, 16))
+        self.assertGreaterEqual(len(evidence["evidence"]), 91)
+
+        # The historical AU post-state itself remains exact in the frozen plan.
+        post = self.plan["postconditions"]
+        self.assertEqual(post["analysis_reviews_version"], "0.16")
+        self.assertEqual(post["analysis_review_count"], 20)
+        self.assertEqual(post["analysis_evidence_version"], "0.16")
+        self.assertEqual(post["analysis_evidence_count"], 91)
 
     def test_remaining_frontier_is_japan_only_but_not_queue_goal(self):
         self.assertEqual(self.plan["postconditions"]["remaining_eligible_unreviewed_occurrence_ids"], ["WSO-MAC-B-0041"])
