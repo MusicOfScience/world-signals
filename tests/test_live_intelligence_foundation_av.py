@@ -25,8 +25,14 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
 
     def opened_schema(self):
         schema = copy.deepcopy(self.schema)
-        schema["foundation_population_policy"]["production_population_allowed"] = True
-        schema["foundation_population_policy"]["evidence_population_allowed"] = True
+        if "population_policy" in schema:
+            schema["population_policy"]["production_population_allowed"] = True
+            schema["population_policy"]["evidence_population_allowed"] = True
+            schema["population_policy"]["maximum_observation_count"] = 999
+            schema["population_policy"]["maximum_evidence_count"] = 999
+        else:
+            schema["foundation_population_policy"]["production_population_allowed"] = True
+            schema["foundation_population_policy"]["evidence_population_allowed"] = True
         return schema
 
     def evidence_row(self, evidence_id="WSEV-LI-TEST-1", roles=None):
@@ -37,6 +43,7 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
             "title": "Test factual observation",
             "url": "https://example.test/observation",
             "roles": roles or ["FACTUAL_OBSERVATION"],
+            "publication_time": {"precision": "CIVIL_DATE", "published_date": "2026-09-06"},
             "canonical_provenance_effect": "NONE",
         }
 
@@ -66,20 +73,34 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
             self.canonical,
         )
 
-    def test_exact_post_76_foundation_is_empty_and_valid(self):
-        self.assertEqual(self.schema["version"], "0.1")
-        self.assertEqual(self.observations["population_state"], "FOUNDATION_ONLY_NO_POPULATION")
-        self.assertEqual(self.observations["observations"], [])
-        self.assertEqual(self.evidence["evidence"], [])
+    def test_av_foundation_checkpoint_is_preserved_while_live_descendants_may_grow(self):
+        if self.schema["version"] == "0.1":
+            self.assertEqual(self.observations["population_state"], "FOUNDATION_ONLY_NO_POPULATION")
+            self.assertEqual(self.observations["observations"], [])
+            self.assertEqual(self.evidence["evidence"], [])
+        else:
+            checkpoint = self.schema["foundation_checkpoint"]
+            self.assertEqual(checkpoint["schema_version"], "0.1")
+            self.assertEqual(checkpoint["population_state"], "FOUNDATION_ONLY_NO_POPULATION")
+            self.assertEqual(checkpoint["observation_count"], 0)
+            self.assertEqual(checkpoint["evidence_count"], 0)
         report = self.validate()
         self.assertTrue(report.ok, report.errors)
 
     def test_foundation_population_gate_rejects_convenience_population(self):
+        schema = copy.deepcopy(self.schema)
+        schema.pop("population_policy", None)
+        schema["foundation_population_policy"] = {
+            "production_population_allowed": False,
+            "evidence_population_allowed": False,
+            "existing_analysis_evidence_migration_allowed": False,
+            "public_observation_projection_allowed": False,
+        }
         evidence = copy.deepcopy(self.evidence)
         observations = copy.deepcopy(self.observations)
-        evidence["evidence"].append(self.evidence_row())
-        observations["observations"].append(self.observation_row())
-        report = self.validate(evidence=evidence, observations=observations)
+        evidence["evidence"].append(self.evidence_row("WSEV-LI-TEST-FOUNDATION"))
+        observations["observations"].append(self.observation_row("WSLI-TEST-FOUNDATION", "WSEV-LI-TEST-FOUNDATION"))
+        report = self.validate(schema=schema, evidence=evidence, observations=observations)
         joined = " ".join(report.errors)
         self.assertIn("prohibits production observation population", joined)
         self.assertIn("prohibits evidence population", joined)
@@ -260,20 +281,27 @@ class LiveIntelligenceFoundationAVTests(unittest.TestCase):
         self.assertFalse(boundary["market_move_attribution_allowed"])
 
     def test_existing_analysis_evidence_is_not_migration_seed(self):
-        policy = self.schema["foundation_population_policy"]
+        policy = self.schema.get("population_policy") or self.schema["foundation_population_policy"]
         self.assertFalse(policy["existing_analysis_evidence_migration_allowed"])
         analysis_evidence = json.loads((ROOT / "data/analysis/evidence_registry.json").read_text(encoding="utf-8"))
         self.assertGreater(len(analysis_evidence["evidence"]), 0)
-        self.assertEqual(self.evidence["evidence"], [])
+        analysis_ids = {row.get("evidence_id") for row in analysis_evidence["evidence"]}
+        live_ids = {row.get("evidence_id") for row in self.evidence.get("evidence", [])}
+        self.assertTrue(analysis_ids.isdisjoint(live_ids))
 
-    def test_public_projection_is_metadata_only_not_a_fake_live_feed(self):
+    def test_public_projection_remains_metadata_only_not_a_fake_live_feed(self):
         projection = public_live_intelligence_projection(
             self.schema, self.evidence, self.observations, self.canonical
         )
         metadata = projection["metadata"]
-        self.assertEqual(metadata["projection_type"], "LIVE_INTELLIGENCE_FOUNDATION_NOT_RUNTIME_FEED")
-        self.assertEqual(metadata["schema_version"], "0.1")
-        self.assertEqual(metadata["internal_observation_count"], 0)
+        expected_type = (
+            "LIVE_INTELLIGENCE_FOUNDATION_NOT_RUNTIME_FEED"
+            if self.observations["population_state"] == "FOUNDATION_ONLY_NO_POPULATION"
+            else "LIVE_INTELLIGENCE_CURATED_STORE_NOT_RUNTIME_FEED"
+        )
+        self.assertEqual(metadata["projection_type"], expected_type)
+        self.assertEqual(metadata["schema_version"], self.schema["version"])
+        self.assertEqual(metadata["internal_observation_count"], len(self.observations["observations"]))
         self.assertEqual(metadata["public_observation_count"], 0)
         self.assertEqual(metadata["canonical_registry_version_at_build"], "0.38")
         self.assertEqual(metadata["canonical_record_count_at_build"], 688)

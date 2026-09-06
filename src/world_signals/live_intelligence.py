@@ -128,21 +128,44 @@ def validate_live_intelligence(
 
     grouping = schema.get("story_grouping_policy") or {}
     if grouping.get("automatic_clustering_allowed") is not False:
-        errors.append("Live Intelligence v0.1 must prohibit automatic story clustering")
+        errors.append("Live Intelligence must prohibit automatic story clustering unless a later reviewed contract explicitly opens it")
     if grouping.get("future_story_identity_requires_pressure_audited_contract") is not True:
         errors.append("Future Live Intelligence story identity must require a pressure-audited contract")
 
-    foundation = schema.get("foundation_population_policy") or {}
     observations = observations_dataset.get("observations") or []
     evidence = evidence_registry.get("evidence") or []
-    if foundation.get("production_population_allowed") is False and observations:
-        errors.append("Live Intelligence v0.1 foundation prohibits production observation population")
-    if foundation.get("evidence_population_allowed") is False and evidence:
-        errors.append("Live Intelligence v0.1 foundation prohibits evidence population")
-    if foundation.get("existing_analysis_evidence_migration_allowed") is not False:
-        errors.append("Live Intelligence foundation must prohibit retrospective Analysis-evidence migration")
-    if foundation.get("public_observation_projection_allowed") is not False:
-        errors.append("Live Intelligence foundation must not claim a public live observation feed")
+    population = schema.get("population_policy")
+    if population is not None:
+        if population.get("production_population_allowed") is not True:
+            errors.append("Controlled Live Intelligence population policy must explicitly allow reviewed production observations")
+        if population.get("evidence_population_allowed") is not True:
+            errors.append("Controlled Live Intelligence population policy must explicitly allow reviewed evidence")
+        if population.get("automatic_ingestion_allowed") is not False:
+            errors.append("Controlled Live Intelligence population must keep automatic ingestion disabled")
+        if population.get("existing_analysis_evidence_migration_allowed") is not False:
+            errors.append("Live Intelligence must prohibit retrospective Analysis-evidence migration")
+        if population.get("public_observation_projection_allowed") is not False:
+            errors.append("Controlled Live Intelligence population must keep public observation projection closed")
+        max_observations = population.get("maximum_observation_count")
+        max_evidence = population.get("maximum_evidence_count")
+        if not isinstance(max_observations, int) or max_observations < 0:
+            errors.append("Live Intelligence population policy requires non-negative maximum_observation_count")
+        elif len(observations) > max_observations:
+            errors.append("Live Intelligence observation population exceeds reviewed policy maximum")
+        if not isinstance(max_evidence, int) or max_evidence < 0:
+            errors.append("Live Intelligence population policy requires non-negative maximum_evidence_count")
+        elif len(evidence) > max_evidence:
+            errors.append("Live Intelligence evidence population exceeds reviewed policy maximum")
+    else:
+        foundation = schema.get("foundation_population_policy") or {}
+        if foundation.get("production_population_allowed") is False and observations:
+            errors.append("Live Intelligence v0.1 foundation prohibits production observation population")
+        if foundation.get("evidence_population_allowed") is False and evidence:
+            errors.append("Live Intelligence v0.1 foundation prohibits evidence population")
+        if foundation.get("existing_analysis_evidence_migration_allowed") is not False:
+            errors.append("Live Intelligence foundation must prohibit retrospective Analysis-evidence migration")
+        if foundation.get("public_observation_projection_allowed") is not False:
+            errors.append("Live Intelligence foundation must not claim a public live observation feed")
 
     schema_version = schema.get("version")
     if evidence_registry.get("version") != schema_version:
@@ -158,6 +181,7 @@ def validate_live_intelligence(
     allowed_domains = set(vocab.get("domain_tag") or [])
     allowed_relationships = set(vocab.get("canonical_relationship") or [])
     allowed_time_precision = set(vocab.get("event_time_precision") or [])
+    allowed_publication_time_precision = set(vocab.get("publication_time_precision") or [])
     required_evidence_fields = set(schema.get("required_evidence_fields") or [])
     required_observation_fields = set(schema.get("required_observation_fields") or [])
     prohibited_analysis_fields = set(schema.get("prohibited_analysis_fields") or [])
@@ -186,6 +210,28 @@ def validate_live_intelligence(
             errors.append(f"{evidence_id}: url required")
         if row.get("canonical_provenance_effect") != "NONE":
             errors.append(f"{evidence_id}: live evidence cannot alter canonical provenance")
+
+        publication_time = row.get("publication_time")
+        if "publication_time" in required_evidence_fields:
+            if not isinstance(publication_time, dict):
+                errors.append(f"{evidence_id}: publication_time must be an object")
+            else:
+                precision = publication_time.get("precision")
+                if precision not in allowed_publication_time_precision:
+                    errors.append(f"{evidence_id}: invalid publication_time precision {precision}")
+                elif precision == "EXACT_TIMESTAMP":
+                    if _exact_utc(publication_time.get("published_at_utc")) is None:
+                        errors.append(f"{evidence_id}: exact publication_time requires published_at_utc in UTC")
+                    if publication_time.get("published_date") is not None:
+                        errors.append(f"{evidence_id}: exact publication_time must not also carry published_date")
+                elif precision == "CIVIL_DATE":
+                    if _civil_date(publication_time.get("published_date")) is None:
+                        errors.append(f"{evidence_id}: civil publication_time requires YYYY-MM-DD published_date")
+                    if publication_time.get("published_at_utc") is not None:
+                        errors.append(f"{evidence_id}: civil publication date must not be upgraded to published_at_utc")
+                elif precision == "UNKNOWN":
+                    if publication_time.get("published_at_utc") is not None or publication_time.get("published_date") is not None:
+                        errors.append(f"{evidence_id}: UNKNOWN publication_time may not carry precise publication fields")
 
     canonical_ids = {
         row.get("occurrence_id")
@@ -340,14 +386,21 @@ def public_live_intelligence_projection(
     observations = observations_dataset.get("observations") or []
     evidence = evidence_registry.get("evidence") or []
     projection_allowed = policy.get("observation_projection_allowed") is True
+    population_state = observations_dataset.get("population_state")
+    projection_type = (
+        "LIVE_INTELLIGENCE_FOUNDATION_NOT_RUNTIME_FEED"
+        if population_state == "FOUNDATION_ONLY_NO_POPULATION"
+        else "LIVE_INTELLIGENCE_CURATED_STORE_NOT_RUNTIME_FEED"
+    )
 
     return {
         "metadata": {
-            "projection_type": "LIVE_INTELLIGENCE_FOUNDATION_NOT_RUNTIME_FEED",
+            "projection_type": projection_type,
             "schema_version": schema.get("version"),
             "observations_version": observations_dataset.get("version"),
             "evidence_version": evidence_registry.get("version"),
-            "population_state": observations_dataset.get("population_state"),
+            "population_state": population_state,
+            "population_mode": (schema.get("population_policy") or {}).get("mode"),
             "internal_observation_count": len(observations),
             "internal_evidence_count": len(evidence),
             "public_observation_count": len(observations) if projection_allowed else 0,
