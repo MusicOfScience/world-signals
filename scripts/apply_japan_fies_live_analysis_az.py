@@ -275,6 +275,21 @@ def target_analysis_evidence(current: dict[str, Any], payload: dict[str, Any]) -
 def target_status(current: str) -> str:
     if "# CURRENT RECOVERY OVERRIDE — POST-AY / AZ FIRST PRODUCTION LIVE→ANALYSIS LINK" in current:
         return current
+    ba_title = "# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"
+    if ba_title in current:
+        require(
+            "- Live Intelligence: **v0.4 / 4 reviewed internal observations / 6 primary-official evidence rows / public observation projection CLOSED**" in current,
+            "AZ PROJECT_STATUS BA descendant lost Live v0.4 checkpoint",
+        )
+        require(
+            "- Analysis: **v0.17 / 21 reviews / 95 evidence / 18 reviewed event types**" in current,
+            "AZ PROJECT_STATUS BA descendant lost Analysis v0.17 population",
+        )
+        require(
+            "- production `live_inputs`: **1 / reviewed maximum 1 / public projection CLOSED**" in current,
+            "AZ PROJECT_STATUS BA descendant lost first production Live input",
+        )
+        return current
     require("# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION" in current, "AZ PROJECT_STATUS title drift")
     text = current.replace(
         "# CURRENT RECOVERY OVERRIDE — POST-AX / AY LIVE→ANALYSIS BRIDGE FOUNDATION",
