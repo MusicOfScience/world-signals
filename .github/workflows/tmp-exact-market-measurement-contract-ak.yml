@@ -49,10 +49,10 @@ jobs:
 
           path = Path('scripts/apply_exact_market_measurement_contract_ak.py')
           text = path.read_text(encoding='utf-8')
-          old_reference = "**Reference date:** {plan['reference_date']}  \n"
-          new_reference = "**Reference date:** {plan['reference_date']}\n"
-          old_base = "**Exact base main:** `{plan['base_main_sha']}`  \n"
-          new_base = "**Exact base main:** `{plan['base_main_sha']}`\n"
+          old_reference = r"**Reference date:** {plan['reference_date']}  \n"
+          new_reference = r"**Reference date:** {plan['reference_date']}\n"
+          old_base = r"**Exact base main:** `{plan['base_main_sha']}`  \n"
+          new_base = r"**Exact base main:** `{plan['base_main_sha']}`\n"
           assert text.count(old_reference) == 1
           assert text.count(old_base) == 1
           text = text.replace(old_reference, new_reference, 1).replace(old_base, new_base, 1)
