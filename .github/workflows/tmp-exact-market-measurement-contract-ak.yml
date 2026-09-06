@@ -40,6 +40,33 @@ jobs:
           test ! -e .github/workflows/tmp-post-aj-pressure-audit-ak.yml
           test ! -e scripts/tmp_post_aj_pressure_audit_ak.py
 
+      - name: Repair audit renderer formatting and checkpoint it
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/apply_exact_market_measurement_contract_ak.py')
+          text = path.read_text(encoding='utf-8')
+          old_reference = "**Reference date:** {plan['reference_date']}  \n"
+          new_reference = "**Reference date:** {plan['reference_date']}\n"
+          old_base = "**Exact base main:** `{plan['base_main_sha']}`  \n"
+          new_base = "**Exact base main:** `{plan['base_main_sha']}`\n"
+          assert text.count(old_reference) == 1
+          assert text.count(old_base) == 1
+          text = text.replace(old_reference, new_reference, 1).replace(old_base, new_base, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+          git diff --check -- scripts/apply_exact_market_measurement_contract_ak.py
+          git config user.name 'WORLD SIGNALS transaction gate'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/apply_exact_market_measurement_contract_ak.py
+          git diff --cached --check
+          git commit -m 'AK prep: remove transaction-audit trailing whitespace'
+          git push origin HEAD:feature/post-aj-pressure-audit-ak
+          test -z "$(git status --porcelain=v1)"
+
       - name: Read-only fail-closed simulation
         run: python scripts/apply_exact_market_measurement_contract_ak.py --check
 
