@@ -1,0 +1,93 @@
+name: WORLD SIGNALS AO SB64 climate governance analysis preflight
+
+on:
+  push:
+    branches:
+      - feature/post-an-pressure-audit-ao
+    paths:
+      - .github/workflows/tmp-unfccc-sb64-climate-governance-analysis-ao-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Prove exact post-69 base and live main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=35bcb5616e99c7fce58f82cfc14bfed901929f3a
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Read-only fail-closed AO simulation
+        run: python scripts/apply_unfccc_sb64_climate_governance_analysis_ao.py --check
+
+      - name: Run AO regressions
+        run: python -m unittest tests.test_unfccc_sb64_climate_governance_analysis_ao -v
+
+      - name: Prove repaired AN descendant checkpoint
+        run: python -m unittest tests.test_south_korea_local_election_analysis_an -v
+
+      - name: Validate canonical registry
+        run: python scripts/validate_registry.py
+
+      - name: Validate Analysis layer
+        run: python scripts/validate_analysis.py
+
+      - name: Run full repository suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile repository Python
+        run: python -m compileall -q scripts src tests
+
+      - name: Check browser JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Build static site without production data change
+        run: python scripts/build_site.py
+
+      - name: Prove current production exact-series population remains zero
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          reviews = json.loads(Path('data/analysis/event_reviews.json').read_text(encoding='utf-8'))
+          exact = [
+              (review.get('analysis_id'), movement.get('movement_id'))
+              for review in reviews.get('reviews', [])
+              for movement in (review.get('what_moved') or [])
+              if movement.get('measurement_precision') == 'EXACT_TIMESTAMP_SERIES'
+          ]
+          assert exact == [], exact
+          print('AO_PREFLIGHT_EXACT_TIMESTAMP_SERIES_ROWS=0')
+          PY
+
+      - name: Prove read-only preflight left tracked tree clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1)"
+          echo AO_PREFLIGHT_TRACKED_TREE_CLEAN
