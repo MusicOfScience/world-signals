@@ -29,38 +29,95 @@ jobs:
           test "$(git rev-parse origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
           test "$(git merge-base HEAD origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
 
-      - name: Inspect only the official ICS generator contract
+      - name: Probe recovered Eurostat ICS feed and canonical alignment
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import html as html_lib
-          import re
-          import urllib.request
+          import json, re, urllib.request
+          from pathlib import Path
+          from datetime import datetime
 
-          URL='https://ec.europa.eu/eurostat/subscribe/ics.format'
+          URL='https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0'
           UA='WORLD-SIGNALS-research-probe/0.1 (+https://github.com/MusicOfScience/world-signals)'
-          req=urllib.request.Request(URL,headers={'User-Agent':UA,'Accept':'text/html,*/*;q=0.1'})
+          req=urllib.request.Request(URL,headers={'User-Agent':UA,'Accept':'text/calendar,*/*;q=0.1'})
           with urllib.request.urlopen(req,timeout=30) as r:
-              raw=r.read().decode('utf-8','replace')
-              print('LANDING',r.status,r.geturl(),r.headers.get('content-type'),len(raw))
+              body=r.read()
+              ctype=r.headers.get('content-type')
+              print('FEED',r.status,r.geturl(),ctype,len(body))
+          text=body.decode('utf-8-sig','replace')
+          assert 'BEGIN:VCALENDAR' in text and 'END:VCALENDAR' in text
 
-          needles=('estat-ics-url-generator','p_p_lifecycle=2','Copy calendar URL','calendarUrl','calendarURL','\.ics')
-          for needle in needles:
-              print('\n=== NEEDLE',needle,'===')
-              matches=list(re.finditer(needle,raw,re.I))
-              print('COUNT',len(matches))
-              for m in matches[:8]:
-                  lo=max(0,m.start()-1800); hi=min(len(raw),m.end()+2600)
-                  print(html_lib.unescape(raw[lo:hi]))
-                  print('\n--- CONTEXT END ---')
+          # RFC5545 line unfolding only; no speculative timezone conversion.
+          raw=text.replace('\r\n','\n').replace('\r','\n').split('\n')
+          lines=[]
+          for line in raw:
+              if line.startswith((' ','\t')) and lines:
+                  lines[-1]+=line[1:]
+              else:
+                  lines.append(line)
 
-          print('\n=== RESOURCE URLS ===')
-          candidates=[]
-          for m in re.finditer(r'https?[^\"\'<>\\\s]+p_p_lifecycle(?:=|%3D)2[^\"\'<>\\\s]*',html_lib.unescape(raw),re.I):
-              value=m.group(0).replace('&amp;','&')
-              if value not in candidates: candidates.append(value)
-          for value in candidates[:20]: print(value)
+          def unescape(v):
+              return v.replace('\\n','\n').replace('\\N','\n').replace('\\,',',').replace('\\;',';').replace('\\\\','\\')
+
+          events=[]; cur=None
+          for line in lines:
+              if line=='BEGIN:VEVENT': cur={}; continue
+              if line=='END:VEVENT':
+                  if cur is not None: events.append(cur)
+                  cur=None; continue
+              if cur is None or ':' not in line: continue
+              lhs,val=line.split(':',1)
+              key=lhs.split(';',1)[0].upper()
+              if key in {'UID','SUMMARY','DTSTART','DTEND','URL','DESCRIPTION','CATEGORIES','LOCATION','STATUS','LAST-MODIFIED'}:
+                  cur.setdefault(key,[]).append(unescape(val))
+          print('VEVENT_COUNT',len(events))
+          print('CAL_HEADERS',[line for line in lines if line.startswith(('VERSION:','PRODID:','X-WR-CALNAME:','X-WR-TIMEZONE:'))][:10])
+          assert events
+
+          reg=json.loads(Path('data/canonical/registry.json').read_text())
+          canon=[r for r in reg['records'] if r.get('source_id')=='WSSRC-MAC-005']
+          print('CANONICAL_COUNT',len(canon))
+          assert len(canon)==12
+
+          def date_token(v):
+              if not v: return None
+              s=v[0]
+              m=re.search(r'(\d{8})',s)
+              if not m: return None
+              return f'{m.group(1)[:4]}-{m.group(1)[4:6]}-{m.group(1)[6:8]}'
+
+          by_date={}
+          for e in events:
+              d=date_token(e.get('DTSTART'))
+              if d: by_date.setdefault(d,[]).append(e)
+
+          for row in canon:
+              native=str(row.get('start_local') or '')
+              d=native[:10] if re.match(r'^\d{4}-\d{2}-\d{2}',native) else None
+              matches=by_date.get(d,[]) if d else []
+              print('CANON',json.dumps({
+                  'occurrence_id':row.get('occurrence_id'),
+                  'series_id':row.get('series_id'),
+                  'title':row.get('title'),
+                  'start_local':row.get('start_local'),
+                  'start_utc':row.get('start_utc'),
+                  'source_timezone':row.get('source_timezone'),
+                  'time_precision':row.get('time_precision'),
+                  'certainty_status':row.get('certainty_status'),
+                  'lifecycle_status':row.get('lifecycle_status'),
+                  'same_date_feed_count':len(matches),
+              },sort_keys=True))
+              for e in matches[:15]:
+                  print('  FEED_EVENT',json.dumps({
+                      'uid':(e.get('UID') or [None])[0],
+                      'summary':(e.get('SUMMARY') or [None])[0],
+                      'dtstart':(e.get('DTSTART') or [None])[0],
+                      'dtend':(e.get('DTEND') or [None])[0],
+                      'categories':(e.get('CATEGORIES') or [None])[0],
+                      'status':(e.get('STATUS') or [None])[0],
+                      'url':(e.get('URL') or [None])[0],
+                  },ensure_ascii=False,sort_keys=True))
           PY
 
       - name: Prove no governed mutation
