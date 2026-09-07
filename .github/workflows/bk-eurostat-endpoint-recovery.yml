@@ -109,7 +109,7 @@ jobs:
           node --check web/biosecurity.js
           node --check web/analysis.js
           python scripts/build_site.py
-          git restore docs || true
+          rm -rf docs
       - name: Exercise materialised Eurostat route live
         shell: bash
         run: |
@@ -145,6 +145,6 @@ jobs:
             data/monitor/expectations.json \
             scripts/run_live_monitor.py \
             scripts/run_adapter_smoke.py \
-            src/world_signals/adapters/__init__.py \
-            docs || true
+            src/world_signals/adapters/__init__.py
+          rm -rf docs
           sha256sum -c /tmp/bk-governed-pre.sha
