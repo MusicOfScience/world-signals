@@ -18,6 +18,7 @@ from world_signals.adapters.japan_statistics_dashboard import (
     JAPAN_HHSPEND_STAT_CODE,
     JAPAN_STATISTICS_DASHBOARD_API_DOCS,
     JAPAN_STATISTICS_DASHBOARD_DATA_API,
+    JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE,
     japan_household_spending_data_url,
     parse_japan_household_spending_data_json,
 )
@@ -40,14 +41,27 @@ VALUE = {
 }
 
 
-def api_payload(values=None, *, input_time="20260700", status=0) -> str:
+def api_payload(
+    values=None,
+    *,
+    input_time="20260700",
+    status=0,
+    message=None,
+    uppercase_result_keys=False,
+) -> str:
     statistical = None
     if values is not None:
         rows = [{"VALUE": deepcopy(row)} for row in values]
         statistical = {"DATA_INF": {"DATA_OBJ": rows}}
+    if message is None:
+        message = "Success." if status == 0 else "failure"
+    if uppercase_result_keys:
+        result = {"STATUS": str(status), "ERROR_MSG": message}
+    else:
+        result = {"status": str(status), "errorMsg": message, "date": "Tue Sep 08 08:27:29 JST 2026"}
     get_stats = {
-        "RESULT": {"STATUS": status, "ERROR_MSG": "" if status == 0 else "failure"},
-        "PARAMETER": {"PARAMETER_INF": [{"@name": "Time", "$": input_time}]},
+        "RESULT": result,
+        "PARAMETER": {"time": input_time},
     }
     if statistical is not None:
         get_stats["STATISTICAL_DATA"] = statistical
@@ -108,7 +122,7 @@ class JapanHouseholdSpendingMonitorBLTests(unittest.TestCase):
         self.assertIn("RegionalRank=2", url)
         self.assertIn("IsSeasonalAdjustment=1", url)
 
-    def test_parser_extracts_only_validated_value_rows(self):
+    def test_parser_extracts_only_validated_value_rows_from_live_lowercase_shape(self):
         values = parse_japan_household_spending_data_json(api_payload([VALUE]))
         self.assertEqual(len(values), 1)
         row = values[0]
@@ -119,8 +133,39 @@ class JapanHouseholdSpendingMonitorBLTests(unittest.TestCase):
         self.assertEqual(row.stat_code, JAPAN_HHSPEND_STAT_CODE)
         self.assertEqual(row.region_code, "00000")
 
+    def test_legacy_uppercase_result_keys_remain_parseable(self):
+        values = parse_japan_household_spending_data_json(
+            api_payload([VALUE], uppercase_result_keys=True)
+        )
+        self.assertEqual([row.reference_period_code for row in values], ["20260700"])
+
+    def test_official_status_one_normal_no_data_is_empty_only_without_statistical_data(self):
+        body = api_payload(
+            None,
+            input_time="20260800",
+            status=1,
+            message=JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE,
+        )
+        self.assertIn("20260800", body)
+        self.assertEqual(parse_japan_household_spending_data_json(body), [])
+
+        with self.assertRaises(AdapterError):
+            parse_japan_household_spending_data_json(
+                api_payload(
+                    [VALUE],
+                    input_time="20260800",
+                    status=1,
+                    message=JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE,
+                )
+            )
+
     def test_echoed_requested_month_is_not_data_availability(self):
-        body = api_payload(None, input_time="20260800")
+        body = api_payload(
+            None,
+            input_time="20260800",
+            status=1,
+            message=JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE,
+        )
         self.assertIn("20260800", body)
         values = parse_japan_household_spending_data_json(body)
         self.assertEqual(values, [])
@@ -134,6 +179,10 @@ class JapanHouseholdSpendingMonitorBLTests(unittest.TestCase):
             parse_japan_household_spending_data_json(api_payload([VALUE, VALUE]))
         with self.assertRaises(AdapterError):
             parse_japan_household_spending_data_json(api_payload(None, status=7))
+        with self.assertRaises(AdapterError):
+            parse_japan_household_spending_data_json(
+                api_payload(None, status=1, message="unexpected status-one response")
+            )
 
     def test_completed_occurrence_is_observation_only_even_when_data_present(self):
         values = parse_japan_household_spending_data_json(api_payload([VALUE]))
