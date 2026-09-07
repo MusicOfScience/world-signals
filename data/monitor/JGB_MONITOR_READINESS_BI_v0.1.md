@@ -37,13 +37,15 @@ Japan Ministry of Finance current official surfaces reviewed on 8 September 2026
 
 The September calendar currently lists, among other rows:
 
-- 1 September — 10-year JGB (383);
-- 3 September — 30-year JGB (91);
+- 1 September — 10-year JGB;
+- 3 September — 30-year JGB;
 - 8 September — 5-year JGB;
 - 10 September — liquidity-enhancement auction, remaining maturities 1–5 years;
 - 15 September — 20-year JGB;
 - 29 September — 40-year JGB;
 - 30 September — 2-year JGB.
+
+Issue numbers are not inferred from other MOF pages into the current monthly-calendar row identity. The adapter stores the issue text actually present on the monthly source.
 
 The page explicitly states that the calendar may be changed or added to in light of circumstances and that changes will be announced in advance. That makes semantic schedule-diff detection operationally valuable.
 
@@ -67,6 +69,17 @@ The parser:
 
 A changed date or changed issue identity changes the semantic hash. Such a future difference would still be review evidence only; it would not itself mutate Canonical state.
 
+## Runner preflight evidence
+
+A temporary read-only GitHub Actions workflow tested the branch against the live September MOF endpoint.
+
+- Run `34149283288`: exact base, targeted tests, full regression suite and compilation passed. The live fetch and parse also completed; the step then failed only because the temporary diagnostic attempted to print nonexistent `FetchSnapshot.status_code` rather than the existing `FetchSnapshot.status`. No adapter or governed-data defect was indicated.
+- The temporary workflow was corrected only at that diagnostic field.
+- Run `34149369644`: **PASS**. Exact-base verification, targeted BI tests, the full regression suite, compilation, live MOF fetch+parse, governed-file byte checks, production-gate assertions and static build all passed.
+- The temporary preflight workflow was then removed from the branch.
+
+This demonstrates bounded GitHub-runner technical fetchability on 8 September 2026. It does **not** by itself change the source-governance automation decision.
+
 ## Production boundary
 
 BI deliberately leaves all operational authority unchanged:
@@ -82,13 +95,13 @@ BI deliberately leaves all operational authority unchanged:
 
 ## Why this is not yet Monitor v0.11
 
-A technically robust parser is necessary but not sufficient for production activation. The source-governance contract intentionally separates:
+A technically robust parser and one successful runner fetch are necessary but not sufficient for production activation. The source-governance contract intentionally separates:
 
 `authoritative factual reuse` from `automated endpoint access`.
 
-BI proves parser semantics and can support a bounded GitHub-runner endpoint probe. It does not silently convert `ENDPOINT_REVIEW_REQUIRED` to `CLEARED` merely because the public page is fetchable or because PDL 1.0 governs content reuse.
+BI proves parser semantics and bounded runner fetchability. It does not silently convert `ENDPOINT_REVIEW_REQUIRED` to `CLEARED` merely because the public page is fetchable or because PDL 1.0 governs content reuse.
 
-A later activation tranche would require a fresh decision on endpoint/automation permission plus live-run evidence, and would then need an explicit scoped occurrence set rather than silently treating every JGB-series occurrence as monitored.
+A later activation tranche would require a fresh explicit endpoint/automation-permission decision and an explicit scoped occurrence set rather than silently treating every JGB-series occurrence as monitored. Any resulting change detection must remain review-only unless a separate governed decision changes that architecture.
 
 ## Mutation boundary
 
