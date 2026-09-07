@@ -1,0 +1,97 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BJ",
+  "title": "Reserve Bank of Australia Monetary Policy Board monitor readiness",
+  "reference_date": "2026-09-08",
+  "exact_base_main": "ba3f36f1f75733654f3783a2b609590186eb4971",
+  "selection": {
+    "source_id": "WSSRC-CB-002",
+    "institution": "Reserve Bank of Australia",
+    "domain": "monetary_policy",
+    "reason": "High-sensitivity home-region schedule with an architecturally material distinction between multi-day Board meeting windows and separately timed decision/media-conference occurrences.",
+    "independent_of_quarantined_opec_bh": true
+  },
+  "official_routes": {
+    "monetary_policy_calendar": "https://www.rba.gov.au/schedules-events/calendar/?topics=monetary-policy-board",
+    "board_meeting_schedule": "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html",
+    "copyright_notice": "https://www.rba.gov.au/copyright/",
+    "robots_policy": "https://www.rba.gov.au/robots.txt"
+  },
+  "current_verified_anchor": {
+    "meeting_window": {
+      "start_local": "2026-09-28",
+      "end_local": "2026-09-29",
+      "source_timezone": "Australia/Sydney",
+      "precision": "CIVIL_DATE_RANGE"
+    },
+    "decision_statement": {
+      "start_local": "2026-09-29T14:30:00",
+      "published_timezone_label": "AEST",
+      "source_timezone": "Australia/Sydney"
+    },
+    "media_conference": {
+      "start_local": "2026-09-29T15:30:00",
+      "published_timezone_label": "AEST",
+      "source_timezone": "Australia/Sydney"
+    },
+    "minutes": {
+      "start_local": "2026-10-13T11:30:00",
+      "published_timezone_label": "AEDT",
+      "source_timezone": "Australia/Sydney"
+    }
+  },
+  "canonical_series_contract": {
+    "MEETING_WINDOW": "WS.CB.RBA.MPB_MEETING_WINDOW",
+    "DECISION_STATEMENT": "WS.CB.RBA.MONETARY_POLICY_DECISION",
+    "PRESS_CONFERENCE": "WS.CB.RBA.MPB_PRESS_CONFERENCE",
+    "MINUTES": "WS.CB.RBA.MPB_MINUTES",
+    "identity_rule": "Do not collapse a meeting window, decision statement, press conference or minutes publication into one occurrence."
+  },
+  "source_governance_prestate": {
+    "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "verification_mode": "AUTOMATED_PILOT",
+    "rights_interpretation": "RBA factual content reuse and endpoint automation permission remain separate questions. BJ does not promote automation rights."
+  },
+  "allowed_permanent_changes": [
+    "src/world_signals/adapters/rba_mpb.py",
+    "src/world_signals/adapters/__init__.py",
+    "tests/test_rba_mpb_adapter.py",
+    "data/monitor/RBA_MPB_MONITOR_READINESS_BJ_PLAN_v0.1.json",
+    "data/monitor/RBA_MPB_MONITOR_READINESS_BJ_v0.1.md"
+  ],
+  "prohibited_mutations": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "production_boundary": {
+    "monitor_expectations_version": "0.10",
+    "configured_adapter_count": 8,
+    "new_production_adapter": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "public_live_projection": "CLOSED",
+    "analysis_population_change": false,
+    "live_population_change": false
+  },
+  "validation_requirements": [
+    "offline target parser tests",
+    "full repository regression suite",
+    "Python compilation",
+    "live read-only fetch of both official RBA schedule surfaces",
+    "September 2026 meeting/decision/conference/minutes semantic assertions",
+    "cross-surface meeting-window alignment",
+    "governed-file byte identity",
+    "production-gate assertions",
+    "static site build"
+  ]
+}
