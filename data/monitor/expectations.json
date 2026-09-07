@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.11",
+  "version": "0.12",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -659,6 +659,85 @@
       "elapsed_policy": "DO_NOT_PRESENCE_CHECK_ELAPSED_OCCURRENCES_AGAINST_CURRENT_FEED",
       "precision_policy": "DATE_ONLY_FEED_CANNOT_DOWNGRADE_OR_OVERWRITE_CANONICAL_CLOCK_TIME",
       "certainty_policy": "ICS_HAS_NO_GOVERNED_CONFIRMED_PROVISIONAL_FIELD_DO_NOT_CHANGE_CERTAINTY",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+      "source_id": "WSSRC-MAC-030",
+      "canonical_occurrence_ids": [
+        "WSO-MAC-B-0041",
+        "WSO-MAC-B-0042",
+        "WSO-MAC-B-0043",
+        "WSO-MAC-B-0044",
+        "WSO-MAC-B-0045",
+        "WSO-MAC-B-0046",
+        "WSO-MAC-B-0047",
+        "WSO-MAC-B-0048"
+      ],
+      "monitor_role": "REFERENCE_PERIOD_DATA_AVAILABILITY_SENTINEL",
+      "cadence": "DAILY",
+      "api_query": {
+        "documentation_url": "https://dashboard.e-stat.go.jp/en/static/api",
+        "transport": "REST_JSON",
+        "indicator_code": "0704010101000010000",
+        "stat_code": "00200561",
+        "cycle": "1",
+        "regional_rank": "2",
+        "region_code": "00000",
+        "original_series_code": "1",
+        "time_from": "20260700",
+        "time_to": "20270200",
+        "request_policy": "ONE_BOUNDED_REQUEST_PER_MONITOR_RUN"
+      },
+      "tracked_releases": [
+        {
+          "occurrence_id": "WSO-MAC-B-0041",
+          "reference_period_code": "20260700"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0042",
+          "reference_period_code": "20260800"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0043",
+          "reference_period_code": "20260900"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0044",
+          "reference_period_code": "20261000"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0045",
+          "reference_period_code": "20261100"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0046",
+          "reference_period_code": "20261200"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0047",
+          "reference_period_code": "20270100"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0048",
+          "reference_period_code": "20270200"
+        }
+      ],
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-MAC-024",
+        "machine_data_availability_source_id": "WSSRC-MAC-030",
+        "manual_completion_verification_source_id": "WSSRC-MAC-029"
+      },
+      "required_manual_verification_source_ids": [
+        "WSSRC-MAC-029"
+      ],
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "absence_policy": "NO_CANCELLATION_DELAY_DATE_OR_COMPLETION_INFERENCE",
+      "early_presence_policy": "GENERATE_REVIEW_CANDIDATE_NO_SCHEDULE_CHANGE_INFERENCE",
+      "on_or_after_date_presence_policy": "GENERATE_COMPLETION_REVIEW_REQUIRE_MANUAL_RESULT_VERIFICATION",
+      "precision_policy": "API_DOES_NOT_SUPPLY_OR_CHANGE_CANONICAL_RELEASE_CLOCK",
+      "certainty_policy": "API_DOES_NOT_CHANGE_CANONICAL_CERTAINTY",
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_OF_API_VALUES_TO_LIVE_INTELLIGENCE",
       "automatic_commit_allowed": false
     }
   ]

@@ -23,6 +23,7 @@ from world_signals.adapters import (
     fetch_eia_wpsr_schedule,
     fetch_eurostat_release_calendar,
     fetch_ons_upcoming_releases,
+    fetch_japan_household_spending_data,
     fetch_rba_fsr,
     fetch_suin_rows,
     normalize_cellar_legal_topology,
@@ -31,6 +32,7 @@ from world_signals.adapters import (
 )
 from world_signals.io import load_json
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
+from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.legal_monitor import (
     cbam_annual_deadline_review_candidate,
@@ -252,6 +254,40 @@ def main() -> int:
                 "error":str(exc),
                 "canonical_action":"NONE",
                 "absence_is_not_event_state":True,
+            })
+
+    if "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API" in configs:
+        jp_config=configs["JAPAN_HHSPEND_STATISTICS_DASHBOARD_API"]
+        query=jp_config.get("api_query") or {}
+        try:
+            jp_values,jp_snap=fetch_japan_household_spending_data(
+                time_from=query["time_from"],
+                time_to=query["time_to"],
+            )
+            report["source_health"].append({
+                "adapter_id":"JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+                "source_id":jp_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":jp_snap.as_dict(),
+                "value_count":len(jp_values),
+                "reference_period_codes":[row.reference_period_code for row in jp_values],
+                "request_policy":"ONE_BOUNDED_REQUEST_PER_MONITOR_RUN",
+                "schedule_authority":False,
+            })
+            candidates,observations=japan_household_spending_review_candidates(
+                registry.get("records",[]),jp_values,jp_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError,KeyError) as exc:
+            report["source_health"].append({
+                "adapter_id":"JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+                "source_id":jp_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
             })
 
     try:

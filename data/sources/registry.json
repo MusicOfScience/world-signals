@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
-  "reference_date": "2026-09-07",
-  "version": "1.84",
+  "reference_date": "2026-09-08",
+  "version": "1.85",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10295,6 +10295,95 @@
         "The 4 October date in SPA is not forward-schedule authority for this source and BG creates no occurrence from it."
       ],
       "notes": "Official participating-government completion confirmation only. WSSRC-COM-001 remains the governed OPEC schedule/decision authority; Reuters fallback remains in history; competent OPEC outcome provenance remains pending."
+    },
+    {
+      "source_id": "WSSRC-MAC-030",
+      "institution": "Statistics Bureau of Japan / Ministry of Internal Affairs and Communications",
+      "jurisdiction": "Japan",
+      "domain": "macro_releases",
+      "endpoint_role": "Family Income and Expenditure Survey household-spending machine data availability sentinel",
+      "authoritative_url": "https://dashboard.e-stat.go.jp/en/static/api",
+      "source_type": "official_statistical_webapi",
+      "information_supplied": "Official machine-readable household-spending reference-period data availability, value and provisional-status metadata. This source is not release-calendar authority and has zero Canonical schedule dependencies.",
+      "future_schedule_horizon": "not a schedule source; data availability follows published statistical releases",
+      "typical_advance_notice": "not applicable; current data-state sentinel",
+      "machine_readable_available": "REST JSON WebAPI",
+      "source_timezone": "Asia/Tokyo",
+      "recommended_verification_cadence": "daily; one bounded household-spending request per monitor run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "STATISTICS_DASHBOARD_JSON_REFERENCE_PERIOD_SENTINEL",
+      "parser_version": "japan-hhspend-dashboard-0.1",
+      "known_limitations": [
+        "The WebAPI is a result/data interface, not authority for the pre-announced release schedule.",
+        "A requested Time value is echoed even when no DATA_OBJ.VALUE row exists; only validated VALUE rows establish data availability.",
+        "Data presence before the Canonical release date is review evidence only and does not move the release date.",
+        "Data presence on or after the Canonical release date requires manual WSSRC-MAC-029 completion verification before lifecycle changes.",
+        "The API provides no Canonical release clock for this series; all tracked occurrences remain DAY precision in Asia/Tokyo.",
+        "BL does not automatically promote returned statistical values into Live Intelligence or Analysis."
+      ],
+      "timezone_scope": "SOURCE_NATIVE_JAPAN_CIVIL_DATE",
+      "licence_constraints": "Use the official public WebAPI without abusive short-period mass access; one bounded request is used per monitor run.",
+      "ingestion_permission": "OFFICIAL_MACHINE_DATA_SENTINEL_ALLOWED",
+      "licence_review_status": "CLEARED_EXPLICIT_PUBLIC_WEBAPI_USE",
+      "automated_retrieval_permission": "OFFICIAL_REST_WEBAPI_NO_REGISTRATION_BOUNDED_REQUESTS",
+      "redistribution_permission": "NO_BROAD_REDISTRIBUTION_ASSERTED_BEYOND_CURATED_INTERNAL_MONITOR_METADATA",
+      "rights_evidence_url": "https://dashboard.e-stat.go.jp/en/static/api",
+      "rights_summary": "Statistics Dashboard documentation explicitly publishes a REST WebAPI, states that no registration is required and that anyone may use it, subject to Site Policy. Official Japanese API guidance prohibits abusive short-period mass access that interferes with the service.",
+      "automation_summary": "Automation is limited to one small bounded getData request per run for one reviewed indicator and explicit monthly reference periods.",
+      "rights_reviewed_at": "2026-09-08",
+      "rights_review_scope": "BL_EXPLICIT_MACHINE_INTERFACE_AND_ANTI_ABUSE_DISCIPLINE",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "canonical_provenance_use": "MONITOR_ONLY_MACHINE_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS_2026_09_08",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "LIVE_READ_ONLY_DATA_AVAILABILITY_SENTINEL_NO_AUTO_COMMIT",
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "Separate official machine-interface identity created because WSSRC-MAC-024 remains Canonical schedule authority with endpoint review still required. The Statistics Dashboard WebAPI has explicit public machine-use terms and deterministic household-spending identity.",
+      "live_adapter_id": "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+      "live_validation_evidence": {
+        "metadata_and_policy_probe_run_id": 34168995455,
+        "data_availability_probe_run_id": 34169141999,
+        "observed_at": "2026-09-08",
+        "http_status": 200,
+        "indicator_code": "0704010101000010000",
+        "july_reference_period_present": true,
+        "august_reference_period_absent_at_probe": true,
+        "one_bounded_request_per_run": true,
+        "automatic_commit_allowed": false
+      },
+      "required_authoritative_verification_source_ids": [
+        "WSSRC-MAC-029"
+      ],
+      "related_source_ids": [
+        "WSSRC-MAC-024",
+        "WSSRC-MAC-029"
+      ],
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-MAC-024",
+        "machine_data_availability_source_id": "WSSRC-MAC-030",
+        "manual_completion_verification_source_id": "WSSRC-MAC-029"
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "statistics_dashboard_household_spending_getData",
+          "url": "https://dashboard.e-stat.go.jp/api/1.0/Json/getData?",
+          "transport": "REST_JSON",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "ONE_REVIEWED_INDICATOR_BOUNDED_REFERENCE_PERIOD_RANGE",
+          "notes": "Query exactly one reviewed indicator and a bounded TimeFrom/TimeTo range; do not enumerate the wider API."
+        },
+        {
+          "endpoint_role": "statistics_dashboard_api_documentation",
+          "url": "https://dashboard.e-stat.go.jp/en/static/api",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "API_USE_AND_PARAMETER_DOCUMENTATION"
+        }
+      ]
     }
   ],
   "activation_backlog": [

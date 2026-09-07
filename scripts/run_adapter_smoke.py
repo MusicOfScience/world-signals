@@ -22,6 +22,7 @@ from world_signals.adapters import (
     fetch_cellar_rdf_notice,
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
+    fetch_japan_household_spending_data,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -90,6 +91,31 @@ def main() -> int:
             "adapter":"EUROSTAT_RELEASE_CALENDAR_ICS",
             "status":"FAIL",
             "source_id":"WSSRC-MAC-005",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
+
+    try:
+        jp_values,jp_snap=fetch_japan_household_spending_data(
+            time_from="20260700",time_to="20270200"
+        )
+        report["results"].append({
+            "adapter":"JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+            "status":"PASS",
+            "source_id":"WSSRC-MAC-030",
+            "snapshot":jp_snap.as_dict(),
+            "value_count":len(jp_values),
+            "reference_period_codes":[row.reference_period_code for row in jp_values],
+            "request_policy":"ONE_BOUNDED_REQUEST_PER_MONITOR_RUN",
+            "schedule_authority":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+            "status":"FAIL",
+            "source_id":"WSSRC-MAC-030",
             "error":str(exc),
             "canonical_action":"NONE",
         })
