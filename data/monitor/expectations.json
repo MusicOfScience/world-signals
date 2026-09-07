@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.10",
+  "version": "0.11",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -567,6 +567,98 @@
       "publication_index_policy": "CORROBORATION_ONLY_INDEX_LAG_KNOWN",
       "time_semantics_policy": "PRESERVE_SOURCE_AFTER_SEMANTICS_DO_NOT_UPGRADE_TO_EXACT",
       "test_format_policy": "DO_NOT_DEPEND_ON_PROVISIONAL_WPSR_TEST_JSON_OR_CSV",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EUROSTAT_RELEASE_CALENDAR_ICS",
+      "source_id": "WSSRC-MAC-005",
+      "canonical_occurrence_ids": [
+        "WSO-MAC-A-0030",
+        "WSO-MAC-A-0031",
+        "WSO-MAC-A-0032",
+        "WSO-MAC-A-0033",
+        "WSO-MAC-A-0034",
+        "WSO-MAC-A-0035",
+        "WSO-MAC-A-0036",
+        "WSO-MAC-B-0053",
+        "WSO-MAC-B-0054",
+        "WSO-MAC-B-0055",
+        "WSO-MAC-B-0056",
+        "WSO-MAC-B-0057"
+      ],
+      "monitor_role": "EXACT_RELEASE_TITLE_CIVIL_DATE_SENTINEL",
+      "cadence": "DAILY",
+      "feed": {
+        "subscription_page": "https://ec.europa.eu/eurostat/subscribe/ics.format",
+        "url": "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0",
+        "transport": "ICS",
+        "semantic_format": "RFC5545_VCALENDAR",
+        "source_time_precision": "DAY",
+        "source_timezone": "Europe/Luxembourg",
+        "scope": "ALL_CATEGORY_FEED_NARROWED_BY_TRACKED_ALLOW_LIST"
+      },
+      "tracked_items": [
+        {
+          "occurrence_id": "WSO-MAC-A-0030",
+          "feed_title": "Inflation (HICP)"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0031",
+          "feed_title": "Flash estimate inflation euro area"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0032",
+          "feed_title": "Unemployment"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0033",
+          "feed_title": "GDP main aggregates and employment"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0034",
+          "feed_title": "GDP main aggregates and employment - update"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0035",
+          "feed_title": "Preliminary flash estimate GDP - EU and euro area"
+        },
+        {
+          "occurrence_id": "WSO-MAC-A-0036",
+          "feed_title": "Flash estimate GDP and employment - EU and euro area"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0053",
+          "feed_title": "Retail trade"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0054",
+          "feed_title": "International trade in goods"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0055",
+          "feed_title": "International trade in goods"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0056",
+          "feed_title": "International trade in goods"
+        },
+        {
+          "occurrence_id": "WSO-MAC-B-0057",
+          "feed_title": "International trade in goods"
+        }
+      ],
+      "matching": {
+        "identity": "EXACT_OFFICIAL_SUMMARY_PLUS_BOUNDED_NEAREST_DATE",
+        "nearest_exact_title_max_days": 10,
+        "uid_is_stable_identity": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "date_change_policy": "GENERATE_REVIEW_CANDIDATE_NO_DIRECT_CANONICAL_MUTATION",
+      "absence_policy": "REVIEW_ONLY_NO_CANCELLATION_COMPLETION_OR_CERTAINTY_INFERENCE",
+      "ambiguity_policy": "REVIEW_ONLY_NO_ARBITRARY_MATCH_SELECTION",
+      "elapsed_policy": "DO_NOT_PRESENCE_CHECK_ELAPSED_OCCURRENCES_AGAINST_CURRENT_FEED",
+      "precision_policy": "DATE_ONLY_FEED_CANNOT_DOWNGRADE_OR_OVERWRITE_CANONICAL_CLOCK_TIME",
+      "certainty_policy": "ICS_HAS_NO_GOVERNED_CONFIRMED_PROVISIONAL_FIELD_DO_NOT_CHANGE_CERTAINTY",
       "automatic_commit_allowed": false
     }
   ]
