@@ -59,6 +59,10 @@ BOARD_HTML = b'''<!doctype html><html><body>
 </body></html>'''
 
 
+def _version_tuple(value: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class RBAMPBAdapterTests(unittest.TestCase):
     def test_official_routes_and_source_native_timezone_are_frozen(self):
         self.assertEqual(
@@ -136,12 +140,16 @@ class RBAMPBAdapterTests(unittest.TestCase):
 
     def test_bj_does_not_activate_production_monitoring_or_change_rights(self):
         expectations = json.loads((ROOT / "data/monitor/expectations.json").read_text())
-        self.assertNotIn(
-            "RBA_MPB_CALENDAR",
-            {row["adapter_id"] for row in expectations["adapters"]},
-        )
-        self.assertEqual(expectations["version"], "0.10")
-        self.assertEqual(len(expectations["adapters"]), 8)
+        adapter_ids = {row["adapter_id"] for row in expectations["adapters"]}
+        self.assertNotIn("RBA_MPB_CALENDAR", adapter_ids)
+
+        # BJ's exact reviewed checkpoint was monitor v0.10 / 8 routes. That is a
+        # historical floor, not a ceiling on later independently reviewed routes.
+        self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 10))
+        self.assertGreaterEqual(len(expectations["adapters"]), 8)
+        if expectations["version"] == "0.10":
+            self.assertEqual(len(expectations["adapters"]), 8)
+
         sources = json.loads((ROOT / "data/sources/registry.json").read_text())
         source = next(row for row in sources["sources"] if row["source_id"] == "WSSRC-CB-002")
         self.assertEqual(source["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
@@ -149,6 +157,7 @@ class RBAMPBAdapterTests(unittest.TestCase):
         self.assertEqual(source["verification_mode"], "AUTOMATED_PILOT")
         self.assertFalse(expectations["automatic_canonical_commit"])
         self.assertFalse(expectations["google_calendar_write"])
+        self.assertTrue(all(not row.get("automatic_commit_allowed", False) for row in expectations["adapters"]))
 
 
 if __name__ == "__main__":
