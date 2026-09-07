@@ -17,6 +17,7 @@ JAPAN_HHSPEND_REGIONAL_RANK = "2"
 JAPAN_HHSPEND_ORIGINAL_SERIES = "1"
 JAPAN_HHSPEND_TIMEZONE = "Asia/Tokyo"
 JAPAN_STATISTICS_DASHBOARD_ACCEPT = "application/json,*/*;q=0.1"
+JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE = "It ended normally but data did not exist."
 
 
 @dataclass(frozen=True)
@@ -62,15 +63,19 @@ def japan_household_spending_data_url(*, time_from: str, time_to: str) -> str:
     return JAPAN_STATISTICS_DASHBOARD_DATA_API + urlencode(params)
 
 
-def _result_status(get_stats: dict) -> int:
+def _result_status_and_message(get_stats: dict) -> tuple[int, str]:
     result = get_stats.get("RESULT")
     if not isinstance(result, dict):
         raise AdapterError("Japan Statistics Dashboard response missing GET_STATS.RESULT")
-    raw = result.get("STATUS")
+    raw = result.get("status", result.get("STATUS"))
+    message = result.get("errorMsg", result.get("ERROR_MSG", ""))
     try:
-        return int(raw)
+        status = int(raw)
     except (TypeError, ValueError) as exc:
         raise AdapterError(f"invalid Japan Statistics Dashboard result status: {raw!r}") from exc
+    if not isinstance(message, str):
+        raise AdapterError(f"invalid Japan Statistics Dashboard result message: {message!r}")
+    return status, message.strip()
 
 
 def _data_objects(get_stats: dict) -> list[dict]:
@@ -103,11 +108,16 @@ def parse_japan_household_spending_data_json(body: bytes | str) -> list[JapanHou
     get_stats = payload.get("GET_STATS") if isinstance(payload, dict) else None
     if not isinstance(get_stats, dict):
         raise AdapterError("Japan Statistics Dashboard response missing GET_STATS")
-    status = _result_status(get_stats)
+    status, message = _result_status_and_message(get_stats)
+    if status == 1 and message == JAPAN_STATISTICS_DASHBOARD_NO_DATA_MESSAGE:
+        if get_stats.get("STATISTICAL_DATA") is not None:
+            raise AdapterError(
+                "Japan Statistics Dashboard normal-no-data status unexpectedly carried STATISTICAL_DATA"
+            )
+        return []
     if status != 0:
-        result = get_stats.get("RESULT") or {}
         raise AdapterError(
-            f"Japan Statistics Dashboard API returned result status {status}: {result.get('ERROR_MSG')!r}"
+            f"Japan Statistics Dashboard API returned result status {status}: {message!r}"
         )
 
     values: list[JapanHouseholdSpendingValue] = []
