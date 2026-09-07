@@ -38,37 +38,48 @@ jobs:
           assert m['automatic_canonical_commit'] is False
           assert m['google_calendar_write'] is False
           PY
-      - name: Inspect existing Japan canonical and source scope
+      - name: Inspect exact Japan scope and source-ID namespace
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
+          import json,re
           from pathlib import Path
           c=json.loads(Path('data/canonical/registry.json').read_text())
           s=json.loads(Path('data/sources/registry.json').read_text())
           rows=[r for r in c['records'] if r.get('series_id')=='WSER-MAC-JP-HHSPEND']
           print('HHSPEND_COUNT',len(rows))
           for r in rows:
-              keep={k:r.get(k) for k in ('occurrence_id','series_id','title','start_local','end_local','start_date','end_date','source_timezone','time_precision','date_precision','lifecycle_status','certainty_status','source_id') if k in r}
-              print('HHSPEND',json.dumps(keep,ensure_ascii=False,sort_keys=True))
-          for sid in ('WSSRC-MAC-024','WSSRC-MAC-029','WSSRC-MAC-014'):
-              rec=next((x for x in s['sources'] if x.get('source_id')==sid),None)
-              if rec:
-                  print('SOURCE',sid,json.dumps(rec,ensure_ascii=False,sort_keys=True))
+              print('HHSPEND',r['occurrence_id'],r.get('start_local'),r.get('lifecycle_status'),r.get('source_id'))
+          mac=[]
+          for row in s['sources']:
+              m=re.fullmatch(r'WSSRC-MAC-(\d+)',row.get('source_id',''))
+              if m: mac.append((int(m.group(1)),row['source_id'],row.get('institution'),row.get('source_type')))
+          for row in sorted(mac)[-12:]: print('MAC_SOURCE',row)
+          print('MAX_MAC_SOURCE_NUMBER',max(x[0] for x in mac),'COUNT',len(mac))
+          print('SOURCE_SPLIT_REFERENCES')
+          for p in Path('data').rglob('*.md'):
+              text=p.read_text(errors='replace')
+              if 'machine' in text.lower() and 'source' in text.lower() and ('split' in text.lower() or 'separate' in text.lower()):
+                  if 'Colombia' in text or 'Socrata' in text:
+                      print(p)
           PY
-      - name: Probe official Statistics Dashboard WebAPI metadata
+      - name: Probe exact household-spending getData semantics
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import json, urllib.parse, urllib.request
-          BASE='https://dashboard.e-stat.go.jp/api/1.0/Json/getIndicatorInfo?'
+          IND='0704010101000010000'
+          BASE='https://dashboard.e-stat.go.jp/api/1.0/Json/getData?'
+          common={
+            'Lang':'EN','IndicatorCode':IND,'Cycle':'1','RegionalRank':'2',
+            'IsSeasonalAdjustment':'1','MetaGetFlg':'Y','SectionHeaderFlg':'1'
+          }
           queries=[
-              {'Lang':'JP','StatName':'家計調査'},
-              {'Lang':'EN','StatName':'Family Income and Expenditure Survey'},
-              {'Lang':'JP','SearchIndicatorWord':'消費支出'},
-              {'Lang':'EN','SearchIndicatorWord':'Consumption expenditures'},
+            dict(common,TimeFrom='20260600',TimeTo='20260800'),
+            dict(common,Time='20260700'),
+            dict(common,Time='20260800'),
           ]
           def walk(obj):
               if isinstance(obj,dict):
@@ -81,38 +92,49 @@ jobs:
               req=urllib.request.Request(url,headers={'User-Agent':'WORLD-SIGNALS-read-only-research/1.0'})
               with urllib.request.urlopen(req,timeout=30) as resp:
                   body=resp.read()
-                  print('API_STATUS',q,resp.status,'BYTES',len(body),'TYPE',resp.headers.get('content-type'))
+                  print('DATA_STATUS',q.get('Time') or (q.get('TimeFrom'),q.get('TimeTo')),resp.status,'BYTES',len(body),'TYPE',resp.headers.get('content-type'))
               data=json.loads(body)
-              hits=[]
+              print('TOP_KEYS',list(data)[:20])
+              candidates=[]
               for d in walk(data):
                   text=json.dumps(d,ensure_ascii=False)
-                  if any(term in text.lower() for term in ('family income','expenditure','consumption')) or '家計' in text or '消費支出' in text:
-                      if d not in hits: hits.append(d)
-                  if len(hits)>=20: break
-              print('API_HITS',q,len(hits))
-              for h in hits[:12]:
-                  print('API_HIT',json.dumps(h,ensure_ascii=False,sort_keys=True)[:4000])
+                  if IND in text and any(k in d for k in ('VALUE','value','Time','TIME','@time','time')):
+                      candidates.append(d)
+                  elif any(str(v) in ('20260600','20260700','20260800') for v in d.values() if not isinstance(v,(dict,list))):
+                      candidates.append(d)
+                  if len(candidates)>=40: break
+              print('DATA_CANDIDATES',len(candidates))
+              for d in candidates[:25]: print('DATA_ROW',json.dumps(d,ensure_ascii=False,sort_keys=True)[:3000])
+              raw=json.dumps(data,ensure_ascii=False)
+              for token in ('20260600','20260700','20260800'):
+                  print('TOKEN_PRESENT',token,token in raw)
           PY
-      - name: Probe API policy surfaces
+      - name: Probe policy and request-discipline markers
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request
+          import re, urllib.request
           urls=[
             'https://dashboard.e-stat.go.jp/en/static/api',
             'https://dashboard.e-stat.go.jp/static/api',
-            'https://www.e-stat.go.jp/en/terms-of-use',
+            'https://dashboard.e-stat.go.jp/en/static/sitePolicy',
+            'https://dashboard.e-stat.go.jp/static/sitePolicy',
           ]
           for url in urls:
               req=urllib.request.Request(url,headers={'User-Agent':'WORLD-SIGNALS-read-only-research/1.0'})
-              with urllib.request.urlopen(req,timeout=30) as resp:
-                  text=resp.read().decode('utf-8','replace')
-                  print('POLICY_STATUS',url,resp.status,'BYTES',len(text))
-                  low=text.lower()
-                  for needle in ('anyone can use','no requirement to register','massive access','short period','利用登録不要','誰でもお使いいただけます','大量のアクセス'):
-                      if needle.lower() in low:
-                          print('POLICY_MARKER',needle)
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as resp:
+                      text=resp.read().decode('utf-8','replace')
+                      print('POLICY_STATUS',url,resp.status,'BYTES',len(text))
+              except Exception as exc:
+                  print('POLICY_ERROR',url,type(exc).__name__,str(exc)); continue
+              plain=re.sub(r'<[^>]+>',' ',text)
+              plain=re.sub(r'\s+',' ',plain)
+              low=plain.lower()
+              for needle in ('anyone can use','no requirement to register','massive access','short period','interfere','利用登録不要','誰でもお使いいただけます','大量のアクセス','短時間'):
+                  i=low.find(needle.lower())
+                  if i>=0: print('POLICY_MARKER',needle,plain[max(0,i-180):i+420])
           PY
       - name: Prove read-only branch state
         shell: bash
