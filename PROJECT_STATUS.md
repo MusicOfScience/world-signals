@@ -1,17 +1,17 @@
-# CURRENT RECOVERY OVERRIDE — POST-BF / BG OPEC OFFICIAL-CONFIRMATION PROVENANCE STRENGTHENING
+# CURRENT RECOVERY OVERRIDE — POST-BG / BH OPEC COMPETENT-PRIMARY PROVENANCE RECOVERY
 
-**Effective checkpoint:** 2026-09-07
-**Exact post-BF main base:** `363c5ff249ca8833744f15d74750d9377e8a9002`
+**Effective checkpoint:** 2026-09-08
+**Exact post-BG main base:** `eb0845c791133bb8262692c8ebe38ab362dfeff1`
 
 This override supersedes stale "current" counts in the historical body below while preserving that body as an audit/recovery record. `WORLD_SIGNALS_PROJECT_CHARTER.md` remains authoritative; governed registry/contract files remain operational truth.
 
 ## Current governed state
 
-- Canonical Registry: **v0.41 / 689 occurrences**
+- Canonical Registry: **v0.42 / 689 occurrences**
 - Canonical schema: **v0.52**
 - Source Registry: **v1.83 / 246 sources**
-- reviewed Change Ledger: **v0.27 / 62 entries**
-- biosecurity overlay: **v0.16 @ canonical v0.41 / 689**
+- reviewed Change Ledger: **v0.28 / 63 entries**
+- biosecurity overlay: **v0.17 @ canonical v0.42 / 689**
 - Source/Change Monitor expectations: **v0.10 / 8 configured adapters**
 - Monitor operations policy: **v0.1**
 - Live Intelligence: **v0.6 / 6 reviewed internal observations / 9 primary-official evidence rows / public observation projection CLOSED**
@@ -27,15 +27,15 @@ This override supersedes stale "current" counts in the historical body below whi
 
 ## Current architecture decision
 
-BG strengthens the completion provenance of the already-completed **6 September 2026 OPEC+ voluntary-adjustment review** (`WSO-COM-A-0001`) with official Saudi Press Agency confirmation. SPA is official participating-government confirmation, not the competent OPEC issuing authority.
+BH closes the explicit BE/BG competent-OPEC-primary provenance debt for the already-completed **6 September 2026 OPEC+ voluntary-adjustment review** (`WSO-COM-A-0001`). The competent OPEC issuing institution now provides the official outcome release at `https://www.opec.org/pr-detail/613-6-september-2026.html`.
 
-BE's Reuters fallback `WSSRC-COM-015` remains preserved in history. `WSSRC-COM-001` remains OPEC schedule/decision authority, and competent OPEC outcome provenance remains `REQUIRED_WHEN_RETRIEVABLE`. BG changes no lifecycle, certainty, event date/time, Live record or Analysis record and creates no October occurrence.
+`WSSRC-COM-001` remains the stable OPEC schedule/decision authority. BE Reuters `WSSRC-COM-015` and BG SPA `WSSRC-COM-016` remain preserved as historical provenance; their earlier pending markers are not rewritten. BH changes no lifecycle, certainty, event date/time, Source population, Live record or Analysis record and creates no 4 October occurrence.
 
 BF remains the sixth Live specimen. AZ remains the only production `live_input`; BA's Analysis revision grammar remains production-closed. Public Live projection, automatic ingestion, automatic Canonical commit and Google Calendar writes remain closed.
 
-## Current configured monitor cohort
+## Latest read-only monitor evidence at BH selection
 
-Eight configured adapters: RBA FSR; Colombia SUIN/Socrata; EU CRA/Cellar; three EU CBAM legal-rule routes; ONS release-calendar RSS; EIA WPSR schedule. Route presence does not imply blanket source automation permission, and all routes remain review-only with automatic canonical commit disabled.
+Scheduled run `34111609049` (run 83) observed all eight configured adapters healthy, produced zero review candidates, left Canonical unchanged and retained automatic Canonical commit / Google Calendar write as false. This is evidence against advancing the monitor write gate in BH.
 
 ## Recovery order
 

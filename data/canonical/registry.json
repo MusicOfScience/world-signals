@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.41",
-  "reference_date": "2026-09-07",
+  "version": "0.42",
+  "reference_date": "2026-09-08",
   "record_count": 689,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
@@ -42760,7 +42760,7 @@
       "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
       "source_id": "WSSRC-COM-001",
       "primary_source_assertion_id": "WSA-e57ec413d7095a56",
-      "last_successful_assertion_id": "WSA-c1f92a2fae083bf1",
+      "last_successful_assertion_id": "WSA-9272b44a5e3a7008",
       "status_history": [
         {
           "as_of": "2026-09-02",
@@ -42796,6 +42796,12 @@
           "role": "OFFICIAL_PARTICIPATING_GOVERNMENT_COMPLETION_CONFIRMATION_PRIMARY_OPEC_PENDING",
           "source_locator": "https://www.spa.gov.sa/en/N2669918",
           "primary_opec_provenance_state": "REQUIRED_WHEN_RETRIEVABLE"
+        },
+        {
+          "source_id": "WSSRC-COM-001",
+          "role": "COMPETENT_OPEC_PRIMARY_COMPLETION_CONFIRMATION",
+          "source_locator": "https://www.opec.org/pr-detail/613-6-september-2026.html",
+          "primary_opec_provenance_state": "SATISFIED_BY_COMPETENT_OPEC_PRIMARY"
         }
       ],
       "intrinsic_importance": "HIGH",

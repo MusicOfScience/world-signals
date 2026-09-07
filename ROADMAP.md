@@ -136,6 +136,16 @@ BG strengthens BE's completion provenance for `WSO-COM-A-0001` with Saudi Press 
 
 Reuters `WSSRC-COM-015` remains preserved as the evidence used for BE completion; `WSSRC-COM-001` remains OPEC schedule/decision authority; the competent OPEC outcome source remains `REQUIRED_WHEN_RETRIEVABLE`. BG changes no lifecycle, event date/time, Live observation, Analysis packet, bridge relationship or automation gate and creates no October occurrence from SPA.
 
+### BH — OPEC competent-primary provenance recovery — DONE
+
+BH closes the provenance condition deliberately left open by BE and BG. The competent OPEC issuing institution now exposes the official 6 September 2026 outcome release confirming that the seven participating countries met and maintained September required production for October.
+
+BH reuses `WSSRC-COM-001`; it creates no new source object or occurrence. Reuters `WSSRC-COM-015` and SPA `WSSRC-COM-016` remain preserved as historical evidence, including the fact that OPEC-primary provenance was still pending at their review checkpoints. The later OPEC related-document assertion and reviewed Change Ledger entry satisfy that requirement without rewriting history.
+
+Event timing remains `CIVIL_DATE` on 6 September 2026 with no invented clock time. Lifecycle remains `COMPLETED`. Monitor, Live Intelligence and Analysis populations are unchanged; no second Live→Analysis link, Analysis revision, automatic Canonical commit or Calendar write is opened.
+
+A standalone OPEC Analysis review remains a separate future pressure decision, not a consequence of queue status or BH provenance repair.
+
 ## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
 AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.
