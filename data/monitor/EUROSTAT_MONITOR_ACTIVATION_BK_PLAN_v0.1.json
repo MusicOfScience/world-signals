@@ -1,0 +1,91 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BK",
+  "purpose": "Activate one Eurostat read-only release-calendar review monitor after recovering the official generated ICS endpoint.",
+  "reference_date": "2026-09-08",
+  "exact_base_main": "2510ca6aa46f4e172b87ced5f2015488c655be75",
+  "pre_state": {
+    "canonical": {"version": "0.41", "count": 689},
+    "sources": {"version": "1.83", "count": 246},
+    "monitor_expectations": {"version": "0.10", "adapter_count": 8},
+    "live_intelligence": {"version": "0.6", "observation_count": 6, "evidence_count": 9},
+    "analysis": {"version": "0.17", "review_count": 21, "evidence_count": 95}
+  },
+  "target": {
+    "source_id": "WSSRC-MAC-005",
+    "adapter_id": "EUROSTAT_RELEASE_CALENDAR_ICS",
+    "canonical_occurrence_ids": [
+      "WSO-MAC-A-0030",
+      "WSO-MAC-A-0031",
+      "WSO-MAC-A-0032",
+      "WSO-MAC-A-0033",
+      "WSO-MAC-A-0034",
+      "WSO-MAC-A-0035",
+      "WSO-MAC-A-0036",
+      "WSO-MAC-B-0053",
+      "WSO-MAC-B-0054",
+      "WSO-MAC-B-0055",
+      "WSO-MAC-B-0056",
+      "WSO-MAC-B-0057"
+    ],
+    "subscription_page": "https://ec.europa.eu/eurostat/subscribe/ics.format",
+    "generated_feed_url": "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0",
+    "matching_contract": "EXACT_OFFICIAL_SUMMARY_PLUS_BOUNDED_NEAREST_DATE",
+    "nearest_exact_title_max_days": 10,
+    "source_uid_is_stable_identity": false,
+    "feed_time_precision": "DAY"
+  },
+  "rights_and_governance": {
+    "existing_automated_monitoring_use_required": "CLEARED",
+    "existing_verification_mode_required": "AUTOMATED_PILOT",
+    "successful_fetch_does_not_create_permission": true,
+    "source_failure_is_event_state": false,
+    "automatic_commit_allowed": false,
+    "google_calendar_write": false
+  },
+  "authorised_mutation": {
+    "governed_files": [
+      "data/sources/registry.json",
+      "data/monitor/expectations.json"
+    ],
+    "runtime_files": [
+      "scripts/run_live_monitor.py",
+      "scripts/run_adapter_smoke.py",
+      "src/world_signals/adapters/__init__.py"
+    ],
+    "post_state": {
+      "canonical": {"version": "0.41", "count": 689},
+      "sources": {"version": "1.84", "count": 246},
+      "monitor_expectations": {"version": "0.11", "adapter_count": 9},
+      "live_intelligence": {"version": "0.6", "observation_count": 6, "evidence_count": 9},
+      "analysis": {"version": "0.17", "review_count": 21, "evidence_count": 95}
+    }
+  },
+  "prohibited_mutation": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/operations_policy.json",
+    "data/monitor/review_candidate_state_contract.json",
+    "data/monitor/review_decisions.json",
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "research_evidence": {
+    "generator_recovery_run": 34161096050,
+    "full_feed_alignment_run": 34161197856,
+    "filtered_feed_negative_control_run": 34161294980,
+    "read_only_full_preflight_run": 34161741308
+  },
+  "negative_control": {
+    "route": "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=2",
+    "result": "REJECTED_AS_INCOMPLETE_FOR_TRACKED_SCOPE",
+    "reason": "Omitted the tracked 2026-10-20 GDP main aggregates and employment - update occurrence during validation."
+  },
+  "merge_policy": "MANUAL_MERGE_ONLY_NO_AUTO_MERGE"
+}
