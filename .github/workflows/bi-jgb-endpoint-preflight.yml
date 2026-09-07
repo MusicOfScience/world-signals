@@ -78,7 +78,7 @@ jobs:
           assert len(calendar.entries) >= 10
           print({
               "url": snapshot.url,
-              "status_code": snapshot.status_code,
+              "status": snapshot.status,
               "entry_count": len(calendar.entries),
               "schedule_sha256": calendar.schedule_sha256,
               "rights_effect": "NONE_ENDPOINT_PROBE_ONLY"
