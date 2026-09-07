@@ -11,7 +11,7 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
         with:
@@ -29,80 +29,38 @@ jobs:
           test "$(git rev-parse origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
           test "$(git merge-base HEAD origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
 
-      - name: Introspect Eurostat canonical scope and source state
+      - name: Inspect only the official ICS generator contract
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
-          from pathlib import Path
-          c=json.loads(Path('data/canonical/registry.json').read_text())
-          s=json.loads(Path('data/sources/registry.json').read_text())
-          rows=[r for r in c['records'] if r.get('source_id')=='WSSRC-MAC-005']
-          print('EUROSTAT_CANONICAL_COUNT',len(rows))
-          for r in rows:
-              print(json.dumps({k:r.get(k) for k in ('occurrence_id','series_id','event_type','title','start_local','start_utc','source_timezone','time_precision','certainty_status','lifecycle_status')},sort_keys=True))
-          src=next(r for r in s['sources'] if r['source_id']=='WSSRC-MAC-005')
-          print('EUROSTAT_SOURCE',json.dumps({k:src.get(k) for k in ('authoritative_url','machine_readable_available','parser_type','parser_version','runtime_health_state','automated_monitoring_use','verification_mode','monitor_endpoints','monitoring_activation_status','known_limitations')},sort_keys=True))
-          PY
+          import html as html_lib
+          import re
+          import urllib.request
 
-      - name: Recover generated ICS endpoint identity
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import re, urllib.request, urllib.parse
-          from html.parser import HTMLParser
-
-          LANDING='https://ec.europa.eu/eurostat/subscribe/ics.format'
+          URL='https://ec.europa.eu/eurostat/subscribe/ics.format'
           UA='WORLD-SIGNALS-research-probe/0.1 (+https://github.com/MusicOfScience/world-signals)'
+          req=urllib.request.Request(URL,headers={'User-Agent':UA,'Accept':'text/html,*/*;q=0.1'})
+          with urllib.request.urlopen(req,timeout=30) as r:
+              raw=r.read().decode('utf-8','replace')
+              print('LANDING',r.status,r.geturl(),r.headers.get('content-type'),len(raw))
 
-          def get(url):
-              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'text/html,application/javascript,text/javascript,*/*;q=0.1'})
-              with urllib.request.urlopen(req,timeout=30) as r:
-                  body=r.read()
-                  print('FETCH',r.status,r.geturl(),r.headers.get('content-type'),len(body))
-                  return body.decode('utf-8','replace'),r.geturl(),r.headers
+          needles=('estat-ics-url-generator','p_p_lifecycle=2','Copy calendar URL','calendarUrl','calendarURL','\.ics')
+          for needle in needles:
+              print('\n=== NEEDLE',needle,'===')
+              matches=list(re.finditer(needle,raw,re.I))
+              print('COUNT',len(matches))
+              for m in matches[:8]:
+                  lo=max(0,m.start()-1800); hi=min(len(raw),m.end()+2600)
+                  print(html_lib.unescape(raw[lo:hi]))
+                  print('\n--- CONTEXT END ---')
 
-          html,final,_=get(LANDING)
-          print('HTML_ICS_STRINGS')
-          for m in sorted(set(re.findall(r'[^\"\'<>\s]{0,120}ics[^\"\'<>\s]{0,160}',html,re.I))):
-              if 'statistics' not in m.lower():
-                  print(m[:500])
-
-          class P(HTMLParser):
-              def __init__(self):
-                  super().__init__(); self.urls=[]
-              def handle_starttag(self,tag,attrs):
-                  d=dict(attrs)
-                  for key in ('src','href','action','data-url','data-href','data-endpoint'):
-                      if d.get(key): self.urls.append((tag,key,d[key]))
-          p=P(); p.feed(html)
-          urls=[]
-          for tag,key,value in p.urls:
-              u=urllib.parse.urljoin(final,value)
-              if u not in urls: urls.append(u)
-          print('PAGE_URLS_RELEVANT')
-          for u in urls:
-              if any(x in u.lower() for x in ('ics','calendar','subscribe','.js')):
-                  print(u)
-
-          scripts=[u for u in urls if u.lower().split('?',1)[0].endswith('.js') and 'ec.europa.eu' in urllib.parse.urlparse(u).netloc]
-          print('SCRIPT_COUNT',len(scripts))
-          hits=[]
-          for u in scripts[:40]:
-              try: txt,_,_=get(u)
-              except Exception as e:
-                  print('SCRIPT_FETCH_ERROR',u,type(e).__name__,str(e)[:160]); continue
-              low=txt.lower()
-              if '.ics' in low or 'calendarurl' in low or 'calendar url' in low or 'ics.format' in low or 'subscribe' in low:
-                  print('SCRIPT_RELEVANT',u)
-                  for pat in (r'https?[^\"\'\s<>]{1,300}',r'[^\"\'\n]{0,160}\.ics[^\"\'\n]{0,220}',r'[^\"\'\n]{0,180}calendar[^\"\'\n]{0,220}',r'[^\"\'\n]{0,180}subscribe[^\"\'\n]{0,220}'):
-                      for m in re.findall(pat,txt,re.I):
-                          if any(k in m.lower() for k in ('ics','calendar','subscribe')):
-                              hits.append((u,m[:700]))
-          print('SCRIPT_HITS')
-          for u,m in hits[:120]: print(u,'::',m)
+          print('\n=== RESOURCE URLS ===')
+          candidates=[]
+          for m in re.finditer(r'https?[^\"\'<>\\\s]+p_p_lifecycle(?:=|%3D)2[^\"\'<>\\\s]*',html_lib.unescape(raw),re.I):
+              value=m.group(0).replace('&amp;','&')
+              if value not in candidates: candidates.append(value)
+          for value in candidates[:20]: print(value)
           PY
 
       - name: Prove no governed mutation
