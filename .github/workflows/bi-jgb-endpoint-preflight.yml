@@ -1,0 +1,111 @@
+name: BI JGB endpoint preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bg-jgb-monitor-readiness-bi
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify exact post-BG base
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "eb0845c791133bb8262692c8ebe38ab362dfeff1"
+          test "$(git merge-base HEAD origin/main)" = "eb0845c791133bb8262692c8ebe38ab362dfeff1"
+
+      - name: Snapshot governed layers
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/monitor/review_candidate_state_contract.json \
+            data/monitor/review_decisions.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json > /tmp/bi-governed.sha
+
+      - name: Targeted parser and production-boundary tests
+        run: python -m unittest tests.test_japan_mof_jgb_adapter -v
+
+      - name: Full regression suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile BI adapter and test
+        run: python -m py_compile src/world_signals/adapters/japan_mof_jgb.py tests/test_japan_mof_jgb_adapter.py
+
+      - name: Probe current Japan MOF September calendar
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters import fetch_jgb_monthly_auction_calendar
+
+          calendar, snapshot = fetch_jgb_monthly_auction_calendar(2026, 9, timeout=30)
+          assert calendar.year == 2026
+          assert calendar.month == 9
+          assert calendar.source_timezone == "Asia/Tokyo"
+          assert calendar.time_precision == "CIVIL_DATE"
+          assert any(
+              row.auction_date == "2026-09-03" and row.issue.lower().startswith("30-year")
+              for row in calendar.entries
+          )
+          assert len(calendar.entries) >= 10
+          print({
+              "url": snapshot.url,
+              "status_code": snapshot.status_code,
+              "entry_count": len(calendar.entries),
+              "schedule_sha256": calendar.schedule_sha256,
+              "rights_effect": "NONE_ENDPOINT_PROBE_ONLY"
+          })
+          PY
+
+      - name: Prove production gates and governed files unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c /tmp/bi-governed.sha
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expectations = json.loads(Path('data/monitor/expectations.json').read_text())
+          sources = json.loads(Path('data/sources/registry.json').read_text())
+          assert expectations['version'] == '0.10'
+          assert len(expectations['adapters']) == 8
+          assert 'JAPAN_MOF_JGB_AUCTION_CALENDAR' not in {row['adapter_id'] for row in expectations['adapters']}
+          assert expectations['automatic_canonical_commit'] is False
+          assert expectations['google_calendar_write'] is False
+          source = next(row for row in sources['sources'] if row['source_id'] == 'WSSRC-FIS-007')
+          assert source['automated_monitoring_use'] == 'ENDPOINT_REVIEW_REQUIRED'
+          assert source['verification_mode'] == 'AUTOMATED_PILOT'
+          print('BI production boundary: PASS')
+          PY
+
+      - name: Static build
+        run: python scripts/build_site.py
