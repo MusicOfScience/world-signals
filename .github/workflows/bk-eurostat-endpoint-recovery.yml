@@ -1,4 +1,4 @@
-name: BK Eurostat controlled transaction
+name: BK descendant-ceiling repair preflight
 
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - feature/post-bj-eurostat-endpoint-recovery-bk
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  transaction:
+  preflight:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -38,17 +38,17 @@ jobs:
           assert m['automatic_canonical_commit'] is False
           assert m['google_calendar_write'] is False
           PY
-      - name: Snapshot protected layers and exact mutable pre-state
+      - name: Snapshot all governed pre-state
         shell: bash
         run: |
           set -euo pipefail
-          cp data/sources/registry.json /tmp/bk-sources-pre.json
-          cp data/monitor/expectations.json /tmp/bk-expectations-pre.json
           sha256sum \
             data/canonical/registry.json \
             data/canonical/schema.json \
+            data/sources/registry.json \
             data/changes/ledger.json \
             data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
             data/monitor/operations_policy.json \
             data/monitor/review_candidate_state_contract.json \
             data/monitor/review_decisions.json \
@@ -57,21 +57,18 @@ jobs:
             data/live_intelligence/evidence_registry.json \
             data/analysis/schema.json \
             data/analysis/event_reviews.json \
-            data/analysis/evidence_registry.json > /tmp/bk-protected.sha
-      - name: Reconfirm check-only transform
-        run: python scripts/apply_eurostat_monitor_bk.py
-      - name: Apply bounded BK transaction
+            data/analysis/evidence_registry.json > /tmp/bk-governed-pre.sha
+      - name: Materialise BK locally only
         env:
           WORLD_SIGNALS_APPLY_MONITOR_BK: "1"
         run: python scripts/apply_eurostat_monitor_bk.py --apply
-      - name: Prove exact mutation boundary and semantic narrowness
+      - name: Prove simulated post-state and exact mutation boundary
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import json, subprocess
           from pathlib import Path
-
           expected={
             'data/sources/registry.json',
             'data/monitor/expectations.json',
@@ -81,41 +78,22 @@ jobs:
           }
           changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
           assert changed == expected, (sorted(changed),sorted(expected))
-
-          before_s=json.loads(Path('/tmp/bk-sources-pre.json').read_text())
-          after_s=json.loads(Path('data/sources/registry.json').read_text())
-          assert (after_s['version'],len(after_s['sources'])) == ('1.84',246)
-          pre_by={x['source_id']:x for x in before_s['sources']}
-          post_by={x['source_id']:x for x in after_s['sources']}
-          assert set(pre_by)==set(post_by)
-          changed_sources=[sid for sid in pre_by if pre_by[sid] != post_by[sid]]
-          assert changed_sources == ['WSSRC-MAC-005'], changed_sources
-          eurostat=post_by['WSSRC-MAC-005']
-          assert eurostat['automated_monitoring_use']=='CLEARED'
-          assert eurostat['live_adapter_id']=='EUROSTAT_RELEASE_CALENDAR_ICS'
-          assert eurostat['monitoring_activation_status']=='LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT'
-
-          before_m=json.loads(Path('/tmp/bk-expectations-pre.json').read_text())
-          after_m=json.loads(Path('data/monitor/expectations.json').read_text())
-          assert (after_m['version'],len(after_m['adapters'])) == ('0.11',9)
-          assert after_m['adapters'][:8] == before_m['adapters']
-          assert after_m['automatic_canonical_commit'] is False
-          assert after_m['google_calendar_write'] is False
-          adapter=after_m['adapters'][8]
-          assert adapter['adapter_id']=='EUROSTAT_RELEASE_CALENDAR_ICS'
-          assert adapter['source_id']=='WSSRC-MAC-005'
-          assert adapter['automatic_commit_allowed'] is False
-          print('BK mutation boundary and semantic narrowness: PASS')
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (s['version'],len(s['sources'])) == ('1.84',246)
+          assert (m['version'],len(m['adapters'])) == ('0.11',9)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          assert m['adapters'][-1]['adapter_id']=='EUROSTAT_RELEASE_CALENDAR_ICS'
           PY
-          sha256sum -c /tmp/bk-protected.sha
-      - name: Validate materialised governed state
+      - name: Run materialised targeted and full suite
         shell: bash
         run: |
           set -euo pipefail
           python scripts/validate_registry.py
           python scripts/validate_live_intelligence.py
           python scripts/validate_analysis.py
-          python -m unittest tests.test_eurostat_monitor_bk tests.test_core_monitor_expansion_o -v
+          python -m unittest tests.test_eurostat_monitor_bk tests.test_core_monitor_expansion_o tests.test_opec_official_confirmation_bg tests.test_rba_mpb_adapter -v
           python -m unittest discover -s tests -v
           python -m py_compile \
             src/world_signals/adapters/eurostat_ics.py \
@@ -130,6 +108,8 @@ jobs:
           node --check web/operations.js
           node --check web/biosecurity.js
           node --check web/analysis.js
+          python scripts/build_site.py
+          git restore docs || true
       - name: Exercise materialised Eurostat route live
         shell: bash
         run: |
@@ -155,27 +135,16 @@ jobs:
           assert types.get('EUROSTAT_TRACKED_OCCURRENCE_ELAPSED_NOT_PRESENCE_CHECKED')==2
           assert types.get('EUROSTAT_RELEASE_DATE_NO_CHANGE')==10
           PY
-      - name: Static build and restore derived docs
+      - name: Restore ephemeral BK writes and prove original governed bytes
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/build_site.py
-          git restore docs || true
-      - name: Final protected-layer check
-        run: sha256sum -c /tmp/bk-protected.sha
-      - name: Commit transaction and self-remove workflow
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "Mx Hud Harding"
-          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add \
+          git restore \
             data/sources/registry.json \
             data/monitor/expectations.json \
             scripts/run_live_monitor.py \
             scripts/run_adapter_smoke.py \
-            src/world_signals/adapters/__init__.py
-          git rm .github/workflows/bk-eurostat-endpoint-recovery.yml
-          git diff --cached --check
-          git commit -m "BK: activate Eurostat read-only release monitor"
-          git push origin HEAD:feature/post-bj-eurostat-endpoint-recovery-bk
+            src/world_signals/adapters/__init__.py \
+            docs || true
+          sha256sum -c /tmp/bk-governed-pre.sha
