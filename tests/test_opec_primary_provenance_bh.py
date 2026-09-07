@@ -92,7 +92,7 @@ class OPECPrimaryProvenanceBHTests(unittest.TestCase):
 
     def test_current_spa_source_text_records_recovery_not_a_current_pending_debt(self):
         source = bh.by_source(self.target_state["sources"])[bh.SPA_ID]
-        self.assertFalse(bh.source_pending_text(source))
+        self.assertFalse(bh.current_spa_pending(source))
         self.assertIn("BH subsequently recovered competent OPEC", source["information_supplied"])
         self.assertIn("SPA remains supporting evidence", source["notes"])
 
@@ -155,7 +155,7 @@ class OPECPrimaryProvenanceBHTests(unittest.TestCase):
         self.assertTrue(bg_plan["historical_preservation"]["competent_opec_primary_remains_pending"])
 
     def test_materialised_or_simulated_target_validates(self):
-        bh.assert_common_layers(self.target_state, self.plan)
+        bh.assert_downstream(self.target_state, self.plan)
         if self.materialised:
             bh.assert_materialised(self.state, self.plan)
         else:
