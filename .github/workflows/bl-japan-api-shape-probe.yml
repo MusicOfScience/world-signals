@@ -1,0 +1,77 @@
+name: BL Japan API shape probe
+
+on:
+  push:
+    branches:
+      - feature/post-bk-japan-statistics-api-bl
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BK base
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "3952ec1f5a6022fec43210103f7a7244442e3201"
+          test "$(git merge-base HEAD origin/main)" = "3952ec1f5a6022fec43210103f7a7244442e3201"
+      - name: Inspect official getData JSON shapes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,urllib.parse,urllib.request
+          base='https://dashboard.e-stat.go.jp/api/1.0/Json/getData?'
+          common={
+            'Lang':'EN','IndicatorCode':'0704010101000010000','Cycle':'1',
+            'RegionalRank':'2','IsSeasonalAdjustment':'1','MetaGetFlg':'Y','SectionHeaderFlg':'1'
+          }
+          queries=[
+            ('range',dict(common,TimeFrom='20260700',TimeTo='20270200')),
+            ('july',dict(common,Time='20260700')),
+            ('august',dict(common,Time='20260800')),
+          ]
+          for label,q in queries:
+              url=base+urllib.parse.urlencode(q)
+              req=urllib.request.Request(url,headers={'User-Agent':'WORLD-SIGNALS-read-only-research/1.0','Accept':'application/json,*/*;q=0.1'})
+              with urllib.request.urlopen(req,timeout=30) as resp:
+                  body=resp.read()
+                  print('HTTP',label,resp.status,resp.headers.get('content-type'),'BYTES',len(body))
+              data=json.loads(body)
+              print('TOP',label,list(data.keys()) if isinstance(data,dict) else type(data).__name__)
+              gs=data.get('GET_STATS') if isinstance(data,dict) else None
+              print('GET_STATS_TYPE',label,type(gs).__name__)
+              if isinstance(gs,dict):
+                  print('GET_STATS_KEYS',label,list(gs.keys()))
+                  print('RESULT',label,json.dumps(gs.get('RESULT'),ensure_ascii=False,sort_keys=True)[:3000])
+                  print('PARAMETER',label,json.dumps(gs.get('PARAMETER'),ensure_ascii=False,sort_keys=True)[:3000])
+                  stat=gs.get('STATISTICAL_DATA')
+                  print('STAT_TYPE',label,type(stat).__name__)
+                  if isinstance(stat,dict):
+                      print('STAT_KEYS',label,list(stat.keys()))
+                      inf=stat.get('DATA_INF')
+                      print('DATA_INF_TYPE',label,type(inf).__name__)
+                      if isinstance(inf,dict):
+                          obj=inf.get('DATA_OBJ')
+                          print('DATA_OBJ_TYPE',label,type(obj).__name__,'COUNT',len(obj) if isinstance(obj,list) else (1 if isinstance(obj,dict) else 0))
+                          if isinstance(obj,list) and obj: print('FIRST_OBJ',label,json.dumps(obj[0],ensure_ascii=False,sort_keys=True)[:3000])
+                          elif isinstance(obj,dict): print('FIRST_OBJ',label,json.dumps(obj,ensure_ascii=False,sort_keys=True)[:3000])
+              print('BODY_PREFIX',label,body[:1200].decode('utf-8','replace'))
+          PY
+      - name: Prove read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
