@@ -12,6 +12,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import apply_opec_official_confirmation_bg as bg
 
 
+def _version_tuple(value: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class OPECOfficialConfirmationBGTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -84,7 +88,15 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(len(self.target["analysis_evidence"]["evidence"]), 95)
         self.assertEqual(bg.production_live_input_count(self.target["analysis_reviews"]), 1)
         self.assertEqual(bg.revision_count(self.target["analysis_reviews"]), 0)
-        self.assertEqual(len(self.target["expectations"]["adapters"]), 8)
+
+        expectations = self.target["expectations"]
+        self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 10))
+        self.assertGreaterEqual(len(expectations["adapters"]), 8)
+        if expectations["version"] == "0.10":
+            self.assertEqual(len(expectations["adapters"]), 8)
+        self.assertFalse(expectations["automatic_canonical_commit"])
+        self.assertFalse(expectations["google_calendar_write"])
+        self.assertTrue(all(not row.get("automatic_commit_allowed", False) for row in expectations["adapters"]))
 
     def test_bg_does_not_create_october_voluntary_adjustment_occurrence(self):
         matches = [
@@ -104,11 +116,36 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertIn("Reuters `WSSRC-COM-015` remains preserved", roadmap)
 
     def test_materialised_target_validates_or_simulation_is_clean(self):
-        bg.assert_common_layers(self.target, self.plan, target=True)
         if not self.is_target:
+            # Exact historical BG simulation remains strict at its own checkpoint.
+            bg.assert_common_layers(self.target, self.plan, target=True)
             bg.assert_poststate(self.state, self.target, self.plan)
-        else:
-            bg.assert_materialised(self.state, self.plan)
+            return
+
+        # On reviewed descendants, validate the still-materialised BG contribution
+        # without turning BG's monitor v0.10 / 8-route checkpoint into a ceiling.
+        bg.validate_layers(self.target)
+        row = bg.by_occurrence(self.target["canonical"])[bg.TARGET_ID]
+        self.assertEqual(row["last_successful_assertion_id"], self.plan["provenance_basis"]["assertion_id"])
+        self.assertIsNotNone(bg.related(row, bg.REUTERS_ID))
+        self.assertIsNotNone(bg.related(row, bg.SPA_ID))
+        self.assertEqual(
+            bg.related(row, bg.SPA_ID)["primary_opec_provenance_state"],
+            "REQUIRED_WHEN_RETRIEVABLE",
+        )
+        self.assertEqual(
+            bg.by_source(self.target["sources"])[bg.SPA_ID],
+            self.plan["official_confirmation_source"],
+        )
+        self.assertIn(
+            self.plan["provenance_basis"]["change_id"],
+            {x.get("change_id") for x in self.target["ledger"].get("changes", [])},
+        )
+        expectations = self.target["expectations"]
+        self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 10))
+        self.assertGreaterEqual(len(expectations["adapters"]), 8)
+        self.assertFalse(expectations["automatic_canonical_commit"])
+        self.assertFalse(expectations["google_calendar_write"])
 
 
 if __name__ == "__main__":
