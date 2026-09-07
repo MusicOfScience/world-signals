@@ -1,0 +1,129 @@
+name: BJ RBA MPB readiness preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bi-rba-mpb-monitor-readiness-bj
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify exact post-BI base
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "ba3f36f1f75733654f3783a2b609590186eb4971"
+          test "$(git merge-base HEAD origin/main)" = "ba3f36f1f75733654f3783a2b609590186eb4971"
+
+      - name: Snapshot governed layers
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/monitor/review_candidate_state_contract.json \
+            data/monitor/review_decisions.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json > /tmp/bj-governed.sha
+
+      - name: Targeted RBA parser and production-boundary tests
+        run: python -m unittest tests.test_rba_mpb_adapter -v
+
+      - name: Full regression suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile BJ adapter and test
+        run: python -m py_compile src/world_signals/adapters/rba_mpb.py tests/test_rba_mpb_adapter.py
+
+      - name: Probe current RBA monetary-policy surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters import (
+              fetch_rba_board_schedule,
+              fetch_rba_monetary_policy_calendar,
+              validate_rba_calendar_alignment,
+          )
+
+          calendar, calendar_snapshot = fetch_rba_monetary_policy_calendar(timeout=30)
+          windows, board_snapshot = fetch_rba_board_schedule(timeout=30)
+          validate_rba_calendar_alignment(calendar, windows)
+
+          events = {(row.event_kind, row.start_local): row for row in calendar.events}
+          meeting = next(
+              row for row in calendar.events
+              if row.event_kind == 'MEETING_WINDOW'
+              and row.start_local == '2026-09-28'
+              and row.end_local == '2026-09-29'
+          )
+          decision = events[('DECISION_STATEMENT', '2026-09-29T14:30:00')]
+          conference = events[('PRESS_CONFERENCE', '2026-09-29T15:30:00')]
+          minutes = events[('MINUTES', '2026-10-13T11:30:00')]
+
+          assert meeting.time_precision == 'CIVIL_DATE_RANGE'
+          assert decision.published_timezone_label == 'AEST'
+          assert conference.published_timezone_label == 'AEST'
+          assert minutes.published_timezone_label == 'AEDT'
+          assert all(row.source_timezone == 'Australia/Sydney' for row in calendar.events)
+          assert ('2026-09-28', '2026-09-29') in {(row.start_local, row.end_local) for row in windows}
+
+          print({
+              'calendar_status': calendar_snapshot.status,
+              'board_status': board_snapshot.status,
+              'calendar_event_count': len(calendar.events),
+              'board_window_count': len(windows),
+              'schedule_sha256': calendar.schedule_sha256,
+              'rights_effect': 'NONE_ENDPOINT_PROBE_ONLY',
+          })
+          PY
+
+      - name: Prove production gates and governed files unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c /tmp/bj-governed.sha
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expectations = json.loads(Path('data/monitor/expectations.json').read_text())
+          sources = json.loads(Path('data/sources/registry.json').read_text())
+          assert expectations['version'] == '0.10'
+          assert len(expectations['adapters']) == 8
+          assert 'RBA_MPB_CALENDAR' not in {row['adapter_id'] for row in expectations['adapters']}
+          assert expectations['automatic_canonical_commit'] is False
+          assert expectations['google_calendar_write'] is False
+          source = next(row for row in sources['sources'] if row['source_id'] == 'WSSRC-CB-002')
+          assert source['canonical_provenance_use'] == 'CLEARED_CURATED_FACTUAL_METADATA'
+          assert source['automated_monitoring_use'] == 'ENDPOINT_REVIEW_REQUIRED'
+          assert source['verification_mode'] == 'AUTOMATED_PILOT'
+          print('BJ production boundary: PASS')
+          PY
+
+      - name: Static build
+        run: python scripts/build_site.py
