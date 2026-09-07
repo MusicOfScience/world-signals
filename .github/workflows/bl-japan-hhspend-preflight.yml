@@ -60,16 +60,21 @@ jobs:
             data/analysis/schema.json \
             data/analysis/event_reviews.json \
             data/analysis/evidence_registry.json > /tmp/bl-governed-pre.sha
-      - name: Reconfirm guarded check-only transform
+      - name: Reconfirm guarded check-only transforms
         shell: bash
         run: |
           set -euo pipefail
           python scripts/apply_japan_household_spending_monitor_bl.py
+          python scripts/repair_bk_monitor_ceiling_bl.py
           python -m unittest tests.test_japan_household_spending_monitor_bl -v
       - name: Materialise BL locally only
+        shell: bash
         env:
           WORLD_SIGNALS_APPLY_MONITOR_BL: "1"
-        run: python scripts/apply_japan_household_spending_monitor_bl.py --apply
+        run: |
+          set -euo pipefail
+          python scripts/apply_japan_household_spending_monitor_bl.py --apply
+          python scripts/repair_bk_monitor_ceiling_bl.py --apply
       - name: Prove exact local mutation boundary and post-state
         shell: bash
         run: |
@@ -83,6 +88,7 @@ jobs:
             'scripts/run_live_monitor.py',
             'scripts/run_adapter_smoke.py',
             'src/world_signals/adapters/__init__.py',
+            'tests/test_eurostat_monitor_bk.py',
           }
           tracked=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
           untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
@@ -103,6 +109,9 @@ jobs:
           assert route['automatic_commit_allowed'] is False
           assert m['automatic_canonical_commit'] is False
           assert m['google_calendar_write'] is False
+          bk=Path('tests/test_eurostat_monitor_bk.py').read_text()
+          assert 'self.assertGreaterEqual(dotted(sources["version"]), dotted("1.84"))' in bk
+          assert 'eurostat["live_adapter_id"], "EUROSTAT_RELEASE_CALENDAR_ICS"' in bk
           PY
       - name: Run materialised targeted and full regression suite
         shell: bash
@@ -121,6 +130,7 @@ jobs:
             src/world_signals/adapters/japan_statistics_dashboard.py \
             src/world_signals/japan_household_spending_monitor.py \
             scripts/apply_japan_household_spending_monitor_bl.py \
+            scripts/repair_bk_monitor_ceiling_bl.py \
             scripts/run_live_monitor.py \
             scripts/run_adapter_smoke.py
           node --check web/app.js
@@ -173,6 +183,7 @@ jobs:
             data/monitor/expectations.json \
             scripts/run_live_monitor.py \
             scripts/run_adapter_smoke.py \
-            src/world_signals/adapters/__init__.py
+            src/world_signals/adapters/__init__.py \
+            tests/test_eurostat_monitor_bk.py
           rm -rf docs artifacts review_candidates/live || true
           sha256sum -c /tmp/bl-governed-pre.sha
