@@ -117,30 +117,49 @@ class CoreMonitorExpansionOTests(unittest.TestCase):
         self.assertIn("RSS_HAS_NO_CONFIRMED_PROVISIONAL_FIELD", adapter["certainty_policy"])
         self.assertFalse(adapter["automatic_commit_allowed"])
 
-    def test_eurostat_permission_and_endpoint_readiness_are_separate(self):
+    def test_eurostat_permission_and_o_endpoint_hold_are_historical_not_descendant_ceiling(self):
         if self.sources["version"] == "1.69":
             post_sources = tx.transform_sources(self.sources)
         else:
             post_sources = self.sources
         eurostat = next(x for x in post_sources["sources"] if x["source_id"] == "WSSRC-MAC-005")
         self.assertEqual(eurostat["automated_monitoring_use"], "CLEARED")
-        self.assertEqual(eurostat["monitoring_activation_status"], "ENDPOINT_IDENTITY_HOLD_NO_LIVE_ROUTE")
-        self.assertEqual(eurostat["monitoring_readiness_status"], "HOLD_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED")
-        endpoint = next(
-            e for e in eurostat["monitor_endpoints"]
-            if e["url"] == "https://ec.europa.eu/eurostat/en/news/release-calendar"
-        )
-        self.assertEqual(endpoint["transport"], "HTML")
-        self.assertFalse(endpoint["preferred_for_monitoring"])
-        self.assertEqual(endpoint["route_validation_state"], "HTML_LANDING_PAGE_NOT_GENERATED_ICS_FEED")
 
-    def test_eurostat_is_not_silently_added_as_live_adapter(self):
+        # O's exact reviewed state must remain provable. A later tranche may supersede
+        # the endpoint-identity hold only by adding an explicit reviewed live route.
+        if eurostat.get("monitoring_activation_status") == "ENDPOINT_IDENTITY_HOLD_NO_LIVE_ROUTE":
+            self.assertEqual(eurostat["monitoring_readiness_status"], "HOLD_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED")
+            endpoint = next(
+                e for e in eurostat["monitor_endpoints"]
+                if e["url"] == "https://ec.europa.eu/eurostat/en/news/release-calendar"
+            )
+            self.assertEqual(endpoint["transport"], "HTML")
+            self.assertFalse(endpoint["preferred_for_monitoring"])
+            self.assertEqual(endpoint["route_validation_state"], "HTML_LANDING_PAGE_NOT_GENERATED_ICS_FEED")
+        else:
+            self.assertEqual(eurostat.get("monitoring_activation_status"), "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT")
+            self.assertEqual(eurostat.get("live_adapter_id"), "EUROSTAT_RELEASE_CALENDAR_ICS")
+            self.assertEqual(eurostat.get("monitoring_readiness_status"), "LIVE_VALIDATED_NO_AUTO_COMMIT")
+            generated = [
+                e for e in eurostat.get("monitor_endpoints", [])
+                if e.get("url") == "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0"
+            ]
+            self.assertEqual(len(generated), 1)
+            self.assertTrue(generated[0]["preferred_for_monitoring"])
+            self.assertEqual(generated[0]["semantic_format"], "RFC5545_VCALENDAR")
+
+    def test_eurostat_was_not_silently_added_at_o_but_reviewed_descendant_may_activate_it(self):
         adapter_ids = {x["adapter_id"] for x in self.expectations["adapters"]}
         if self.expectations["version"] == "0.7":
             post = tx.transform_expectations(self.expectations)
             adapter_ids = {x["adapter_id"] for x in post["adapters"]}
-        self.assertIn("ONS_RELEASE_CALENDAR_RSS", adapter_ids)
-        self.assertFalse(any("EUROSTAT" in x for x in adapter_ids))
+            self.assertNotIn("EUROSTAT_RELEASE_CALENDAR_ICS", adapter_ids)
+        else:
+            self.assertIn("ONS_RELEASE_CALENDAR_RSS", adapter_ids)
+            if "EUROSTAT_RELEASE_CALENDAR_ICS" in adapter_ids:
+                eurostat = next(x for x in self.expectations["adapters"] if x["adapter_id"] == "EUROSTAT_RELEASE_CALENDAR_ICS")
+                self.assertEqual(eurostat["source_id"], "WSSRC-MAC-005")
+                self.assertFalse(eurostat["automatic_commit_allowed"])
 
     def test_research_preserves_monitor_layer_boundary(self):
         text = (ROOT / "data/monitor/CORE_MONITOR_EXPANSION_O_RESEARCH_v0.1.md").read_text(encoding="utf-8")
