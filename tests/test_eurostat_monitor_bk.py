@@ -187,11 +187,29 @@ class EurostatMonitorBKTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             eurostat_release_calendar_review_candidates(records, [], cfg)
 
-    def test_bk_check_only_transform_is_exact_and_keeps_upstream_populations_unchanged(self):
-        post_sources, post_expectations, live, smoke, adapter_init = tx.build_post_state()
-        self.assertEqual(post_sources["version"], "1.84")
+    def test_bk_pre_or_post_state_contract_and_mutation_boundary(self):
+        sources = json.loads((ROOT / "data/sources/registry.json").read_text())
+        expectations = json.loads((ROOT / "data/monitor/expectations.json").read_text())
+        pre_transaction = sources["version"] == "1.83" and expectations["version"] == "0.10"
+
+        if pre_transaction:
+            post_sources, post_expectations, live, smoke, adapter_init = tx.build_post_state()
+            pre_by_id = {row["source_id"]: row for row in sources["sources"]}
+            post_by_id = {row["source_id"]: row for row in post_sources["sources"]}
+            self.assertEqual(set(pre_by_id), set(post_by_id))
+            for source_id in pre_by_id:
+                if source_id != "WSSRC-MAC-005":
+                    self.assertEqual(post_by_id[source_id], pre_by_id[source_id], source_id)
+            self.assertEqual(post_expectations["adapters"][:8], expectations["adapters"])
+        else:
+            self.assertEqual(sources["version"], "1.84")
+            self.assertEqual(expectations["version"], "0.11")
+            post_sources, post_expectations = sources, expectations
+            live = (ROOT / "scripts/run_live_monitor.py").read_text()
+            smoke = (ROOT / "scripts/run_adapter_smoke.py").read_text()
+            adapter_init = (ROOT / "src/world_signals/adapters/__init__.py").read_text()
+
         self.assertEqual(len(post_sources["sources"]), 246)
-        self.assertEqual(post_expectations["version"], "0.11")
         self.assertEqual(len(post_expectations["adapters"]), 9)
         eurostat = next(row for row in post_sources["sources"] if row["source_id"] == "WSSRC-MAC-005")
         self.assertEqual(eurostat["automated_monitoring_use"], "CLEARED")
@@ -199,6 +217,7 @@ class EurostatMonitorBKTests(unittest.TestCase):
         self.assertEqual(eurostat["monitoring_activation_status"], "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT")
         endpoint = next(row for row in eurostat["monitor_endpoints"] if row.get("url") == tx.EUROSTAT_ENDPOINT)
         self.assertTrue(endpoint["preferred_for_monitoring"])
+        self.assertEqual(endpoint["semantic_format"], "RFC5545_VCALENDAR")
         adapter = next(row for row in post_expectations["adapters"] if row["adapter_id"] == "EUROSTAT_RELEASE_CALENDAR_ICS")
         self.assertEqual(adapter["canonical_occurrence_ids"], [oid for oid, _ in tx.EUROSTAT_TRACKED])
         self.assertFalse(adapter["automatic_commit_allowed"])
