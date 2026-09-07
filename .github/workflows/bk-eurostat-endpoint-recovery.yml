@@ -1,4 +1,4 @@
-name: BK Eurostat endpoint recovery probe
+name: BK Eurostat activation preflight
 
 on:
   push:
@@ -9,9 +9,9 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  preflight:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
         with:
@@ -26,72 +26,90 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
           test "$(git merge-base HEAD origin/main)" = "2510ca6aa46f4e172b87ced5f2015488c655be75"
-      - name: Test Euro indicator filtered feed against exact tracked identities
+      - name: Snapshot governed pre-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/canonical/schema.json \
+            data/sources/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/monitor/expectations.json \
+            data/monitor/operations_policy.json \
+            data/monitor/review_candidate_state_contract.json \
+            data/monitor/review_decisions.json \
+            data/live_intelligence/schema.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/schema.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json > /tmp/bk-governed.sha
+      - name: Targeted BK and historical-O descendant tests
+        run: python -m unittest tests.test_eurostat_monitor_bk tests.test_core_monitor_expansion_o -v
+      - name: Check-only post-state transform
+        run: python scripts/apply_eurostat_monitor_bk.py
+      - name: Compile simulated runtime patches
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json,re,urllib.request
-          from pathlib import Path
-
-          URL='https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=2'
-          req=urllib.request.Request(URL,headers={
-              'User-Agent':'WORLD-SIGNALS-research-probe/0.1 (+https://github.com/MusicOfScience/world-signals)',
-              'Accept':'text/calendar,*/*;q=0.1',
-          })
-          with urllib.request.urlopen(req,timeout=30) as r:
-              body=r.read(); print('FEED',r.status,r.geturl(),r.headers.get('content-type'),len(body))
-          text=body.decode('utf-8-sig','replace')
-          raw=text.replace('\r\n','\n').replace('\r','\n').split('\n')
-          lines=[]
-          for line in raw:
-              if line.startswith((' ','\t')) and lines: lines[-1]+=line[1:]
-              else: lines.append(line)
-          events=[]; cur=None
-          for line in lines:
-              if line=='BEGIN:VEVENT': cur={}; continue
-              if line=='END:VEVENT':
-                  if cur is not None: events.append(cur)
-                  cur=None; continue
-              if cur is None or ':' not in line: continue
-              lhs,val=line.split(':',1); key=lhs.split(';',1)[0].upper()
-              if key in {'UID','SUMMARY','DTSTART','DESCRIPTION','CATEGORIES'}:
-                  cur[key]=val.replace('\\,',',').replace('\\;',';').replace('\\n','\n')
-          print('VEVENT_COUNT',len(events))
-          assert events
-
-          expected={
-            'WSO-MAC-A-0030':('Inflation (HICP)','20260917'),
-            'WSO-MAC-A-0031':('Flash estimate inflation euro area','20261002'),
-            'WSO-MAC-A-0032':('Unemployment','20261001'),
-            'WSO-MAC-A-0033':('GDP main aggregates and employment','20260907'),
-            'WSO-MAC-A-0034':('GDP main aggregates and employment - update','20261020'),
-            'WSO-MAC-A-0035':('Preliminary flash estimate GDP - EU and euro area','20261030'),
-            'WSO-MAC-A-0036':('Flash estimate GDP and employment - EU and euro area','20261113'),
-            'WSO-MAC-B-0053':('Retail trade','20260904'),
-            'WSO-MAC-B-0054':('International trade in goods','20260915'),
-            'WSO-MAC-B-0055':('International trade in goods','20261016'),
-            'WSO-MAC-B-0056':('International trade in goods','20261113'),
-            'WSO-MAC-B-0057':('International trade in goods','20261216'),
-          }
-          reg=json.loads(Path('data/canonical/registry.json').read_text())
-          canon={r['occurrence_id']:r for r in reg['records'] if r.get('source_id')=='WSSRC-MAC-005'}
-          assert set(canon)==set(expected)
-          for oid,(summary,date) in expected.items():
-              matches=[e for e in events if e.get('SUMMARY')==summary and re.sub(r'[^0-9].*','',e.get('DTSTART',''))[:8]==date]
-              print('MATCH',oid,summary,date,'COUNT',len(matches))
-              for e in matches:
-                  print(' ',json.dumps({k:e.get(k) for k in ('UID','SUMMARY','DTSTART','CATEGORIES','DESCRIPTION')},ensure_ascii=False)[:1500])
-              assert len(matches)==1, (oid,len(matches))
-          # The subscription feed is date-only; it cannot overwrite richer canonical clocks.
-          minute_rows=[r for r in canon.values() if r.get('time_precision')=='MINUTE']
-          print('MINUTE_CANONICAL_ROWS',[(r['occurrence_id'],r['start_local'],r['start_utc']) for r in minute_rows])
-          assert len(minute_rows)==4
+          import ast
+          import scripts.apply_eurostat_monitor_bk as tx
+          _,_,live,smoke,adapter_init=tx.build_post_state()
+          ast.parse(live, filename='scripts/run_live_monitor.py')
+          ast.parse(smoke, filename='scripts/run_adapter_smoke.py')
+          ast.parse(adapter_init, filename='src/world_signals/adapters/__init__.py')
+          print('simulated runtime patches compile')
           PY
-      - name: Prove no governed mutation
+          python -m py_compile \
+            src/world_signals/adapters/eurostat_ics.py \
+            src/world_signals/eurostat_monitor.py \
+            scripts/apply_eurostat_monitor_bk.py \
+            tests/test_eurostat_monitor_bk.py
+      - name: Live full-feed simulation against proposed nine-route contract
         shell: bash
         run: |
           set -euo pipefail
-          git diff --exit-code origin/main -- \
-            data/canonical data/sources data/changes data/coverage/biosecurity_overlay.json \
-            data/monitor data/live_intelligence data/analysis
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import scripts.apply_eurostat_monitor_bk as tx
+          from world_signals.adapters.eurostat_ics import fetch_eurostat_release_calendar
+          from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
+
+          registry=json.loads(Path('data/canonical/registry.json').read_text())
+          _,post_expectations,_,_,_=tx.build_post_state()
+          config=next(x for x in post_expectations['adapters'] if x['adapter_id']=='EUROSTAT_RELEASE_CALENDAR_ICS')
+          items,snap=fetch_eurostat_release_calendar(timeout=30)
+          candidates,observations=eurostat_release_calendar_review_candidates(
+              registry['records'], items, config, now_utc=datetime(2026,9,8,0,0,tzinfo=timezone.utc)
+          )
+          by_type={}
+          for row in observations: by_type[row['type']]=by_type.get(row['type'],0)+1
+          print({
+              'status':snap.status,
+              'resolved_url':snap.resolved_url,
+              'content_type':snap.content_type,
+              'item_count':len(items),
+              'candidate_count':len(candidates),
+              'observation_types':by_type,
+          })
+          assert snap.status == 200
+          assert len(items) > 100
+          assert len(candidates) == 0, candidates
+          assert by_type.get('EUROSTAT_TRACKED_OCCURRENCE_ELAPSED_NOT_PRESENCE_CHECKED') == 2
+          assert by_type.get('EUROSTAT_RELEASE_DATE_NO_CHANGE') == 10
+          PY
+      - name: Full regression suite
+        run: python -m unittest discover -s tests -v
+      - name: Static build on untouched governed state
+        run: python scripts/build_site.py
+      - name: Prove governed pre-state remained byte-identical
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c /tmp/bk-governed.sha
