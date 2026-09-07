@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-07",
-  "version": "1.83",
+  "version": "1.84",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -708,17 +708,22 @@
       "information_supplied": "Euro-area/EU indicator release schedule",
       "future_schedule_horizon": "annual/multi-month",
       "typical_advance_notice": "scheduled",
-      "machine_readable_available": "HTML",
+      "machine_readable_available": "HTML + official generated ICS subscription",
       "source_timezone": "Europe/Luxembourg",
       "recommended_verification_cadence": "daily",
       "activation_status": "ACTIVE",
-      "parser_type": "ICS_PRIMARY_HTML_RSS_API_FALLBACK",
-      "known_limitations": [],
+      "parser_type": "ICS_RELEASE_DATE_SENTINEL_WITH_HTML_MANUAL_REVIEW",
+      "known_limitations": [
+        "Official generated ICS feed exposes tracked release dates at civil-date precision; it must not downgrade richer canonical clock times.",
+        "Generated-feed UID values are evidence only and are not stable WORLD SIGNALS occurrence identities.",
+        "The category=2 Euro-indicator filter omitted a tracked GDP update in BK validation, so production uses the all-category feed plus an explicit allow-list.",
+        "Absence, ambiguity, or date drift is review evidence only and is not cancellation, completion, or certainty evidence."
+      ],
       "backup_source": null,
       "notes": null,
       "timezone_scope": "FIXED",
-      "parser_version": "eurostat-release-calendar-0.2",
-      "runtime_health_state": "ENDPOINT_IDENTITY_HOLD",
+      "parser_version": "eurostat-release-calendar-0.3",
+      "runtime_health_state": "HEALTHY_AT_2026_09_08_ICS_PROBE",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_CC_BY_AND_FREE_STATISTICAL_REUSE",
@@ -730,11 +735,11 @@
       "rights_reviewed_at": "2026-09-02T19:47:00+10:00",
       "rights_review_scope": "P0-A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
       "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
-      "monitoring_readiness_status": "HOLD_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 330,
       "canonical_dependency_count": 12,
       "monitoring_readiness_assessed_at": "2026-09-02",
-      "monitoring_activation_status": "ENDPOINT_IDENTITY_HOLD_NO_LIVE_ROUTE",
+      "monitoring_activation_status": "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT",
       "last_successful_research_verification_at": "2026-09-02T23:10:00+10:00",
       "monitor_endpoints": [
         {
@@ -752,6 +757,17 @@
           "transport": "HTML",
           "preferred_for_monitoring": false,
           "completeness_scope": "FULL_PUBLISHED_EURO_INDICATOR_CALENDAR"
+        },
+        {
+          "endpoint_role": "release_calendar_all_category_ics_subscription",
+          "url": "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0",
+          "transport": "ICS",
+          "observed_content_type": "text/plain",
+          "semantic_format": "RFC5545_VCALENDAR",
+          "completeness_scope": "FULL_RELEASE_CALENDAR_SUBSCRIPTION",
+          "preferred_for_monitoring": true,
+          "route_validation_state": "LIVE_HTTP_200_VCALENDAR_VALIDATED",
+          "notes": "Recovered from Eurostat's own live subscription-page generator. The all-category feed is used because the category=2 Euro-indicator filter omitted at least one tracked GDP update during BK validation. WORLD SIGNALS narrows scope through an explicit 12-occurrence allow-list."
         }
       ],
       "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
@@ -759,7 +775,24 @@
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
       "governance_backfill_basis": "Eurostat permits attributed reuse and expressly provides an internet-calendar subscription that automatically receives calendar updates; automated clearance is bounded to the official ICS/feed route and source-native provisional/confirmed status must be preserved.",
-      "endpoint_route_validation_state": "MISCLASSIFIED_ICS_ENDPOINT_REPAIRED_GENERATED_FEED_UNRESOLVED"
+      "endpoint_route_validation_state": "OFFICIAL_GENERATOR_AND_ALL_CATEGORY_ICS_ROUTE_VALIDATED",
+      "live_adapter_id": "EUROSTAT_RELEASE_CALENDAR_ICS",
+      "live_validation_evidence": {
+        "generator_recovery_run_id": 34161096050,
+        "full_feed_alignment_run_id": 34161197856,
+        "filtered_negative_control_run_id": 34161294980,
+        "observed_at": "2026-09-08",
+        "subscription_page": "https://ec.europa.eu/eurostat/subscribe/ics.format",
+        "generated_feed_url": "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0",
+        "transport_http_status": 200,
+        "semantic_format": "RFC5545_VCALENDAR",
+        "full_feed_vevent_count_at_probe": 2397,
+        "canonical_dependency_count": 12,
+        "feed_time_precision": "DAY",
+        "uid_is_stable_identity": false,
+        "category_2_filter_is_complete_for_tracked_scope": false,
+        "automatic_commit_allowed": false
+      }
     },
     {
       "source_id": "WSSRC-MAC-006",

@@ -21,6 +21,7 @@ from world_signals.adapters import (
     fetch_cellar_celex_document,
     fetch_cellar_rdf_notice,
     fetch_eia_wpsr_schedule,
+    fetch_eurostat_release_calendar,
     fetch_ons_upcoming_releases,
     fetch_rba_fsr,
     fetch_suin_rows,
@@ -29,6 +30,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
+from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.legal_monitor import (
     cbam_annual_deadline_review_candidate,
@@ -222,6 +224,34 @@ def main() -> int:
                 "error":str(exc),
                 "canonical_action":"NONE",
                 "completion_inference":"PROHIBITED",
+            })
+
+    if "EUROSTAT_RELEASE_CALENDAR_ICS" in configs:
+        eurostat_config=configs["EUROSTAT_RELEASE_CALENDAR_ICS"]
+        try:
+            eurostat_items,eurostat_snap=fetch_eurostat_release_calendar()
+            report["source_health"].append({
+                "adapter_id":"EUROSTAT_RELEASE_CALENDAR_ICS",
+                "source_id":eurostat_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":eurostat_snap.as_dict(),
+                "item_count":len(eurostat_items),
+                "feed_time_precision":"DAY",
+                "uid_is_stable_identity":False,
+            })
+            candidates,observations=eurostat_release_calendar_review_candidates(
+                registry.get("records",[]),eurostat_items,eurostat_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"EUROSTAT_RELEASE_CALENDAR_ICS",
+                "source_id":eurostat_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
             })
 
     try:

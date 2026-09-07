@@ -21,6 +21,7 @@ from world_signals.adapters import (
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
     fetch_ons_upcoming_releases,
+    fetch_eurostat_release_calendar,
     fetch_rba_fsr,
     fetch_suin_metadata,
     fetch_suin_rows,
@@ -53,7 +54,6 @@ def main() -> int:
         "held_routes_excluded":[
             "KENYA_PFM_BPS_RULE",
             "EU_CRA_CURRENT_ELI_HTML_HTTP_202_ROUTE",
-            "EUROSTAT_GENERATED_ICS_ENDPOINT_REDISCOVERY_REQUIRED"
         ],
         "results":[],
     }
@@ -71,6 +71,28 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
+    try:
+        eurostat_items,eurostat_snap=fetch_eurostat_release_calendar()
+        report["results"].append({
+            "adapter":"EUROSTAT_RELEASE_CALENDAR_ICS",
+            "status":"PASS",
+            "source_id":"WSSRC-MAC-005",
+            "snapshot":eurostat_snap.as_dict(),
+            "item_count":len(eurostat_items),
+            "feed_time_precision":"DAY",
+            "uid_is_stable_identity":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"EUROSTAT_RELEASE_CALENDAR_ICS",
+            "status":"FAIL",
+            "source_id":"WSSRC-MAC-005",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         ons_items,ons_snaps=fetch_ons_upcoming_releases()

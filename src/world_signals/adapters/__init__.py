@@ -50,6 +50,15 @@ from .eia_wpsr import (
     fetch_eia_wpsr_schedule,
     parse_eia_wpsr_schedule_html,
 )
+from .eurostat_ics import (
+    EUROSTAT_ICS_ACCEPT,
+    EUROSTAT_ICS_ALL_RELEASES,
+    EUROSTAT_ICS_SUBSCRIPTION_PAGE,
+    EUROSTAT_TIMEZONE,
+    EurostatReleaseItem,
+    fetch_eurostat_release_calendar,
+    parse_eurostat_release_calendar_ics,
+)
 from .japan_mof_jgb import (
     JAPAN_MOF_JGB_CALENDAR_INDEX,
     JAPAN_MOF_TIMEZONE,
@@ -117,6 +126,11 @@ __all__ = [
     "EIA_WPSR_TIMEZONE",
     "EIAWPSRSchedule",
     "FetchSnapshot",
+    "EUROSTAT_ICS_ACCEPT",
+    "EUROSTAT_ICS_ALL_RELEASES",
+    "EUROSTAT_ICS_SUBSCRIPTION_PAGE",
+    "EUROSTAT_TIMEZONE",
+    "EurostatReleaseItem",
     "JAPAN_MOF_JGB_CALENDAR_INDEX",
     "JAPAN_MOF_TIMEZONE",
     "JGBAuctionEntry",
@@ -147,6 +161,7 @@ __all__ = [
     "fetch_cellar_identifier_notice",
     "fetch_cellar_rdf_notice",
     "fetch_eia_wpsr_schedule",
+    "fetch_eurostat_release_calendar",
     "fetch_eli_current_document",
     "fetch_cra_article_71",
     "fetch_jgb_monthly_auction_calendar",
@@ -169,6 +184,7 @@ __all__ = [
     "parse_cellar_identifier_notice",
     "parse_cellar_legal_relation_diagnostics",
     "parse_eia_wpsr_schedule_html",
+    "parse_eurostat_release_calendar_ics",
     "parse_eli_current_state",
     "parse_jgb_monthly_auction_calendar_html",
     "parse_kenya_budget_policy_rule",
