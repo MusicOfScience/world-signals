@@ -117,7 +117,7 @@
     "canonical_date_drift": "GENERATE_SCHEDULE_DATE_CHANGE_REVIEW_CANDIDATE_ONLY",
     "authoritative_time_drift": "GENERATE_CLOCK_CHANGE_REVIEW_CANDIDATE_ONLY",
     "exact_match_after_reviewed_clock_enrichment": "OBSERVATION_ONLY_NO_CHANGE",
-    "missing_report": "GENERATE_SOURCE_MATCH_REVIEW_OBSERVATION_NO_EVENT_STATE_INFERENCE",
+    "missing_report": "GENERATE_SOURCE_MATCH_REVIEW_CANDIDATE_ONLY_NO_EVENT_STATE_INFERENCE",
     "duplicate_or_ambiguous_report": "FAIL_CLOSED_NO_GUESS",
     "route_or_markup_contract_drift": "SOURCE_HEALTH_DEGRADED_NO_EVENT_MUTATION",
     "elapsed_date": "NO_COMPLETION_SEMANTICS"
