@@ -36,31 +36,27 @@ Kenya Law materials also support the existing content-reuse classification: writ
 
 ## Endpoint/runtime evidence
 
-Historical evidence recorded in the adapter showed GitHub Actions receiving HTTP 403 from the current route on 3 September 2026.
+The runtime evidence is deliberately preserved as a sequence rather than collapsed into a single health claim.
 
-BN ran a new bounded, identified, read-only GitHub Actions probe on 8 September 2026:
+1. Existing adapter evidence records the current Kenya Law route returning HTTP 403 from GitHub Actions on 3 September 2026.
+2. BN bounded read-only probe run `34189112995`, job `101943332200`, on 8 September returned HTTP 200 from both the frozen and current routes. Both parsed section `25(2)`, deadline `2 / 15`, and semantic SHA-256 `3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c`.
+3. BN materialised read-only preflight run `34189687457`, job `101945016694`, again passed the current/frozen semantic comparison together with repository validation and byte-clean restoration.
+4. The first controlled write attempt, run `34189781916`, job `101945294642`, subsequently received HTTP 403 from the **frozen** 2025-11-04 route before the current route was requested. The source transform and semantic post-state audit had passed, but the workflow stopped at that live gate; no commit or repository write occurred.
 
-- run `34189112995`
-- job `101943332200`
-- frozen 2025-11-04 route: HTTP 200
-- current unversioned route: HTTP 200
-- both identify section `25(2)`
-- both extract deadline month/day `2 / 15`
-- both produce semantic rule SHA-256 `3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c`
-- full repository regression: 920 tests passed, 41 skipped.
-
-The 3 September 403 is therefore historical runtime evidence, not a current endpoint-health statement. The 8 September 200/200 result does not prove permanent availability.
+The correct runtime conclusion is therefore **variable 403/200/403 access from GitHub Actions**, not either “healthy” or “blocked”. A successful request does not prove durable availability, and a 403 does not alter the statutory rule.
 
 ## Governance interpretation
 
 BN keeps four propositions separate:
 
 1. **Canonical provenance:** already cleared for curated factual/legal use.
-2. **Parser readiness:** now live-validated against both current and versioned official routes.
-3. **Runtime reachability:** healthy in the bounded 8 September probe, but historically variable.
+2. **Parser readiness:** technically live-validated against both current and versioned official routes and regression-tested fail-closed offline.
+3. **Runtime reachability:** demonstrably variable from GitHub Actions.
 4. **Unattended automated retrieval permission:** still not cleared.
 
 Consequently, HTTP 200 and parser success must not be promoted into a recurring production route. `automated_monitoring_use` remains `ENDPOINT_REVIEW_REQUIRED`; `automated_retrieval_permission` remains `ENDPOINT_OPERATIONAL_REVIEW_REQUIRED`.
+
+The failed live-gated transaction changes the transaction method as well as the status label. BN will not repeatedly hit Kenya Law merely to obtain a green write run while unattended endpoint permission is unresolved. The final source-registry transaction may rely on the already captured live evidence, plus offline parser regression, exact semantic mutation checks, protected-layer checksums and the full repository suite.
 
 ## Semantic boundary
 
@@ -74,17 +70,27 @@ If a future official current route diverges from the frozen section 25(2) semant
 - infer a Treasury publication or parliamentary submission event;
 - create a new recurrence or clock time.
 
+Likewise, an HTTP 403 or HTTP 200 cannot itself change any event state.
+
 ## BN target
 
 BN is permitted to:
 
 - advance Source Registry `v1.86 / 247` to `v1.87 / 247`;
 - change only `WSSRC-REG6-001` readiness/runtime metadata;
-- record the bounded live-validation evidence;
+- record the bounded successful live validation and subsequent 403 evidence;
 - advance verification mode to `AUTOMATED_PILOT` as a technical verification capability;
+- classify runtime health as variable rather than healthy;
 - preserve all endpoint-permission and production-route holds.
 
 BN is not permitted to change Canonical, Monitor expectations, Change Ledger, biosecurity overlay, Live Intelligence or Analysis.
+
+## Historical test repairs
+
+BN exposed two historical checkpoint assumptions that had become descendant ceilings:
+
+- BM's FOMC readiness test treated Source Registry v1.86 as permanent; it now accepts later reviewed descendants while preserving every FOMC substantive invariant.
+- Verification Closeout A historically established Kenya `MANUAL_AUTHORITATIVE_RECHECK`; its descendant branch now permits Kenya to advance to `AUTOMATED_PILOT` only when the explicit endpoint-permission hold, no-production-route status and monitoring hold remain intact. Other Closeout A source expectations remain exact.
 
 ## Main-history housekeeping note
 
