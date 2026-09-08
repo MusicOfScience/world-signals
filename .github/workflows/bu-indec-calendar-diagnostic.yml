@@ -1,4 +1,4 @@
-name: BU INDEC calendar script diagnostic
+name: BU INDEC calendar invocation diagnostic
 
 on:
   push:
@@ -25,13 +25,12 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
           test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
-      - name: Inspect only the two first-party calendar scripts
+      - name: Inspect INDEC calendar invocation contract without calling data routes
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import hashlib, json, re, urllib.request
-          from urllib.parse import urljoin
+          import hashlib, json, urllib.request
 
           UA='WORLD-SIGNALS-RESEARCH/1.0'
           urls=[
@@ -39,41 +38,32 @@ jobs:
             'https://www.indec.gob.ar/Scripts/calendario.js',
           ]
           headers={'User-Agent':UA,'Accept':'application/javascript,text/javascript,*/*;q=0.5'}
-          combined=[]
+          needles=('filtroscalendario','informecalendario','selectcalendar','form','submit','location','action','href','buscar','/dia/','/mes/')
           for url in urls:
               req=urllib.request.Request(url,headers=headers)
               with urllib.request.urlopen(req,timeout=30) as r:
-                  body=r.read()
-                  text=body.decode('utf-8','replace')
-                  combined.append(text)
-                  print('SCRIPT',json.dumps({'url':url,'status':r.status,'content_type':r.headers.get_content_type(),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()},sort_keys=True))
-                  candidates=[]
-                  patterns=[
-                    r'''url\s*:\s*["']([^"']+)["']''',
-                    r'''fetch\s*\(\s*["']([^"']+)["']''',
-                    r'''\.get(?:JSON)?\s*\(\s*["']([^"']+)["']''',
-                    r'''\.post\s*\(\s*["']([^"']+)["']''',
-                    r'''["']([^"']*(?:Calendario|calendario|Calendar|calendar|Fecha|fecha)[^"']*)["']''',
-                  ]
-                  for pat in patterns:
-                      for m in re.findall(pat,text,re.I|re.S):
-                          if len(m) < 300:
-                              candidates.append(urljoin(url,m))
-                  print('ENDPOINT_HINTS',json.dumps(sorted(set(candidates)),ensure_ascii=False,indent=2))
-                  print('AJAX_TOKENS',json.dumps({
-                    'ajax':text.lower().count('ajax'),
-                    'getjson':text.lower().count('getjson'),
-                    'fetch':text.lower().count('fetch('),
-                    'xmlhttprequest':text.lower().count('xmlhttprequest'),
-                    'ics':text.lower().count('.ics'),
-                    'google_calendar':text.lower().count('calendar.google'),
-                  },sort_keys=True))
-                  # Print compact surrounding snippets for endpoint-bearing lines only.
-                  for line in text.splitlines():
+                  body=r.read(); text=body.decode('utf-8','replace')
+                  print('SCRIPT',json.dumps({'url':url,'status':r.status,'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()},sort_keys=True))
+                  lines=text.splitlines()
+                  selected=[]
+                  for i,line in enumerate(lines,1):
                       low=line.lower()
-                      if ('url:' in low or '$.get' in low or '$.post' in low or 'ajax' in low or 'calendario-' in low or 'calendar-' in low) and len(line) < 1200:
-                          print('LINE',line.strip())
+                      if any(n in low for n in needles):
+                          lo=max(1,i-2); hi=min(len(lines),i+2)
+                          selected.append((lo,hi))
+                  merged=[]
+                  for lo,hi in sorted(set(selected)):
+                      if merged and lo <= merged[-1][1]+1:
+                          merged[-1]=(merged[-1][0],max(merged[-1][1],hi))
+                      else:
+                          merged.append((lo,hi))
+                  for lo,hi in merged:
+                      print(f'CONTEXT {url} L{lo}-L{hi}')
+                      for j in range(lo,hi+1):
+                          print(f'{j}: {lines[j-1]}')
+                  print('LINE_COUNT',len(lines))
           print('REQUEST_COUNT',len(urls))
+          print('DATA_ROUTE_REQUEST_COUNT',0)
           PY
       - name: Prove diagnostic is read-only
         run: |
