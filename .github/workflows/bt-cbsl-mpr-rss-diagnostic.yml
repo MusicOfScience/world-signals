@@ -48,6 +48,9 @@ jobs:
                   body=r.read()
                   return r.status, r.headers.get('Content-Type',''), r.geturl(), body
 
+          def localname(tag):
+              return tag.rsplit('}',1)[-1] if '}' in tag else tag
+
           status, ctype, final, html=fetch(DOCS,'text/html,application/xhtml+xml')
           assert status==200
           assert urlparse(final).netloc.lower() in {'cbsl.gov.lk','www.cbsl.gov.lk'}
@@ -80,40 +83,37 @@ jobs:
           fu=urlparse(ffinal)
           assert fu.netloc.lower() in {'cbsl.gov.lk','www.cbsl.gov.lk'}
           root=ET.fromstring(body)
-          tag=root.tag.lower()
+          assert root.tag.lower().endswith('rss')
+          channel=root.find('channel')
+          assert channel is not None
+          rows=channel.findall('item')
+          assert rows
+
           parsed=[]
-          format_name=None
-          if tag.endswith('rss'):
-              format_name='RSS'
-              channel=root.find('channel')
-              assert channel is not None
-              rows=channel.findall('item')
-              for item in rows:
-                  title=(item.findtext('title') or '').strip()
-                  link=(item.findtext('link') or '').strip()
-                  pub=(item.findtext('pubDate') or '').strip()
-                  desc=(item.findtext('description') or '').strip()
-                  assert title and link
-                  parsed.append({'title':title,'link':link,'published':pub,'description_present':bool(desc)})
-          else:
-              ns=''
-              if root.tag.startswith('{'):
-                  ns=root.tag.split('}',1)[0]+'}'
-              assert root.tag.endswith('feed')
-              format_name='ATOM'
-              rows=root.findall(f'{ns}entry')
-              for entry in rows:
-                  title=(entry.findtext(f'{ns}title') or '').strip()
-                  published=(entry.findtext(f'{ns}published') or entry.findtext(f'{ns}updated') or '').strip()
-                  link=''
-                  for node in entry.findall(f'{ns}link'):
-                      href=node.attrib.get('href','').strip()
-                      if href:
-                          link=href; break
-                  assert title and link
-                  parsed.append({'title':title,'link':link,'published':published,'description_present':False})
-          assert parsed
-          assert all(urlparse(x['link']).netloc.lower() in {'cbsl.gov.lk','www.cbsl.gov.lk'} for x in parsed)
+          inventory=[]
+          for item in rows:
+              fields={}
+              ordered=[]
+              for child in list(item):
+                  key=localname(child.tag)
+                  val=' '.join(''.join(child.itertext()).split())
+                  ordered.append(key)
+                  fields.setdefault(key,[]).append(val)
+              title=(item.findtext('title') or '').strip()
+              link=(item.findtext('link') or '').strip()
+              assert title and link
+              assert urlparse(link).netloc.lower() in {'cbsl.gov.lk','www.cbsl.gov.lk'}
+              parsed.append({'title':title,'link':link})
+              inventory.append({
+                  'title':title,
+                  'link':link,
+                  'child_tags':ordered,
+                  'guid':(fields.get('guid') or [''])[0],
+                  'pubDate':(fields.get('pubDate') or [''])[0],
+                  'date':(fields.get('date') or [''])[0],
+                  'created':(fields.get('created') or [''])[0],
+                  'updated':(fields.get('updated') or [''])[0],
+              })
 
           print(json.dumps({
               'docs_status':status,
@@ -123,13 +123,13 @@ jobs:
               'feed_status':fstatus,
               'feed_content_type':fctype,
               'feed_final_url':ffinal,
-              'feed_format':format_name,
+              'feed_format':'RSS',
               'feed_sha256':hashlib.sha256(body).hexdigest(),
               'item_count':len(parsed),
-              'first_five':[x['title'] for x in parsed[:5]],
-              'published_field_count':sum(bool(x['published']) for x in parsed),
-              'all_items_have_links':all(bool(x['link']) for x in parsed),
+              'first_five_item_metadata':inventory[:5],
+              'all_item_child_tag_sets':[x['child_tags'] for x in inventory],
               'request_count':2,
+              'followup_item_request_count':0,
               'repository_write_count':0,
           },indent=2,ensure_ascii=False,sort_keys=True))
           PY
