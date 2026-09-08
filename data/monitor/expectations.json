@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.20",
+  "version": "0.21",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -1278,6 +1278,102 @@
       "canonical_clock_mutation_allowed": false,
       "automatic_amis_followup_allowed": false,
       "automatic_faostat_followup_allowed": false,
+      "automatic_pdf_fetch_allowed": false,
+      "automatic_news_followup_allowed": false,
+      "automatic_search_route_discovery_allowed": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
+      "source_id": "WSSRC-MAC-014",
+      "canonical_schedule_source_id": "WSSRC-MAC-014",
+      "same_source_identity_for_canonical_and_monitor": true,
+      "canonical_occurrence_ids": [
+        "WSO-MAC-A-0050",
+        "WSO-MAC-A-0051",
+        "WSO-MAC-A-0052",
+        "WSO-MAC-A-0053",
+        "WSO-MAC-A-0054",
+        "WSO-MAC-A-0055",
+        "WSO-MAC-A-0056"
+      ],
+      "identity_by_occurrence_id": {
+        "WSO-MAC-A-0050": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "August 2026"
+        },
+        "WSO-MAC-A-0051": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "September 2026"
+        },
+        "WSO-MAC-A-0052": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "October 2026"
+        },
+        "WSO-MAC-A-0053": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "November 2026"
+        },
+        "WSO-MAC-A-0054": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "December 2026"
+        },
+        "WSO-MAC-A-0055": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "January 2027"
+        },
+        "WSO-MAC-A-0056": {
+          "series_id": "WSER-MAC-JP-CPI",
+          "reference_period": "February 2027"
+        }
+      },
+      "registered_schedule_url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
+      "robots_url": "https://www.stat.go.jp/robots.txt",
+      "separate_clock_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+      "monitor_role": "OFFICIAL_JAPAN_NATIONAL_CPI_RELEASE_DATE_DRIFT_SENTINEL",
+      "cadence": "WEEKLY; DAILY_INSIDE_7_DAYS_OF_CONFIGURED_RELEASE",
+      "request_budget_per_run": 2,
+      "robots_requests_per_run": 1,
+      "schedule_requests_per_run": 1,
+      "followup_requests_per_run": 0,
+      "classification_contract": {
+        "date_change": "JAPAN_CPI_RELEASE_DATE_CHANGE_REVIEW",
+        "missing_configured_row": "JAPAN_CPI_RELEASE_ROW_MISSING_REVIEW",
+        "unchanged_match": "JAPAN_CPI_RELEASE_DATE_MATCH_OBSERVATION",
+        "completed_occurrence": "JAPAN_CPI_COMPLETED_OCCURRENCE_SCHEDULE_CORROBORATION_ONLY",
+        "structural_failure": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+        "outside_configured_scope": "JAPAN_CPI_OUTSIDE_CONFIGURED_REFERENCE_PERIOD_OBSERVATION",
+        "absence_is_not_cancellation": true,
+        "absence_is_not_completion": true,
+        "absence_is_not_certainty_change": true,
+        "no_clock_inference": true
+      },
+      "source_role_contract": {
+        "same_source_identity_for_canonical_and_monitor": true,
+        "reason": "The Canonical civil-date authority and the monitor inspect the same first-party Statistics Bureau CPI schedule; a duplicate monitor source would misrepresent provenance.",
+        "canonical_provenance_use_preserved": "CLEARED_CURATED_FACTUAL_METADATA",
+        "schedule_endpoint_role": "NATIONAL_CPI_CIVIL_DATE_AUTHORITY_AND_DATE_DRIFT_SENTINEL",
+        "clock_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+        "clock_rule_is_separate_from_schedule": true,
+        "route_schedule_mutation_authority": false,
+        "route_clock_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_change_policy": "GENERATE_DATE_REVIEW_CANDIDATE_FOR_SAME_STABLE_OCCURRENCE_ID_ONLY",
+      "absence_policy": "MISSING_CONFIGURED_ROW_IS_REVIEW_EVIDENCE_ONLY_NO_EVENT_STATE_INFERENCE",
+      "outside_scope_policy": "OBSERVE_ONLY_NO_AUTOMATIC_CANONICAL_ADDITION",
+      "schedule_mutation_authority": false,
+      "clock_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_tokyo_cpi_followup_allowed": false,
+      "automatic_estat_api_followup_allowed": false,
+      "automatic_data_release_followup_allowed": false,
       "automatic_pdf_fetch_allowed": false,
       "automatic_news_followup_allowed": false,
       "automatic_search_route_discovery_allowed": false,

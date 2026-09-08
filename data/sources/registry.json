@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
-  "reference_date": "2026-09-08",
-  "version": "1.95",
+  "reference_date": "2026-09-09",
+  "version": "1.96",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -2959,38 +2959,72 @@
         "time_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm"
       },
       "timezone_scope": "FIXED",
-      "parser_version": "jp-stat-cpi-0.1",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+      "parser_version": "jp-stat-cpi-0.2",
+      "runtime_health_state": "READ_ONLY_DIAGNOSTIC_PASS_2026_09_09",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_GOVERNMENT_OF_JAPAN_OPEN_TERMS",
-      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "automated_retrieval_permission": "BOUNDED_OFFICIAL_HTML_SCHEDULE_ROBOTS_COMPATIBLE",
       "redistribution_permission": "COMMERCIAL_AND_NONCOMMERCIAL_REUSE_WITH_ATTRIBUTION_AND_CHANGE_NOTICE",
       "rights_evidence_url": "https://www.stat.go.jp/english/info/riyou.html",
       "rights_summary": "Statistics Bureau content may be freely used, copied, transmitted, translated or modified under the Government of Japan terms; commercial use is permitted, with source citation and change disclosure. Numerical/simple-tabular data may be freely used.",
-      "automation_summary": "Content licence does not itself specify crawler/request behaviour; production retrieval still needs endpoint/robots/rate review.",
+      "automation_summary": "WORLD SIGNALS automation is bounded to one Statistics Bureau robots-policy request followed, only when allowed, by one exact registered national/Tokyo CPI schedule request. The parser reads national CPI date cells only for the configured Canonical scope; Tokyo CPI, e-Stat/API, data releases, PDFs, news and search routes are not followed.",
       "rights_reviewed_at": "2026-09-02T20:51:00+10:00",
       "rights_review_scope": "P0-B_HIGH_DEPENDENCY_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
       "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
-      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 280,
       "canonical_dependency_count": 7,
-      "monitoring_readiness_assessed_at": "2026-09-02",
+      "monitoring_readiness_assessed_at": "2026-09-09",
       "monitor_endpoints": [
         {
           "endpoint_role": "national_and_tokyo_cpi_schedule",
           "url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
           "transport": "HTML",
           "completeness_scope": "FULL_PUBLISHED_SERIES_SCHEDULE"
+        },
+        {
+          "endpoint_role": "robots_policy",
+          "url": "https://www.stat.go.jp/robots.txt",
+          "transport": "TEXT_PLAIN",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "AUTOMATION_POLICY_GATE_FOR_REGISTERED_CPI_SCHEDULE"
         }
       ],
-      "last_successful_research_verification_at": "2026-09-02T22:20:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-09",
+      "monitoring_activation_status": "LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT",
       "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
-      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_SCHEDULE",
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "Statistics Bureau CPI content is reusable under Public Data License 1.0 and the registered CPI schedule parser has pilot evidence, but content-use terms do not independently define production crawler behaviour. The schedule supplies dates and the separate official CPI publication rule supplies the 08:30 JST time."
+      "governance_backfill_basis": "Statistics Bureau CPI content is reusable under Public Data License 1.0 and the registered CPI schedule parser has pilot evidence, but content-use terms do not independently define production crawler behaviour. The schedule supplies dates and the separate official CPI publication rule supplies the 08:30 JST time.",
+      "automation_evidence_url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
+      "automation_review_scope": "BW_MACHINE_ACCESS_REVIEW_SEPARATE_FROM_UNCHANGED_PUBLIC_DATA_LICENSE_RIGHTS",
+      "live_adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
+      "automation_reviewed_at": "2026-09-09",
+      "live_validation_evidence": {
+        "endpoint_diagnostic_run_id": 34240941533,
+        "endpoint_diagnostic_job_id": 102110625804,
+        "registered_endpoint_run_id": 34241227432,
+        "registered_endpoint_job_id": 102111604587,
+        "request_budget_per_run": 2,
+        "configured_exact_unique_match_count": 7,
+        "clock_exposed_by_schedule": false,
+        "automatic_commit_allowed": false
+      },
+      "source_role_contract": {
+        "same_source_identity_for_canonical_and_monitor": true,
+        "reason": "The Canonical civil-date authority and the monitor inspect the same first-party Statistics Bureau CPI schedule; a duplicate monitor source would misrepresent provenance.",
+        "canonical_provenance_use_preserved": "CLEARED_CURATED_FACTUAL_METADATA",
+        "schedule_endpoint_role": "NATIONAL_CPI_CIVIL_DATE_AUTHORITY_AND_DATE_DRIFT_SENTINEL",
+        "clock_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+        "clock_rule_is_separate_from_schedule": true,
+        "route_schedule_mutation_authority": false,
+        "route_clock_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      }
     },
     {
       "source_id": "WSSRC-MAC-015",
