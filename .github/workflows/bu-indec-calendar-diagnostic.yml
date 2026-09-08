@@ -51,7 +51,7 @@ jobs:
       - name: Run BU parser and comparator tests
         run: |
           set -euo pipefail
-          python -m unittest -v tests.test_indec_cpi_calendar_bu
+          PYTHONPATH=src python -m unittest -v tests.test_indec_cpi_calendar_bu
       - name: Compile BU implementation
         run: |
           set -euo pipefail
