@@ -1,0 +1,177 @@
+name: BW post-BV read-only pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-bv-pressure-audit-bw
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BV baseline and compute pressure
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          test "$(git merge-base HEAD origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (sources['version'],len(sources['sources']))==('1.95',252)
+          assert (monitor['version'],len(monitor['adapters']))==('0.20',18)
+          assert monitor['automatic_canonical_commit'] is False
+          assert monitor['google_calendar_write'] is False
+
+          by_occ={r['occurrence_id']:r for r in canonical['records']}
+          by_source={r['source_id']:r for r in sources['sources']}
+          region_total=Counter(r.get('region') or 'UNKNOWN' for r in canonical['records'])
+          region_monitored_links=Counter()
+          region_unique_monitored=defaultdict(set)
+          region_routes=Counter()
+          monitored_ids=set()
+          route_rows=[]
+
+          for adapter in monitor['adapters']:
+              ids=list(adapter.get('canonical_occurrence_ids') or [])
+              regions=Counter()
+              for oid in ids:
+                  row=by_occ.get(oid)
+                  if not row:
+                      continue
+                  reg=row.get('region') or 'UNKNOWN'
+                  regions[reg]+=1
+                  region_monitored_links[reg]+=1
+                  region_unique_monitored[reg].add(oid)
+                  monitored_ids.add(oid)
+              for reg in regions:
+                  region_routes[reg]+=1
+              route_rows.append({
+                  'adapter_id':adapter.get('adapter_id'),
+                  'source_id':adapter.get('source_id'),
+                  'occurrence_count':len(ids),
+                  'regions':dict(regions),
+                  'schedule_authority':adapter.get('schedule_authority'),
+                  'lifecycle_authority':adapter.get('lifecycle_authority'),
+                  'automatic_commit_allowed':adapter.get('automatic_commit_allowed'),
+              })
+
+          pressure=[]
+          for reg,n in region_total.items():
+              unique=len(region_unique_monitored.get(reg,set()))
+              routes=region_routes.get(reg,0)
+              pressure.append({
+                  'region':reg,
+                  'canonical_occurrences':n,
+                  'configured_routes':routes,
+                  'monitored_occurrence_links':region_monitored_links.get(reg,0),
+                  'unique_monitored_occurrences':unique,
+                  'unmonitored_occurrences':n-unique,
+                  'unique_monitor_coverage_pct':round(100*unique/n,1) if n else 0.0,
+              })
+          pressure.sort(key=lambda x:(x['configured_routes'],x['unique_monitor_coverage_pct'],-x['canonical_occurrences'],x['region']))
+
+          deps=defaultdict(list)
+          for row in canonical['records']:
+              sid=row.get('source_id')
+              if sid:
+                  deps[sid].append(row)
+
+          candidate_rows=[]
+          for sid,rows in deps.items():
+              src=by_source.get(sid)
+              if not src:
+                  continue
+              future=[r for r in rows if str(r.get('start_local') or '')>='2026-09-09']
+              if not future:
+                  continue
+              regions=Counter(r.get('region') or 'UNKNOWN' for r in rows)
+              unmonitored=[r for r in future if r['occurrence_id'] not in monitored_ids]
+              if not unmonitored:
+                  continue
+              candidate_rows.append({
+                  'source_id':sid,
+                  'institution':src.get('institution'),
+                  'jurisdiction':src.get('jurisdiction'),
+                  'domain':src.get('domain'),
+                  'source_type':src.get('source_type'),
+                  'regions':dict(regions),
+                  'canonical_dependency_count':src.get('canonical_dependency_count'),
+                  'actual_dependency_count':len(rows),
+                  'future_unmonitored_dependency_count':len(unmonitored),
+                  'existing_route_count_for_source':sum(1 for a in monitor['adapters'] if a.get('source_id')==sid),
+                  'automated_monitoring_use':src.get('automated_monitoring_use'),
+                  'automated_retrieval_permission':src.get('automated_retrieval_permission'),
+                  'verification_mode':src.get('verification_mode'),
+                  'monitoring_readiness_status':src.get('monitoring_readiness_status'),
+                  'monitoring_activation_status':src.get('monitoring_activation_status'),
+                  'runtime_health_state':src.get('runtime_health_state'),
+                  'machine_readable_available':src.get('machine_readable_available'),
+                  'parser_type':src.get('parser_type'),
+                  'monitor_endpoints':src.get('monitor_endpoints'),
+                  'authoritative_url':src.get('authoritative_url'),
+                  'future_occurrences':[
+                      {
+                          'occurrence_id':r.get('occurrence_id'),
+                          'title':r.get('title'),
+                          'start_local':r.get('start_local'),
+                          'region':r.get('region'),
+                      }
+                      for r in unmonitored[:16]
+                  ],
+              })
+
+          def readiness_rank(x):
+              text=' '.join(str(x.get(k) or '') for k in (
+                  'automated_monitoring_use','monitoring_readiness_status','monitoring_activation_status','runtime_health_state'
+              )).upper()
+              if 'CLEARED' in text or 'READY' in text or 'OPERATIONAL' in text:
+                  return 0
+              if 'ENDPOINT_REVIEW' in text or 'REVIEW_REQUIRED' in text:
+                  return 1
+              if 'HOLD' in text or 'BLOCK' in text or 'PERMISSION' in text:
+                  return 3
+              return 2
+
+          candidate_rows.sort(key=lambda x:(
+              readiness_rank(x),
+              min(region_routes.get(r,0) for r in x['regions']),
+              -x['future_unmonitored_dependency_count'],
+              x['source_id'],
+          ))
+
+          print(json.dumps({
+              'baseline':'b277939bc6c540d0986f298a832c7d63a29a2d19',
+              'reference_date':'2026-09-09',
+              'canonical':[canonical['version'],len(canonical['records'])],
+              'sources':[sources['version'],len(sources['sources'])],
+              'monitor':[monitor['version'],len(monitor['adapters'])],
+              'regional_pressure':pressure,
+              'routes':route_rows,
+              'candidate_sources':candidate_rows[:80],
+          },indent=2,ensure_ascii=False,sort_keys=True))
+          PY
+      - name: Prove audit is repository-read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
