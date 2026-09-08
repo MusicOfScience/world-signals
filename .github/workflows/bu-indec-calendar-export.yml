@@ -1,0 +1,94 @@
+name: BU INDEC governed post-state export
+
+on:
+  push:
+    branches:
+      - feature/post-bt-pressure-audit-bu
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact base and clean export pre-state
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
+          test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
+          test -z "$(git status --porcelain)"
+          python scripts/apply_indec_cpi_calendar_monitor_bu.py
+      - name: Materialise exact BU post-state in runner workspace
+        env:
+          WORLD_SIGNALS_APPLY_MONITOR_BU: '1'
+        run: |
+          set -euo pipefail
+          WORLD_SIGNALS_APPLY_MONITOR_BU=1 python scripts/apply_indec_cpi_calendar_monitor_bu.py --apply
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected,(changed,expected)
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('1.94',252)
+          assert (m['version'],len(m['adapters']))==('0.19',17)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          PY
+          mkdir -p /tmp/bu-export
+          cp --parents \
+            data/sources/registry.json \
+            data/monitor/expectations.json \
+            scripts/run_live_monitor.py \
+            scripts/run_adapter_smoke.py \
+            src/world_signals/adapters/__init__.py \
+            /tmp/bu-export/
+          git diff --binary > /tmp/bu-export/BU_GOVERNED_POSTSTATE.patch
+      - name: Validate materialised post-state
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile src/world_signals/adapters/indec_calendar.py src/world_signals/indec_cpi_monitor.py scripts/apply_indec_cpi_calendar_monitor_bu.py scripts/run_live_monitor.py scripts/run_adapter_smoke.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bu-indec-governed-poststate
+          path: /tmp/bu-export
+          if-no-files-found: error
+          retention-days: 1
+      - name: Restore clean workspace
+        if: always()
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
