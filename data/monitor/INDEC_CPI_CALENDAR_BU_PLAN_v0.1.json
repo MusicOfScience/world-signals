@@ -1,0 +1,180 @@
+{
+  "tranche": "BU",
+  "reference_date": "2026-09-08",
+  "exact_base_main_sha": "17e6130267c9d7911d12ac6f685c90228fec9e1e",
+  "purpose": "Activate a bounded first-party INDEC interactive dissemination-calendar monitor for the four remaining 2026 Canonical Argentina national CPI releases while preserving the existing PDF schedule source and keeping richer 16:00 source precision review-only.",
+  "selection": {
+    "institution": "INDEC",
+    "jurisdiction": "Argentina",
+    "region": "Latin America",
+    "series_id": "WSER-REG2-AR-CPI",
+    "canonical_schedule_source_id": "WSSRC-REG2-006",
+    "completed_release_source_id": "WSSRC-REG2-008",
+    "machine_source_id": "WSSRC-REG2-009",
+    "adapter_id": "INDEC_CPI_CALENDAR",
+    "calendar_url": "https://www.indec.gob.ar/indec/web/Calendario-Fecha-0",
+    "month_route_template": "https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/{month_slug}/0",
+    "robots_url": "https://www.indec.gob.ar/robots.txt",
+    "rights_evidence_url": "https://www.indec.gob.ar/ftp/cuadros/publicaciones/politica_difusion_indec.pdf",
+    "source_timezone": "America/Argentina/Buenos_Aires"
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.93",
+    "source_count": 251,
+    "monitor_expectations_version": "0.18",
+    "configured_monitor_adapter_count": 16,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-REG-B-0008",
+    "WSO-REG-B-0009",
+    "WSO-REG-B-0010",
+    "WSO-REG-B-0011"
+  ],
+  "canonical_occurrences": [
+    {
+      "occurrence_id": "WSO-REG-B-0008",
+      "reference_period": "August 2026",
+      "reference_period_es": "Agosto de 2026",
+      "canonical_release_date": "2026-09-10",
+      "month_slug": "Septiembre-2026",
+      "authoritative_calendar_time": "16:00:00"
+    },
+    {
+      "occurrence_id": "WSO-REG-B-0009",
+      "reference_period": "September 2026",
+      "reference_period_es": "Septiembre de 2026",
+      "canonical_release_date": "2026-10-13",
+      "month_slug": "Octubre-2026",
+      "authoritative_calendar_time": "16:00:00"
+    },
+    {
+      "occurrence_id": "WSO-REG-B-0010",
+      "reference_period": "October 2026",
+      "reference_period_es": "Octubre de 2026",
+      "canonical_release_date": "2026-11-12",
+      "month_slug": "Noviembre-2026",
+      "authoritative_calendar_time": "16:00:00"
+    },
+    {
+      "occurrence_id": "WSO-REG-B-0011",
+      "reference_period": "November 2026",
+      "reference_period_es": "Noviembre de 2026",
+      "canonical_release_date": "2026-12-15",
+      "month_slug": "Diciembre-2026",
+      "authoritative_calendar_time": "16:00:00"
+    }
+  ],
+  "read_only_diagnostics": {
+    "post_bt_pressure_audit": {
+      "run_id": 34221221467,
+      "job_id": 102044536376,
+      "result": "NO_ZERO_ROUTE_REGION_BUT_LATIN_AMERICA_AFRICA_SOUTH_ASIA_AND_SOUTHEAST_ASIA_REMAIN_THIN"
+    },
+    "robots_and_calendar_surface": {
+      "run_id": 34221438614,
+      "job_id": 102045235833,
+      "robots_http_status": 200,
+      "robots_user_agent": "*",
+      "robots_disallow": "",
+      "calendar_http_status": 200
+    },
+    "public_ui_route_discovery": {
+      "run_id": 34221689211,
+      "job_id": 102046057336,
+      "month_route_invocation": "JQUERY_LOAD_GET_TO_/Calendario/FiltrosCalendario/mes/{month}/{variant}"
+    },
+    "september_one_shot": {
+      "run_id": 34221959307,
+      "job_id": 102046924867,
+      "url": "https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Septiembre-2026/0",
+      "http_status": 200,
+      "body_sha256": "ac0dbb3549df14ca8a8691e77d5a184e6b9b6f158c34c249366a64c9b89533c5",
+      "observed_cpi_release_date": "2026-09-10",
+      "observed_cpi_local_time": "16:00:00"
+    },
+    "raw_entity_fail_closed": {
+      "run_id": 34222409320,
+      "job_id": 102048394411,
+      "result": "RAW_LITERAL_ACCENTED_TITLE_ASSERTION_FAILED_BECAUSE_HTML_ENTITY_ENCODING_IS_PRESENT"
+    },
+    "entity_normalized_structure": {
+      "run_id": 34222469393,
+      "job_id": 102048588503,
+      "result": "VISIBLE_CPI_TITLE_AND_16_00_ROW_PLUS_EMBEDDED_GOOGLE_TEMPLATE_METADATA_AGREE",
+      "embedded_timezone": "America/Argentina/Buenos_Aires",
+      "google_followup_request_count": 0
+    }
+  },
+  "classification_contract": {
+    "exact_report_identity": "TITLE_MUST_EQUAL_NATIONAL_CPI_FAMILY_PLUS_EXPECTED_SPANISH_REFERENCE_PERIOD",
+    "exact_source_timezone": "America/Argentina/Buenos_Aires",
+    "embedded_calendar_metadata": "FIRST_PARTY_RESPONSE_GOOGLE_TEMPLATE_TEXT_DATES_AND_CTZ_MUST_BE_STRUCTURALLY_VALID_AND_CONSISTENT_WITH_VISIBLE_ROW",
+    "canonical_date_match_with_missing_canonical_clock": "GENERATE_CLOCK_ENRICHMENT_REVIEW_CANDIDATE_ONLY",
+    "canonical_date_drift": "GENERATE_SCHEDULE_DATE_CHANGE_REVIEW_CANDIDATE_ONLY",
+    "authoritative_time_drift": "GENERATE_CLOCK_CHANGE_REVIEW_CANDIDATE_ONLY",
+    "exact_match_after_reviewed_clock_enrichment": "OBSERVATION_ONLY_NO_CHANGE",
+    "missing_report": "GENERATE_SOURCE_MATCH_REVIEW_OBSERVATION_NO_EVENT_STATE_INFERENCE",
+    "duplicate_or_ambiguous_report": "FAIL_CLOSED_NO_GUESS",
+    "route_or_markup_contract_drift": "SOURCE_HEALTH_DEGRADED_NO_EVENT_MUTATION",
+    "elapsed_date": "NO_COMPLETION_SEMANTICS"
+  },
+  "source_role_contract": {
+    "WSSRC-REG2-006": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_OFFICIAL_PDF_CURATED_METADATA_ENDPOINT_AUTOMATION_HOLD_PRESERVED",
+    "WSSRC-REG2-008": "COMPLETED_RELEASE_OUTCOME_PROVENANCE_ONLY_NO_AUTOMATIC_FETCH",
+    "WSSRC-REG2-009": "OFFICIAL_INTERACTIVE_CALENDAR_MACHINE_MONITOR_ONLY_NO_DIRECT_CANONICAL_WRITE_AUTHORITY",
+    "machine_route_can_report_date_change": true,
+    "machine_route_can_report_clock_enrichment": true,
+    "machine_route_can_change_canonical_schedule": false,
+    "machine_route_can_set_lifecycle_completed": false,
+    "machine_route_can_change_certainty": false,
+    "machine_route_can_create_or_upgrade_canonical_clock": false,
+    "automatic_pdf_fetch_allowed": false,
+    "automatic_completed_release_fetch_allowed": false,
+    "automatic_google_fetch_allowed": false,
+    "automatic_search_route_discovery_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "rights_contract": {
+    "content_reuse_basis": "INDEC_WEBSITE_MATERIAL_GENERALLY_CREATIVE_COMMONS_WITH_ATTRIBUTION_AND_MODIFICATION_CONDITIONS",
+    "robots_policy_basis": "ROBOTS_TXT_HTTP_200_USER_AGENT_STAR_EMPTY_DISALLOW",
+    "machine_access_basis": "PUBLIC_FIRST_PARTY_UI_EXPLICITLY_USES_BOUNDED_MONTH_ROUTE_GETS_AND_ROBOTS_IS_COMPATIBLE",
+    "machine_access_scope": "ROBOTS_CHECK_PLUS_EXACT_FOUR_REVIEWED_2026_MONTH_ROUTES_ONLY",
+    "broad_crawling_allowed": false,
+    "search_route_use_allowed": false,
+    "legal_opinion": false
+  },
+  "request_contract": {
+    "cadence": "DAILY",
+    "robots_requests_per_run": 1,
+    "maximum_month_route_requests_per_run": 4,
+    "maximum_total_requests_per_run": 5,
+    "month_slugs": [
+      "Septiembre-2026",
+      "Octubre-2026",
+      "Noviembre-2026",
+      "Diciembre-2026"
+    ],
+    "item_or_pdf_followup_requests": 0,
+    "google_requests": 0,
+    "search_route_requests": 0
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.94",
+    "source_count": 252,
+    "monitor_expectations_version": "0.19",
+    "configured_monitor_adapter_count": 17,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "canonical_unchanged": true,
+    "change_ledger_unchanged": true,
+    "biosecurity_overlay_unchanged": true,
+    "live_intelligence_unchanged": true,
+    "analysis_unchanged": true
+  }
+}
