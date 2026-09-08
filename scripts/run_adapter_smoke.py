@@ -16,6 +16,7 @@ from world_signals.adapters import (
     CRA_CELEX,
     cellar_representation_diagnostics,
     fetch_cbam_certificate_sale_rule,
+    fetch_cbn_mpc_calendar,
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
     fetch_cellar_identifier_notice,
@@ -36,6 +37,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 
+from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy
 from world_signals.rba_mpb_monitor import fetch_rba_robots_policy, rba_schedule_path_disallowed
 
 CANONICAL=ROOT/"data/canonical/registry.json"
@@ -78,6 +80,33 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
+    try:
+        cbn_allowed,cbn_robots_snap=fetch_cbn_robots_policy()
+        if not cbn_allowed:
+            raise AdapterError("CBN robots policy disallows the MPC calendar path")
+        cbn_calendar,cbn_calendar_snap=fetch_cbn_mpc_calendar()
+        report["results"].append({
+            "adapter":"CBN_MPC_CALENDAR",
+            "status":"PASS",
+            "source_id":"WSSRC-CB-014",
+            "robots_snapshot":cbn_robots_snap.as_dict(),
+            "calendar_snapshot":cbn_calendar_snap.as_dict(),
+            "meeting_count":len(cbn_calendar.meetings),
+            "schedule_sha256":cbn_calendar.schedule_sha256,
+            "request_budget_per_run":2,
+            "decision_publication_time_authority":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"CBN_MPC_CALENDAR",
+            "status":"FAIL",
+            "source_id":"WSSRC-CB-014",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         fed_items,fed_snap=fetch_fed_monetary_policy_rss()

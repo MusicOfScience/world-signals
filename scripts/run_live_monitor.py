@@ -16,6 +16,7 @@ from world_signals.adapters import (
     CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
     fetch_cbam_annual_declaration_surrender_rule,
+    fetch_cbn_mpc_calendar,
     fetch_cbam_certificate_sale_rule,
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
@@ -35,6 +36,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
+from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
@@ -213,6 +215,51 @@ def main() -> int:
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
+
+    if "CBN_MPC_CALENDAR" in configs:
+        cbn_config=configs["CBN_MPC_CALENDAR"]
+        try:
+            cbn_allowed,cbn_robots_snap=fetch_cbn_robots_policy()
+            if not cbn_allowed:
+                report["source_health"].append({
+                    "adapter_id":"CBN_MPC_CALENDAR",
+                    "source_id":cbn_config["source_id"],
+                    "state":"DEGRADED",
+                    "robots_snapshot":cbn_robots_snap.as_dict(),
+                    "failure_stage":"ROBOTS_POLICY_NOW_DISALLOWS_CBN_MPC_CALENDAR",
+                    "calendar_request_skipped":True,
+                    "canonical_action":"NONE",
+                })
+            else:
+                cbn_calendar,cbn_calendar_snap=fetch_cbn_mpc_calendar()
+                report["source_health"].append({
+                    "adapter_id":"CBN_MPC_CALENDAR",
+                    "source_id":cbn_config["source_id"],
+                    "state":"HEALTHY",
+                    "robots_snapshot":cbn_robots_snap.as_dict(),
+                    "calendar_snapshot":cbn_calendar_snap.as_dict(),
+                    "meeting_count":len(cbn_calendar.meetings),
+                    "schedule_sha256":cbn_calendar.schedule_sha256,
+                    "request_budget_per_run":2,
+                    "decision_publication_time_authority":False,
+                    "lifecycle_authority":False,
+                    "automatic_commit_allowed":False,
+                })
+                candidates,observations=cbn_mpc_schedule_review_candidates(
+                    registry.get("records",[]),cbn_calendar,cbn_config
+                )
+                report["review_candidates"].extend(candidates)
+                report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"CBN_MPC_CALENDAR",
+                "source_id":cbn_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "decision_publication_time_inference":"PROHIBITED",
+            })
 
     if "FED_MONETARY_POLICY_RSS" in configs:
         fed_config=configs["FED_MONETARY_POLICY_RSS"]
