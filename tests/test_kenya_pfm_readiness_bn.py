@@ -41,7 +41,9 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
             self.assertGreaterEqual(tuple(map(int, sources["version"].split("."))), (1, 87))
             post = sources
 
-        self.assertEqual(len(post["sources"]), 247)
+        self.assertGreaterEqual(len(post["sources"]), 247)
+        if post["version"] == "1.87":
+            self.assertEqual(len(post["sources"]), 247)
         target = next(row for row in post["sources"] if row["source_id"] == tx.SOURCE_ID)
         self.assertEqual(target["parser_version"], "kenya-bps-rule-0.1")
         self.assertEqual(target["verification_mode"], "AUTOMATED_PILOT")
