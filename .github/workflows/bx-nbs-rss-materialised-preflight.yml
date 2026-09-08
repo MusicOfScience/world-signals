@@ -91,7 +91,7 @@ jobs:
           old=json.loads(Path('/tmp/bx-nbs-schedule-before.json').read_text())
           current=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-007']
           assert len(current)==1 and current[0]==old
-          machine=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-026']
+          machine=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-031']
           assert len(machine)==1
           m=machine[0]
           assert m['canonical_dependency_count']==0
@@ -101,7 +101,7 @@ jobs:
           routes=[x for x in monitor['adapters'] if x.get('adapter_id')=='CHINA_NBS_LATEST_RELEASES_RSS']
           assert len(routes)==1
           r=routes[0]
-          assert r['source_id']=='WSSRC-MAC-026'
+          assert r['source_id']=='WSSRC-MAC-031'
           assert r['canonical_schedule_source_id']=='WSSRC-MAC-007'
           assert len(r['canonical_occurrence_ids'])==36
           assert r['request_budget_per_run']==1 and r['native_rss_request_count_per_run']==1
