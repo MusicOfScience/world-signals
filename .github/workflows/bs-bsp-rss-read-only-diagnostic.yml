@@ -39,11 +39,13 @@ jobs:
           rows=sorted([x for x in c['records'] if x.get('source_id')=='WSSRC-REGJ-003'],key=lambda x:(str(x.get('start_local')),x['occurrence_id']))
           assert len(rows)==2,len(rows)
           assert all(x.get('region')=='Southeast Asia' for x in rows)
-          assert src['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
-          assert src['automated_retrieval_permission']=='PENDING_ENDPOINT_OPERATIONAL_REVIEW'
+          assert src.get('institution')=='Bangko Sentral ng Pilipinas'
+          assert src.get('jurisdiction')=='Philippines'
+          assert src.get('authoritative_url')=='https://www.bsp.gov.ph/Pages/PriceStability/ScheduleOfMeetingsOfTheAdvisoryCommitteeAndMonetaryBoardOnMonetaryPolicy.aspx'
           assert not any(x.get('source_id')=='WSSRC-REGJ-003' for x in m['adapters'])
           assert not any(x.get('source_id')=='WSSRC-REGJ-006' for x in s['sources'])
-          print(json.dumps({'source':src,'proposed_machine_source_id':'WSSRC-REGJ-006','occurrences':[{k:r.get(k) for k in ('occurrence_id','series_id','canonical_name','start_local','end_local','source_timezone','time_precision','timing_type','lifecycle_status','certainty_status','notes')} for r in rows]},indent=2,ensure_ascii=False,sort_keys=True))
+          governance={k:src.get(k) for k in ('canonical_dependency_count','canonical_provenance_use','automated_monitoring_use','automated_retrieval_permission','verification_mode','monitoring_readiness_status','monitoring_activation_status','runtime_health_state','machine_readable_available','parser_type')}
+          print(json.dumps({'source':src,'legacy_governance_projection':governance,'missing_governance_fields':[k for k,v in governance.items() if v is None],'proposed_machine_source_id':'WSSRC-REGJ-006','occurrences':[{k:r.get(k) for k in ('occurrence_id','series_id','canonical_name','start_local','end_local','source_timezone','time_precision','timing_type','lifecycle_status','certainty_status','notes')} for r in rows]},indent=2,ensure_ascii=False,sort_keys=True))
           PY
       - name: Verify official RSS documentation and deterministically resolve Media Releases feed link
         shell: bash
@@ -71,8 +73,6 @@ jobs:
                   media.append((html.unescape(href),label_plain))
           assert len(media)==1,media
           href=media[0][0]
-          # BSP emits a SharePoint server-template expression in the public href.
-          # Resolve only GetWebAbsoluteURL()+literal-path, without inventing a route.
           m=re.fullmatch(r"\{\{GetWebAbsoluteURL\(\)\+'([^']+)'\}\}",href)
           if m:
               feed_url='https://www.bsp.gov.ph'+m.group(1)
@@ -88,7 +88,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import email.utils,hashlib,json,re,urllib.request,xml.etree.ElementTree as ET
+          import hashlib,json,urllib.request,xml.etree.ElementTree as ET
           from pathlib import Path
           UA='WORLD-SIGNALS-read-only-diagnostic/0.1'
           url=Path('/tmp/bsp-feed-url').read_text().strip()
