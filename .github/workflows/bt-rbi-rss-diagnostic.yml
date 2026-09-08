@@ -1,0 +1,117 @@
+name: BT RBI RSS read-only diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bs-rbi-rss-bt
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BS ancestry and clean workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "2b74c10905760c98c75b3598df96441f99841b00"
+          test "$(git merge-base HEAD origin/main)" = "2b74c10905760c98c75b3598df96441f99841b00"
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Resolve and inspect official RBI Press Releases RSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin, urlparse
+          from urllib.request import Request, urlopen
+          import hashlib, json, xml.etree.ElementTree as ET
+
+          DOCS='https://www.rbi.org.in/Scripts/rss.aspx'
+          UA='WORLD-SIGNALS/1.0 (+research; review-only)'
+
+          def fetch(url, accept):
+              req=Request(url,headers={'User-Agent':UA,'Accept':accept})
+              with urlopen(req,timeout=30) as r:
+                  body=r.read()
+                  return r.status, r.headers.get('Content-Type',''), r.geturl(), body
+
+          status, ctype, final, html=fetch(DOCS,'text/html,application/xhtml+xml')
+          assert status==200
+          assert 'rbi.org.in' in urlparse(final).netloc.lower()
+
+          class P(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.links=[]; self.href=None; self.text=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag.lower()=='a': self.href=dict(attrs).get('href'); self.text=[]
+              def handle_data(self,data):
+                  if self.href is not None: self.text.append(data)
+              def handle_endtag(self,tag):
+                  if tag.lower()=='a' and self.href is not None:
+                      self.links.append((' '.join(''.join(self.text).split()),self.href)); self.href=None; self.text=[]
+          p=P(); p.feed(html.decode('utf-8','replace'))
+          matches=[href for text,href in p.links if text.strip().lower()=='press releases']
+          assert len(matches)==1, matches
+          feed=urljoin(final,matches[0])
+          u=urlparse(feed)
+          assert u.scheme=='https'
+          assert u.netloc.lower() in {'rbi.org.in','www.rbi.org.in'}
+          assert u.path.lower()=='/pressreleases_rss.xml'
+          assert not u.query and not u.fragment
+
+          fstatus,fctype,ffinal,body=fetch(feed,'application/rss+xml,application/xml,text/xml')
+          assert fstatus==200
+          fu=urlparse(ffinal)
+          assert fu.netloc.lower() in {'rbi.org.in','www.rbi.org.in'}
+          root=ET.fromstring(body)
+          assert root.tag.lower().endswith('rss')
+          channel=root.find('channel')
+          assert channel is not None
+          items=channel.findall('item')
+          assert items
+          parsed=[]
+          for item in items:
+              title=(item.findtext('title') or '').strip()
+              link=(item.findtext('link') or '').strip()
+              pub=(item.findtext('pubDate') or '').strip()
+              desc=(item.findtext('description') or '').strip()
+              assert title and link and pub
+              parsed.append({'title':title,'link':link,'pubDate':pub,'description_present':bool(desc)})
+
+          print(json.dumps({
+              'docs_status':status,
+              'docs_content_type':ctype,
+              'docs_final_url':final,
+              'documented_feed_url':feed,
+              'feed_status':fstatus,
+              'feed_content_type':fctype,
+              'feed_final_url':ffinal,
+              'feed_sha256':hashlib.sha256(body).hexdigest(),
+              'item_count':len(parsed),
+              'first_five':[x['title'] for x in parsed[:5]],
+              'all_items_have_pubDate':all(bool(x['pubDate']) for x in parsed),
+              'all_items_have_links':all(bool(x['link']) for x in parsed),
+              'request_count':2,
+              'repository_write_count':0,
+          },indent=2,ensure_ascii=False,sort_keys=True))
+          PY
+      - name: Confirm repository remains byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
