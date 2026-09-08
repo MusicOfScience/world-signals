@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.86",
+  "version": "1.87",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -8661,7 +8661,10 @@
       "parser_version": "kenya-bps-rule-0.1",
       "known_limitations": [
         "Treasury process pages are corroborative; the legal deadline comes from the Public Finance Management Act.",
-        "Automated crawling terms for Treasury/Kenya Law endpoints require operational review."
+        "Automated crawling terms for Treasury/Kenya Law endpoints require operational review.",
+        "GitHub Actions access to Kenya Law is demonstrably variable: the current route returned HTTP 403 on 3 September 2026; a bounded BN probe on 8 September returned HTTP 200 for both current and frozen routes; a later BN transaction runner on 8 September received HTTP 403 from the frozen route before requesting the current route. Runtime reachability is not permission and is not stable enough for a production route.",
+        "The one successful current/frozen comparison exposed the same section 25(2) semantic rule. A later rule divergence or endpoint failure would require human review and cannot itself infer a Canonical date, lifecycle or event-state change.",
+        "Because unattended endpoint permission remains unresolved and repeated probing may itself be inappropriate, BN does not require another live request in the source-registry write transaction; technical parsing is regression-tested offline and the variable live evidence is preserved explicitly."
       ],
       "timezone_scope": "JURISDICTIONAL_CIVIL_DATE",
       "licence_review_status": "WRITTEN_LAW_EXCLUDED_FROM_COPYRIGHT_SITE_AUTOMATION_REVIEW_PENDING",
@@ -8673,12 +8676,31 @@
       "rights_reviewed_at": "2026-09-03T07:55:00+10:00",
       "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
       "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
-      "runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED",
-      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
-      "monitoring_activation_status": "MANUAL_LEGAL_RULE_RECHECK_NO_AUTO_COMMIT",
-      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "runtime_health_state": "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08",
+      "monitoring_readiness_status": "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD",
+      "monitoring_activation_status": "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
+      "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-05",
-      "governance_backfill_basis": "Kenya Public Finance Management Act requires the Budget Policy Statement by 15 February each year. Written-law copyright status supports factual legal provenance but does not authorise unrestricted polling of Kenya Law infrastructure; endpoint review remains separate and verification is manual authoritative recheck."
+      "governance_backfill_basis": "Kenya Public Finance Management Act requires the Budget Policy Statement by 15 February each year. Written-law copyright status supports factual legal provenance but does not authorise unrestricted polling of Kenya Law infrastructure; endpoint review remains separate and verification is manual authoritative recheck.",
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "automation_summary": "The existing Kenya PFM section 25(2) adapter was live-validated in one bounded GitHub Actions probe against both the frozen 2025-11-04 and current unversioned Kenya Law surfaces, which both returned HTTP 200 and the same semantic statutory deadline rule. A subsequent controlled-transaction runner received HTTP 403 from the frozen route before the current route was requested, confirming that runtime reachability is variable. Successful parsing proves technical pilot readiness only; neither HTTP 200 nor public-domain legal content clears unattended polling. automated_monitoring_use remains ENDPOINT_REVIEW_REQUIRED, automated_retrieval_permission remains ENDPOINT_OPERATIONAL_REVIEW_REQUIRED, and no production monitor route is configured.",
+      "live_validation_evidence": {
+        "successful_read_only_probe_run_id": 34189112995,
+        "successful_read_only_probe_job_id": 101943332200,
+        "successful_probe_observed_at": "2026-09-08",
+        "historical_github_actions_current_route_status_2026_09_03": 403,
+        "successful_probe_baseline_2025_11_04_http_status": 200,
+        "successful_probe_current_unversioned_http_status": 200,
+        "successful_probe_baseline_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+        "successful_probe_current_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+        "subsequent_transaction_probe_run_id": 34189781916,
+        "subsequent_transaction_probe_job_id": 101945294642,
+        "subsequent_transaction_baseline_2025_11_04_http_status": 403,
+        "subsequent_transaction_current_route_status": "NOT_REQUESTED_AFTER_BASELINE_FAILURE",
+        "statutory_section": "25(2)",
+        "deadline_month": 2,
+        "deadline_day": 15
+      }
     },
     {
       "source_id": "WSSRC-REG6-002",
