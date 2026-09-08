@@ -81,6 +81,8 @@ jobs:
           canonical=json.loads(Path('data/canonical/registry.json').read_text())
           sources=json.loads(Path('data/sources/registry.json').read_text())
           expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          plan=json.loads(Path('data/monitor/FAO_RELEASE_CALENDAR_BV_PLAN_v0.1.json').read_text())
+          update=plan['source_governance_update']
           assert (canonical['version'],len(canonical['records']))==('0.41',689)
           assert (sources['version'],len(sources['sources']))==('1.95',252)
           assert (expectations['version'],len(expectations['adapters']))==('0.20',18)
@@ -92,8 +94,9 @@ jobs:
           assert src['canonical_dependency_count']==9
           assert src['canonical_provenance_use']=='MANUAL_INFORMATIONAL_REFERENCE_ONLY'
           assert src['licence_review_status']=='CLEARED_FOR_FACTUAL_METADATA'
-          assert src['automated_monitoring_use']=='CLEARED'
-          assert src['automated_retrieval_permission']=='BOUNDED_PUBLIC_HTML_SCHEDULE_ROBOTS_COMPATIBLE'
+          assert src['automated_monitoring_use']==update['automated_monitoring_use']
+          assert src['automated_retrieval_permission']==update['automated_retrieval_permission']
+          assert src['monitoring_readiness_status']==update['monitoring_readiness_status']
           assert src['live_adapter_id']=='FAO_RELEASE_CALENDAR'
           routes=[x for x in expectations['adapters'] if x.get('adapter_id')=='FAO_RELEASE_CALENDAR']
           assert len(routes)==1
