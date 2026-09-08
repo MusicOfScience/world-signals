@@ -27,7 +27,7 @@ jobs:
           test "$(git rev-parse origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
           test "$(git merge-base HEAD origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
           python - <<'PY'
-          import json
+          import json, os
           from collections import Counter, defaultdict
           from pathlib import Path
 
@@ -157,7 +157,7 @@ jobs:
               x['source_id'],
           ))
 
-          print(json.dumps({
+          result={
               'baseline':'b277939bc6c540d0986f298a832c7d63a29a2d19',
               'reference_date':'2026-09-09',
               'canonical':[canonical['version'],len(canonical['records'])],
@@ -166,7 +166,10 @@ jobs:
               'regional_pressure':pressure,
               'routes':route_rows,
               'candidate_sources':candidate_rows[:80],
-          },indent=2,ensure_ascii=False,sort_keys=True))
+          }
+          text=json.dumps(result,indent=2,ensure_ascii=False,sort_keys=True)
+          print(text)
+          Path(os.environ['RUNNER_TEMP'],'bw-pressure-audit.json').write_text(text)
           PY
       - name: Prove audit is repository-read-only
         shell: bash
@@ -175,3 +178,10 @@ jobs:
           test -z "$(git diff --name-only)"
           test -z "$(git diff --cached --name-only)"
           test -z "$(git ls-files --others --exclude-standard)"
+      - name: Upload retained audit result
+        uses: actions/upload-artifact@v4
+        with:
+          name: bw-pressure-audit
+          path: ${{ runner.temp }}/bw-pressure-audit.json
+          if-no-files-found: error
+          retention-days: 1
