@@ -1,0 +1,98 @@
+name: BV CBE read-only endpoint diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bu-pressure-audit-bv
+    paths:
+      - '.github/workflows/bv-cbe-endpoint-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact BV base and inspect CBE endpoint contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
+          test "$(git merge-base HEAD origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
+          python - <<'PY'
+          import hashlib, re, urllib.request, urllib.robotparser
+
+          UA='WORLD-SIGNALS/0.1 (+read-only institutional schedule verification)'
+          robots_url='https://www.cbe.org.eg/robots.txt'
+          schedule_url='https://www.cbe.org.eg/en/monetary-policy/mpc-meetings-schedule?verify=false'
+
+          def fetch(url):
+              req=urllib.request.Request(url,headers={
+                  'User-Agent':UA,
+                  'Accept':'text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.1',
+                  'Accept-Language':'en',
+              })
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      body=r.read()
+                      return r.status,dict(r.headers),body,r.geturl()
+              except urllib.error.HTTPError as e:
+                  body=e.read()
+                  return e.code,dict(e.headers),body,e.geturl()
+
+          rs,rh,rb,rf=fetch(robots_url)
+          print('ROBOTS_STATUS',rs)
+          print('ROBOTS_FINAL_URL',rf)
+          print('ROBOTS_CONTENT_TYPE',rh.get('Content-Type'))
+          print('ROBOTS_BYTES',len(rb))
+          print('ROBOTS_SHA256',hashlib.sha256(rb).hexdigest())
+          robots_text=rb.decode('utf-8','replace')
+          print('ROBOTS_TEXT',repr(robots_text[:4000]))
+
+          allowed=None
+          if rs==200:
+              rp=urllib.robotparser.RobotFileParser()
+              rp.set_url(robots_url)
+              rp.parse(robots_text.splitlines())
+              allowed=rp.can_fetch(UA,schedule_url)
+              print('ROBOTS_EXACT_PATH_ALLOWED',allowed)
+              if not allowed:
+                  raise SystemExit('CBE schedule path disallowed by robots; no schedule request made')
+          elif rs in (404,410):
+              print('ROBOTS_POLICY_STATE','NOT_EXPRESS_PERMISSION_OR_PROHIBITION')
+          else:
+              print('ROBOTS_POLICY_STATE','UNRESOLVED_NON_200')
+              raise SystemExit('Robots state unresolved; no schedule request made')
+
+          ss,sh,sb,sf=fetch(schedule_url)
+          print('SCHEDULE_STATUS',ss)
+          print('SCHEDULE_FINAL_URL',sf)
+          print('SCHEDULE_CONTENT_TYPE',sh.get('Content-Type'))
+          print('SCHEDULE_BYTES',len(sb))
+          print('SCHEDULE_SHA256',hashlib.sha256(sb).hexdigest())
+          text=sb.decode('utf-8','replace')
+          print('HAS_MPC_HEADING',bool(re.search(r'MPC.{0,40}(Meeting|Decision)',text,re.I|re.S)))
+          for needle in ('24 September 2026','20 November 2026','24 December 2026','September 24','November 20','December 24'):
+              print('VISIBLE_NEEDLE',needle,needle.lower() in text.lower())
+          # Reveal only structural endpoint clues, not page-content reproduction.
+          urls=sorted(set(re.findall(r'https?://[^"\'<> ]+|/[A-Za-z0-9_./?=&%-]{8,}',text)))
+          clues=[u for u in urls if any(k in u.lower() for k in ('api','mpc','monetary','meeting','schedule','ajax','graphql'))]
+          print('STRUCTURAL_ENDPOINT_CLUES',clues[:80])
+          print('REQUEST_COUNT',2)
+          PY
+      - name: Prove diagnostic is repository-read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
