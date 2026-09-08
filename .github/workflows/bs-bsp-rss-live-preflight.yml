@@ -1,0 +1,139 @@
+name: BS BSP RSS one-shot live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-br-pressure-audit-bs
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and materialise BS post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "22a5c0a922d3a126bf268acb61a68abe1bfe5075"
+          test "$(git merge-base HEAD origin/main)" = "22a5c0a922d3a126bf268acb61a68abe1bfe5075"
+          python scripts/apply_bsp_monetary_rss_monitor_bs.py
+          WORLD_SIGNALS_APPLY_MONITOR_BS=1 python scripts/apply_bsp_monetary_rss_monitor_bs.py --apply
+      - name: Freeze protected-layer checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json > /tmp/bs-live-protected.before
+      - name: Audit exact five-file materialisation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed=={
+            'data/sources/registry.json','data/monitor/expectations.json',
+            'scripts/run_live_monitor.py','scripts/run_adapter_smoke.py',
+            'src/world_signals/adapters/__init__.py'
+          },changed
+          PY
+      - name: Execute exactly one official BSP RSS request and real review comparator
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from world_signals.adapters import fetch_bsp_media_releases_rss
+          from world_signals.bsp_monetary_monitor import (
+              bsp_monetary_rss_review_candidates,
+              is_bsp_monetary_policy_stance_item,
+          )
+
+          items,snap=fetch_bsp_media_releases_rss(timeout=30)
+          assert snap.status==200
+          assert len(items)>0
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          config=next(x for x in monitor['adapters'] if x['adapter_id']=='BSP_MONETARY_POLICY_RSS')
+          candidates,observations=bsp_monetary_rss_review_candidates(canonical['records'],items,config)
+
+          stance_items=[x for x in items if is_bsp_monetary_policy_stance_item(x)]
+          historical=[x for x in observations if x['type']=='BSP_MONETARY_POLICY_STANCE_PUBLICATION_OUTSIDE_CONFIGURED_SCOPE']
+          absence=[x for x in observations if x['type']=='BSP_RSS_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_OR_CERTAINTY_SEMANTICS']
+          configured={x['occurrence_id'] for x in canonical['records'] if x['occurrence_id'] in set(config['canonical_occurrence_ids'])}
+          assert configured=={'WSO-REG-J-0008','WSO-REG-J-0009'}
+          assert any(x.title=='Monetary Board raises target RRP Rate by 25 basis points' for x in stance_items)
+          assert any(x['publication_local_date']=='2026-08-27' for x in historical)
+          assert len(absence)==1
+          # On 8 September neither the October nor December stance publication can
+          # legitimately exist in this finite rolling feed. A positive candidate
+          # here would therefore signal classifier/scope drift and must fail closed.
+          assert candidates==[],candidates
+          assert absence[0]['matched_occurrence_count']==0
+          assert config['request_budget_per_run']==1
+          assert config['schedule_authority'] is False
+          assert config['lifecycle_authority'] is False
+          assert config['certainty_authority'] is False
+          assert config['rss_publication_time_is_event_time'] is False
+          assert config['canonical_clock_mutation_allowed'] is False
+          assert config['automatic_schedule_html_fetch_allowed'] is False
+          assert config['automatic_commit_allowed'] is False
+          print(json.dumps({
+            'status':snap.status,
+            'content_type':snap.content_type,
+            'body_sha256':snap.body_sha256,
+            'item_count':len(items),
+            'structural_stance_item_count':len(stance_items),
+            'historical_or_untracked_stance_observation_count':len(historical),
+            'review_candidate_count':len(candidates),
+            'configured_match_count':absence[0]['matched_occurrence_count'],
+            'request_count':1,
+            'schedule_authority':False,
+            'lifecycle_authority':False,
+            'certainty_authority':False,
+            'rss_publication_time_is_event_time':False,
+            'canonical_clock_mutation_allowed':False,
+            'automatic_schedule_html_fetch_allowed':False,
+            'automatic_commit_allowed':False,
+          },indent=2,sort_keys=True))
+          PY
+      - name: Validate full repository and static build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile src/world_signals/adapters/bsp_rss.py src/world_signals/bsp_monetary_monitor.py scripts/apply_bsp_monetary_rss_monitor_bs.py scripts/run_live_monitor.py scripts/run_adapter_smoke.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+      - name: Verify protected layers and restore materialisation byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/event_reviews.json data/analysis/evidence_registry.json > /tmp/bs-live-protected.after
+          diff -u /tmp/bs-live-protected.before /tmp/bs-live-protected.after
+          git restore -- data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
