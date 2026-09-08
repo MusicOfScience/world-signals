@@ -1,0 +1,143 @@
+name: BW Japan CPI read-only endpoint diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bv-pressure-audit-bw
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BV ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          test "$(git merge-base HEAD origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+      - name: Execute exactly two official Statistics Bureau requests
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP="$RUNNER_TEMP/bw-jp-cpi"
+          mkdir -p "$TMP"
+          ROBOTS='https://www.stat.go.jp/robots.txt'
+          SCHEDULE='https://www.stat.go.jp/english/data/cpi/1582.html'
+          curl --silent --show-error --max-redirs 0 -A 'WORLD-SIGNALS/0.1 (+review-only schedule monitor)' -D "$TMP/robots.headers" -o "$TMP/robots.body" -w '%{http_code}|%{content_type}|%{url_effective}\n' "$ROBOTS" > "$TMP/robots.meta"
+          curl --silent --show-error --max-redirs 0 -A 'WORLD-SIGNALS/0.1 (+review-only schedule monitor)' -D "$TMP/schedule.headers" -o "$TMP/schedule.body" -w '%{http_code}|%{content_type}|%{url_effective}\n' "$SCHEDULE" > "$TMP/schedule.meta"
+          python - <<'PY'
+          import hashlib, html, json, os, re
+          from pathlib import Path
+          from urllib.robotparser import RobotFileParser
+
+          root=Path(os.environ['RUNNER_TEMP'])/'bw-jp-cpi'
+          robots_meta=(root/'robots.meta').read_text().strip().split('|',2)
+          schedule_meta=(root/'schedule.meta').read_text().strip().split('|',2)
+          robots_body=(root/'robots.body').read_bytes()
+          schedule_body=(root/'schedule.body').read_bytes()
+          robots_status=int(robots_meta[0])
+          schedule_status=int(schedule_meta[0])
+          schedule_text=schedule_body.decode('utf-8','replace')
+          assert schedule_status==200, schedule_meta
+          assert 'text/html' in schedule_meta[1].lower(), schedule_meta
+          assert len(schedule_body)>10000
+          assert 'Schedule of Release' in schedule_text
+          assert 'Last Update' in schedule_text
+          assert '23 January 2026' in schedule_text
+          assert 'Consumer Price Index' in schedule_text or '/data/cpi/' in schedule_text
+
+          # The schedule page controls national CPI civil dates only. Canonical clock provenance is separate.
+          expected={
+              'August, 2026':'September 18',
+              'September':'October 23',
+              'October':'November 20',
+              'November':'December 18',
+              'December':'January 22, 2027',
+              'January, 2027':'February 19',
+              'February':'March 19',
+          }
+          stripped=re.sub(r'<[^>]+>',' ',schedule_text)
+          stripped=html.unescape(re.sub(r'\s+',' ',stripped))
+          checks={}
+          for survey_month,release in expected.items():
+              pattern=re.escape(survey_month)+r'.{0,120}?'+re.escape(release)
+              checks[survey_month]=bool(re.search(pattern,stripped,re.I))
+          assert all(checks.values()), checks
+
+          robots_state='ABSENT_OR_NONSTANDARD_NO_PERMISSION_INFERENCE'
+          robots_allows=None
+          if robots_status==200:
+              robots_text=robots_body.decode('utf-8','replace')
+              assert 'user-agent' in robots_text.lower(), 'robots 200 without valid syntax'
+              rp=RobotFileParser()
+              rp.parse(robots_text.splitlines())
+              robots_allows=rp.can_fetch('*','https://www.stat.go.jp/english/data/cpi/1582.html')
+              robots_state='VALID_POLICY_ALLOW' if robots_allows else 'VALID_POLICY_DISALLOW'
+              assert robots_allows is True
+          elif robots_status not in (404,410):
+              raise AssertionError(('unexpected robots status',robots_meta))
+
+          result={
+              'reference_date':'2026-09-09',
+              'baseline':'b277939bc6c540d0986f298a832c7d63a29a2d19',
+              'request_count':2,
+              'followup_request_count':0,
+              'robots':{
+                  'status':robots_status,
+                  'content_type':robots_meta[1],
+                  'effective_url':robots_meta[2],
+                  'bytes':len(robots_body),
+                  'sha256':hashlib.sha256(robots_body).hexdigest(),
+                  'state':robots_state,
+                  'allows_schedule_path':robots_allows,
+              },
+              'schedule':{
+                  'status':schedule_status,
+                  'content_type':schedule_meta[1],
+                  'effective_url':schedule_meta[2],
+                  'bytes':len(schedule_body),
+                  'sha256':hashlib.sha256(schedule_body).hexdigest(),
+                  'last_update_23_jan_2026':True,
+                  'configured_national_cpi_date_matches':checks,
+                  'configured_match_count':sum(checks.values()),
+                  'clock_exposed_by_schedule':False,
+              },
+              'authority_contract':{
+                  'civil_date_identity_evidence_only':True,
+                  'clock_authority':False,
+                  'lifecycle_authority':False,
+                  'certainty_authority':False,
+                  'automatic_canonical_commit':False,
+                  'google_calendar_write':False,
+                  'automatic_live_or_analysis_promotion':False,
+              },
+          }
+          out=Path(os.environ['RUNNER_TEMP'])/'bw-japan-cpi-diagnostic.json'
+          out.write_text(json.dumps(result,indent=2,sort_keys=True))
+          print(out.read_text())
+          PY
+      - name: Prove repository remains read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Upload diagnostic result
+        uses: actions/upload-artifact@v4
+        with:
+          name: bw-japan-cpi-diagnostic
+          path: ${{ runner.temp }}/bw-japan-cpi-diagnostic.json
+          if-no-files-found: error
+          retention-days: 1
