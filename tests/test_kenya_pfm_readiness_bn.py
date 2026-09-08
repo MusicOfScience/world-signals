@@ -40,9 +40,13 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
         self.assertEqual(target["verification_mode"], "AUTOMATED_PILOT")
         self.assertEqual(target["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
         self.assertEqual(target["automated_retrieval_permission"], "ENDPOINT_OPERATIONAL_REVIEW_REQUIRED")
-        self.assertEqual(target["monitoring_readiness_status"], "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD")
+        self.assertEqual(
+            target["monitoring_readiness_status"],
+            "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD",
+        )
         self.assertEqual(target["monitoring_activation_status"], "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE")
-        self.assertIn("do not clear unattended polling", target["automation_summary"])
+        self.assertEqual(target["runtime_health_state"], "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08")
+        self.assertIn("does not clear unattended polling", target["automation_summary"])
 
     def test_exact_prestate_simulation_changes_only_kenya_source_row(self):
         _, sources, _ = self._live_state()
@@ -84,17 +88,26 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
         self.assertEqual(a.rule_sha256, b.rule_sha256)
         self.assertEqual(a.rule_sha256, "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c")
 
-    def test_runtime_reachability_never_becomes_permission_or_event_state(self):
+    def test_variable_runtime_reachability_never_becomes_permission_or_event_state(self):
         _, sources, _ = self._live_state()
         post = tx.build_post_state() if sources["version"] == "1.86" else sources
         target = next(row for row in post["sources"] if row["source_id"] == tx.SOURCE_ID)
         evidence = target["live_validation_evidence"]
         self.assertEqual(evidence["historical_github_actions_current_route_status_2026_09_03"], 403)
-        self.assertEqual(evidence["current_unversioned_http_status"], 200)
-        self.assertEqual(evidence["baseline_2025_11_04_http_status"], 200)
-        self.assertEqual(evidence["baseline_rule_sha256"], evidence["current_rule_sha256"])
+        self.assertEqual(evidence["successful_probe_current_unversioned_http_status"], 200)
+        self.assertEqual(evidence["successful_probe_baseline_2025_11_04_http_status"], 200)
+        self.assertEqual(
+            evidence["successful_probe_baseline_rule_sha256"],
+            evidence["successful_probe_current_rule_sha256"],
+        )
+        self.assertEqual(evidence["subsequent_transaction_baseline_2025_11_04_http_status"], 403)
+        self.assertEqual(
+            evidence["subsequent_transaction_current_route_status"],
+            "NOT_REQUESTED_AFTER_BASELINE_FAILURE",
+        )
         self.assertEqual(target["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
         self.assertEqual(target["automated_retrieval_permission"], "ENDPOINT_OPERATIONAL_REVIEW_REQUIRED")
+        self.assertEqual(target["monitoring_activation_status"], "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE")
 
 
 if __name__ == "__main__":
