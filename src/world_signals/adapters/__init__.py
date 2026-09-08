@@ -17,6 +17,15 @@ from .cbam import (
     parse_cbam_certificate_sale_rule,
     parse_cbam_verification_report_rule,
 )
+from .cbn_mpc import (
+    CBN_MPC_ACCEPT,
+    CBN_MPC_CALENDAR_URL,
+    CBN_MPC_TIMEZONE,
+    CBNMPCCalendar,
+    CBNMPCMeeting,
+    fetch_cbn_mpc_calendar,
+    parse_cbn_mpc_calendar_html,
+)
 from .cellar import (
     CELLAR_CELEX_BASE,
     ELI_IDENTIFIER_BASE,
@@ -154,6 +163,11 @@ __all__ = [
     "CBAM_VERIFICATION_CELEX",
     "CBAMAnnualDeadlineRule",
     "CBAMMilestoneRule",
+    "CBN_MPC_ACCEPT",
+    "CBN_MPC_CALENDAR_URL",
+    "CBN_MPC_TIMEZONE",
+    "CBNMPCCalendar",
+    "CBNMPCMeeting",
     "CELLAR_CELEX_BASE",
     "ELI_IDENTIFIER_BASE",
     "EURLEX_ELI_FETCH_BASE",
@@ -215,6 +229,8 @@ __all__ = [
     "eli_current_fetch_url",
     "cellar_document_text",
     "cellar_representation_diagnostics",
+    "fetch_cbn_mpc_calendar",
+    "parse_cbn_mpc_calendar_html",
     "fetch_cbam_annual_declaration_surrender_rule",
     "fetch_cbam_certificate_sale_rule",
     "fetch_cbam_verification_report_rule",

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.14",
+  "version": "0.15",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -887,6 +887,44 @@
       "certainty_authority": false,
       "meeting_window_monitoring": false,
       "press_conference_monitoring": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CBN_MPC_CALENDAR",
+      "source_id": "WSSRC-CB-014",
+      "canonical_occurrence_ids": [
+        "WSO-CBN-MPC-307",
+        "WSO-CBN-MPC-308"
+      ],
+      "meeting_number_by_occurrence_id": {
+        "WSO-CBN-MPC-307": 307,
+        "WSO-CBN-MPC-308": 308
+      },
+      "monitor_role": "OFFICIAL_CBN_MPC_MEETING_WINDOW_SCHEDULE_SENTINEL",
+      "cadence": "DAILY_WHILE_FUTURE_TRACKED_OCCURRENCES_REMAIN",
+      "request_budget_per_run": 2,
+      "request_order": [
+        "ROBOTS_POLICY",
+        "MPC_CALENDAR_IF_ALLOWED"
+      ],
+      "robots_policy": "FETCH_FIRST_FAIL_CLOSED_IF_CALENDAR_PATH_DISALLOWED",
+      "scope_policy": "EXACT_TWO_OCCURRENCE_ALLOW_LIST_NO_DYNAMIC_SERIES_EXPANSION",
+      "matching": {
+        "identity": "EXACT_MPC_MEETING_NUMBER",
+        "required_source_timezone": "Africa/Lagos",
+        "required_time_precision": "DAY_RANGE"
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "date_drift_policy": "GENERATE_REVIEW_CANDIDATE_NO_DIRECT_CANONICAL_MUTATION",
+      "absence_policy": "FUTURE_TRACKED_ROW_ABSENCE_IS_REVIEW_EVIDENCE_ONLY_NOT_DELAY_CANCELLATION_COMPLETION_OR_CERTAINTY_CHANGE",
+      "untracked_future_policy": "OBSERVATION_ONLY_SCOPE_EXTENSION_REQUIRES_SEPARATE_REVIEW",
+      "elapsed_policy": "DO_NOT_USE_CURRENT_CALENDAR_PRESENCE_OR_ABSENCE_TO_INFER_EVENT_STATE",
+      "decision_time_policy": "PROHIBIT_INFERENCE_OF_DECISION_PUBLICATION_DAY_OR_CLOCK_FROM_MEETING_WINDOW_OR_HISTORICAL_PRACTICE",
+      "schedule_authority": true,
+      "decision_publication_time_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }
