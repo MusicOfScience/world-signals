@@ -79,6 +79,25 @@ EXPECTED_CLASSIFICATIONS = {
     ),
 }
 
+BW_JAPAN_SOURCE_ID = "WSSRC-MAC-014"
+BW_JAPAN_ADAPTER_ID = "JAPAN_CPI_RELEASE_SCHEDULE"
+BW_JAPAN_PROMOTED_MONITORING = "CLEARED_BOUNDED_RELEASE_SCHEDULE"
+BW_JAPAN_OCCURRENCE_IDS = {f"WSO-MAC-A-{n:04d}" for n in range(50, 57)}
+BW_FALSE_ROUTE_GATES = {
+    "schedule_mutation_authority",
+    "clock_authority",
+    "lifecycle_authority",
+    "certainty_authority",
+    "canonical_clock_mutation_allowed",
+    "automatic_tokyo_cpi_followup_allowed",
+    "automatic_estat_api_followup_allowed",
+    "automatic_data_release_followup_allowed",
+    "automatic_pdf_fetch_allowed",
+    "automatic_news_followup_allowed",
+    "automatic_search_route_discovery_allowed",
+    "automatic_commit_allowed",
+}
+
 
 class P1FGovernanceMigrationTests(unittest.TestCase):
     @classmethod
@@ -95,6 +114,50 @@ class P1FGovernanceMigrationTests(unittest.TestCase):
     def _version_tuple(value: str) -> tuple[int, ...]:
         return tuple(int(part) for part in str(value).split("."))
 
+    def _bw_japan_cpi_descendant_promotion_is_valid(self, by_id: dict[str, dict]) -> bool:
+        source = by_id.get(BW_JAPAN_SOURCE_ID)
+        if not isinstance(source, dict):
+            return False
+        routes = [
+            row
+            for row in self.expectations.get("adapters", [])
+            if row.get("adapter_id") == BW_JAPAN_ADAPTER_ID
+        ]
+        if len(routes) != 1:
+            return False
+        route = routes[0]
+        notes = source.get("notes") or {}
+        if not isinstance(notes, dict):
+            return False
+        if self.expectations.get("automatic_canonical_commit") is not False:
+            return False
+        if self.expectations.get("google_calendar_write") is not False:
+            return False
+        if any(route.get(key) is not False for key in BW_FALSE_ROUTE_GATES):
+            return False
+        return (
+            source.get("automated_monitoring_use") == BW_JAPAN_PROMOTED_MONITORING
+            and source.get("automated_retrieval_permission")
+            == "BOUNDED_OFFICIAL_HTML_SCHEDULE_ROBOTS_COMPATIBLE"
+            and source.get("monitoring_readiness_status") == "LIVE_VALIDATED_NO_AUTO_COMMIT"
+            and source.get("monitoring_activation_status")
+            == "LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT"
+            and source.get("canonical_provenance_use") == "CLEARED_CURATED_FACTUAL_METADATA"
+            and source.get("verification_mode") == "AUTOMATED_PILOT"
+            and source.get("canonical_dependency_count") == 7
+            and source.get("live_adapter_id") == BW_JAPAN_ADAPTER_ID
+            and source.get("parser_version") == "jp-stat-cpi-0.2"
+            and notes.get("time_rule_url") == "https://www.stat.go.jp/english/data/cpi/1585.htm"
+            and route.get("source_id") == BW_JAPAN_SOURCE_ID
+            and route.get("canonical_schedule_source_id") == BW_JAPAN_SOURCE_ID
+            and route.get("same_source_identity_for_canonical_and_monitor") is True
+            and set(route.get("canonical_occurrence_ids") or []) == BW_JAPAN_OCCURRENCE_IDS
+            and route.get("request_budget_per_run") == 2
+            and route.get("robots_requests_per_run") == 1
+            and route.get("schedule_requests_per_run") == 1
+            and route.get("followup_requests_per_run") == 0
+        )
+
     def _assert_completed_source_state(self, source_registry: dict) -> None:
         self.assertGreaterEqual(
             self._version_tuple(str(source_registry.get("version"))),
@@ -102,8 +165,16 @@ class P1FGovernanceMigrationTests(unittest.TestCase):
         )
         assert_source_registry_compatible(self, source_registry)
         by_id = MIGRATION._sources_by_id(source_registry)
+        bw_japan_promoted = self._bw_japan_cpi_descendant_promotion_is_valid(by_id)
         for source_id, spec in self.plan["source_updates"].items():
             for field, value in spec["set"].items():
+                if (
+                    source_id == BW_JAPAN_SOURCE_ID
+                    and field == "automated_monitoring_use"
+                    and bw_japan_promoted
+                ):
+                    self.assertEqual(by_id[source_id].get(field), BW_JAPAN_PROMOTED_MONITORING)
+                    continue
                 self.assertEqual(by_id[source_id].get(field), value)
         assert_held_sources_compatible(
             self, source_registry, HELD,
@@ -143,6 +214,15 @@ class P1FGovernanceMigrationTests(unittest.TestCase):
             self.assertEqual(row["canonical_provenance_use"], values[0])
             self.assertEqual(row["automated_monitoring_use"], values[1])
             self.assertEqual(row["verification_mode"], values[2])
+
+    def test_later_bw_japan_promotion_never_rewrites_p1f_historical_truth(self):
+        frozen = self.plan["source_updates"][BW_JAPAN_SOURCE_ID]["set"]
+        self.assertEqual(frozen["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
+        self.assertEqual(frozen["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
+        self.assertEqual(frozen["verification_mode"], "AUTOMATED_PILOT")
+        by_id = MIGRATION._sources_by_id(self.sources)
+        if by_id[BW_JAPAN_SOURCE_ID].get("automated_monitoring_use") == BW_JAPAN_PROMOTED_MONITORING:
+            self.assertTrue(self._bw_japan_cpi_descendant_promotion_is_valid(by_id))
 
     def test_pilots_rights_holds_and_manual_recheck_are_not_conflated(self):
         japan = self.plan["source_updates"]["WSSRC-MAC-014"]["set"]
