@@ -126,21 +126,25 @@ def _parse_clock(value: str) -> str:
 
 
 def _nearest_preceding_time(tokens: list[str], index: int, *, max_back: int = 4) -> str:
-    for candidate in reversed(tokens[max(0, index - max_back) : index]):
-        if _TIME_RE.fullmatch(candidate):
-            return _parse_clock(candidate)
-    raise AdapterError(f"FOMC event at token {index} lacks an unambiguous preceding time")
+    candidates = [
+        candidate
+        for candidate in tokens[max(0, index - max_back) : index]
+        if _TIME_RE.fullmatch(candidate)
+    ]
+    if not candidates:
+        raise AdapterError(f"FOMC event at token {index} lacks a preceding time")
+    return _parse_clock(candidates[-1])
 
 
 def _next_day(tokens: list[str], index: int, *, max_forward: int = 5) -> int:
-    values = []
-    for candidate in tokens[index + 1 : index + 1 + max_forward]:
-        if _DAY_RE.fullmatch(candidate):
-            values.append(int(candidate))
-            break
-    if len(values) != 1:
-        raise AdapterError(f"FOMC event at token {index} lacks an unambiguous release day")
-    return values[0]
+    days = [
+        int(candidate)
+        for candidate in tokens[index + 1 : index + 1 + max_forward]
+        if _DAY_RE.fullmatch(candidate)
+    ]
+    if not days:
+        raise AdapterError(f"FOMC event at token {index} lacks a release day")
+    return days[0]
 
 
 def _iso_day(year: int, month: int, day: int) -> str:
@@ -235,7 +239,9 @@ def _meeting_dates(year: int, month_label: str, range_token: str) -> tuple[str, 
     if len(labels) == 1:
         month = _month_number(labels[0])
         if end_day < start_day:
-            raise AdapterError(f"cross-month FOMC range lacks a two-month label: {month_label} {range_token}")
+            raise AdapterError(
+                f"cross-month FOMC range lacks a two-month label: {month_label} {range_token}"
+            )
         return _iso_day(year, month, start_day), _iso_day(year, month, end_day), sep
     if len(labels) != 2:
         raise AdapterError(f"invalid FOMC month range label: {month_label!r}")
@@ -297,7 +303,11 @@ def parse_fomc_meeting_calendar_html(
         raise AdapterError("no FOMC meeting windows found")
 
     minute_rule = next(
-        (token for token in tokens if "minutes of regularly scheduled meetings are released three weeks" in token.lower()),
+        (
+            token
+            for token in tokens
+            if "minutes of regularly scheduled meetings are released three weeks" in token.lower()
+        ),
         None,
     )
     tentative = any(
@@ -350,7 +360,12 @@ def _parse_two_day_description(value: str, year: int) -> tuple[str, str]:
     return _iso_day(year, month, start_day), _iso_day(year, month, end_day)
 
 
-def _parse_minutes_meeting_description(value: str, calendar_year: int) -> tuple[str | None, str]:
+def _parse_minutes_meeting_description(
+    value: str,
+    *,
+    calendar_year: int,
+    calendar_month: int,
+) -> tuple[str, str]:
     clean = _norm(value)
     match = re.fullmatch(
         rf"Meeting of\s+({_MONTH_NAME})\s+(\d{{1,2}})\s*-\s*(\d{{1,2}})",
@@ -359,16 +374,24 @@ def _parse_minutes_meeting_description(value: str, calendar_year: int) -> tuple[
     )
     if not match:
         raise AdapterError(f"unrecognised FOMC minutes meeting description: {value!r}")
-    month = _month_number(match.group(1).title())
+    meeting_month = _month_number(match.group(1).title())
     start_day = int(match.group(2))
     end_day = int(match.group(3))
-    year = calendar_year
-    # January minutes may describe a December meeting from the prior year.
-    if month == 12 and calendar_year == 1:
-        year -= 1
-    start = _iso_day(year, month, start_day)
-    end = _iso_day(year, month, end_day)
-    return start, end
+    if end_day < start_day:
+        raise AdapterError("FOMC minutes meeting description has a reversed day range")
+    meeting_year = calendar_year
+    # A January release can legitimately contain minutes for a December meeting
+    # in the preceding year. No other cross-year inference is permitted.
+    if calendar_month == 1 and meeting_month == 12:
+        meeting_year -= 1
+    elif meeting_month > calendar_month:
+        raise AdapterError(
+            "FOMC minutes description refers to a future meeting month without a governed rollover rule"
+        )
+    return (
+        _iso_day(meeting_year, meeting_month, start_day),
+        _iso_day(meeting_year, meeting_month, end_day),
+    )
 
 
 def parse_fomc_operational_calendar_html(body: bytes | str) -> FOMCOperationalCalendar:
@@ -378,12 +401,26 @@ def parse_fomc_operational_calendar_html(body: bytes | str) -> FOMCOperationalCa
     events: list[FOMCOperationalEvent] = []
 
     decision_indexes = [i for i, token in enumerate(section) if token == "FOMC Meeting"]
+    press_indexes = [i for i, token in enumerate(section) if token == "FOMC Press Conference"]
+    minute_indexes = [i for i, token in enumerate(section) if token == "FOMC Minutes"]
+
     if len(decision_indexes) > 1:
         raise AdapterError("multiple FOMC Meeting decision rows in one monthly calendar")
+    if len(press_indexes) > 1:
+        raise AdapterError("multiple FOMC Press Conference rows in one monthly calendar")
+    if len(minute_indexes) > 1:
+        raise AdapterError("multiple FOMC Minutes rows in one monthly calendar")
+    if bool(decision_indexes) != bool(press_indexes):
+        raise AdapterError(
+            "FOMC decision and press-conference rows must be present as a distinct pair"
+        )
+
     for idx in decision_indexes:
         clock = _nearest_preceding_time(section, idx)
         descriptions = [
-            token for token in section[idx + 1 : idx + 4] if token.lower().startswith("two-day meeting,")
+            token
+            for token in section[idx + 1 : idx + 4]
+            if token.lower().startswith("two-day meeting,")
         ]
         if len(descriptions) != 1:
             raise AdapterError("FOMC Meeting row lacks one two-day meeting description")
@@ -400,9 +437,6 @@ def parse_fomc_operational_calendar_html(body: bytes | str) -> FOMCOperationalCa
             )
         )
 
-    press_indexes = [i for i, token in enumerate(section) if token == "FOMC Press Conference"]
-    if len(press_indexes) > 1:
-        raise AdapterError("multiple FOMC Press Conference rows in one monthly calendar")
     for idx in press_indexes:
         clock = _nearest_preceding_time(section, idx)
         day = _next_day(section, idx)
@@ -418,17 +452,20 @@ def parse_fomc_operational_calendar_html(body: bytes | str) -> FOMCOperationalCa
             )
         )
 
-    minute_indexes = [i for i, token in enumerate(section) if token == "FOMC Minutes"]
-    if len(minute_indexes) > 1:
-        raise AdapterError("multiple FOMC Minutes rows in one monthly calendar")
     for idx in minute_indexes:
         clock = _nearest_preceding_time(section, idx)
         descriptions = [
-            token for token in section[idx + 1 : idx + 4] if token.lower().startswith("meeting of ")
+            token
+            for token in section[idx + 1 : idx + 4]
+            if token.lower().startswith("meeting of ")
         ]
         if len(descriptions) != 1:
             raise AdapterError("FOMC Minutes row lacks one source meeting description")
-        related_start, related_end = _parse_minutes_meeting_description(descriptions[0], year)
+        related_start, related_end = _parse_minutes_meeting_description(
+            descriptions[0],
+            calendar_year=year,
+            calendar_month=month,
+        )
         day = _next_day(section, idx)
         event_date = _iso_day(year, month, day)
         events.append(
@@ -469,9 +506,13 @@ def validate_fomc_schedule_alignment(
             press = presses[0]
             relation = (decision.related_meeting_start_date, decision.related_meeting_end_date)
             if relation not in windows:
-                raise AdapterError(f"operational FOMC meeting window not found in meeting calendar: {relation}")
+                raise AdapterError(
+                    f"operational FOMC meeting window not found in meeting calendar: {relation}"
+                )
             if press.related_meeting_end_date != decision.related_meeting_end_date:
-                raise AdapterError("FOMC press conference date does not align with decision meeting end date")
+                raise AdapterError(
+                    "FOMC press conference date does not align with decision meeting end date"
+                )
             if press.start_local == decision.start_local:
                 raise AdapterError("FOMC decision and press conference were collapsed to one timestamp")
         elif presses:
