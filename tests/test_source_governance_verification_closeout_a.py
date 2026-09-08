@@ -61,7 +61,10 @@ class VerificationCloseoutATests(unittest.TestCase):
                         source_id == "WSSRC-REG6-001"
                         and key == "verification_mode"
                         and by_id[source_id].get("monitoring_readiness_status")
-                        == "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD"
+                        in {
+                            "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD",
+                            "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD",
+                        }
                     ):
                         # Verification Closeout A historically established MANUAL_AUTHORITATIVE_RECHECK.
                         # A later reviewed readiness tranche may advance the technical verification mode,
@@ -76,6 +79,11 @@ class VerificationCloseoutATests(unittest.TestCase):
                             by_id[source_id].get("monitoring_activation_status"),
                             "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
                         )
+                        if by_id[source_id].get("monitoring_readiness_status") == "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD":
+                            self.assertEqual(
+                                by_id[source_id].get("runtime_health_state"),
+                                "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08",
+                            )
                         self.assertFalse(
                             any(row.get("source_id") == source_id for row in self.expectations["adapters"])
                         )
