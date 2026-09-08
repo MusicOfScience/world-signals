@@ -37,6 +37,8 @@ APPROVED = {
 }
 HELD = "WSSRC-EL-BR-001"
 EIA = "WSSRC-COM-003"
+FAO = "WSSRC-COM-010"
+FAO_BV_ADAPTER = "FAO_RELEASE_CALENDAR"
 
 
 class P1AGovernanceMigrationTests(unittest.TestCase):
@@ -82,6 +84,67 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
         )
         self.assertIn("does not confer publication-completion authority", row.get("monitor_route_scope_note", ""))
 
+    def _assert_reviewed_fao_descendant_clearance(self, row: dict) -> None:
+        """Allow only BV's bounded FAO release-calendar automation promotion.
+
+        P1-A's 2026-09-04 classification remains frozen historical truth: the
+        FAO calendar endpoint still required endpoint review at that checkpoint.
+        BV may advance automation/readiness only after the separate bounded
+        robots + calendar diagnostic and only while Canonical provenance and
+        general-web-content rights classifications remain unchanged.
+        """
+        routes = [
+            route for route in self.expectations.get("adapters", [])
+            if route.get("adapter_id") == FAO_BV_ADAPTER
+        ]
+        self.assertEqual(len(routes), 1)
+        route = routes[0]
+        self.assertEqual(route.get("source_id"), FAO)
+        self.assertEqual(route.get("canonical_schedule_source_id"), FAO)
+        self.assertTrue(route.get("same_source_identity_for_canonical_and_monitor"))
+        self.assertEqual(route.get("request_budget_per_run"), 2)
+        self.assertEqual(route.get("robots_requests_per_run"), 1)
+        self.assertEqual(route.get("calendar_requests_per_run"), 1)
+        self.assertEqual(route.get("followup_requests_per_run"), 0)
+        for key in (
+            "schedule_authority",
+            "lifecycle_authority",
+            "certainty_authority",
+            "canonical_clock_mutation_allowed",
+            "automatic_amis_followup_allowed",
+            "automatic_faostat_followup_allowed",
+            "automatic_pdf_fetch_allowed",
+            "automatic_news_followup_allowed",
+            "automatic_search_route_discovery_allowed",
+            "automatic_commit_allowed",
+        ):
+            self.assertFalse(route.get(key), key)
+
+        self.assertEqual(row.get("canonical_provenance_use"), "MANUAL_INFORMATIONAL_REFERENCE_ONLY")
+        self.assertEqual(row.get("licence_review_status"), "CLEARED_FOR_FACTUAL_METADATA")
+        self.assertEqual(row.get("ingestion_permission"), "PUBLIC_FACTS_ALLOWED")
+        self.assertEqual(row.get("redistribution_permission"), "PUBLIC_FACTUAL_METADATA_ONLY")
+        self.assertEqual(row.get("governance_backfill_reviewed_at"), "2026-09-04")
+        self.assertIn(
+            "separate statistical-database licensing regime is not projected",
+            row.get("governance_backfill_basis", ""),
+        )
+        self.assertEqual(row.get("automated_monitoring_use"), "CLEARED_BOUNDED_RELEASE_CALENDAR")
+        self.assertEqual(
+            row.get("automated_retrieval_permission"),
+            "BOUNDED_OFFICIAL_CALENDAR_ROBOTS_COMPATIBLE",
+        )
+        self.assertEqual(row.get("monitoring_readiness_status"), "LIVE_VALIDATED_NO_AUTO_COMMIT")
+        self.assertEqual(row.get("verification_mode"), "AUTOMATED_PILOT")
+        self.assertEqual(row.get("live_adapter_id"), FAO_BV_ADAPTER)
+        evidence = row.get("live_validation_evidence") or {}
+        self.assertEqual(evidence.get("run_id"), 34234241294)
+        self.assertEqual(evidence.get("job_id"), 102087743209)
+        self.assertEqual(evidence.get("request_count"), 2)
+        self.assertEqual(evidence.get("configured_match_count"), 6)
+        self.assertFalse(evidence.get("clock_exposed"))
+        self.assertFalse(evidence.get("automatic_commit_allowed"))
+
     def _assert_completed_source_state(self, source_registry: dict) -> None:
         self.assertGreaterEqual(
             self._version_tuple(str(source_registry.get("version"))),
@@ -94,6 +157,9 @@ class P1AGovernanceMigrationTests(unittest.TestCase):
                 actual = by_id[source_id].get(field)
                 if source_id == EIA and field == "automated_monitoring_use" and actual != value:
                     self._assert_reviewed_eia_descendant_clearance(by_id[source_id])
+                    continue
+                if source_id == FAO and field in {"automated_monitoring_use", "verification_mode"} and actual != value:
+                    self._assert_reviewed_fao_descendant_clearance(by_id[source_id])
                     continue
                 self.assertEqual(actual, value)
         assert_held_sources_compatible(
