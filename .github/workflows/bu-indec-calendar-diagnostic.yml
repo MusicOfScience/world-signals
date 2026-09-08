@@ -1,0 +1,98 @@
+name: BU INDEC calendar diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bt-pressure-audit-bu
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BT ancestry
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
+          test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
+      - name: Probe INDEC crawler policy and calendar surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, re, urllib.request, urllib.error
+          from urllib.parse import urljoin, urlparse
+          from urllib.robotparser import RobotFileParser
+
+          UA='WORLD-SIGNALS-RESEARCH/1.0'
+          robots='https://www.indec.gob.ar/robots.txt'
+          calendar='https://www.indec.gob.ar/indec/web/Calendario-Fecha-0'
+          headers={'User-Agent':UA,'Accept':'text/html,application/xhtml+xml,*/*;q=0.5'}
+
+          def get(url):
+              req=urllib.request.Request(url,headers=headers)
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r:
+                      body=r.read()
+                      return {'status':r.status,'content_type':r.headers.get_content_type(),'final_url':r.geturl(),'body':body}
+              except urllib.error.HTTPError as e:
+                  body=e.read()
+                  return {'status':e.code,'content_type':e.headers.get_content_type() if e.headers else None,'final_url':e.geturl(),'body':body}
+
+          rr=get(robots)
+          print('ROBOTS', json.dumps({'status':rr['status'],'content_type':rr['content_type'],'final_url':rr['final_url'],'sha256':hashlib.sha256(rr['body']).hexdigest(),'bytes':len(rr['body'])},sort_keys=True))
+          robots_text=rr['body'].decode('utf-8','replace')
+          print('ROBOTS_TEXT', repr(robots_text[:2000]))
+
+          allowed=None
+          if rr['status']==200:
+              rp=RobotFileParser(); rp.set_url(robots); rp.parse(robots_text.splitlines())
+              allowed=rp.can_fetch(UA, calendar)
+          print('CALENDAR_ROBOTS_ALLOWED', allowed)
+          if allowed is False:
+              raise SystemExit('calendar path explicitly disallowed; fail closed without calendar request')
+
+          cr=get(calendar)
+          print('CALENDAR', json.dumps({'status':cr['status'],'content_type':cr['content_type'],'final_url':cr['final_url'],'sha256':hashlib.sha256(cr['body']).hexdigest(),'bytes':len(cr['body'])},sort_keys=True))
+          if cr['status'] != 200:
+              raise SystemExit('calendar surface not HTTP 200')
+          text=cr['body'].decode('utf-8','replace')
+          hrefs=re.findall(r'''href\s*=\s*["']([^"']+)["']''',text,re.I)
+          srcs=re.findall(r'''src\s*=\s*["']([^"']+)["']''',text,re.I)
+          interesting=[]
+          for h in hrefs:
+              low=h.lower()
+              if any(k in low for k in ('calend','agenda','.ics','ical','.pdf','difusion','difusión')):
+                  interesting.append(urljoin(cr['final_url'],h))
+          scripts=[]
+          for s in srcs:
+              low=s.lower()
+              if low.endswith('.js') or 'calendar' in low or 'calend' in low:
+                  scripts.append(urljoin(cr['final_url'],s))
+          tokens=[]
+          for pat in (r'url\s*:\s*["\']([^"\']+)', r'fetch\s*\(\s*["\']([^"\']+)', r'\.ajax\s*\(.*?url\s*:\s*["\']([^"\']+)'):
+              for m in re.findall(pat,text,re.I|re.S):
+                  tokens.append(urljoin(cr['final_url'],m))
+          print('INTERESTING_HREFS', json.dumps(sorted(set(interesting)),ensure_ascii=False,indent=2))
+          print('SCRIPT_REFS', json.dumps(sorted(set(scripts)),ensure_ascii=False,indent=2))
+          print('INLINE_ENDPOINT_HINTS', json.dumps(sorted(set(tokens)),ensure_ascii=False,indent=2))
+          print('HAS_AGENDAR', 'AGENDAR' in text.upper())
+          print('HAS_DESCARGAR_CALENDARIO', 'DESCARGAR CALENDARIO' in text.upper())
+          print('REQUEST_COUNT', 2)
+          PY
+      - name: Prove diagnostic is read-only
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
