@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.85",
+  "version": "1.86",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -19,15 +19,20 @@
       "source_timezone": "America/New_York",
       "recommended_verification_cadence": "weekly; daily inside 30 days of next meeting",
       "activation_status": "ACTIVE",
-      "parser_type": "HTML_FOMC_CALENDAR_PLUS_RULE_MONITOR",
+      "parser_type": "HTML_FOMC_SCHEDULE_READINESS_ADAPTER",
       "known_limitations": [
-        "Minutes are a linked publication series and should be separate occurrences."
+        "Minutes are a linked publication series and should be separate occurrences.",
+        "The conventional /robots.txt path returned HTTP 404 during the bounded BM probe; absence of a robots file is neither permission nor prohibition and does not clear automated retrieval.",
+        "The Federal Reserve monetary-policy RSS feed is a separate machine-readable publication interface and is not forward schedule authority; BM does not activate or fold it into this source route.",
+        "The FOMC calendar's generic tentative-date note is preserved as source semantics but is not converted into automatic Canonical certainty changes.",
+        "The general three-week minutes-release convention is not used to manufacture future minutes occurrences; explicit monthly operational calendars remain required for clocks and publication dates.",
+        "The historical source record overstated durable parser readiness: BM replaces the bootstrap-era parser label with a real live-validated adapter while keeping the automation permission hold closed."
       ],
       "backup_source": null,
       "notes": null,
       "timezone_scope": "FIXED",
-      "parser_version": "fomc-calendar-rule-0.1",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+      "parser_version": "fomc-schedule-readiness-0.2",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS_2026_09_08",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_PUBLIC_DOMAIN_FACTUAL_CONTENT",
@@ -35,15 +40,15 @@
       "redistribution_permission": "PUBLIC_DOMAIN_CONTENT_WITH_SOURCE_CITATION_PREFERRED",
       "rights_evidence_url": "https://www.federalreserve.gov/disclaimer.htm",
       "rights_summary": "Board website information is public domain unless otherwise indicated; third-party material and seals/logos are excluded.",
-      "automation_summary": "Public-domain status does not itself authorise unlimited crawling; endpoint/robots/rate behaviour still requires operational review.",
+      "automation_summary": "A real first-party FOMC schedule adapter is live-validated against the meeting calendar and September/October/December 2026 operational calendars. Reachability and successful parsing are not treated as automated-retrieval permission; automated_monitoring_use remains ENDPOINT_REVIEW_REQUIRED and no production monitor route is configured.",
       "rights_reviewed_at": "2026-09-02T19:47:00+10:00",
       "rights_review_scope": "P0-A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
       "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
-      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_readiness_status": "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD",
       "monitoring_priority_score": 650,
       "canonical_dependency_count": 44,
-      "monitoring_readiness_assessed_at": "2026-09-02",
-      "monitoring_activation_status": "PILOT_WITH_REVIEWED_COMMIT_ONLY",
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "monitoring_activation_status": "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
       "last_successful_research_verification_at": "2026-09-02T22:58:00+10:00",
       "monitor_endpoints": [
         {
@@ -65,7 +70,27 @@
       "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "Federal Reserve factual website content is public domain unless otherwise indicated and the FOMC parser has pilot evidence, but unrestricted automated calendar polling is not inferred from public-domain status."
+      "governance_backfill_basis": "Federal Reserve factual website content is public domain unless otherwise indicated and the FOMC parser has pilot evidence, but unrestricted automated calendar polling is not inferred from public-domain status.",
+      "live_validation_evidence": {
+        "post_bl_pressure_audit_run_id": 34182397891,
+        "source_scope_probe_run_id": 34182471933,
+        "endpoint_operational_probe_run_id": 34182651174,
+        "adapter_preflight_success_run_id": 34183359710,
+        "adapter_preflight_success_job_id": 101926752639,
+        "first_fail_closed_preflight_run_id": 34183129817,
+        "first_fail_closed_preflight_job_id": 101926078988,
+        "observed_at": "2026-09-08",
+        "meeting_calendar_http_status": 200,
+        "operational_calendar_http_statuses": [
+          200,
+          200,
+          200
+        ],
+        "meeting_schedule_semantic_sha256": "e9db0ba88ed1798569706a99201a457e87b0abe80e4ccb06266d297ff8a533a5",
+        "september_operational_semantic_sha256": "8a601428ad51e2f1e8444356f196e5a054749a60ba913930a3b9447917d873c8",
+        "october_operational_semantic_sha256": "8c6252d6cf334c92e687217280e86f8c1722df2cbef2a41c262eee334e48181f",
+        "december_operational_semantic_sha256": "6a10ba410fbd110391317a4892ab548cb3bff6c1e9c86448dfec734838533610"
+      }
     },
     {
       "source_id": "WSSRC-CB-002",

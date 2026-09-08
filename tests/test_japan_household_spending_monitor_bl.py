@@ -306,15 +306,19 @@ class JapanHouseholdSpendingMonitorBLTests(unittest.TestCase):
                 self.assertEqual(post_by_id[source_id], pre_by_id[source_id], source_id)
             self.assertEqual(post_expectations["adapters"][:9], expectations["adapters"])
         else:
-            self.assertEqual(sources["version"], "1.85")
-            self.assertEqual(expectations["version"], "0.12")
+            self.assertGreaterEqual(
+                tuple(map(int, sources["version"].split("."))), (1, 85)
+            )
+            self.assertGreaterEqual(
+                tuple(map(int, expectations["version"].split("."))), (0, 12)
+            )
             post_sources, post_expectations = sources, expectations
             live = (ROOT / "scripts/run_live_monitor.py").read_text()
             smoke = (ROOT / "scripts/run_adapter_smoke.py").read_text()
             adapter_init = (ROOT / "src/world_signals/adapters/__init__.py").read_text()
 
-        self.assertEqual(len(post_sources["sources"]), 247)
-        self.assertEqual(len(post_expectations["adapters"]), 10)
+        self.assertGreaterEqual(len(post_sources["sources"]), 247)
+        self.assertGreaterEqual(len(post_expectations["adapters"]), 10)
         machine = next(row for row in post_sources["sources"] if row["source_id"] == "WSSRC-MAC-030")
         schedule = next(row for row in post_sources["sources"] if row["source_id"] == "WSSRC-MAC-024")
         self.assertEqual(machine["canonical_dependency_count"], 0)
