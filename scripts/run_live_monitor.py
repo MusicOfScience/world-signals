@@ -31,6 +31,8 @@ from world_signals.adapters import (
     fetch_ons_upcoming_releases,
     fetch_indec_cpi_months,
     fetch_indec_robots_policy,
+    fetch_japan_cpi_robots_policy,
+    fetch_japan_cpi_schedule,
     fetch_japan_household_spending_data,
     fetch_japan_mof_news_rss,
     fetch_rba_fsr,
@@ -51,6 +53,7 @@ from world_signals.fao_release_monitor import fao_release_calendar_review_candid
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
 from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
 from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
+from world_signals.japan_cpi_monitor import japan_cpi_schedule_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.rba_mpb_monitor import (
@@ -632,6 +635,71 @@ def main() -> int:
                 "schedule_authority":False,
                 "lifecycle_authority":False,
                 "automatic_calendar_html_fetch_allowed":False,
+            })
+
+    if "JAPAN_CPI_RELEASE_SCHEDULE" in configs:
+        jp_cpi_config=configs["JAPAN_CPI_RELEASE_SCHEDULE"]
+        try:
+            jp_cpi_allowed,jp_cpi_robots_snap=fetch_japan_cpi_robots_policy()
+            if not jp_cpi_allowed:
+                report["source_health"].append({
+                    "adapter_id":"JAPAN_CPI_RELEASE_SCHEDULE",
+                    "source_id":jp_cpi_config["source_id"],
+                    "state":"DEGRADED",
+                    "robots_snapshot":jp_cpi_robots_snap.as_dict(),
+                    "failure_stage":"ROBOTS_POLICY_NOW_DISALLOWS_REGISTERED_JAPAN_CPI_SCHEDULE",
+                    "schedule_request_skipped":True,
+                    "canonical_action":"NONE",
+                    "clock_authority":False,
+                    "lifecycle_authority":False,
+                    "certainty_authority":False,
+                    "automatic_commit_allowed":False,
+                })
+            else:
+                jp_cpi_items,jp_cpi_schedule_snap=fetch_japan_cpi_schedule()
+                report["source_health"].append({
+                    "adapter_id":"JAPAN_CPI_RELEASE_SCHEDULE",
+                    "source_id":jp_cpi_config["source_id"],
+                    "state":"HEALTHY",
+                    "robots_snapshot":jp_cpi_robots_snap.as_dict(),
+                    "schedule_snapshot":jp_cpi_schedule_snap.as_dict(),
+                    "national_schedule_row_count":len(jp_cpi_items),
+                    "request_budget_per_run":2,
+                    "robots_request_count":1,
+                    "schedule_request_count":1,
+                    "followup_request_count":0,
+                    "tokyo_cpi_followup_request_count":0,
+                    "estat_api_followup_request_count":0,
+                    "data_release_followup_request_count":0,
+                    "pdf_followup_request_count":0,
+                    "news_followup_request_count":0,
+                    "search_route_request_count":0,
+                    "schedule_mutation_authority":False,
+                    "clock_authority":False,
+                    "lifecycle_authority":False,
+                    "certainty_authority":False,
+                    "canonical_clock_mutation_allowed":False,
+                    "automatic_commit_allowed":False,
+                })
+                candidates,observations=japan_cpi_schedule_review_candidates(
+                    registry.get("records",[]),jp_cpi_items,jp_cpi_config
+                )
+                report["review_candidates"].extend(candidates)
+                report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"JAPAN_CPI_RELEASE_SCHEDULE",
+                "source_id":jp_cpi_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_mutation_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_clock_mutation_allowed":False,
+                "automatic_commit_allowed":False,
             })
 
     if "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API" in configs:

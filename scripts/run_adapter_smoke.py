@@ -30,6 +30,8 @@ from world_signals.adapters import (
     fetch_fed_monetary_policy_rss,
     fetch_indec_cpi_months,
     fetch_indec_robots_policy,
+    fetch_japan_cpi_robots_policy,
+    fetch_japan_cpi_schedule,
     fetch_japan_household_spending_data,
     fetch_japan_mof_news_rss,
     fetch_rba_fsr,
@@ -299,6 +301,31 @@ def main() -> int:
             "error":str(exc),
             "canonical_action":"NONE",
         })
+
+    try:
+        jp_cpi_allowed,jp_cpi_robots_snap=fetch_japan_cpi_robots_policy()
+        if not jp_cpi_allowed:
+            raise AdapterError("Statistics Bureau robots policy disallows the registered CPI schedule path")
+        jp_cpi_items,jp_cpi_schedule_snap=fetch_japan_cpi_schedule()
+        report["results"].append({
+            "adapter":"JAPAN_CPI_RELEASE_SCHEDULE",
+            "status":"PASS",
+            "source_id":"WSSRC-MAC-014",
+            "robots_snapshot":jp_cpi_robots_snap.as_dict(),
+            "schedule_snapshot":jp_cpi_schedule_snap.as_dict(),
+            "national_schedule_row_count":len(jp_cpi_items),
+            "request_budget_per_run":2,
+            "robots_request_count":1,
+            "schedule_request_count":1,
+            "followup_request_count":0,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "certainty_authority":False,
+            "canonical_clock_mutation_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"JAPAN_CPI_RELEASE_SCHEDULE","error":str(exc)})
 
     try:
         jp_values,jp_snap=fetch_japan_household_spending_data(
