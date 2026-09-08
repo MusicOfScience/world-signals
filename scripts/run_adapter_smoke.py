@@ -25,6 +25,7 @@ from world_signals.adapters import (
     fetch_eurostat_release_calendar,
     fetch_fed_monetary_policy_rss,
     fetch_japan_household_spending_data,
+    fetch_japan_mof_news_rss,
     fetch_rba_fsr,
     fetch_rba_monetary_policy_calendar,
     fetch_rba_board_schedule,
@@ -179,6 +180,29 @@ def main() -> int:
             "adapter":"EUROSTAT_RELEASE_CALENDAR_ICS",
             "status":"FAIL",
             "source_id":"WSSRC-MAC-005",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
+
+    try:
+        jgb_items,jgb_snap=fetch_japan_mof_news_rss()
+        report["results"].append({
+            "adapter":"JAPAN_MOF_JGB_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-FIS-029",
+            "snapshot":jgb_snap.as_dict(),
+            "item_count":len(jgb_items),
+            "request_policy":"ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN",
+            "schedule_authority":False,
+            "automatic_calendar_html_fetch_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"JAPAN_MOF_JGB_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-FIS-029",
             "error":str(exc),
             "canonical_action":"NONE",
         })

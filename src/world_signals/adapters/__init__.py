@@ -107,6 +107,14 @@ from .japan_statistics_dashboard import (
     japan_household_spending_data_url,
     parse_japan_household_spending_data_json,
 )
+from .japan_mof_rss import (
+    JAPAN_MOF_NEWS_RSS,
+    JAPAN_MOF_RSS_ACCEPT,
+    JAPAN_MOF_RSS_DOCS,
+    JapanMOFRSSItem,
+    fetch_japan_mof_news_rss,
+    parse_japan_mof_news_rss,
+)
 from .japan_mof_jgb import (
     JAPAN_MOF_JGB_CALENDAR_INDEX,
     JAPAN_MOF_TIMEZONE,
@@ -196,6 +204,10 @@ __all__ = [
     "FOMCOperationalCalendar",
     "FOMCOperationalEvent",
     "FetchSnapshot",
+    "JAPAN_MOF_NEWS_RSS",
+    "JAPAN_MOF_RSS_ACCEPT",
+    "JAPAN_MOF_RSS_DOCS",
+    "JapanMOFRSSItem",
     "JAPAN_MOF_JGB_CALENDAR_INDEX",
     "JAPAN_MOF_TIMEZONE",
     "JAPAN_HHSPEND_CYCLE",
@@ -245,6 +257,8 @@ __all__ = [
     "parse_fed_monetary_policy_rss",
     "fetch_fomc_meeting_calendar",
     "fetch_fomc_operational_calendar",
+    "fetch_japan_mof_news_rss",
+    "parse_japan_mof_news_rss",
     "fetch_jgb_monthly_auction_calendar",
     "fetch_japan_household_spending_data",
     "fetch_kenya_budget_policy_rule_baseline",

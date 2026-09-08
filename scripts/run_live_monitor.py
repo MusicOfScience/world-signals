@@ -26,6 +26,7 @@ from world_signals.adapters import (
     fetch_fed_monetary_policy_rss,
     fetch_ons_upcoming_releases,
     fetch_japan_household_spending_data,
+    fetch_japan_mof_news_rss,
     fetch_rba_fsr,
     fetch_rba_monetary_policy_calendar,
     fetch_rba_board_schedule,
@@ -39,6 +40,7 @@ from world_signals.io import load_json
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
+from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.rba_mpb_monitor import (
@@ -389,6 +391,40 @@ def main() -> int:
                 "error":str(exc),
                 "canonical_action":"NONE",
                 "absence_is_not_event_state":True,
+            })
+
+    if "JAPAN_MOF_JGB_RSS" in configs:
+        jgb_config=configs["JAPAN_MOF_JGB_RSS"]
+        try:
+            jgb_items,jgb_snap=fetch_japan_mof_news_rss()
+            report["source_health"].append({
+                "adapter_id":"JAPAN_MOF_JGB_RSS",
+                "source_id":jgb_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":jgb_snap.as_dict(),
+                "item_count":len(jgb_items),
+                "request_policy":"ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN",
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "automatic_calendar_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=japan_mof_jgb_rss_review_candidates(
+                registry.get("records",[]),jgb_items,jgb_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"JAPAN_MOF_JGB_RSS",
+                "source_id":jgb_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "automatic_calendar_html_fetch_allowed":False,
             })
 
     if "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API" in configs:
