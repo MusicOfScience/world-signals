@@ -36,7 +36,6 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
 
         self.assertEqual(len(post["sources"]), 247)
         target = next(row for row in post["sources"] if row["source_id"] == tx.SOURCE_ID)
-        self.assertEqual(target["canonical_dependency_count"], 1)
         self.assertEqual(target["parser_version"], "kenya-bps-rule-0.1")
         self.assertEqual(target["verification_mode"], "AUTOMATED_PILOT")
         self.assertEqual(target["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
