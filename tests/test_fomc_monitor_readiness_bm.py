@@ -91,8 +91,8 @@ class FOMCMonitorReadinessBMTests(unittest.TestCase):
         self.assertEqual((analysis["version"], len(analysis["reviews"])), ("0.17", 21))
         self.assertEqual(len(analysis_evidence["evidence"]), 95)
         self.assertEqual((ledger["version"], len(ledger["changes"])), ("0.27", 62))
-        self.assertEqual(overlay["canonical_registry_version"], "0.41")
-        self.assertEqual(overlay["canonical_registry_record_count"], 689)
+        self.assertEqual(overlay["canonical_checkpoint"]["registry_version"], "0.41")
+        self.assertEqual(overlay["canonical_checkpoint"]["record_count"], 689)
 
     def test_bl_descendant_repair_is_narrow_and_idempotent(self):
         original = (ROOT / "tests/test_japan_household_spending_monitor_bl.py").read_text()
