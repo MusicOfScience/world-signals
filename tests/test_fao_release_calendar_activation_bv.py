@@ -50,12 +50,15 @@ class FAOReleaseCalendarActivationBVTests(unittest.TestCase):
     @classmethod
     def _is_bv_or_descendant(cls) -> bool:
         source = cls._source()
+        update = PLAN["source_governance_update"]
         return (
             _version_tuple(SOURCES.get("version", "0")) >= (1, 95)
             and len(SOURCES.get("sources", [])) >= 252
             and _version_tuple(EXPECTATIONS.get("version", "0")) >= (0, 20)
             and len(EXPECTATIONS.get("adapters", [])) >= 18
-            and source.get("automated_monitoring_use") == "CLEARED"
+            and source.get("automated_monitoring_use") == update["automated_monitoring_use"]
+            and source.get("automated_retrieval_permission") == update["automated_retrieval_permission"]
+            and source.get("monitoring_readiness_status") == update["monitoring_readiness_status"]
             and source.get("live_adapter_id") == TX.ADAPTER_ID
             and sum(x.get("adapter_id") == TX.ADAPTER_ID for x in EXPECTATIONS.get("adapters", [])) == 1
         )
@@ -86,15 +89,16 @@ class FAOReleaseCalendarActivationBVTests(unittest.TestCase):
                     continue
                 self.assertEqual(after_by_id[source_id], before)
         source = after_by_id[TX.SOURCE_ID]
+        update = PLAN["source_governance_update"]
         self.assertEqual(source["canonical_dependency_count"], 9)
         self.assertEqual(source["canonical_provenance_use"], "MANUAL_INFORMATIONAL_REFERENCE_ONLY")
         self.assertEqual(source["licence_review_status"], "CLEARED_FOR_FACTUAL_METADATA")
         self.assertEqual(source["ingestion_permission"], "PUBLIC_FACTS_ALLOWED")
         self.assertEqual(source["redistribution_permission"], "PUBLIC_FACTUAL_METADATA_ONLY")
-        self.assertEqual(source["automated_monitoring_use"], "CLEARED")
+        self.assertEqual(source["automated_monitoring_use"], update["automated_monitoring_use"])
         self.assertEqual(source["live_adapter_id"], TX.ADAPTER_ID)
-        self.assertEqual(source["automated_retrieval_permission"], "BOUNDED_PUBLIC_HTML_SCHEDULE_ROBOTS_COMPATIBLE")
-        self.assertEqual(source["monitoring_readiness_status"], "LIVE_VALIDATED_NO_AUTO_COMMIT")
+        self.assertEqual(source["automated_retrieval_permission"], update["automated_retrieval_permission"])
+        self.assertEqual(source["monitoring_readiness_status"], update["monitoring_readiness_status"])
         self.assertEqual(len(source["monitor_endpoints"]), 2)
         self.assertEqual(source["live_validation_evidence"]["request_count"], 2)
         self.assertEqual(source["live_validation_evidence"]["configured_match_count"], 6)
