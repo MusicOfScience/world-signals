@@ -54,15 +54,32 @@ class P1BGovernanceMigrationTests(unittest.TestCase):
         return tuple(int(part) for part in str(value).split("."))
 
     def _assert_completed_source_state(self, source_registry: dict) -> None:
-        self.assertGreaterEqual(
-            self._version_tuple(str(source_registry.get("version"))),
-            self._version_tuple(self.post_version),
-        )
+        current_version = self._version_tuple(str(source_registry.get("version")))
+        self.assertGreaterEqual(current_version, self._version_tuple(self.post_version))
         assert_source_registry_compatible(self, source_registry)
         by_id = MIGRATION._sources_by_id(source_registry)
         for source_id, spec in self.plan["source_updates"].items():
             for field, value in spec["set"].items():
-                self.assertEqual(by_id[source_id].get(field), value)
+                actual = by_id[source_id].get(field)
+                # P1B froze RBA MPB at endpoint-review-required. A later
+                # reviewed activation may advance only that automation field,
+                # while the original P1B plan remains exact historical truth.
+                if (
+                    source_id == "WSSRC-CB-002"
+                    and field == "automated_monitoring_use"
+                    and current_version >= (1, 88)
+                    and actual == "CLEARED"
+                ):
+                    self.assertEqual(
+                        by_id[source_id].get("automated_retrieval_permission"),
+                        "CLEARED_BOUNDED_ROBOTS_CONFORMANT_LOW_RATE_SCHEDULE_PATHS",
+                    )
+                    self.assertEqual(
+                        by_id[source_id].get("monitoring_activation_status"),
+                        "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT",
+                    )
+                    continue
+                self.assertEqual(actual, value)
         assert_held_sources_compatible(
             self, source_registry, {HELD},
             self.plan["preconditions"]["required_missing_governance_fields"],
