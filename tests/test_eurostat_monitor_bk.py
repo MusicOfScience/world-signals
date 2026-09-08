@@ -202,15 +202,20 @@ class EurostatMonitorBKTests(unittest.TestCase):
                     self.assertEqual(post_by_id[source_id], pre_by_id[source_id], source_id)
             self.assertEqual(post_expectations["adapters"][:8], expectations["adapters"])
         else:
-            self.assertEqual(sources["version"], "1.84")
-            self.assertEqual(expectations["version"], "0.11")
+            # BK freezes its own Eurostat contribution, not a permanent ceiling on
+            # later independently reviewed source or monitor growth.
+            def dotted(value: str) -> tuple[int, ...]:
+                return tuple(int(part) for part in value.split("."))
+
+            self.assertGreaterEqual(dotted(sources["version"]), dotted("1.84"))
+            self.assertGreaterEqual(dotted(expectations["version"]), dotted("0.11"))
             post_sources, post_expectations = sources, expectations
             live = (ROOT / "scripts/run_live_monitor.py").read_text()
             smoke = (ROOT / "scripts/run_adapter_smoke.py").read_text()
             adapter_init = (ROOT / "src/world_signals/adapters/__init__.py").read_text()
 
-        self.assertEqual(len(post_sources["sources"]), 246)
-        self.assertEqual(len(post_expectations["adapters"]), 9)
+        self.assertGreaterEqual(len(post_sources["sources"]), 246)
+        self.assertGreaterEqual(len(post_expectations["adapters"]), 9)
         eurostat = next(row for row in post_sources["sources"] if row["source_id"] == "WSSRC-MAC-005")
         self.assertEqual(eurostat["automated_monitoring_use"], "CLEARED")
         self.assertEqual(eurostat["live_adapter_id"], "EUROSTAT_RELEASE_CALENDAR_ICS")

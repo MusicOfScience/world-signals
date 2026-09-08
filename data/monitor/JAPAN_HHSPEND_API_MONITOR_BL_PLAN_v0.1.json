@@ -1,0 +1,181 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "JAPAN_HHSPEND_API_MONITOR_BL_PLAN",
+  "version": "0.1",
+  "review_date": "2026-09-08",
+  "exact_base_main_sha": "3952ec1f5a6022fec43210103f7a7244442e3201",
+  "purpose": "Add the first East Asia production monitor route by separating the Statistics Bureau of Japan canonical release-schedule authority from the official Statistics Dashboard machine-data availability interface, while preserving review-only monitoring and every upstream write gate.",
+  "principles": {
+    "canonical_schedule_source_remains_authoritative": "WSSRC-MAC-024",
+    "machine_sentinel_source_is_separate": "WSSRC-MAC-030",
+    "machine_sentinel_has_zero_canonical_dependencies": true,
+    "api_data_availability_is_not_release_calendar_authority": true,
+    "api_absence_is_not_cancellation_or_date_change": true,
+    "api_presence_before_planned_date_is_review_evidence_only": true,
+    "api_presence_on_or_after_planned_date_requires_manual_completion_verification": true,
+    "api_never_supplies_canonical_clock_time": true,
+    "api_never_changes_certainty": true,
+    "api_outcome_is_not_automatically_live_intelligence": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "one_bounded_api_request_per_monitor_run": true
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.84",
+    "source_count": 246,
+    "monitor_expectations_version": "0.11",
+    "configured_monitor_adapter_count": 9,
+    "required_source_ids": [
+      "WSSRC-MAC-024",
+      "WSSRC-MAC-029"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-MAC-030"
+    ],
+    "household_spending_series_id": "WSER-MAC-JP-HHSPEND",
+    "household_spending_occurrence_count": 8,
+    "household_spending_canonical_source_id": "WSSRC-MAC-024",
+    "household_spending_source_timezone": "Asia/Tokyo",
+    "household_spending_time_precision": "DAY"
+  },
+  "api_identity": {
+    "documentation_url": "https://dashboard.e-stat.go.jp/en/static/api",
+    "data_endpoint_base": "https://dashboard.e-stat.go.jp/api/1.0/Json/getData?",
+    "indicator_code": "0704010101000010000",
+    "stat_code": "00200561",
+    "indicator_label_en": "Consumption expenditures for two-or-more-person households",
+    "survey_label_en": "Family Income and Expenditure Survey",
+    "region_code": "00000",
+    "regional_rank": "2",
+    "cycle": "1",
+    "original_series_code": "1",
+    "source_timezone": "Asia/Tokyo",
+    "reference_period_code_format": "YYYYMM00"
+  },
+  "tracked_releases": [
+    {
+      "occurrence_id": "WSO-MAC-B-0041",
+      "canonical_release_date": "2026-09-04",
+      "reference_period_code": "20260700"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0042",
+      "canonical_release_date": "2026-10-09",
+      "reference_period_code": "20260800"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0043",
+      "canonical_release_date": "2026-11-10",
+      "reference_period_code": "20260900"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0044",
+      "canonical_release_date": "2026-12-08",
+      "reference_period_code": "20261000"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0045",
+      "canonical_release_date": "2027-01-08",
+      "reference_period_code": "20261100"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0046",
+      "canonical_release_date": "2027-02-05",
+      "reference_period_code": "20261200"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0047",
+      "canonical_release_date": "2027-03-09",
+      "reference_period_code": "20270100"
+    },
+    {
+      "occurrence_id": "WSO-MAC-B-0048",
+      "canonical_release_date": "2027-04-06",
+      "reference_period_code": "20270200"
+    }
+  ],
+  "rights_evidence": {
+    "api_documentation": {
+      "url": "https://dashboard.e-stat.go.jp/en/static/api",
+      "finding": "The Statistics Dashboard explicitly publishes a REST WebAPI in machine-readable formats and states that no registration is required and anyone can use it, subject to Site Policy."
+    },
+    "api_use_policy": {
+      "url": "https://dashboard.e-stat.go.jp/static/api",
+      "finding": "The official Japanese API guidance prohibits abusive short-period mass access that interferes with the API, network or system; BL therefore uses one bounded household-spending request per monitor run rather than repeated per-occurrence polling."
+    }
+  },
+  "research_runs": {
+    "metadata_and_policy_probe": 34168995455,
+    "data_availability_and_namespace_probe": 34169141999
+  },
+  "live_probe_evidence_at_review": {
+    "observed_date": "2026-09-08",
+    "http_status": 200,
+    "july_2026_reference_period": {
+      "reference_period_code": "20260700",
+      "value": "301245",
+      "is_provisional": false,
+      "data_object_present": true
+    },
+    "august_2026_reference_period": {
+      "reference_period_code": "20260800",
+      "data_object_present": false,
+      "important_parser_rule": "The API echoes requested time parameters even when no VALUE row exists; only STATISTICAL_DATA.DATA_INF.DATA_OBJ.VALUE establishes data availability."
+    }
+  },
+  "new_machine_source": {
+    "source_id": "WSSRC-MAC-030",
+    "canonical_dependency_count": 0,
+    "related_source_ids": [
+      "WSSRC-MAC-024",
+      "WSSRC-MAC-029"
+    ],
+    "automated_monitoring_use": "CLEARED",
+    "verification_mode": "AUTOMATED_PILOT",
+    "source_role": "OFFICIAL_MACHINE_DATA_AVAILABILITY_SENTINEL_ONLY"
+  },
+  "monitor_route": {
+    "adapter_id": "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+    "source_id": "WSSRC-MAC-030",
+    "monitor_role": "REFERENCE_PERIOD_DATA_AVAILABILITY_SENTINEL",
+    "cadence": "DAILY",
+    "query_time_from": "20260700",
+    "query_time_to": "20270200",
+    "required_manual_verification_source_ids": [
+      "WSSRC-MAC-029"
+    ],
+    "canonical_schedule_source_id": "WSSRC-MAC-024",
+    "automatic_commit_allowed": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.85",
+    "source_count": 247,
+    "monitor_expectations_version": "0.12",
+    "configured_monitor_adapter_count": 10,
+    "change_ledger_unchanged": true,
+    "biosecurity_overlay_unchanged": true,
+    "live_intelligence_unchanged": true,
+    "analysis_unchanged": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "authorised_runtime_mutation_paths": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "scripts/run_live_monitor.py",
+    "scripts/run_adapter_smoke.py",
+    "src/world_signals/adapters/__init__.py"
+  ],
+  "non_goals": [
+    "Do not change any household-spending release date, lifecycle status, certainty status, source timezone or clock precision.",
+    "Do not make WSSRC-MAC-030 a canonical provenance dependency.",
+    "Do not use API data presence as proof that the pre-announced release date changed.",
+    "Do not mark an occurrence completed without manual authoritative result verification.",
+    "Do not populate Live Intelligence or Analysis from API values in BL.",
+    "Do not activate Japan MOF JGB, RBA MPB, RBNZ or Kenya monitoring as part of this tranche."
+  ]
+}
