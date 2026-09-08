@@ -1,0 +1,68 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BN",
+  "title": "Kenya PFM schedule-monitor readiness truth repair",
+  "exact_base_sha": "9b79c93cde36a2e261a134b1259e02ca18096210",
+  "mode": "READINESS_ONLY_NO_PRODUCTION_ACTIVATION",
+  "target_source_id": "WSSRC-REG6-001",
+  "target_occurrence_id": "WSO-REG-I-0001",
+  "target_series_id": "WSER-REG6-KE-BPS",
+  "pre_state": {
+    "canonical": ["0.41", 689],
+    "sources": ["1.86", 247],
+    "monitor": ["0.12", 10],
+    "source_runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED",
+    "source_monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+    "source_verification_mode": "MANUAL_AUTHORITATIVE_RECHECK"
+  },
+  "post_state": {
+    "canonical": ["0.41", 689],
+    "sources": ["1.87", 247],
+    "monitor": ["0.12", 10],
+    "source_runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS_2026_09_08",
+    "source_monitoring_readiness_status": "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD",
+    "source_monitoring_activation_status": "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
+    "source_verification_mode": "AUTOMATED_PILOT"
+  },
+  "permission_holds_preserved": {
+    "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "automated_retrieval_permission": "ENDPOINT_OPERATIONAL_REVIEW_REQUIRED"
+  },
+  "live_probe": {
+    "run_id": 34189112995,
+    "job_id": 101943332200,
+    "baseline_http_status": 200,
+    "current_http_status": 200,
+    "semantic_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+    "historical_current_route_status_2026_09_03": 403
+  },
+  "authorised_governed_mutations": [
+    "data/sources/registry.json"
+  ],
+  "permanent_support_files": [
+    "data/monitor/KENYA_PFM_READINESS_BN_PLAN_v0.1.json",
+    "data/monitor/KENYA_PFM_READINESS_BN_RESEARCH_v0.1.md",
+    "scripts/apply_kenya_pfm_readiness_bn.py",
+    "src/world_signals/adapters/kenya_law.py",
+    "tests/test_kenya_pfm_readiness_bn.py"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/monitor/expectations.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "prohibitions": [
+    "NO_KENYA_PRODUCTION_MONITOR_ROUTE",
+    "NO_CANONICAL_DATE_OR_LIFECYCLE_MUTATION",
+    "NO_COMPLETION_INFERENCE_FROM_ELAPSED_TIME_OR_ENDPOINT_STATE",
+    "NO_PERMISSION_INFERENCE_FROM_HTTP_200_OR_PUBLIC_DOMAIN_CONTENT",
+    "NO_AUTOMATIC_CANONICAL_COMMIT",
+    "NO_GOOGLE_CALENDAR_WRITE",
+    "MANUAL_MERGE_ONLY"
+  ]
+}
