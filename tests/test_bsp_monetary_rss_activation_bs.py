@@ -21,6 +21,10 @@ SOURCES = json.loads((ROOT / "data/sources/registry.json").read_text())
 EXPECTATIONS = json.loads((ROOT / "data/monitor/expectations.json").read_text())
 
 
+def _version_tuple(value: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in value.split("."))
+
+
 class BSPMonetaryRSSActivationBSTests(unittest.TestCase):
     @staticmethod
     def _is_pre() -> bool:
@@ -32,11 +36,21 @@ class BSPMonetaryRSSActivationBSTests(unittest.TestCase):
             and not any(x.get("source_id") == "WSSRC-REGJ-006" for x in SOURCES.get("sources", []))
         )
 
+    @staticmethod
+    def _is_bs_or_descendant() -> bool:
+        return (
+            _version_tuple(SOURCES.get("version", "0")) >= (1, 92)
+            and len(SOURCES.get("sources", [])) >= 250
+            and _version_tuple(EXPECTATIONS.get("version", "0")) >= (0, 17)
+            and len(EXPECTATIONS.get("adapters", [])) >= 15
+            and sum(x.get("source_id") == "WSSRC-REGJ-006" for x in SOURCES.get("sources", [])) == 1
+            and sum(x.get("adapter_id") == "BSP_MONETARY_POLICY_RSS" for x in EXPECTATIONS.get("adapters", [])) == 1
+        )
+
     def _post(self):
         if self._is_pre():
             return TX.build_post_state(CANONICAL, SOURCES, EXPECTATIONS, PLAN)
-        self.assertEqual((SOURCES["version"], len(SOURCES["sources"])), ("1.92", 250))
-        self.assertEqual((EXPECTATIONS["version"], len(EXPECTATIONS["adapters"])), ("0.17", 15))
+        self.assertTrue(self._is_bs_or_descendant(), "state is neither exact BS pre-state nor a valid BS descendant")
         return SOURCES, EXPECTATIONS, None, None, None
 
     def test_exact_preflight_or_bs_descendant_state(self):
@@ -44,6 +58,7 @@ class BSPMonetaryRSSActivationBSTests(unittest.TestCase):
         if self._is_pre():
             TX.preflight(CANONICAL, SOURCES, EXPECTATIONS, PLAN)
         else:
+            self.assertTrue(self._is_bs_or_descendant())
             by_source = {x["source_id"]: x for x in SOURCES["sources"]}
             self.assertIn("WSSRC-REGJ-006", by_source)
             self.assertEqual(by_source["WSSRC-REGJ-003"]["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
@@ -73,9 +88,9 @@ class BSPMonetaryRSSActivationBSTests(unittest.TestCase):
         self.assertEqual(machine["automated_monitoring_use"], "CLEARED")
         self.assertEqual(machine["canonical_provenance_use"], "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY")
         self.assertEqual(machine["related_source_ids"], ["WSSRC-REGJ-003"])
-        self.assertEqual(post_expectations["adapters"][: len(EXPECTATIONS["adapters"])], EXPECTATIONS["adapters"])
-        route = post_expectations["adapters"][-1]
-        self.assertEqual(route["adapter_id"], "BSP_MONETARY_POLICY_RSS")
+        routes = [x for x in post_expectations["adapters"] if x.get("adapter_id") == "BSP_MONETARY_POLICY_RSS"]
+        self.assertEqual(len(routes), 1)
+        route = routes[0]
         self.assertEqual(route["source_id"], "WSSRC-REGJ-006")
         self.assertEqual(route["request_budget_per_run"], 1)
         self.assertEqual(set(route["canonical_occurrence_ids"]), set(PLAN["canonical_occurrence_ids"]))
@@ -87,6 +102,8 @@ class BSPMonetaryRSSActivationBSTests(unittest.TestCase):
         self.assertFalse(route["automatic_commit_allowed"])
         self.assertFalse(post_expectations["automatic_canonical_commit"])
         self.assertFalse(post_expectations["google_calendar_write"])
+        if self._is_pre():
+            self.assertEqual(post_expectations["adapters"][:-1], EXPECTATIONS["adapters"])
 
     def test_runtime_patch_wires_only_rss_machine_source(self):
         if not self._is_pre():
