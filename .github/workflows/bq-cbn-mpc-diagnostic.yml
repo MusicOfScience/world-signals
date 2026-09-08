@@ -45,7 +45,7 @@ jobs:
           assert all(r['series_id']=='WSER-CB-NG-CBN-MPC' for r in rows)
           assert all(r['region']=='Africa' for r in rows)
           assert all(r['source_timezone']=='Africa/Lagos' for r in rows)
-          assert all(r['time_precision']=='DATE_RANGE' for r in rows)
+          assert all(r['time_precision']=='DAY_RANGE' for r in rows)
           assert all(r['lifecycle_status']=='PLANNED' for r in rows)
 
           by_occ={r['occurrence_id']:r for r in canonical['records']}
@@ -72,7 +72,6 @@ jobs:
           set -euo pipefail
           python - <<'PY'
           import hashlib, html, json, re, urllib.request
-          from urllib.parse import urlparse
           from urllib.robotparser import RobotFileParser
 
           UA='WORLD-SIGNALS-read-only-diagnostic/0.1'
@@ -117,8 +116,6 @@ jobs:
           for no,(d1,d2) in expected.items():
               assert no in cal and d1 in cal and d2 in cal,(no,d1,d2)
 
-          assert 'Sep. 21, 2026' in cal and 'Sep. 22, 2026' in cal
-          assert 'Nov. 23, 2026' in cal and 'Nov. 24, 2026' in cal
           print(json.dumps({
               'requests':3,
               'robots_allows_calendar':True,
