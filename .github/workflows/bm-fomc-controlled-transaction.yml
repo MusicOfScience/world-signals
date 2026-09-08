@@ -174,9 +174,10 @@ jobs:
               'tests/test_japan_household_spending_monitor_bl.py',
               '.github/workflows/bm-fomc-controlled-transaction.yml',
           }
-          tracked=set(check_output(['git','diff','--name-only'], text=True).splitlines())
+          unstaged=set(check_output(['git','diff','--name-only'], text=True).splitlines())
+          staged=set(check_output(['git','diff','--cached','--name-only'], text=True).splitlines())
           untracked=set(check_output(['git','ls-files','--others','--exclude-standard'], text=True).splitlines())
-          changed=tracked|untracked
+          changed=unstaged|staged|untracked
           assert changed == allowed, (changed, allowed)
           PY
           git add data/sources/registry.json tests/test_japan_household_spending_monitor_bl.py
