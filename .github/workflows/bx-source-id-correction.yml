@@ -91,8 +91,7 @@ jobs:
                   tests/test_nbs_native_rss_bx.py \
                   scripts/apply_china_nbs_native_rss_monitor_bx.py \
                   tests/test_nbs_native_rss_activation_bx.py \
-                  .github/workflows/bx-nbs-rss-materialised-preflight.yml \
-                  .github/workflows/bx-source-id-correction.yml
+                  .github/workflows/bx-nbs-rss-materialised-preflight.yml
           test -z "$(git diff --name-only)"
           git fetch --no-tags origin main
           test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
