@@ -1,0 +1,128 @@
+{
+  "tranche": "BV",
+  "reference_date": "2026-09-08",
+  "exact_base_main_sha": "525d44f0e83c58efd6308900740c5677d962a9f4",
+  "selection": {
+    "source_id": "WSSRC-COM-010",
+    "adapter_id": "FAO_RELEASE_CALENDAR",
+    "institution": "Food and Agriculture Organization of the United Nations",
+    "calendar_url": "https://www.fao.org/statistics/data-releases/upcoming-data-releases/",
+    "robots_url": "https://www.fao.org/robots.txt",
+    "terms_url": "https://www.fao.org/contact-us/terms/",
+    "source_timezone": "Europe/Rome"
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.94",
+    "source_count": 252,
+    "monitor_expectations_version": "0.19",
+    "configured_monitor_adapter_count": 17,
+    "source_canonical_dependency_count": 9,
+    "source_automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "source_automated_retrieval_permission": "PENDING",
+    "source_monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.95",
+    "source_count": 252,
+    "monitor_expectations_version": "0.20",
+    "configured_monitor_adapter_count": 18,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-COM-A-0042",
+    "WSO-COM-A-0043",
+    "WSO-COM-A-0044",
+    "WSO-COM-A-0045",
+    "WSO-COM-A-0046",
+    "WSO-COM-A-0047"
+  ],
+  "canonical_occurrences": [
+    {"occurrence_id":"WSO-COM-A-0042","series_id":"WSER-COM-FAO-FFPI","product_key":"FFPI","slot_month":"October 2026","canonical_release_date":"2026-10-02"},
+    {"occurrence_id":"WSO-COM-A-0043","series_id":"WSER-COM-AMIS","product_key":"AMIS","slot_month":"October 2026","canonical_release_date":"2026-10-02"},
+    {"occurrence_id":"WSO-COM-A-0044","series_id":"WSER-COM-FAO-FFPI","product_key":"FFPI","slot_month":"November 2026","canonical_release_date":"2026-11-06"},
+    {"occurrence_id":"WSO-COM-A-0045","series_id":"WSER-COM-AMIS","product_key":"AMIS","slot_month":"November 2026","canonical_release_date":"2026-11-06"},
+    {"occurrence_id":"WSO-COM-A-0046","series_id":"WSER-COM-FAO-FFPI","product_key":"FFPI","slot_month":"December 2026","canonical_release_date":"2026-12-04"},
+    {"occurrence_id":"WSO-COM-A-0047","series_id":"WSER-COM-AMIS","product_key":"AMIS","slot_month":"December 2026","canonical_release_date":"2026-12-04"}
+  ],
+  "configured_month_sections": ["October 2026","November 2026","December 2026"],
+  "request_contract": {
+    "request_budget_per_run": 2,
+    "robots_requests_per_run": 1,
+    "calendar_requests_per_run": 1,
+    "followup_requests_per_run": 0,
+    "robots_first": true,
+    "no_amis_followup": true,
+    "no_faostat_followup": true,
+    "no_pdf_followup": true,
+    "no_news_followup": true,
+    "no_search_route_discovery": true
+  },
+  "classification_contract": {
+    "date_change": "FAO_RELEASE_DATE_CHANGE_REVIEW",
+    "missing_configured_row": "FAO_RELEASE_SLOT_MISSING_REVIEW",
+    "unchanged_match": "FAO_RELEASE_DATE_MATCH_OBSERVATION",
+    "structural_failure": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "absence_is_not_cancellation": true,
+    "absence_is_not_completion": true,
+    "absence_is_not_certainty_change": true,
+    "no_clock_inference": true
+  },
+  "source_role_contract": {
+    "same_source_identity_for_canonical_and_monitor": true,
+    "reason": "The Canonical authority and monitor inspect the same first-party FAO schedule endpoint; a duplicate machine-source identity would misrepresent provenance.",
+    "canonical_provenance_use_preserved": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+    "monitoring_role": "OFFICIAL_FAO_FFPI_AMIS_RELEASE_DATE_CHANGE_SENTINEL",
+    "route_schedule_authority": false,
+    "route_lifecycle_authority": false,
+    "route_certainty_authority": false,
+    "automatic_commit_allowed": false
+  },
+  "source_governance_update": {
+    "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_CALENDAR",
+    "automated_retrieval_permission": "BOUNDED_OFFICIAL_CALENDAR_ROBOTS_COMPATIBLE",
+    "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+    "monitoring_activation_status": "LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT",
+    "verification_mode": "AUTOMATED_PILOT",
+    "runtime_health_state": "READ_ONLY_DIAGNOSTIC_PASS_2026_09_08",
+    "monitoring_readiness_assessed_at": "2026-09-08",
+    "last_successful_research_verification_at": "2026-09-08",
+    "automation_evidence_url": "https://www.fao.org/statistics/data-releases/upcoming-data-releases/",
+    "rights_evidence_url": "https://www.fao.org/contact-us/terms/",
+    "rights_review_scope": "BV_GENERAL_WEB_CONTENT_REUSE_AND_MACHINE_ACCESS_SEPARATELY_REVIEWED",
+    "live_adapter_id": "FAO_RELEASE_CALENDAR"
+  },
+  "read_only_diagnostic": {
+    "run_id": 34234241294,
+    "job_id": 102087743209,
+    "request_count": 2,
+    "robots_status": 200,
+    "robots_content_type": "text/plain",
+    "calendar_status": 200,
+    "calendar_content_type": "text/html; charset=utf-8",
+    "configured_matches": 6,
+    "clock_exposed": false,
+    "repository_mutation": false
+  },
+  "mutation_boundary": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "scripts/run_live_monitor.py",
+    "scripts/run_adapter_smoke.py",
+    "src/world_signals/adapters/__init__.py"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/changes/ledger.json",
+    "data/biosecurity",
+    "data/live",
+    "data/live_intelligence",
+    "data/analysis"
+  ]
+}

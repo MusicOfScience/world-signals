@@ -25,6 +25,8 @@ from world_signals.adapters import (
     fetch_cellar_rdf_notice,
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
+    fetch_fao_release_calendar,
+    fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
     fetch_indec_cpi_months,
     fetch_indec_robots_policy,
@@ -222,6 +224,31 @@ def main() -> int:
         })
     except (AdapterError,ValueError) as exc:
         failures.append({"adapter":"CBSL_MONETARY_POLICY_RSS","error":str(exc)})
+
+    try:
+        fao_months=["October 2026","November 2026","December 2026"]
+        fao_allowed,fao_robots_snap=fetch_fao_robots_policy()
+        if not fao_allowed:
+            raise AdapterError("FAO robots policy disallows the release-calendar path")
+        fao_items,fao_calendar_snap=fetch_fao_release_calendar(fao_months)
+        report["results"].append({
+            "adapter":"FAO_RELEASE_CALENDAR",
+            "status":"PASS",
+            "source_id":"WSSRC-COM-010",
+            "robots_snapshot":fao_robots_snap.as_dict(),
+            "calendar_snapshot":fao_calendar_snap.as_dict(),
+            "item_count":len(fao_items),
+            "request_budget_per_run":2,
+            "robots_request_count":1,
+            "calendar_request_count":1,
+            "followup_request_count":0,
+            "schedule_authority":False,
+            "lifecycle_authority":False,
+            "canonical_clock_mutation_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"FAO_RELEASE_CALENDAR","error":str(exc)})
 
     try:
         indec_slugs=["Septiembre-2026","Octubre-2026","Noviembre-2026","Diciembre-2026"]
