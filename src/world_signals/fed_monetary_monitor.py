@@ -193,6 +193,26 @@ def fed_monetary_rss_review_candidates(
         if occurrence_id in matched_occurrence_ids:
             raise ValueError(f"multiple Fed RSS publications mapped to one Canonical occurrence: {occurrence_id}")
         matched_occurrence_ids.add(occurrence_id)
+
+        # Once Canonical completion has been manually reviewed and committed,
+        # the same rolling-feed publication becomes corroboration only. This
+        # avoids generating a fresh completion proposition on every daily run.
+        if record.get("lifecycle_status") == "COMPLETED":
+            observations.append({
+                "type": "FED_FOMC_RSS_COMPLETED_OCCURRENCE_PUBLICATION_PRESENT_NO_LIFECYCLE_ACTION",
+                "occurrence_id": occurrence_id,
+                "series_id": series_id,
+                "canonical_source_id": record.get("source_id"),
+                "monitor_source_id": monitor_source_id,
+                "published_utc": item.pub_date_utc,
+                "canonical_start_local": record.get("start_local"),
+                "timestamp_delta_seconds": delta_seconds,
+                "event_state_inference": "NONE",
+                "automatic_commit_allowed": False,
+                "canonical_lifecycle_already_reviewed": True,
+            })
+            continue
+
         candidates.append(_publication_candidate(record, item, monitor_source_id=monitor_source_id))
         observations.append({
             "type": "FED_FOMC_RSS_PUBLICATION_MATCHED_REVIEW_REQUIRED",
