@@ -1,0 +1,54 @@
+name: BM FOMC readiness probe
+
+on:
+  push:
+    branches:
+      - feature/post-bl-pressure-audit-bm
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Inspect governed FOMC source and canonical dependency contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          test "$(git merge-base HEAD origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          src=next(x for x in s['sources'] if x['source_id']=='WSSRC-CB-001')
+          rows=[x for x in c['records'] if x.get('source_id')=='WSSRC-CB-001']
+          print('BM_FOMC_SOURCE_BEGIN')
+          print(json.dumps(src,sort_keys=True))
+          print('BM_FOMC_SOURCE_END')
+          print('BM_FOMC_SCOPE_BEGIN')
+          print(json.dumps({
+            'count':len(rows),
+            'series':dict(sorted(Counter(x.get('series_id') for x in rows).items())),
+            'event_types':dict(sorted(Counter(x.get('event_type') for x in rows).items())),
+            'lifecycles':dict(sorted(Counter(x.get('lifecycle_status') for x in rows).items())),
+            'precisions':dict(sorted(Counter(x.get('time_precision') for x in rows).items())),
+            'timezones':sorted({x.get('source_timezone') for x in rows}),
+            'occurrences':[{k:x.get(k) for k in ('occurrence_id','series_id','canonical_name','start_date','start_local','start_utc','time_precision','lifecycle_status','certainty')} for x in rows],
+            'already_configured':any(a.get('source_id')=='WSSRC-CB-001' for a in m['adapters']),
+          },sort_keys=True))
+          print('BM_FOMC_SCOPE_END')
+          PY
+          git diff --exit-code
