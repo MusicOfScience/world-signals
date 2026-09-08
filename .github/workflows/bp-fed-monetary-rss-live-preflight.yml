@@ -114,7 +114,7 @@ jobs:
           print({
             'rss_status':snapshot.status,
             'rss_content_type':snapshot.content_type,
-            'rss_sha256':snapshot.sha256,
+            'rss_sha256':snapshot.body_sha256,
             'feed_items':len(items),
             'review_candidates':len(candidates),
             'observations':len(observations),
