@@ -48,50 +48,57 @@ jobs:
           assert all(r['time_precision']=='DAY' for r in rows)
           assert src['canonical_dependency_count']==10
           assert src['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert src['automated_retrieval_permission']=='PENDING_ENDPOINT_OPERATIONAL_REVIEW'
           assert src['verification_mode']=='AUTOMATED_PILOT'
           assert not any(r['adapter_id']=='JAPAN_MOF_JGB_AUCTION_CALENDAR' for r in monitor['adapters'])
+          assert not any(r['source_id']=='WSSRC-FIS-029' for r in sources['sources'])
 
           print(json.dumps({
             'canonical':[canonical['version'],len(canonical['records'])],
             'sources':[sources['version'],len(sources['sources'])],
             'monitor':[monitor['version'],len(monitor['adapters'])],
             'source':src,
+            'proposed_machine_source_id':'WSSRC-FIS-029',
             'occurrences':[{k:r.get(k) for k in ('occurrence_id','canonical_name','start_local','end_local','time_precision','lifecycle_status','certainty_status','notes')} for r in rows],
           },indent=2,ensure_ascii=False,sort_keys=True))
           PY
-      - name: Live-review MOF rights, robots and exact tracked monthly surfaces
+      - name: Verify robots absence remains a hold on calendar HTML
         shell: bash
-        env:
-          PYTHONPATH: src
         run: |
           set -euo pipefail
           python - <<'PY'
-          import hashlib,html,json,re,urllib.request
-          from datetime import date
-          from pathlib import Path
-          from urllib.robotparser import RobotFileParser
-          from world_signals.adapters.japan_mof_jgb import fetch_jgb_monthly_auction_calendar,jgb_monthly_calendar_url
+          import json,urllib.error,urllib.request
+          url='https://www.mof.go.jp/robots.txt'
+          req=urllib.request.Request(url,headers={'User-Agent':'WORLD-SIGNALS-read-only-diagnostic/0.1','Accept':'text/plain,*/*;q=0.1'})
+          try:
+              urllib.request.urlopen(req,timeout=30)
+              raise AssertionError('expected conventional MOF robots path to remain absent during BR diagnostic')
+          except urllib.error.HTTPError as exc:
+              assert exc.code==404,exc.code
+              print(json.dumps({'robots_url':url,'status':404,'interpretation':'ABSENCE_IS_NEITHER_PERMISSION_NOR_PROHIBITION_HTML_HOLD_REMAINS'}))
+          PY
+      - name: Live-review official MOF RSS machine interface and JGB signal content
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import email.utils,hashlib,html,json,re,urllib.request,xml.etree.ElementTree as ET
 
           UA='WORLD-SIGNALS-read-only-diagnostic/0.1'
-          robots_url='https://www.mof.go.jp/robots.txt'
-          rights_url='https://www.mof.go.jp/english/about_mof/notice/index.html'
-          index_url='https://www.mof.go.jp/english/policy/jgbs/auction/calendar/index.htm'
-
-          def fetch(url,accept='text/html,text/plain;q=0.9,*/*;q=0.2'):
+          urls={
+            'rss_docs':'https://www.mof.go.jp/english/about_mof/rss/index.html',
+            'rss':'https://www.mof.go.jp/english/news.rss',
+            'rights':'https://www.mof.go.jp/english/about_mof/notice/index.html',
+          }
+          bodies={}; meta={}
+          for key,url in urls.items():
+              accept='application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.1' if key=='rss' else 'text/html,*/*;q=0.1'
               req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
               with urllib.request.urlopen(req,timeout=30) as resp:
                   body=resp.read()
-                  return body,{'status':resp.status,'content_type':resp.headers.get('Content-Type',''),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
-
-          robots_raw,robots_meta=fetch(robots_url,'text/plain,*/*;q=0.1')
-          rights_raw,rights_meta=fetch(rights_url)
-          index_raw,index_meta=fetch(index_url)
-          assert robots_meta['status']==rights_meta['status']==index_meta['status']==200
-
-          rp=RobotFileParser()
-          rp.set_url(robots_url)
-          rp.parse(robots_raw.decode('utf-8','replace').splitlines())
-          assert rp.can_fetch(UA,index_url)
+                  assert resp.status==200,(key,resp.status)
+                  bodies[key]=body
+                  meta[key]={'status':resp.status,'content_type':resp.headers.get('Content-Type',''),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
 
           def textify(raw):
               s=raw.decode('utf-8','replace')
@@ -99,38 +106,56 @@ jobs:
               s=re.sub(r'(?s)<[^>]+>',' ',s)
               return re.sub(r'\s+',' ',html.unescape(s)).strip()
 
-          rights=textify(rights_raw).lower()
+          docs=textify(bodies['rss_docs']).lower()
+          rights=textify(bodies['rights']).lower()
+          assert 'rss reader' in docs and 'aggregator' in docs
           assert 'public data license' in rights
           assert 'pdl 1.0' in rights or 'version 1.0' in rights
 
-          canonical=json.loads(Path('data/canonical/registry.json').read_text())
-          rows=[r for r in canonical['records'] if r.get('source_id')=='WSSRC-FIS-007']
-          future=[r for r in rows if r['start_local'] >= '2026-09-08']
-          months=sorted({tuple(map(int,r['start_local'][:7].split('-'))) for r in future})
-          calendars=[]
-          for year,month in months:
-              url=jgb_monthly_calendar_url(year,month)
-              assert rp.can_fetch(UA,url),(year,month)
-              cal,snap=fetch_jgb_monthly_auction_calendar(year,month,timeout=30)
-              assert snap.status==200
-              calendars.append({
-                'year':year,'month':month,'url':url,'status':snap.status,
-                'content_type':snap.content_type,'sha256':snap.body_sha256,
-                'schedule_sha256':cal.schedule_sha256,
-                'entries':[e.as_dict() for e in cal.entries],
-              })
+          root=ET.fromstring(bodies['rss'])
+          assert root.tag.lower().endswith('rss')
+          channel=root.find('channel')
+          assert channel is not None
+          items=[]
+          for item in channel.findall('item'):
+              title=(item.findtext('title') or '').strip()
+              link=(item.findtext('link') or '').strip()
+              pub=(item.findtext('pubDate') or '').strip()
+              items.append({'title':title,'link':link,'pubDate':pub})
+          assert items
+
+          jgb=[]
+          for row in items:
+              title=row['title'].lower(); link=row['link'].lower()
+              if '/policy/jgbs/' in link or '/jgbs/' in link or 'jgb' in title or 'auction' in title or 'treasury discount' in title:
+                  jgb.append(row)
+          assert jgb,jgb
+          current=[r for r in jgb if any(token in r['title'].lower() for token in ('5-year','20-year','30-year','10-year','40-year','2-year','auction'))]
+          assert current,current
+
+          classes={'calendar_alteration':0,'auction_announcement':0,'auction_result':0,'other_jgb':0}
+          for row in jgb:
+              t=row['title'].lower()
+              if 'alteration of the calendar' in t or 'change' in t and 'auction' in t:
+                  classes['calendar_alteration']+=1
+              elif 'announcement' in t and ('jgb' in t or 'auction' in t):
+                  classes['auction_announcement']+=1
+              elif 'auction result' in t or 'result of' in t and 'auction' in t:
+                  classes['auction_result']+=1
+              else:
+                  classes['other_jgb']+=1
 
           print(json.dumps({
-            'robots':robots_meta,
-            'rights':rights_meta,
-            'index':index_meta,
-            'robots_allows_index':True,
-            'future_tracked_count':len(future),
-            'future_tracked':[{k:r.get(k) for k in ('occurrence_id','canonical_name','start_local','notes')} for r in sorted(future,key=lambda r:r['start_local'])],
-            'unique_future_months':months,
-            'routine_candidate_request_budget':1+len(months),
-            'monthly_calendars':calendars,
-            'rights_reuse_evidence':'PDL_1_0_PRESENT_OPERATIONAL_AUTOMATION_STILL_SEPARATE',
+            'http':meta,
+            'rss_documentation_explicit_software_interface':True,
+            'rights_pdl_1_0_present':True,
+            'rss_item_count':len(items),
+            'jgb_related_item_count':len(jgb),
+            'classification_counts':classes,
+            'sample_jgb_items':jgb[:20],
+            'machine_interface_role':'PUBLICATION_AND_CHANGE_SENTINEL_NOT_FORWARD_SCHEDULE_AUTHORITY',
+            'html_calendar_hold_preserved':True,
+            'routine_candidate_request_budget':1,
           },indent=2,ensure_ascii=False,sort_keys=True))
           PY
       - name: Prove diagnostic is repository-read-only
