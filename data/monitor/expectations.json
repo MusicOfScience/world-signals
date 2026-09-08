@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.15",
+  "version": "0.16",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -925,6 +925,61 @@
       "decision_publication_time_authority": false,
       "lifecycle_authority": false,
       "certainty_authority": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_MOF_JGB_RSS",
+      "source_id": "WSSRC-FIS-029",
+      "canonical_occurrence_ids": [
+        "WSO-FIS-A-0015",
+        "WSO-FIS-A-0016",
+        "WSO-FIS-A-0017",
+        "WSO-FIS-A-0018",
+        "WSO-FIS-A-0019",
+        "WSO-FIS-A-0020",
+        "WSO-FIS-A-0021",
+        "WSO-FIS-A-0022",
+        "WSO-FIS-A-0023",
+        "WSO-FIS-A-0024"
+      ],
+      "monitor_role": "OFFICIAL_JAPAN_MOF_JGB_PUBLICATION_AND_CHANGE_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 1,
+      "feed": {
+        "url": "https://www.mof.go.jp/english/news.rss",
+        "transport": "RSS_2_0_XML",
+        "request_policy": "ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN"
+      },
+      "classification_contract": {
+        "standard_result": "Auction Result of N-Year JGBs on Month D, YYYY",
+        "special_participant_result": "corroboration observation only",
+        "issuance_announcement": "observation only; title reference month does not establish auction date",
+        "calendar_change_notice": "review candidate requiring manual WSSRC-FIS-007 calendar recheck",
+        "other_jgb_item": "observation only",
+        "feed_absence": "NO_SCHEDULE_LIFECYCLE_OR_CERTAINTY_SEMANTICS"
+      },
+      "source_role_contract": {
+        "canonical_forward_schedule_source_id": "WSSRC-FIS-007",
+        "rss_publication_change_sentinel_source_id": "WSSRC-FIS-029",
+        "rss_may_mutate_canonical_schedule": false,
+        "rss_may_set_lifecycle_completed": false,
+        "rss_may_change_certainty": false,
+        "rss_may_create_auction_clock": false,
+        "calendar_change_notice_requires_manual_schedule_source_recheck": true
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_OR_CERTAINTY_SEMANTICS",
+      "positive_result_policy": "GENERATE_REVIEW_CANDIDATE_FOR_STANDARD_RESULT_MATCH_TO_NONCOMPLETED_TRACKED_AUCTION",
+      "special_participant_result_policy": "CORROBORATION_OBSERVATION_ONLY",
+      "issuance_announcement_policy": "OBSERVATION_ONLY_NO_AUCTION_DATE_INFERENCE",
+      "calendar_change_notice_policy": "GENERATE_MANUAL_WSSRC_FIS_007_SCHEDULE_RECHECK_CANDIDATE",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "rss_publication_time_is_auction_time": false,
+      "automatic_calendar_html_fetch_allowed": false,
+      "canonical_schedule_source_id": "WSSRC-FIS-007",
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }
