@@ -1,0 +1,148 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BP",
+  "title": "Federal Reserve Monetary Policy RSS publication sentinel activation",
+  "review_date": "2026-09-08",
+  "exact_base_main_sha": "edc800a694370b66d4c5c6d0a465fb3e5e554218",
+  "mode": "OFFICIAL_MACHINE_PUBLICATION_SENTINEL_REVIEW_ONLY",
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.88",
+    "source_count": 247,
+    "monitor_expectations_version": "0.13",
+    "configured_monitor_adapter_count": 11,
+    "canonical_schedule_source_id": "WSSRC-CB-001",
+    "required_absent_machine_source_id": "WSSRC-CB-015",
+    "fomc_family_occurrence_count": 44,
+    "tracked_publication_occurrence_count": 22,
+    "tracked_policy_decision_count": 11,
+    "tracked_minutes_count": 11,
+    "canonical_timezone": "America/New_York"
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.89",
+    "source_count": 248,
+    "monitor_expectations_version": "0.14",
+    "configured_monitor_adapter_count": 12,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "adapter_id": "FED_MONETARY_POLICY_RSS",
+  "machine_source_id": "WSSRC-CB-015",
+  "canonical_schedule_source_id": "WSSRC-CB-001",
+  "machine_interface": {
+    "feed_url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+    "feed_documentation_url": "https://www.federalreserve.gov/feeds/feeds.htm",
+    "rights_evidence_url": "https://www.federalreserve.gov/disclaimer.htm",
+    "transport": "RSS_2_0_XML",
+    "native_timestamp_timezone": "UTC",
+    "canonical_matching_timezone": "America/New_York",
+    "request_policy": "ONE_DEDICATED_FEED_REQUEST_PER_DAILY_MONITOR_RUN"
+  },
+  "tracked_publications": [
+    {"occurrence_id":"WSO-08f11832f0335c85","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2026-09-16T14:00:00"},
+    {"occurrence_id":"WSO-9eba0c2ef8365a9f","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2026-10-07T14:00:00"},
+    {"occurrence_id":"WSO-4e25032b0df35d00","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2026-10-28T14:00:00"},
+    {"occurrence_id":"WSO-7b898efc6e9f5329","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2026-11-18T14:00:00"},
+    {"occurrence_id":"WSO-723fbab6b29755d8","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2026-12-09T14:00:00"},
+    {"occurrence_id":"WSO-36cb750a65f053fd","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2026-12-30T14:00:00"},
+    {"occurrence_id":"WSO-e8d32490a7f85587","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-01-27T14:00:00"},
+    {"occurrence_id":"WSO-08fe7646168b556e","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-02-17T14:00:00"},
+    {"occurrence_id":"WSO-b217176c19ee5503","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-03-17T14:00:00"},
+    {"occurrence_id":"WSO-224df0d92ea05a98","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-04-07T14:00:00"},
+    {"occurrence_id":"WSO-dd3b44bfc1255815","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-04-28T14:00:00"},
+    {"occurrence_id":"WSO-9fd13c55f79f5c3e","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-05-19T14:00:00"},
+    {"occurrence_id":"WSO-d5079228484e529f","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-06-09T14:00:00"},
+    {"occurrence_id":"WSO-ea219f3d4bb25478","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-06-30T14:00:00"},
+    {"occurrence_id":"WSO-120dfe059f7a574e","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-07-28T14:00:00"},
+    {"occurrence_id":"WSO-32bf69f2d0b758a8","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-08-18T14:00:00"},
+    {"occurrence_id":"WSO-0f521f2656035f06","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-09-15T14:00:00"},
+    {"occurrence_id":"WSO-297c7daa100d5c84","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-10-06T14:00:00"},
+    {"occurrence_id":"WSO-c8f8e3177abb5863","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-10-27T14:00:00"},
+    {"occurrence_id":"WSO-52f58e46fa1451fe","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-11-17T14:00:00"},
+    {"occurrence_id":"WSO-02db9fca7dc952c2","series_id":"WS.CB.FED.FOMC_POLICY_DECISION","canonical_start_local":"2027-12-08T14:00:00"},
+    {"occurrence_id":"WSO-d8fae34438965253","series_id":"WS.CB.FED.FOMC_MINUTES","canonical_start_local":"2027-12-29T14:00:00"}
+  ],
+  "classification_contract": {
+    "policy_decision": {
+      "exact_title": "Federal Reserve issues FOMC statement",
+      "series_id": "WS.CB.FED.FOMC_POLICY_DECISION"
+    },
+    "minutes": {
+      "title_prefix": "Minutes of the Federal Open Market Committee,",
+      "series_id": "WS.CB.FED.FOMC_MINUTES"
+    },
+    "other_fomc_items": "OBSERVATION_ONLY_UNCLASSIFIED_NO_EVENT_INFERENCE",
+    "other_monetary_policy_items": "IGNORED_BY_THIS_ROUTE"
+  },
+  "monitor_route": {
+    "cadence": "DAILY",
+    "request_budget_per_run": 1,
+    "matching": {
+      "method": "CLASSIFIED_SERIES_PLUS_NEAREST_EXPLICIT_CANONICAL_TIMESTAMP",
+      "timestamp_tolerance_minutes": 180,
+      "tie_policy": "FAIL_TO_REVIEW_NO_IDENTITY_GUESS"
+    },
+    "positive_presence_policy": "PUBLICATION_EVIDENCE_REVIEW_CANDIDATE_ONLY",
+    "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_DELAY_CANCELLATION_OR_COMPLETION_SEMANTICS",
+    "schedule_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "automatic_commit_allowed": false
+  },
+  "source_role_contract": {
+    "canonical_schedule_source_id": "WSSRC-CB-001",
+    "machine_publication_sentinel_source_id": "WSSRC-CB-015",
+    "machine_source_canonical_dependency_count": 0,
+    "html_schedule_endpoint_permission_hold_preserved": true
+  },
+  "operational_governance": {
+    "machine_interface_basis": "Federal Reserve publishes RSS feeds for use by reader/aggregator software that automatically incorporates updates.",
+    "content_reuse_basis": "Board-produced website information is public domain unless otherwise indicated and may be copied/distributed without permission; Board citation is requested.",
+    "third_party_material_excluded_from_clearance": true,
+    "broad_site_crawling_authorised": false,
+    "clearance_scope": "ONE_OFFICIAL_MONETARY_POLICY_RSS_REQUEST_PER_DAILY_RUN",
+    "no_permission_inference_from_http_200_alone": true
+  },
+  "read_only_diagnostic": {
+    "run_id": 34201995068,
+    "job_id": 101982693680,
+    "observed_at": "2026-09-08",
+    "rss_http_status": 200,
+    "feeds_documentation_http_status": 200,
+    "disclaimer_http_status": 200,
+    "rss_content_type": "text/xml",
+    "rss_item_count": 15,
+    "fomc_related_item_count": 10,
+    "rss_sha256": "29f22f648e90461f404d2da6b90e068544ca35891e27d567d61ade7ed9978015",
+    "historical_statement_timestamp_alignment": "OBSERVED_EXACT_14_00_AMERICA_NEW_YORK",
+    "historical_minutes_timestamp_alignment": "OBSERVED_EXACT_14_00_AMERICA_NEW_YORK",
+    "repository_mutation": "NONE"
+  },
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json"
+  ],
+  "prohibitions": [
+    "NO_CHANGE_TO_WSSRC_CB_001",
+    "NO_FOMC_HTML_SCHEDULE_PRODUCTION_ACTIVATION",
+    "NO_MEETING_WINDOW_MONITORING_FROM_RSS",
+    "NO_PRESS_CONFERENCE_MONITORING_FROM_RSS",
+    "NO_SCHEDULE_CHANGE_FROM_RSS",
+    "NO_AUTOMATIC_LIFECYCLE_COMPLETION",
+    "NO_EVENT_STATE_FROM_FEED_ABSENCE",
+    "NO_CANONICAL_AUTOMATIC_WRITE",
+    "NO_GOOGLE_CALENDAR_WRITE",
+    "NO_LIVE_ANALYSIS_AUTO_PROMOTION",
+    "NO_OPEC_RETRY",
+    "MANUAL_MERGE_ONLY"
+  ]
+}
