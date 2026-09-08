@@ -46,7 +46,8 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
         )
         self.assertEqual(target["monitoring_activation_status"], "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE")
         self.assertEqual(target["runtime_health_state"], "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08")
-        self.assertIn("does not clear unattended polling", target["automation_summary"])
+        self.assertIn("clears unattended polling", target["automation_summary"])
+        self.assertIn("neither HTTP 200 nor public-domain legal content", target["automation_summary"])
 
     def test_exact_prestate_simulation_changes_only_kenya_source_row(self):
         _, sources, _ = self._live_state()
