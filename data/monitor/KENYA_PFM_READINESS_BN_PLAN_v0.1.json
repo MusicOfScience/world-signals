@@ -19,8 +19,8 @@
     "canonical": ["0.41", 689],
     "sources": ["1.87", 247],
     "monitor": ["0.12", 10],
-    "source_runtime_health_state": "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS_2026_09_08",
-    "source_monitoring_readiness_status": "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD",
+    "source_runtime_health_state": "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08",
+    "source_monitoring_readiness_status": "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD",
     "source_monitoring_activation_status": "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
     "source_verification_mode": "AUTOMATED_PILOT"
   },
@@ -28,13 +28,39 @@
     "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
     "automated_retrieval_permission": "ENDPOINT_OPERATIONAL_REVIEW_REQUIRED"
   },
-  "live_probe": {
-    "run_id": 34189112995,
-    "job_id": 101943332200,
-    "baseline_http_status": 200,
-    "current_http_status": 200,
-    "semantic_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
-    "historical_current_route_status_2026_09_03": 403
+  "runtime_evidence": {
+    "historical_current_route_status_2026_09_03": 403,
+    "successful_read_only_probe": {
+      "run_id": 34189112995,
+      "job_id": 101943332200,
+      "baseline_http_status": 200,
+      "current_http_status": 200,
+      "semantic_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c"
+    },
+    "successful_materialised_preflight": {
+      "run_id": 34189687457,
+      "job_id": 101945016694,
+      "baseline_http_status": 200,
+      "current_http_status": 200
+    },
+    "failed_live_gated_transaction": {
+      "run_id": 34189781916,
+      "job_id": 101945294642,
+      "baseline_http_status": 403,
+      "current_route_status": "NOT_REQUESTED_AFTER_BASELINE_FAILURE",
+      "repository_write_occurred": false
+    },
+    "interpretation": "Technical parser readiness is demonstrated, but GitHub Actions reachability is variable and unattended endpoint permission remains unresolved. BN must not perform repeated live probing merely to obtain a green transaction."
+  },
+  "transaction_policy_after_runtime_variability": {
+    "repeat_live_request_required": false,
+    "reason": "A successful bounded live parse and a subsequent 403 already establish the relevant readiness and volatility facts. Repeated unattended probes would add little evidence while endpoint permission remains unresolved.",
+    "required_instead": [
+      "offline fail-closed parser regression",
+      "exact source-row semantic audit",
+      "protected-layer checksums",
+      "full repository validation and static build"
+    ]
   },
   "authorised_governed_mutations": [
     "data/sources/registry.json"
@@ -44,7 +70,9 @@
     "data/monitor/KENYA_PFM_READINESS_BN_RESEARCH_v0.1.md",
     "scripts/apply_kenya_pfm_readiness_bn.py",
     "src/world_signals/adapters/kenya_law.py",
-    "tests/test_kenya_pfm_readiness_bn.py"
+    "tests/test_kenya_pfm_readiness_bn.py",
+    "tests/test_fomc_monitor_readiness_bm.py",
+    "tests/test_source_governance_verification_closeout_a.py"
   ],
   "protected_layers": [
     "data/canonical/registry.json",
@@ -61,6 +89,8 @@
     "NO_CANONICAL_DATE_OR_LIFECYCLE_MUTATION",
     "NO_COMPLETION_INFERENCE_FROM_ELAPSED_TIME_OR_ENDPOINT_STATE",
     "NO_PERMISSION_INFERENCE_FROM_HTTP_200_OR_PUBLIC_DOMAIN_CONTENT",
+    "NO_HEALTH_INFERENCE_FROM_A_SINGLE_HTTP_RESULT",
+    "NO_REPEATED_LIVE_PROBING_TO_FORCE_A_GREEN_TRANSACTION",
     "NO_AUTOMATIC_CANONICAL_COMMIT",
     "NO_GOOGLE_CALENDAR_WRITE",
     "MANUAL_MERGE_ONLY"
