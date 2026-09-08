@@ -1,4 +1,4 @@
-name: BU INDEC repository identity diagnostic
+name: BU INDEC search-term diagnostic
 
 on:
   push:
@@ -25,26 +25,32 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
           test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
-      - name: Freeze current INDEC Canonical and source identities
+      - name: Derive CPI search term from INDEC's own autocomplete JavaScript
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
-          from pathlib import Path
-          c=json.loads(Path('data/canonical/registry.json').read_text())
-          s=json.loads(Path('data/sources/registry.json').read_text())
-          records=[r for r in c['records'] if r.get('series_id')=='WSER-REG2-AR-CPI' or r.get('source_id')=='WSSRC-REG2-006']
-          print('CANONICAL_MATCH_COUNT',len(records))
-          for r in records:
-              print('CANONICAL',json.dumps(r,ensure_ascii=False,sort_keys=True))
-          reg2=[x for x in s['sources'] if str(x.get('source_id','')).startswith('WSSRC-REG2-')]
-          print('REG2_SOURCE_IDS',json.dumps([x['source_id'] for x in reg2]))
-          for x in reg2:
-              if x['source_id'] in {'WSSRC-REG2-006','WSSRC-REG2-008'}:
-                  print('SOURCE',json.dumps(x,ensure_ascii=False,sort_keys=True))
-          print('CANONICAL_VERSION',c.get('version'),'COUNT',len(c['records']))
-          print('SOURCES_VERSION',s.get('version'),'COUNT',len(s['sources']))
+          import hashlib, json, re, urllib.request
+          url='https://www.indec.gob.ar/Scripts/calendario.js'
+          req=urllib.request.Request(url,headers={'User-Agent':'WORLD-SIGNALS-RESEARCH/1.0','Accept':'application/javascript,*/*;q=0.5'})
+          with urllib.request.urlopen(req,timeout=30) as r:
+              body=r.read(); text=body.decode('utf-8','replace'); lines=text.splitlines()
+              print('RESOURCE',json.dumps({'url':url,'status':r.status,'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()},sort_keys=True))
+              for i,line in enumerate(lines,1):
+                  low=line.lower()
+                  if ('índice de precios al consumidor' in low or 'indice de precios al consumidor' in low or 'var arr' in low or 'autocomplete' in low or 'informe' in low and ('[' in line or 'push' in low)):
+                      lo=max(1,i-3); hi=min(len(lines),i+3)
+                      print(f'CONTEXT L{lo}-L{hi}')
+                      for j in range(lo,hi+1): print(f'{j}: {lines[j-1]}')
+              # Extract string literals containing CPI to avoid guessing punctuation.
+              cpi=[]
+              for q,s in re.findall(r'''(["'])(.*?)\1''',text,re.S):
+                  norm=s.lower().replace('í','i')
+                  if 'indice de precios al consumidor' in norm:
+                      cpi.append(s)
+              print('CPI_STRING_LITERALS',json.dumps(cpi,ensure_ascii=False,indent=2))
+          print('REQUEST_COUNT',1)
+          print('SEARCH_ROUTE_REQUEST_COUNT',0)
           PY
       - name: Prove diagnostic is read-only
         run: |
