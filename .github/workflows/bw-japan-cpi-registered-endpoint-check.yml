@@ -1,0 +1,87 @@
+name: BW Japan CPI registered-endpoint check
+
+on:
+  push:
+    branches:
+      - feature/post-bv-pressure-audit-bw
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and registered endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          test "$(git merge-base HEAD origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          TMP="$RUNNER_TEMP/bw-jp-cpi-registered"
+          mkdir -p "$TMP"
+          curl --silent --show-error --max-redirs 0 -A 'WORLD-SIGNALS/0.1 (+review-only schedule monitor)' -o "$TMP/robots" -w '%{http_code}|%{content_type}|%{url_effective}\n' 'https://www.stat.go.jp/robots.txt' > "$TMP/robots.meta"
+          curl --silent --show-error --max-redirs 0 -A 'WORLD-SIGNALS/0.1 (+review-only schedule monitor)' -o "$TMP/schedule" -w '%{http_code}|%{content_type}|%{url_effective}\n' 'https://www.stat.go.jp/english/data/cpi/1582.htm' > "$TMP/schedule.meta"
+          python - <<'PY'
+          import json, os
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.robotparser import RobotFileParser
+
+          class Rows(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True); self.rows=[]; self.row=None; self.cell=None
+              def handle_starttag(self,tag,attrs):
+                  if tag.lower()=='tr': self.row=[]
+                  elif tag.lower() in {'td','th'} and self.row is not None: self.cell=[]
+              def handle_data(self,data):
+                  if self.cell is not None: self.cell.append(data)
+              def handle_endtag(self,tag):
+                  tag=tag.lower()
+                  if tag in {'td','th'} and self.row is not None and self.cell is not None:
+                      self.row.append(' '.join(''.join(self.cell).replace('\xa0',' ').split())); self.cell=None
+                  elif tag=='tr' and self.row is not None:
+                      if self.row: self.rows.append(self.row)
+                      self.row=None; self.cell=None
+
+          root=Path(os.environ['RUNNER_TEMP'])/'bw-jp-cpi-registered'
+          rm=(root/'robots.meta').read_text().strip().split('|',2)
+          sm=(root/'schedule.meta').read_text().strip().split('|',2)
+          assert int(rm[0])==200, rm
+          assert int(sm[0])==200, sm
+          assert sm[2]=='https://www.stat.go.jp/english/data/cpi/1582.htm', sm
+          assert 'text/html' in sm[1].lower(), sm
+          rt=(root/'robots').read_text(errors='replace')
+          rp=RobotFileParser(); rp.parse(rt.splitlines())
+          assert rp.can_fetch('*','https://www.stat.go.jp/english/data/cpi/1582.htm') is True
+          text=(root/'schedule').read_text(errors='replace')
+          p=Rows(); p.feed(text)
+          expected=[('August','September 18'),('September','October 23'),('October','November 20'),('November','December 18'),('December','January 22, 2027'),('January, 2027','February 19'),('February','March 19')]
+          counts={f'{a} -> {b}':sum(1 for r in p.rows if len(r)>=2 and r[0]==a and r[1]==b) for a,b in expected}
+          assert set(counts.values())=={1}, counts
+          result={'baseline':'b277939bc6c540d0986f298a832c7d63a29a2d19','request_count':2,'followup_request_count':0,'registered_endpoint':sm[2],'robots_status':int(rm[0]),'robots_allows_registered_endpoint':True,'schedule_status':int(sm[0]),'schedule_content_type':sm[1],'exact_unique_pair_count':sum(v==1 for v in counts.values()),'pair_counts':counts,'clock_authority':False,'lifecycle_authority':False,'certainty_authority':False,'automatic_canonical_commit':False,'google_calendar_write':False}
+          out=Path(os.environ['RUNNER_TEMP'])/'bw-japan-cpi-registered-endpoint.json'
+          out.write_text(json.dumps(result,indent=2,sort_keys=True)); print(out.read_text())
+          PY
+      - name: Prove repository remains read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bw-japan-cpi-registered-endpoint
+          path: ${{ runner.temp }}/bw-japan-cpi-registered-endpoint.json
+          if-no-files-found: error
+          retention-days: 1
