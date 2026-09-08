@@ -24,6 +24,9 @@ from world_signals.adapters import (
     fetch_eurostat_release_calendar,
     fetch_japan_household_spending_data,
     fetch_rba_fsr,
+    fetch_rba_monetary_policy_calendar,
+    fetch_rba_board_schedule,
+    validate_rba_calendar_alignment,
     fetch_suin_metadata,
     fetch_suin_rows,
     normalize_cellar_legal_topology,
@@ -31,6 +34,8 @@ from world_signals.adapters import (
     parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
 )
+
+from world_signals.rba_mpb_monitor import fetch_rba_robots_policy, rba_schedule_path_disallowed
 
 CANONICAL=ROOT/"data/canonical/registry.json"
 ARTIFACT_DIR=ROOT/"artifacts"
@@ -72,6 +77,36 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
+    try:
+        robots_rules,robots_snap=fetch_rba_robots_policy()
+        if rba_schedule_path_disallowed(robots_rules):
+            raise AdapterError("RBA robots policy disallows /schedules-events/")
+        rba_calendar,rba_calendar_snap=fetch_rba_monetary_policy_calendar()
+        rba_board,rba_board_snap=fetch_rba_board_schedule()
+        validate_rba_calendar_alignment(rba_calendar,rba_board)
+        report["results"].append({
+            "adapter":"RBA_MPB_CALENDAR",
+            "status":"PASS",
+            "source_id":"WSSRC-CB-002",
+            "robots_snapshot":robots_snap.as_dict(),
+            "calendar_snapshot":rba_calendar_snap.as_dict(),
+            "board_snapshot":rba_board_snap.as_dict(),
+            "calendar_event_count":len(rba_calendar.events),
+            "board_window_count":len(rba_board),
+            "schedule_sha256":rba_calendar.schedule_sha256,
+            "request_budget_per_run":3,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"RBA_MPB_CALENDAR",
+            "status":"FAIL",
+            "source_id":"WSSRC-CB-002",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         eurostat_items,eurostat_snap=fetch_eurostat_release_calendar()

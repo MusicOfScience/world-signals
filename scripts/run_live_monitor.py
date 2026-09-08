@@ -25,6 +25,9 @@ from world_signals.adapters import (
     fetch_ons_upcoming_releases,
     fetch_japan_household_spending_data,
     fetch_rba_fsr,
+    fetch_rba_monetary_policy_calendar,
+    fetch_rba_board_schedule,
+    validate_rba_calendar_alignment,
     fetch_suin_rows,
     normalize_cellar_legal_topology,
     parse_cra_article_71,
@@ -34,6 +37,11 @@ from world_signals.io import load_json
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
+from world_signals.rba_mpb_monitor import (
+    fetch_rba_robots_policy,
+    rba_mpb_schedule_review_candidates,
+    rba_schedule_path_disallowed,
+)
 from world_signals.legal_monitor import (
     cbam_annual_deadline_review_candidate,
     cbam_legal_milestone_review_candidate,
@@ -203,6 +211,52 @@ def main() -> int:
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
+
+    if "RBA_MPB_CALENDAR" in configs:
+        rba_mpb_config=configs["RBA_MPB_CALENDAR"]
+        try:
+            robots_rules,robots_snap=fetch_rba_robots_policy()
+            if rba_schedule_path_disallowed(robots_rules):
+                report["source_health"].append({
+                    "adapter_id":"RBA_MPB_CALENDAR",
+                    "source_id":rba_mpb_config["source_id"],
+                    "state":"DEGRADED",
+                    "robots_snapshot":robots_snap.as_dict(),
+                    "failure_stage":"ROBOTS_POLICY_NOW_DISALLOWS_SCHEDULE_PATH",
+                    "schedule_requests_skipped":True,
+                    "canonical_action":"NONE",
+                })
+            else:
+                rba_calendar,rba_calendar_snap=fetch_rba_monetary_policy_calendar()
+                rba_board,rba_board_snap=fetch_rba_board_schedule()
+                validate_rba_calendar_alignment(rba_calendar,rba_board)
+                report["source_health"].append({
+                    "adapter_id":"RBA_MPB_CALENDAR",
+                    "source_id":rba_mpb_config["source_id"],
+                    "state":"HEALTHY",
+                    "robots_snapshot":robots_snap.as_dict(),
+                    "calendar_snapshot":rba_calendar_snap.as_dict(),
+                    "board_snapshot":rba_board_snap.as_dict(),
+                    "calendar_event_count":len(rba_calendar.events),
+                    "board_window_count":len(rba_board),
+                    "schedule_sha256":rba_calendar.schedule_sha256,
+                    "request_budget_per_run":3,
+                    "automatic_commit_allowed":False,
+                })
+                candidates,observations=rba_mpb_schedule_review_candidates(
+                    registry.get("records",[]),rba_calendar,rba_board,rba_mpb_config
+                )
+                report["review_candidates"].extend(candidates)
+                report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"RBA_MPB_CALENDAR",
+                "source_id":rba_mpb_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+            })
 
     if "EIA_WPSR_SCHEDULE" in configs:
         eia_config=configs["EIA_WPSR_SCHEDULE"]
