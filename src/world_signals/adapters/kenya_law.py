@@ -72,16 +72,24 @@ def _fetch_rule(url: str, *, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchS
     return parse_kenya_budget_policy_rule(body),snapshot
 
 def fetch_kenya_budget_policy_rule_baseline(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
-    """Fetch the frozen 4 Nov 2025 version for reproducible provenance tests."""
+    """Fetch the frozen 4 Nov 2025 route when a bounded manual/pilot probe is justified.
+
+    The route is useful as a reproducibility identity, but GitHub Actions access
+    has proved variable (including both HTTP 200 and HTTP 403 on 8 Sep 2026).
+    Callers must not assume that a versioned URL is operationally stable or that
+    successful access grants recurring retrieval permission.
+    """
     return _fetch_rule(KENYA_PFM_BASELINE_2025_11_04,timeout=timeout)
 
 def fetch_kenya_budget_policy_rule_current(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
     """Probe the unversioned current route without implying production clearance.
 
-    GitHub Actions returned HTTP 403 on 3 Sep 2026, while the bounded BN
-    readiness probe on 8 Sep 2026 returned HTTP 200 and the same semantic
-    section 25(2) rule as the frozen versioned route. Reachability is runtime
-    evidence only: callers must never treat success or failure as automated
-    retrieval permission, legal-rule change, or event-state change.
+    GitHub Actions returned HTTP 403 on 3 Sep 2026. A bounded BN readiness probe
+    on 8 Sep returned HTTP 200 for both current and frozen routes and the same
+    semantic section 25(2) rule; a later BN transaction runner then received
+    HTTP 403 from the frozen route before the current route was requested.
+    Reachability is therefore variable runtime evidence only: callers must never
+    treat success or failure as automated retrieval permission, legal-rule
+    change, or event-state change.
     """
     return _fetch_rule(KENYA_PFM_CURRENT,timeout=timeout)
