@@ -1,0 +1,77 @@
+name: BN Kenya PFM readiness probe
+
+on:
+  push:
+    branches:
+      - feature/post-bm-kenya-pfm-readiness-bn
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BM cleanup ancestry and governed pre-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "9b79c93cde36a2e261a134b1259e02ca18096210"
+          test "$(git merge-base HEAD origin/main)" = "9b79c93cde36a2e261a134b1259e02ca18096210"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          print({'canonical':(c['version'],len(c['records'])),'sources':(s['version'],len(s['sources'])),'monitor':(m['version'],len(m['adapters']))})
+          assert (c['version'],len(c['records'])) == ('0.41',689)
+          assert (s['version'],len(s['sources'])) == ('1.86',247)
+          assert (m['version'],len(m['adapters'])) == ('0.12',10)
+          src=next(x for x in s['sources'] if x['source_id']=='WSSRC-REG6-001')
+          deps=[x for x in c['records'] if x.get('source_id')=='WSSRC-REG6-001' or 'WSSRC-REG6-001' in x.get('source_ids',[])]
+          print('SOURCE', json.dumps(src, indent=2, sort_keys=True))
+          print('DEPENDENCIES', json.dumps([{k:x.get(k) for k in ('occurrence_id','series_id','title','start_date','event_date','category','region','lifecycle_status','time_precision','timezone')} for x in deps], indent=2, sort_keys=True))
+          print('MONITOR_ROUTES', [x.get('adapter_id') for x in m['adapters'] if x.get('source_id')=='WSSRC-REG6-001'])
+          assert len(deps)==1
+          assert not any(x.get('source_id')=='WSSRC-REG6-001' for x in m['adapters'])
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          PY
+      - name: Run Kenya adapter tests
+        run: python -m unittest tests.test_kenya_law_adapter -v
+      - name: Exercise bounded official Kenya Law surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters.kenya_law import (
+              fetch_kenya_budget_policy_rule_baseline,
+              fetch_kenya_budget_policy_rule_current,
+          )
+          baseline,bs=fetch_kenya_budget_policy_rule_baseline(timeout=30)
+          current,cs=fetch_kenya_budget_policy_rule_current(timeout=30)
+          print({'baseline_status':bs.status,'current_status':cs.status})
+          print({'baseline':baseline.as_dict(),'current':current.as_dict()})
+          assert bs.status==200
+          assert cs.status==200
+          assert (baseline.deadline_month,baseline.deadline_day)==(2,15)
+          assert (current.deadline_month,current.deadline_day)==(2,15)
+          assert baseline.section==current.section=='25(2)'
+          PY
+      - name: Confirm repository validation remains green
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
