@@ -3,10 +3,9 @@ from __future__ import annotations
 from datetime import date, datetime, timezone
 from hashlib import sha256
 import json
-from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
-from .adapters.base import AdapterError, FetchSnapshot
+from .adapters.base import AdapterError, FetchSnapshot, fetch_bytes
 from .adapters.rba_mpb import RBA_TIMEZONE, RBAMeetingWindow, RBAMonetaryPolicyCalendar
 
 RBA_ROBOTS_URL = "https://www.rba.gov.au/robots.txt"
@@ -60,25 +59,11 @@ def rba_schedule_path_disallowed(rules: tuple[str, ...]) -> bool:
 
 
 def fetch_rba_robots_policy(*, timeout: int = 30) -> tuple[tuple[str, ...], FetchSnapshot]:
-    req = Request(
+    body, snapshot = fetch_bytes(
         RBA_ROBOTS_URL,
-        headers={
-            "User-Agent": "WORLD-SIGNALS/0.1 read-only monitor",
-            "Accept": "text/plain,*/*;q=0.1",
-        },
+        timeout=timeout,
+        accept="text/plain,*/*;q=0.1",
     )
-    try:
-        with urlopen(req, timeout=timeout) as response:
-            body = response.read()
-            snapshot = FetchSnapshot(
-                url=response.geturl(),
-                status=response.status,
-                content_type=response.headers.get("Content-Type"),
-                content_length=len(body),
-                sha256=sha256(body).hexdigest(),
-            )
-    except Exception as exc:  # urllib surfaces HTTP/network failures as several exception types
-        raise AdapterError(f"RBA robots policy fetch failed: {exc}") from exc
     if snapshot.status != 200:
         raise AdapterError(f"RBA robots policy returned HTTP {snapshot.status}")
     rules = _star_disallow_rules(body.decode("utf-8", errors="replace"))
@@ -185,7 +170,6 @@ def rba_mpb_schedule_review_candidates(
     observations: list[dict] = []
     seen_ids: set[str] = set()
 
-    # Board schedule is the primary monitoring surface for meeting windows.
     for window in board_windows:
         source_date = _civil(window.start_local)
         if source_date is None or source_date < today:
@@ -231,9 +215,6 @@ def rba_mpb_schedule_review_candidates(
         else:
             candidates.append(_drift_candidate(record, observed, source_id=source_id, kind="MEETING_WINDOW"))
 
-    # Topic calendar supplies exact decision/conference/minutes timing. Meeting
-    # windows on this surface are cross-validation evidence and are not compared
-    # twice to Canonical.
     for event in calendar.events:
         if event.event_kind == "MEETING_WINDOW":
             continue
@@ -286,8 +267,6 @@ def rba_mpb_schedule_review_candidates(
         else:
             candidates.append(_drift_candidate(record, observed, source_id=source_id, kind=event.event_kind))
 
-    # Absence is deliberately non-semantic. The topic calendar is rolling and
-    # does not expose every future exact-time occurrence already in Canonical.
     for record in scoped:
         start = _civil(record.get("start_local"))
         if start is None or start < today or record["occurrence_id"] in seen_ids:
