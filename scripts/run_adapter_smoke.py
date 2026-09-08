@@ -26,6 +26,8 @@ from world_signals.adapters import (
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
     fetch_fed_monetary_policy_rss,
+    fetch_indec_cpi_months,
+    fetch_indec_robots_policy,
     fetch_japan_household_spending_data,
     fetch_japan_mof_news_rss,
     fetch_rba_fsr,
@@ -220,6 +222,33 @@ def main() -> int:
         })
     except (AdapterError,ValueError) as exc:
         failures.append({"adapter":"CBSL_MONETARY_POLICY_RSS","error":str(exc)})
+
+    try:
+        indec_slugs=["Septiembre-2026","Octubre-2026","Noviembre-2026","Diciembre-2026"]
+        indec_allowed,indec_robots_snap=fetch_indec_robots_policy(indec_slugs)
+        if not indec_allowed:
+            raise AdapterError("INDEC robots policy disallows a configured CPI month route")
+        indec_items,indec_snaps=fetch_indec_cpi_months(indec_slugs)
+        report["results"].append({
+            "adapter":"INDEC_CPI_CALENDAR",
+            "status":"PASS",
+            "source_id":"WSSRC-REG2-009",
+            "robots_snapshot":indec_robots_snap.as_dict(),
+            "month_route_snapshots":[snap.as_dict() for snap in indec_snaps],
+            "item_count":len(indec_items),
+            "request_budget_per_run":5,
+            "robots_request_count":1,
+            "month_route_request_count":len(indec_snaps),
+            "google_followup_request_count":0,
+            "pdf_followup_request_count":0,
+            "completed_release_followup_request_count":0,
+            "search_route_request_count":0,
+            "schedule_authority":False,
+            "canonical_clock_mutation_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"INDEC_CPI_CALENDAR","error":str(exc)})
 
     try:
         jgb_items,jgb_snap=fetch_japan_mof_news_rss()
