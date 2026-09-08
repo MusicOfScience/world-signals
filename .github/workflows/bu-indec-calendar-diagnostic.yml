@@ -1,4 +1,4 @@
-name: BU INDEC calendar structure diagnostic
+name: BU INDEC offline implementation preflight
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  diagnostic:
+  preflight:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -25,32 +25,38 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
           test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
-      - name: Inspect one entity-normalized CPI HTML block from the first-party month route
-        shell: bash
+      - name: Validate frozen BU plan
         run: |
           set -euo pipefail
           python - <<'PY'
-          import hashlib, html, json, urllib.request
-          url='https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Septiembre-2026/0'
-          req=urllib.request.Request(url,headers={
-            'User-Agent':'WORLD-SIGNALS-RESEARCH/1.0',
-            'Accept':'text/html,*/*;q=0.5',
-            'X-Requested-With':'XMLHttpRequest',
-            'Referer':'https://www.indec.gob.ar/indec/web/Calendario-Fecha-0',
-          })
-          with urllib.request.urlopen(req,timeout=30) as r:
-              body=r.read(); raw=body.decode('utf-8','replace'); text=html.unescape(raw)
-              needle='Índice de precios al consumidor (IPC). Cobertura nacional. Agosto de 2026'
-              pos=text.find(needle)
-              assert pos >= 0, 'CPI title missing after HTML entity normalization'
-              lo=max(0,pos-2500); hi=min(len(text),pos+3500)
-              print('ROUTE',json.dumps({'status':r.status,'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest(),'raw_has_literal':needle in raw,'normalized_has_literal':needle in text},sort_keys=True))
-              print('CPI_HTML_CONTEXT_BEGIN')
-              print(text[lo:hi])
-              print('CPI_HTML_CONTEXT_END')
-          print('REQUEST_COUNT',1)
+          import json
+          from pathlib import Path
+          p=json.loads(Path('data/monitor/INDEC_CPI_CALENDAR_BU_PLAN_v0.1.json').read_text())
+          assert p['exact_base_main_sha']=='17e6130267c9d7911d12ac6f685c90228fec9e1e'
+          assert p['preconditions']['canonical_registry_version']=='0.41'
+          assert p['preconditions']['canonical_record_count']==689
+          assert p['preconditions']['source_registry_version']=='1.93'
+          assert p['preconditions']['source_count']==251
+          assert p['preconditions']['monitor_expectations_version']=='0.18'
+          assert p['preconditions']['configured_monitor_adapter_count']==16
+          assert p['postconditions']['source_registry_version']=='1.94'
+          assert p['postconditions']['source_count']==252
+          assert p['postconditions']['monitor_expectations_version']=='0.19'
+          assert p['postconditions']['configured_monitor_adapter_count']==17
+          assert p['classification_contract']['missing_report']=='GENERATE_SOURCE_MATCH_REVIEW_CANDIDATE_ONLY_NO_EVENT_STATE_INFERENCE'
+          assert p['request_contract']['maximum_total_requests_per_run']==5
+          assert p['request_contract']['google_requests']==0
+          assert p['request_contract']['search_route_requests']==0
           PY
-      - name: Prove diagnostic is read-only
+      - name: Run BU parser and comparator tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v tests.test_indec_cpi_calendar_bu
+      - name: Compile BU implementation
+        run: |
+          set -euo pipefail
+          python -m py_compile src/world_signals/adapters/indec_calendar.py src/world_signals/indec_cpi_monitor.py tests/test_indec_cpi_calendar_bu.py
+      - name: Prove preflight is read-only
         run: |
           set -euo pipefail
           test -z "$(git diff --name-only)"
