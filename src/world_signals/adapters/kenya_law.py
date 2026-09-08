@@ -76,10 +76,12 @@ def fetch_kenya_budget_policy_rule_baseline(*, timeout: int = 30) -> tuple[Kenya
     return _fetch_rule(KENYA_PFM_BASELINE_2025_11_04,timeout=timeout)
 
 def fetch_kenya_budget_policy_rule_current(*, timeout: int = 30) -> tuple[KenyaBudgetRule, FetchSnapshot]:
-    """Probe the unversioned current route.
+    """Probe the unversioned current route without implying production clearance.
 
-    This route is not production-cleared: GitHub Actions returned HTTP 403 on
-    3 Sep 2026. Callers must treat failure as route health only, never as a
-    legal-rule or event-state change.
+    GitHub Actions returned HTTP 403 on 3 Sep 2026, while the bounded BN
+    readiness probe on 8 Sep 2026 returned HTTP 200 and the same semantic
+    section 25(2) rule as the frozen versioned route. Reachability is runtime
+    evidence only: callers must never treat success or failure as automated
+    retrieval permission, legal-rule change, or event-state change.
     """
     return _fetch_rule(KENYA_PFM_CURRENT,timeout=timeout)
