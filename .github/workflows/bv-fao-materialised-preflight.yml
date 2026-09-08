@@ -1,0 +1,143 @@
+name: BV FAO materialised preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bu-pressure-audit-bv
+    paths:
+      - '.github/workflows/bv-fao-materialised-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and clean branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
+          test "$(git merge-base HEAD origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
+          test -z "$(git status --porcelain)"
+      - name: Freeze protected governed layers
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/bv-protected-files <<'EOF'
+          data/canonical/registry.json
+          data/canonical/schema.json
+          data/changes/ledger.json
+          data/coverage/biosecurity_overlay.json
+          data/monitor/operations_policy.json
+          data/live_intelligence/schema.json
+          data/live_intelligence/observations.json
+          data/live_intelligence/evidence_registry.json
+          data/analysis/schema.json
+          data/analysis/event_reviews.json
+          data/analysis/evidence_registry.json
+          EOF
+          xargs sha256sum < /tmp/bv-protected-files > /tmp/bv-protected.before
+      - name: Check and materialise exact BV post-state
+        shell: bash
+        env:
+          WORLD_SIGNALS_APPLY_MONITOR_BV: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_fao_release_calendar_monitor_bv.py
+          python scripts/apply_fao_release_calendar_monitor_bv.py --apply
+      - name: Audit exact five-file materialisation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --name-only | sort > /tmp/bv-actual-files
+          cat > /tmp/bv-expected-files <<'EOF'
+          data/monitor/expectations.json
+          data/sources/registry.json
+          scripts/run_adapter_smoke.py
+          scripts/run_live_monitor.py
+          src/world_signals/adapters/__init__.py
+          EOF
+          sort -o /tmp/bv-expected-files /tmp/bv-expected-files
+          diff -u /tmp/bv-expected-files /tmp/bv-actual-files
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Assert governed BV postconditions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (sources['version'],len(sources['sources']))==('1.95',252)
+          assert (expectations['version'],len(expectations['adapters']))==('0.20',18)
+          assert expectations['automatic_canonical_commit'] is False
+          assert expectations['google_calendar_write'] is False
+          src=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-COM-010']
+          assert len(src)==1
+          src=src[0]
+          assert src['canonical_dependency_count']==9
+          assert src['canonical_provenance_use']=='MANUAL_INFORMATIONAL_REFERENCE_ONLY'
+          assert src['licence_review_status']=='CLEARED_FOR_FACTUAL_METADATA'
+          assert src['automated_monitoring_use']=='CLEARED'
+          assert src['automated_retrieval_permission']=='BOUNDED_PUBLIC_HTML_SCHEDULE_ROBOTS_COMPATIBLE'
+          assert src['live_adapter_id']=='FAO_RELEASE_CALENDAR'
+          routes=[x for x in expectations['adapters'] if x.get('adapter_id')=='FAO_RELEASE_CALENDAR']
+          assert len(routes)==1
+          route=routes[0]
+          assert route['source_id']=='WSSRC-COM-010'
+          assert route['canonical_schedule_source_id']=='WSSRC-COM-010'
+          assert route['same_source_identity_for_canonical_and_monitor'] is True
+          assert len(route['canonical_occurrence_ids'])==6
+          assert route['request_budget_per_run']==2
+          assert route['robots_requests_per_run']==1
+          assert route['calendar_requests_per_run']==1
+          assert route['followup_requests_per_run']==0
+          for key in ('schedule_authority','lifecycle_authority','certainty_authority','canonical_clock_mutation_allowed','automatic_amis_followup_allowed','automatic_faostat_followup_allowed','automatic_pdf_fetch_allowed','automatic_news_followup_allowed','automatic_search_route_discovery_allowed','automatic_commit_allowed'):
+              assert route[key] is False,(key,route[key])
+          print('BV_GOVERNED_POSTCONDITIONS_PASS')
+          PY
+      - name: Full repository validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py src/world_signals/adapters/fao_release_calendar.py src/world_signals/fao_release_monitor.py scripts/apply_fao_release_calendar_monitor_bv.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Prove protected layers unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          xargs sha256sum < /tmp/bv-protected-files > /tmp/bv-protected.after
+          diff -u /tmp/bv-protected.before /tmp/bv-protected.after
+      - name: Restore and prove byte-clean checkout
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
