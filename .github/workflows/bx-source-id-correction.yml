@@ -36,7 +36,7 @@ jobs:
           assert new==[], new
           PY
 
-      - name: Correct BX machine source identity only
+      - name: Correct BX machine source identity in ordinary files only
         shell: bash
         run: |
           set -euo pipefail
@@ -49,7 +49,6 @@ jobs:
               Path('tests/test_nbs_native_rss_bx.py'),
               Path('scripts/apply_china_nbs_native_rss_monitor_bx.py'),
               Path('tests/test_nbs_native_rss_activation_bx.py'),
-              Path('.github/workflows/bx-nbs-rss-materialised-preflight.yml'),
           ]
           total=0
           for path in paths:
@@ -64,11 +63,10 @@ jobs:
               assert 'WSSRC-MAC-026' not in path.read_text(), path
           PY
 
-      - name: Audit correction boundary and self-remove workflow
+      - name: Audit correction boundary, commit and push
         shell: bash
         run: |
           set -euo pipefail
-          git rm .github/workflows/bx-source-id-correction.yml
           python - <<'PY'
           import subprocess
           expected={
@@ -78,11 +76,9 @@ jobs:
               'tests/test_nbs_native_rss_bx.py',
               'scripts/apply_china_nbs_native_rss_monitor_bx.py',
               'tests/test_nbs_native_rss_activation_bx.py',
-              '.github/workflows/bx-nbs-rss-materialised-preflight.yml',
-              '.github/workflows/bx-source-id-correction.yml',
           }
-          changed=set(subprocess.check_output(['git','status','--porcelain'],text=True).splitlines())
-          names={line[3:] for line in changed}
+          lines=subprocess.check_output(['git','status','--porcelain'],text=True).splitlines()
+          names={line[3:] for line in lines}
           assert names==expected,(sorted(names),sorted(expected))
           PY
           git add data/monitor/CHINA_NBS_NATIVE_RSS_BX_PLAN_v0.1.json \
@@ -90,8 +86,7 @@ jobs:
                   src/world_signals/nbs_release_monitor.py \
                   tests/test_nbs_native_rss_bx.py \
                   scripts/apply_china_nbs_native_rss_monitor_bx.py \
-                  tests/test_nbs_native_rss_activation_bx.py \
-                  .github/workflows/bx-nbs-rss-materialised-preflight.yml
+                  tests/test_nbs_native_rss_activation_bx.py
           test -z "$(git diff --name-only)"
           git fetch --no-tags origin main
           test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
