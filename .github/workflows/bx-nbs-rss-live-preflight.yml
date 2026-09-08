@@ -1,0 +1,151 @@
+name: BX NBS native RSS one-request live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bw-pressure-audit-bx
+    paths:
+      - .github/workflows/bx-nbs-rss-live-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live-preflight:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify exact post-BW ancestry and clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=29b71bea42610992ad073b1583be64ced7e5de81
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+
+      - name: Materialise BX post-state locally and enforce five-file boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORLD_SIGNALS_APPLY_MONITOR_BX=1 python scripts/apply_china_nbs_native_rss_monitor_bx.py --apply
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected,(sorted(changed),sorted(expected))
+          PY
+
+      - name: Execute exactly one native NBS RSS request and real comparator
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from world_signals.adapters.nbs_native_rss import fetch_nbs_native_latest_releases_rss
+          from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
+
+          canonical_path=Path('data/canonical/registry.json')
+          canonical_sha_before=hashlib.sha256(canonical_path.read_bytes()).hexdigest()
+          registry=json.loads(canonical_path.read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          routes=[x for x in expectations['adapters'] if x.get('adapter_id')=='CHINA_NBS_LATEST_RELEASES_RSS']
+          assert len(routes)==1
+          config=routes[0]
+
+          # This is the single network call in the live preflight.
+          items,snapshot=fetch_nbs_native_latest_releases_rss(timeout=30)
+          assert snapshot.status==200, snapshot.as_dict()
+          assert len(items)>0
+
+          # Live semantic guardrails: recent native items must still classify deterministically.
+          identities={(x.series_key,x.reference_year,x.reference_month) for x in items if x.series_key is not None}
+          for expected in {('PMI',2026,8),('CPI',2026,7),('PPI',2026,7)}:
+              assert expected in identities,(expected,sorted(identities)[:20])
+
+          candidates,observations=nbs_native_rss_review_candidates(
+              registry['records'],items,config
+          )
+          configured=set(config['canonical_occurrence_ids'])
+          seen=set()
+          for candidate in candidates:
+              assert candidate['candidate_type']=='CHINA_NBS_CONFIGURED_RELEASE_PUBLICATION_EVIDENCE'
+              assert candidate['source_id']=='WSSRC-MAC-031'
+              assert candidate['event_state_inference']=='NONE'
+              assert candidate['automatic_commit_allowed'] is False
+              assert candidate['canonical_clock_mutation_allowed'] is False
+              assert candidate['completion_requires_review'] is True
+              assert len(candidate['occurrence_ids'])==1
+              occurrence_id=candidate['occurrence_ids'][0]
+              assert occurrence_id in configured, occurrence_id
+              assert occurrence_id not in seen, occurrence_id
+              seen.add(occurrence_id)
+
+          absence=[x for x in observations if x.get('type')=='CHINA_NBS_RSS_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_DELAY_CANCELLATION_OR_CERTAINTY_SEMANTICS']
+          assert len(absence)==1, absence
+          assert absence[0]['configured_occurrence_count']==36
+          assert absence[0]['event_state_inference']=='NONE'
+          assert absence[0]['automatic_commit_allowed'] is False
+
+          assert config['request_budget_per_run']==1
+          assert config['native_rss_request_count_per_run']==1
+          for key in ('schedule_request_count_per_run','english_rss_request_count_per_run','article_followup_request_count_per_run','data_api_followup_request_count_per_run','search_route_discovery_request_count_per_run'):
+              assert config[key]==0,(key,config[key])
+          for key in ('schedule_authority','clock_authority','lifecycle_authority','certainty_authority','rss_publication_metadata_is_event_clock_authority','rss_publication_metadata_is_schedule_authority','canonical_clock_mutation_allowed','automatic_item_link_fetch_allowed','automatic_schedule_html_fetch_allowed','automatic_english_rss_fetch_allowed','automatic_data_api_fetch_allowed','automatic_search_route_discovery_allowed','automatic_commit_allowed'):
+              assert config[key] is False,(key,config[key])
+          assert expectations['automatic_canonical_commit'] is False
+          assert expectations['google_calendar_write'] is False
+          assert hashlib.sha256(canonical_path.read_bytes()).hexdigest()==canonical_sha_before
+
+          result={
+              'tranche':'BX',
+              'source_id':'WSSRC-MAC-031',
+              'adapter_id':'CHINA_NBS_LATEST_RELEASES_RSS',
+              'snapshot':snapshot.as_dict(),
+              'item_count':len(items),
+              'classified_item_count':sum(1 for x in items if x.series_key is not None),
+              'review_candidate_count':len(candidates),
+              'candidate_occurrence_ids':sorted(seen),
+              'observation_count':len(observations),
+              'configured_occurrence_count':36,
+              'request_count':1,
+              'schedule_request_count':0,
+              'english_rss_request_count':0,
+              'article_followup_request_count':0,
+              'data_api_followup_request_count':0,
+              'search_route_discovery_request_count':0,
+              'schedule_authority':False,
+              'clock_authority':False,
+              'lifecycle_authority':False,
+              'certainty_authority':False,
+              'automatic_commit_allowed':False,
+              'canonical_clock_mutation_allowed':False,
+          }
+          print('BX_NBS_LIVE',json.dumps(result,ensure_ascii=False,sort_keys=True))
+          PY
+
+      - name: Restore local materialisation and prove byte-clean checkout
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git restore -- data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          rm -rf __pycache__ scripts/__pycache__ src/world_signals/__pycache__ src/world_signals/adapters/__pycache__ tests/__pycache__
+          git clean -fdx artifacts review_candidates || true
+          test -z "$(git status --porcelain)"
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
