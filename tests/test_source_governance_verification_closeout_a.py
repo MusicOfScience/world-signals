@@ -57,6 +57,37 @@ class VerificationCloseoutATests(unittest.TestCase):
             by_id = closeout.sources_by_id(self.sources)
             for source_id, spec in self.plan["source_updates"].items():
                 for key, value in spec["set"].items():
+                    if (
+                        source_id == "WSSRC-REG6-001"
+                        and key == "verification_mode"
+                        and by_id[source_id].get("monitoring_readiness_status")
+                        in {
+                            "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD",
+                            "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD",
+                        }
+                    ):
+                        # Verification Closeout A historically established MANUAL_AUTHORITATIVE_RECHECK.
+                        # A later reviewed readiness tranche may advance the technical verification mode,
+                        # but only while the separate endpoint-permission and production-route holds survive.
+                        self.assertEqual(by_id[source_id].get("verification_mode"), "AUTOMATED_PILOT")
+                        self.assertEqual(by_id[source_id].get("automated_monitoring_use"), "ENDPOINT_REVIEW_REQUIRED")
+                        self.assertEqual(
+                            by_id[source_id].get("automated_retrieval_permission"),
+                            "ENDPOINT_OPERATIONAL_REVIEW_REQUIRED",
+                        )
+                        self.assertEqual(
+                            by_id[source_id].get("monitoring_activation_status"),
+                            "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE",
+                        )
+                        if by_id[source_id].get("monitoring_readiness_status") == "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD":
+                            self.assertEqual(
+                                by_id[source_id].get("runtime_health_state"),
+                                "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08",
+                            )
+                        self.assertFalse(
+                            any(row.get("source_id") == source_id for row in self.expectations["adapters"])
+                        )
+                        continue
                     self.assertEqual(by_id[source_id].get(key), value, f"{source_id} {key}")
             vietnam = by_id["WSSRC-REG5-001"]
             self.assertEqual(vietnam.get("authoritative_url"), self.plan["preconditions"]["vietnam_hold"]["expected_authoritative_url"])

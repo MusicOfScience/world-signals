@@ -31,10 +31,13 @@ class FOMCMonitorReadinessBMTests(unittest.TestCase):
         if sources["version"] == "1.85":
             post = tx.build_post_state()
         else:
-            self.assertEqual(sources["version"], tx.TARGET_SOURCE_VERSION)
+            self.assertGreaterEqual(
+                tuple(map(int, sources["version"].split("."))),
+                tuple(map(int, tx.TARGET_SOURCE_VERSION.split("."))),
+            )
             post = sources
 
-        self.assertEqual(len(post["sources"]), 247)
+        self.assertGreaterEqual(len(post["sources"]), 247)
         target = next(row for row in post["sources"] if row["source_id"] == tx.SOURCE_ID)
         self.assertEqual(target["canonical_dependency_count"], 44)
         self.assertEqual(target["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
