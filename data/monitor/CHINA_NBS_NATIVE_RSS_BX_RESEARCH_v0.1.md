@@ -10,7 +10,7 @@ BX selects a **new monitor-only native RSS source** for the National Bureau of S
 This is a source-role decomposition, not a retroactive clearance of the annual release-calendar endpoint.
 
 - `WSSRC-MAC-007`: remains Canonical forward release-date/clock authority for 36 already-modelled NBS occurrences; its existing endpoint-review/automation status is preserved byte-for-byte by the transaction.
-- `WSSRC-MAC-026`: proposed new native `最新发布` RSS monitor identity; publication sentinel only, zero Canonical dependencies.
+- `WSSRC-MAC-031`: proposed new native `最新发布` RSS monitor identity; publication sentinel only, zero Canonical dependencies.
 - route: `CHINA_NBS_LATEST_RELEASES_RSS`.
 
 ## Why NBS emerged from the post-BW audit

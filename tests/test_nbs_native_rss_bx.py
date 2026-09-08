@@ -41,7 +41,7 @@ def feed(*items: str) -> str:
 def config() -> dict:
     return {
         "adapter_id": "CHINA_NBS_LATEST_RELEASES_RSS",
-        "source_id": "WSSRC-MAC-026",
+        "source_id": "WSSRC-MAC-031",
         "canonical_schedule_source_id": "WSSRC-MAC-007",
         "canonical_occurrence_ids": list(PLAN["canonical_occurrence_ids"]),
         "identity_by_occurrence_id": copy.deepcopy(PLAN["canonical_identity_by_occurrence_id"]),

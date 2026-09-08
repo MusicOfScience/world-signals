@@ -7,7 +7,7 @@ from .adapters.nbs_native_rss import NBSNativeReleaseItem
 
 NBS_TIMEZONE = "Asia/Shanghai"
 CANONICAL_SOURCE_ID = "WSSRC-MAC-007"
-MONITOR_SOURCE_ID = "WSSRC-MAC-026"
+MONITOR_SOURCE_ID = "WSSRC-MAC-031"
 EXPECTED_CONFIGURED_COUNT = 36
 
 

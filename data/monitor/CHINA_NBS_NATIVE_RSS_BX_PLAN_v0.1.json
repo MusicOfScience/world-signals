@@ -4,7 +4,7 @@
   "exact_base_main_sha": "29b71bea42610992ad073b1583be64ced7e5de81",
   "selection": {
     "canonical_schedule_source_id": "WSSRC-MAC-007",
-    "machine_source_id": "WSSRC-MAC-026",
+    "machine_source_id": "WSSRC-MAC-031",
     "adapter_id": "CHINA_NBS_LATEST_RELEASES_RSS",
     "institution": "National Bureau of Statistics of China",
     "jurisdiction": "China",
@@ -118,7 +118,7 @@
   },
   "source_role_contract": {
     "canonical_schedule_source_id": "WSSRC-MAC-007",
-    "machine_source_id": "WSSRC-MAC-026",
+    "machine_source_id": "WSSRC-MAC-031",
     "canonical_schedule_source_unchanged": true,
     "canonical_schedule_source_role": "NBS_ANNUAL_FORWARD_RELEASE_CALENDAR_CANONICAL_DATE_AND_CLOCK_AUTHORITY",
     "machine_source_role": "NBS_NATIVE_LATEST_RELEASES_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL",
