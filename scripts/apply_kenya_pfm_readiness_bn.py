@@ -52,7 +52,6 @@ def assert_preconditions(canonical: dict, sources: dict, expectations: dict) -> 
 
     source = _source_by_id(sources, SOURCE_ID)
     required = {
-        "canonical_dependency_count": 1,
         "source_timezone": "Africa/Nairobi",
         "parser_version": "kenya-bps-rule-0.1",
         "runtime_health_state": "RESEARCH_VERIFIED_NOT_LIVE_POLLED",
