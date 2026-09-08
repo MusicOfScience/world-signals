@@ -1,0 +1,137 @@
+name: BS BSP RSS materialised preflight
+
+on:
+  push:
+    branches:
+      - feature/post-br-pressure-audit-bs
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BR ancestry and BS check-only state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "22a5c0a922d3a126bf268acb61a68abe1bfe5075"
+          test "$(git merge-base HEAD origin/main)" = "22a5c0a922d3a126bf268acb61a68abe1bfe5075"
+          python scripts/apply_bsp_monetary_rss_monitor_bs.py
+          python -m unittest tests.test_bsp_monetary_rss_bs tests.test_bsp_monetary_rss_activation_bs -v
+      - name: Freeze protected-layer checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            > /tmp/bs-protected.before
+      - name: Materialise bounded BS post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORLD_SIGNALS_APPLY_MONITOR_BS=1 python scripts/apply_bsp_monetary_rss_monitor_bs.py --apply
+      - name: Audit exact five-file governed/runtime boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          expected={
+            'data/sources/registry.json',
+            'data/monitor/expectations.json',
+            'scripts/run_live_monitor.py',
+            'scripts/run_adapter_smoke.py',
+            'src/world_signals/adapters/__init__.py',
+          }
+          assert changed==expected,(changed,expected)
+          pre_sources=json.loads(subprocess.check_output(['git','show','HEAD:data/sources/registry.json'],text=True))
+          post_sources=json.loads(Path('data/sources/registry.json').read_text())
+          pre_monitor=json.loads(subprocess.check_output(['git','show','HEAD:data/monitor/expectations.json'],text=True))
+          post_monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (pre_sources['version'],len(pre_sources['sources']))==('1.91',249)
+          assert (post_sources['version'],len(post_sources['sources']))==('1.92',250)
+          assert (pre_monitor['version'],len(pre_monitor['adapters']))==('0.16',14)
+          assert (post_monitor['version'],len(post_monitor['adapters']))==('0.17',15)
+          before={r['source_id']:r for r in pre_sources['sources']}
+          after={r['source_id']:r for r in post_sources['sources']}
+          assert set(after)-set(before)=={'WSSRC-REGJ-006'}
+          schedule=after['WSSRC-REGJ-003']
+          assert schedule['canonical_dependency_count']==2
+          assert schedule['canonical_provenance_use']=='CLEARED_CURATED_FACTUAL_METADATA'
+          assert schedule['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert schedule['automated_retrieval_permission']=='PENDING_ENDPOINT_OPERATIONAL_REVIEW'
+          assert schedule['verification_mode']=='MANUAL_AUTHORITATIVE_RECHECK'
+          assert schedule['monitoring_activation_status']=='HOLD_NO_LIVE_ROUTE'
+          machine=after['WSSRC-REGJ-006']
+          assert machine['canonical_dependency_count']==0
+          assert machine['automated_monitoring_use']=='CLEARED'
+          assert machine['canonical_provenance_use']=='MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY'
+          assert post_monitor['adapters'][:14]==pre_monitor['adapters']
+          route=post_monitor['adapters'][14]
+          assert route['adapter_id']=='BSP_MONETARY_POLICY_RSS'
+          assert route['source_id']=='WSSRC-REGJ-006'
+          assert route['canonical_occurrence_ids']==['WSO-REG-J-0008','WSO-REG-J-0009']
+          assert route['request_budget_per_run']==1
+          assert route['schedule_authority'] is False
+          assert route['lifecycle_authority'] is False
+          assert route['certainty_authority'] is False
+          assert route['canonical_clock_mutation_allowed'] is False
+          assert route['automatic_schedule_html_fetch_allowed'] is False
+          assert route['automatic_commit_allowed'] is False
+          assert post_monitor['automatic_canonical_commit'] is False
+          assert post_monitor['google_calendar_write'] is False
+          PY
+      - name: Validate full descendant repository and static build offline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile src/world_signals/adapters/bsp_rss.py src/world_signals/bsp_monetary_monitor.py scripts/apply_bsp_monetary_rss_monitor_bs.py scripts/run_live_monitor.py scripts/run_adapter_smoke.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+      - name: Verify protected layers and restore materialisation byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            > /tmp/bs-protected.after
+          diff -u /tmp/bs-protected.before /tmp/bs-protected.after
+          git restore -- data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
