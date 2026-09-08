@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 import unittest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.adapters.base import AdapterError
 from world_signals.adapters.japan_mof_rss import JapanMOFRSSItem, parse_japan_mof_news_rss
 from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
 
-ROOT = Path(__file__).resolve().parents[1]
 PLAN = json.loads((ROOT / "data/monitor/JGB_RSS_MONITOR_BR_PLAN_v0.1.json").read_text())
 CANONICAL = json.loads((ROOT / "data/canonical/registry.json").read_text())
 
