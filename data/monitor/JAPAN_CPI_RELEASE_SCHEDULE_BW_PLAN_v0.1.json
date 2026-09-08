@@ -110,7 +110,7 @@
     "monitoring_readiness_assessed_at": "2026-09-09",
     "last_successful_research_verification_at": "2026-09-09",
     "automation_evidence_url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
-    "rights_review_scope": "BW_PUBLIC_DATA_LICENSE_AND_MACHINE_ACCESS_SEPARATELY_REVIEWED",
+    "automation_review_scope": "BW_MACHINE_ACCESS_REVIEW_SEPARATE_FROM_UNCHANGED_PUBLIC_DATA_LICENSE_RIGHTS",
     "live_adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
     "parser_version": "jp-stat-cpi-0.2"
   },
