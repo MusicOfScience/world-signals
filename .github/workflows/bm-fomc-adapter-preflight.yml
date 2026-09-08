@@ -44,8 +44,12 @@ jobs:
           assert m['automatic_canonical_commit'] is False
           assert m['google_calendar_write'] is False
           PY
-      - name: Run check-only FOMC readiness transform
-        run: python scripts/apply_fomc_monitor_readiness_bm.py
+      - name: Run check-only readiness and descendant-repair transforms
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_fomc_monitor_readiness_bm.py
+          python scripts/repair_bl_source_ceiling_bm.py
       - name: Exercise current first-party FOMC schedule surfaces
         shell: bash
         run: |
@@ -78,16 +82,7 @@ jobs:
         run: |
           set -euo pipefail
           WORLD_SIGNALS_APPLY_MONITOR_BM=1 python scripts/apply_fomc_monitor_readiness_bm.py --apply
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('tests/test_japan_household_spending_monitor_bl.py')
-          text=p.read_text()
-          old='            self.assertEqual(sources["version"], "1.85")\n            self.assertEqual(expectations["version"], "0.12")'
-          new='            self.assertGreaterEqual(tuple(map(int, sources["version"].split("."))), (1, 85))\n            self.assertEqual(expectations["version"], "0.12")'
-          if text.count(old) != 1:
-              raise SystemExit('BL descendant repair target not unique')
-          p.write_text(text.replace(old,new))
-          PY
+          WORLD_SIGNALS_APPLY_MONITOR_BM=1 python scripts/repair_bl_source_ceiling_bm.py --apply
           python - <<'PY'
           import json
           from pathlib import Path
@@ -120,12 +115,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m unittest tests.test_fomc_adapter_bm -v
+          python -m unittest tests.test_fomc_adapter_bm tests.test_fomc_monitor_readiness_bm -v
           python scripts/validate_registry.py
           python scripts/validate_live_intelligence.py
           python scripts/validate_analysis.py
           python -m unittest discover -s tests -v
-          python -m py_compile src/world_signals/adapters/fomc.py scripts/apply_fomc_monitor_readiness_bm.py
+          python -m py_compile src/world_signals/adapters/fomc.py scripts/apply_fomc_monitor_readiness_bm.py scripts/repair_bl_source_ceiling_bm.py
           node --check web/app.js
           node --check web/horizon.js
           node --check web/native-calendar.js
