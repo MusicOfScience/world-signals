@@ -1,0 +1,189 @@
+name: BX controlled NBS native RSS activation transaction
+
+on:
+  push:
+    branches:
+      - feature/post-bw-pressure-audit-bx
+    paths:
+      - .github/workflows/bx-nbs-rss-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify exact post-BW ancestry and clean transaction start
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=29b71bea42610992ad073b1583be64ced7e5de81
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+
+      - name: Freeze protected data layers and Canonical NBS schedule source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          excluded={Path('data/sources/registry.json'),Path('data/monitor/expectations.json')}
+          rows=[]
+          for path in sorted(Path('data').rglob('*')):
+              if path.is_file() and path not in excluded:
+                  rows.append((path.as_posix(),hashlib.sha256(path.read_bytes()).hexdigest()))
+          Path('/tmp/bx-protected-before.json').write_text(json.dumps(rows,indent=2)+'\n')
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          old=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-007']
+          assert len(old)==1
+          Path('/tmp/bx-nbs-schedule-before.json').write_text(json.dumps(old[0],sort_keys=True,ensure_ascii=False)+'\n')
+          PY
+
+      - name: Check helper then apply exact BX governed transition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_china_nbs_native_rss_monitor_bx.py
+          test -z "$(git status --porcelain)"
+          WORLD_SIGNALS_APPLY_MONITOR_BX=1 python scripts/apply_china_nbs_native_rss_monitor_bx.py --apply
+
+      - name: Audit exact five-file boundary and governed post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected,(sorted(changed),sorted(expected))
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert canonical['version']=='0.41' and len(canonical['records'])==689
+          assert sources['version']=='1.97' and len(sources['sources'])==253
+          assert monitor['version']=='0.22' and len(monitor['adapters'])==20
+          assert monitor['automatic_canonical_commit'] is False
+          assert monitor['google_calendar_write'] is False
+
+          old=json.loads(Path('/tmp/bx-nbs-schedule-before.json').read_text())
+          current=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-007']
+          assert len(current)==1 and current[0]==old
+          machine=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-MAC-031']
+          assert len(machine)==1
+          m=machine[0]
+          assert m['canonical_dependency_count']==0
+          assert m['automated_monitoring_use']=='CLEARED'
+          assert m['automated_retrieval_permission']=='OFFICIAL_DEDICATED_RSS_INTERFACE_BOUNDED_METADATA_MONITORING'
+          assert m['canonical_provenance_use']=='MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY'
+          assert m['verification_mode']=='AUTOMATED_PILOT'
+
+          routes=[x for x in monitor['adapters'] if x.get('adapter_id')=='CHINA_NBS_LATEST_RELEASES_RSS']
+          assert len(routes)==1
+          r=routes[0]
+          assert r['source_id']=='WSSRC-MAC-031'
+          assert r['canonical_schedule_source_id']=='WSSRC-MAC-007'
+          assert len(r['canonical_occurrence_ids'])==36
+          assert len(set(r['canonical_occurrence_ids']))==36
+          assert r['request_budget_per_run']==1
+          assert r['native_rss_request_count_per_run']==1
+          for key in ('schedule_request_count_per_run','english_rss_request_count_per_run','article_followup_request_count_per_run','data_api_followup_request_count_per_run','search_route_discovery_request_count_per_run'):
+              assert r[key]==0,(key,r[key])
+          for key in ('schedule_authority','clock_authority','lifecycle_authority','certainty_authority','rss_publication_metadata_is_event_clock_authority','rss_publication_metadata_is_schedule_authority','canonical_clock_mutation_allowed','automatic_item_link_fetch_allowed','automatic_schedule_html_fetch_allowed','automatic_english_rss_fetch_allowed','automatic_data_api_fetch_allowed','automatic_search_route_discovery_allowed','automatic_commit_allowed'):
+              assert r[key] is False,(key,r[key])
+          PY
+
+      - name: Run full repository validators tests compile and static build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q src scripts
+          for f in web/app.js web/horizon.js web/native-calendar.js web/history.js web/operations.js web/biosecurity.js web/analysis.js; do node --check "$f"; done
+          python scripts/build_site.py
+
+      - name: Clean build artifacts and prove protected data layers identical
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site __pycache__ scripts/__pycache__ src/world_signals/__pycache__ src/world_signals/adapters/__pycache__ tests/__pycache__
+          git clean -fdx artifacts review_candidates || true
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          before=[tuple(x) for x in json.loads(Path('/tmp/bx-protected-before.json').read_text())]
+          excluded={Path('data/sources/registry.json'),Path('data/monitor/expectations.json')}
+          after=[]
+          for path in sorted(Path('data').rglob('*')):
+              if path.is_file() and path not in excluded:
+                  after.append((path.as_posix(),hashlib.sha256(path.read_bytes()).hexdigest()))
+          assert after==before
+          PY
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          lines=subprocess.check_output(['git','status','--porcelain'],text=True).splitlines()
+          names={line[3:] for line in lines}
+          assert names==expected,(sorted(names),sorted(expected))
+          PY
+
+      - name: Stage only governed five files audit and push transaction commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add data/sources/registry.json \
+                  data/monitor/expectations.json \
+                  scripts/run_live_monitor.py \
+                  scripts/run_adapter_smoke.py \
+                  src/world_signals/adapters/__init__.py
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          staged=set(subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines())
+          unstaged=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          untracked=[line for line in subprocess.check_output(['git','status','--porcelain'],text=True).splitlines() if line.startswith('??')]
+          assert staged==expected,(sorted(staged),sorted(expected))
+          assert not unstaged,sorted(unstaged)
+          assert not untracked,untracked
+          PY
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
+          test "$(git merge-base HEAD origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
+          git config user.name "world-signals-bot"
+          git config user.email "world-signals-bot@users.noreply.github.com"
+          git commit -m "BX: activate China NBS native RSS publication monitor"
+          echo "BX_TRANSACTION_HEAD=$(git rev-parse HEAD)"
+          git push origin HEAD:feature/post-bw-pressure-audit-bx
