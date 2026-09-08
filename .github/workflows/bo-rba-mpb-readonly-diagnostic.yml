@@ -1,0 +1,121 @@
+name: BO RBA MPB read-only activation diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bn-rba-mpb-monitor-activation-bo
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BN base
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "3a6869a054372e5df135067df77fb9bdc772367e"
+          test "$(git merge-base HEAD origin/main)" = "3a6869a054372e5df135067df77fb9bdc772367e"
+      - name: Derive exact RBA MPB Canonical scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          series={
+            'WS.CB.RBA.MPB_MEETING_WINDOW',
+            'WS.CB.RBA.MONETARY_POLICY_DECISION',
+            'WS.CB.RBA.MPB_PRESS_CONFERENCE',
+            'WS.CB.RBA.MPB_MINUTES',
+          }
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          rows=[r for r in canonical['records'] if r.get('series_id') in series]
+          rows.sort(key=lambda r:(r.get('start_local') or '',r['series_id'],r['occurrence_id']))
+          print('RBA_MPB_SCOPE_JSON='+json.dumps([
+            {
+              'occurrence_id':r['occurrence_id'],
+              'series_id':r['series_id'],
+              'start_local':r.get('start_local'),
+              'end_local':r.get('end_local'),
+              'source_id':r.get('source_id'),
+              'source_timezone':r.get('source_timezone'),
+              'time_precision':r.get('time_precision'),
+              'lifecycle_status':r.get('lifecycle_status'),
+              'certainty_status':r.get('certainty_status'),
+            } for r in rows
+          ],sort_keys=True))
+          print('RBA_MPB_SCOPE_COUNT=',len(rows))
+          print('RBA_MPB_SERIES_COUNTS=',dict(Counter(r['series_id'] for r in rows)))
+          print('RBA_MPB_SOURCE_COUNTS=',dict(Counter(r.get('source_id') for r in rows)))
+          assert len(rows) > 0
+          assert {r.get('source_timezone') for r in rows} == {'Australia/Sydney'}
+          assert all(r.get('source_id') in {'WSSRC-CB-002','WSSRC-CB-013'} for r in rows)
+          PY
+      - name: Exercise official RBA schedule surfaces and alignment
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters.rba_mpb import (
+              fetch_rba_monetary_policy_calendar,
+              fetch_rba_board_schedule,
+              validate_rba_calendar_alignment,
+          )
+          calendar,cs=fetch_rba_monetary_policy_calendar(timeout=30)
+          board,bs=fetch_rba_board_schedule(timeout=30)
+          assert cs.status == 200
+          assert bs.status == 200
+          validate_rba_calendar_alignment(calendar,board)
+          print({
+            'calendar_status':cs.status,
+            'board_status':bs.status,
+            'calendar_event_count':len(calendar.events),
+            'board_window_count':len(board),
+            'schedule_sha256':calendar.schedule_sha256,
+          })
+          PY
+      - name: Record RBA robots operational policy without treating it as legal permission
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from urllib.request import Request,urlopen
+          url='https://www.rba.gov.au/robots.txt'
+          req=Request(url,headers={'User-Agent':'WORLD-SIGNALS/0.1 read-only governance probe','Accept':'text/plain,*/*;q=0.1'})
+          with urlopen(req,timeout=30) as resp:
+              body=resp.read().decode('utf-8','replace')
+              status=resp.status
+          assert status == 200
+          rules=[]
+          active=False
+          for raw in body.splitlines():
+              line=raw.split('#',1)[0].strip()
+              if not line or ':' not in line: continue
+              key,val=(x.strip() for x in line.split(':',1))
+              if key.lower()=='user-agent':
+                  active=(val=='*')
+              elif active and key.lower()=='disallow':
+                  rules.append(val)
+          assert not any('/schedules-events/' == r or '/schedules-events/' .startswith(r.rstrip('*')) for r in rules if r)
+          print({'robots_status':status,'user_agent_star_disallow':rules,'schedule_path_disallowed':False,'interpretation':'OPERATIONAL_CRAWLER_POLICY_EVIDENCE_ONLY_NOT_BLANKET_PERMISSION'})
+          PY
+      - name: Run RBA adapter regression and verify no governed mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest tests.test_rba_mpb_adapter -v
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
