@@ -1,0 +1,205 @@
+name: BX post-BW read-only pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-bw-pressure-audit-bx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify frozen post-BW base and clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=29b71bea42610992ad073b1583be64ced7e5de81
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+      - name: Run read-only source and monitor pressure audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+
+          BASE = '29b71bea42610992ad073b1583be64ced7e5de81'
+          canonical = json.loads(Path('data/canonical/registry.json').read_text())
+          sources = json.loads(Path('data/sources/registry.json').read_text())
+          monitor = json.loads(Path('data/monitor/expectations.json').read_text())
+
+          def list_for(obj, names):
+              for n in names:
+                  v = obj.get(n)
+                  if isinstance(v, list):
+                      return v
+              raise RuntimeError(f'none of {names} is a list')
+
+          occs = list_for(canonical, ('occurrences','records','events'))
+          srcs = list_for(sources, ('sources','records'))
+          routes = list_for(monitor, ('adapters','routes','expectations'))
+
+          by_occ = {}
+          for o in occs:
+              oid = o.get('occurrence_id') or o.get('id')
+              if oid:
+                  by_occ[str(oid)] = o
+
+          def region_of(o):
+              for k in ('region','region_name','regional_bucket'):
+                  if o.get(k): return str(o[k])
+              geo = o.get('geography')
+              if isinstance(geo, dict):
+                  for k in ('region','region_name','bucket'):
+                      if geo.get(k): return str(geo[k])
+              return 'UNSPECIFIED'
+
+          def source_refs(o):
+              vals=[]
+              for k in ('source_id','canonical_source_id','primary_source_id'):
+                  if o.get(k): vals.append(str(o[k]))
+              for k in ('source_ids','canonical_source_ids'):
+                  if isinstance(o.get(k), list): vals += [str(x) for x in o[k] if x]
+              prov=o.get('provenance')
+              if isinstance(prov, dict):
+                  for k in ('source_id','primary_source_id'):
+                      if prov.get(k): vals.append(str(prov[k]))
+                  if isinstance(prov.get('source_ids'), list): vals += [str(x) for x in prov['source_ids'] if x]
+              return set(vals)
+
+          canonical_region_counts = Counter(region_of(o) for o in occs)
+          canonical_source_links = Counter()
+          source_regions = defaultdict(Counter)
+          for o in occs:
+              r=region_of(o)
+              for sid in source_refs(o):
+                  canonical_source_links[sid] += 1
+                  source_regions[sid][r] += 1
+
+          routed_source_ids = set()
+          route_region_counts = Counter()
+          route_rows=[]
+          monitored_occurrence_region_counts=Counter()
+          for r in routes:
+              sid=str(r.get('source_id') or '')
+              if sid: routed_source_ids.add(sid)
+              ids=[str(x) for x in (r.get('canonical_occurrence_ids') or [])]
+              regs=Counter(region_of(by_occ[x]) for x in ids if x in by_occ)
+              for reg in regs:
+                  route_region_counts[reg]+=1
+              for reg,n in regs.items(): monitored_occurrence_region_counts[reg]+=n
+              route_rows.append({
+                  'adapter_id': r.get('adapter_id'), 'source_id': sid,
+                  'canonical_occurrence_count': len(ids), 'regions': dict(regs),
+                  'automatic_commit_allowed': r.get('automatic_commit_allowed'),
+              })
+
+          def dep(s):
+              v=s.get('canonical_dependency_count')
+              try: return int(v or 0)
+              except Exception: return 0
+
+          candidates=[]
+          for s in srcs:
+              sid=str(s.get('source_id') or '')
+              d=dep(s)
+              if not sid or d <= 0 or sid in routed_source_ids:
+                  continue
+              am=str(s.get('automated_monitoring_use') or '')
+              arp=str(s.get('automated_retrieval_permission') or '')
+              ready=str(s.get('monitoring_readiness_status') or '')
+              act=str(s.get('monitoring_activation_status') or '')
+              ver=str(s.get('verification_mode') or '')
+              parser=str(s.get('parser_type') or '')
+              machine=str(s.get('machine_readable_available') or '')
+              if am == 'CLEARED' or am.startswith('CLEARED_'):
+                  bucket='A_CLEARED_UNROUTED'
+              elif 'PROHIBITED' in am or 'RIGHTS_HOLD' in am or 'RIGHTS_HELD' in ver or 'PRIOR_WRITTEN' in arp:
+                  bucket='D_RIGHTS_HELD'
+              elif 'ENDPOINT' in am or 'PENDING_ENDPOINT' in arp or 'OPERATIONAL_REVIEW' in arp:
+                  bucket='B_ENDPOINT_REVIEW'
+              else:
+                  bucket='C_OTHER_HOLD'
+              reg = source_regions.get(sid, Counter())
+              candidates.append({
+                  'bucket':bucket,
+                  'source_id':sid,
+                  'institution':s.get('institution'),
+                  'jurisdiction':s.get('jurisdiction'),
+                  'domain':s.get('domain'),
+                  'endpoint_role':s.get('endpoint_role'),
+                  'source_type':s.get('source_type'),
+                  'canonical_dependency_count_declared':d,
+                  'canonical_links_observed':canonical_source_links.get(sid,0),
+                  'regions':dict(reg),
+                  'machine_readable_available':machine,
+                  'parser_type':parser,
+                  'runtime_health_state':s.get('runtime_health_state'),
+                  'automated_monitoring_use':am,
+                  'automated_retrieval_permission':arp,
+                  'monitoring_readiness_status':ready,
+                  'monitoring_activation_status':act,
+                  'verification_mode':ver,
+                  'authoritative_url':s.get('authoritative_url'),
+                  'monitor_endpoints':s.get('monitor_endpoints'),
+                  'rights_evidence_url':s.get('rights_evidence_url'),
+              })
+
+          bucket_order={'A_CLEARED_UNROUTED':0,'B_ENDPOINT_REVIEW':1,'C_OTHER_HOLD':2,'D_RIGHTS_HELD':3}
+          candidates.sort(key=lambda x:(bucket_order[x['bucket']],-x['canonical_dependency_count_declared'],x['source_id']))
+
+          result={
+              'tranche':'BX', 'exact_base_main_sha':BASE,
+              'governed_baseline':{
+                  'canonical_version':canonical.get('version'), 'canonical_count':len(occs),
+                  'sources_version':sources.get('version'), 'source_count':len(srcs),
+                  'monitor_version':monitor.get('version'), 'route_count':len(routes),
+                  'automatic_canonical_commit':monitor.get('automatic_canonical_commit'),
+                  'google_calendar_write':monitor.get('google_calendar_write'),
+              },
+              'canonical_region_counts':dict(canonical_region_counts),
+              'production_route_region_counts':dict(route_region_counts),
+              'monitored_canonical_occurrence_region_counts':dict(monitored_occurrence_region_counts),
+              'routed_source_count':len(routed_source_ids),
+              'candidate_count':len(candidates),
+              'candidates':candidates,
+              'routes':route_rows,
+          }
+          Path('/tmp/bx-pressure-audit.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+
+          print('BX_BASE', BASE)
+          print('BASELINE', json.dumps(result['governed_baseline'],sort_keys=True))
+          print('CANONICAL_REGIONS', json.dumps(dict(canonical_region_counts),sort_keys=True))
+          print('ROUTE_REGIONS', json.dumps(dict(route_region_counts),sort_keys=True))
+          print('MONITORED_OCC_REGIONS', json.dumps(dict(monitored_occurrence_region_counts),sort_keys=True))
+          print('--- TOP UNROUTED CANONICAL-DEPENDENT SOURCES ---')
+          for c in candidates[:80]:
+              print(json.dumps(c,ensure_ascii=False,sort_keys=True))
+          PY
+          test -z "$(git status --porcelain)"
+      - name: Upload read-only audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bx-post-bw-pressure-audit
+          path: /tmp/bx-pressure-audit.json
+          retention-days: 1
+      - name: Prove repository remained byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
