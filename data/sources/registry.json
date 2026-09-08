@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.88",
+  "version": "1.89",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10457,6 +10457,100 @@
           "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
           "preferred_for_monitoring": false,
           "completeness_scope": "API_USE_AND_PARAMETER_DOCUMENTATION"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-CB-015",
+      "institution": "Board of Governors of the Federal Reserve System",
+      "jurisdiction": "United States",
+      "domain": "monetary_policy",
+      "endpoint_role": "Monetary Policy RSS statement/minutes publication sentinel",
+      "authoritative_url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Official Federal Reserve monetary-policy publication items and timezone-aware publication timestamps. This source is publication evidence only and is not FOMC schedule authority.",
+      "future_schedule_horizon": "not a schedule source; finite rolling publication feed",
+      "typical_advance_notice": "not applicable; publication sentinel",
+      "machine_readable_available": "RSS 2.0 XML",
+      "source_timezone": "UTC",
+      "recommended_verification_cadence": "daily; one dedicated feed request per run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "FED_MONETARY_POLICY_RSS_PUBLICATION_SENTINEL",
+      "parser_version": "fed-monetary-rss-0.1",
+      "known_limitations": [
+        "The RSS feed is a publication interface, not FOMC forward schedule authority.",
+        "The feed is finite and rolling; absence cannot imply cancellation, delay, completion or certainty change.",
+        "Only the exact FOMC statement form and FOMC minutes title form are classified by BP; other FOMC-related items are observation-only.",
+        "A matched publication creates a review candidate but does not automatically mark the Canonical occurrence COMPLETED.",
+        "Meeting windows and press conferences are outside this route.",
+        "WSSRC-CB-001 remains the Canonical schedule source and retains its separate HTML endpoint-permission hold.",
+        "Third-party material, seals, logos and linked content are outside the BP public-domain clearance."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine-interface identity created to preserve schedule-source and publication-sentinel roles.",
+      "timezone_scope": "FEED_NATIVE_UTC_PUBLICATION_TIMESTAMP_MATCHED_TO_AMERICA_NEW_YORK_CANONICAL_TIME",
+      "licence_constraints": "BOARD_PRODUCED_PUBLIC_DOMAIN_CONTENT_EXCLUDES_THIRD_PARTY_MATERIAL_AND_MARKS",
+      "ingestion_permission": "OFFICIAL_RSS_MACHINE_PUBLICATION_METADATA_ALLOWED",
+      "licence_review_status": "CLEARED_PUBLIC_DOMAIN_BOARD_CONTENT_AND_OFFICIAL_RSS_MACHINE_INTERFACE",
+      "automated_retrieval_permission": "OFFICIAL_RSS_SUBSCRIPTION_INTERFACE_EXPLICIT_SOFTWARE_USE",
+      "redistribution_permission": "BOARD_PRODUCED_PUBLIC_DOMAIN_CONTENT_WITH_BOARD_CITATION_REQUESTED",
+      "rights_evidence_url": "https://www.federalreserve.gov/disclaimer.htm",
+      "rights_summary": "Federal Reserve RSS documentation explicitly describes reader/aggregator software that automatically incorporates feed updates. The Board disclaimer states Board-produced website information is public domain unless otherwise indicated and may be copied/distributed without permission, with Board citation requested.",
+      "automation_summary": "Automation is limited to one daily request to the dedicated Monetary Policy RSS. It does not clear broad Federal Reserve crawling and does not alter the separate FOMC HTML schedule endpoint hold.",
+      "rights_reviewed_at": "2026-09-08",
+      "rights_review_scope": "BP_EXPLICIT_RSS_MACHINE_INTERFACE_AND_BOARD_PUBLIC_DOMAIN_CONTENT",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 700,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "monitoring_activation_status": "LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-08",
+      "canonical_provenance_use": "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_RSS_FETCH_PARSE_PASS_2026_09_08",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "Separate official RSS machine-interface identity created because WSSRC-CB-001 remains Canonical FOMC schedule authority with HTML endpoint permission still held.",
+      "live_adapter_id": "FED_MONETARY_POLICY_RSS",
+      "live_validation_evidence": {
+        "read_only_diagnostic_run_id": 34201995068,
+        "read_only_diagnostic_job_id": 101982693680,
+        "observed_at": "2026-09-08",
+        "rss_http_status": 200,
+        "feeds_documentation_http_status": 200,
+        "disclaimer_http_status": 200,
+        "rss_item_count": 15,
+        "fomc_related_item_count": 10,
+        "rss_sha256": "29f22f648e90461f404d2da6b90e068544ca35891e27d567d61ade7ed9978015",
+        "historical_statement_timestamp_alignment": "OBSERVED_EXACT_14_00_AMERICA_NEW_YORK",
+        "historical_minutes_timestamp_alignment": "OBSERVED_EXACT_14_00_AMERICA_NEW_YORK",
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-CB-001"
+      ],
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-CB-001",
+        "machine_publication_sentinel_source_id": "WSSRC-CB-015",
+        "machine_source_canonical_dependency_count": 0,
+        "html_schedule_endpoint_permission_hold_preserved": true
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "monetary_policy_rss",
+          "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+          "transport": "RSS_2_0_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "FINITE_ROLLING_MONETARY_POLICY_PUBLICATIONS",
+          "notes": "One dedicated feed request per daily run; no wider site crawl."
+        },
+        {
+          "endpoint_role": "rss_machine_interface_documentation",
+          "url": "https://www.federalreserve.gov/feeds/feeds.htm",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "RSS_SUBSCRIPTION_INTERFACE_DOCUMENTATION"
         }
       ]
     }

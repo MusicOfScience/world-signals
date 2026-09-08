@@ -22,6 +22,7 @@ from world_signals.adapters import (
     fetch_cellar_rdf_notice,
     fetch_eia_wpsr_schedule,
     fetch_eurostat_release_calendar,
+    fetch_fed_monetary_policy_rss,
     fetch_ons_upcoming_releases,
     fetch_japan_household_spending_data,
     fetch_rba_fsr,
@@ -35,6 +36,7 @@ from world_signals.adapters import (
 )
 from world_signals.io import load_json
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
+from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.rba_mpb_monitor import (
@@ -211,6 +213,38 @@ def main() -> int:
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
+
+    if "FED_MONETARY_POLICY_RSS" in configs:
+        fed_config=configs["FED_MONETARY_POLICY_RSS"]
+        try:
+            fed_items,fed_snap=fetch_fed_monetary_policy_rss()
+            report["source_health"].append({
+                "adapter_id":"FED_MONETARY_POLICY_RSS",
+                "source_id":fed_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":fed_snap.as_dict(),
+                "item_count":len(fed_items),
+                "request_policy":"ONE_DEDICATED_FEED_REQUEST_PER_DAILY_MONITOR_RUN",
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=fed_monetary_rss_review_candidates(
+                registry.get("records",[]),fed_items,fed_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"FED_MONETARY_POLICY_RSS",
+                "source_id":fed_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+            })
 
     if "RBA_MPB_CALENDAR" in configs:
         rba_mpb_config=configs["RBA_MPB_CALENDAR"]

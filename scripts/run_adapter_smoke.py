@@ -22,6 +22,7 @@ from world_signals.adapters import (
     fetch_cellar_rdf_notice,
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
+    fetch_fed_monetary_policy_rss,
     fetch_japan_household_spending_data,
     fetch_rba_fsr,
     fetch_rba_monetary_policy_calendar,
@@ -77,6 +78,29 @@ def main() -> int:
     except AdapterError as exc:
         failures.append(str(exc))
         report["results"].append({"adapter":"RBA_FSR_RSS","status":"FAIL","error":str(exc)})
+
+    try:
+        fed_items,fed_snap=fetch_fed_monetary_policy_rss()
+        report["results"].append({
+            "adapter":"FED_MONETARY_POLICY_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-CB-015",
+            "snapshot":fed_snap.as_dict(),
+            "item_count":len(fed_items),
+            "request_policy":"ONE_DEDICATED_FEED_REQUEST_PER_DAILY_MONITOR_RUN",
+            "schedule_authority":False,
+            "lifecycle_authority":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"FED_MONETARY_POLICY_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-CB-015",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         robots_rules,robots_snap=fetch_rba_robots_policy()

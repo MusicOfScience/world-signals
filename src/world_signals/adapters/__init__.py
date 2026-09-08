@@ -59,6 +59,13 @@ from .eurostat_ics import (
     fetch_eurostat_release_calendar,
     parse_eurostat_release_calendar_ics,
 )
+from .fed_monetary_rss import (
+    FED_MONETARY_POLICY_RSS,
+    FED_MONETARY_POLICY_RSS_ACCEPT,
+    FedMonetaryRSSItem,
+    fetch_fed_monetary_policy_rss,
+    parse_fed_monetary_policy_rss,
+)
 from .fomc import (
     FOMC_ACCEPT,
     FOMC_MEETING_CALENDAR_URL,
@@ -162,6 +169,9 @@ __all__ = [
     "EUROSTAT_ICS_SUBSCRIPTION_PAGE",
     "EUROSTAT_TIMEZONE",
     "EurostatReleaseItem",
+    "FED_MONETARY_POLICY_RSS",
+    "FED_MONETARY_POLICY_RSS_ACCEPT",
+    "FedMonetaryRSSItem",
     "FOMC_ACCEPT",
     "FOMC_MEETING_CALENDAR_URL",
     "FOMC_OPERATIONAL_CALENDAR_TEMPLATE",
@@ -215,6 +225,8 @@ __all__ = [
     "fetch_eurostat_release_calendar",
     "fetch_eli_current_document",
     "fetch_cra_article_71",
+    "fetch_fed_monetary_policy_rss",
+    "parse_fed_monetary_policy_rss",
     "fetch_fomc_meeting_calendar",
     "fetch_fomc_operational_calendar",
     "fetch_jgb_monthly_auction_calendar",

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.13",
+  "version": "0.14",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -819,6 +819,75 @@
       "precision_policy": "PRESERVE_SOURCE_NATIVE_AUSTRALIA_SYDNEY_AND_EXPLICIT_RBA_PRECISION",
       "event_separation_policy": "MEETING_WINDOW_DECISION_PRESS_CONFERENCE_AND_MINUTES_ARE_DISTINCT",
       "heuristic_policy": "DO_NOT_INFER_DECISION_FROM_LAST_MEETING_DAY_WHEN_EXPLICIT_SCHEDULE_EXISTS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "FED_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-CB-015",
+      "canonical_occurrence_ids": [
+        "WSO-08f11832f0335c85",
+        "WSO-9eba0c2ef8365a9f",
+        "WSO-4e25032b0df35d00",
+        "WSO-7b898efc6e9f5329",
+        "WSO-723fbab6b29755d8",
+        "WSO-36cb750a65f053fd",
+        "WSO-e8d32490a7f85587",
+        "WSO-08fe7646168b556e",
+        "WSO-b217176c19ee5503",
+        "WSO-224df0d92ea05a98",
+        "WSO-dd3b44bfc1255815",
+        "WSO-9fd13c55f79f5c3e",
+        "WSO-d5079228484e529f",
+        "WSO-ea219f3d4bb25478",
+        "WSO-120dfe059f7a574e",
+        "WSO-32bf69f2d0b758a8",
+        "WSO-0f521f2656035f06",
+        "WSO-297c7daa100d5c84",
+        "WSO-c8f8e3177abb5863",
+        "WSO-52f58e46fa1451fe",
+        "WSO-02db9fca7dc952c2",
+        "WSO-d8fae34438965253"
+      ],
+      "monitor_role": "OFFICIAL_FOMC_STATEMENT_AND_MINUTES_PUBLICATION_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 1,
+      "feed": {
+        "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+        "transport": "RSS_2_0_XML",
+        "request_policy": "ONE_DEDICATED_FEED_REQUEST_PER_DAILY_MONITOR_RUN"
+      },
+      "classification_contract": {
+        "policy_decision": {
+          "exact_title": "Federal Reserve issues FOMC statement",
+          "series_id": "WS.CB.FED.FOMC_POLICY_DECISION"
+        },
+        "minutes": {
+          "title_prefix": "Minutes of the Federal Open Market Committee,",
+          "series_id": "WS.CB.FED.FOMC_MINUTES"
+        },
+        "other_fomc_items": "OBSERVATION_ONLY_UNCLASSIFIED_NO_EVENT_INFERENCE",
+        "other_monetary_policy_items": "IGNORED_BY_THIS_ROUTE"
+      },
+      "matching": {
+        "method": "CLASSIFIED_SERIES_PLUS_NEAREST_EXPLICIT_CANONICAL_TIMESTAMP",
+        "timestamp_tolerance_minutes": 180,
+        "tie_policy": "FAIL_TO_REVIEW_NO_IDENTITY_GUESS"
+      },
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-CB-001",
+        "machine_publication_sentinel_source_id": "WSSRC-CB-015",
+        "machine_source_canonical_dependency_count": 0,
+        "html_schedule_endpoint_permission_hold_preserved": true
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_DELAY_CANCELLATION_OR_COMPLETION_SEMANTICS",
+      "positive_presence_policy": "PUBLICATION_EVIDENCE_REVIEW_CANDIDATE_ONLY",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "meeting_window_monitoring": false,
+      "press_conference_monitoring": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }
   ]
