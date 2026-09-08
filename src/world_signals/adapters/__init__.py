@@ -17,6 +17,14 @@ from .cbam import (
     parse_cbam_certificate_sale_rule,
     parse_cbam_verification_report_rule,
 )
+from .bsp_rss import (
+    BSP_MEDIA_RELEASES_RSS,
+    BSP_RSS_ACCEPT,
+    BSP_RSS_DOCS,
+    BSPMediaReleaseItem,
+    fetch_bsp_media_releases_rss,
+    parse_bsp_media_releases_rss,
+)
 from .cbn_mpc import (
     CBN_MPC_ACCEPT,
     CBN_MPC_CALENDAR_URL,
@@ -171,6 +179,10 @@ __all__ = [
     "CBAM_VERIFICATION_CELEX",
     "CBAMAnnualDeadlineRule",
     "CBAMMilestoneRule",
+    "BSP_MEDIA_RELEASES_RSS",
+    "BSP_RSS_ACCEPT",
+    "BSP_RSS_DOCS",
+    "BSPMediaReleaseItem",
     "CBN_MPC_ACCEPT",
     "CBN_MPC_CALENDAR_URL",
     "CBN_MPC_TIMEZONE",
@@ -241,6 +253,8 @@ __all__ = [
     "eli_current_fetch_url",
     "cellar_document_text",
     "cellar_representation_diagnostics",
+    "fetch_bsp_media_releases_rss",
+    "parse_bsp_media_releases_rss",
     "fetch_cbn_mpc_calendar",
     "parse_cbn_mpc_calendar_html",
     "fetch_cbam_annual_declaration_surrender_rule",

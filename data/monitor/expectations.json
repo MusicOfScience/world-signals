@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.16",
+  "version": "0.17",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -980,6 +980,56 @@
       "rss_publication_time_is_auction_time": false,
       "automatic_calendar_html_fetch_allowed": false,
       "canonical_schedule_source_id": "WSSRC-FIS-007",
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "BSP_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-REGJ-006",
+      "canonical_occurrence_ids": [
+        "WSO-REG-J-0008",
+        "WSO-REG-J-0009"
+      ],
+      "monitor_role": "OFFICIAL_BSP_MONETARY_POLICY_STANCE_PUBLICATION_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 1,
+      "feed": {
+        "url": "https://www.bsp.gov.ph/_layouts/15/listfeed.aspx?List=9b0a2117-49d8-4e96-80ba-8651a0e3e17a&View=8c968884-887d-4d63-8c00-ba05ea3c2d93",
+        "transport": "RSS_XML",
+        "request_policy": "ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN"
+      },
+      "classification_contract": {
+        "positive_stance_publication": {
+          "title_prefix_case_insensitive": "Monetary Board ",
+          "required_body_phrase_case_insensitive": "At its monetary policy meeting today, the Monetary Board decided",
+          "match_to_canonical": "Convert RSS pubDate to Asia/Manila civil date and require exact equality with one configured Canonical occurrence date.",
+          "result": "REVIEW_CANDIDATE_ONLY"
+        },
+        "generic_monetary_policy_mentions": "OBSERVATION_OR_IGNORE_ONLY_NO_EVENT_INFERENCE",
+        "publication_outside_two_occurrence_scope": "HISTORICAL_OR_UNTRACKED_PUBLICATION_OBSERVATION_ONLY",
+        "feed_absence": "NO_SCHEDULE_LIFECYCLE_CERTAINTY_OR_CANCELLATION_SEMANTICS",
+        "duplicate_or_ambiguous_match": "FAIL_CLOSED_NO_GUESS"
+      },
+      "source_role_contract": {
+        "WSSRC-REGJ-003": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_CURATED_HTML_PDF_AUTOMATION_HOLD_REMAINS",
+        "WSSRC-REGJ-006": "OFFICIAL_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+        "rss_publication_time_is_event_time": false,
+        "rss_can_create_or_upgrade_canonical_clock": false,
+        "rss_can_change_canonical_schedule": false,
+        "rss_can_set_lifecycle_completed": false,
+        "rss_can_change_certainty": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_publication_policy": "GENERATE_REVIEW_CANDIDATE_ONLY_FOR_STRUCTURAL_STANCE_PUBLICATION_MATCHED_BY_EXACT_MANILA_CIVIL_DATE",
+      "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_CANCELLATION_OR_CERTAINTY_SEMANTICS",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "rss_publication_time_is_event_time": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_schedule_html_fetch_allowed": false,
+      "canonical_schedule_source_id": "WSSRC-REGJ-003",
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }
