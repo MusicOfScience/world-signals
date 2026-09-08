@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.18",
+  "version": "0.19",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -1099,6 +1099,97 @@
       "automatic_item_link_fetch_allowed": false,
       "automatic_schedule_html_fetch_allowed": false,
       "canonical_schedule_source_id": "WSSRC-REGJ-002",
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "INDEC_CPI_CALENDAR",
+      "source_id": "WSSRC-REG2-009",
+      "canonical_schedule_source_id": "WSSRC-REG2-006",
+      "completed_release_source_id": "WSSRC-REG2-008",
+      "canonical_occurrence_ids": [
+        "WSO-REG-B-0008",
+        "WSO-REG-B-0009",
+        "WSO-REG-B-0010",
+        "WSO-REG-B-0011"
+      ],
+      "identity_by_occurrence_id": {
+        "WSO-REG-B-0008": {
+          "reference_period_es": "Agosto de 2026",
+          "canonical_release_date": "2026-09-10",
+          "authoritative_calendar_time": "16:00:00",
+          "month_slug": "Septiembre-2026"
+        },
+        "WSO-REG-B-0009": {
+          "reference_period_es": "Septiembre de 2026",
+          "canonical_release_date": "2026-10-13",
+          "authoritative_calendar_time": "16:00:00",
+          "month_slug": "Octubre-2026"
+        },
+        "WSO-REG-B-0010": {
+          "reference_period_es": "Octubre de 2026",
+          "canonical_release_date": "2026-11-12",
+          "authoritative_calendar_time": "16:00:00",
+          "month_slug": "Noviembre-2026"
+        },
+        "WSO-REG-B-0011": {
+          "reference_period_es": "Noviembre de 2026",
+          "canonical_release_date": "2026-12-15",
+          "authoritative_calendar_time": "16:00:00",
+          "month_slug": "Diciembre-2026"
+        }
+      },
+      "monitor_role": "OFFICIAL_INDEC_CPI_INTERACTIVE_CALENDAR_SCHEDULE_AND_CLOCK_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 5,
+      "robots_requests_per_run": 1,
+      "maximum_month_route_requests_per_run": 4,
+      "month_slugs": [
+        "Septiembre-2026",
+        "Octubre-2026",
+        "Noviembre-2026",
+        "Diciembre-2026"
+      ],
+      "classification_contract": {
+        "exact_report_identity": "TITLE_MUST_EQUAL_NATIONAL_CPI_FAMILY_PLUS_EXPECTED_SPANISH_REFERENCE_PERIOD",
+        "exact_source_timezone": "America/Argentina/Buenos_Aires",
+        "embedded_calendar_metadata": "FIRST_PARTY_RESPONSE_GOOGLE_TEMPLATE_TEXT_DATES_AND_CTZ_MUST_BE_STRUCTURALLY_VALID_AND_CONSISTENT_WITH_VISIBLE_ROW",
+        "canonical_date_match_with_missing_canonical_clock": "GENERATE_CLOCK_ENRICHMENT_REVIEW_CANDIDATE_ONLY",
+        "canonical_date_drift": "GENERATE_SCHEDULE_DATE_CHANGE_REVIEW_CANDIDATE_ONLY",
+        "authoritative_time_drift": "GENERATE_CLOCK_CHANGE_REVIEW_CANDIDATE_ONLY",
+        "exact_match_after_reviewed_clock_enrichment": "OBSERVATION_ONLY_NO_CHANGE",
+        "missing_report": "GENERATE_SOURCE_MATCH_REVIEW_CANDIDATE_ONLY_NO_EVENT_STATE_INFERENCE",
+        "duplicate_or_ambiguous_report": "FAIL_CLOSED_NO_GUESS",
+        "route_or_markup_contract_drift": "SOURCE_HEALTH_DEGRADED_NO_EVENT_MUTATION",
+        "elapsed_date": "NO_COMPLETION_SEMANTICS"
+      },
+      "source_role_contract": {
+        "WSSRC-REG2-006": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_OFFICIAL_PDF_CURATED_METADATA_ENDPOINT_AUTOMATION_HOLD_PRESERVED",
+        "WSSRC-REG2-008": "COMPLETED_RELEASE_OUTCOME_PROVENANCE_ONLY_NO_AUTOMATIC_FETCH",
+        "WSSRC-REG2-009": "OFFICIAL_INTERACTIVE_CALENDAR_MACHINE_MONITOR_ONLY_NO_DIRECT_CANONICAL_WRITE_AUTHORITY",
+        "machine_route_can_report_date_change": true,
+        "machine_route_can_report_clock_enrichment": true,
+        "machine_route_can_change_canonical_schedule": false,
+        "machine_route_can_set_lifecycle_completed": false,
+        "machine_route_can_change_certainty": false,
+        "machine_route_can_create_or_upgrade_canonical_clock": false,
+        "automatic_pdf_fetch_allowed": false,
+        "automatic_completed_release_fetch_allowed": false,
+        "automatic_google_fetch_allowed": false,
+        "automatic_search_route_discovery_allowed": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_change_policy": "GENERATE_REVIEW_CANDIDATES_ONLY_FOR_EXACT_CONFIGURED_REFERENCE_PERIOD_IDENTITIES",
+      "absence_policy": "MISSING_CONFIGURED_REPORT_IS_REVIEW_EVIDENCE_ONLY_NO_EVENT_STATE_INFERENCE",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_pdf_fetch_allowed": false,
+      "automatic_completed_release_fetch_allowed": false,
+      "automatic_google_fetch_allowed": false,
+      "automatic_search_route_discovery_allowed": false,
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }

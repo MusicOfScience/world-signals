@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.93",
+  "version": "1.94",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10882,6 +10882,106 @@
           "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
           "preferred_for_monitoring": false,
           "completeness_scope": "CBSL_PUBLISHED_RSS_FEED_DIRECTORY"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-REG2-009",
+      "institution": "INDEC",
+      "jurisdiction": "Argentina",
+      "domain": "macro_official_statistics",
+      "endpoint_role": "Official INDEC interactive dissemination-calendar CPI schedule/change sentinel",
+      "authoritative_url": "https://www.indec.gob.ar/indec/web/Calendario-Fecha-0",
+      "source_type": "official_interactive_release_calendar",
+      "information_supplied": "First-party INDEC month-calendar rows for the four remaining 2026 national CPI releases, including report identity, civil release date and explicit 16:00 America/Argentina/Buenos_Aires clock metadata.",
+      "future_schedule_horizon": "through Dec 2026; exact four-occurrence BU allow-list only",
+      "typical_advance_notice": "calendar publication and revision driven",
+      "machine_readable_available": "bounded first-party HTML fragments invoked by official calendar UI",
+      "source_timezone": "America/Argentina/Buenos_Aires",
+      "recommended_verification_cadence": "daily; one robots request plus at most four exact month-route requests",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "INDEC_CPI_INTERACTIVE_CALENDAR_SENTINEL",
+      "parser_version": "indec-cpi-calendar-0.1",
+      "known_limitations": [
+        "Only four reviewed 2026 month routes are permitted; this source is not a general INDEC crawler.",
+        "Embedded Google Calendar URLs are parsed only as metadata already present in the INDEC response; Google is never requested.",
+        "The richer 16:00 source clock is review evidence only and cannot automatically upgrade Canonical precision.",
+        "Absence of a configured CPI row triggers review only and has no cancellation, delay, completion or certainty semantics.",
+        "WSSRC-REG2-006 remains the Canonical forward-schedule provenance source and is preserved unchanged.",
+        "WSSRC-REG2-008 remains post-event outcome/completion provenance only and is never automatically fetched by this route."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine identity preserves provenance-layer separation while exposing authoritative schedule and clock-change evidence.",
+      "timezone_scope": "FIXED_AMERICA_ARGENTINA_BUENOS_AIRES",
+      "licence_constraints": "INDEC_CREATIVE_COMMONS_TERMS_WITH_ATTRIBUTION_AND_MODIFICATION_CONDITIONS",
+      "ingestion_permission": "BOUNDED_FIRST_PARTY_CALENDAR_METADATA_INTERNAL_MONITORING",
+      "licence_review_status": "CLEARED_CREATIVE_COMMONS_STATISTICAL_CONTENT_MACHINE_ACCESS_SEPARATELY_GOVERNED",
+      "automated_retrieval_permission": "BOUNDED_PUBLIC_UI_MONTH_ROUTES_ROBOTS_COMPATIBLE",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_WITH_PRIMARY_SOURCE_ATTRIBUTION",
+      "rights_evidence_url": "https://www.indec.gob.ar/ftp/cuadros/publicaciones/politica_difusion_indec.pdf",
+      "rights_summary": "INDEC dissemination policy generally permits copying and redistribution of website material subject to source attribution and modification notice conditions.",
+      "automation_evidence_url": "https://www.indec.gob.ar/indec/web/Calendario-Fecha-0",
+      "automation_summary": "Automation is limited to one robots check and the exact four first-party month routes already used by INDEC's public calendar UI; no search, PDF, result-page or Google follow-up.",
+      "rights_reviewed_at": "2026-09-08",
+      "rights_review_scope": "BU_CONTENT_REUSE_ROBOTS_AND_FIRST_PARTY_MACHINE_ACCESS_SEPARATED",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 640,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "monitoring_activation_status": "LIVE_READ_ONLY_SCHEDULE_AND_CLOCK_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-08",
+      "canonical_provenance_use": "MONITOR_ONLY_INTERACTIVE_CALENDAR_NO_DIRECT_CANONICAL_WRITE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "READ_ONLY_DIAGNOSTICS_PASS_2026_09_08",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "Separate first-party interactive-calendar machine source created without mutating the existing PDF schedule or completed-release sources.",
+      "live_adapter_id": "INDEC_CPI_CALENDAR",
+      "live_validation_evidence": {
+        "robots_calendar_run_id": 34221438614,
+        "robots_calendar_job_id": 102045235833,
+        "september_route_run_id": 34221959307,
+        "september_route_job_id": 102046924867,
+        "entity_structure_run_id": 34222469393,
+        "entity_structure_job_id": 102048588503,
+        "google_followup_request_count": 0,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-REG2-006",
+        "WSSRC-REG2-008"
+      ],
+      "source_role_contract": {
+        "WSSRC-REG2-006": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_OFFICIAL_PDF_CURATED_METADATA_ENDPOINT_AUTOMATION_HOLD_PRESERVED",
+        "WSSRC-REG2-008": "COMPLETED_RELEASE_OUTCOME_PROVENANCE_ONLY_NO_AUTOMATIC_FETCH",
+        "WSSRC-REG2-009": "OFFICIAL_INTERACTIVE_CALENDAR_MACHINE_MONITOR_ONLY_NO_DIRECT_CANONICAL_WRITE_AUTHORITY",
+        "machine_route_can_report_date_change": true,
+        "machine_route_can_report_clock_enrichment": true,
+        "machine_route_can_change_canonical_schedule": false,
+        "machine_route_can_set_lifecycle_completed": false,
+        "machine_route_can_change_certainty": false,
+        "machine_route_can_create_or_upgrade_canonical_clock": false,
+        "automatic_pdf_fetch_allowed": false,
+        "automatic_completed_release_fetch_allowed": false,
+        "automatic_google_fetch_allowed": false,
+        "automatic_search_route_discovery_allowed": false,
+        "automatic_commit_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "robots_policy",
+          "url": "https://www.indec.gob.ar/robots.txt",
+          "transport": "TEXT_PLAIN",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "AUTOMATION_POLICY_GATE"
+        },
+        {
+          "endpoint_role": "indec_interactive_calendar_month_routes",
+          "url": "https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/{month_slug}/0",
+          "transport": "HTML_FRAGMENT_GET",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "EXACT_FOUR_REVIEWED_2026_MONTH_ROUTES_ONLY"
         }
       ]
     }
