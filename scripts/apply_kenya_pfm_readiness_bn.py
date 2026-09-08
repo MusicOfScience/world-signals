@@ -91,28 +91,34 @@ def build_post_state() -> dict:
     post["reference_date"] = "2026-09-08"
     target = _source_by_id(post, SOURCE_ID)
 
-    target["runtime_health_state"] = "LIVE_GITHUB_ACTIONS_FETCH_PARSE_PASS_2026_09_08"
-    target["monitoring_readiness_status"] = "PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD"
+    target["runtime_health_state"] = "VARIABLE_GITHUB_ACTIONS_403_200_403_2026_09_08"
+    target["monitoring_readiness_status"] = "PILOT_ADAPTER_LIVE_VALIDATED_VARIABLE_RUNTIME_PERMISSION_HOLD"
     target["monitoring_activation_status"] = "ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE"
     target["monitoring_readiness_assessed_at"] = "2026-09-08"
     target["verification_mode"] = "AUTOMATED_PILOT"
     target["automation_summary"] = (
-        "The existing Kenya PFM section 25(2) adapter was live-validated in a bounded GitHub Actions "
-        "probe against both the frozen 2025-11-04 and current unversioned Kenya Law surfaces. Both "
-        "returned HTTP 200 and the same semantic statutory deadline rule. Successful reachability and "
-        "parsing do not clear unattended polling: automated_monitoring_use remains ENDPOINT_REVIEW_REQUIRED, "
-        "automated_retrieval_permission remains ENDPOINT_OPERATIONAL_REVIEW_REQUIRED, and no production "
-        "monitor route is configured."
+        "The existing Kenya PFM section 25(2) adapter was live-validated in one bounded GitHub Actions "
+        "probe against both the frozen 2025-11-04 and current unversioned Kenya Law surfaces, which both "
+        "returned HTTP 200 and the same semantic statutory deadline rule. A subsequent controlled-transaction "
+        "runner received HTTP 403 from the frozen route before the current route was requested, confirming that "
+        "runtime reachability is variable. Successful parsing proves technical pilot readiness only; neither "
+        "HTTP 200 nor public-domain legal content clears unattended polling. automated_monitoring_use remains "
+        "ENDPOINT_REVIEW_REQUIRED, automated_retrieval_permission remains ENDPOINT_OPERATIONAL_REVIEW_REQUIRED, "
+        "and no production monitor route is configured."
     )
     target["live_validation_evidence"] = {
-        "read_only_probe_run_id": 34189112995,
-        "read_only_probe_job_id": 101943332200,
-        "observed_at": "2026-09-08",
+        "successful_read_only_probe_run_id": 34189112995,
+        "successful_read_only_probe_job_id": 101943332200,
+        "successful_probe_observed_at": "2026-09-08",
         "historical_github_actions_current_route_status_2026_09_03": 403,
-        "baseline_2025_11_04_http_status": 200,
-        "current_unversioned_http_status": 200,
-        "baseline_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
-        "current_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+        "successful_probe_baseline_2025_11_04_http_status": 200,
+        "successful_probe_current_unversioned_http_status": 200,
+        "successful_probe_baseline_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+        "successful_probe_current_rule_sha256": "3121afc21199d121650558d896055e91ab24a6ff01c62a27dfc797baeaaab50c",
+        "subsequent_transaction_probe_run_id": 34189781916,
+        "subsequent_transaction_probe_job_id": 101945294642,
+        "subsequent_transaction_baseline_2025_11_04_http_status": 403,
+        "subsequent_transaction_current_route_status": "NOT_REQUESTED_AFTER_BASELINE_FAILURE",
         "statutory_section": "25(2)",
         "deadline_month": 2,
         "deadline_day": 15,
@@ -120,8 +126,9 @@ def build_post_state() -> dict:
 
     limitations = list(target.get("known_limitations") or [])
     additions = [
-        "GitHub Actions returned HTTP 403 on the current Kenya Law route on 3 September 2026, but a bounded BN probe on 8 September returned HTTP 200 for both the current and frozen versioned routes; runtime reachability can change and is not permission.",
-        "The current and frozen routes exposed the same section 25(2) semantic rule in BN; a later rule divergence would require human review and cannot itself infer an event-state change.",
+        "GitHub Actions access to Kenya Law is demonstrably variable: the current route returned HTTP 403 on 3 September 2026; a bounded BN probe on 8 September returned HTTP 200 for both current and frozen routes; a later BN transaction runner on 8 September received HTTP 403 from the frozen route before requesting the current route. Runtime reachability is not permission and is not stable enough for a production route.",
+        "The one successful current/frozen comparison exposed the same section 25(2) semantic rule. A later rule divergence or endpoint failure would require human review and cannot itself infer a Canonical date, lifecycle or event-state change.",
+        "Because unattended endpoint permission remains unresolved and repeated probing may itself be inappropriate, BN does not require another live request in the source-registry write transaction; technical parsing is regression-tested offline and the variable live evidence is preserved explicitly.",
     ]
     for item in additions:
         if item not in limitations:
