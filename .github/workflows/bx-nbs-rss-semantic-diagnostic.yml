@@ -1,0 +1,111 @@
+name: BX NBS RSS one-request semantic mapping diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-bw-pressure-audit-bx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify exact post-BW ancestry and clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=29b71bea42610992ad073b1583be64ced7e5de81
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+      - name: Fetch exactly one NBS RSS response and inspect deterministic series identity patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, re, urllib.request
+          import xml.etree.ElementTree as ET
+          from collections import defaultdict
+          from pathlib import Path
+
+          FEED='https://www.stats.gov.cn/english/PressRelease/rss.xml'
+          UA='WORLD-SIGNALS-read-only-research/0.1 (+one-request NBS RSS semantic diagnostic)'
+          req=urllib.request.Request(FEED,headers={'User-Agent':UA,'Accept':'text/xml, application/rss+xml;q=0.9,*/*;q=0.1'})
+          with urllib.request.urlopen(req,timeout=30) as r:
+              body=r.read()
+              meta={'status':r.status,'final_url':r.geturl(),'content_type':r.headers.get('Content-Type'),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
+          text=body.decode('utf-8','replace')
+          frags=re.findall(r'<item(?:\s[^>]*)?>.*?</item\s*>',text,re.I|re.S)
+          assert len(frags) == 500, len(frags)
+
+          rows=[]
+          for idx,frag in enumerate(frags):
+              node=ET.fromstring(frag)
+              children=[ch.tag.split('}',1)[-1] for ch in list(node)]
+              assert children == ['title','channel','link','source','pubTime','pubDate','description','content','docId','hitCount'], children
+              row={'fragment_index':idx}
+              for ch in list(node):
+                  tag=ch.tag.split('}',1)[-1]
+                  if tag in ('title','link','pubTime','pubDate','channel','source'):
+                      row[tag]=(ch.text or '').strip() if ch.text else None
+              rows.append(row)
+
+          classifiers={
+              'CPI':[r'consumer prices?',r'consumer price index'],
+              'PPI':[r'producer prices?',r'producer price index',r'factory-gate prices?'],
+              'PMI':[r'purchasing managers?[’\']? index',r'\bpmi\b'],
+              'NEP':[r'national economy',r'national economic performance'],
+              'IP':[r'industrial production operation'],
+              'ENERGY':[r'energy production'],
+              'FAI':[r'investment in fixed assets'],
+              'REALESTATE':[r'investment in real estate development'],
+              'RETAIL':[r'total retail sales of consumer goods'],
+          }
+          matches=defaultdict(list)
+          for row in rows:
+              title=row['title'] or ''
+              low=title.lower()
+              for key,patterns in classifiers.items():
+                  if any(re.search(p,low,re.I) for p in patterns):
+                      matches[key].append(row)
+
+          # Limit to 2025-2026 material for current naming stability, preserving exact titles.
+          recent={}
+          for key,vals in matches.items():
+              selected=[]
+              for r in vals:
+                  blob=' '.join(str(r.get(k) or '') for k in ('title','link','pubDate'))
+                  if '2025' in blob or '2026' in blob:
+                      selected.append(r)
+              recent[key]=selected[:30]
+
+          result={'tranche':'BX','feed_meta':meta,'fragment_count':len(frags),'classifier_counts':{k:len(v) for k,v in matches.items()},'recent_samples':recent}
+          Path('/tmp/bx-nbs-rss-semantic.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+          print('FEED_META',json.dumps(meta,sort_keys=True))
+          print('CLASSIFIER_COUNTS',json.dumps(result['classifier_counts'],sort_keys=True))
+          for key in ('CPI','PPI','PMI','NEP','IP','ENERGY','FAI','REALESTATE','RETAIL'):
+              print('SERIES',key,json.dumps(recent.get(key,[])[:16],ensure_ascii=False))
+          PY
+          test -z "$(git status --porcelain)"
+      - name: Upload semantic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bx-nbs-rss-semantic-diagnostic
+          path: /tmp/bx-nbs-rss-semantic.json
+          retention-days: 1
+      - name: Prove repository remained byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "29b71bea42610992ad073b1583be64ced7e5de81"
