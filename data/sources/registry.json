@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.92",
+  "version": "1.93",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -10780,6 +10780,108 @@
           "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
           "preferred_for_monitoring": false,
           "completeness_scope": "RSS_AUTOMATIC_FETCH_AND_APPLICATION_USE_DOCUMENTATION"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-REGJ-007",
+      "institution": "Central Bank of Sri Lanka",
+      "jurisdiction": "Sri Lanka",
+      "domain": "monetary_policy",
+      "endpoint_role": "Official CBSL Monetary Policy Review RSS publication sentinel",
+      "authoritative_url": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Official CBSL Monetary Policy Review RSS title and linked-PDF identity metadata. The feed is not forward monetary-policy schedule authority and supplies no publication clock.",
+      "future_schedule_horizon": "not a schedule source; finite rolling publication feed",
+      "typical_advance_notice": "publication driven",
+      "machine_readable_available": "RSS/XML",
+      "source_timezone": "Asia/Colombo",
+      "recommended_verification_cadence": "daily; one official RSS request per run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "CBSL_MPR_RSS_PUBLICATION_SENTINEL",
+      "parser_version": "cbsl-mpr-rss-0.1",
+      "known_limitations": [
+        "The RSS feed is finite and rolling; absence has no schedule, lifecycle, delay, cancellation or certainty semantics.",
+        "RSS items expose title, link and source only; there is no pubDate or publication clock.",
+        "The official linked-PDF filename civil date is used only for exact identity matching and is not a clock-time precision upgrade.",
+        "The monitor does not automatically fetch linked PDFs, article pages or the held advance-release-calendar source.",
+        "Positive publication evidence creates review candidates only and cannot automatically set COMPLETED.",
+        "WSSRC-REGJ-002 remains Canonical forward-schedule authority and retains its rights/automation hold."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine-interface identity preserves the distinction between held Canonical schedule provenance and publication monitoring.",
+      "timezone_scope": "ASIA_COLOMBO_CIVIL_DATE_IDENTITY_ONLY_NO_RSS_PUBLICATION_TIMESTAMP",
+      "licence_constraints": "ALL_RIGHTS_RESERVED_SITE_CONTENT_NO_BROAD_REUSE_GRANT_ASSERTED",
+      "ingestion_permission": "OFFICIAL_DEDICATED_RSS_MINIMAL_FACTUAL_METADATA_INTERNAL_MONITORING",
+      "licence_review_status": "NO_BROAD_CONTENT_REUSE_GRANT_RSS_MACHINE_INTERFACE_SEPARATELY_IDENTIFIED",
+      "automated_retrieval_permission": "OFFICIAL_DEDICATED_RSS_INTERFACE_BOUNDED_METADATA_MONITORING",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY_NO_PDF_OR_ARTICLE_CONTENT_REPUBLICATION",
+      "rights_evidence_url": "https://www.cbsl.gov.lk/en",
+      "rights_summary": "CBSL website states All Rights Reserved; BT does not infer a broad content-reuse or redistribution licence.",
+      "automation_evidence_url": "https://www.cbsl.gov.lk/en/rss-feeds",
+      "automation_summary": "Automation is limited to one daily request to the CBSL-published Monetary Policy Review RSS feed; no item-link or schedule-source follow-up is performed.",
+      "rights_reviewed_at": "2026-09-08",
+      "rights_review_scope": "BT_CONTENT_REUSE_AND_DEDICATED_RSS_MACHINE_ACCESS_SEPARATED_FROM_SCHEDULE_SOURCE_HOLD",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 620,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "monitoring_activation_status": "LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-08",
+      "canonical_provenance_use": "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_RSS_FETCH_PARSE_PASS_2026_09_08",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "Separate first-party dedicated RSS source created while WSSRC-REGJ-002 remains rights-held manual schedule provenance.",
+      "live_adapter_id": "CBSL_MONETARY_POLICY_RSS",
+      "live_validation_evidence": {
+        "feed_contract_run_id": 34218166410,
+        "feed_contract_job_id": 102034765821,
+        "metadata_run_id": 34218262645,
+        "metadata_job_id": 102035077150,
+        "rss_documentation_http_status": 200,
+        "rss_http_status": 200,
+        "rss_content_type": "application/rss+xml; charset=utf-8",
+        "rss_item_count": 10,
+        "rss_sha256": "1ab11c945f2f63e1dc5db813226a72a37946ec6b24dbe4519771d7361e8abae7",
+        "standard_pubdate_present": false,
+        "followup_item_request_count": 0,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-REGJ-002"
+      ],
+      "source_role_contract": {
+        "WSSRC-REGJ-002": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_RIGHTS_HELD_MANUAL_ONLY",
+        "WSSRC-REGJ-007": "OFFICIAL_MPR_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+        "rss_has_publication_clock": false,
+        "official_pdf_filename_date_is_clock_time": false,
+        "official_pdf_filename_date_may_be_used_for_exact_civil_date_identity_matching": true,
+        "rss_can_change_canonical_schedule": false,
+        "rss_can_set_lifecycle_completed": false,
+        "rss_can_change_certainty": false,
+        "rss_can_create_or_upgrade_canonical_clock": false,
+        "automatic_item_link_fetch_allowed": false,
+        "automatic_schedule_html_fetch_allowed": false,
+        "automatic_commit_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "cbsl_monetary_policy_review_rss",
+          "url": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+          "transport": "RSS_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "FINITE_ROLLING_CBSL_MONETARY_POLICY_REVIEWS",
+          "notes": "Exactly one request per daily run; no automatic linked-PDF or schedule-source follow-up."
+        },
+        {
+          "endpoint_role": "rss_machine_interface_documentation",
+          "url": "https://www.cbsl.gov.lk/en/rss-feeds",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "CBSL_PUBLISHED_RSS_FEED_DIRECTORY"
         }
       ]
     }

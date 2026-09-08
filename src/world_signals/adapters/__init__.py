@@ -25,6 +25,14 @@ from .bsp_rss import (
     fetch_bsp_media_releases_rss,
     parse_bsp_media_releases_rss,
 )
+from .cbsl_rss import (
+    CBSL_MPR_RSS,
+    CBSL_RSS_ACCEPT,
+    CBSL_RSS_DOCS,
+    CBSLMonetaryPolicyReviewItem,
+    fetch_cbsl_mpr_rss,
+    parse_cbsl_mpr_rss,
+)
 from .cbn_mpc import (
     CBN_MPC_ACCEPT,
     CBN_MPC_CALENDAR_URL,
@@ -183,6 +191,10 @@ __all__ = [
     "BSP_RSS_ACCEPT",
     "BSP_RSS_DOCS",
     "BSPMediaReleaseItem",
+    "CBSL_MPR_RSS",
+    "CBSL_RSS_ACCEPT",
+    "CBSL_RSS_DOCS",
+    "CBSLMonetaryPolicyReviewItem",
     "CBN_MPC_ACCEPT",
     "CBN_MPC_CALENDAR_URL",
     "CBN_MPC_TIMEZONE",
@@ -255,6 +267,8 @@ __all__ = [
     "cellar_representation_diagnostics",
     "fetch_bsp_media_releases_rss",
     "parse_bsp_media_releases_rss",
+    "fetch_cbsl_mpr_rss",
+    "parse_cbsl_mpr_rss",
     "fetch_cbn_mpc_calendar",
     "parse_cbn_mpc_calendar_html",
     "fetch_cbam_annual_declaration_surrender_rule",

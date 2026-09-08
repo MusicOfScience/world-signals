@@ -17,6 +17,7 @@ from world_signals.adapters import (
     CRA_CELEX,
     fetch_cbam_annual_declaration_surrender_rule,
     fetch_bsp_media_releases_rss,
+    fetch_cbsl_mpr_rss,
     fetch_cbn_mpc_calendar,
     fetch_cbam_certificate_sale_rule,
     fetch_cbam_verification_report_rule,
@@ -39,6 +40,7 @@ from world_signals.adapters import (
 )
 from world_signals.io import load_json
 from world_signals.bsp_monetary_monitor import bsp_monetary_rss_review_candidates
+from world_signals.cbsl_monetary_monitor import cbsl_mpr_rss_review_candidates
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
@@ -253,6 +255,48 @@ def main() -> int:
                 "absence_is_not_event_state":True,
                 "schedule_authority":False,
                 "lifecycle_authority":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "CBSL_MONETARY_POLICY_RSS" in configs:
+        cbsl_config=configs["CBSL_MONETARY_POLICY_RSS"]
+        try:
+            cbsl_items,cbsl_snap=fetch_cbsl_mpr_rss()
+            report["source_health"].append({
+                "adapter_id":"CBSL_MONETARY_POLICY_RSS",
+                "source_id":cbsl_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":cbsl_snap.as_dict(),
+                "item_count":len(cbsl_items),
+                "request_budget_per_run":1,
+                "item_link_followup_request_count":0,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "rss_has_publication_clock":False,
+                "official_link_filename_date_is_clock_time":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=cbsl_mpr_rss_review_candidates(
+                registry.get("records",[]),cbsl_items,cbsl_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"CBSL_MONETARY_POLICY_RSS",
+                "source_id":cbsl_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "rss_has_publication_clock":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_html_fetch_allowed":False,
                 "automatic_commit_allowed":False,
             })
 
