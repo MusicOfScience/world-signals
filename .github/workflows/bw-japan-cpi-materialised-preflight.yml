@@ -1,0 +1,174 @@
+name: BW Japan CPI materialised preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bv-pressure-audit-bw
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and clean feature checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          test "$(git merge-base HEAD origin/main)" = "b277939bc6c540d0986f298a832c7d63a29a2d19"
+          test -z "$(git status --porcelain)"
+      - name: Freeze protected layer hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          paths=[
+              Path('data/canonical/registry.json'),
+              Path('data/changes/ledger.json'),
+              Path('data/biosecurity'),
+              Path('data/live'),
+              Path('data/live_intelligence'),
+              Path('data/analysis'),
+          ]
+          def digest(path):
+              h=hashlib.sha256()
+              if path.is_file():
+                  h.update(path.read_bytes())
+              else:
+                  for p in sorted(x for x in path.rglob('*') if x.is_file()):
+                      h.update(str(p.relative_to(path)).encode()); h.update(b'\0'); h.update(p.read_bytes()); h.update(b'\0')
+              return h.hexdigest()
+          out={str(p):digest(p) for p in paths}
+          Path('/tmp/bw-protected-before.json').write_text(json.dumps(out,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - name: Run guarded check-only helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_japan_cpi_monitor_bw.py | tee /tmp/bw-check.json
+          test -z "$(git status --porcelain)"
+      - name: Materialise exact BW governed post-state in runner
+        shell: bash
+        env:
+          WORLD_SIGNALS_APPLY_MONITOR_BW: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_japan_cpi_monitor_bw.py --apply | tee /tmp/bw-apply.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (sources['version'],len(sources['sources']))==('1.96',252)
+          assert (monitor['version'],len(monitor['adapters']))==('0.21',19)
+          assert monitor['automatic_canonical_commit'] is False
+          assert monitor['google_calendar_write'] is False
+          src=[s for s in sources['sources'] if s.get('source_id')=='WSSRC-MAC-014']
+          assert len(src)==1
+          src=src[0]
+          assert src['automated_monitoring_use']=='CLEARED_BOUNDED_RELEASE_SCHEDULE'
+          assert src['automated_retrieval_permission']=='BOUNDED_OFFICIAL_HTML_SCHEDULE_ROBOTS_COMPATIBLE'
+          assert src['monitoring_readiness_status']=='LIVE_VALIDATED_NO_AUTO_COMMIT'
+          assert src['monitoring_activation_status']=='LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT'
+          assert src['canonical_dependency_count']==7
+          assert src['canonical_provenance_use']=='CLEARED_CURATED_FACTUAL_METADATA'
+          assert src['rights_evidence_url']=='https://www.stat.go.jp/english/info/riyou.html'
+          assert src['notes']['time_rule_url']=='https://www.stat.go.jp/english/data/cpi/1585.htm'
+          assert src['parser_version']=='jp-stat-cpi-0.2'
+          routes=[r for r in monitor['adapters'] if r.get('adapter_id')=='JAPAN_CPI_RELEASE_SCHEDULE']
+          assert len(routes)==1
+          r=routes[0]
+          assert r['source_id']=='WSSRC-MAC-014'
+          assert r['canonical_schedule_source_id']=='WSSRC-MAC-014'
+          assert len(r['canonical_occurrence_ids'])==7
+          assert r['request_budget_per_run']==2
+          assert r['robots_requests_per_run']==1
+          assert r['schedule_requests_per_run']==1
+          assert r['followup_requests_per_run']==0
+          for key in ['schedule_mutation_authority','clock_authority','lifecycle_authority','certainty_authority','canonical_clock_mutation_allowed','automatic_tokyo_cpi_followup_allowed','automatic_estat_api_followup_allowed','automatic_data_release_followup_allowed','automatic_pdf_fetch_allowed','automatic_news_followup_allowed','automatic_search_route_discovery_allowed','automatic_commit_allowed']:
+              assert r[key] is False,(key,r[key])
+          PY
+      - name: Enforce exact five-file materialisation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/expected <<'EOF'
+          data/monitor/expectations.json
+          data/sources/registry.json
+          scripts/run_adapter_smoke.py
+          scripts/run_live_monitor.py
+          src/world_signals/adapters/__init__.py
+          EOF
+          git diff --name-only | sort > /tmp/actual
+          diff -u /tmp/expected /tmp/actual
+      - name: Validate governed registries and analysis layers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+      - name: Run full unit-test suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -v
+      - name: Compile Python and validate web JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src scripts tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+      - name: Build static site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site.py
+      - name: Prove protected layers byte-identical
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          before=json.loads(Path('/tmp/bw-protected-before.json').read_text())
+          def digest(path):
+              h=hashlib.sha256()
+              if path.is_file(): h.update(path.read_bytes())
+              else:
+                  for p in sorted(x for x in path.rglob('*') if x.is_file()):
+                      h.update(str(p.relative_to(path)).encode()); h.update(b'\0'); h.update(p.read_bytes()); h.update(b'\0')
+              return h.hexdigest()
+          after={key:digest(Path(key)) for key in before}
+          assert after==before,(before,after)
+          print(json.dumps(after,indent=2,sort_keys=True))
+          PY
+      - name: Restore materialised files and prove byte-clean branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git restore data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          git clean -fd artifacts review_candidates site >/dev/null 2>&1 || true
+          test -z "$(git status --porcelain)"
