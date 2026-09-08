@@ -10,7 +10,7 @@ from .base import AdapterError, FetchSnapshot, fetch_bytes
 JAPAN_MOF_NEWS_RSS = "https://www.mof.go.jp/english/news.rss"
 JAPAN_MOF_RSS_DOCS = "https://www.mof.go.jp/english/about_mof/rss/index.html"
 JAPAN_MOF_RSS_ACCEPT = "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1"
-JAPAN_MOF_OFFICIAL_PREFIX = "https://www.mof.go.jp/english/"
+JAPAN_MOF_OFFICIAL_PREFIX = "https://www.mof.go.jp/"
 
 
 @dataclass(frozen=True)
@@ -55,9 +55,9 @@ def parse_japan_mof_news_rss(body: bytes | str) -> list[JapanMOFRSSItem]:
         pub_date = _text(node, "pubDate", required=True)
         description = _text(node, "description")
         if not link.startswith(JAPAN_MOF_OFFICIAL_PREFIX):
-            raise AdapterError(f"Japan MOF RSS item points outside official English host: {link!r}")
+            raise AdapterError(f"Japan MOF RSS item points outside official MOF host: {link!r}")
         if guid.startswith("http") and not guid.startswith(JAPAN_MOF_OFFICIAL_PREFIX):
-            raise AdapterError(f"Japan MOF RSS guid points outside official English host: {guid!r}")
+            raise AdapterError(f"Japan MOF RSS guid points outside official MOF host: {guid!r}")
         try:
             dt = parsedate_to_datetime(pub_date)
         except (TypeError, ValueError) as exc:
