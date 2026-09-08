@@ -16,6 +16,7 @@ from world_signals.adapters import (
     CBAM_VERIFICATION_CELEX,
     CRA_CELEX,
     fetch_cbam_annual_declaration_surrender_rule,
+    fetch_bsp_media_releases_rss,
     fetch_cbn_mpc_calendar,
     fetch_cbam_certificate_sale_rule,
     fetch_cbam_verification_report_rule,
@@ -37,6 +38,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 from world_signals.io import load_json
+from world_signals.bsp_monetary_monitor import bsp_monetary_rss_review_candidates
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
@@ -217,6 +219,42 @@ def main() -> int:
             "adapter_id":"RBA_FSR_RSS","source_id":"WSSRC-FIN-001",
             "state":"DEGRADED","error":str(exc),"canonical_action":"NONE",
         })
+
+    if "BSP_MONETARY_POLICY_RSS" in configs:
+        bsp_config=configs["BSP_MONETARY_POLICY_RSS"]
+        try:
+            bsp_items,bsp_snap=fetch_bsp_media_releases_rss()
+            report["source_health"].append({
+                "adapter_id":"BSP_MONETARY_POLICY_RSS",
+                "source_id":bsp_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":bsp_snap.as_dict(),
+                "item_count":len(bsp_items),
+                "request_budget_per_run":1,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "rss_publication_time_is_event_time":False,
+                "automatic_schedule_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=bsp_monetary_rss_review_candidates(
+                registry.get("records",[]),bsp_items,bsp_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"BSP_MONETARY_POLICY_RSS",
+                "source_id":bsp_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "automatic_commit_allowed":False,
+            })
 
     if "CBN_MPC_CALENDAR" in configs:
         cbn_config=configs["CBN_MPC_CALENDAR"]

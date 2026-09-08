@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.91",
+  "version": "1.92",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -8901,7 +8901,13 @@
       "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
       "monitoring_priority_score": 600,
       "canonical_dependency_count": 2,
-      "last_successful_research_verification_at": "2026-09-03"
+      "last_successful_research_verification_at": "2026-09-03",
+      "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "monitoring_activation_status": "HOLD_NO_LIVE_ROUTE",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "BS modernized missing governance fields without clearing automated retrieval of the BSP HTML/PDF schedule source. WSSRC-REGJ-006 is the separate explicit RSS machine interface."
     },
     {
       "domain": "monetary_policy",
@@ -10678,6 +10684,102 @@
           "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
           "preferred_for_monitoring": false,
           "completeness_scope": "RSS_SUBSCRIPTION_INTERFACE_DOCUMENTATION"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-REGJ-006",
+      "institution": "Bangko Sentral ng Pilipinas",
+      "jurisdiction": "Philippines",
+      "domain": "monetary_policy",
+      "endpoint_role": "Official BSP Media Releases RSS monetary-policy publication sentinel",
+      "authoritative_url": "https://www.bsp.gov.ph/_layouts/15/listfeed.aspx?List=9b0a2117-49d8-4e96-80ba-8651a0e3e17a&View=8c968884-887d-4d63-8c00-ba05ea3c2d93",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Official BSP Media Releases RSS publication metadata and content, including Monetary Board monetary-policy stance releases. This source is not forward monetary-policy schedule authority.",
+      "future_schedule_horizon": "not a schedule source; finite rolling publication feed",
+      "typical_advance_notice": "publication driven",
+      "machine_readable_available": "RSS/XML",
+      "source_timezone": "Asia/Manila",
+      "recommended_verification_cadence": "daily; one official RSS request per run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "BSP_MEDIA_RELEASES_RSS_MONETARY_POLICY_SENTINEL",
+      "parser_version": "bsp-monetary-rss-0.1",
+      "known_limitations": [
+        "The RSS feed is finite and rolling; absence has no schedule, lifecycle, cancellation or certainty semantics.",
+        "RSS pubDate is publication time, not the Canonical monetary-policy event clock.",
+        "Only structurally identified Monetary Board stance publications are eligible for review matching; generic monetary-policy mentions are not.",
+        "Positive publication evidence requires reviewed Canonical lifecycle handling and cannot automatically set COMPLETED.",
+        "WSSRC-REGJ-003 remains Canonical forward-schedule authority with HTML/PDF automated retrieval held."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine-interface identity preserves the distinction between Canonical schedule provenance and publication monitoring.",
+      "timezone_scope": "RSS_PUBDATE_OFFSET_PRESERVED_NORMALIZED_TO_UTC; ASIA_MANILA_CIVIL_DATE_DERIVED_ONLY_FOR_IDENTITY_MATCHING",
+      "licence_constraints": "ATTRIBUTION_REQUIRED_FOR_REUSE",
+      "ingestion_permission": "OFFICIAL_RSS_MACHINE_PUBLICATION_METADATA_ALLOWED_WITH_ATTRIBUTION",
+      "licence_review_status": "CLEARED_REUSE_WITH_ATTRIBUTION_AND_EXPLICIT_RSS_MACHINE_INTERFACE",
+      "automated_retrieval_permission": "OFFICIAL_RSS_INTERFACE_EXPLICIT_AUTOMATIC_FETCH_AND_APPLICATION_USE",
+      "redistribution_permission": "ALLOWED_WITH_ATTRIBUTION",
+      "rights_evidence_url": "https://www.bsp.gov.ph/Pages/AboutTheBank/Terms-of-Use.aspx",
+      "rights_summary": "BSP terms permit quotation, copying or reproduction with BSP credited; RSS documentation separately establishes intended automated feed/application use.",
+      "automation_evidence_url": "https://www.bsp.gov.ph/SitePages/RSS.aspx",
+      "automation_summary": "Automation is limited to one daily request to the BSP-published Media Releases RSS feed; no schedule HTML/PDF follow-up is performed.",
+      "rights_reviewed_at": "2026-09-08",
+      "rights_review_scope": "BS_CONTENT_REUSE_AND_EXPLICIT_RSS_MACHINE_INTERFACE_SEPARATED_FROM_SCHEDULE_SOURCE_HOLD",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 610,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-08",
+      "monitoring_activation_status": "LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-08",
+      "canonical_provenance_use": "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_RSS_FETCH_PARSE_PASS_2026_09_08",
+      "governance_backfill_reviewed_at": "2026-09-08",
+      "governance_backfill_basis": "Separate first-party RSS source created because the legacy BSP schedule source remains held for automated HTML/PDF retrieval.",
+      "live_adapter_id": "BSP_MONETARY_POLICY_RSS",
+      "live_validation_evidence": {
+        "read_only_diagnostic_run_id": 34213769016,
+        "read_only_diagnostic_job_id": 102020585149,
+        "rss_documentation_http_status": 200,
+        "rss_http_status": 200,
+        "rss_content_type": "text/xml; charset=utf-8",
+        "rss_item_count": 30,
+        "rss_sha256": "715c610524b3e7339e5f649cdb74536d11a06b056af6ed85716ab9843b78b013",
+        "historical_stance_example_title": "Monetary Board raises target RRP Rate by 25 basis points",
+        "historical_stance_example_publication_date": "2026-08-27",
+        "request_count": 1,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-REGJ-003"
+      ],
+      "source_role_contract": {
+        "WSSRC-REGJ-003": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_CURATED_HTML_PDF_AUTOMATION_HOLD_REMAINS",
+        "WSSRC-REGJ-006": "OFFICIAL_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+        "rss_publication_time_is_event_time": false,
+        "rss_can_create_or_upgrade_canonical_clock": false,
+        "rss_can_change_canonical_schedule": false,
+        "rss_can_set_lifecycle_completed": false,
+        "rss_can_change_certainty": false,
+        "automatic_commit_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "bsp_media_releases_rss",
+          "url": "https://www.bsp.gov.ph/_layouts/15/listfeed.aspx?List=9b0a2117-49d8-4e96-80ba-8651a0e3e17a&View=8c968884-887d-4d63-8c00-ba05ea3c2d93",
+          "transport": "RSS_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "FINITE_ROLLING_BSP_MEDIA_RELEASES",
+          "notes": "Exactly one request per daily run; no automatic item-link or schedule-source follow-up."
+        },
+        {
+          "endpoint_role": "rss_machine_interface_documentation",
+          "url": "https://www.bsp.gov.ph/SitePages/RSS.aspx",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "RSS_AUTOMATIC_FETCH_AND_APPLICATION_USE_DOCUMENTATION"
         }
       ]
     }

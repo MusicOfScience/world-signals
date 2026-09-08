@@ -16,6 +16,7 @@ from world_signals.adapters import (
     CRA_CELEX,
     cellar_representation_diagnostics,
     fetch_cbam_certificate_sale_rule,
+    fetch_bsp_media_releases_rss,
     fetch_cbn_mpc_calendar,
     fetch_cbam_verification_report_rule,
     fetch_cellar_celex_document,
@@ -183,6 +184,22 @@ def main() -> int:
             "error":str(exc),
             "canonical_action":"NONE",
         })
+
+    try:
+        bsp_items,bsp_snap=fetch_bsp_media_releases_rss()
+        report["results"].append({
+            "adapter":"BSP_MONETARY_POLICY_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-REGJ-006",
+            "snapshot":bsp_snap.as_dict(),
+            "item_count":len(bsp_items),
+            "request_policy":"ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN",
+            "schedule_authority":False,
+            "lifecycle_authority":False,
+            "automatic_schedule_html_fetch_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"BSP_MONETARY_POLICY_RSS","error":str(exc)})
 
     try:
         jgb_items,jgb_snap=fetch_japan_mof_news_rss()
