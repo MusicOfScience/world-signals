@@ -1,4 +1,4 @@
-name: BU INDEC offline implementation preflight
+name: BU INDEC materialised live preflight
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 jobs:
   preflight:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
         with:
@@ -19,46 +19,160 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact post-BT ancestry
+      - name: Verify exact post-BT ancestry and clean pre-state
         run: |
           set -euo pipefail
           git fetch origin main
           test "$(git rev-parse origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
           test "$(git merge-base HEAD origin/main)" = "17e6130267c9d7911d12ac6f685c90228fec9e1e"
-      - name: Validate frozen BU plan
+          test -z "$(git status --porcelain)"
+      - name: Freeze protected layers and INDEC provenance objects
         run: |
           set -euo pipefail
           python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          roots=[
+              Path('data/canonical/registry.json'),
+              Path('data/changes/ledger.json'),
+          ]
+          for dirname in ('data/biosecurity','data/live','data/live_intelligence','data/analysis'):
+              p=Path(dirname)
+              if p.exists(): roots.extend(x for x in p.rglob('*') if x.is_file())
+          roots=sorted(set(roots),key=lambda p:str(p))
+          hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in roots}
+          Path('/tmp/bu_protected_before.json').write_text(json.dumps(hashes,sort_keys=True))
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          by_id={x['source_id']:x for x in sources['sources']}
+          frozen={sid:by_id[sid] for sid in ('WSSRC-REG2-006','WSSRC-REG2-008')}
+          Path('/tmp/bu_indec_provenance_before.json').write_text(json.dumps(frozen,sort_keys=True,ensure_ascii=False))
+          print('PROTECTED_FILE_COUNT',len(hashes))
+          PY
+      - name: Check-only transaction and focused tests
+        run: |
+          set -euo pipefail
+          python scripts/apply_indec_cpi_calendar_monitor_bu.py
+          python -m unittest -v tests.test_indec_cpi_calendar_bu tests.test_indec_cpi_calendar_activation_bu
+          python -m py_compile scripts/apply_indec_cpi_calendar_monitor_bu.py src/world_signals/adapters/indec_calendar.py src/world_signals/indec_cpi_monitor.py tests/test_indec_cpi_calendar_bu.py tests/test_indec_cpi_calendar_activation_bu.py
+          test -z "$(git status --porcelain)"
+      - name: Materialise BU post-state in runner workspace only
+        env:
+          WORLD_SIGNALS_APPLY_MONITOR_BU: '1'
+        run: |
+          set -euo pipefail
+          python scripts/apply_indec_cpi_calendar_monitor_bu.py --apply
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected,(changed,expected)
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('1.94',252)
+          assert (m['version'],len(m['adapters']))==('0.19',17)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          by_id={x['source_id']:x for x in s['sources']}
+          frozen=json.loads(Path('/tmp/bu_indec_provenance_before.json').read_text())
+          assert by_id['WSSRC-REG2-006']==frozen['WSSRC-REG2-006']
+          assert by_id['WSSRC-REG2-008']==frozen['WSSRC-REG2-008']
+          assert sum(x.get('source_id')=='WSSRC-REG2-009' for x in s['sources'])==1
+          routes=[x for x in m['adapters'] if x.get('adapter_id')=='INDEC_CPI_CALENDAR']
+          assert len(routes)==1
+          r=routes[0]
+          assert r['request_budget_per_run']==5
+          assert r['robots_requests_per_run']==1
+          assert r['maximum_month_route_requests_per_run']==4
+          for key in ('schedule_authority','lifecycle_authority','certainty_authority','canonical_clock_mutation_allowed','automatic_pdf_fetch_allowed','automatic_completed_release_fetch_allowed','automatic_google_fetch_allowed','automatic_search_route_discovery_allowed','automatic_commit_allowed'):
+              assert r[key] is False,key
+          print('MATERIALISED_CHANGED_FILES',sorted(changed))
+          PY
+      - name: Live bounded INDEC route preflight
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
           import json
           from pathlib import Path
-          p=json.loads(Path('data/monitor/INDEC_CPI_CALENDAR_BU_PLAN_v0.1.json').read_text())
-          assert p['exact_base_main_sha']=='17e6130267c9d7911d12ac6f685c90228fec9e1e'
-          assert p['preconditions']['canonical_registry_version']=='0.41'
-          assert p['preconditions']['canonical_record_count']==689
-          assert p['preconditions']['source_registry_version']=='1.93'
-          assert p['preconditions']['source_count']==251
-          assert p['preconditions']['monitor_expectations_version']=='0.18'
-          assert p['preconditions']['configured_monitor_adapter_count']==16
-          assert p['postconditions']['source_registry_version']=='1.94'
-          assert p['postconditions']['source_count']==252
-          assert p['postconditions']['monitor_expectations_version']=='0.19'
-          assert p['postconditions']['configured_monitor_adapter_count']==17
-          assert p['classification_contract']['missing_report']=='GENERATE_SOURCE_MATCH_REVIEW_CANDIDATE_ONLY_NO_EVENT_STATE_INFERENCE'
-          assert p['request_contract']['maximum_total_requests_per_run']==5
-          assert p['request_contract']['google_requests']==0
-          assert p['request_contract']['search_route_requests']==0
+          from world_signals.adapters.indec_calendar import fetch_indec_cpi_months, fetch_indec_robots_policy
+          from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          config=next(x for x in expectations['adapters'] if x['adapter_id']=='INDEC_CPI_CALENDAR')
+          slugs=list(config['month_slugs'])
+          assert slugs==['Septiembre-2026','Octubre-2026','Noviembre-2026','Diciembre-2026']
+          allowed,robots_snapshot=fetch_indec_robots_policy(slugs)
+          assert allowed
+          releases,snapshots=fetch_indec_cpi_months(slugs)
+          assert len(releases)==4 and len(snapshots)==4
+          assert len({x.reference_period for x in releases})==4
+          assert all(x.source_timezone=='America/Argentina/Buenos_Aires' for x in releases)
+          assert all(x.visible_time_label.endswith('hs') for x in releases)
+          candidates,observations=indec_cpi_calendar_review_candidates(canonical['records'],releases,config)
+          assert len(candidates)==4
+          allowed_types={
+              'INDEC_CPI_CLOCK_ENRICHMENT_REVIEW',
+              'INDEC_CPI_SCHEDULE_DATE_CHANGE_REVIEW',
+              'INDEC_CPI_CLOCK_CHANGE_REVIEW',
+          }
+          assert {x['candidate_type'] for x in candidates} <= allowed_types
+          assert all(x['automatic_commit_allowed'] is False for x in candidates)
+          assert all(x['canonical_clock_mutation_allowed'] is False for x in candidates)
+          assert config['request_budget_per_run']==5
+          assert config['automatic_google_fetch_allowed'] is False
+          assert config['automatic_pdf_fetch_allowed'] is False
+          assert config['automatic_completed_release_fetch_allowed'] is False
+          assert config['automatic_search_route_discovery_allowed'] is False
+          print('ROBOTS_SNAPSHOT',json.dumps(robots_snapshot.as_dict(),sort_keys=True))
+          print('MONTH_SNAPSHOTS',json.dumps([x.as_dict() for x in snapshots],sort_keys=True))
+          print('RELEASES',json.dumps([x.as_dict() for x in releases],ensure_ascii=False,sort_keys=True))
+          print('CANDIDATE_TYPES',json.dumps([x['candidate_type'] for x in candidates]))
+          print('OBSERVATION_COUNT',len(observations))
+          print('REQUEST_COUNT',1+len(snapshots))
+          print('GOOGLE_REQUEST_COUNT',0)
+          print('PDF_REQUEST_COUNT',0)
+          print('COMPLETED_RELEASE_REQUEST_COUNT',0)
+          print('SEARCH_ROUTE_REQUEST_COUNT',0)
           PY
-      - name: Run BU parser and comparator tests
+      - name: Full repository validation on materialised post-state
         run: |
           set -euo pipefail
-          PYTHONPATH=src python -m unittest -v tests.test_indec_cpi_calendar_bu
-      - name: Compile BU implementation
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/apply_analysis_revision_contract_ba.py scripts/apply_indec_cpi_calendar_monitor_bu.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py src/world_signals/adapters/indec_calendar.py src/world_signals/indec_cpi_monitor.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Verify protected layers remain byte-identical
         run: |
           set -euo pipefail
-          python -m py_compile src/world_signals/adapters/indec_calendar.py src/world_signals/indec_cpi_monitor.py tests/test_indec_cpi_calendar_bu.py
-      - name: Prove preflight is read-only
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          before=json.loads(Path('/tmp/bu_protected_before.json').read_text())
+          after={path:hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in before}
+          assert after==before
+          print('PROTECTED_HASH_AUDIT_PASS',len(after))
+          PY
+      - name: Restore and prove preflight is read-only
+        if: always()
         run: |
           set -euo pipefail
-          test -z "$(git diff --name-only)"
-          test -z "$(git diff --cached --name-only)"
-          test -z "$(git ls-files --others --exclude-standard)"
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
