@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.87",
+  "version": "1.88",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -109,30 +109,34 @@
       "activation_status": "ACTIVE",
       "parser_type": "HTML_CALENDAR_MONITOR",
       "known_limitations": [
-        "Page mixes meeting, decision, press conference, minutes and report events; parse as linked series."
+        "Page mixes meeting, decision, press conference, minutes and report events; parse as linked series.",
+        "robots.txt compatibility is operational crawler-policy evidence and not blanket legal permission; every live run rechecks it before schedule retrieval.",
+        "The MPB topic calendar is rolling, so absence from the current page cannot imply cancellation, delay, completion or certainty change.",
+        "The monitor may observe minutes on the MPB calendar but must preserve WSSRC-CB-013 as the Canonical source identity for the 11 tracked minutes occurrences.",
+        "Meeting windows, decision statements, media conferences and minutes remain distinct event series; BO never derives decision timing from the final meeting day when explicit schedule entries exist."
       ],
       "backup_source": null,
       "notes": null,
       "timezone_scope": "FIXED",
       "parser_version": "rba-calendar-0.1",
-      "runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_DUAL_SCHEDULE_AND_ROBOTS_PASS_2026_09_08",
       "licence_constraints": null,
       "ingestion_permission": "CURATED_FACTUAL_METADATA_ALLOWED",
       "licence_review_status": "CLEARED_OPEN_LICENCE_GENERAL_CONTENT",
-      "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+      "automated_retrieval_permission": "CLEARED_BOUNDED_ROBOTS_CONFORMANT_LOW_RATE_SCHEDULE_PATHS",
       "redistribution_permission": "CC_BY_4_GENERAL_CONTENT_WITH_ENDPOINT_EXCEPTIONS",
       "rights_evidence_url": "https://www.rba.gov.au/copyright/",
       "rights_summary": "Most RBA website material is under CC BY 4.0, with explicit special conditions for some categories and third-party material.",
-      "automation_summary": "Copyright notice does not itself establish automated-access permission; review endpoint/robots separately.",
+      "automation_summary": "Production monitoring is bounded to one daily robots-policy check followed, only when /schedules-events/ remains compatible, by the reviewed MPB topic calendar and Board schedule. The operational clearance combines RBA's published crawler exclusions with the existing CC BY 4.0 general-content reuse review; it is not blanket permission to crawl RBA infrastructure. All schedule differences are review-only and cannot automatically change Canonical.",
       "rights_reviewed_at": "2026-09-02T19:47:00+10:00",
       "rights_review_scope": "P0-A_CONTENT_REUSE_AND_AUTOMATION_SEPARATED",
       "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
-      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "monitoring_readiness_status": "LIVE_VALIDATED_ROBOTS_CONFORMANT_NO_AUTO_COMMIT",
       "monitoring_priority_score": 540,
       "canonical_dependency_count": 33,
-      "monitoring_readiness_assessed_at": "2026-09-02",
+      "monitoring_readiness_assessed_at": "2026-09-08",
       "last_successful_research_verification_at": "2026-09-02T20:51:00+10:00",
-      "monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+      "monitoring_activation_status": "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT",
       "monitor_endpoints": [
         {
           "endpoint_role": "board_schedule",
@@ -148,10 +152,34 @@
         }
       ],
       "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
-      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "automated_monitoring_use": "CLEARED",
       "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "Most RBA factual website content is CC BY 4.0 and the existing calendar parser has pilot evidence; automated production retrieval remains a separate endpoint review. The multi-day Board meeting and separately timed decision release must remain distinct."
+      "governance_backfill_basis": "Most RBA factual website content is CC BY 4.0 and the existing calendar parser has pilot evidence; automated production retrieval remains a separate endpoint review. The multi-day Board meeting and separately timed decision release must remain distinct.",
+      "live_adapter_id": "RBA_MPB_CALENDAR",
+      "automated_monitoring_scope": {
+        "cadence": "DAILY",
+        "request_budget_per_run": 3,
+        "robots_url": "https://www.rba.gov.au/robots.txt",
+        "allowed_schedule_path_prefix": "/schedules-events/",
+        "topic_calendar_url": "https://www.rba.gov.au/schedules-events/calendar/?topics=monetary-policy-board",
+        "board_schedule_url": "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html",
+        "fail_closed_if_schedule_path_disallowed": true,
+        "broad_crawling_allowed": false
+      },
+      "live_validation_evidence": {
+        "read_only_diagnostic_run_id": 34196933651,
+        "read_only_diagnostic_job_id": 101966639103,
+        "observed_at": "2026-09-08",
+        "calendar_http_status": 200,
+        "board_http_status": 200,
+        "robots_http_status": 200,
+        "schedule_path_disallowed": false,
+        "calendar_event_count": 31,
+        "board_window_count": 16,
+        "calendar_schedule_sha256": "c7be2be9424706b936f5f1b9557947366cb90d0043373e39d5ad3c4b863831dc",
+        "automatic_commit_allowed": false
+      }
     },
     {
       "source_id": "WSSRC-CB-003",

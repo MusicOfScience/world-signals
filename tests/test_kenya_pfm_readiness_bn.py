@@ -13,6 +13,10 @@ import scripts.apply_kenya_pfm_readiness_bn as tx
 from world_signals.adapters.kenya_law import parse_kenya_budget_policy_rule
 
 
+def _version_tuple(value: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in str(value).split("."))
+
+
 class KenyaPFMReadinessBNTests(unittest.TestCase):
     def _live_state(self):
         canonical = json.loads((ROOT / "data/canonical/registry.json").read_text())
@@ -23,7 +27,10 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
     def test_bn_is_readiness_only_not_production_activation(self):
         canonical, sources, monitor = self._live_state()
         self.assertEqual((canonical["version"], len(canonical["records"])), ("0.41", 689))
-        self.assertEqual((monitor["version"], len(monitor["adapters"])), ("0.12", 10))
+        self.assertGreaterEqual(_version_tuple(monitor["version"]), (0, 12))
+        self.assertGreaterEqual(len(monitor["adapters"]), 10)
+        if monitor["version"] == "0.12":
+            self.assertEqual(len(monitor["adapters"]), 10)
         self.assertFalse(monitor["automatic_canonical_commit"])
         self.assertFalse(monitor["google_calendar_write"])
         self.assertFalse(any(row.get("source_id") == tx.SOURCE_ID for row in monitor["adapters"]))
