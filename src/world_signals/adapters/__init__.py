@@ -185,6 +185,14 @@ from .kenya_law import (
     fetch_kenya_budget_policy_rule_current,
     parse_kenya_budget_policy_rule,
 )
+from .nbs_native_rss import (
+    NBS_NATIVE_LATEST_RELEASES_RSS,
+    NBS_NATIVE_RSS_ACCEPT,
+    NBS_NATIVE_RSS_DOCS,
+    NBSNativeReleaseItem,
+    fetch_nbs_native_latest_releases_rss,
+    parse_nbs_native_latest_releases_rss,
+)
 from .ons_release_calendar import (
     ONS_RELEASE_CALENDAR,
     ONS_RELEASE_CALENDAR_RSS_ACCEPT,
@@ -304,6 +312,12 @@ __all__ = [
     "JGBMonthlyAuctionCalendar",
     "KENYA_PFM_BASELINE_2025_11_04",
     "KENYA_PFM_CURRENT",
+    "NBS_NATIVE_LATEST_RELEASES_RSS",
+    "NBS_NATIVE_RSS_ACCEPT",
+    "NBS_NATIVE_RSS_DOCS",
+    "NBSNativeReleaseItem",
+    "fetch_nbs_native_latest_releases_rss",
+    "parse_nbs_native_latest_releases_rss",
     "ONS_RELEASE_CALENDAR",
     "ONS_RELEASE_CALENDAR_RSS_ACCEPT",
     "ONSReleaseItem",
