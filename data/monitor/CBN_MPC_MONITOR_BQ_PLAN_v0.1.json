@@ -1,0 +1,101 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "BQ",
+  "review_date": "2026-09-08",
+  "exact_base_main_sha": "65e9ceb07d0c5175db61f9251a730a9bcf563d04",
+  "objective": "Activate a bounded read-only Central Bank of Nigeria MPC meeting-calendar monitor without manufacturing a decision publication time or event-state inference.",
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.89",
+    "source_count": 248,
+    "monitor_expectations_version": "0.14",
+    "configured_monitor_adapter_count": 12,
+    "source_id": "WSSRC-CB-014",
+    "series_id": "WSER-CB-NG-CBN-MPC",
+    "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK"
+  },
+  "tracked_occurrences": [
+    {
+      "occurrence_id": "WSO-CBN-MPC-307",
+      "meeting_number": 307,
+      "start_local": "2026-09-21",
+      "end_local": "2026-09-22",
+      "time_precision": "DAY_RANGE",
+      "source_timezone": "Africa/Lagos"
+    },
+    {
+      "occurrence_id": "WSO-CBN-MPC-308",
+      "meeting_number": 308,
+      "start_local": "2026-11-23",
+      "end_local": "2026-11-24",
+      "time_precision": "DAY_RANGE",
+      "source_timezone": "Africa/Lagos"
+    }
+  ],
+  "official_interfaces": {
+    "calendar_url": "https://www.cbn.gov.ng/MonetaryPolicy/calendar.html",
+    "robots_url": "https://www.cbn.gov.ng/robots.txt",
+    "rights_evidence_url": "https://www.cbn.gov.ng/Legal.html",
+    "calendar_path": "/MonetaryPolicy/calendar.html"
+  },
+  "read_only_diagnostic": {
+    "run_id": 34205403293,
+    "job_id": 101993598863,
+    "requests": 3,
+    "robots_http_status": 200,
+    "legal_http_status": 200,
+    "calendar_http_status": 200,
+    "robots_allows_calendar": true,
+    "legal_copy_with_attribution_no_distortion": true,
+    "calendar_sha256": "a91d3e74e69bb0629c39f305403736714c9e02ec3a42a56de0b771a655f07160",
+    "robots_sha256": "a28e1810a23c0cb48b57f050d394687b0337efaca2e43c24a499773c775e0ff6",
+    "legal_sha256": "14ac5116e938c45cfff85324037fe760858534a7fc9d86b52505898603c70a51"
+  },
+  "monitor_route": {
+    "adapter_id": "CBN_MPC_CALENDAR",
+    "cadence": "DAILY_WHILE_FUTURE_TRACKED_OCCURRENCES_REMAIN",
+    "request_budget_per_run": 2,
+    "request_order": ["ROBOTS_POLICY", "MPC_CALENDAR_IF_ALLOWED"],
+    "robots_policy": "FETCH_FIRST_FAIL_CLOSED_IF_CALENDAR_PATH_DISALLOWED",
+    "scope_policy": "EXACT_TWO_OCCURRENCE_ALLOW_LIST_NO_DYNAMIC_SERIES_EXPANSION",
+    "matching": {
+      "identity": "EXACT_MPC_MEETING_NUMBER",
+      "required_source_timezone": "Africa/Lagos",
+      "required_time_precision": "DAY_RANGE"
+    },
+    "date_drift_policy": "GENERATE_REVIEW_CANDIDATE_NO_DIRECT_CANONICAL_MUTATION",
+    "absence_policy": "FUTURE_TRACKED_ROW_ABSENCE_IS_REVIEW_EVIDENCE_ONLY_NOT_DELAY_CANCELLATION_COMPLETION_OR_CERTAINTY_CHANGE",
+    "untracked_future_policy": "OBSERVATION_ONLY_SCOPE_EXTENSION_REQUIRES_SEPARATE_REVIEW",
+    "elapsed_policy": "DO_NOT_USE_CURRENT_CALENDAR_PRESENCE_OR_ABSENCE_TO_INFER_EVENT_STATE",
+    "decision_time_policy": "PROHIBIT_INFERENCE_OF_DECISION_PUBLICATION_DAY_OR_CLOCK_FROM_MEETING_WINDOW_OR_HISTORICAL_PRACTICE",
+    "automatic_commit_allowed": false
+  },
+  "source_governance_target": {
+    "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "automated_monitoring_use": "CLEARED",
+    "automated_retrieval_permission": "CLEARED_BOUNDED_ROBOTS_CONFORMANT_LOW_RATE_MPC_CALENDAR_PATH",
+    "verification_mode": "AUTOMATED_PILOT",
+    "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+    "monitoring_activation_status": "LIVE_READ_ONLY_REVIEW_MONITOR_NO_AUTO_COMMIT",
+    "runtime_health_state": "HEALTHY_AT_2026_09_08_CBN_CALENDAR_PROBE",
+    "parser_type": "HTML_CBN_MPC_MEETING_WINDOW_SENTINEL",
+    "parser_version": "cbn-mpc-calendar-0.1"
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.90",
+    "source_count": 248,
+    "monitor_expectations_version": "0.15",
+    "configured_monitor_adapter_count": 13,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "live_intelligence_unchanged": true,
+    "analysis_unchanged": true,
+    "change_ledger_unchanged": true,
+    "biosecurity_overlay_unchanged": true
+  }
+}
