@@ -1,0 +1,161 @@
+{
+  "tranche": "BW",
+  "reference_date": "2026-09-09",
+  "exact_base_main_sha": "b277939bc6c540d0986f298a832c7d63a29a2d19",
+  "selection": {
+    "source_id": "WSSRC-MAC-014",
+    "adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
+    "institution": "Statistics Bureau of Japan",
+    "schedule_url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
+    "robots_url": "https://www.stat.go.jp/robots.txt",
+    "clock_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+    "rights_url": "https://www.stat.go.jp/english/info/riyou.html",
+    "source_timezone": "Asia/Tokyo",
+    "selection_reason": "The existing first-party CPI schedule is live, robots-compatible and semantically aligned with seven existing Canonical national-CPI occurrences. It can detect civil-date drift while leaving the separately sourced 08:30 JST clock untouched."
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.95",
+    "source_count": 252,
+    "monitor_expectations_version": "0.20",
+    "configured_monitor_adapter_count": 18,
+    "source_canonical_dependency_count": 7,
+    "source_canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "source_automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "source_automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "source_monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+    "source_monitoring_activation_status": "PILOT_ONLY_NO_AUTO_COMMIT",
+    "source_verification_mode": "AUTOMATED_PILOT",
+    "source_runtime_health_state": "PILOT_RESEARCH_VERIFIED",
+    "source_parser_type": "HTML_SERIES_RELEASE_SCHEDULE_MONITOR",
+    "source_parser_version": "jp-stat-cpi-0.1",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.96",
+    "source_count": 252,
+    "monitor_expectations_version": "0.21",
+    "configured_monitor_adapter_count": 19,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-MAC-A-0050",
+    "WSO-MAC-A-0051",
+    "WSO-MAC-A-0052",
+    "WSO-MAC-A-0053",
+    "WSO-MAC-A-0054",
+    "WSO-MAC-A-0055",
+    "WSO-MAC-A-0056"
+  ],
+  "canonical_occurrences": [
+    {"occurrence_id":"WSO-MAC-A-0050","series_id":"WSER-MAC-JP-CPI","reference_period":"August 2026","schedule_survey_label":"August","canonical_start_local":"2026-09-18T08:30:00","canonical_start_utc":"2026-09-17T23:30:00Z","canonical_release_date":"2026-09-18"},
+    {"occurrence_id":"WSO-MAC-A-0051","series_id":"WSER-MAC-JP-CPI","reference_period":"September 2026","schedule_survey_label":"September","canonical_start_local":"2026-10-23T08:30:00","canonical_start_utc":"2026-10-22T23:30:00Z","canonical_release_date":"2026-10-23"},
+    {"occurrence_id":"WSO-MAC-A-0052","series_id":"WSER-MAC-JP-CPI","reference_period":"October 2026","schedule_survey_label":"October","canonical_start_local":"2026-11-20T08:30:00","canonical_start_utc":"2026-11-19T23:30:00Z","canonical_release_date":"2026-11-20"},
+    {"occurrence_id":"WSO-MAC-A-0053","series_id":"WSER-MAC-JP-CPI","reference_period":"November 2026","schedule_survey_label":"November","canonical_start_local":"2026-12-18T08:30:00","canonical_start_utc":"2026-12-17T23:30:00Z","canonical_release_date":"2026-12-18"},
+    {"occurrence_id":"WSO-MAC-A-0054","series_id":"WSER-MAC-JP-CPI","reference_period":"December 2026","schedule_survey_label":"December","canonical_start_local":"2027-01-22T08:30:00","canonical_start_utc":"2027-01-21T23:30:00Z","canonical_release_date":"2027-01-22"},
+    {"occurrence_id":"WSO-MAC-A-0055","series_id":"WSER-MAC-JP-CPI","reference_period":"January 2027","schedule_survey_label":"January, 2027","canonical_start_local":"2027-02-19T08:30:00","canonical_start_utc":"2027-02-18T23:30:00Z","canonical_release_date":"2027-02-19"},
+    {"occurrence_id":"WSO-MAC-A-0056","series_id":"WSER-MAC-JP-CPI","reference_period":"February 2027","schedule_survey_label":"February","canonical_start_local":"2027-03-19T08:30:00","canonical_start_utc":"2027-03-18T23:30:00Z","canonical_release_date":"2027-03-19"}
+  ],
+  "request_contract": {
+    "request_budget_per_run": 2,
+    "robots_requests_per_run": 1,
+    "schedule_requests_per_run": 1,
+    "followup_requests_per_run": 0,
+    "robots_first": true,
+    "registered_schedule_endpoint_only": true,
+    "no_tokyo_cpi_followup": true,
+    "no_estat_api_followup": true,
+    "no_data_release_followup": true,
+    "no_pdf_followup": true,
+    "no_news_followup": true,
+    "no_search_route_discovery": true
+  },
+  "classification_contract": {
+    "date_change": "JAPAN_CPI_RELEASE_DATE_CHANGE_REVIEW",
+    "missing_configured_row": "JAPAN_CPI_RELEASE_ROW_MISSING_REVIEW",
+    "unchanged_match": "JAPAN_CPI_RELEASE_DATE_MATCH_OBSERVATION",
+    "completed_occurrence": "JAPAN_CPI_COMPLETED_OCCURRENCE_SCHEDULE_CORROBORATION_ONLY",
+    "structural_failure": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "outside_configured_scope": "JAPAN_CPI_OUTSIDE_CONFIGURED_REFERENCE_PERIOD_OBSERVATION",
+    "absence_is_not_cancellation": true,
+    "absence_is_not_completion": true,
+    "absence_is_not_certainty_change": true,
+    "no_clock_inference": true
+  },
+  "source_role_contract": {
+    "same_source_identity_for_canonical_and_monitor": true,
+    "reason": "The Canonical civil-date authority and the monitor inspect the same first-party Statistics Bureau CPI schedule; a duplicate monitor source would misrepresent provenance.",
+    "canonical_provenance_use_preserved": "CLEARED_CURATED_FACTUAL_METADATA",
+    "schedule_endpoint_role": "NATIONAL_CPI_CIVIL_DATE_AUTHORITY_AND_DATE_DRIFT_SENTINEL",
+    "clock_rule_url": "https://www.stat.go.jp/english/data/cpi/1585.htm",
+    "clock_rule_is_separate_from_schedule": true,
+    "route_schedule_mutation_authority": false,
+    "route_clock_authority": false,
+    "route_lifecycle_authority": false,
+    "route_certainty_authority": false,
+    "automatic_commit_allowed": false
+  },
+  "source_governance_update": {
+    "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_SCHEDULE",
+    "automated_retrieval_permission": "BOUNDED_OFFICIAL_HTML_SCHEDULE_ROBOTS_COMPATIBLE",
+    "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+    "monitoring_activation_status": "LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT",
+    "verification_mode": "AUTOMATED_PILOT",
+    "runtime_health_state": "READ_ONLY_DIAGNOSTIC_PASS_2026_09_09",
+    "monitoring_readiness_assessed_at": "2026-09-09",
+    "last_successful_research_verification_at": "2026-09-09",
+    "automation_evidence_url": "https://www.stat.go.jp/english/data/cpi/1582.htm",
+    "rights_review_scope": "BW_PUBLIC_DATA_LICENSE_AND_MACHINE_ACCESS_SEPARATELY_REVIEWED",
+    "live_adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
+    "parser_version": "jp-stat-cpi-0.2"
+  },
+  "read_only_pressure_audit": {
+    "run_id": 34240072579,
+    "job_id": 102107667084,
+    "repository_mutation": false
+  },
+  "read_only_endpoint_diagnostic": {
+    "run_id": 34240941533,
+    "job_id": 102110625804,
+    "request_count": 2,
+    "robots_status": 200,
+    "robots_allows_schedule": true,
+    "schedule_status": 200,
+    "configured_exact_unique_matches": 7,
+    "clock_exposed_by_schedule": false,
+    "repository_mutation": false
+  },
+  "read_only_registered_endpoint_check": {
+    "run_id": 34241227432,
+    "job_id": 102111604587,
+    "registered_endpoint": "https://www.stat.go.jp/english/data/cpi/1582.htm",
+    "request_count": 2,
+    "configured_exact_unique_matches": 7,
+    "repository_mutation": false
+  },
+  "read_only_contract_inspection": {
+    "run_id": 34241042301,
+    "job_id": 102110970929,
+    "repository_mutation": false
+  },
+  "mutation_boundary": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "scripts/run_live_monitor.py",
+    "scripts/run_adapter_smoke.py",
+    "src/world_signals/adapters/__init__.py"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/changes/ledger.json",
+    "data/biosecurity",
+    "data/live",
+    "data/live_intelligence",
+    "data/analysis"
+  ]
+}
