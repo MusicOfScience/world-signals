@@ -138,23 +138,44 @@ class RBAMPBAdapterTests(unittest.TestCase):
         with self.assertRaises(AdapterError):
             validate_rba_calendar_alignment(calendar, windows)
 
-    def test_bj_does_not_activate_production_monitoring_or_change_rights(self):
+    def test_bj_checkpoint_or_later_reviewed_activation_is_safe(self):
         expectations = json.loads((ROOT / "data/monitor/expectations.json").read_text())
+        sources = json.loads((ROOT / "data/sources/registry.json").read_text())
         adapter_ids = {row["adapter_id"] for row in expectations["adapters"]}
-        self.assertNotIn("RBA_MPB_CALENDAR", adapter_ids)
+        source = next(row for row in sources["sources"] if row["source_id"] == "WSSRC-CB-002")
 
-        # BJ's exact reviewed checkpoint was monitor v0.10 / 8 routes. That is a
-        # historical floor, not a ceiling on later independently reviewed routes.
+        # BJ's exact reviewed checkpoint was Monitor v0.10 / 8 with no RBA MPB
+        # production route and endpoint review still required. That state must
+        # remain provable, but it is not a permanent ceiling on a later tranche.
         self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 10))
         self.assertGreaterEqual(len(expectations["adapters"]), 8)
+        self.assertEqual(source["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
+        self.assertEqual(source["verification_mode"], "AUTOMATED_PILOT")
+
         if expectations["version"] == "0.10":
             self.assertEqual(len(expectations["adapters"]), 8)
+            self.assertNotIn("RBA_MPB_CALENDAR", adapter_ids)
+            self.assertEqual(source["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
+        elif "RBA_MPB_CALENDAR" not in adapter_ids:
+            self.assertEqual(source["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
+        else:
+            route = next(row for row in expectations["adapters"] if row["adapter_id"] == "RBA_MPB_CALENDAR")
+            self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 13))
+            self.assertEqual(source["automated_monitoring_use"], "CLEARED")
+            self.assertEqual(
+                source["automated_retrieval_permission"],
+                "CLEARED_BOUNDED_ROBOTS_CONFORMANT_LOW_RATE_SCHEDULE_PATHS",
+            )
+            self.assertEqual(route["cadence"], "DAILY")
+            self.assertEqual(route["request_budget_per_run"], 3)
+            self.assertEqual(route["robots_policy"], "FETCH_FIRST_FAIL_CLOSED_IF_SCHEDULE_PATH_DISALLOWED")
+            self.assertEqual(len(route["canonical_occurrence_ids"]), 44)
+            self.assertEqual(
+                route["canonical_source_role_contract"]["WS.CB.RBA.MPB_MINUTES"],
+                "WSSRC-CB-013",
+            )
+            self.assertFalse(route["automatic_commit_allowed"])
 
-        sources = json.loads((ROOT / "data/sources/registry.json").read_text())
-        source = next(row for row in sources["sources"] if row["source_id"] == "WSSRC-CB-002")
-        self.assertEqual(source["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
-        self.assertEqual(source["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
-        self.assertEqual(source["verification_mode"], "AUTOMATED_PILOT")
         self.assertFalse(expectations["automatic_canonical_commit"])
         self.assertFalse(expectations["google_calendar_write"])
         self.assertTrue(all(not row.get("automatic_commit_allowed", False) for row in expectations["adapters"]))
