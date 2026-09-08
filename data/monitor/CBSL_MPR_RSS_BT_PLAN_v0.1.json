@@ -1,0 +1,146 @@
+{
+  "tranche": "BT",
+  "reference_date": "2026-09-08",
+  "exact_base_main_sha": "2b74c10905760c98c75b3598df96441f99841b00",
+  "purpose": "Activate a bounded official Central Bank of Sri Lanka Monetary Policy Review RSS publication sentinel for the two remaining 2026 Canonical CBSL monetary-policy announcement occurrences while preserving the separate advance-release-calendar source and its rights/automation hold.",
+  "selection": {
+    "institution": "Central Bank of Sri Lanka",
+    "jurisdiction": "Sri Lanka",
+    "region": "South Asia",
+    "series_id": "WSER-REGJ-LK-CBSL-MPB",
+    "canonical_schedule_source_id": "WSSRC-REGJ-002",
+    "machine_source_id": "WSSRC-REGJ-007",
+    "adapter_id": "CBSL_MONETARY_POLICY_RSS",
+    "schedule_url": "https://www.cbsl.gov.lk/en/monetary-policy/monetary-policy-communication/monetary-policy-advance-release-calendar",
+    "rss_documentation_url": "https://www.cbsl.gov.lk/en/rss-feeds",
+    "rss_url": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+    "rights_evidence_url": "https://www.cbsl.gov.lk/en",
+    "source_timezone": "Asia/Colombo"
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.92",
+    "source_count": 250,
+    "monitor_expectations_version": "0.17",
+    "configured_monitor_adapter_count": 15,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-REG-J-0006",
+    "WSO-REG-J-0007"
+  ],
+  "canonical_occurrences": [
+    {
+      "occurrence_id": "WSO-REG-J-0006",
+      "review_number": 5,
+      "year": 2026,
+      "meeting_date": "2026-09-29",
+      "announcement_date": "2026-09-30",
+      "start_local": "2026-09-30"
+    },
+    {
+      "occurrence_id": "WSO-REG-J-0007",
+      "review_number": 6,
+      "year": 2026,
+      "meeting_date": "2026-11-19",
+      "announcement_date": "2026-11-20",
+      "start_local": "2026-11-20"
+    }
+  ],
+  "read_only_diagnostics": {
+    "rbi_broad_press_feed": {
+      "failed_fail_closed_run_id": 34217840056,
+      "failed_fail_closed_job_id": 102033709896,
+      "successful_run_id": 34217974010,
+      "successful_job_id": 102034145142,
+      "result": "VALID_OFFICIAL_RSS_BUT_BROAD_TOPIC_SURFACE_AND_CANONICAL_MEETING_WINDOW_SEMANTICS_MAKE_IT_INFERIOR_TO_CBSL_FOR_BT",
+      "rss_item_count": 10,
+      "rss_content_type": "text/xml",
+      "request_count": 2
+    },
+    "cbsl_feed_contract": {
+      "successful_run_id": 34218166410,
+      "successful_job_id": 102034765821,
+      "metadata_successful_run_id": 34218262645,
+      "metadata_successful_job_id": 102035077150,
+      "docs_http_status": 200,
+      "rss_http_status": 200,
+      "rss_content_type": "application/rss+xml; charset=utf-8",
+      "rss_item_count": 10,
+      "rss_sha256": "1ab11c945f2f63e1dc5db813226a72a37946ec6b24dbe4519771d7361e8abae7",
+      "item_child_tags": ["title", "link", "source"],
+      "standard_pubdate_present": false,
+      "followup_item_request_count": 0,
+      "request_count": 2,
+      "historical_2026_examples": [
+        {
+          "title": "Monetary Policy Review - No. 1 of 2026",
+          "link_filename_date": "2026-01-28"
+        },
+        {
+          "title": "Monetary Policy Review - No. 2 of 2026",
+          "link_filename_date": "2026-03-25"
+        },
+        {
+          "title": "Monetary Policy Review - No. 3 of 2026",
+          "link_filename_date": "2026-05-26"
+        },
+        {
+          "title": "Monetary Policy Review - No. 4 of 2026",
+          "link_filename_date": "2026-07-22"
+        }
+      ]
+    }
+  },
+  "classification_contract": {
+    "positive_review_publication": {
+      "title_pattern": "Monetary Policy Review - No. N of YYYY",
+      "official_pdf_filename_pattern": "press_YYYYMMDD_Monetary_Policy_Review_No_N_YYYY_e_<opaque>.pdf",
+      "required_consistency": "TITLE_REVIEW_NUMBER_AND_YEAR_MUST_EQUAL_FILENAME_REVIEW_NUMBER_AND_YEAR",
+      "canonical_match": "EXACT_EXPLICIT_REVIEW_NUMBER_YEAR_AND_CANONICAL_ANNOUNCEMENT_CIVIL_DATE",
+      "result": "REVIEW_CANDIDATE_ONLY"
+    },
+    "historical_or_untracked_review": "OBSERVATION_ONLY_NO_SCOPE_EXPANSION",
+    "feed_absence": "NO_SCHEDULE_LIFECYCLE_CERTAINTY_DELAY_OR_CANCELLATION_SEMANTICS",
+    "duplicate_or_ambiguous_match": "FAIL_CLOSED_NO_GUESS",
+    "filename_drift": "SOURCE_HEALTH_DEGRADED_NO_EVENT_MUTATION"
+  },
+  "source_role_contract": {
+    "WSSRC-REGJ-002": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_RIGHTS_HELD_MANUAL_ONLY",
+    "WSSRC-REGJ-007": "OFFICIAL_MPR_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+    "rss_has_publication_clock": false,
+    "official_pdf_filename_date_is_clock_time": false,
+    "official_pdf_filename_date_may_be_used_for_exact_civil_date_identity_matching": true,
+    "rss_can_change_canonical_schedule": false,
+    "rss_can_set_lifecycle_completed": false,
+    "rss_can_change_certainty": false,
+    "rss_can_create_or_upgrade_canonical_clock": false,
+    "automatic_item_link_fetch_allowed": false,
+    "automatic_schedule_html_fetch_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "rights_contract": {
+    "schedule_source_rights_hold_remains": true,
+    "rss_machine_access_basis": "CBSL_PUBLISHES_A_DEDICATED_RSS_FEEDS_PAGE_AND_A_MONETARY_POLICY_REVIEW_RSS_ENDPOINT",
+    "content_reuse_basis": "NO_BROAD_REUSE_GRANT_ASSERTED; CBSL_SITE_STATES_ALL_RIGHTS_RESERVED",
+    "redistribution_policy": "MINIMAL_FACTUAL_METADATA_ONLY_NO_PDF_OR_ARTICLE_CONTENT_REPUBLICATION",
+    "legal_opinion": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.93",
+    "source_count": 251,
+    "monitor_expectations_version": "0.18",
+    "configured_monitor_adapter_count": 16,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "canonical_unchanged": true,
+    "change_ledger_unchanged": true,
+    "biosecurity_overlay_unchanged": true,
+    "live_intelligence_unchanged": true,
+    "analysis_unchanged": true
+  }
+}

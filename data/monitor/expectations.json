@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.17",
+  "version": "0.18",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -1030,6 +1030,75 @@
       "canonical_clock_mutation_allowed": false,
       "automatic_schedule_html_fetch_allowed": false,
       "canonical_schedule_source_id": "WSSRC-REGJ-003",
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CBSL_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-REGJ-007",
+      "canonical_occurrence_ids": [
+        "WSO-REG-J-0006",
+        "WSO-REG-J-0007"
+      ],
+      "review_identity_by_occurrence_id": {
+        "WSO-REG-J-0006": {
+          "review_number": 5,
+          "year": 2026,
+          "announcement_date": "2026-09-30"
+        },
+        "WSO-REG-J-0007": {
+          "review_number": 6,
+          "year": 2026,
+          "announcement_date": "2026-11-20"
+        }
+      },
+      "monitor_role": "OFFICIAL_CBSL_MONETARY_POLICY_REVIEW_PUBLICATION_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 1,
+      "feed": {
+        "url": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+        "transport": "RSS_XML",
+        "request_policy": "ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN"
+      },
+      "classification_contract": {
+        "positive_review_publication": {
+          "title_pattern": "Monetary Policy Review - No. N of YYYY",
+          "official_pdf_filename_pattern": "press_YYYYMMDD_Monetary_Policy_Review_No_N_YYYY_e_<opaque>.pdf",
+          "required_consistency": "TITLE_REVIEW_NUMBER_AND_YEAR_MUST_EQUAL_FILENAME_REVIEW_NUMBER_AND_YEAR",
+          "canonical_match": "EXACT_EXPLICIT_REVIEW_NUMBER_YEAR_AND_CANONICAL_ANNOUNCEMENT_CIVIL_DATE",
+          "result": "REVIEW_CANDIDATE_ONLY"
+        },
+        "historical_or_untracked_review": "OBSERVATION_ONLY_NO_SCOPE_EXPANSION",
+        "feed_absence": "NO_SCHEDULE_LIFECYCLE_CERTAINTY_DELAY_OR_CANCELLATION_SEMANTICS",
+        "duplicate_or_ambiguous_match": "FAIL_CLOSED_NO_GUESS",
+        "filename_drift": "SOURCE_HEALTH_DEGRADED_NO_EVENT_MUTATION"
+      },
+      "source_role_contract": {
+        "WSSRC-REGJ-002": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_RIGHTS_HELD_MANUAL_ONLY",
+        "WSSRC-REGJ-007": "OFFICIAL_MPR_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+        "rss_has_publication_clock": false,
+        "official_pdf_filename_date_is_clock_time": false,
+        "official_pdf_filename_date_may_be_used_for_exact_civil_date_identity_matching": true,
+        "rss_can_change_canonical_schedule": false,
+        "rss_can_set_lifecycle_completed": false,
+        "rss_can_change_certainty": false,
+        "rss_can_create_or_upgrade_canonical_clock": false,
+        "automatic_item_link_fetch_allowed": false,
+        "automatic_schedule_html_fetch_allowed": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_publication_policy": "GENERATE_REVIEW_CANDIDATE_ONLY_FOR_EXACT_REVIEW_NUMBER_YEAR_AND_OFFICIAL_LINK_FILENAME_CIVIL_DATE_MATCH",
+      "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_DELAY_CANCELLATION_OR_CERTAINTY_SEMANTICS",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "rss_has_publication_clock": false,
+      "official_link_filename_date_is_clock_time": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_item_link_fetch_allowed": false,
+      "automatic_schedule_html_fetch_allowed": false,
+      "canonical_schedule_source_id": "WSSRC-REGJ-002",
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false
     }
