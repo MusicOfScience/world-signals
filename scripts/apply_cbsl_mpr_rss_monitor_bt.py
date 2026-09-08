@@ -103,7 +103,6 @@ def preflight(canonical: dict, sources: dict, expectations: dict, plan: dict) ->
             "time_precision": "DAY",
             "timing_type": "CIVIL_DATE",
             "start_local": mapping["announcement_date"],
-            "meeting_date": mapping["meeting_date"],
             "lifecycle_status": "PLANNED",
             "certainty_status": "CONFIRMED",
         }
