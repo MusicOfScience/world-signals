@@ -2,9 +2,14 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+import sys
 import unittest
 from urllib.parse import quote_plus
 from zoneinfo import ZoneInfo
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.adapters.base import AdapterError
 from world_signals.adapters.indec_calendar import (
