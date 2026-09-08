@@ -134,8 +134,40 @@ class MixedSignalCorrectionMTests(unittest.TestCase):
         by_id = {row["source_id"]: row for row in sources["sources"]}
         cbn = by_id["WSSRC-CB-014"]
         self.assertEqual(cbn["canonical_provenance_use"], "CLEARED_CURATED_FACTUAL_METADATA")
-        self.assertEqual(cbn["automated_monitoring_use"], "ENDPOINT_REVIEW_REQUIRED")
-        self.assertEqual(cbn["verification_mode"], "MANUAL_AUTHORITATIVE_RECHECK")
+
+        expectations = json.loads(EXPECTATIONS_PATH.read_text(encoding="utf-8"))
+        adapter_ids = {row["adapter_id"] for row in expectations.get("adapters", [])}
+        if cbn["automated_monitoring_use"] == "ENDPOINT_REVIEW_REQUIRED":
+            # Correction M's reviewed checkpoint remains exact historical truth.
+            self.assertEqual(cbn["verification_mode"], "MANUAL_AUTHORITATIVE_RECHECK")
+            self.assertEqual(cbn["automated_retrieval_permission"], "PENDING_ENDPOINT_OPERATIONAL_REVIEW")
+            self.assertNotIn("CBN_MPC_CALENDAR", adapter_ids)
+        else:
+            # A later descendant may advance automation only through the bounded
+            # BQ robots-first, two-occurrence, review-only contract.
+            self.assertGreaterEqual(self._version(sources["version"]), (1,90))
+            self.assertEqual(cbn["automated_monitoring_use"], "CLEARED")
+            self.assertEqual(cbn["verification_mode"], "AUTOMATED_PILOT")
+            self.assertEqual(
+                cbn["automated_retrieval_permission"],
+                "CLEARED_BOUNDED_ROBOTS_CONFORMANT_LOW_RATE_MPC_CALENDAR_PATH",
+            )
+            self.assertEqual(cbn["canonical_dependency_count"], 2)
+            route = next(row for row in expectations["adapters"] if row["adapter_id"] == "CBN_MPC_CALENDAR")
+            self.assertEqual(route["source_id"], "WSSRC-CB-014")
+            self.assertEqual(
+                set(route["canonical_occurrence_ids"]),
+                {"WSO-CBN-MPC-307", "WSO-CBN-MPC-308"},
+            )
+            self.assertEqual(route["request_budget_per_run"], 2)
+            self.assertEqual(route["robots_policy"], "FETCH_FIRST_FAIL_CLOSED_IF_CALENDAR_PATH_DISALLOWED")
+            self.assertFalse(route["decision_publication_time_authority"])
+            self.assertFalse(route["lifecycle_authority"])
+            self.assertFalse(route["certainty_authority"])
+            self.assertFalse(route["automatic_commit_allowed"])
+            self.assertFalse(expectations["automatic_canonical_commit"])
+            self.assertFalse(expectations["google_calendar_write"])
+
         for source_id in ("WSSRC-INT-032", "WSSRC-INT-033"):
             row = by_id[source_id]
             self.assertEqual(row["canonical_provenance_use"], "MANUAL_INFORMATIONAL_REFERENCE_ONLY")
