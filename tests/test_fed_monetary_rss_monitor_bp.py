@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from pathlib import Path
 import unittest
@@ -97,6 +98,22 @@ class FedMonetaryRSSBPTests(unittest.TestCase):
         self.assertTrue(all(c["automatic_commit_allowed"] is False for c in candidates))
         matched = [o for o in observations if o["type"] == "FED_FOMC_RSS_PUBLICATION_MATCHED_REVIEW_REQUIRED"]
         self.assertEqual({o["timestamp_delta_seconds"] for o in matched}, {0})
+
+    def test_completed_occurrence_publication_is_corroboration_only(self):
+        records = deepcopy(CANONICAL["records"])
+        target = next(r for r in records if r["occurrence_id"] == "WSO-08f11832f0335c85")
+        target["lifecycle_status"] = "COMPLETED"
+        item = _item("Federal Reserve issues FOMC statement", "2026-09-16T18:00:00Z", "20260916a")
+        candidates, observations = fed_monetary_rss_review_candidates(records, [item], _config())
+        self.assertEqual(candidates, [])
+        corroboration = next(
+            o for o in observations
+            if o["type"] == "FED_FOMC_RSS_COMPLETED_OCCURRENCE_PUBLICATION_PRESENT_NO_LIFECYCLE_ACTION"
+        )
+        self.assertEqual(corroboration["occurrence_id"], target["occurrence_id"])
+        self.assertTrue(corroboration["canonical_lifecycle_already_reviewed"])
+        self.assertEqual(corroboration["event_state_inference"], "NONE")
+        self.assertFalse(corroboration["automatic_commit_allowed"])
 
     def test_winter_timezone_mapping_uses_est_not_fixed_utc_offset(self):
         item = _item("Federal Reserve issues FOMC statement", "2026-12-09T19:00:00Z", "20261209a")
