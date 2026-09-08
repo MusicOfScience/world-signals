@@ -1,0 +1,107 @@
+name: BM FOMC adapter readiness preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bl-pressure-audit-bm
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BL ancestry and unchanged governed pre-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          test "$(git merge-base HEAD origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (c['version'],len(c['records'])) == ('0.41',689)
+          assert (s['version'],len(s['sources'])) == ('1.85',247)
+          assert (m['version'],len(m['adapters'])) == ('0.12',10)
+          src=next(x for x in s['sources'] if x['source_id']=='WSSRC-CB-001')
+          assert src['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert src['verification_mode']=='AUTOMATED_PILOT'
+          assert not any(x.get('source_id')=='WSSRC-CB-001' for x in m['adapters'])
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          PY
+      - name: Run targeted FOMC readiness tests
+        run: python -m unittest tests.test_fomc_adapter_bm -v
+      - name: Exercise current first-party FOMC schedule surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters.fomc import (
+              fetch_fomc_meeting_calendar,
+              fetch_fomc_operational_calendar,
+              validate_fomc_schedule_alignment,
+          )
+          meetings,meeting_snap=fetch_fomc_meeting_calendar(timeout=30,years=(2026,2027))
+          operational=[]
+          snaps=[]
+          for year,month in ((2026,9),(2026,10),(2026,12)):
+              calendar,snap=fetch_fomc_operational_calendar(year,month,timeout=30)
+              operational.append(calendar); snaps.append(snap)
+          validate_fomc_schedule_alignment(meetings,operational)
+          windows={(x.start_date,x.end_date):x for x in meetings.windows}
+          assert ('2026-09-15','2026-09-16') in windows
+          assert windows[('2026-09-15','2026-09-16')].sep_associated is True
+          assert ('2026-10-27','2026-10-28') in windows
+          assert ('2026-12-08','2026-12-09') in windows
+          assert len([x for x in meetings.windows if x.year==2027])==8
+          sep={x.event_kind:x for x in operational[0].events}
+          octo={x.event_kind:x for x in operational[1].events}
+          dec={x.event_kind:x for x in operational[2].events}
+          assert sep['DECISION'].start_local=='2026-09-16T14:00:00'
+          assert sep['PRESS_CONFERENCE'].start_local=='2026-09-16T14:30:00'
+          assert octo['MINUTES'].start_local=='2026-10-07T14:00:00'
+          assert octo['DECISION'].start_local=='2026-10-28T14:00:00'
+          assert octo['PRESS_CONFERENCE'].start_local=='2026-10-28T14:30:00'
+          assert dec['DECISION'].start_local=='2026-12-09T14:00:00'
+          assert dec['PRESS_CONFERENCE'].start_local=='2026-12-09T14:30:00'
+          print({
+            'meeting_status':meeting_snap.status,
+            'meeting_windows':len(meetings.windows),
+            'meeting_hash':meetings.schedule_sha256,
+            'operational_statuses':[s.status for s in snaps],
+            'operational_event_counts':[len(x.events) for x in operational],
+            'operational_hashes':[x.schedule_sha256 for x in operational],
+          })
+          PY
+      - name: Validate full repository and build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile src/world_signals/adapters/fomc.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+          git diff --exit-code
