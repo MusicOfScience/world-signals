@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.19",
+  "version": "0.20",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -1189,6 +1189,97 @@
       "automatic_pdf_fetch_allowed": false,
       "automatic_completed_release_fetch_allowed": false,
       "automatic_google_fetch_allowed": false,
+      "automatic_search_route_discovery_allowed": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "FAO_RELEASE_CALENDAR",
+      "source_id": "WSSRC-COM-010",
+      "canonical_schedule_source_id": "WSSRC-COM-010",
+      "same_source_identity_for_canonical_and_monitor": true,
+      "canonical_occurrence_ids": [
+        "WSO-COM-A-0042",
+        "WSO-COM-A-0043",
+        "WSO-COM-A-0044",
+        "WSO-COM-A-0045",
+        "WSO-COM-A-0046",
+        "WSO-COM-A-0047"
+      ],
+      "identity_by_occurrence_id": {
+        "WSO-COM-A-0042": {
+          "series_id": "WSER-COM-FAO-FFPI",
+          "product_key": "FFPI",
+          "slot_month": "October 2026"
+        },
+        "WSO-COM-A-0043": {
+          "series_id": "WSER-COM-AMIS",
+          "product_key": "AMIS",
+          "slot_month": "October 2026"
+        },
+        "WSO-COM-A-0044": {
+          "series_id": "WSER-COM-FAO-FFPI",
+          "product_key": "FFPI",
+          "slot_month": "November 2026"
+        },
+        "WSO-COM-A-0045": {
+          "series_id": "WSER-COM-AMIS",
+          "product_key": "AMIS",
+          "slot_month": "November 2026"
+        },
+        "WSO-COM-A-0046": {
+          "series_id": "WSER-COM-FAO-FFPI",
+          "product_key": "FFPI",
+          "slot_month": "December 2026"
+        },
+        "WSO-COM-A-0047": {
+          "series_id": "WSER-COM-AMIS",
+          "product_key": "AMIS",
+          "slot_month": "December 2026"
+        }
+      },
+      "configured_month_sections": [
+        "October 2026",
+        "November 2026",
+        "December 2026"
+      ],
+      "monitor_role": "OFFICIAL_FAO_FFPI_AMIS_RELEASE_DATE_CHANGE_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 2,
+      "robots_requests_per_run": 1,
+      "calendar_requests_per_run": 1,
+      "followup_requests_per_run": 0,
+      "classification_contract": {
+        "date_change": "FAO_RELEASE_DATE_CHANGE_REVIEW",
+        "missing_configured_row": "FAO_RELEASE_SLOT_MISSING_REVIEW",
+        "unchanged_match": "FAO_RELEASE_DATE_MATCH_OBSERVATION",
+        "structural_failure": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+        "absence_is_not_cancellation": true,
+        "absence_is_not_completion": true,
+        "absence_is_not_certainty_change": true,
+        "no_clock_inference": true
+      },
+      "source_role_contract": {
+        "same_source_identity_for_canonical_and_monitor": true,
+        "reason": "The Canonical authority and monitor inspect the same first-party FAO schedule endpoint; a duplicate machine-source identity would misrepresent provenance.",
+        "canonical_provenance_use_preserved": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "monitoring_role": "OFFICIAL_FAO_FFPI_AMIS_RELEASE_DATE_CHANGE_SENTINEL",
+        "route_schedule_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_change_policy": "GENERATE_REVIEW_CANDIDATE_FOR_SAME_STABLE_OCCURRENCE_ID_ONLY",
+      "absence_policy": "MISSING_CONFIGURED_ROW_IS_REVIEW_EVIDENCE_ONLY_NO_EVENT_STATE_INFERENCE",
+      "schedule_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_amis_followup_allowed": false,
+      "automatic_faostat_followup_allowed": false,
+      "automatic_pdf_fetch_allowed": false,
+      "automatic_news_followup_allowed": false,
       "automatic_search_route_discovery_allowed": false,
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false

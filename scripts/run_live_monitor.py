@@ -25,6 +25,8 @@ from world_signals.adapters import (
     fetch_cellar_rdf_notice,
     fetch_eia_wpsr_schedule,
     fetch_eurostat_release_calendar,
+    fetch_fao_release_calendar,
+    fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
     fetch_ons_upcoming_releases,
     fetch_indec_cpi_months,
@@ -45,6 +47,7 @@ from world_signals.bsp_monetary_monitor import bsp_monetary_rss_review_candidate
 from world_signals.cbsl_monetary_monitor import cbsl_mpr_rss_review_candidates
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
+from world_signals.fao_release_monitor import fao_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
 from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
 from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
@@ -300,6 +303,67 @@ def main() -> int:
                 "rss_has_publication_clock":False,
                 "automatic_item_link_fetch_allowed":False,
                 "automatic_schedule_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "FAO_RELEASE_CALENDAR" in configs:
+        fao_config=configs["FAO_RELEASE_CALENDAR"]
+        try:
+            fao_allowed,fao_robots_snap=fetch_fao_robots_policy()
+            if not fao_allowed:
+                report["source_health"].append({
+                    "adapter_id":"FAO_RELEASE_CALENDAR",
+                    "source_id":fao_config["source_id"],
+                    "state":"DEGRADED",
+                    "robots_snapshot":fao_robots_snap.as_dict(),
+                    "failure_stage":"ROBOTS_POLICY_NOW_DISALLOWS_FAO_RELEASE_CALENDAR",
+                    "calendar_request_skipped":True,
+                    "canonical_action":"NONE",
+                    "automatic_commit_allowed":False,
+                })
+            else:
+                fao_items,fao_calendar_snap=fetch_fao_release_calendar(
+                    list(fao_config["configured_month_sections"])
+                )
+                report["source_health"].append({
+                    "adapter_id":"FAO_RELEASE_CALENDAR",
+                    "source_id":fao_config["source_id"],
+                    "state":"HEALTHY",
+                    "robots_snapshot":fao_robots_snap.as_dict(),
+                    "calendar_snapshot":fao_calendar_snap.as_dict(),
+                    "item_count":len(fao_items),
+                    "request_budget_per_run":2,
+                    "robots_request_count":1,
+                    "calendar_request_count":1,
+                    "followup_request_count":0,
+                    "amis_followup_request_count":0,
+                    "faostat_followup_request_count":0,
+                    "pdf_followup_request_count":0,
+                    "news_followup_request_count":0,
+                    "search_route_request_count":0,
+                    "schedule_authority":False,
+                    "lifecycle_authority":False,
+                    "certainty_authority":False,
+                    "canonical_clock_mutation_allowed":False,
+                    "automatic_commit_allowed":False,
+                })
+                candidates,observations=fao_release_calendar_review_candidates(
+                    registry.get("records",[]),fao_items,fao_config
+                )
+                report["review_candidates"].extend(candidates)
+                report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"FAO_RELEASE_CALENDAR",
+                "source_id":fao_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_clock_mutation_allowed":False,
                 "automatic_commit_allowed":False,
             })
 

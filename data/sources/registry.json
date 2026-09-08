@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-08",
-  "version": "1.94",
+  "version": "1.95",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -6053,18 +6053,61 @@
       "licence_constraints": "Public official factual/schedule metadata.",
       "ingestion_permission": "PUBLIC_FACTS_ALLOWED",
       "licence_review_status": "CLEARED_FOR_FACTUAL_METADATA",
-      "automated_retrieval_permission": "PENDING",
+      "automated_retrieval_permission": "BOUNDED_OFFICIAL_CALENDAR_ROBOTS_COMPATIBLE",
       "redistribution_permission": "PUBLIC_FACTUAL_METADATA_ONLY",
-      "runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
-      "monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+      "runtime_health_state": "READ_ONLY_DIAGNOSTIC_PASS_2026_09_08",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
       "monitoring_priority_score": 300,
       "canonical_dependency_count": 9,
-      "monitoring_readiness_assessed_at": "2026-09-02",
+      "monitoring_readiness_assessed_at": "2026-09-08",
       "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
-      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
-      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_CALENDAR",
+      "verification_mode": "AUTOMATED_PILOT",
       "governance_backfill_reviewed_at": "2026-09-04",
-      "governance_backfill_basis": "FAO general website terms support attributed non-commercial informational use; the separate statistical-database licensing regime is not projected onto the release-calendar HTML endpoint."
+      "governance_backfill_basis": "FAO general website terms support attributed non-commercial informational use; the separate statistical-database licensing regime is not projected onto the release-calendar HTML endpoint.",
+      "monitoring_activation_status": "LIVE_READ_ONLY_DATE_CHANGE_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-08",
+      "automation_evidence_url": "https://www.fao.org/statistics/data-releases/upcoming-data-releases/",
+      "rights_evidence_url": "https://www.fao.org/contact-us/terms/",
+      "rights_review_scope": "BV_GENERAL_WEB_CONTENT_REUSE_AND_MACHINE_ACCESS_SEPARATELY_REVIEWED",
+      "live_adapter_id": "FAO_RELEASE_CALENDAR",
+      "automation_summary": "WORLD SIGNALS automation is bounded to one valid FAO robots-policy request followed, only when allowed, by one exact first-party 2026 data-release calendar request. No linked FAO, AMIS, FAOSTAT, PDF, news or search endpoint is followed.",
+      "automation_reviewed_at": "2026-09-08",
+      "rights_summary": "FAO general website terms permit attributed non-commercial research/informational reuse subject to stated conditions; the separate statistical-database licence is not projected onto the HTML release-calendar surface.",
+      "live_validation_evidence": {
+        "run_id": 34234241294,
+        "job_id": 102087743209,
+        "request_count": 2,
+        "configured_match_count": 6,
+        "clock_exposed": false,
+        "automatic_commit_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "robots_policy",
+          "url": "https://www.fao.org/robots.txt",
+          "transport": "TEXT_PLAIN",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "AUTOMATION_POLICY_GATE"
+        },
+        {
+          "endpoint_role": "official_release_calendar",
+          "url": "https://www.fao.org/statistics/data-releases/upcoming-data-releases/",
+          "transport": "HTML_GET",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "EXACT_CONFIGURED_FFPI_AND_AMIS_OCT_DEC_2026_SLOTS_ONLY"
+        }
+      ],
+      "source_role_contract": {
+        "same_source_identity_for_canonical_and_monitor": true,
+        "reason": "The Canonical authority and monitor inspect the same first-party FAO schedule endpoint; a duplicate machine-source identity would misrepresent provenance.",
+        "canonical_provenance_use_preserved": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+        "monitoring_role": "OFFICIAL_FAO_FFPI_AMIS_RELEASE_DATE_CHANGE_SENTINEL",
+        "route_schedule_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      }
     },
     {
       "source_id": "WSSRC-COM-011",
