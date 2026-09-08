@@ -25,6 +25,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # BV rerun after narrow historical P1-A descendant-compatibility repair.
           git fetch origin main
           test "$(git rev-parse origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
           test "$(git merge-base HEAD origin/main)" = "525d44f0e83c58efd6308900740c5677d962a9f4"
