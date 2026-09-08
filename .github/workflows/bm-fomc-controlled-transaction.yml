@@ -1,0 +1,185 @@
+name: BM FOMC controlled readiness transaction
+
+on:
+  push:
+    branches:
+      - feature/post-bl-pressure-audit-bm
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and unchanged governed pre-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          test "$(git merge-base HEAD origin/main)" = "1edd6ac0b540db60519fdccab5c404d42d8fc442"
+          python scripts/apply_fomc_monitor_readiness_bm.py
+          python scripts/repair_bl_source_ceiling_bm.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (c['version'],len(c['records'])) == ('0.41',689)
+          assert (s['version'],len(s['sources'])) == ('1.85',247)
+          assert (m['version'],len(m['adapters'])) == ('0.12',10)
+          src=next(x for x in s['sources'] if x['source_id']=='WSSRC-CB-001')
+          assert src['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert src['automated_retrieval_permission']=='PENDING_ENDPOINT_OPERATIONAL_REVIEW'
+          assert src['verification_mode']=='AUTOMATED_PILOT'
+          assert not any(x.get('source_id')=='WSSRC-CB-001' for x in m['adapters'])
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          PY
+      - name: Freeze protected-layer checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/monitor/expectations.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            > /tmp/bm-protected.before
+      - name: Apply bounded BM source and descendant-harness transforms
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORLD_SIGNALS_APPLY_MONITOR_BM=1 python scripts/apply_fomc_monitor_readiness_bm.py --apply
+          WORLD_SIGNALS_APPLY_MONITOR_BM=1 python scripts/repair_bl_source_ceiling_bm.py --apply
+      - name: Audit semantic narrowness and post-state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          pre=json.loads(subprocess.check_output(['git','show','HEAD:data/sources/registry.json'], text=True))
+          post=json.loads(Path('data/sources/registry.json').read_text())
+          assert (pre['version'],len(pre['sources'])) == ('1.85',247)
+          assert (post['version'],len(post['sources'])) == ('1.86',247)
+          pre_by={x['source_id']:x for x in pre['sources']}
+          post_by={x['source_id']:x for x in post['sources']}
+          assert set(pre_by)==set(post_by)
+          changed=[sid for sid in pre_by if pre_by[sid] != post_by[sid]]
+          assert changed == ['WSSRC-CB-001'], changed
+          src=post_by['WSSRC-CB-001']
+          assert src['canonical_dependency_count']==44
+          assert src['parser_version']=='fomc-schedule-readiness-0.2'
+          assert src['monitoring_readiness_status']=='PILOT_ADAPTER_LIVE_VALIDATED_PERMISSION_HOLD'
+          assert src['monitoring_activation_status']=='ENDPOINT_PERMISSION_HOLD_NO_PRODUCTION_ROUTE'
+          assert src['automated_monitoring_use']=='ENDPOINT_REVIEW_REQUIRED'
+          assert src['automated_retrieval_permission']=='PENDING_ENDPOINT_OPERATIONAL_REVIEW'
+          assert src['verification_mode']=='AUTOMATED_PILOT'
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          assert (monitor['version'],len(monitor['adapters'])) == ('0.12',10)
+          assert (canonical['version'],len(canonical['records'])) == ('0.41',689)
+          assert not any(x.get('source_id')=='WSSRC-CB-001' for x in monitor['adapters'])
+          assert monitor['automatic_canonical_commit'] is False
+          assert monitor['google_calendar_write'] is False
+          PY
+          python scripts/repair_bl_source_ceiling_bm.py
+      - name: Exercise first-party FOMC surfaces after materialisation
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from world_signals.adapters.fomc import fetch_fomc_meeting_calendar, fetch_fomc_operational_calendar, validate_fomc_schedule_alignment
+          meetings,ms=fetch_fomc_meeting_calendar(timeout=30,years=(2026,2027))
+          calendars=[]; snaps=[]
+          for ym in ((2026,9),(2026,10),(2026,12)):
+              c,s=fetch_fomc_operational_calendar(*ym,timeout=30)
+              calendars.append(c); snaps.append(s)
+          validate_fomc_schedule_alignment(meetings,calendars)
+          assert ms.status==200
+          assert [s.status for s in snaps]==[200,200,200]
+          print({'meeting_windows':len(meetings.windows),'operational_event_counts':[len(c.events) for c in calendars]})
+          PY
+      - name: Validate full repository and static build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest tests.test_fomc_adapter_bm tests.test_fomc_monitor_readiness_bm -v
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile src/world_signals/adapters/fomc.py scripts/apply_fomc_monitor_readiness_bm.py scripts/repair_bl_source_ceiling_bm.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+          rm -rf docs
+      - name: Verify protected layers stayed byte-identical
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            data/canonical/registry.json \
+            data/monitor/expectations.json \
+            data/changes/ledger.json \
+            data/coverage/biosecurity_overlay.json \
+            data/live_intelligence/observations.json \
+            data/live_intelligence/evidence_registry.json \
+            data/analysis/event_reviews.json \
+            data/analysis/evidence_registry.json \
+            > /tmp/bm-protected.after
+          diff -u /tmp/bm-protected.before /tmp/bm-protected.after
+      - name: Audit exact working-tree mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from subprocess import check_output
+          allowed={'data/sources/registry.json','tests/test_japan_household_spending_monitor_bl.py'}
+          tracked=set(check_output(['git','diff','--name-only'], text=True).splitlines())
+          untracked=set(check_output(['git','ls-files','--others','--exclude-standard'], text=True).splitlines())
+          changed=tracked|untracked
+          assert changed == allowed, (changed, allowed)
+          PY
+      - name: Self-remove transaction workflow and commit only approved files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git rm .github/workflows/bm-fomc-controlled-transaction.yml
+          python - <<'PY'
+          from subprocess import check_output
+          allowed={
+              'data/sources/registry.json',
+              'tests/test_japan_household_spending_monitor_bl.py',
+              '.github/workflows/bm-fomc-controlled-transaction.yml',
+          }
+          tracked=set(check_output(['git','diff','--name-only'], text=True).splitlines())
+          untracked=set(check_output(['git','ls-files','--others','--exclude-standard'], text=True).splitlines())
+          changed=tracked|untracked
+          assert changed == allowed, (changed, allowed)
+          PY
+          git add data/sources/registry.json tests/test_japan_household_spending_monitor_bl.py
+          git diff --cached --name-only
+          git commit -m "BM: materialise FOMC readiness truth repair"
+          git push origin HEAD:feature/post-bl-pressure-audit-bm
