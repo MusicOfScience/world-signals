@@ -63,14 +63,16 @@ jobs:
                   if tag.lower()=='a' and self.href is not None:
                       self.links.append((' '.join(''.join(self.text).split()),self.href)); self.href=None; self.text=[]
           p=P(); p.feed(html.decode('utf-8','replace'))
-          matches=[href for text,href in p.links if text.strip().lower()=='press releases']
-          assert len(matches)==1, matches
-          feed=urljoin(final,matches[0])
-          u=urlparse(feed)
-          assert u.scheme=='https'
-          assert u.netloc.lower() in {'rbi.org.in','www.rbi.org.in'}
-          assert u.path.lower()=='/pressreleases_rss.xml'
-          assert not u.query and not u.fragment
+          labelled=[href for text,href in p.links if text.strip().lower()=='press releases']
+          matches=[]
+          for href in labelled:
+              candidate=urljoin(final,href)
+              u=urlparse(candidate)
+              if (u.scheme=='https' and u.netloc.lower() in {'rbi.org.in','www.rbi.org.in'}
+                  and u.path.lower()=='/pressreleases_rss.xml' and not u.query and not u.fragment):
+                  matches.append(candidate)
+          assert len(matches)==1, {'labelled':labelled,'rss_matches':matches}
+          feed=matches[0]
 
           fstatus,fctype,ffinal,body=fetch(feed,'application/rss+xml,application/xml,text/xml')
           assert fstatus==200
