@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import unittest
 from urllib.parse import quote_plus
 from zoneinfo import ZoneInfo
@@ -32,7 +32,7 @@ def fixture(reference_period_es: str, release_date: str, *, time_value: str = "1
     hhmmss = time_value.replace(":", "")
     start = f"{compact}T{hhmmss}"
     start_dt = datetime.strptime(start, "%Y%m%dT%H%M%S")
-    end_dt = start_dt.replace(minute=start_dt.minute + 30)
+    end_dt = start_dt + timedelta(minutes=30)
     end = end_dt.strftime("%Y%m%dT%H%M%S")
     report = title(reference_period_es)
     encoded_report = report.replace("Í", "&#205;")
