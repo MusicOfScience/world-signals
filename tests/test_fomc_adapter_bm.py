@@ -59,6 +59,14 @@ OCTOBER_FIXTURE = """
 </body></html>
 """
 
+JANUARY_FIXTURE = """
+<html><body><h4>January 2027</h4>
+<h4>FOMC Meetings</h4><div>Time:</div><div>Release Date(s):</div>
+<div>2:00 p.m.</div><div>FOMC Minutes</div><div>Meeting of December 8-9</div><div>6</div>
+<h4>Beige Book</h4>
+</body></html>
+"""
+
 
 class FOMCAdapterBMTests(unittest.TestCase):
     def test_official_routes_timezone_and_series_are_frozen(self):
@@ -118,6 +126,16 @@ class FOMCAdapterBMTests(unittest.TestCase):
         self.assertEqual(by_kind["MINUTES"].related_meeting_end_date, "2026-09-16")
         self.assertEqual(by_kind["DECISION"].start_local, "2026-10-28T14:00:00")
         self.assertEqual(by_kind["PRESS_CONFERENCE"].start_local, "2026-10-28T14:30:00")
+
+    def test_january_minutes_roll_back_only_to_prior_december(self):
+        calendar = parse_fomc_operational_calendar_html(JANUARY_FIXTURE)
+        minute = next(row for row in calendar.events if row.event_kind == "MINUTES")
+        self.assertEqual(minute.start_local, "2027-01-06T14:00:00")
+        self.assertEqual(minute.related_meeting_start_date, "2026-12-08")
+        self.assertEqual(minute.related_meeting_end_date, "2026-12-09")
+        impossible = OCTOBER_FIXTURE.replace("Meeting of September 15-16", "Meeting of December 8-9")
+        with self.assertRaises(AdapterError):
+            parse_fomc_operational_calendar_html(impossible)
 
     def test_alignment_requires_distinct_decision_press_and_known_window(self):
         meetings = parse_fomc_meeting_calendar_html(MEETING_FIXTURE, years=(2026, 2027))
