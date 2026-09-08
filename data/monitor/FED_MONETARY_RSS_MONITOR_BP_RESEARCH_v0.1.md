@@ -80,7 +80,7 @@ Historical or otherwise out-of-scope publication items remain observations only.
 
 ## Lifecycle boundary
 
-A matching official RSS publication is strong evidence that the publication is available. BP nevertheless does **not** write `COMPLETED` automatically. Instead it creates a review candidate:
+A matching official RSS publication is strong evidence that the publication is available. For a tracked occurrence that is not already `COMPLETED`, BP nevertheless does **not** write `COMPLETED` automatically. Instead it creates a review candidate:
 
 `FED_FOMC_PUBLICATION_EVIDENCE_AVAILABLE`
 
@@ -89,6 +89,12 @@ with review state:
 `PENDING_AUTHORITATIVE_FOMC_PUBLICATION_REVIEW`.
 
 This keeps publication evidence and Canonical lifecycle mutation separate.
+
+Once an occurrence has already been manually reviewed and committed as `COMPLETED`, a matching publication becomes corroborating observation only:
+
+`FED_FOMC_RSS_COMPLETED_OCCURRENCE_PUBLICATION_PRESENT_NO_LIFECYCLE_ACTION`.
+
+That prevents the finite rolling feed from generating a fresh completion proposition on every daily run after lifecycle review. It does not infer completion itself and cannot reopen or otherwise change the reviewed lifecycle state.
 
 The finite rolling feed is not a schedule. Absence therefore has no cancellation, delay, completion, certainty or date semantics.
 
