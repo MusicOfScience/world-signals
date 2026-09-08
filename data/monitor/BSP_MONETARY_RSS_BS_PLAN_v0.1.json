@@ -1,0 +1,132 @@
+{
+  "tranche": "BS",
+  "reference_date": "2026-09-08",
+  "exact_base_main_sha": "22a5c0a922d3a126bf268acb61a68abe1bfe5075",
+  "purpose": "Activate a bounded official Bangko Sentral ng Pilipinas Media Releases RSS publication sentinel for the two remaining 2026 BSP monetary-policy stance decisions while preserving the separate HTML/PDF schedule-source endpoint hold and all Canonical timing/lifecycle semantics.",
+  "selection": {
+    "jurisdiction": "Philippines",
+    "region": "Southeast Asia",
+    "series_id": "WSER-REGJ-PH-BSP-MB",
+    "canonical_schedule_source_id": "WSSRC-REGJ-003",
+    "machine_source_id": "WSSRC-REGJ-006",
+    "adapter_id": "BSP_MONETARY_POLICY_RSS",
+    "rss_documentation_url": "https://www.bsp.gov.ph/SitePages/RSS.aspx",
+    "rss_url": "https://www.bsp.gov.ph/_layouts/15/listfeed.aspx?List=9b0a2117-49d8-4e96-80ba-8651a0e3e17a&View=8c968884-887d-4d63-8c00-ba05ea3c2d93",
+    "schedule_url": "https://www.bsp.gov.ph/Pages/PriceStability/ScheduleOfMeetingsOfTheAdvisoryCommitteeAndMonetaryBoardOnMonetaryPolicy.aspx",
+    "rights_url": "https://www.bsp.gov.ph/Pages/AboutTheBank/Terms-of-Use.aspx",
+    "source_timezone": "Asia/Manila"
+  },
+  "selection_pressure": {
+    "post_br_regional_monitor_audit_run_id": 34212793713,
+    "post_br_regional_monitor_audit_job_id": 102017467282,
+    "south_asia_canonical_occurrences": 29,
+    "south_asia_configured_monitor_routes": 0,
+    "southeast_asia_canonical_occurrences": 19,
+    "southeast_asia_configured_monitor_routes": 0,
+    "why_bsp_after_mospi_hold": "South Asia remained the larger structural gap, but MoSPI automation was not promoted because its robots path served an SPA shell, visible calendar surfaces diverged, and no documented release-calendar API was established. BSP was selected next because it publishes an explicit RSS machine interface whose documentation states that feeds fetch updates automatically and provide structured information for applications."
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.91",
+    "source_count": 249,
+    "monitor_expectations_version": "0.16",
+    "configured_monitor_adapter_count": 14,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "canonical_schedule_source_dependency_count": 2,
+    "canonical_schedule_source_automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "canonical_schedule_source_monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED"
+  },
+  "canonical_occurrence_ids": [
+    "WSO-REG-J-0008",
+    "WSO-REG-J-0009"
+  ],
+  "canonical_occurrences": [
+    {
+      "occurrence_id": "WSO-REG-J-0008",
+      "start_local": "2026-10-22",
+      "source_timezone": "Asia/Manila",
+      "time_precision": "DAY",
+      "timing_type": "CIVIL_DATE"
+    },
+    {
+      "occurrence_id": "WSO-REG-J-0009",
+      "start_local": "2026-12-17",
+      "source_timezone": "Asia/Manila",
+      "time_precision": "DAY",
+      "timing_type": "CIVIL_DATE"
+    }
+  ],
+  "legacy_schedule_source_governance_backfill": {
+    "canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+    "monitoring_activation_status": "HOLD_NO_LIVE_ROUTE",
+    "principle": "Backfill missing modern governance fields only. Do not reinterpret curated reuse permission as permission to automate the HTML/PDF schedule source."
+  },
+  "read_only_diagnostic": {
+    "successful_run_id": 34213769016,
+    "successful_job_id": 102020585149,
+    "rss_documentation_http_status": 200,
+    "rss_http_status": 200,
+    "rss_content_type": "text/xml; charset=utf-8",
+    "rss_item_count": 30,
+    "monetary_policy_keyword_item_count": 8,
+    "rss_sha256": "715c610524b3e7339e5f649cdb74536d11a06b056af6ed85716ab9843b78b013",
+    "historical_stance_example_title": "Monetary Board raises target RRP Rate by 25 basis points",
+    "historical_stance_example_publication_date": "2026-08-27",
+    "historical_stance_example_in_scope": false,
+    "request_count": 1,
+    "repository_read_only": true
+  },
+  "classification_contract": {
+    "positive_stance_publication": {
+      "title_prefix_case_insensitive": "Monetary Board ",
+      "required_body_phrase_case_insensitive": "At its monetary policy meeting today, the Monetary Board decided",
+      "match_to_canonical": "Convert RSS pubDate to Asia/Manila civil date and require exact equality with one configured Canonical occurrence date.",
+      "result": "REVIEW_CANDIDATE_ONLY"
+    },
+    "generic_monetary_policy_mentions": "OBSERVATION_OR_IGNORE_ONLY_NO_EVENT_INFERENCE",
+    "publication_outside_two_occurrence_scope": "HISTORICAL_OR_UNTRACKED_PUBLICATION_OBSERVATION_ONLY",
+    "feed_absence": "NO_SCHEDULE_LIFECYCLE_CERTAINTY_OR_CANCELLATION_SEMANTICS",
+    "duplicate_or_ambiguous_match": "FAIL_CLOSED_NO_GUESS"
+  },
+  "source_role_contract": {
+    "WSSRC-REGJ-003": "CANONICAL_FORWARD_SCHEDULE_AUTHORITY_CURATED_HTML_PDF_AUTOMATION_HOLD_REMAINS",
+    "WSSRC-REGJ-006": "OFFICIAL_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL_NO_FORWARD_SCHEDULE_AUTHORITY",
+    "rss_publication_time_is_event_time": false,
+    "rss_can_create_or_upgrade_canonical_clock": false,
+    "rss_can_change_canonical_schedule": false,
+    "rss_can_set_lifecycle_completed": false,
+    "rss_can_change_certainty": false,
+    "automatic_commit_allowed": false
+  },
+  "monitor_route": {
+    "cadence": "DAILY",
+    "request_budget_per_run": 1,
+    "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "positive_publication_policy": "REVIEW_ONLY",
+    "absence_policy": "NO_EVENT_STATE_INFERENCE",
+    "automatic_schedule_html_fetch_allowed": false,
+    "schedule_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "automatic_commit_allowed": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.92",
+    "source_count": 250,
+    "monitor_expectations_version": "0.17",
+    "configured_monitor_adapter_count": 15,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "live_intelligence_unchanged": true,
+    "analysis_unchanged": true,
+    "change_ledger_unchanged": true,
+    "biosecurity_overlay_unchanged": true
+  }
+}
