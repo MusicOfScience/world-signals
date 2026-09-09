@@ -101,7 +101,7 @@ def main() -> None:
             "Raw transport/body hash change alone is not legal-state evidence.",
             "The monitor must not automatically fetch the human page, parent publication, draft SI attachment, legislation.gov.uk, Parliament, search routes or other follow-ups."
         ],
-        "backup_source": null,
+        "backup_source": None,
         "notes": "Monitor-only machine identity. Existing WSSRC-MKT-012 remains Canonical policy/dependency authority.",
         "licence_constraints": "Open Government Licence v3.0 attribution/reuse conditions apply; third-party material remains excluded where identified.",
         "ingestion_permission": "BOUNDED_FIRST_PARTY_CONTENT_API_METADATA_AND_MINIMAL_SEMANTIC_STATE_ALLOWED",
@@ -115,7 +115,7 @@ def main() -> None:
         "rights_review_scope": "CC_FIRST_PARTY_CONTENT_API_AND_OGL_REVIEW",
         "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
         "monitoring_readiness_status": "LIVE_VALIDATED_FIRST_PARTY_CONTENT_API_NO_AUTO_COMMIT",
-        "canonical_dependency_count": 1,
+        "canonical_dependency_count": 0,
         "monitoring_readiness_assessed_at": "2026-09-09",
         "monitoring_activation_status": "LIVE_READ_ONLY_DEPENDENCY_SENTINEL_NO_AUTO_COMMIT",
         "canonical_provenance_use": "MONITOR_ONLY_NOT_CANONICAL_AUTHORITY",

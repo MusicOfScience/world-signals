@@ -53,6 +53,7 @@ from world_signals.adapters import (
     parse_cellar_legal_relation_diagnostics,
 )
 
+from world_signals.adapters.hmt_t1_content_api import fetch_hmt_t1_content_api
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy
 from world_signals.rba_mpb_monitor import fetch_rba_robots_policy, rba_schedule_path_disallowed
 
@@ -84,6 +85,27 @@ def main() -> int:
     }
     failures=[]
 
+
+    try:
+        hmt_state,hmt_snap=fetch_hmt_t1_content_api()
+        report["results"].append({
+            "adapter":"HMT_T1_CONTENT_API",
+            "status":"PASS",
+            "source_id":"WSSRC-MKT-014",
+            "snapshot":hmt_snap.as_dict(),
+            "content_id":hmt_state.content_id,
+            "public_updated_at":hmt_state.public_updated_at,
+            "withdrawn":hmt_state.withdrawn,
+            "pending_markers":hmt_state.pending_markers,
+            "semantic_sha256":hmt_state.semantic_sha256,
+            "request_budget_per_run":1,
+            "followup_request_count":0,
+            "condition_state_authority":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({"adapter":"HMT_T1_CONTENT_API","status":"FAIL","source_id":"WSSRC-MKT-014","error":str(exc),"canonical_action":"NONE"})
 
     try:
         sarb_items,sarb_snap=fetch_sarb_publications_rss()
