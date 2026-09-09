@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - feature/post-cg-state-truth-ch
-    paths:
-      - '.github/workflows/ch-state-truth-preflight.yml'
 
 permissions:
   contents: read
@@ -87,6 +85,7 @@ jobs:
               'data/status/current_state.json',
               'data/status/POST_CG_STATE_TRUTH_CH_AUDIT_v0.1.md',
               'scripts/project_state_snapshot.py',
+              'scripts/apply_analysis_revision_contract_ba.py',
               'tests/test_project_state_snapshot_ch.py',
           }
           changed = set(subprocess.check_output(
