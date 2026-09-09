@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact base and perform bounded Consilium probe
+      - name: Verify exact base and probe advertised Consilium RSS
         shell: bash
         run: |
           set -euo pipefail
@@ -30,13 +30,11 @@ jobs:
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
           python - <<'PY'
-          import hashlib, html, json, re, urllib.request, urllib.robotparser
-          from html.parser import HTMLParser
+          import hashlib, json, re, urllib.request, xml.etree.ElementTree as ET
           from pathlib import Path
 
           SOURCE_ID='WSSRC-INT-003'
-          ROBOTS='https://www.consilium.europa.eu/robots.txt'
-          CAL='https://www.consilium.europa.eu/en/meetings/calendar/?Entity=122132'
+          FEED='https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=euco'
           UA='WORLD-SIGNALS-read-only-monitor/0.1'
 
           C=json.loads(Path('data/canonical/registry.json').read_text())
@@ -45,54 +43,61 @@ jobs:
           assert len(src)==1
           deps=[r for r in C['records'] if r.get('source_id')==SOURCE_ID]
           assert len(deps)==src[0]['canonical_dependency_count']==3
-          print('SOURCE',json.dumps({k:src[0].get(k) for k in ('source_id','institution','authoritative_url','automated_monitoring_use','automated_retrieval_permission','monitoring_readiness_status','runtime_health_state','canonical_dependency_count')},sort_keys=True))
-          print('CANONICAL',json.dumps([{k:r.get(k) for k in ('occurrence_id','canonical_name','start_local','end_local','source_timezone','timing_type','time_precision','lifecycle_status','certainty_status','series_id')} for r in deps],sort_keys=True))
+          expected={r['occurrence_id']:(r.get('start_local'),r.get('end_local'),r.get('canonical_name')) for r in deps}
+          assert expected=={
+              'WSO-INT-B-0102':('2026-10-15','2026-10-16','European Council'),
+              'WSO-INT-B-0103':('2026-11-13',None,'Informal meeting of EU heads of state or government'),
+              'WSO-INT-B-0104':('2026-12-17','2026-12-18','European Council'),
+          }
+          for r in deps:
+              assert r['source_timezone']=='Europe/Brussels'
+              assert r['time_precision']=='DAY'
+              assert r['lifecycle_status']=='PLANNED'
+              assert r['certainty_status']=='CONFIRMED'
+          assert deps[0]['timing_type']=='MULTI_DAY_LOCAL'
+          assert deps[1]['timing_type']=='CIVIL_DATE'
+          assert deps[2]['timing_type']=='MULTI_DAY_LOCAL'
 
-          requests=[]
-          def get(url,accept):
-              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
-              with urllib.request.urlopen(req,timeout=25) as resp:
-                  body=resp.read()
-                  meta={'url':url,'status':resp.status,'content_type':resp.headers.get('Content-Type'),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest(),'final_url':resp.geturl()}
-                  requests.append(meta); print('FETCH',json.dumps(meta,sort_keys=True)); return resp.headers,body
+          req=urllib.request.Request(FEED,headers={'User-Agent':UA,'Accept':'application/rss+xml,application/xml,text/xml,*/*;q=0.1'})
+          with urllib.request.urlopen(req,timeout=25) as resp:
+              body=resp.read()
+              meta={'url':FEED,'status':resp.status,'content_type':resp.headers.get('Content-Type'),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest(),'final_url':resp.geturl()}
+          print('FETCH',json.dumps(meta,sort_keys=True))
+          assert meta['status']==200
+          assert len(body)>500
+          low=body[:1000].lower()
+          assert b'<html' not in low and b'<!doctype' not in low
+          root=ET.fromstring(body)
+          assert root.tag.lower().endswith('rss')
+          channel=root.find('channel'); assert channel is not None
+          items=channel.findall('item'); assert items
+          rows=[]
+          for item in items:
+              row={tag:(item.findtext(tag) or '').strip() for tag in ('title','link','description','pubDate','guid')}
+              rows.append(row)
+          for row in rows:
+              assert row['title'] and row['link']
+              assert row['link'].startswith('https://www.consilium.europa.eu/')
+          print('CHANNEL',json.dumps({'title':channel.findtext('title'),'description':channel.findtext('description'),'item_count':len(rows)},sort_keys=True))
+          print('ITEMS',json.dumps(rows,ensure_ascii=False,sort_keys=True))
 
-          rh,rb=get(ROBOTS,'text/plain,*/*;q=0.1')
-          assert requests[-1]['status']==200
-          txt=rb.decode('utf-8','replace')
-          assert '<html' not in txt.lower() and '<!doctype' not in txt.lower()
-          assert any(line.lstrip().lower().startswith('user-agent:') for line in txt.splitlines())
-          rp=urllib.robotparser.RobotFileParser(); rp.set_url(ROBOTS); rp.parse(txt.splitlines())
-          policy={'allowed':rp.can_fetch(UA,CAL),'crawl_delay':rp.crawl_delay(UA) or rp.crawl_delay('*') or 0,'lines':len(txt.splitlines())}
-          print('ROBOTS_POLICY',json.dumps(policy,sort_keys=True))
-          assert policy['allowed'] is True
-
-          ch,cb=get(CAL,'text/html,*/*;q=0.1')
-          assert len(requests)==2
-          assert 'html' in (ch.get('Content-Type') or '').lower()
-          assert len(cb)>10000
-          raw=cb.decode('utf-8','replace'); low=raw.lower()
-          for marker in ('request rejected','access denied','captcha','cf-chl-'):
-              assert marker not in low,marker
-
-          class Visible(HTMLParser):
-              def __init__(self): super().__init__(); self.skip=0; self.parts=[]
-              def handle_starttag(self,tag,attrs):
-                  if tag in ('script','style','noscript'): self.skip+=1
-              def handle_endtag(self,tag):
-                  if tag in ('script','style','noscript') and self.skip: self.skip-=1
-              def handle_data(self,data):
-                  if not self.skip: self.parts.append(data)
-          p=Visible(); p.feed(raw); visible=' '.join(html.unescape(' '.join(p.parts)).split())
-          assert 'Meeting calendar' in visible
-          assert 'constantly updated' in visible.lower()
-          expected_text=(
-              'European Council, 15-16 October 2026',
-              'Informal meeting of heads of state or government',
-              'European Council, 17-18 December 2026',
-          )
-          for item in expected_text: assert item.lower() in visible.lower(),item
-          assert re.search(r'13\s+November\s+2026',visible,re.I)
-          result={'configured_canonical_occurrences':3,'calendar_markers':list(expected_text),'requests':2,'followups':0,'calendar_change_review_only':True,'clock_inference':False,'lifecycle_authority':False,'certainty_authority':False,'canonical_mutation':False}
-          print('SEMANTICS',json.dumps(result,sort_keys=True))
-          print('REQUESTS',json.dumps(requests,sort_keys=True))
+          corpus=' '.join(' '.join((r['title'],r['description'],r['link'])) for r in rows)
+          checks={
+              'october_euco':bool(re.search(r'15(?:-|\s|&ndash;|–)16\s+October\s+2026|15\s+October\s+2026',corpus,re.I)),
+              'november_informal':bool(re.search(r'13\s+November\s+2026',corpus,re.I) and re.search(r'Informal meeting of (?:EU )?heads of state or government',corpus,re.I)),
+              'december_euco':bool(re.search(r'17(?:-|\s|&ndash;|–)18\s+December\s+2026|17\s+December\s+2026',corpus,re.I)),
+          }
+          print('SEMANTIC_CHECKS',json.dumps(checks,sort_keys=True))
+          print('GOVERNANCE',json.dumps({
+              'network_requests':1,
+              'direct_calendar_html_requests':0,
+              'feed_is_explicitly_advertised_machine_interface':True,
+              'candidate_source_role':'SEPARATE_MONITOR_INTERFACE_PENDING_CONTRACT_REVIEW',
+              'canonical_source_unchanged':SOURCE_ID,
+              'absence_semantics':'NONE_UNTIL_FEED_COMPLETENESS_ESTABLISHED',
+              'clock_inference':False,
+              'lifecycle_authority':False,
+              'certainty_authority':False,
+              'canonical_mutation':False,
+          },sort_keys=True))
           PY
