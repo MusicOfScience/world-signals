@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact post-BY base and compute pressure audit
+      - name: Verify exact post-BY base and compute source-aware pressure audit
         shell: bash
         run: |
           set -euo pipefail
@@ -35,124 +35,77 @@ jobs:
           from collections import Counter,defaultdict
           from pathlib import Path
 
-          canonical=json.loads(Path('data/canonical/registry.json').read_text())
-          sources=json.loads(Path('data/sources/registry.json').read_text())
-          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          C=json.loads(Path('data/canonical/registry.json').read_text())
+          S=json.loads(Path('data/sources/registry.json').read_text())
+          M=json.loads(Path('data/monitor/expectations.json').read_text())
+          records=C['records']; sources=S['sources']; adapters=M['adapters']
 
-          records=canonical.get('records',[])
-          srcs=sources.get('sources',[])
-          adapters=monitor.get('adapters',[])
-
-          def find_tokens(obj,prefix):
-              out=set()
-              if isinstance(obj,str):
-                  if obj.startswith(prefix): out.add(obj)
-              elif isinstance(obj,list):
-                  for x in obj: out |= find_tokens(x,prefix)
-              elif isinstance(obj,dict):
-                  for x in obj.values(): out |= find_tokens(x,prefix)
-              return out
-
-          configured_ids=set()
-          routed_sources=set()
-          for a in adapters:
-              configured_ids |= find_tokens(a,'WSO-')
-              routed_sources |= find_tokens(a,'WSSRC-')
-
-          def rid(r):
-              for k in ('occurrence_id','record_id','id'):
-                  if isinstance(r.get(k),str) and r[k].startswith('WSO-'): return r[k]
-              toks=find_tokens(r,'WSO-')
-              return sorted(toks)[0] if toks else None
-
-          def scalar(r,*keys,default='UNKNOWN'):
-              for k in keys:
-                  v=r.get(k)
-                  if isinstance(v,str) and v: return v
-              return default
-
-          rows=[]
+          configured={oid for a in adapters for oid in a.get('canonical_occurrence_ids',[]) if isinstance(oid,str)}
+          routed={a.get('source_id') for a in adapters if isinstance(a.get('source_id'),str)}
+          by_source=defaultdict(list)
           for r in records:
-              oid=rid(r)
-              rows.append({
-                  'id':oid,
-                  'region':scalar(r,'region','geography_region','world_region'),
-                  'category':scalar(r,'category','event_category','domain'),
-                  'lifecycle':scalar(r,'lifecycle','lifecycle_state'),
-                  'certainty':scalar(r,'certainty','certainty_state'),
-                  'source_ids':sorted(find_tokens(r,'WSSRC-')),
-                  'monitored': oid in configured_ids if oid else False,
+              sid=r.get('source_id')
+              if isinstance(sid,str): by_source[sid].append(r)
+
+          def cov(key):
+              buckets=defaultdict(lambda:[0,0])
+              for r in records:
+                  k=r.get(key) or 'UNKNOWN'; buckets[k][0]+=1
+                  if r.get('occurrence_id') in configured: buckets[k][1]+=1
+              return [{'key':k,'total':v[0],'monitored':v[1],'coverage_pct':round(100*v[1]/v[0],1)} for k,v in sorted(buckets.items(),key=lambda kv:(kv[1][1]/kv[1][0],-kv[1][0],kv[0]))]
+
+          candidates=[]
+          for s in sources:
+              sid=s.get('source_id'); deps=s.get('canonical_dependency_count',0)
+              if not isinstance(deps,int) or deps<=0 or sid in routed: continue
+              rs=by_source.get(sid,[])
+              candidates.append({
+                'source_id':sid,
+                'institution':s.get('institution'),
+                'jurisdiction':s.get('jurisdiction'),
+                'domain':s.get('domain'),
+                'endpoint_role':s.get('endpoint_role'),
+                'authoritative_url':s.get('authoritative_url'),
+                'machine_readable_available':s.get('machine_readable_available'),
+                'canonical_dependency_count':deps,
+                'derived_record_count':len(rs),
+                'regions':dict(Counter((r.get('region') or 'UNKNOWN') for r in rs)),
+                'categories':dict(Counter((r.get('category') or 'UNKNOWN') for r in rs)),
+                'lifecycles':dict(Counter((r.get('lifecycle_status') or 'UNKNOWN') for r in rs)),
+                'certainty':dict(Counter((r.get('certainty_status') or 'UNKNOWN') for r in rs)),
+                'monitoring_priority_score':s.get('monitoring_priority_score'),
+                'automated_monitoring_use':s.get('automated_monitoring_use'),
+                'automated_retrieval_permission':s.get('automated_retrieval_permission'),
+                'monitoring_readiness_status':s.get('monitoring_readiness_status'),
+                'monitoring_activation_status':s.get('monitoring_activation_status'),
+                'verification_mode':s.get('verification_mode'),
+                'runtime_health_state':s.get('runtime_health_state'),
+                'parser_type':s.get('parser_type'),
+                'parser_version':s.get('parser_version'),
+                'rights_summary':s.get('rights_summary'),
+                'automation_summary':s.get('automation_summary'),
+                'known_limitations':s.get('known_limitations'),
+                'monitor_endpoints':s.get('monitor_endpoints'),
               })
 
-          by_region=defaultdict(lambda:[0,0])
-          by_category=defaultdict(lambda:[0,0])
-          by_region_category=defaultdict(lambda:[0,0])
-          for x in rows:
-              by_region[x['region']][0]+=1; by_category[x['category']][0]+=1; by_region_category[(x['region'],x['category'])][0]+=1
-              if x['monitored']:
-                  by_region[x['region']][1]+=1; by_category[x['category']][1]+=1; by_region_category[(x['region'],x['category'])][1]+=1
-
-          readiness=Counter()
-          activation=Counter()
-          auto_use=Counter()
-          unrouted=[]
-          for s in srcs:
-              sid=s.get('source_id')
-              readiness[str(s.get('monitoring_readiness_status','UNKNOWN'))]+=1
-              activation[str(s.get('monitoring_activation_status','UNKNOWN'))]+=1
-              auto_use[str(s.get('automated_monitoring_use','UNKNOWN'))]+=1
-              dep=s.get('canonical_dependency_count',0)
-              if isinstance(dep,int) and dep>0 and sid not in routed_sources:
-                  unrouted.append({
-                      'source_id':sid,
-                      'name':s.get('name') or s.get('source_name') or s.get('publisher'),
-                      'deps':dep,
-                      'auto_use':s.get('automated_monitoring_use'),
-                      'retrieval':s.get('automated_retrieval_permission'),
-                      'readiness':s.get('monitoring_readiness_status'),
-                      'activation':s.get('monitoring_activation_status'),
-                      'verification':s.get('verification_mode'),
-                      'region':s.get('region'),
-                      'category':s.get('category'),
-                  })
-
-          def table(countermap):
-              return [
-                  {'key':k,'total':v[0],'monitored':v[1],'coverage_pct':round(100*v[1]/v[0],1) if v[0] else 0}
-                  for k,v in sorted(countermap.items(), key=lambda kv:(kv[1][1]/kv[1][0] if kv[1][0] else 0, -kv[1][0], str(kv[0])))
-              ]
-
           payload={
-              'exact_base':'3ccb20539c10d0965de84efa298ba75634c19249',
-              'canonical_version':canonical.get('version'),
-              'canonical_count':len(records),
-              'sources_version':sources.get('version'),
-              'sources_count':len(srcs),
-              'monitor_version':monitor.get('version'),
-              'adapter_count':len(adapters),
-              'configured_occurrence_id_count':len(configured_ids),
-              'routed_source_id_count':len(routed_sources),
-              'record_keys':sorted(records[0].keys()) if records else [],
-              'source_keys':sorted(srcs[0].keys()) if srcs else [],
-              'adapter_keys':sorted(adapters[0].keys()) if adapters else [],
-              'coverage_by_region':table(by_region),
-              'coverage_by_category':table(by_category),
-              'coverage_by_region_category':[
-                  {'region':k[0],'category':k[1],'total':v[0],'monitored':v[1],'coverage_pct':round(100*v[1]/v[0],1) if v[0] else 0}
-                  for k,v in sorted(by_region_category.items(), key=lambda kv:(kv[1][1]/kv[1][0] if kv[1][0] else 0,-kv[1][0],str(kv[0])))
-              ],
-              'source_readiness_counts':dict(readiness),
-              'source_activation_counts':dict(activation),
-              'source_automated_use_counts':dict(auto_use),
-              'unrouted_sources_with_dependencies':sorted(unrouted,key=lambda x:(-x['deps'],str(x['source_id']))),
-              'automatic_canonical_commit':monitor.get('automatic_canonical_commit'),
-              'google_calendar_write':monitor.get('google_calendar_write'),
+            'exact_base':'3ccb20539c10d0965de84efa298ba75634c19249',
+            'canonical':{'version':C.get('version'),'count':len(records)},
+            'sources':{'version':S.get('version'),'count':len(sources)},
+            'monitor':{'version':M.get('version'),'count':len(adapters),'automatic_canonical_commit':M.get('automatic_canonical_commit'),'google_calendar_write':M.get('google_calendar_write')},
+            'configured_occurrence_count':len(configured),
+            'coverage_by_region':cov('region'),
+            'coverage_by_category':cov('category'),
+            'configured_routes':[{'adapter_id':a.get('adapter_id'),'source_id':a.get('source_id'),'occurrences':len(a.get('canonical_occurrence_ids',[])),'monitor_role':a.get('monitor_role')} for a in adapters],
+            'unrouted_sources_with_dependencies':sorted(candidates,key=lambda x:(-x['canonical_dependency_count'],x['source_id'] or '')),
           }
-          Path('artifacts/bz-pressure-audit.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
-          print(json.dumps({k:payload[k] for k in ('canonical_version','canonical_count','sources_version','sources_count','monitor_version','adapter_count','configured_occurrence_id_count','routed_source_id_count','automatic_canonical_commit','google_calendar_write')},indent=2))
+          Path('artifacts/bz-source-aware-pressure-audit.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
+          print('candidate_count',len(candidates))
+          for x in payload['coverage_by_category'][:8]: print('CATEGORY',x)
+          for x in payload['coverage_by_region'][:5]: print('REGION',x)
           PY
       - uses: actions/upload-artifact@v6
         with:
-          name: bz-pressure-audit
-          path: artifacts/bz-pressure-audit.json
+          name: bz-source-aware-pressure-audit
+          path: artifacts/bz-source-aware-pressure-audit.json
           if-no-files-found: error
