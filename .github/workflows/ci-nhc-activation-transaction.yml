@@ -2,8 +2,10 @@ name: CI NHC activation transaction
 
 on:
   push:
-    branches: [feature/post-ch-nhc-monitor-activation-ci]
-    paths: ['.github/workflows/ci-nhc-activation-transaction.yml']
+    branches:
+      - feature/post-ch-nhc-monitor-activation-ci
+    paths:
+      - '.github/workflows/ci-nhc-activation-transaction.yml'
   workflow_dispatch:
 
 permissions:
@@ -24,6 +26,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: feature/post-ch-nhc-monitor-activation-ci
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
@@ -49,154 +52,22 @@ jobs:
           x=json.loads(Path('data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json').read_text())
           assert x['readiness_verdict']=='PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT'
           assert (x['definition']['start_month_day'],x['definition']['end_month_day'])==('06-01','11-30')
-          assert x['review_candidate_count']==0 and all(x['robots_path_access'].values())
-          assert x['climatology_snapshot']['status']==200 and x['atlantic_outlook_rss_snapshot']['status']==200
+          assert x['review_candidate_count']==0
+          assert all(x['robots_path_access'].values())
+          assert x['climatology_snapshot']['status']==200
+          assert x['atlantic_outlook_rss_snapshot']['status']==200
           req=Request('https://www.weather.gov/disclaimer/',headers={'User-Agent':'WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)'})
           with urlopen(req,timeout=30) as r:
-              body=r.read().decode('utf-8','replace').lower(); status=r.status
+              body=r.read().decode('utf-8','replace').lower()
+              status=r.status
           assert status==200 and 'public domain' in body
           assert 'appropriate use' in body or 'appropriate-use' in body
           print('CI_NHC_LIVE_PREFLIGHT_PASS')
           PY
           cp /tmp/nhc-readiness-before.json data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json
 
-      - name: Repair historical descendant assertions narrowly
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-
-          def replace_once(path, old, new):
-              p=Path(path); text=p.read_text(encoding='utf-8')
-              if text.count(old)!=1:
-                  raise SystemExit(f'{path}: expected exactly one repair marker, found {text.count(old)}')
-              p.write_text(text.replace(old,new,1),encoding='utf-8')
-
-          replace_once(
-              'scripts/apply_barmm_pre_election_live_cg.py',
-              '''    require(sources.get("version") == pre["source_registry_version"], "CG Source Registry version drift")
-    require(len(sources.get("sources", [])) == pre["source_count"], "CG Source population drift")
-    require(expectations.get("version") == pre["monitor_expectations_version"], "CG Monitor expectations drift")
-    require(len(expectations.get("adapters", [])) == pre["monitor_adapter_count"], "CG Monitor adapter count drift")
-''',
-              '''    version_tuple = lambda value: tuple(int(part) for part in str(value).split("."))
-    require(version_tuple(sources.get("version")) >= version_tuple(pre["source_registry_version"]), "CG Source Registry regressed below historical checkpoint")
-    require(len(sources.get("sources", [])) >= pre["source_count"], "CG Source population regressed below historical checkpoint")
-    require(version_tuple(expectations.get("version")) >= version_tuple(pre["monitor_expectations_version"]), "CG Monitor expectations regressed below historical checkpoint")
-    require(len(expectations.get("adapters", [])) >= pre["monitor_adapter_count"], "CG Monitor adapter population regressed below historical checkpoint")
-    require(expectations.get("automatic_canonical_commit") is False, "CG descendant opened automatic Canonical commit")
-    require(expectations.get("google_calendar_write") is False, "CG descendant opened Google Calendar write")
-''')
-
-          replace_once(
-              'tests/test_bwc_wg8_first_analysis_revision_cd.py',
-              '''                if path.startswith("data/live_intelligence/"):
-                    continue
-''',
-              '''                if path.startswith("data/live_intelligence/") or path in {"data/sources/registry.json", "data/monitor/expectations.json"}:
-                    continue
-''')
-          replace_once(
-              'tests/test_bwc_wg8_first_analysis_revision_cd.py',
-              '''            live_schema = load(apply_cd.LIVE_SCHEMA_PATH)
-            live_evidence = load(apply_cd.LIVE_EVIDENCE_PATH)
-''',
-              '''            source_registry = load(ROOT / "data/sources/registry.json")
-            monitor = load(ROOT / "data/monitor/expectations.json")
-            self.assertGreaterEqual(tuple(map(int, source_registry["version"].split("."))), tuple(map(int, self.plan["target_state"]["source_registry_version"].split("."))))
-            self.assertGreaterEqual(len(source_registry["sources"]), self.plan["target_state"]["source_count"])
-            self.assertGreaterEqual(tuple(map(int, monitor["version"].split("."))), tuple(map(int, self.plan["target_state"]["monitor_version"].split("."))))
-            self.assertGreaterEqual(len(monitor["adapters"]), self.plan["target_state"]["monitor_adapter_count"])
-            self.assertFalse(monitor["automatic_canonical_commit"])
-            self.assertFalse(monitor["google_calendar_write"])
-            live_schema = load(apply_cd.LIVE_SCHEMA_PATH)
-            live_evidence = load(apply_cd.LIVE_EVIDENCE_PATH)
-''')
-
-          replace_once(
-              'tests/test_hmt_t1_content_api_activation_cc.py',
-              '''        self.assertEqual((sources["version"], len(sources["sources"])), ("2.02", 257))
-        self.assertEqual((monitor["version"], len(monitor["adapters"])), ("0.27", 25))
-''',
-              '''        self.assertGreaterEqual(tuple(map(int, sources["version"].split("."))), (2, 2))
-        self.assertGreaterEqual(len(sources["sources"]), 257)
-        self.assertGreaterEqual(tuple(map(int, monitor["version"].split("."))), (0, 27))
-        self.assertGreaterEqual(len(monitor["adapters"]), 25)
-''')
-
-          replace_once('tests/test_opec_official_confirmation_bg.py','import copy\n','import copy\nimport json\n')
-          replace_once(
-              'tests/test_opec_official_confirmation_bg.py',
-              '''            self.assertIn("Source Registry: **v2.02 / 257 sources**", status_source)
-''',
-              '''            current_state = json.loads((ROOT / "data/status/current_state.json").read_text(encoding="utf-8"))
-            current_sources = current_state["sources"]
-            self.assertIn(f"Source Registry: **v{current_sources['registry_version']} / {current_sources['source_count']} sources**", status_source)
-''')
-
-          ch=Path('tests/test_project_state_snapshot_ch.py')
-          text=ch.read_text(encoding='utf-8')
-          start=text.index('    def test_current_governed_counts_are_not_stale(self):\n')
-          end=text.index('    def test_all_write_and_public_projection_gates_remain_closed(self):\n')
-          replacement='''    def test_governed_state_is_at_least_ch_checkpoint(self):
-        vt = lambda value: tuple(int(part) for part in str(value).split("."))
-        self.assertGreaterEqual(vt(self.derived["canonical"]["registry_version"]), (0, 41))
-        self.assertGreaterEqual(self.derived["canonical"]["occurrence_count"], 689)
-        self.assertGreaterEqual(vt(self.derived["canonical"]["schema_version"]), (0, 52))
-        self.assertGreaterEqual(vt(self.derived["sources"]["registry_version"]), (2, 2))
-        self.assertGreaterEqual(self.derived["sources"]["source_count"], 257)
-        self.assertGreaterEqual(vt(self.derived["change_ledger"]["version"]), (0, 27))
-        self.assertGreaterEqual(self.derived["change_ledger"]["entry_count"], 62)
-        self.assertGreaterEqual(vt(self.derived["monitor"]["expectations_version"]), (0, 27))
-        self.assertGreaterEqual(self.derived["monitor"]["configured_adapter_count"], 25)
-        self.assertGreaterEqual(self.derived["monitor"]["unique_monitor_source_count"], 24)
-        self.assertGreaterEqual(self.derived["monitor"]["explicit_scoped_occurrence_count"], 215)
-        self.assertGreaterEqual(vt(self.derived["live_intelligence"]["schema_version"]), (0, 7))
-        self.assertGreaterEqual(self.derived["live_intelligence"]["observation_count"], 7)
-        self.assertGreaterEqual(self.derived["live_intelligence"]["evidence_count"], 10)
-        self.assertGreaterEqual(self.derived["live_intelligence"]["canonical_linked_observation_count"], 2)
-        self.assertGreaterEqual(vt(self.derived["analysis"]["schema_version"]), (0, 8))
-        self.assertGreaterEqual(self.derived["analysis"]["review_count"], 22)
-        self.assertGreaterEqual(self.derived["analysis"]["evidence_count"], 97)
-        self.assertGreaterEqual(self.derived["analysis"]["production_live_input_count"], 1)
-        self.assertGreaterEqual(self.derived["analysis"]["production_revision_count"], 1)
-
-    def test_nhc_pilot_history_allows_only_reviewed_bounded_registration(self):
-        nhc = self.derived["monitor"]["nhc_atlantic_pilot"]
-        self.assertEqual(nhc["readiness_verdict"], "PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT")
-        self.assertEqual(nhc["source_id"], "WSSRC-RISK-002")
-        self.assertEqual(set(nhc["canonical_occurrence_ids"]), {"WSO-COM-A-0049", "WSO-COM-A-0050"})
-        if not nhc["registered_in_expectations"]:
-            return
-        expectations = json.loads((ROOT / "data/monitor/expectations.json").read_text(encoding="utf-8"))
-        routes = [row for row in expectations["adapters"] if row.get("adapter_id") == "NHC_ATLANTIC_SEASON"]
-        self.assertEqual(len(routes), 1)
-        route = routes[0]
-        self.assertEqual(route["source_id"], "WSSRC-RISK-002")
-        self.assertEqual(route["canonical_occurrence_ids"], ["WSO-COM-A-0049", "WSO-COM-A-0050"])
-        self.assertEqual(route["cadence"], "DAILY")
-        self.assertEqual(route["endpoint"]["request_budget_per_run"], 2)
-        self.assertEqual(route["baseline"]["start_month_day"], "06-01")
-        self.assertEqual(route["baseline"]["end_month_day"], "11-30")
-        for gate in (
-            "schedule_authority", "lifecycle_authority", "certainty_authority",
-            "canonical_date_mutation_allowed", "automatic_new_occurrence_creation_allowed",
-            "automatic_live_or_analysis_promotion_allowed", "automatic_commit_allowed",
-        ):
-            self.assertFalse(route[gate], gate)
-        sources = json.loads((ROOT / "data/sources/registry.json").read_text(encoding="utf-8"))
-        source = [row for row in sources["sources"] if row.get("source_id") == "WSSRC-RISK-002"]
-        self.assertEqual(len(source), 1)
-        self.assertEqual(source[0]["automated_monitoring_use"], "CLEARED")
-        self.assertEqual(source[0]["monitoring_readiness_status"], "PILOT_VALIDATED_NO_AUTO_COMMIT")
-        self.assertIn("READ_ONLY_SENTINEL_ONLY", source[0]["automated_monitoring_scope"])
-
-'''
-          text=text[:start]+replacement+text[end:]
-          ch.write_text(text,encoding='utf-8')
-          print('CI_DESCENDANT_REPAIR_PREPARED')
-          PY
+      - name: Prepare narrow descendant repairs
+        run: python scripts/repair_monitor_descendants_ci_tmp.py
 
       - name: Validate descendant repairs on exact prestate
         shell: bash
@@ -260,54 +131,50 @@ jobs:
           r=json.loads(Path('artifacts/live-monitor.json').read_text())
           h=[x for x in r['source_health'] if x.get('adapter_id')=='NHC_ATLANTIC_SEASON']
           assert len(h)==1 and h[0]['state']=='HEALTHY', h
-          assert h[0]['request_budget_per_run']==2 and h[0]['rss_has_season_date_authority'] is False
+          assert h[0]['request_budget_per_run']==2
+          assert h[0]['rss_has_season_date_authority'] is False
           assert r['canonical_unchanged'] is True
           assert r['source_health_summary']['all_expected_adapters_observed'] is True
           print('CI_NHC_RUNTIME_PASS')
           PY
 
-      - name: Audit protected layers bounded diff and commit materialised state
+      - name: Audit protected layers and bounded diff
         shell: bash
         run: |
           set -euo pipefail
           rm -rf docs site artifacts review_candidates/live
           cp /tmp/nhc-readiness-before.json data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json
-          protected=(data/canonical/registry.json data/canonical/schema.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json OPEC_QUARANTINE.md tests/test_opec_quarantine_cf.py)
+          protected=(
+            data/canonical/registry.json
+            data/canonical/schema.json
+            data/changes/ledger.json
+            data/coverage/biosecurity_overlay.json
+            data/monitor/operations_policy.json
+            data/live_intelligence/schema.json
+            data/live_intelligence/observations.json
+            data/live_intelligence/evidence_registry.json
+            data/analysis/schema.json
+            data/analysis/event_reviews.json
+            data/analysis/evidence_registry.json
+            OPEC_QUARANTINE.md
+            tests/test_opec_quarantine_cf.py
+          )
           for path in "${protected[@]}"; do
-            test "$(git rev-parse origin/main:$path)" = "$(git hash-object "$path")" || { echo "protected path changed: $path" >&2; exit 1; }
+            test "$(git rev-parse origin/main:$path)" = "$(git hash-object "$path")" || {
+              echo "protected path changed: $path" >&2
+              exit 1
+            }
           done
-          cat > data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md <<EOF
-          # WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
-
-          - exact merged CH base: \`c4f359c2c70f023c32990f20234aaf154dced152\`
-          - GitHub Actions successful transaction run: \`${GITHUB_RUN_ID}\`
-          - executed at UTC: \`$(date -u +%Y-%m-%dT%H:%M:%SZ)\`
-          - failed attempt 1 / run \`34407375556\`: preflight script import-path harness failure before network access or write gate; no governed mutation.
-          - failed attempt 2 / run \`34407481825\`: live NHC/robots/rights preflight and CI simulation passed; focused unittest import path then failed before write gate; no governed mutation.
-          - failed attempt 3 / run \`34407564966\`: live preflight, focused tests, simulated activation, ephemeral materialisation and immediate validators passed; full suite then exposed six historical descendant assertions that froze Source v2.02 / Monitor 25 / NHC-unregistered state. Runner was discarded before runtime, protected-layer audit or commit; no governed mutation was pushed.
-          - descendant repairs preserve the historical CG/CD/CC/BG/CH checkpoints while allowing reviewed Source/Monitor descendants; NHC registration is accepted only when the exact bounded route and closed authority gates are present.
-          - fresh NHC climatology/RSS/robots readiness: **PASS**
-          - fresh NWS public-domain / appropriate-use marker recheck: **PASS**
-          - Source Registry: \`v2.02 / 257\` → \`v2.03 / 257\`
-          - Monitor expectations: \`v0.27 / 25\` → \`v0.28 / 26\`
-          - Monitor coverage: 24 → 25 unique configured sources; 215 → 217 scoped occurrences; 47 → 48 scoped series; 11 → 12 scoped categories.
-          - route: \`NHC_ATLANTIC_SEASON\`; exact scope \`WSO-COM-A-0049\`, \`WSO-COM-A-0050\`
-          - semantic baseline: NHC Atlantic season \`06-01 → 11-30\`
-          - RSS role: source health only; no season-date or event-state authority
-          - actual shared scheduler cadence: daily; request budget: two first-party requests per run
-          - Canonical / Change Ledger / Monitor operations policy / Live / Analysis mutation: **NONE**
-          - automatic Canonical commit / Google Calendar write / automatic Live-Analysis promotion: **OFF**
-          - OPEC CE quarantine: **RESPECTED**
-          - full live-monitor runtime observed the NHC adapter and preserved Canonical hash.
-          EOF
           python - <<'PY'
           import subprocess
           allowed={
-            '.github/workflows/ci-nhc-activation-transaction.yml','README.md','PROJECT_STATUS.md','ROADMAP.md',
-            'data/monitor/POST_CH_PRESSURE_AUDIT_CI_v0.1.md','data/monitor/NHC_ATLANTIC_SEASON_CI_PLAN_v0.1.json',
-            'data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md','data/monitor/expectations.json',
-            'data/sources/registry.json','data/status/current_state.json','scripts/apply_nhc_atlantic_season_monitor_ci.py',
-            'scripts/run_live_monitor.py','tests/test_nhc_atlantic_season_activation_ci.py',
+            '.github/workflows/ci-nhc-activation-transaction.yml',
+            'README.md','PROJECT_STATUS.md','ROADMAP.md',
+            'data/monitor/POST_CH_PRESSURE_AUDIT_CI_v0.1.md',
+            'data/monitor/NHC_ATLANTIC_SEASON_CI_PLAN_v0.1.json',
+            'data/monitor/expectations.json','data/sources/registry.json','data/status/current_state.json',
+            'scripts/apply_nhc_atlantic_season_monitor_ci.py','scripts/run_live_monitor.py',
+            'scripts/repair_monitor_descendants_ci_tmp.py','tests/test_nhc_atlantic_season_activation_ci.py',
             'scripts/apply_barmm_pre_election_live_cg.py','tests/test_bwc_wg8_first_analysis_revision_cd.py',
             'tests/test_hmt_t1_content_api_activation_cc.py','tests/test_opec_official_confirmation_bg.py',
             'tests/test_project_state_snapshot_ch.py'
@@ -316,12 +183,48 @@ jobs:
           working=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
           untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
           actual=committed|working|untracked
-          if actual!=allowed: raise SystemExit(f'CI unexpected paths: {sorted(actual ^ allowed)}; actual={sorted(actual)}')
+          if actual!=allowed:
+              raise SystemExit(f'CI unexpected paths: {sorted(actual ^ allowed)}; actual={sorted(actual)}')
           print('CI_BOUNDED_DIFF_PASS')
           PY
+
+      - name: Write transaction audit and commit materialised state
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md <<EOF
+          # WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
+
+          - exact merged CH base: \`c4f359c2c70f023c32990f20234aaf154dced152\`
+          - successful transaction run: \`${GITHUB_RUN_ID}\`
+          - executed at UTC: \`$(date -u +%Y-%m-%dT%H:%M:%SZ)\`
+          - run \`34407375556\`: import-path harness failure before network or write gate; no governed mutation.
+          - run \`34407481825\`: live preflight and simulation passed; unittest import-path failure before write gate; no governed mutation.
+          - run \`34407564966\`: live preflight, focused tests and ephemeral activation passed; full suite exposed six frozen historical descendant assertions; runner discarded before commit.
+          - run \`34407905276\`: temporary workflow parse/dispatch failure; no job and no mutation.
+          - descendant repairs preserve historical CG/CD/CC/BG/CH checkpoints while permitting reviewed Source/Monitor descendants; NHC registration is valid only with its exact bounded route and closed authority gates.
+          - fresh NHC climatology/RSS/robots and NWS rights/appropriate-use recheck: **PASS**
+          - Source Registry: \`v2.02 / 257\` → \`v2.03 / 257\`
+          - Monitor expectations: \`v0.27 / 25\` → \`v0.28 / 26\`
+          - Monitor coverage: 24 → 25 unique sources; 215 → 217 scoped occurrences; 47 → 48 series; 11 → 12 categories.
+          - exact NHC scope: \`WSO-COM-A-0049\`, \`WSO-COM-A-0050\`; semantic baseline \`06-01 → 11-30\`.
+          - RSS is source-health corroboration only; actual scheduler cadence is daily; request budget is two first-party requests per run.
+          - Canonical / Change Ledger / Monitor operations policy / Live / Analysis mutation: **NONE**.
+          - automatic Canonical commit / Google Calendar write / automatic Live-Analysis promotion: **OFF**.
+          - OPEC CE quarantine: **RESPECTED**.
+          - registered runtime observed NHC and preserved Canonical hash.
+          EOF
           git config user.name "Mx Hud Harding"
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add README.md PROJECT_STATUS.md ROADMAP.md data/sources/registry.json data/monitor/expectations.json data/status/current_state.json scripts/run_live_monitor.py data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md scripts/apply_barmm_pre_election_live_cg.py tests/test_bwc_wg8_first_analysis_revision_cd.py tests/test_hmt_t1_content_api_activation_cc.py tests/test_opec_official_confirmation_bg.py tests/test_project_state_snapshot_ch.py
+          git add \
+            README.md PROJECT_STATUS.md ROADMAP.md \
+            data/sources/registry.json data/monitor/expectations.json data/status/current_state.json \
+            scripts/run_live_monitor.py data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md \
+            scripts/apply_barmm_pre_election_live_cg.py \
+            tests/test_bwc_wg8_first_analysis_revision_cd.py \
+            tests/test_hmt_t1_content_api_activation_cc.py \
+            tests/test_opec_official_confirmation_bg.py \
+            tests/test_project_state_snapshot_ch.py
           git diff --cached --quiet && { echo 'No materialised CI changes to commit' >&2; exit 1; }
           git commit -m "CI: materialise bounded NHC season monitor"
           git push origin HEAD:feature/post-ch-nhc-monitor-activation-ci
