@@ -17,7 +17,7 @@
 - final guarded validation: **1,235 tests OK, 68 skipped**; Canonical, Live and Analysis validators passed; Python compile, seven JavaScript syntax checks and static build passed.
 - final registered runtime: process RC `0`; **26 healthy / 0 degraded** adapter entries; NHC itself HEALTHY; `canonical_unchanged=true`; all expected adapters observed.
 - final containment gates: protected Canonical / Change Ledger / Monitor operations policy / Live / Analysis / OPEC-quarantine paths byte-identical to merged CH base; bounded-diff proof **PASS**.
-- handoff housekeeping: four empty branch-only marker files (`data/monitor/.keep`, `.keep2`, `.keep3`, `.keep4`) were accidentally created by a mis-selected file-creation operation during PR-tool handoff and immediately deleted before review; no governed content changed and all four paths are absent from the final diff. The file-creation path was then abandoned for handoff.
+- handoff housekeeping: seven empty branch-only marker files (`data/monitor/.keep` through `.keep7`) were accidentally created by a mis-selected file-creation operation during PR-tool handoff and immediately deleted before review. No governed content changed, all seven paths are absent from the final diff, and the file-creation path was abandoned before the dedicated pull-request action succeeded.
 - fresh NHC climatology/RSS/robots and NWS rights/appropriate-use recheck: **PASS**.
 - Source Registry: `v2.02 / 257` → `v2.03 / 257`.
 - Monitor expectations: `v0.27 / 25` → `v0.28 / 26`.
