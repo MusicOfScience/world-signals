@@ -1,0 +1,83 @@
+name: CC HMT T+1 Content API contract diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-cb-pressure-audit-cc
+    paths:
+      - '.github/workflows/cc-hmt-t1-contract-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Assert governed pre-state and exact ancestry
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          base='67de150ac1175c59ccfa3a844c1dcecd1dc2b4ed'
+          subprocess.run(['git','merge-base','--is-ancestor',base,'HEAD'],check=True)
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          mon=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert can['version']=='0.41' and len(can['records'])==689
+          assert src['version']=='2.01' and len(src['sources'])==256
+          assert mon['version']=='0.26' and len(mon['adapters'])==24
+          assert mon['automatic_canonical_commit'] is False
+          assert mon['google_calendar_write'] is False
+          assert all(s['source_id']!='WSSRC-MKT-014' for s in src['sources'])
+          print('PRESTATE_OK', base)
+          PY
+      - name: One-request GOV.UK Content API contract diagnostic
+        run: |
+          python - <<'PY'
+          import json, urllib.request, hashlib
+          endpoint='https://www.gov.uk/api/content/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk'
+          req=urllib.request.Request(endpoint, headers={'User-Agent':'WORLD-SIGNALS-read-only-contract-diagnostic/1.0'})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              status=r.status
+              ctype=r.headers.get('Content-Type')
+              payload=r.read()
+          assert status==200, status
+          doc=json.loads(payload)
+          print('REQUEST_COUNT 1')
+          print('FOLLOWUP_REQUEST_COUNT 0')
+          print('HTTP_STATUS',status)
+          print('CONTENT_TYPE',ctype)
+          print('BYTES',len(payload))
+          print('SHA256',hashlib.sha256(payload).hexdigest())
+          print('TOP_LEVEL_KEYS',sorted(doc))
+          for key in ['base_path','content_id','document_type','schema_name','title','description','first_published_at','public_updated_at','publishing_app','rendering_app','locale']:
+              print(key.upper(),repr(doc.get(key)))
+          details=doc.get('details') or {}
+          print('DETAIL_KEYS',sorted(details))
+          body=details.get('body') or ''
+          print('BODY_LENGTH',len(body))
+          markers={
+            'draft_not_final':'This is a draft SI and should not be treated as final' in body,
+            'intends_lay_final':'intends to lay the final SI' in body,
+            'affirmative_procedure':'subject to the affirmative procedure' in body,
+            'both_houses':'approved by both Houses of Parliament' in body,
+            'scheduled_2027':'11 October 2027' in body,
+          }
+          print('MARKERS',json.dumps(markers,sort_keys=True))
+          assert doc.get('base_path')=='/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk'
+          assert doc.get('title')=='Policy note – Mandating T+1 settlement in the UK'
+          assert markers['draft_not_final'] and markers['intends_lay_final'] and markers['affirmative_procedure'] and markers['scheduled_2027']
+          print('CONTRACT_DIAGNOSTIC PASS')
+          PY
+      - name: Prove repository byte-clean except temporary workflows
+        run: |
+          git diff --exit-code
+          git diff --exit-code 67de150ac1175c59ccfa3a844c1dcecd1dc2b4ed..HEAD -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis scripts src tests
