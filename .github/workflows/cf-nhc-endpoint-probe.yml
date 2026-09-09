@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/cf-nhc-endpoint-probe.yml'
       - 'scripts/probe_nhc_monitor_cf.py'
+      - 'scripts/probe_nhc_robots_cf.py'
 
 permissions:
   contents: write
@@ -32,16 +33,22 @@ jobs:
         run: python -m unittest tests.test_opec_quarantine_cf -v
       - name: Probe NHC endpoints without storing bodies
         run: python scripts/probe_nhc_monitor_cf.py
+      - name: Probe NHC crawler policy and fail closed
+        run: python scripts/probe_nhc_robots_cf.py
       - name: Confirm bounded outputs
         run: |
           test -f data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json
           test -f data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md
+          test -f data/monitor/NHC_ATLANTIC_SEASON_CF_ROBOTS_PROBE_v0.1.json
           python - <<'PY'
           import json
           from pathlib import Path
           data = json.loads(Path('data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json').read_text())
+          robots = json.loads(Path('data/monitor/NHC_ATLANTIC_SEASON_CF_ROBOTS_PROBE_v0.1.json').read_text())
           assert data['opec_quarantine_respected'] is True
           assert data['retention_policy'].startswith('NO_REMOTE_SOURCE_BODY_STORED')
+          assert robots['all_required_paths_allowed'] is True
+          assert robots['source_body_retained'] is False
           for endpoint in data['endpoints'].values():
               assert 'body' not in endpoint
           PY
@@ -52,11 +59,12 @@ jobs:
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
           git add \
             data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json \
-            data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md
-          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0\.1\.(json|md)$' || true)"
+            data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md \
+            data/monitor/NHC_ATLANTIC_SEASON_CF_ROBOTS_PROBE_v0.1.json
+          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/NHC_ATLANTIC_SEASON_CF_(ENDPOINT_PROBE_v0\.1\.(json|md)|ROBOTS_PROBE_v0\.1\.json)$' || true)"
           if git diff --cached --quiet; then
             echo "No probe output change to commit"
             exit 0
           fi
-          git commit -m "CF: persist bounded NHC endpoint probe"
+          git commit -m "CF: persist bounded NHC endpoint and robots probes"
           git push origin HEAD:feature/post-cd-monitor-pressure-cf
