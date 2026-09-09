@@ -27,13 +27,12 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           src=Path('.github/workflows/cb-build-sarb-monitor.yml').read_text().splitlines()
-          marker='        run: |'
-          start=src.index(marker)+1
+          step='      - name: Materialise bounded SARB RSS monitor'
+          step_idx=src.index(step)
+          start=next(i for i in range(step_idx,len(src)) if src[i].strip()=='set -euo pipefail')
           body=[]
           for line in src[start:]:
-              if line and not line.startswith('          '):
-                  break
-              body.append(line[10:] if line.startswith('          ') else '')
+              body.append(line[10:] if line.startswith('          ') else line)
           Path('/tmp/cb-builder.sh').write_text('\n'.join(body)+'\n')
           print('CB_BUILDER_LINES',len(body))
           PY
