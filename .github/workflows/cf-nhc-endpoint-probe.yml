@@ -1,0 +1,57 @@
+name: CF NHC endpoint probe
+
+on:
+  push:
+    branches:
+      - feature/post-cd-monitor-pressure-cf
+    paths:
+      - '.github/workflows/cf-nhc-endpoint-probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cd-monitor-pressure-cf
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Assert clean main lineage
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+          test "$(git merge-base HEAD origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+      - name: Enforce OPEC quarantine
+        run: python -m unittest tests.test_opec_quarantine_cf -v
+      - name: Probe NHC endpoints without storing bodies
+        run: python scripts/probe_nhc_monitor_cf.py
+      - name: Confirm bounded outputs
+        run: |
+          test -f data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json
+          test -f data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json').read_text())
+          assert data['opec_quarantine_respected'] is True
+          assert data['retention_policy'].startswith('NO_REMOTE_SOURCE_BODY_STORED')
+          for endpoint in data['endpoints'].values():
+              assert 'body' not in endpoint
+          PY
+      - name: Commit probe outputs only
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add \
+            data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json \
+            data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md
+          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0\.1\.(json|md)$' || true)"
+          git commit -m "CF: persist bounded NHC endpoint probe"
+          git push origin HEAD:feature/post-cd-monitor-pressure-cf
