@@ -77,7 +77,7 @@ jobs:
               'http_status':snapshot.status,
               'content_type':snapshot.content_type,
               'body_bytes':snapshot.body_bytes,
-              'sha256_observed_not_frozen':snapshot.sha256,
+              'sha256_observed_not_frozen':snapshot.body_sha256,
               'target_items_parsed':len(items),
               'configured_uid_match_count':len(matches),
               'review_candidate_count':len(candidates),
