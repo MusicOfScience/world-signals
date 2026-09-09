@@ -1,0 +1,66 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CG",
+  "reference_date": "2026-09-10",
+  "base_main_sha": "6c96794cb553c6b34df93536141340c2af8db44a",
+  "selection": "BARMM_PRE_ELECTION_INSTITUTIONAL_CONTEXT",
+  "pre_state": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.02",
+    "source_count": 257,
+    "monitor_expectations_version": "0.27",
+    "monitor_adapter_count": 25,
+    "live_schema_version": "0.6",
+    "live_observation_count": 6,
+    "live_evidence_count": 9,
+    "analysis_schema_version": "0.8",
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_analysis_revision_count": 1,
+    "production_live_input_count": 1
+  },
+  "target_state": {
+    "live_schema_version": "0.7",
+    "live_observation_count": 7,
+    "live_evidence_count": 10,
+    "canonical_linked_live_observation_count": 2,
+    "automatic_ingestion_allowed": false,
+    "public_observation_projection_allowed": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "target": {
+    "canonical_occurrence_id": "WSO-EL-PH-BARMM-20260914",
+    "canonical_relationship": "CONTEXT_FOR",
+    "observation_id": "WSLI-INST-PHL-BARMM-PREELECT-20260909-001",
+    "evidence_ids": [
+      "WSEV-LI-PHL-BARMM-PIA-PEACE-20260909"
+    ]
+  },
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "OPEC_QUARANTINE.md",
+    "tests/test_opec_quarantine_cf.py"
+  ],
+  "authorized_governed_writes": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json"
+  ],
+  "notes": [
+    "CG explicitly excludes quarantined CE OPEC work from candidate selection.",
+    "The existing COMELEC-governed 14 September Canonical election date is not changed by Live evidence.",
+    "The PIA evidence is Live-only and has no Canonical provenance effect.",
+    "No event clock is inferred from the PIA publication date or from the word recently."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CG",
+  "observation_template": {
+    "observation_id": "WSLI-INST-PHL-BARMM-PREELECT-20260909-001",
+    "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "GPH-MILF ceasefire coordination reinforced ahead of the BARMM parliamentary election",
+    "summary": "Philippine Information Agency reported on 9 September 2026 that government representatives, Moro Islamic Liberation Front ground commanders and other stakeholders signed ceasefire-related coordination guidelines and a pledge to promote a peaceful electoral process ahead of the 14 September BARMM parliamentary election. This observation records the institutional coordination as factual pre-election context only; it does not predict election security, integrity, results, peace-process outcomes or market effects, and it does not change the Canonical election date or provenance.",
+    "domain_tags": [
+      "POLITICS",
+      "INSTITUTIONS"
+    ],
+    "jurisdictions": [
+      "Philippines"
+    ],
+    "regions": [
+      "Southeast Asia"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-PHL-BARMM-PIA-PEACE-20260909"
+    ],
+    "canonical_links": [
+      {
+        "occurrence_id": "WSO-EL-PH-BARMM-20260914",
+        "relationship": "CONTEXT_FOR"
+      }
+    ],
+    "revision_of_observation_id": null,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-PHL-BARMM-PIA-PEACE-20260909",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Philippine Information Agency",
+      "title": "GPH-MILF forge commitment to promote peaceful electoral process during the BARMM polls",
+      "url": "https://pia.gov.ph/news/gph-milf-forge-commitment-to-promote-peaceful-electoral-process-during-the-barmm-polls/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-09"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official Philippine government information-agency reporting that GPH representatives, MILF ground commanders and other stakeholders signed ceasefire-related coordination guidelines and a pledge for a peaceful electoral process ahead of the 14 September 2026 BARMM parliamentary election. The page does not supply a source-native exact date/time for the signing beyond describing it as recent, so CG does not manufacture event_time."
+    }
+  ]
+}

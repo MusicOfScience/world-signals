@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.6",
-  "reference_date": "2026-09-07",
+  "version": "0.7",
+  "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
     "CANONICAL_REGISTRY",
@@ -219,7 +219,12 @@
     "BF records the institutional adoption and vote without implying a compulsory single world map, territorial or sovereignty change, or economic/market consequence.",
     "BF preserves event and source-publication timing at CIVIL_DATE because no source-native clock time is required for the reviewed factual claim.",
     "Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain prohibited in BF v0.6.",
-    "A seventh Live observation, broader ingestion, second production Live-to-Analysis link or first production Analysis revision requires another pressure audit."
+    "BF v0.6 remains the frozen six-observation/nine-evidence checkpoint; CG is the separately pressure-audited seventh observation.",
+    "CG v0.7 adds one primary-confirmed BARMM pre-election INSTITUTIONAL_DEVELOPMENT with a reviewed CONTEXT_FOR link to WSO-EL-PH-BARMM-20260914.",
+    "CG Live evidence has no Canonical provenance or timing authority; the COMELEC-governed 14 September 2026 election identity remains unchanged.",
+    "CG does not infer a real-world signing timestamp from a 9 September publication date or the source wording 'recently'.",
+    "Public observation projection, automatic ingestion, automatic Canonical commit and Google Calendar writes remain prohibited in CG v0.7.",
+    "An eighth Live observation, automatic context linking, second production Live-to-Analysis link, further Analysis revision or NHC Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -235,12 +240,12 @@
     "mode": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 6,
-    "maximum_evidence_count": 9,
+    "maximum_observation_count": 7,
+    "maximum_evidence_count": 10,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "BF adds exactly one pressure-audited UN General Assembly INSTITUTIONAL_DEVELOPMENT with two primary-official evidence rows and zero Canonical links."
+    "reason": "CG adds exactly one pressure-audited BARMM pre-election INSTITUTIONAL_DEVELOPMENT linked CONTEXT_FOR the existing 14 September 2026 Canonical election occurrence."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -281,5 +286,15 @@
     "evidence_count": 7,
     "post_merge_main_sha": "e54dddbaa0d60a39babc2fa47c1f054954b5c9ac",
     "historical_contract": "BD v0.5 preserved AW/AX/AZ and added one reviewed Vietnam-Myanmar GEOPOLITICAL_DEVELOPMENT with zero Canonical links while all public/automatic gates remained closed."
+  },
+  "cg_checkpoint": {
+    "schema_version": "0.7",
+    "observations_version": "0.7",
+    "evidence_version": "0.7",
+    "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
+    "observation_count": 7,
+    "evidence_count": 10,
+    "base_main_sha": "6c96794cb553c6b34df93536141340c2af8db44a",
+    "historical_contract": "CG adds one reviewed Southeast Asia elections-context Live observation and exercises CONTEXT_FOR without changing Canonical, Monitor or Analysis state."
   }
 }

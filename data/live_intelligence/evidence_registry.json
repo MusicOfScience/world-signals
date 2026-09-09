@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.6",
-  "reference_date": "2026-09-07",
+  "version": "0.7",
+  "reference_date": "2026-09-10",
   "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through BF. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
+  "scope_note": "Evidence supports the bounded reviewed Live store through CG. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -159,6 +159,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary African Union evidence confirming the Africa-led institutional initiative, Togo's role on behalf of the African Group, and the AU Commission's stated intention to support implementation. The evidence is contextual confirmation, not authority for the UN vote record itself."
+    },
+    {
+      "evidence_id": "WSEV-LI-PHL-BARMM-PIA-PEACE-20260909",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Philippine Information Agency",
+      "title": "GPH-MILF forge commitment to promote peaceful electoral process during the BARMM polls",
+      "url": "https://pia.gov.ph/news/gph-milf-forge-commitment-to-promote-peaceful-electoral-process-during-the-barmm-polls/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "CONTEXT_ONLY"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-09"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Official Philippine government information-agency reporting that GPH representatives, MILF ground commanders and other stakeholders signed ceasefire-related coordination guidelines and a pledge for a peaceful electoral process ahead of the 14 September 2026 BARMM parliamentary election. The page does not supply a source-native exact date/time for the signing beyond describing it as recent, so CG does not manufacture event_time."
     }
   ]
 }
