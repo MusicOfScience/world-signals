@@ -1,0 +1,40 @@
+name: CB SARB build trigger
+
+on:
+  push:
+    branches:
+      - feature/post-ca-pressure-audit-cb
+    paths:
+      - .github/workflows/cb-build-trigger.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Execute CB builder payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('.github/workflows/cb-build-sarb-monitor.yml').read_text().splitlines()
+          marker='        run: |'
+          start=src.index(marker)+1
+          body=[]
+          for line in src[start:]:
+              if line and not line.startswith('          '):
+                  break
+              body.append(line[10:] if line.startswith('          ') else '')
+          Path('/tmp/cb-builder.sh').write_text('\n'.join(body)+'\n')
+          print('CB_BUILDER_LINES',len(body))
+          PY
+          bash /tmp/cb-builder.sh
