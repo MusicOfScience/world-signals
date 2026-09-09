@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact ancestry and run BZ offline contract tests
+      - name: Verify exact ancestry and run BZ activation-contract gate
         shell: bash
         run: |
           set -euo pipefail
@@ -29,6 +29,13 @@ jobs:
           git fetch --no-tags origin main
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
-          python -m unittest -v tests.test_european_council_rss_bz
-          python -m py_compile src/world_signals/adapters/european_council_rss.py src/world_signals/european_council_monitor.py tests/test_european_council_rss_bz.py
+          python -m unittest -v tests.test_european_council_rss_bz tests.test_european_council_rss_activation_bz
+          python scripts/apply_european_council_rss_monitor_bz.py > /tmp/bz-check.json
+          grep -q 'READ_ONLY_PREFLIGHT' /tmp/bz-check.json
+          python -m py_compile \
+            src/world_signals/adapters/european_council_rss.py \
+            src/world_signals/european_council_monitor.py \
+            scripts/apply_european_council_rss_monitor_bz.py \
+            tests/test_european_council_rss_bz.py \
+            tests/test_european_council_rss_activation_bz.py
           test -z "$(git status --porcelain)"
