@@ -31,8 +31,10 @@ jobs:
           c=json.loads(Path('data/canonical/registry.json').read_text())
           s=json.loads(Path('data/sources/registry.json').read_text())
           m=json.loads(Path('data/monitor/expectations.json').read_text())
-          l=json.loads(Path('data/live_intelligence/registry.json').read_text()) if Path('data/live_intelligence/registry.json').exists() else None
-          a=json.loads(Path('data/analysis/registry.json').read_text()) if Path('data/analysis/registry.json').exists() else None
+          lo=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          le=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          ar=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          ae=json.loads(Path('data/analysis/evidence_registry.json').read_text())
           assert (c['version'],len(c['records']))==('0.41',689)
           assert (s['version'],len(s['sources']))==('2.02',257)
           assert (m['version'],len(m['adapters']))==('0.27',25)
@@ -40,8 +42,8 @@ jobs:
           assert m['google_calendar_write'] is False
           print('BASE',base)
           print('GOVERNED',{'canonical':[c['version'],len(c['records'])],'sources':[s['version'],len(s['sources'])],'monitor':[m['version'],len(m['adapters'])]})
-          print('LIVE_REGISTRY', None if l is None else {'version':l.get('version'),'records':len(l.get('observations',l.get('records',[])))})
-          print('ANALYSIS_REGISTRY', None if a is None else {'version':a.get('version'),'records':len(a.get('records',[]))})
+          print('LIVE_LAYER',{'version':lo.get('version'),'observations':len(lo.get('observations',[])),'evidence':len(le.get('evidence',[])),'population_state':lo.get('population_state')})
+          print('ANALYSIS_LAYER',{'version':ar.get('version'),'reviews':len(ar.get('reviews',[])),'evidence':len(ae.get('evidence',[]))})
           PY
       - name: Recompute monitor coverage audit
         run: python scripts/run_monitor_coverage_audit.py
@@ -50,9 +52,12 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+          from collections import Counter
           c=json.loads(Path('data/canonical/registry.json').read_text())
           s=json.loads(Path('data/sources/registry.json').read_text())
           m=json.loads(Path('data/monitor/expectations.json').read_text())
+          lo=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          ar=json.loads(Path('data/analysis/event_reviews.json').read_text())
           audit=json.loads(Path('artifacts/monitor/monitor-coverage-audit.json').read_text())
           print('MONITOR_TOTALS',json.dumps(audit.get('totals',{}),sort_keys=True))
           print('DIAGNOSTIC_PROMPTS',json.dumps(audit.get('diagnostic_prompts',{}),sort_keys=True))
@@ -64,14 +69,18 @@ jobs:
               vals=[x.get(k) for x in adapters if k in x]
               print(k,{'true':sum(v is True for v in vals),'false':sum(v is False for v in vals),'missing':len(adapters)-len(vals)})
           print('CANONICAL_STATUS_COUNTS')
-          from collections import Counter
           for field in ['certainty_status','activation_mode','event_state','time_status','timing_type','category']:
               ctr=Counter(r.get(field) for r in c['records'])
               print(field,json.dumps(ctr.most_common(),ensure_ascii=False))
-          print('SOURCE_MONITOR_USE_COUNTS')
-          print(json.dumps(Counter(x.get('automated_monitoring_use') for x in s['sources']),sort_keys=True))
-          print('SOURCE_CANONICAL_USE_COUNTS')
-          print(json.dumps(Counter(x.get('canonical_provenance_use') for x in s['sources']),sort_keys=True))
+          def render_counter(values):
+              ctr=Counter(values)
+              return sorted(((('<MISSING>' if k is None else str(k)),v) for k,v in ctr.items()),key=lambda kv:kv[0])
+          print('SOURCE_MONITOR_USE_COUNTS',json.dumps(render_counter(x.get('automated_monitoring_use') for x in s['sources']),ensure_ascii=False))
+          print('SOURCE_CANONICAL_USE_COUNTS',json.dumps(render_counter(x.get('canonical_provenance_use') for x in s['sources']),ensure_ascii=False))
+          print('LIVE_OBSERVATION_TYPES',json.dumps(render_counter(x.get('observation_type',x.get('type')) for x in lo.get('observations',[])),ensure_ascii=False))
+          print('LIVE_LINKED_OCCURRENCES',sum(bool(x.get('occurrence_id') or x.get('canonical_occurrence_id')) for x in lo.get('observations',[])))
+          print('ANALYSIS_REVIEW_TYPES',json.dumps(render_counter(x.get('review_type',x.get('analysis_type')) for x in ar.get('reviews',[])),ensure_ascii=False))
+          print('ANALYSIS_LINKED_OCCURRENCES',sum(bool(x.get('occurrence_id') or x.get('canonical_occurrence_id')) for x in ar.get('reviews',[])))
           PY
       - name: Prove governed layers unchanged
         run: |
