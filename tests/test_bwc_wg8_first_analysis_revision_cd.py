@@ -202,10 +202,26 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
 
     def test_simulation_is_read_only_for_protected_upstream_layers(self):
         before = {p: stable_hash(ROOT / p) for p in self.plan["protected_paths"]}
-        again = apply_cd.simulate()
-        apply_cd.assert_target(self.plan, again)
-        after = {p: stable_hash(ROOT / p) for p in self.plan["protected_paths"]}
-        self.assertEqual(before, after)
+        current_schema = load(apply_cd.ANALYSIS_SCHEMA_PATH)
+        if current_schema["version"] == self.plan["pre_state"]["analysis_schema_version"]:
+            again = apply_cd.simulate()
+            apply_cd.assert_target(self.plan, again)
+            after = {p: stable_hash(ROOT / p) for p in self.plan["protected_paths"]}
+            self.assertEqual(before, after)
+        else:
+            self.assertEqual(
+                current_schema["version"],
+                self.plan["target_state"]["analysis_schema_version"],
+            )
+            base = self.plan["exact_base_main_sha"]
+            for path in self.plan["protected_paths"]:
+                base_bytes = subprocess.check_output(["git", "show", f"{base}:{path}"])
+                current_bytes = (ROOT / path).read_bytes()
+                self.assertEqual(
+                    hashlib.sha256(current_bytes).hexdigest(),
+                    hashlib.sha256(base_bytes).hexdigest(),
+                    path,
+                )
         self.assertEqual(len(self.live_observations["observations"]), 6)
 
 
