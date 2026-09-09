@@ -1,0 +1,506 @@
+name: CB build SARB monitor
+
+on:
+  push:
+    branches:
+      - feature/post-ca-pressure-audit-cb
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Materialise bounded SARB RSS monitor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from copy import deepcopy
+
+          ROOT=Path('.')
+          BASE='1f20c9afbf7d9e295024ce534b3191155d9f674b'
+          assert __import__('subprocess').check_output(['git','merge-base','HEAD','origin/main'],text=True).strip()==BASE
+
+          research='''# WORLD SIGNALS — CB research note: SARB MPC statement RSS
+
+**Reference date:** 2026-09-09  
+**Exact base:** `1f20c9afbf7d9e295024ce534b3191155d9f674b` (post-CA main)
+
+## Pressure audit
+
+CB was selected by source readiness rather than regional quota. India MoSPI remains held because its current dynamic release-calendar surface and official advance-release-calendar PDF do not provide one internally consistent production route. RBI has an expressly published press-release RSS interface, but WORLD SIGNALS models its remaining 2026 Canonical objects as multi-day MPC meeting windows rather than separate decision-publication occurrences. Banco Central do Brasil likewise has official Copom statement RSS, while the existing Canonical scope is three multi-day Copom meeting processes. Those are useful future architecture candidates but are not clean publication-to-occurrence matches.
+
+The South African Reserve Bank is cleaner. Existing Canonical source `WSSRC-REG-006` supplies two exact public MPC announcement occurrences: 23 September 2026 at 15:00 and 19 November 2026 at 15:00, `Africa/Johannesburg`. Its general website rights classification remains held and is not changed by CB.
+
+SARB separately publishes an RSS subscription page which expressly describes RSS as a way to receive latest SARB content and links the machine endpoint `https://www.resbank.co.za/bin/sarb/solr/publications/rss`. That is a distinct source role, not a clearance of the held schedule/webcast page.
+
+## Read-only diagnostics
+
+Successful source/Canonical/feed contract diagnostic:
+
+- run `34311819558`
+- job `102339870513`
+- Canonical v0.41 / 689
+- Sources v2.00 / 255
+- Monitor v0.25 / 23
+- `WSSRC-REG-013` confirmed unused
+- no existing SARB machine source or monitor route
+- exactly two SARB Canonical dependencies: `WSO-REG-A-0009`, `WSO-REG-A-0010`
+- RSS HTTP 200
+- content type `application/xml;charset=utf-8`
+- 25 rolling items
+- item field contract: `title`, `link`, `description`, `pubDate`, `category`, `guid`
+- repository byte-clean
+
+The current 25-item rolling window contained no MPC statement. CB therefore does not claim that a live target item was observed. First-party SARB historical/current publication pages independently establish the stable statement-title family `Statement of the Monetary Policy Committee <Month> <Year>` and publication path family under `/statements/monetary-policy-statements/<year>/<month>`.
+
+## Architecture
+
+CB creates a separate monitor-only source `WSSRC-REG-013` for the expressly published RSS interface. `WSSRC-REG-006` remains byte-identical Canonical schedule/clock authority.
+
+The monitor:
+
+1. makes exactly one request to the official RSS endpoint;
+2. parses the six-field RSS item contract and fails closed on structural drift;
+3. ignores ordinary non-MPC publications;
+4. treats any item mentioning the Monetary Policy Committee but failing the exact title/path/category contract as source-structure drift;
+5. maps only September 2026 and November 2026 statement identities to the two existing stable occurrence IDs;
+6. converts `pubDate` to `Africa/Johannesburg` only to compare the observed publication civil date with the configured Canonical date;
+7. never treats RSS `pubDate` as Canonical clock authority;
+8. never fetches the linked statement page, PDF, webcast page, search results or any other follow-up;
+9. creates review candidates only; no automatic lifecycle, certainty, schedule, clock, Canonical, Live Intelligence or Analysis mutation is permitted;
+10. gives feed absence no cancellation, delay, completion or certainty meaning.
+
+A target statement published on a different civil date remains mapped by exact year/month statement identity but generates a publication-date-mismatch review candidate rather than silently moving Canonical.
+
+## Rights and machine access
+
+SARB's general disclaimer remains restrictive. CB does not assert a broad reproduction or redistribution right for website content and does not change `WSSRC-REG-006`.
+
+The narrower machine-access finding is that SARB itself publishes an RSS subscription page and directs users to its RSS feed. `WSSRC-REG-013` therefore records permission only for bounded internal monitoring of minimal feed metadata through that supplied machine interface. This does not imply permission to crawl the held schedule source or republish article/PDF content.
+
+## Governed target
+
+- Canonical Registry: v0.41 / 689 unchanged
+- Sources: v2.00 / 255 → v2.01 / 256
+- Monitor expectations: v0.25 / 23 → v0.26 / 24
+- automatic Canonical commit OFF
+- Google Calendar write OFF
+- all other project layers unchanged
+'''
+          (ROOT/'data/monitor/SARB_MPC_RSS_CB_RESEARCH_v0.1.md').write_text(research)
+
+          plan={
+            'project':'WORLD SIGNALS','tranche':'CB','reference_date':'2026-09-09','exact_base_main_sha':BASE,
+            'selection':{
+              'canonical_schedule_source_id':'WSSRC-REG-006','machine_source_id':'WSSRC-REG-013','adapter_id':'SARB_MPC_STATEMENTS_RSS','series_id':'WSER-REG-ZA-SARB',
+              'rss_documentation_url':'https://www.resbank.co.za/en/home/quick-links/rss-feeds','rss_url':'https://www.resbank.co.za/bin/sarb/solr/publications/rss','rights_evidence_url':'https://www.resbank.co.za/en/home/quick-links/disclaimer','source_timezone':'Africa/Johannesburg'
+            },
+            'preconditions':{'canonical_registry_version':'0.41','canonical_record_count':689,'source_registry_version':'2.00','source_count':255,'monitor_expectations_version':'0.25','configured_monitor_adapter_count':23},
+            'postconditions':{'canonical_registry_version':'0.41','canonical_record_count':689,'source_registry_version':'2.01','source_count':256,'monitor_expectations_version':'0.26','configured_monitor_adapter_count':24,'automatic_canonical_commit':False,'google_calendar_write':False},
+            'canonical_occurrences':[
+              {'occurrence_id':'WSO-REG-A-0009','year':2026,'month':9,'month_name':'September','announcement_datetime':'2026-09-23T15:00:00','announcement_date':'2026-09-23'},
+              {'occurrence_id':'WSO-REG-A-0010','year':2026,'month':11,'month_name':'November','announcement_datetime':'2026-11-19T15:00:00','announcement_date':'2026-11-19'}
+            ],
+            'request_contract':{'max_requests_per_run':1,'rss_requests':1,'robots_requests':0,'schedule_requests':0,'item_link_requests':0,'pdf_requests':0,'search_requests':0},
+            'authority_gates':{'schedule_authority':False,'clock_authority':False,'lifecycle_authority':False,'certainty_authority':False,'canonical_datetime_mutation_allowed':False,'automatic_item_link_fetch_allowed':False,'automatic_schedule_fetch_allowed':False,'automatic_new_occurrence_creation_allowed':False,'automatic_live_or_analysis_promotion_allowed':False,'automatic_commit_allowed':False},
+            'diagnostics':{'contract_run_id':34311819558,'contract_job_id':102339870513,'rss_status':200,'rss_content_type':'application/xml;charset=utf-8','rss_item_count':25,'target_items_observed':0,'repository_byte_clean':True}
+          }
+          (ROOT/'data/monitor/SARB_MPC_RSS_CB_PLAN_v0.1.json').write_text(json.dumps(plan,indent=2)+'\n')
+
+          adapter=r'''from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+from datetime import datetime
+import re
+import xml.etree.ElementTree as ET
+
+from .base import AdapterError, FetchSnapshot, fetch_bytes
+
+SARB_RSS_DOCS = "https://www.resbank.co.za/en/home/quick-links/rss-feeds"
+SARB_PUBLICATIONS_RSS = "https://www.resbank.co.za/bin/sarb/solr/publications/rss"
+SARB_RSS_ACCEPT = "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1"
+SARB_MPC_CATEGORY = "Statements > Monetary Policy Statements"
+TITLE_RE = re.compile(r"^Statement of the Monetary Policy Committee (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})$")
+MONTHS = {name: i for i, name in enumerate(("January","February","March","April","May","June","July","August","September","October","November","December"), 1)}
+ITEM_FIELDS = ("title", "link", "description", "pubDate", "category", "guid")
+
+@dataclass(frozen=True)
+class SARBPublicationItem:
+    title: str
+    link: str
+    description: str
+    pub_date: str
+    category: str
+    guid: str
+    mpc_year: int | None = None
+    mpc_month: int | None = None
+    mpc_month_name: str | None = None
+
+    def as_dict(self) -> dict:
+        return asdict(self)
+
+
+def _text(node: ET.Element, tag: str, *, required: bool = False) -> str:
+    child=node.find(tag)
+    value=" ".join("".join(child.itertext()).split()) if child is not None else ""
+    if required and not value:
+        raise AdapterError(f"SARB RSS item missing {tag}")
+    return value
+
+
+def _parse_pub_date(value: str) -> datetime:
+    try:
+        parsed=datetime.fromisoformat(value.replace("Z","+00:00"))
+    except ValueError as exc:
+        raise AdapterError(f"SARB RSS invalid ISO pubDate: {value!r}") from exc
+    if parsed.tzinfo is None:
+        raise AdapterError(f"SARB RSS pubDate lacks timezone: {value!r}")
+    return parsed
+
+
+def _mpc_identity(title: str, link: str, category: str) -> tuple[int|None,int|None,str|None]:
+    marker="monetary policy committee"
+    match=TITLE_RE.fullmatch(title)
+    if match is None:
+        if marker in title.lower() or "monetary-policy-statements" in link.lower():
+            raise AdapterError(f"SARB MPC statement identity drift: title={title!r} link={link!r}")
+        return None,None,None
+    month_name,year_raw=match.groups()
+    year=int(year_raw); month=MONTHS[month_name]
+    expected=f"/en/home/publications/publication-detail-pages/statements/monetary-policy-statements/{year}/{month_name.lower()}"
+    if link != expected:
+        raise AdapterError(f"SARB MPC statement path drift: expected {expected!r}, found {link!r}")
+    if SARB_MPC_CATEGORY not in category:
+        raise AdapterError(f"SARB MPC statement category drift: {category!r}")
+    return year,month,month_name
+
+
+def parse_sarb_publications_rss(body: bytes | str) -> list[SARBPublicationItem]:
+    raw=body.encode("utf-8") if isinstance(body,str) else body
+    try:
+        root=ET.fromstring(raw)
+    except ET.ParseError as exc:
+        raise AdapterError(f"SARB RSS XML parse failed: {exc}") from exc
+    if root.tag.lower()!="rss":
+        raise AdapterError(f"SARB RSS expected root <rss>, found <{root.tag}>")
+    channel=root.find("channel")
+    if channel is None:
+        raise AdapterError("SARB RSS missing channel")
+    out=[]; seen=set()
+    for node in channel.findall("item"):
+        child_names=tuple(child.tag.rsplit("}",1)[-1] for child in list(node))
+        if child_names != ITEM_FIELDS:
+            raise AdapterError(f"SARB RSS item field contract drift: expected {ITEM_FIELDS!r}, found {child_names!r}")
+        title=_text(node,"title",required=True)
+        link=_text(node,"link",required=True)
+        description=_text(node,"description")
+        pub_date=_text(node,"pubDate",required=True)
+        category=_text(node,"category",required=True)
+        guid=_text(node,"guid",required=True)
+        _parse_pub_date(pub_date)
+        if not link.startswith("/en/home/publications/publication-detail-pages/") or "?" in link or "#" in link:
+            raise AdapterError(f"SARB RSS item link contract drift: {link!r}")
+        if not guid.startswith("/content/sarb-project/en/home/publications/publication-detail-pages/"):
+            raise AdapterError(f"SARB RSS guid contract drift: {guid!r}")
+        identity=_mpc_identity(title,link,category)
+        key=(guid,pub_date)
+        if key in seen:
+            raise AdapterError(f"SARB RSS duplicate item identity: {key!r}")
+        seen.add(key)
+        out.append(SARBPublicationItem(title,link,description,pub_date,category,guid,*identity))
+    if not out:
+        raise AdapterError("SARB RSS contained no items")
+    return out
+
+
+def fetch_sarb_publications_rss(*, timeout: int = 30) -> tuple[list[SARBPublicationItem], FetchSnapshot]:
+    body,snapshot=fetch_bytes(SARB_PUBLICATIONS_RSS,timeout=timeout,accept=SARB_RSS_ACCEPT)
+    if snapshot.status != 200:
+        raise AdapterError(f"SARB RSS returned HTTP {snapshot.status}")
+    return parse_sarb_publications_rss(body),snapshot
+'''
+          (ROOT/'src/world_signals/adapters/sarb_rss.py').write_text(adapter)
+
+          monitor=r'''from __future__ import annotations
+
+from datetime import datetime
+from hashlib import sha256
+import json
+from zoneinfo import ZoneInfo
+
+from .adapters.sarb_rss import SARBPublicationItem
+
+SARB_TIMEZONE="Africa/Johannesburg"
+SARB_SERIES_ID="WSER-REG-ZA-SARB"
+CANONICAL_SOURCE_ID="WSSRC-REG-006"
+MONITOR_SOURCE_ID="WSSRC-REG-013"
+
+
+def _stable_hash(value: object) -> str:
+    raw=json.dumps(value,sort_keys=True,ensure_ascii=False,separators=(",",":"))
+    return sha256(raw.encode()).hexdigest()
+
+
+def _scope(records: list[dict], config: dict) -> tuple[dict[str,dict],dict[tuple[int,int],dict]]:
+    ids=list(config.get("canonical_occurrence_ids") or [])
+    identities=config.get("statement_identity_by_occurrence_id")
+    if len(ids)!=2 or len(set(ids))!=2 or not isinstance(identities,dict) or set(identities)!=set(ids):
+        raise ValueError("SARB RSS requires exact two-occurrence identity map")
+    by_id={r.get("occurrence_id"):r for r in records if r.get("occurrence_id") in set(ids)}
+    if set(by_id)!=set(ids):
+        raise ValueError("SARB RSS configured occurrence missing from Canonical")
+    by_identity={}
+    for oid in ids:
+        ident=identities[oid]
+        year=ident.get("year"); month=ident.get("month"); dt=ident.get("announcement_datetime")
+        if not isinstance(year,int) or not isinstance(month,int) or not isinstance(dt,str):
+            raise ValueError(f"SARB RSS invalid identity config for {oid}")
+        if (year,month) in by_identity:
+            raise ValueError("SARB RSS duplicate configured year/month identity")
+        row=by_id[oid]
+        checks={"series_id":SARB_SERIES_ID,"source_id":CANONICAL_SOURCE_ID,"region":"Africa","jurisdiction":"South Africa","source_timezone":SARB_TIMEZONE,"time_precision":"MINUTE","timing_type":"LOCAL_DATETIME","time_basis":"EXPLICIT_AUTHORITATIVE_SCHEDULE","start_local":dt,"publication_datetime":dt}
+        for key,expected in checks.items():
+            if row.get(key)!=expected:
+                raise ValueError(f"SARB Canonical scope drift for {oid} {key}: {row.get(key)!r}")
+        by_identity[(year,month)]=row
+    gates=("schedule_authority","clock_authority","lifecycle_authority","certainty_authority","canonical_datetime_mutation_allowed","automatic_item_link_fetch_allowed","automatic_schedule_fetch_allowed","automatic_new_occurrence_creation_allowed","automatic_live_or_analysis_promotion_allowed","automatic_commit_allowed")
+    if config.get("source_id")!=MONITOR_SOURCE_ID or any(config.get(k) is not False for k in gates):
+        raise ValueError("SARB RSS authority/write gate drift")
+    return by_id,by_identity
+
+
+def _local_pubdate(item: SARBPublicationItem) -> tuple[str,str]:
+    dt=datetime.fromisoformat(item.pub_date.replace("Z","+00:00")).astimezone(ZoneInfo(SARB_TIMEZONE))
+    return dt.isoformat(),dt.date().isoformat()
+
+
+def sarb_mpc_rss_review_candidates(records: list[dict], items: list[SARBPublicationItem], config: dict) -> tuple[list[dict],list[dict]]:
+    by_id,by_identity=_scope(records,config)
+    candidates=[]; observations=[]; matched=set()
+    for item in items:
+        if item.mpc_year is None:
+            continue
+        row=by_identity.get((item.mpc_year,item.mpc_month))
+        if row is None:
+            observations.append({"type":"SARB_MPC_STATEMENT_OUTSIDE_CONFIGURED_SCOPE","title":item.title,"link":item.link,"pubDate":item.pub_date,"event_state_inference":"NONE","automatic_commit_allowed":False})
+            continue
+        oid=row["occurrence_id"]
+        if oid in matched:
+            raise ValueError(f"multiple SARB RSS items mapped to {oid}")
+        matched.add(oid)
+        local_iso,local_date=_local_pubdate(item)
+        expected_date=row["start_local"][:10]
+        if row.get("lifecycle_status")=="COMPLETED":
+            observations.append({"type":"SARB_COMPLETED_OCCURRENCE_STATEMENT_PRESENT_NO_LIFECYCLE_ACTION","occurrence_id":oid,"rss_pubdate":item.pub_date,"rss_pubdate_local":local_iso,"event_state_inference":"NONE","automatic_commit_allowed":False})
+            continue
+        mismatch=local_date!=expected_date
+        evidence={"feed_title":item.title,"feed_link":item.link,"feed_category":item.category,"feed_guid":item.guid,"rss_pubdate":item.pub_date,"rss_pubdate_local":local_iso,"rss_publication_civil_date":local_date,"canonical_announcement_date":expected_date,"rss_pubdate_is_canonical_clock_authority":False,"canonical_source_id":CANONICAL_SOURCE_ID}
+        digest=_stable_hash({"occurrence_id":oid,**evidence})
+        candidates.append({"candidate_id":"WSRC-SARB-RSS-"+digest[:16],"candidate_type":"SARB_MPC_PUBLICATION_DATE_MISMATCH_REVIEW" if mismatch else "SARB_MPC_STATEMENT_PUBLICATION_EVIDENCE","source_id":MONITOR_SOURCE_ID,"occurrence_ids":[oid],"old_value":{"lifecycle_status":row.get("lifecycle_status"),"start_local":row.get("start_local"),"publication_datetime":row.get("publication_datetime"),"canonical_source_id":CANONICAL_SOURCE_ID},"new_value":evidence,"review_state":"PENDING_AUTHORITATIVE_SARB_MPC_PUBLICATION_REVIEW","candidate_origin":"LIVE_READ_ONLY_MONITOR","event_state_inference":"NONE","automatic_commit_allowed":False,"completion_requires_review":True,"canonical_datetime_mutation_allowed":False})
+        observations.append({"type":"SARB_MPC_STATEMENT_MATCHED_REVIEW_REQUIRED","occurrence_id":oid,"publication_date_matches_canonical":not mismatch,"rss_pubdate_is_canonical_clock_authority":False,"event_state_inference":"NONE","automatic_commit_allowed":False})
+    observations.append({"type":"SARB_RSS_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_DELAY_CANCELLATION_OR_CERTAINTY_SEMANTICS","configured_occurrence_count":len(by_id),"matched_occurrence_count":len(matched),"event_state_inference":"NONE","automatic_commit_allowed":False})
+    return candidates,observations
+'''
+          (ROOT/'src/world_signals/sarb_mpc_monitor.py').write_text(monitor)
+
+          # Governed source and expectation transforms.
+          sp=ROOT/'data/sources/registry.json'; ep=ROOT/'data/monitor/expectations.json'; cp=ROOT/'data/canonical/registry.json'
+          sources=json.loads(sp.read_text()); expectations=json.loads(ep.read_text()); canonical=json.loads(cp.read_text())
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (sources['version'],len(sources['sources']))==('2.00',255)
+          assert (expectations['version'],len(expectations['adapters']))==('0.25',23)
+          old=next(s for s in sources['sources'] if s.get('source_id')=='WSSRC-REG-006')
+          old_copy=deepcopy(old)
+          assert not any(s.get('source_id')=='WSSRC-REG-013' for s in sources['sources'])
+          new_source={
+            'source_id':'WSSRC-REG-013','institution':'South African Reserve Bank','jurisdiction':'South Africa','domain':'monetary_policy','endpoint_role':'Official SARB publications RSS publication sentinel','authoritative_url':'https://www.resbank.co.za/bin/sarb/solr/publications/rss','source_type':'official_rss_feed','information_supplied':'Minimal official SARB RSS publication metadata; monitor-only evidence for configured MPC statement publication identity.','future_schedule_horizon':'not a schedule source; rolling latest-publications feed','typical_advance_notice':'publication driven','machine_readable_available':'RSS/XML','source_timezone':'Africa/Johannesburg','recommended_verification_cadence':'daily; one official RSS request per run','activation_status':'ACTIVE_GUARDED','parser_type':'SARB_PUBLICATIONS_RSS_MPC_SENTINEL','parser_version':'sarb-rss-0.1','known_limitations':['Generic rolling feed currently exposes 25 latest publications; absence has no schedule or lifecycle semantics.','No target MPC item was present in the 2026-09-09 diagnostic window; target title/path structure is grounded independently in first-party SARB statement pages.','RSS pubDate is publication metadata only and has no Canonical clock authority.','No automatic statement-page, PDF, webcast, search or schedule follow-up is permitted.','Positive publication evidence creates review candidates only and cannot automatically set COMPLETED.','WSSRC-REG-006 remains Canonical schedule/clock authority and retains its general-site rights hold.'],'backup_source':None,'notes':'Separate machine-interface identity preserves restrictive Canonical source governance while using SARB\'s expressly supplied RSS subscription interface.','timezone_scope':'AFRICA_JOHANNESBURG_FOR_PUBLICATION_CIVIL_DATE_COMPARISON_ONLY','licence_constraints':'GENERAL_SITE_COPY_REPRODUCTION_RESTRICTIONS_PRESERVED_NO_BROAD_REUSE_GRANT_ASSERTED','ingestion_permission':'OFFICIAL_PUBLISHED_RSS_MINIMAL_FACTUAL_METADATA_INTERNAL_MONITORING','licence_review_status':'NO_BROAD_CONTENT_REUSE_GRANT_RSS_MACHINE_INTERFACE_SEPARATELY_IDENTIFIED','automated_retrieval_permission':'OFFICIAL_RSS_SUBSCRIPTION_INTERFACE_BOUNDED_METADATA_MONITORING','redistribution_permission':'MINIMAL_FACTUAL_METADATA_ONLY_NO_ARTICLE_OR_PDF_CONTENT_REPUBLICATION','rights_evidence_url':'https://www.resbank.co.za/en/home/quick-links/disclaimer','rights_summary':'SARB general website rights restrictions remain in force; CB does not infer broad content reproduction or redistribution rights.','automation_evidence_url':'https://www.resbank.co.za/en/home/quick-links/rss-feeds','automation_summary':'SARB explicitly publishes an RSS subscription interface. Automation is limited to one request to that feed with no follow-ups.','rights_reviewed_at':'2026-09-09','rights_review_scope':'CB_CONTENT_REUSE_SEPARATED_FROM_EXPRESS_RSS_MACHINE_INTERFACE','rights_review_note':'Operational governance classification for WORLD SIGNALS; not a legal opinion.','monitoring_readiness_status':'LIVE_VALIDATED_NO_AUTO_COMMIT','monitoring_priority_score':640,'canonical_dependency_count':0,'monitoring_readiness_assessed_at':'2026-09-09','monitoring_activation_status':'LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT','last_successful_research_verification_at':'2026-09-09','canonical_provenance_use':'MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_OR_CLOCK_AUTHORITY','automated_monitoring_use':'CLEARED_BOUNDED_OFFICIAL_RSS','verification_mode':'AUTOMATED_PILOT','runtime_health_state':'READ_ONLY_DIAGNOSTIC_PASS_2026_09_09','governance_backfill_reviewed_at':'2026-09-09','governance_backfill_basis':'Separate first-party RSS machine source; restrictive WSSRC-REG-006 schedule source remains unchanged.','live_adapter_id':'SARB_MPC_STATEMENTS_RSS','live_validation_evidence':{'contract_run_id':34311819558,'contract_job_id':102339870513,'rss_http_status':200,'rss_content_type':'application/xml;charset=utf-8','rss_item_count':25,'target_mpc_items_observed':0,'repository_byte_clean':True,'automatic_commit_allowed':False},'related_source_ids':['WSSRC-REG-006'],'monitor_endpoints':[{'endpoint_role':'sarb_publications_rss','url':'https://www.resbank.co.za/bin/sarb/solr/publications/rss','transport':'RSS_XML','preferred_for_monitoring':True,'completeness_scope':'ROLLING_LATEST_SARB_PUBLICATIONS'},{'endpoint_role':'rss_machine_interface_documentation','url':'https://www.resbank.co.za/en/home/quick-links/rss-feeds','transport':'HTML_MANUAL_GOVERNANCE_REFERENCE','preferred_for_monitoring':False,'completeness_scope':'SARB_RSS_SUBSCRIPTION_DOCUMENTATION'}]}
+          sources['sources'].append(new_source); sources['version']='2.01'; sources['reference_date']='2026-09-09'
+          assert next(s for s in sources['sources'] if s.get('source_id')=='WSSRC-REG-006')==old_copy
+          sp.write_text(json.dumps(sources,indent=2,ensure_ascii=False)+'\n')
+
+          ident={x['occurrence_id']:{'year':x['year'],'month':x['month'],'month_name':x['month_name'],'announcement_datetime':x['announcement_datetime'],'announcement_date':x['announcement_date']} for x in plan['canonical_occurrences']}
+          route={'adapter_id':'SARB_MPC_STATEMENTS_RSS','source_id':'WSSRC-REG-013','canonical_occurrence_ids':['WSO-REG-A-0009','WSO-REG-A-0010'],'statement_identity_by_occurrence_id':ident,'monitor_role':'OFFICIAL_SARB_MPC_STATEMENT_PUBLICATION_RSS_SENTINEL','cadence':'DAILY','request_budget_per_run':1,'feed':{'url':'https://www.resbank.co.za/bin/sarb/solr/publications/rss','transport':'RSS_XML','request_policy':'ONE_OFFICIAL_RSS_REQUEST_PER_DAILY_MONITOR_RUN'},'source_failure_policy':'SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION','positive_publication_policy':'EXACT_TITLE_YEAR_MONTH_PATH_CATEGORY_IDENTITY_CREATES_REVIEW_CANDIDATE_ONLY','publication_date_mismatch_policy':'REVIEW_CANDIDATE_ONLY_NO_CANONICAL_MOVE','absence_policy':'ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_DELAY_CANCELLATION_OR_CERTAINTY_SEMANTICS','canonical_schedule_source_id':'WSSRC-REG-006','schedule_authority':False,'clock_authority':False,'lifecycle_authority':False,'certainty_authority':False,'rss_pubdate_is_canonical_clock_authority':False,'canonical_datetime_mutation_allowed':False,'automatic_item_link_fetch_allowed':False,'automatic_schedule_fetch_allowed':False,'automatic_new_occurrence_creation_allowed':False,'automatic_live_or_analysis_promotion_allowed':False,'live_intelligence_policy':'NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS','automatic_commit_allowed':False}
+          expectations['adapters'].append(route); expectations['version']='0.26'
+          assert expectations.get('automatic_canonical_commit') is False and expectations.get('google_calendar_write') is False
+          ep.write_text(json.dumps(expectations,indent=2,ensure_ascii=False)+'\n')
+
+          # Export adapter.
+          p=ROOT/'src/world_signals/adapters/__init__.py'; text=p.read_text()
+          anchor='from .rba_fsr import RBA_FSR_RSS, fetch_rba_fsr, parse_rba_fsr_rss\n'
+          block='''from .sarb_rss import (\n    SARB_MPC_CATEGORY,\n    SARB_PUBLICATIONS_RSS,\n    SARB_RSS_ACCEPT,\n    SARB_RSS_DOCS,\n    SARBPublicationItem,\n    fetch_sarb_publications_rss,\n    parse_sarb_publications_rss,\n)\n'''
+          assert 'fetch_sarb_publications_rss' not in text and anchor in text
+          p.write_text(text.replace(anchor,block+anchor))
+
+          # Wire live monitor.
+          p=ROOT/'scripts/run_live_monitor.py'; text=p.read_text()
+          text=text.replace('    fetch_rba_fsr,\n','    fetch_rba_fsr,\n    fetch_sarb_publications_rss,\n',1)
+          text=text.replace('from world_signals.rba_mpb_monitor import (\n','from world_signals.sarb_mpc_monitor import sarb_mpc_rss_review_candidates\nfrom world_signals.rba_mpb_monitor import (\n',1)
+          live_block='''\n    if "SARB_MPC_STATEMENTS_RSS" in configs:\n        sarb_config=configs["SARB_MPC_STATEMENTS_RSS"]\n        try:\n            sarb_items,sarb_snap=fetch_sarb_publications_rss()\n            report["source_health"].append({\n                "adapter_id":"SARB_MPC_STATEMENTS_RSS",\n                "source_id":sarb_config["source_id"],\n                "state":"HEALTHY",\n                "snapshot":sarb_snap.as_dict(),\n                "item_count":len(sarb_items),\n                "mpc_item_count":sum(1 for x in sarb_items if x.mpc_year is not None),\n                "request_budget_per_run":1,\n                "rss_request_count":1,\n                "robots_request_count":0,\n                "schedule_request_count":0,\n                "item_link_request_count":0,\n                "pdf_request_count":0,\n                "search_request_count":0,\n                "schedule_authority":False,\n                "clock_authority":False,\n                "lifecycle_authority":False,\n                "certainty_authority":False,\n                "rss_pubdate_is_canonical_clock_authority":False,\n                "canonical_datetime_mutation_allowed":False,\n                "automatic_item_link_fetch_allowed":False,\n                "automatic_schedule_fetch_allowed":False,\n                "automatic_new_occurrence_creation_allowed":False,\n                "automatic_live_or_analysis_promotion_allowed":False,\n                "automatic_commit_allowed":False,\n            })\n            candidates,observations=sarb_mpc_rss_review_candidates(registry.get("records",[]),sarb_items,sarb_config)\n            report["review_candidates"].extend(candidates)\n            report["observations"].extend(observations)\n        except (AdapterError,ValueError) as exc:\n            report["source_health"].append({\n                "adapter_id":"SARB_MPC_STATEMENTS_RSS",\n                "source_id":sarb_config["source_id"],\n                "state":"DEGRADED",\n                "error":str(exc),\n                "canonical_action":"NONE",\n                "absence_is_not_event_state":True,\n                "schedule_authority":False,\n                "clock_authority":False,\n                "lifecycle_authority":False,\n                "certainty_authority":False,\n                "canonical_datetime_mutation_allowed":False,\n                "automatic_item_link_fetch_allowed":False,\n                "automatic_schedule_fetch_allowed":False,\n                "automatic_new_occurrence_creation_allowed":False,\n                "automatic_live_or_analysis_promotion_allowed":False,\n                "automatic_commit_allowed":False,\n            })\n\n'''
+          anchor='    if "USDA_NASS_ASB_ICAL" in configs:\n'
+          assert 'if "SARB_MPC_STATEMENTS_RSS" in configs:' not in text and anchor in text
+          p.write_text(text.replace(anchor,live_block+anchor,1))
+
+          # Wire adapter smoke.
+          p=ROOT/'scripts/run_adapter_smoke.py'; text=p.read_text()
+          text=text.replace('    fetch_rba_fsr,\n','    fetch_rba_fsr,\n    fetch_sarb_publications_rss,\n',1)
+          smoke='''\n    try:\n        sarb_items,sarb_snap=fetch_sarb_publications_rss()\n        report["results"].append({\n            "adapter":"SARB_MPC_STATEMENTS_RSS",\n            "status":"PASS",\n            "source_id":"WSSRC-REG-013",\n            "snapshot":sarb_snap.as_dict(),\n            "item_count":len(sarb_items),\n            "mpc_item_count":sum(1 for x in sarb_items if x.mpc_year is not None),\n            "request_budget_per_run":1,\n            "schedule_authority":False,\n            "clock_authority":False,\n            "lifecycle_authority":False,\n            "automatic_commit_allowed":False,\n        })\n    except AdapterError as exc:\n        failures.append(str(exc))\n        report["results"].append({"adapter":"SARB_MPC_STATEMENTS_RSS","status":"FAIL","source_id":"WSSRC-REG-013","error":str(exc),"canonical_action":"NONE"})\n\n'''
+          anchor='    try:\n        items,snap=fetch_rba_fsr()\n'
+          assert '"adapter":"SARB_MPC_STATEMENTS_RSS"' not in text and anchor in text
+          p.write_text(text.replace(anchor,smoke+anchor,1))
+
+          apply_script=r'''from __future__ import annotations
+
+import argparse, json
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[1]
+PLAN=ROOT/"data/monitor/SARB_MPC_RSS_CB_PLAN_v0.1.json"
+CANONICAL=ROOT/"data/canonical/registry.json"
+SOURCES=ROOT/"data/sources/registry.json"
+EXPECTATIONS=ROOT/"data/monitor/expectations.json"
+
+def load(p): return json.loads(p.read_text())
+
+def check_poststate() -> None:
+    plan=load(PLAN); c=load(CANONICAL); s=load(SOURCES); e=load(EXPECTATIONS)
+    if (c.get("version"),len(c.get("records",[]))) != ("0.41",689): raise SystemExit("CB Canonical poststate drift")
+    if (s.get("version"),len(s.get("sources",[]))) != ("2.01",256): raise SystemExit("CB Sources poststate drift")
+    if (e.get("version"),len(e.get("adapters",[]))) != ("0.26",24): raise SystemExit("CB Monitor poststate drift")
+    if e.get("automatic_canonical_commit") is not False or e.get("google_calendar_write") is not False: raise SystemExit("CB write gate drift")
+    old=[x for x in s["sources"] if x.get("source_id")=="WSSRC-REG-006"]; new=[x for x in s["sources"] if x.get("source_id")=="WSSRC-REG-013"]; route=[x for x in e["adapters"] if x.get("adapter_id")=="SARB_MPC_STATEMENTS_RSS"]
+    if len(old)!=1 or len(new)!=1 or len(route)!=1: raise SystemExit("CB source/route identity drift")
+    if old[0].get("automated_monitoring_use")!="PROHIBITED_OR_RIGHTS_HOLD": raise SystemExit("CB improperly cleared held SARB Canonical source")
+    if route[0].get("canonical_occurrence_ids") != ["WSO-REG-A-0009","WSO-REG-A-0010"]: raise SystemExit("CB occurrence allow-list drift")
+    for k in plan["authority_gates"]:
+        if route[0].get(k) is not False: raise SystemExit(f"CB authority gate drift: {k}")
+    print("CB POSTSTATE CHECK PASS")
+
+def main():
+    ap=argparse.ArgumentParser(); ap.add_argument("--check",action="store_true"); args=ap.parse_args(); check_poststate()
+if __name__=="__main__": main()
+'''
+          (ROOT/'scripts/apply_sarb_mpc_rss_monitor_cb.py').write_text(apply_script)
+
+          tests=r'''from __future__ import annotations
+
+import copy, json, unittest
+from pathlib import Path
+
+from world_signals.adapters.base import AdapterError
+from world_signals.adapters.sarb_rss import parse_sarb_publications_rss
+from world_signals.sarb_mpc_monitor import sarb_mpc_rss_review_candidates
+
+ROOT=Path(__file__).resolve().parents[1]
+PLAN=json.loads((ROOT/"data/monitor/SARB_MPC_RSS_CB_PLAN_v0.1.json").read_text())
+CANONICAL=json.loads((ROOT/"data/canonical/registry.json").read_text())
+EXPECT=json.loads((ROOT/"data/monitor/expectations.json").read_text())
+CONFIG=next(x for x in EXPECT["adapters"] if x.get("adapter_id")=="SARB_MPC_STATEMENTS_RSS")
+
+def xml(items):
+    payload="".join(f"<item><title>{x['title']}</title><link>{x['link']}</link><description>{x.get('description','')}</description><pubDate>{x['pubDate']}</pubDate><category>{x['category']}</category><guid>{x['guid']}</guid></item>" for x in items)
+    return f"<rss><channel>{payload}</channel></rss>"
+
+def target(month='September',date='2026-09-23T13:00:00Z'):
+    low=month.lower()
+    return {'title':f'Statement of the Monetary Policy Committee {month} 2026','link':f'/en/home/publications/publication-detail-pages/statements/monetary-policy-statements/2026/{low}','pubDate':date,'category':"Media &gt; Media Releases | Statements &gt; Monetary Policy Statements | What's New",'guid':f'/content/sarb-project/en/home/publications/publication-detail-pages/statements/monetary-policy-statements/2026/{low}'}
+
+class SARBRSSCBTests(unittest.TestCase):
+    def test_parser_classifies_exact_mpc_identity(self):
+        items=parse_sarb_publications_rss(xml([target()]))
+        self.assertEqual((items[0].mpc_year,items[0].mpc_month,items[0].mpc_month_name),(2026,9,'September'))
+
+    def test_parser_allows_non_mpc_publication(self):
+        item={'title':'Working paper','link':'/en/home/publications/publication-detail-pages/working-papers/2026/example','pubDate':'2026-09-09T08:00:00Z','category':'Working Papers','guid':'/content/sarb-project/en/home/publications/publication-detail-pages/working-papers/2026/example'}
+        parsed=parse_sarb_publications_rss(xml([item]))
+        self.assertIsNone(parsed[0].mpc_year)
+
+    def test_parser_fails_closed_on_mpc_title_drift(self):
+        bad=target(); bad['title']='Monetary Policy Committee statement September 2026'
+        with self.assertRaises(AdapterError): parse_sarb_publications_rss(xml([bad]))
+
+    def test_parser_fails_closed_on_mpc_path_drift(self):
+        bad=target(); bad['link']='/en/home/publications/publication-detail-pages/statements/monetary-policy-statements/2026/wrong'
+        with self.assertRaises(AdapterError): parse_sarb_publications_rss(xml([bad]))
+
+    def test_exact_publication_generates_review_only_candidate(self):
+        items=parse_sarb_publications_rss(xml([target()]))
+        candidates,obs=sarb_mpc_rss_review_candidates(CANONICAL['records'],items,CONFIG)
+        self.assertEqual(len(candidates),1)
+        self.assertEqual(candidates[0]['candidate_type'],'SARB_MPC_STATEMENT_PUBLICATION_EVIDENCE')
+        self.assertFalse(candidates[0]['automatic_commit_allowed'])
+        self.assertFalse(candidates[0]['canonical_datetime_mutation_allowed'])
+
+    def test_different_publication_date_is_review_not_mutation(self):
+        items=parse_sarb_publications_rss(xml([target(date='2026-09-24T08:00:00Z')]))
+        candidates,_=sarb_mpc_rss_review_candidates(CANONICAL['records'],items,CONFIG)
+        self.assertEqual(candidates[0]['candidate_type'],'SARB_MPC_PUBLICATION_DATE_MISMATCH_REVIEW')
+        self.assertFalse(candidates[0]['automatic_commit_allowed'])
+
+    def test_absence_has_no_event_state_semantics(self):
+        ordinary={'title':'Working paper','link':'/en/home/publications/publication-detail-pages/working-papers/2026/example','pubDate':'2026-09-09T08:00:00Z','category':'Working Papers','guid':'/content/sarb-project/en/home/publications/publication-detail-pages/working-papers/2026/example'}
+        items=parse_sarb_publications_rss(xml([ordinary]))
+        candidates,obs=sarb_mpc_rss_review_candidates(CANONICAL['records'],items,CONFIG)
+        self.assertEqual(candidates,[])
+        self.assertEqual(obs[-1]['matched_occurrence_count'],0)
+        self.assertEqual(obs[-1]['event_state_inference'],'NONE')
+
+    def test_completed_occurrence_gets_observation_only(self):
+        records=copy.deepcopy(CANONICAL['records'])
+        next(r for r in records if r.get('occurrence_id')=='WSO-REG-A-0009')['lifecycle_status']='COMPLETED'
+        items=parse_sarb_publications_rss(xml([target()]))
+        candidates,obs=sarb_mpc_rss_review_candidates(records,items,CONFIG)
+        self.assertEqual(candidates,[])
+        self.assertTrue(any(x['type'].startswith('SARB_COMPLETED') for x in obs))
+
+if __name__=='__main__': unittest.main()
+'''
+          (ROOT/'tests/test_sarb_mpc_rss_cb.py').write_text(tests)
+
+          activation=r'''from __future__ import annotations
+import json, unittest
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+class SARBActivationCBTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.c=json.loads((ROOT/'data/canonical/registry.json').read_text()); cls.s=json.loads((ROOT/'data/sources/registry.json').read_text()); cls.e=json.loads((ROOT/'data/monitor/expectations.json').read_text())
+    def test_governed_counts(self):
+        self.assertEqual((self.c['version'],len(self.c['records'])),('0.41',689)); self.assertEqual((self.s['version'],len(self.s['sources'])),('2.01',256)); self.assertEqual((self.e['version'],len(self.e['adapters'])),('0.26',24))
+    def test_canonical_source_stays_held(self):
+        x=next(x for x in self.s['sources'] if x.get('source_id')=='WSSRC-REG-006'); self.assertEqual(x['automated_monitoring_use'],'PROHIBITED_OR_RIGHTS_HOLD'); self.assertEqual(x['verification_mode'],'RIGHTS_HELD_MANUAL_ONLY')
+    def test_monitor_source_and_route(self):
+        src=next(x for x in self.s['sources'] if x.get('source_id')=='WSSRC-REG-013'); route=next(x for x in self.e['adapters'] if x.get('adapter_id')=='SARB_MPC_STATEMENTS_RSS')
+        self.assertEqual(src['canonical_dependency_count'],0); self.assertEqual(src['related_source_ids'],['WSSRC-REG-006']); self.assertEqual(route['canonical_occurrence_ids'],['WSO-REG-A-0009','WSO-REG-A-0010']); self.assertEqual(route['request_budget_per_run'],1)
+        for k in ('schedule_authority','clock_authority','lifecycle_authority','certainty_authority','canonical_datetime_mutation_allowed','automatic_item_link_fetch_allowed','automatic_schedule_fetch_allowed','automatic_new_occurrence_creation_allowed','automatic_live_or_analysis_promotion_allowed','automatic_commit_allowed'): self.assertIs(route[k],False,k)
+        self.assertIs(self.e['automatic_canonical_commit'],False); self.assertIs(self.e['google_calendar_write'],False)
+if __name__=='__main__': unittest.main()
+'''
+          (ROOT/'tests/test_sarb_mpc_rss_activation_cb.py').write_text(activation)
+          PY
+
+          PYTHONPATH=src python scripts/apply_sarb_mpc_rss_monitor_cb.py --check
+          PYTHONPATH=src python -m unittest tests.test_sarb_mpc_rss_cb tests.test_sarb_mpc_rss_activation_cb -v
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m py_compile src/world_signals/adapters/sarb_rss.py src/world_signals/sarb_mpc_monitor.py scripts/run_live_monitor.py scripts/run_adapter_smoke.py scripts/apply_sarb_mpc_rss_monitor_cb.py
+          node --check web/app.js
+          python scripts/build_site.py
+
+          git config user.name "WORLD SIGNALS CB builder"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/monitor/SARB_MPC_RSS_CB_RESEARCH_v0.1.md data/monitor/SARB_MPC_RSS_CB_PLAN_v0.1.json data/monitor/expectations.json data/sources/registry.json scripts/apply_sarb_mpc_rss_monitor_cb.py scripts/run_adapter_smoke.py scripts/run_live_monitor.py src/world_signals/adapters/__init__.py src/world_signals/adapters/sarb_rss.py src/world_signals/sarb_mpc_monitor.py tests/test_sarb_mpc_rss_cb.py tests/test_sarb_mpc_rss_activation_cb.py
+          git commit -m "CB: activate SARB MPC statement RSS monitor"
+          git push origin HEAD:feature/post-ca-pressure-audit-cb
