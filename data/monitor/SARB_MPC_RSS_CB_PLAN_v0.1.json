@@ -1,0 +1,82 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CB",
+  "reference_date": "2026-09-09",
+  "exact_base_main_sha": "1f20c9afbf7d9e295024ce534b3191155d9f674b",
+  "selection": {
+    "canonical_schedule_source_id": "WSSRC-REG-006",
+    "machine_source_id": "WSSRC-REG-013",
+    "adapter_id": "SARB_MPC_STATEMENTS_RSS",
+    "series_id": "WSER-REG-ZA-SARB",
+    "rss_documentation_url": "https://www.resbank.co.za/en/home/quick-links/rss-feeds",
+    "rss_url": "https://www.resbank.co.za/bin/sarb/solr/publications/rss",
+    "rights_evidence_url": "https://www.resbank.co.za/en/home/quick-links/disclaimer",
+    "source_timezone": "Africa/Johannesburg"
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.00",
+    "source_count": 255,
+    "monitor_expectations_version": "0.25",
+    "configured_monitor_adapter_count": 23
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.01",
+    "source_count": 256,
+    "monitor_expectations_version": "0.26",
+    "configured_monitor_adapter_count": 24,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrences": [
+    {
+      "occurrence_id": "WSO-REG-A-0009",
+      "year": 2026,
+      "month": 9,
+      "month_name": "September",
+      "announcement_datetime": "2026-09-23T15:00:00",
+      "announcement_date": "2026-09-23"
+    },
+    {
+      "occurrence_id": "WSO-REG-A-0010",
+      "year": 2026,
+      "month": 11,
+      "month_name": "November",
+      "announcement_datetime": "2026-11-19T15:00:00",
+      "announcement_date": "2026-11-19"
+    }
+  ],
+  "request_contract": {
+    "max_requests_per_run": 1,
+    "rss_requests": 1,
+    "robots_requests": 0,
+    "schedule_requests": 0,
+    "item_link_requests": 0,
+    "pdf_requests": 0,
+    "search_requests": 0
+  },
+  "authority_gates": {
+    "schedule_authority": false,
+    "clock_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "canonical_datetime_mutation_allowed": false,
+    "automatic_item_link_fetch_allowed": false,
+    "automatic_schedule_fetch_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "diagnostics": {
+    "contract_run_id": 34311819558,
+    "contract_job_id": 102339870513,
+    "rss_status": 200,
+    "rss_content_type": "application/xml;charset=utf-8",
+    "rss_item_count": 25,
+    "target_items_observed": 0,
+    "repository_byte_clean": true
+  }
+}

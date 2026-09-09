@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-09",
-  "version": "2.00",
+  "version": "2.01",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -11432,6 +11432,89 @@
           "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
           "preferred_for_monitoring": false,
           "completeness_scope": "CANONICAL_CALENDAR_AUTHORITY_REMAINS_ENDPOINT_HELD"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-REG-013",
+      "institution": "South African Reserve Bank",
+      "jurisdiction": "South Africa",
+      "domain": "monetary_policy",
+      "endpoint_role": "Official SARB publications RSS publication sentinel",
+      "authoritative_url": "https://www.resbank.co.za/bin/sarb/solr/publications/rss",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Minimal official SARB RSS publication metadata; monitor-only evidence for configured MPC statement publication identity.",
+      "future_schedule_horizon": "not a schedule source; rolling latest-publications feed",
+      "typical_advance_notice": "publication driven",
+      "machine_readable_available": "RSS/XML",
+      "source_timezone": "Africa/Johannesburg",
+      "recommended_verification_cadence": "daily; one official RSS request per run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "SARB_PUBLICATIONS_RSS_MPC_SENTINEL",
+      "parser_version": "sarb-rss-0.1",
+      "known_limitations": [
+        "Generic rolling feed currently exposes 25 latest publications; absence has no schedule or lifecycle semantics.",
+        "No target MPC item was present in the 2026-09-09 diagnostic window; target title/path structure is grounded independently in first-party SARB statement pages.",
+        "RSS pubDate is publication metadata only and has no Canonical clock authority.",
+        "No automatic statement-page, PDF, webcast, search or schedule follow-up is permitted.",
+        "Positive publication evidence creates review candidates only and cannot automatically set COMPLETED.",
+        "WSSRC-REG-006 remains Canonical schedule/clock authority and retains its general-site rights hold."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine-interface identity preserves restrictive Canonical source governance while using SARB's expressly supplied RSS subscription interface.",
+      "timezone_scope": "AFRICA_JOHANNESBURG_FOR_PUBLICATION_CIVIL_DATE_COMPARISON_ONLY",
+      "licence_constraints": "GENERAL_SITE_COPY_REPRODUCTION_RESTRICTIONS_PRESERVED_NO_BROAD_REUSE_GRANT_ASSERTED",
+      "ingestion_permission": "OFFICIAL_PUBLISHED_RSS_MINIMAL_FACTUAL_METADATA_INTERNAL_MONITORING",
+      "licence_review_status": "NO_BROAD_CONTENT_REUSE_GRANT_RSS_MACHINE_INTERFACE_SEPARATELY_IDENTIFIED",
+      "automated_retrieval_permission": "OFFICIAL_RSS_SUBSCRIPTION_INTERFACE_BOUNDED_METADATA_MONITORING",
+      "redistribution_permission": "MINIMAL_FACTUAL_METADATA_ONLY_NO_ARTICLE_OR_PDF_CONTENT_REPUBLICATION",
+      "rights_evidence_url": "https://www.resbank.co.za/en/home/quick-links/disclaimer",
+      "rights_summary": "SARB general website rights restrictions remain in force; CB does not infer broad content reproduction or redistribution rights.",
+      "automation_evidence_url": "https://www.resbank.co.za/en/home/quick-links/rss-feeds",
+      "automation_summary": "SARB explicitly publishes an RSS subscription interface. Automation is limited to one request to that feed with no follow-ups.",
+      "rights_reviewed_at": "2026-09-09",
+      "rights_review_scope": "CB_CONTENT_REUSE_SEPARATED_FROM_EXPRESS_RSS_MACHINE_INTERFACE",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 640,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-09",
+      "monitoring_activation_status": "LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-09",
+      "canonical_provenance_use": "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_OR_CLOCK_AUTHORITY",
+      "automated_monitoring_use": "CLEARED_BOUNDED_OFFICIAL_RSS",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "READ_ONLY_DIAGNOSTIC_PASS_2026_09_09",
+      "governance_backfill_reviewed_at": "2026-09-09",
+      "governance_backfill_basis": "Separate first-party RSS machine source; restrictive WSSRC-REG-006 schedule source remains unchanged.",
+      "live_adapter_id": "SARB_MPC_STATEMENTS_RSS",
+      "live_validation_evidence": {
+        "contract_run_id": 34311819558,
+        "contract_job_id": 102339870513,
+        "rss_http_status": 200,
+        "rss_content_type": "application/xml;charset=utf-8",
+        "rss_item_count": 25,
+        "target_mpc_items_observed": 0,
+        "repository_byte_clean": true,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-REG-006"
+      ],
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "sarb_publications_rss",
+          "url": "https://www.resbank.co.za/bin/sarb/solr/publications/rss",
+          "transport": "RSS_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "ROLLING_LATEST_SARB_PUBLICATIONS"
+        },
+        {
+          "endpoint_role": "rss_machine_interface_documentation",
+          "url": "https://www.resbank.co.za/en/home/quick-links/rss-feeds",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "SARB_RSS_SUBSCRIPTION_DOCUMENTATION"
         }
       ]
     }

@@ -42,6 +42,7 @@ from world_signals.adapters import (
     fetch_japan_household_spending_data,
     fetch_japan_mof_news_rss,
     fetch_rba_fsr,
+    fetch_sarb_publications_rss,
     fetch_rba_monetary_policy_calendar,
     fetch_rba_board_schedule,
     validate_rba_calendar_alignment,
@@ -66,6 +67,7 @@ from world_signals.nass_asb_monitor import nass_asb_ical_review_candidates
 from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
 from world_signals.nz_election_monitor import nz_election_timetable_change_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
+from world_signals.sarb_mpc_monitor import sarb_mpc_rss_review_candidates
 from world_signals.rba_mpb_monitor import (
     fetch_rba_robots_policy,
     rba_mpb_schedule_review_candidates,
@@ -447,6 +449,60 @@ def main() -> int:
                 "canonical_date_mutation_allowed":False,
                 "automatic_calendar_html_fetch_allowed":False,
                 "automatic_item_link_fetch_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+
+    if "SARB_MPC_STATEMENTS_RSS" in configs:
+        sarb_config=configs["SARB_MPC_STATEMENTS_RSS"]
+        try:
+            sarb_items,sarb_snap=fetch_sarb_publications_rss()
+            report["source_health"].append({
+                "adapter_id":"SARB_MPC_STATEMENTS_RSS",
+                "source_id":sarb_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":sarb_snap.as_dict(),
+                "item_count":len(sarb_items),
+                "mpc_item_count":sum(1 for x in sarb_items if x.mpc_year is not None),
+                "request_budget_per_run":1,
+                "rss_request_count":1,
+                "robots_request_count":0,
+                "schedule_request_count":0,
+                "item_link_request_count":0,
+                "pdf_request_count":0,
+                "search_request_count":0,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "rss_pubdate_is_canonical_clock_authority":False,
+                "canonical_datetime_mutation_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_fetch_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=sarb_mpc_rss_review_candidates(registry.get("records",[]),sarb_items,sarb_config)
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"SARB_MPC_STATEMENTS_RSS",
+                "source_id":sarb_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_datetime_mutation_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_fetch_allowed":False,
                 "automatic_new_occurrence_creation_allowed":False,
                 "automatic_live_or_analysis_promotion_allowed":False,
                 "automatic_commit_allowed":False,

@@ -41,6 +41,7 @@ from world_signals.adapters import (
     fetch_japan_household_spending_data,
     fetch_japan_mof_news_rss,
     fetch_rba_fsr,
+    fetch_sarb_publications_rss,
     fetch_rba_monetary_policy_calendar,
     fetch_rba_board_schedule,
     validate_rba_calendar_alignment,
@@ -82,6 +83,26 @@ def main() -> int:
         "results":[],
     }
     failures=[]
+
+
+    try:
+        sarb_items,sarb_snap=fetch_sarb_publications_rss()
+        report["results"].append({
+            "adapter":"SARB_MPC_STATEMENTS_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-REG-013",
+            "snapshot":sarb_snap.as_dict(),
+            "item_count":len(sarb_items),
+            "mpc_item_count":sum(1 for x in sarb_items if x.mpc_year is not None),
+            "request_budget_per_run":1,
+            "schedule_authority":False,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "automatic_commit_allowed":False,
+        })
+    except AdapterError as exc:
+        failures.append(str(exc))
+        report["results"].append({"adapter":"SARB_MPC_STATEMENTS_RSS","status":"FAIL","source_id":"WSSRC-REG-013","error":str(exc),"canonical_action":"NONE"})
 
     try:
         items,snap=fetch_rba_fsr()

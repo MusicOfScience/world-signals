@@ -247,6 +247,15 @@ from .ons_release_calendar import (
     ons_release_calendar_rss_url,
     parse_ons_release_calendar_rss,
 )
+from .sarb_rss import (
+    SARB_MPC_CATEGORY,
+    SARB_PUBLICATIONS_RSS,
+    SARB_RSS_ACCEPT,
+    SARB_RSS_DOCS,
+    SARBPublicationItem,
+    fetch_sarb_publications_rss,
+    parse_sarb_publications_rss,
+)
 from .rba_fsr import RBA_FSR_RSS, fetch_rba_fsr, parse_rba_fsr_rss
 from .rba_mpb import (
     RBA_BOARD_SCHEDULE_URL,
