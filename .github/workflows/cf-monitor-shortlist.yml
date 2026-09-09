@@ -1,0 +1,40 @@
+name: CF Monitor candidate shortlist
+
+on:
+  push:
+    branches:
+      - feature/post-cd-monitor-pressure-cf
+    paths:
+      - '.github/workflows/cf-monitor-shortlist.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  shortlist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cd-monitor-pressure-cf
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Enforce OPEC quarantine first
+        run: python -m unittest tests.test_opec_quarantine_cf -v
+      - name: Build source-aware shortlist
+        run: python scripts/build_cf_monitor_shortlist.py
+      - name: Commit shortlist only
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add data/monitor/POST_CD_MONITOR_PRESSURE_CF_SHORTLIST_v0.1.md
+          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/POST_CD_MONITOR_PRESSURE_CF_SHORTLIST_v0\.1\.md$' || true)"
+          if git diff --cached --quiet; then
+            echo "No shortlist change to commit"
+            exit 0
+          fi
+          git commit -m "CF: persist Monitor candidate shortlist"
+          git push origin HEAD:feature/post-cd-monitor-pressure-cf
