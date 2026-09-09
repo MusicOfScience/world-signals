@@ -72,8 +72,9 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
+          import json, sys
           from pathlib import Path
+          sys.path.insert(0,str(Path('src').resolve()))
           from world_signals.adapters.sarb_rss import fetch_sarb_publications_rss
           from world_signals.sarb_mpc_monitor import sarb_mpc_rss_review_candidates
           items,snap=fetch_sarb_publications_rss()
