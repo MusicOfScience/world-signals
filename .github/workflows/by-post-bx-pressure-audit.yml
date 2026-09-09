@@ -1,0 +1,184 @@
+name: BY post-BX read-only pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-bx-pressure-audit-by
+    paths:
+      - .github/workflows/by-post-bx-pressure-audit.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact post-BX ancestry and build audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=a3bca03f36eb5af9036017aad926f75f6762267f
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          python - <<'PY'
+          from __future__ import annotations
+          from collections import Counter, defaultdict
+          import json, os
+          from pathlib import Path
+
+          base='a3bca03f36eb5af9036017aad926f75f6762267f'
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+
+          source_by_id={s.get('source_id'):s for s in sources.get('sources',[]) if s.get('source_id')}
+          deps=Counter(r.get('source_id') for r in canonical.get('records',[]) if r.get('source_id'))
+          route_source_ids=set()
+          route_canonical_source_ids=set()
+          route_ids=[]
+          route_scope_count=Counter()
+          for route in monitor.get('adapters',[]):
+              aid=route.get('adapter_id')
+              if aid: route_ids.append(aid)
+              sid=route.get('source_id')
+              csid=route.get('canonical_schedule_source_id')
+              if sid: route_source_ids.add(sid)
+              if csid: route_canonical_source_ids.add(csid)
+              for oid in route.get('canonical_occurrence_ids') or []:
+                  route_scope_count[oid]+=1
+
+          monitored_canonical_sources=route_source_ids | route_canonical_source_ids
+          records=canonical.get('records',[])
+          region_total=Counter()
+          region_monitored=Counter()
+          category_total=Counter()
+          category_monitored=Counter()
+          domain_total=Counter()
+          domain_monitored=Counter()
+          unmonitored_series=Counter()
+          for r in records:
+              reg=r.get('region') or 'UNSPECIFIED'
+              cat=r.get('category') or r.get('event_category') or 'UNSPECIFIED'
+              dom=r.get('domain') or 'UNSPECIFIED'
+              region_total[reg]+=1
+              category_total[cat]+=1
+              domain_total[dom]+=1
+              if r.get('source_id') in monitored_canonical_sources:
+                  region_monitored[reg]+=1
+                  category_monitored[cat]+=1
+                  domain_monitored[dom]+=1
+              else:
+                  unmonitored_series[r.get('series_id') or 'UNSPECIFIED']+=1
+
+          def coverage_rows(total,monitored):
+              out=[]
+              for key,count in total.items():
+                  m=monitored.get(key,0)
+                  out.append({'name':key,'canonical_count':count,'monitored_count':m,'unmonitored_count':count-m,'coverage_ratio':round(m/count,4) if count else None})
+              return sorted(out,key=lambda x:(x['coverage_ratio'], -x['canonical_count'], x['name']))
+
+          def gov(s):
+              return {
+                  'automated_monitoring_use':s.get('automated_monitoring_use'),
+                  'automated_retrieval_permission':s.get('automated_retrieval_permission'),
+                  'monitoring_readiness_status':s.get('monitoring_readiness_status'),
+                  'monitoring_activation_status':s.get('monitoring_activation_status'),
+                  'verification_mode':s.get('verification_mode'),
+                  'runtime_health_state':s.get('runtime_health_state'),
+                  'canonical_provenance_use':s.get('canonical_provenance_use'),
+                  'licence_review_status':s.get('licence_review_status'),
+                  'ingestion_permission':s.get('ingestion_permission'),
+              }
+
+          unresolved=[]
+          for sid,count in deps.items():
+              s=source_by_id.get(sid,{})
+              if sid in monitored_canonical_sources:
+                  continue
+              unresolved.append({
+                  'source_id':sid,
+                  'dependency_count':count,
+                  'institution':s.get('institution'),
+                  'jurisdiction':s.get('jurisdiction'),
+                  'domain':s.get('domain'),
+                  'endpoint_role':s.get('endpoint_role'),
+                  'source_type':s.get('source_type'),
+                  'authoritative_url':s.get('authoritative_url'),
+                  **gov(s),
+              })
+          unresolved.sort(key=lambda x:(-x['dependency_count'], str(x.get('jurisdiction')), str(x.get('source_id'))))
+
+          buckets=defaultdict(list)
+          for row in unresolved:
+              am=(row.get('automated_monitoring_use') or '').upper()
+              ar=(row.get('automated_retrieval_permission') or '').upper()
+              mr=(row.get('monitoring_readiness_status') or '').upper()
+              lr=(row.get('licence_review_status') or '').upper()
+              text=' | '.join((am,ar,mr,lr))
+              if 'CLEARED' in am and not any(tok in text for tok in ('HOLD','REQUIRED','PENDING','MANUAL_ONLY')):
+                  bucket='CLEARED_BUT_UNROUTED'
+              elif any(tok in text for tok in ('RIGHTS_HOLD','RIGHTS HOLD','MANUAL_ONLY','LICENCE_HOLD','LICENSE_HOLD')):
+                  bucket='RIGHTS_OR_MANUAL_HOLD'
+              elif any(tok in text for tok in ('ENDPOINT_REVIEW_REQUIRED','PENDING_ENDPOINT','OPERATIONAL_REVIEW','PILOT')):
+                  bucket='ENDPOINT_OR_OPERATIONAL_REVIEW'
+              else:
+                  bucket='OTHER_UNRESOLVED'
+              buckets[bucket].append(row)
+
+          result={
+              'tranche':'BY',
+              'reference_date':'2026-09-09',
+              'exact_base_main_sha':base,
+              'governed_baseline':{
+                  'canonical':[canonical.get('version'),len(records)],
+                  'sources':[sources.get('version'),len(sources.get('sources',[]))],
+                  'monitor':[monitor.get('version'),len(monitor.get('adapters',[]))],
+                  'automatic_canonical_commit':monitor.get('automatic_canonical_commit'),
+                  'google_calendar_write':monitor.get('google_calendar_write'),
+              },
+              'route_count':len(route_ids),
+              'monitored_canonical_source_count':len(monitored_canonical_sources),
+              'route_source_ids':sorted(route_source_ids),
+              'route_canonical_source_ids':sorted(route_canonical_source_ids),
+              'coverage_by_region':coverage_rows(region_total,region_monitored),
+              'coverage_by_category':coverage_rows(category_total,category_monitored),
+              'coverage_by_domain':coverage_rows(domain_total,domain_monitored),
+              'top_unmonitored_series':[{'series_id':k,'occurrence_count':v} for k,v in unmonitored_series.most_common(30)],
+              'unresolved_sources_ranked':unresolved[:60],
+              'unresolved_bucket_counts':{k:len(v) for k,v in sorted(buckets.items())},
+              'unresolved_buckets':{k:v[:30] for k,v in sorted(buckets.items())},
+              'audit_rules':{
+                  'no_quota_selection':True,
+                  'no_promotion_from_live_or_analysis':True,
+                  'no_reopening_opec_without_fresh_architectural_reason':True,
+                  'china_nbs_recently_solved_not_preferred_by_momentum':True,
+                  'repository_mutation':False,
+              }
+          }
+          out=Path(os.environ['RUNNER_TEMP'])/'by-post-bx-pressure-audit.json'
+          out.write_text(json.dumps(result,indent=2,ensure_ascii=False,sort_keys=True)+'\n')
+          print(out.read_text())
+          PY
+      - name: Prove repository remains read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only)"
+          test -z "$(git diff --cached --name-only)"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: by-post-bx-pressure-audit
+          path: ${{ runner.temp }}/by-post-bx-pressure-audit.json
+          if-no-files-found: error
+          retention-days: 1
