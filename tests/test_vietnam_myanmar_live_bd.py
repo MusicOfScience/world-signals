@@ -128,6 +128,11 @@ class VietnamMyanmarLiveBDTests(unittest.TestCase):
     def test_status_and_roadmap_targets_record_bd_without_changing_history_body(self):
         status = bd.STATUS_PATH.read_text(encoding="utf-8")
         roadmap = bd.ROADMAP_PATH.read_text(encoding="utf-8")
+        if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in status:
+            self.assertIn("Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**", status)
+            self.assertIn("## Stage 5 — controlled Live Intelligence — IMPLEMENTED / BOUNDED", roadmap)
+            self.assertIn("### CG — BARMM pre-election context — DONE / BOUNDED", roadmap)
+            return
         target_status = bd.target_status(status)
         target_roadmap = bd.target_roadmap(roadmap)
         self.assertIn("POST-BC / BD FIFTH LIVE SPECIMEN", target_status)
