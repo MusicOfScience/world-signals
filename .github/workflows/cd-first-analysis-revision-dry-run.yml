@@ -65,3 +65,4 @@ jobs:
           git diff --exit-code c186835d9d6b36620177badfff604f309ceb35d4..HEAD -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
           git diff --exit-code -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
           echo CD_GOVERNED_PRESTATE_BYTE_CLEAN
+          echo CD_DRY_RUN_RERUN_AFTER_ASSERTION_FIX
