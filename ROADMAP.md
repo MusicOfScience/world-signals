@@ -43,11 +43,11 @@ fetch -> snapshot -> parse -> assert -> match -> diff -> review candidate
 
 Adapters do not receive schedule, lifecycle, certainty, clock or Canonical-write authority merely because they can observe a source. Source competence and unattended-monitoring permission remain separate decisions.
 
-### CF — NOAA/NHC Atlantic-season pilot — VALIDATED / NOT ACTIVATED
+### CF / CI — NOAA/NHC Atlantic-season route — VALIDATED IN CF / ACTIVATED IN PR #117
 
 CF validated a bounded physical-climate-risk pilot for exactly two existing Atlantic hurricane-season Canonical occurrences. NHC climatology is the season-definition authority; RSS is source-health/operational corroboration only.
 
-The pilot remains outside scheduled Monitor expectations. Activation requires a fresh current-source, rights, endpoint, scope and pressure review. Pilot validation is not latent permission to activate automatically.
+PR #117 separately rechecked current source competence, endpoint behaviour, robots/appropriate-use conditions, automation rights, exact scope and registered runtime before activating the route into scheduled Monitor expectations. The route remains review-only: storm activity, RSS presence/absence and elapsed season time have no lifecycle, schedule, certainty, completion, Canonical-write, Calendar-write, Live-promotion or Analysis-promotion authority.
 
 ## Stage 3 — scheduled monitoring and retained operational evidence — DONE
 
@@ -102,24 +102,61 @@ CH introduces `data/status/current_state.json` plus `scripts/project_state_snaps
 
 The snapshot is explicitly noncanonical and may not mutate upstream layers. Its write mode is limited to derived recovery surfaces and requires an explicit environment gate.
 
-## Stage 9 — next pressure selection — CI NHC ACTIVATION SELECTED
+## Stage 9 — CI NHC activation — DONE / GUARDED
 
-Do not preselect the next tranche. Recompute pressure from then-current `main` and compare at least:
+The post-CH pressure review selected the CF-validated NHC Atlantic-season route because it exercised a genuinely new scheduled `PHYSICAL_CLIMATE_RISK` Monitor contract, not because Monitor had the smallest count. PR #117 activated the exact bounded route after fresh official-source, rights, endpoint, scope and runtime validation.
 
-- NHC Monitor activation, with fresh official-source/rights/endpoint review;
-- another Live specimen only if it exercises a genuinely useful missing contract rather than adding count;
-- a second Live→Analysis relationship only when a valid completed Canonical target exists;
-- a second Analysis revision only when new evidence creates real revision pressure;
-- source/readiness debt where it blocks useful governed capability;
-- internationally material Canonical omissions where evidence shows a real gap.
+Result:
 
-Explicitly exclude quarantined CE/OPEC from ordinary candidate selection.
+- NHC is now registered in scheduled Monitor expectations;
+- the route covers exactly two existing Atlantic hurricane-season Canonical occurrences;
+- semantic drift creates review evidence only;
+- Canonical, Change Ledger, Monitor operations policy, Live and Analysis populations were not mutated;
+- all automatic write/promotion gates remain closed;
+- OPEC CE quarantine remained untouched.
 
-## Stage 10 — broader Live / monitoring population — ONLY AFTER AUDIT
+Stage 9 is therefore complete. NHC activation is no longer an unfinished roadmap candidate.
 
-Do not build a high-volume news ingest by default. Expansion must establish source families and rights, observation identity/deduplication, correction/retraction handling, geographic/domain balance, noise controls, retention and provenance, and clean separation of factual observation from analytical inference.
+## Stage 10 — cross-layer coverage audit before broader population — CJ / READ-ONLY
 
-Platform independence remains mandatory.
+The architecture is now mature enough that the next risk is not missing machinery but **population bias**: adding whatever is easy to monitor, easy to source or already familiar. Before broader Live or Monitor growth, WORLD SIGNALS needs a current diagnostic across the full layer chain.
+
+### Stage 10A — CJ cross-layer coverage / pressure diagnostic — IMPLEMENTED IN THIS TRANCHE
+
+CJ adds a reusable read-only audit comparing:
+
+- Canonical occurrence and series breadth by region and Canonical category;
+- explicit configured Monitor occurrence/series scope;
+- Live observation presence by declared region and Live domain tag;
+- Analysis review coverage by the Canonical region/category of its anchor;
+- production Live-input use;
+- the Live→Analysis frontier, distinguishing used Live observations, completed same-anchor linked observations, linked observations whose Canonical target is not completed, and unlinked Live observations.
+
+The diagnostic must not:
+
+- produce a blended coverage score;
+- equalise counts between regions or categories;
+- force Canonical categories and Live domain tags into one taxonomy;
+- create Monitor routes;
+- populate Live or Analysis;
+- open Canonical/Calendar/public-projection gates;
+- convert a review prompt into an automatic finding of undercoverage.
+
+Its artifacts are disposable read-only evidence under `artifacts/coverage/`; governed registries remain authoritative.
+
+### Stage 10B — broader Live / monitoring population — ONLY AFTER CJ AUDIT REVIEW
+
+Use CJ output with current primary-source research and the Charter's systemic-importance test to choose one bounded next tranche. Candidate classes, in decision order rather than rank order, are:
+
+1. **Canonical/source repair** where an internationally material signal family is genuinely absent or stale;
+2. **Monitor expansion** where important existing Canonical scope has a competent, rights-cleared, bounded machine route;
+3. **Live expansion** where a new observation would exercise a missing or materially useful factual contract rather than merely increase volume;
+4. **Live→Analysis** only where a linked Canonical occurrence is completed, the Analysis contract has a valid target, and fresh pressure justifies another production input;
+5. **Analysis revision** only where later evidence changes an existing analytical judgement rather than merely adding chronology.
+
+BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
+
+Broader population must also establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
