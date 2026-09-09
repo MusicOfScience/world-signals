@@ -1,5 +1,6 @@
 name: CG materialize BARMM pre-election Live context
 
+# Retry 2: Canonical occurrence timing fields are flattened in the production registry.
 on:
   push:
     branches:
