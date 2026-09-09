@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import time
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
@@ -29,6 +30,8 @@ from world_signals.adapters import (
     fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
     fetch_nbs_native_latest_releases_rss,
+    fetch_nz_election_robots_policy,
+    fetch_nz_election_rss,
     fetch_ons_upcoming_releases,
     fetch_indec_cpi_months,
     fetch_indec_robots_policy,
@@ -57,6 +60,7 @@ from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candida
 from world_signals.japan_cpi_monitor import japan_cpi_schedule_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
+from world_signals.nz_election_monitor import nz_election_timetable_change_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.rba_mpb_monitor import (
     fetch_rba_robots_policy,
@@ -308,6 +312,82 @@ def main() -> int:
                 "rss_has_publication_clock":False,
                 "automatic_item_link_fetch_allowed":False,
                 "automatic_schedule_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "NZ_ELECTION_TIMETABLE_CHANGE_RSS" in configs:
+        nz_config=configs["NZ_ELECTION_TIMETABLE_CHANGE_RSS"]
+        try:
+            nz_allowed,nz_delay,nz_robots_snap=fetch_nz_election_robots_policy()
+            if not nz_allowed:
+                report["source_health"].append({
+                    "adapter_id":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+                    "source_id":nz_config["source_id"],
+                    "state":"DEGRADED",
+                    "robots_snapshot":nz_robots_snap.as_dict(),
+                    "failure_stage":"ROBOTS_POLICY_NOW_DISALLOWS_ADVERTISED_RSS",
+                    "rss_request_skipped":True,
+                    "request_count":1,
+                    "canonical_action":"NONE",
+                    "schedule_authority":False,
+                    "clock_authority":False,
+                    "lifecycle_authority":False,
+                    "certainty_authority":False,
+                    "automatic_timetable_html_fetch_allowed":False,
+                    "automatic_item_link_fetch_allowed":False,
+                    "automatic_commit_allowed":False,
+                })
+            else:
+                time.sleep(nz_delay)
+                nz_items,nz_rss_snap=fetch_nz_election_rss()
+                report["source_health"].append({
+                    "adapter_id":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+                    "source_id":nz_config["source_id"],
+                    "state":"HEALTHY",
+                    "robots_snapshot":nz_robots_snap.as_dict(),
+                    "rss_snapshot":nz_rss_snap.as_dict(),
+                    "rolling_feed_item_count":len(nz_items),
+                    "request_budget_per_run":2,
+                    "request_count":2,
+                    "robots_request_count":1,
+                    "rss_request_count":1,
+                    "inter_request_delay_seconds":nz_delay,
+                    "timetable_html_request_count":0,
+                    "item_followup_request_count":0,
+                    "results_data_request_count":0,
+                    "search_route_discovery_request_count":0,
+                    "rolling_feed_completeness":"FINITE_ROLLING_WINDOW_NOT_EXHAUSTIVE_CHANGE_LOG",
+                    "schedule_authority":False,
+                    "clock_authority":False,
+                    "lifecycle_authority":False,
+                    "certainty_authority":False,
+                    "canonical_date_mutation_allowed":False,
+                    "automatic_timetable_html_fetch_allowed":False,
+                    "automatic_item_link_fetch_allowed":False,
+                    "automatic_live_or_analysis_promotion_allowed":False,
+                    "automatic_commit_allowed":False,
+                })
+                candidates,observations=nz_election_timetable_change_review_candidates(
+                    registry.get("records",[]),nz_items,nz_config
+                )
+                report["review_candidates"].extend(candidates)
+                report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+                "source_id":nz_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_date_mutation_allowed":False,
+                "automatic_timetable_html_fetch_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
                 "automatic_commit_allowed":False,
             })
 

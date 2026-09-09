@@ -5,6 +5,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import sys
+import time
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
@@ -24,6 +25,8 @@ from world_signals.adapters import (
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
     fetch_nbs_native_latest_releases_rss,
+    fetch_nz_election_robots_policy,
+    fetch_nz_election_rss,
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
     fetch_fao_release_calendar,
@@ -227,6 +230,47 @@ def main() -> int:
         })
     except (AdapterError,ValueError) as exc:
         failures.append({"adapter":"CBSL_MONETARY_POLICY_RSS","error":str(exc)})
+
+    try:
+        nz_allowed,nz_delay,nz_robots_snap=fetch_nz_election_robots_policy()
+        if not nz_allowed:
+            raise AdapterError("Elections NZ robots policy disallows the advertised Media & News RSS path")
+        time.sleep(nz_delay)
+        nz_items,nz_rss_snap=fetch_nz_election_rss()
+        report["results"].append({
+            "adapter":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-EL-NZ-002",
+            "robots_snapshot":nz_robots_snap.as_dict(),
+            "rss_snapshot":nz_rss_snap.as_dict(),
+            "rolling_feed_item_count":len(nz_items),
+            "request_budget_per_run":2,
+            "robots_request_count":1,
+            "rss_request_count":1,
+            "inter_request_delay_seconds":nz_delay,
+            "timetable_html_request_count":0,
+            "item_followup_request_count":0,
+            "results_data_request_count":0,
+            "search_route_discovery_request_count":0,
+            "rolling_feed_completeness":"FINITE_ROLLING_WINDOW_NOT_EXHAUSTIVE_CHANGE_LOG",
+            "schedule_authority":False,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "certainty_authority":False,
+            "canonical_date_mutation_allowed":False,
+            "automatic_timetable_html_fetch_allowed":False,
+            "automatic_item_link_fetch_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"NZ_ELECTION_TIMETABLE_CHANGE_RSS","error":str(exc)})
+        report["results"].append({
+            "adapter":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-EL-NZ-002",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         nbs_items,nbs_snap=fetch_nbs_native_latest_releases_rss()
