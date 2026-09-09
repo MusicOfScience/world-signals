@@ -194,7 +194,7 @@ The transaction:
 
 The temporary controlled-transaction workflow was then removed via the repository contents interface rather than broadening the workflow token's permissions. Its retirement commit was:
 
-`86cd3b04282dce226ab142510689290614169339`
+`86cd2e3d13527e0b90061c07c1bc48194c1c9f41`
 
 No BY diagnostic, preflight or transaction workflow remains in the branch.
 
