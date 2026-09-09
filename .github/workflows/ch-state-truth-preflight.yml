@@ -86,6 +86,7 @@ jobs:
               'data/status/POST_CG_STATE_TRUTH_CH_AUDIT_v0.1.md',
               'scripts/project_state_snapshot.py',
               'scripts/apply_analysis_revision_contract_ba.py',
+              'scripts/apply_japan_fies_live_analysis_az.py',
               'tests/test_project_state_snapshot_ch.py',
           }
           changed = set(subprocess.check_output(
