@@ -20,11 +20,10 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Read-only corrected architecture pressure snapshot
+      - name: Inspect exact OPEC provenance state
         run: |
           python - <<'PY'
           import json
-          from collections import Counter
           from pathlib import Path
           import subprocess
 
@@ -33,93 +32,44 @@ jobs:
 
           canonical = load('data/canonical/registry.json')
           sources = load('data/sources/registry.json')
-          monitor = load('data/monitor/expectations.json')
-          live_schema = load('data/live_intelligence/schema.json')
-          live_obs = load('data/live_intelligence/observations.json')
-          live_ev = load('data/live_intelligence/evidence_registry.json')
-          analysis_schema = load('data/analysis/schema.json')
-          reviews = load('data/analysis/event_reviews.json')
-          analysis_ev = load('data/analysis/evidence_registry.json')
-
-          records = canonical['records']
-          by_id = {r['occurrence_id']: r for r in records}
-          monitored = {cid for a in monitor['adapters'] for cid in a.get('canonical_occurrence_ids', [])}
-          live_ids = {
-              link['occurrence_id']
-              for obs in live_obs['observations']
-              for link in obs.get('canonical_links', [])
-              if link.get('occurrence_id')
-          }
-          analysed = {r['canonical_occurrence_id'] for r in reviews['reviews']}
+          ledger = load('data/changes/ledger.json')
+          target_id = 'WSO-COM-A-0001'
+          source_ids = {'WSSRC-COM-001','WSSRC-COM-015','WSSRC-COM-016'}
 
           print('HEAD', subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip())
           print('BASE_MAIN', subprocess.check_output(['git','rev-parse','origin/main'], text=True).strip())
-          print('STATE', {
-              'canonical': (canonical['version'], len(records)),
-              'sources': (sources['version'], len(sources['sources'])),
-              'monitor': (monitor['version'], len(monitor['adapters']), len(monitored)),
-              'live': (live_schema['version'], live_obs['version'], len(live_obs['observations']), len(live_ev['evidence']), len(live_ids)),
-              'analysis': (analysis_schema['version'], reviews['version'], len(reviews['reviews']), len(analysis_ev['evidence']), len(analysed)),
-          })
-          print('LIVE_POLICY', live_schema['population_policy'])
-          print('ANALYSIS_LIVE_INPUT_POLICY', analysis_schema['live_input_policy'])
-          print('ANALYSIS_REVISION_POLICY', analysis_schema['analysis_revision_policy'])
+          print('CANONICAL_VERSION_COUNT', canonical['version'], len(canonical['records']))
+          print('SOURCE_VERSION_COUNT', sources['version'], len(sources['sources']))
+          print('LEDGER_VERSION_COUNT', ledger['version'], len(ledger['changes']))
 
-          print('LIVE_CANONICAL_LINKS', sorted(live_ids))
-          print('LIVE_OBSERVATION_TYPES', Counter(o['observation_type'] for o in live_obs['observations']))
-          print('LIVE_REGIONS', Counter(x for o in live_obs['observations'] for x in o.get('regions', [])))
-          print('LIVE_DOMAINS', Counter(x for o in live_obs['observations'] for x in o.get('domain_tags', [])))
-          print('LIVE_EVIDENCE_CLASSES', Counter(e['evidence_class'] for e in live_ev['evidence']))
+          target = next(r for r in canonical['records'] if r['occurrence_id'] == target_id)
+          print('TARGET_CANONICAL_JSON')
+          print(json.dumps(target, indent=2, ensure_ascii=False, sort_keys=True))
 
-          def covered_counter(ids, field):
-              return Counter(by_id[i].get(field) for i in ids if i in by_id)
-          for field in ['region','category','event_type']:
-              allc = Counter(r.get(field) for r in records)
-              print('MONITOR_'+field.upper(), covered_counter(monitored, field))
-              print('LIVE_'+field.upper(), covered_counter(live_ids, field))
-              print('ANALYSIS_'+field.upper(), covered_counter(analysed, field))
-              print('MONITOR_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(monitored, field).get(k,0)==0))
-              print('LIVE_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(live_ids, field).get(k,0)==0))
-              print('ANALYSIS_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(analysed, field).get(k,0)==0))
+          print('RELATED_SOURCE_JSON')
+          for row in sources['sources']:
+              if row.get('source_id') in source_ids:
+                  print(json.dumps(row, indent=2, ensure_ascii=False, sort_keys=True))
 
-          def when(r):
-              return r.get('start_utc') or r.get('start_local') or r.get('publication_datetime') or r.get('date_earliest') or ''
+          print('RELATED_LEDGER_JSON')
+          for row in ledger['changes']:
+              if row.get('occurrence_id') == target_id or row.get('source_id') in source_ids or row.get('trigger_source_id') in source_ids:
+                  print(json.dumps(row, indent=2, ensure_ascii=False, sort_keys=True))
 
-          completed = [r for r in records if r.get('lifecycle_status') == 'COMPLETED']
-          active = [r for r in records if r.get('lifecycle_status') == 'ACTIVE']
-          print('COMPLETED_COUNT', len(completed))
-          print('COMPLETED_RECORDS')
-          for r in sorted(completed, key=when):
-              cid = r['occurrence_id']
-              print({
-                  'id': cid,
-                  'when': when(r),
-                  'region': r.get('region'),
-                  'category': r.get('category'),
-                  'event_type': r.get('event_type'),
-                  'institution': r.get('institution'),
-                  'name': r.get('canonical_name'),
-                  'source_id': r.get('source_id'),
-                  'importance': r.get('intrinsic_importance'),
-                  'market_sensitivity': r.get('expected_market_sensitivity'),
-                  'monitored': cid in monitored,
-                  'live_linked': cid in live_ids,
-                  'analysed': cid in analysed,
-              })
-          print('ACTIVE_RECORDS')
-          for r in sorted(active, key=when):
-              cid = r['occurrence_id']
-              print({
-                  'id': cid, 'when': when(r), 'region': r.get('region'), 'category': r.get('category'),
-                  'event_type': r.get('event_type'), 'institution': r.get('institution'), 'name': r.get('canonical_name'),
-                  'monitored': cid in monitored, 'live_linked': cid in live_ids, 'analysed': cid in analysed,
-              })
+          print('OTHER_OPEC_SOURCE_ROWS')
+          for row in sources['sources']:
+              blob = json.dumps(row, ensure_ascii=False).lower()
+              if 'opec' in blob or 'petroleum exporting' in blob:
+                  print(json.dumps(row, indent=2, ensure_ascii=False, sort_keys=True))
 
-          print('COMPLETED_MONITORED_UNLIVE')
-          for r in sorted((r for r in completed if r['occurrence_id'] in monitored and r['occurrence_id'] not in live_ids), key=when):
-              print(r['occurrence_id'], when(r), r.get('region'), r.get('category'), r.get('event_type'), r.get('institution'), r.get('canonical_name'), 'analysed='+str(r['occurrence_id'] in analysed))
-
-          print('COMPLETED_UNANALYSED_MARKET_STRUCTURE')
-          for r in sorted((r for r in completed if r.get('category') == 'CORPORATE_FINANCIAL_MARKET_STRUCTURE' and r['occurrence_id'] not in analysed), key=when):
-              print(r['occurrence_id'], when(r), r.get('region'), r.get('event_type'), r.get('institution'), r.get('canonical_name'), 'monitored='+str(r['occurrence_id'] in monitored), 'live='+str(r['occurrence_id'] in live_ids))
+          print('OPEC_CANONICAL_OCCURRENCES')
+          for row in canonical['records']:
+              if row.get('source_id') == 'WSSRC-COM-001' or 'opec' in str(row.get('institution','')).lower() or 'opec' in str(row.get('canonical_name','')).lower():
+                  print(json.dumps({
+                      k: row.get(k) for k in [
+                          'occurrence_id','series_id','canonical_name','lifecycle_status','certainty_status','source_id',
+                          'primary_source_assertion_id','last_successful_assertion_id','trigger_assertion_id','trigger_source_id',
+                          'last_verified_at','next_verification_due','related_documents','status_history','notes','start_local','start_utc'
+                      ]
+                  }, indent=2, ensure_ascii=False, sort_keys=True))
           PY
