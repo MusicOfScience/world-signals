@@ -1,0 +1,273 @@
+name: CA NASS controlled transaction
+
+on:
+  push:
+    branches:
+      - feature/post-bz-pressure-audit-ca
+    paths:
+      - .github/workflows/ca-nass-controlled-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply, audit, validate, remove temporary workflows, commit and push CA
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=07c558c8811795f0aed40e73bd386cc70344191e
+          BRANCH=feature/post-bz-pressure-audit-ca
+          export PYTHONPATH=src
+          git fetch --no-tags origin main "$BRANCH"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/$BRANCH)"
+          test -z "$(git status --porcelain)"
+
+          cp data/sources/registry.json /tmp/ca-sources-before.json
+          cp data/monitor/expectations.json /tmp/ca-expectations-before.json
+          python - <<'PY' > /tmp/ca-protected-before.json
+          import hashlib,json,subprocess
+          roots=(
+              'data/canonical/registry.json','data/changes/ledger.json','data/biosecurity',
+              'data/live','data/live_intelligence','data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          print(json.dumps({p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))},sort_keys=True))
+          PY
+
+          # Freeze completed pre-transaction validation evidence into the permanent CA records.
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          plan_path=Path('data/monitor/USDA_NASS_ASB_ICAL_CA_PLAN_v0.1.json')
+          plan=json.loads(plan_path.read_text())
+          plan['focused_activation_gate']={
+              'run_id':34307460147,
+              'job_id':102327017370,
+              'result':'SUCCESS',
+              'test_count':36,
+              'repository_mutation':False,
+              'notes':'Earlier focused run 34307089558 / 102325920998 failed before test import because the temporary workflow omitted PYTHONPATH=src; implementation assertions did not run. Harness was repaired and subsequent gates passed.'
+          }
+          plan['materialized_preflight']={
+              'run_id':34307535574,
+              'job_id':102327236940,
+              'result':'SUCCESS',
+              'full_test_count':1173,
+              'skipped_test_count':67,
+              'protected_file_count':110,
+              'exact_mutation_path_count':5,
+              'preexisting_source_objects_unchanged':254,
+              'preexisting_monitor_routes_unchanged':22,
+              'poststate':{
+                  'canonical_registry_version':'0.41','canonical_record_count':689,
+                  'source_registry_version':'2.00','source_count':255,
+                  'monitor_expectations_version':'0.25','configured_monitor_adapter_count':23,
+              },
+              'static_build_passed':True,
+              'protected_layers_byte_identical':True,
+              'runner_reset_clean':True,
+              'repository_mutation':False,
+          }
+          plan['production_live_preflight']={
+              'failed_harness_attempt':{
+                  'run_id':34307710661,'job_id':102327747468,
+                  'result':'FAIL_HARNESS_ONLY_AFTER_FETCH_AND_COMPARE',
+                  'reason':'Temporary reporting code referenced FetchSnapshot.sha256 instead of body_sha256; source fetch/comparator had completed before the reporting accessor failed.'
+              },
+              'run_id':34307783031,
+              'job_id':102327960135,
+              'result':'SUCCESS',
+              'network_request_count':1,
+              'ical_request_count':1,
+              'robots_request_count':0,
+              'calendar_html_request_count':0,
+              'report_followup_request_count':0,
+              'search_route_discovery_request_count':0,
+              'ical_http_status':200,
+              'ical_content_type':'text/calendar',
+              'ical_body_bytes':120961,
+              'ical_sha256_observed_not_frozen':'23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a',
+              'target_items_parsed':16,
+              'configured_uid_match_count':5,
+              'review_candidate_count':0,
+              'unconfigured_future_target_count_observed_not_frozen':0,
+              'canonical_byte_identical':True,
+              'runner_reset_clean':True,
+              'repository_mutation':False,
+          }
+          plan_path.write_text(json.dumps(plan,indent=2,ensure_ascii=False)+'\n')
+
+          research=Path('data/monitor/USDA_NASS_ASB_ICAL_CA_RESEARCH_v0.1.md')
+          text=research.read_text()
+          marker='## Completed CA validation gates\n'
+          if marker in text:
+              raise SystemExit('CA validation evidence already appended')
+          text += '''\n## Completed CA validation gates\n\nThe activation architecture subsequently passed the full pre-transaction sequence.\n\n- **Focused activation contract:** run `34307460147`, job `102327017370` — SUCCESS; **36/36 tests passed**, including parser/comparator adversarial cases, read-only helper execution and the explicit apply environment gate. An earlier temporary focused workflow run (`34307089558` / `102325920998`) failed before importing tests because `PYTHONPATH=src` was omitted; no implementation assertion ran in that failed harness attempt.\n- **Materialised full preflight:** run `34307535574`, job `102327236940` — SUCCESS. The exact five-file governed/runtime patch produced Canonical v0.41 / 689, Sources v2.00 / 255 and Monitor v0.25 / 23; preserved 254 unrelated source objects and all 22 existing routes; then passed **1,173 tests with 67 skipped**, validators, compile/JavaScript checks and the static build. All **110 protected files** were byte-identical and the runner reset clean.\n- **Production-shaped live preflight:** run `34307783031`, job `102327960135` — SUCCESS. Exactly one NASS iCalendar request returned HTTP 200 / `text/calendar` / 120,961 bytes. All five configured UIDs matched current Canonical datetimes, there were zero review candidates and zero unconfigured future target releases in that snapshot. There were no robots, HTML, report-followup or search/discovery requests, and Canonical remained byte-identical. The preceding temporary run (`34307710661` / `102327747468`) had already completed the source fetch and comparator but failed when reporting an incorrectly named snapshot attribute; the accessor was corrected without changing source or comparator logic.\n\nThe repeated live SHA-256 `23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a`, 120,961-byte size and observed event counts are corroborative snapshot evidence only, not production invariants.\n'''
+          research.write_text(text)
+          PY
+
+          # Check-only helper must still be non-mutating before the gated write.
+          cp data/sources/registry.json /tmp/ca-check-sources.json
+          cp data/monitor/expectations.json /tmp/ca-check-monitor.json
+          cp scripts/run_live_monitor.py /tmp/ca-check-live.py
+          cp scripts/run_adapter_smoke.py /tmp/ca-check-smoke.py
+          cp src/world_signals/adapters/__init__.py /tmp/ca-check-init.py
+          python scripts/apply_nass_asb_ical_monitor_ca.py > /tmp/ca-check.json
+          grep -q '"status": "PASS"' /tmp/ca-check.json
+          cmp data/sources/registry.json /tmp/ca-check-sources.json
+          cmp data/monitor/expectations.json /tmp/ca-check-monitor.json
+          cmp scripts/run_live_monitor.py /tmp/ca-check-live.py
+          cmp scripts/run_adapter_smoke.py /tmp/ca-check-smoke.py
+          cmp src/world_signals/adapters/__init__.py /tmp/ca-check-init.py
+
+          WORLD_SIGNALS_APPLY_MONITOR_CA=1 python scripts/apply_nass_asb_ical_monitor_ca.py --apply > /tmp/ca-transaction-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/ca-transaction-apply.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          before_s=json.loads(Path('/tmp/ca-sources-before.json').read_text())
+          after_s=json.loads(Path('data/sources/registry.json').read_text())
+          before_m=json.loads(Path('/tmp/ca-expectations-before.json').read_text())
+          after_m=json.loads(Path('data/monitor/expectations.json').read_text())
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (before_s['version'],len(before_s['sources']))==('1.99',255)
+          assert (after_s['version'],len(after_s['sources']))==('2.00',255)
+          assert (before_m['version'],len(before_m['adapters']))==('0.24',22)
+          assert (after_m['version'],len(after_m['adapters']))==('0.25',23)
+          assert after_m['automatic_canonical_commit'] is False
+          assert after_m['google_calendar_write'] is False
+
+          bs={x['source_id']:x for x in before_s['sources']}; aas={x['source_id']:x for x in after_s['sources']}
+          assert set(bs)==set(aas)
+          for sid,row in bs.items():
+              if sid!='WSSRC-COM-005': assert aas[sid]==row, f'unrelated source changed: {sid}'
+          import importlib.util
+          spec=importlib.util.spec_from_file_location('tx','scripts/apply_nass_asb_ical_monitor_ca.py')
+          tx=importlib.util.module_from_spec(spec); spec.loader.exec_module(tx)
+          changed={k for k in set(bs['WSSRC-COM-005'])|set(aas['WSSRC-COM-005']) if bs['WSSRC-COM-005'].get(k)!=aas['WSSRC-COM-005'].get(k)}
+          assert changed <= tx.ALLOWED_SOURCE_MUTATION_KEYS,sorted(changed-tx.ALLOWED_SOURCE_MUTATION_KEYS)
+
+          bm={x['adapter_id']:x for x in before_m['adapters']}; am={x['adapter_id']:x for x in after_m['adapters']}
+          assert set(am)==set(bm)|{'USDA_NASS_ASB_ICAL'}
+          for aid,row in bm.items(): assert am[aid]==row, f'pre-existing monitor route changed: {aid}'
+          route=am['USDA_NASS_ASB_ICAL']
+          assert route['source_id']==route['canonical_schedule_source_id']=='WSSRC-COM-005'
+          assert route['request_budget_per_run']==route['ical_request_count_per_run']==1
+          for k in ('robots_request_count_per_run','calendar_html_request_count_per_run','report_followup_request_count_per_run','search_route_discovery_request_count_per_run'):
+              assert route[k]==0,k
+          for k in ('schedule_authority','clock_authority','lifecycle_authority','certainty_authority','canonical_datetime_mutation_allowed','automatic_calendar_html_fetch_allowed','automatic_report_followup_allowed','automatic_new_occurrence_creation_allowed','automatic_search_route_discovery_allowed','automatic_live_or_analysis_promotion_allowed','automatic_commit_allowed'):
+              assert route[k] is False,k
+          print('EXISTING_SOURCES_IDENTICAL',len(bs)-1)
+          print('EXISTING_MONITOR_ROUTES_IDENTICAL',len(bm))
+          print('NASS_ALLOWED_SOURCE_KEYS_CHANGED',len(changed))
+          PY
+
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_nass_asb_ical_monitor_ca.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            src/world_signals/live_analysis_bridge.py \
+            src/world_signals/adapters/nass_asb_ical.py \
+            src/world_signals/nass_asb_monitor.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+
+          python - <<'PY'
+          import hashlib,json,subprocess
+          before=json.load(open('/tmp/ca-protected-before.json'))
+          roots=('data/canonical/registry.json','data/changes/ledger.json','data/biosecurity','data/live','data/live_intelligence','data/analysis')
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          after={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          assert before==after,'protected layer hash drift'
+          print('PROTECTED_LAYERS_BYTE_IDENTICAL',len(after))
+          PY
+
+          # Build outputs are validation artifacts, not CA governed mutation targets.
+          git checkout -- docs 2>/dev/null || true
+
+          mapfile -t TEMP_CA < <(find .github/workflows -maxdepth 1 -type f -name 'ca-*.yml' -printf '%f\n' | sort)
+          printf 'TEMP_CA_WORKFLOWS_BEFORE_REMOVAL %s\n' "${TEMP_CA[*]}"
+          expected_temp=(
+            ca-nass-controlled-transaction.yml
+            ca-nass-diagnostic.yml
+            ca-nass-focused-tests.yml
+            ca-nass-materialized-preflight.yml
+            ca-nass-production-live-preflight.yml
+            ca-post-bz-pressure-audit.yml
+          )
+          test "${TEMP_CA[*]}" = "${expected_temp[*]}"
+          rm "${TEMP_CA[@]/#/.github/workflows/}"
+
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/monitor/USDA_NASS_ASB_ICAL_CA_PLAN_v0.1.json',
+              'data/monitor/USDA_NASS_ASB_ICAL_CA_RESEARCH_v0.1.md',
+              'data/monitor/expectations.json',
+              'data/sources/registry.json',
+              'scripts/apply_nass_asb_ical_monitor_ca.py',
+              'scripts/run_adapter_smoke.py',
+              'scripts/run_live_monitor.py',
+              'src/world_signals/adapters/__init__.py',
+              'src/world_signals/adapters/nass_asb_ical.py',
+              'src/world_signals/nass_asb_monitor.py',
+              'tests/test_nass_asb_ical_activation_ca.py',
+              'tests/test_nass_asb_ical_ca.py',
+          }
+          actual=set(subprocess.run(['git','diff','--name-only','origin/main'],check=True,capture_output=True,text=True).stdout.splitlines())
+          assert actual==expected, f'final CA diff mismatch\nmissing={sorted(expected-actual)}\nextra={sorted(actual-expected)}'
+          print('FINAL_PERMANENT_CHANGED_FILE_COUNT',len(actual))
+          for path in sorted(actual): print('FINAL_FILE',path)
+          PY
+
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git status --short
+          git config user.name 'WORLD SIGNALS controlled transaction'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'CA: activate USDA NASS ASB iCalendar monitor'
+          git push origin "HEAD:$BRANCH"
+
+          git fetch --no-tags origin main "$BRANCH"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/$BRANCH)"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          test -z "$(find .github/workflows -maxdepth 1 -type f -name 'ca-*.yml' -print -quit)"
+          echo "CA_TRANSACTION_HEAD=$(git rev-parse HEAD)"
+          echo 'CA CONTROLLED TRANSACTION COMPLETE'
