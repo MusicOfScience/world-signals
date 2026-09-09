@@ -345,7 +345,16 @@ def target_status(current: str) -> str:
     return text.replace(old, new, 1)
 
 def target_roadmap(current: str) -> str:
-    if "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current or "AZ then pressure-audited and populated exactly one relationship" in current:
+    ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
+    ch_stage = "## Stage 6 — Live Intelligence → Analysis bridge — FIRST PRODUCTION LINK DONE / PUBLIC CLOSED"
+    if (
+        "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current
+        or "AZ then pressure-audited and populated exactly one relationship" in current
+        or (ch_state_marker in current and ch_stage in current)
+    ):
+        # Later reviewed recovery roadmaps may renumber capability stages.
+        # CH's derived-state marker plus the preserved production-link
+        # semantics prove AZ is a historical ancestor without freezing prose.
         return current
     text = current.replace(
         "Current bounded population is three observations and four primary-official evidence rows.",
