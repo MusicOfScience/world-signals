@@ -56,7 +56,7 @@ Source competence and automation permission are independent questions. A source 
 
 Configured Monitor routes are governed in `data/monitor/expectations.json`. Route presence does not grant lifecycle, certainty, schedule, clock, Canonical-write, Live-promotion or Analysis-promotion authority unless an explicit reviewed contract says so. Source failure, absence and parser failure remain source-health evidence rather than event-state evidence.
 
-The NOAA/NHC Atlantic-season route is a validated pilot only. Its CF readiness record remains separate from scheduled Monitor expectations; activation requires a fresh reviewed decision rather than inferring permission from pilot validation.
+The NOAA/NHC Atlantic-season route was validated as a bounded pilot in CF and activated into scheduled Monitor expectations in PR #117 after a fresh source, rights, endpoint, scope and runtime review. It remains limited to exactly two existing Atlantic hurricane-season Canonical occurrences: NHC climatology is the season-definition semantic authority, Atlantic outlook RSS is source-health corroboration only, and neither source grants automatic lifecycle, schedule, certainty, completion, Canonical-write, Live-promotion or Analysis-promotion authority.
 
 ## Live Intelligence
 
@@ -90,10 +90,11 @@ python scripts/validate_live_intelligence.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
+python scripts/run_cross_layer_coverage_audit.py
 python scripts/build_site.py
 ```
 
-`python scripts/build_site.py` generates derived site output locally. Generated site material is not Canonical state.
+`python scripts/build_site.py` generates derived site output locally. Generated site material is not Canonical state. `python scripts/run_cross_layer_coverage_audit.py` generates read-only diagnostic artifacts under `artifacts/coverage/`; those artifacts do not authorise population or writes.
 
 To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 

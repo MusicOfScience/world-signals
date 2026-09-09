@@ -47,7 +47,7 @@ This is historical evidence only. Do not reopen, merge, cherry-pick, rebase, mat
 
 ### PR #114 — CF: Monitor pressure audit + NHC pilot — MERGED
 
-CF recomputed explicit Monitor pressure and validated a bounded NOAA/NHC Atlantic-season route over exactly two existing Canonical occurrences. The route remains a pilot: validated architecture does not equal scheduled Monitor activation.
+CF recomputed explicit Monitor pressure and validated a bounded NOAA/NHC Atlantic-season route over exactly two existing Canonical occurrences. CF itself stopped at pilot validation; scheduled activation was separately pressure-audited and reviewed in PR #117.
 
 ### PR #115 — CG: reviewed BARMM pre-election Live context — MERGED
 
@@ -55,17 +55,40 @@ CG added one primary-confirmed Southeast Asia institutional Live observation lin
 
 CG also repaired historical tests that incorrectly froze the BF Live checkpoint as the permanent current head. Historical rows remain tested by identity/semantics while reviewed descendants are allowed.
 
+### PR #116 — CH: derived recovery-state truth — MERGED
+
+CH made cross-layer current-state counts mechanically derivable and CI-checked across `README.md`, `PROJECT_STATUS.md`, `ROADMAP.md` and `data/status/current_state.json`. The derived snapshot is explicitly noncanonical and cannot mutate upstream governed layers.
+
+### PR #117 — CI: bounded NHC Atlantic-season Monitor sentinel — MERGED
+
+CI activated the CF-validated NHC route after a fresh source, rights, endpoint, scope and runtime review. The scheduled route remains bounded to two existing Atlantic hurricane-season occurrences; NHC climatology is semantic authority for the season definition and Atlantic RSS is health corroboration only. It grants no automatic Canonical, lifecycle, Calendar, Live or Analysis authority.
+
 ## Current pressure interpretation
 
-Raw population counts are not a selection rule.
+Raw population counts are not a selection rule. CJ's corrected cross-layer audit now gives an evidence-backed next-pressure boundary.
 
-- **Canonical** is broad enough that no current evidence justifies bulk population.
-- **Monitor** is comparatively mature at the current configured cohort. The NHC pilot remains a legitimate activation candidate, but only after a fresh source/rights/endpoint review and a new pressure decision.
-- **Live Intelligence** is still intentionally small. Two observations now link to Canonical occurrences, exercising both `OUTCOME_OF` and `CONTEXT_FOR` relationships.
-- **Analysis** remains conservative. A second production Live→Analysis link is not currently authorised by mere count pressure. In particular, the BARMM occurrence is still pre-event and therefore cannot support a reviewed post-event Analysis packet under the present schema.
-- **OPEC CE** is excluded from ordinary candidate selection.
+- **Canonical:** 689 occurrences / 203 series. The CJ review identified a likely upstream omission of the annual Pacific Islands Forum Leaders Meeting, an apex 18-member Pacific political institution. This is a stronger repair candidate than bulk Canonical growth.
+- **Monitor:** 26 adapters / 217 scoped occurrences / 48 scoped series. Every Canonical region has at least some configured Monitor scope. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` remain zero-scope categories, but their underlying WHO / UNFCCC / CBD / IPCC sources are rights-held/manual-only at this checkpoint; zero scope is not automation permission.
+- **Live Intelligence:** 7 observations / 2 Canonical-linked. After explicit audit-only regional equivalence, Europe, Latin America, North America and Oceania / Pacific have no controlled Live specimen. These are review prompts, not a population queue.
+- **Analysis:** 22 reviews / 1 production Live input / 1 production revision. The sole production Live input remains Japan FIES. `CORPORATE_FINANCIAL_MARKET_STRUCTURE` has no Analysis review, but that count does not itself justify adding one.
+- **Live→Analysis frontier:** there are zero unused completed same-anchor candidates. BARMM remains linked to a `PLANNED` 14 September 2026 occurrence and cannot be promoted into post-event Analysis before completion/outcome evidence exists.
+- **OPEC CE:** remains excluded from ordinary candidate selection.
 
-The next tranche after the current state-truth hardening must recompute pressure from then-current `main`; it should not assume NHC activation, another Live observation or another Analysis revision in advance.
+CJ implements the read-only diagnostic and records its corrected evidence in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`. The audit uses only two explicit, nonmutating comparison mappings (`Central Africa -> Africa`; `Global -> Cross-regional / Global`) to avoid manufacturing gaps from taxonomy granularity.
+
+### Next selected after CJ merge — CK Pacific Islands Forum upstream repair
+
+Subject to a fresh branch from post-CJ `main`, CK should:
+
+1. confirm no hidden equivalent PIF series/occurrence exists;
+2. establish a stable Pacific Islands Forum Leaders Meeting series if the omission is real;
+3. add the completed 55th Leaders Meeting in Koror, Palau, **30 August–4 September 2026**, preserving civil-date range precision;
+4. register/reuse minimum authoritative provenance sources with current source-governance review;
+5. preserve New Zealand/Auckland as confirmed 2027 host context without inventing meeting dates;
+6. separately decide whether the 2026 Forum Communiqué justifies one bounded Oceania / Pacific Live `OUTCOME_OF` specimen; CJ does not pre-authorise it;
+7. create no automatic Monitor route and open no automatic Canonical/Calendar/Live/Analysis gate.
+
+If primary provenance or identity checks fail, CK must stop or redesign rather than duplicate or fabricate.
 
 ## Write and authority boundaries
 
@@ -98,7 +121,8 @@ python scripts/validate_live_intelligence.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
+python scripts/run_cross_layer_coverage_audit.py
 python scripts/build_site.py
 ```
 
-The derived-state checker must remain read-only in CI. Its explicit `--write` mode is restricted to the derived snapshot and the three marked documentation blocks and requires `WORLD_SIGNALS_WRITE_DERIVED_STATE=YES`.
+The derived-state checker must remain read-only in CI. Its explicit `--write` mode is restricted to the derived snapshot and the three marked documentation blocks and requires `WORLD_SIGNALS_WRITE_DERIVED_STATE=YES`. The cross-layer coverage audit is also read-only and writes only disposable artifacts under `artifacts/coverage/`.

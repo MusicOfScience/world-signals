@@ -6,10 +6,31 @@ on:
     branches: [main]
     paths:
       - 'src/world_signals/coverage.py'
+      - 'src/world_signals/cross_layer_coverage.py'
       - 'scripts/run_coverage_audit.py'
+      - 'scripts/run_cross_layer_coverage_audit.py'
       - 'tests/test_coverage.py'
+      - 'tests/test_cross_layer_coverage_cj.py'
       - 'data/canonical/registry.json'
       - 'data/sources/registry.json'
+      - 'data/monitor/expectations.json'
+      - 'data/live_intelligence/observations.json'
+      - 'data/analysis/event_reviews.json'
+      - 'data/coverage/**'
+      - '.github/workflows/coverage-audit.yml'
+  pull_request:
+    paths:
+      - 'src/world_signals/coverage.py'
+      - 'src/world_signals/cross_layer_coverage.py'
+      - 'scripts/run_coverage_audit.py'
+      - 'scripts/run_cross_layer_coverage_audit.py'
+      - 'tests/test_coverage.py'
+      - 'tests/test_cross_layer_coverage_cj.py'
+      - 'data/canonical/registry.json'
+      - 'data/sources/registry.json'
+      - 'data/monitor/expectations.json'
+      - 'data/live_intelligence/observations.json'
+      - 'data/analysis/event_reviews.json'
       - 'data/coverage/**'
       - '.github/workflows/coverage-audit.yml'
 
@@ -17,7 +38,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: world-signals-coverage-audit
+  group: world-signals-coverage-audit-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -30,10 +51,12 @@ jobs:
         with:
           python-version: '3.13'
       - name: Coverage regression tests
-        run: python -m unittest tests.test_coverage -v
-      - name: Build read-only coverage audit
+        run: python -m unittest tests.test_coverage tests.test_cross_layer_coverage_cj -v
+      - name: Build canonical/source coverage audit
         run: python scripts/run_coverage_audit.py
-      - name: Upload coverage audit
+      - name: Build cross-layer coverage pressure audit
+        run: python scripts/run_cross_layer_coverage_audit.py
+      - name: Upload coverage audits
         uses: actions/upload-artifact@v4
         with:
           name: world-signals-coverage-audit-${{ github.run_id }}
