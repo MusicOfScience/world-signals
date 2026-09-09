@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-09",
-  "version": "1.97",
+  "version": "1.98",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -11168,6 +11168,124 @@
           "transport": "RSS_XML_DIAGNOSTIC_ONLY_NOT_PRODUCTION",
           "preferred_for_monitoring": false,
           "completeness_scope": "ENGLISH_TRANSLATION_SURFACE_EXCLUDED_FROM_BX_PRODUCTION_ROUTE"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-EL-NZ-002",
+      "institution": "Electoral Commission New Zealand",
+      "jurisdiction": "New Zealand",
+      "domain": "elections",
+      "endpoint_role": "Official Media & News RSS timetable-page update sentinel",
+      "authoritative_url": "https://elections.nz/media-and-news/rss",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Minimal first-party RSS metadata identifying recently updated Elections NZ Media & News pages. Used only to detect whether the exact 2026 General Election timetable page has re-entered the rolling update feed.",
+      "future_schedule_horizon": "not a schedule source; rolling ten-page update sentinel",
+      "typical_advance_notice": "source-page update driven",
+      "machine_readable_available": "RSS/XML",
+      "source_timezone": "Pacific/Auckland",
+      "recommended_verification_cadence": "every 6 hours during the 2026 election period",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "NZ_ELECTION_MEDIA_NEWS_RSS_TIMETABLE_PAGE_SENTINEL",
+      "parser_version": "nz-election-rss-0.1",
+      "known_limitations": [
+        "The RSS channel contains only the ten most recently updated pages and is not an exhaustive change log.",
+        "Absence of the timetable page from the rolling feed is not evidence that the page did not change.",
+        "RSS pubDate is page-publication/update metadata and is not Canonical election-event time.",
+        "General election news titles and descriptions are not parsed into milestone changes.",
+        "A positive exact timetable-page identity produces one six-occurrence bundle review only; it does not identify which milestone changed.",
+        "The monitor never automatically fetches the timetable HTML, RSS item pages, election results data or search/discovery routes.",
+        "WSSRC-EL-NZ-001 remains the Canonical timetable authority and retains its existing HTML automation hold unchanged."
+      ],
+      "backup_source": null,
+      "notes": "Separate RSS identity preserves the distinction between an advertised subscription interface and held HTML timetable retrieval.",
+      "timezone_scope": "PACIFIC_AUCKLAND_RSS_PUBLICATION_METADATA_ONLY_NO_CANONICAL_EVENT_TIME_AUTHORITY",
+      "licence_constraints": "MINIMAL_FACTUAL_RSS_METADATA_ONLY_UNDER_EXISTING_PUBLIC_FACTS_CLASSIFICATION_NO_FEED_CONTENT_REPUBLICATION",
+      "ingestion_permission": "OFFICIAL_ADVERTISED_RSS_MINIMAL_METADATA_INTERNAL_CHANGE_SENTINEL",
+      "licence_review_status": "FACTUAL_METADATA_ONLY_RSS_SUBSCRIPTION_INTERFACE_SEPARATELY_REVIEWED",
+      "automated_retrieval_permission": "OFFICIAL_ADVERTISED_RSS_SUBSCRIPTION_INTERFACE_ROBOTS_COMPATIBLE_WITH_CRAWL_DELAY",
+      "redistribution_permission": "FACTUAL_UPDATE_FLAGS_ONLY_NO_RSS_DESCRIPTION_OR_ARTICLE_REPUBLICATION",
+      "rights_evidence_url": "https://elections.nz/media-and-news/2026/key-dates-for-2026-general-election",
+      "rights_summary": "The existing election source is cleared only for public factual milestone metadata. BY retains that narrow scope and does not create a broader right to reproduce RSS descriptions or Commission page content.",
+      "automation_evidence_url": "https://elections.nz/media-and-news",
+      "automation_summary": "The Electoral Commission advertises its Media & News RSS subscription route. WORLD SIGNALS requests robots.txt, respects the declared crawl delay, then makes one RSS request. No item or timetable page is automatically followed.",
+      "rights_reviewed_at": "2026-09-09",
+      "rights_review_scope": "BY_FACTUAL_REUSE_AND_ADVERTISED_RSS_MACHINE_ACCESS_SEPARATED_FROM_HELD_TIMETABLE_HTML",
+      "rights_review_note": "Operational WORLD SIGNALS governance classification; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 420,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-09",
+      "monitoring_activation_status": "LIVE_READ_ONLY_TIMETABLE_PAGE_UPDATE_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-09",
+      "canonical_provenance_use": "MONITOR_ONLY_TIMETABLE_PAGE_UPDATE_SENTINEL_NO_CANONICAL_DATE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_RSS_FETCH_PARSE_PASS_2026_09_09",
+      "governance_backfill_reviewed_at": "2026-09-09",
+      "governance_backfill_basis": "Separate first-party RSS source created because the Electoral Commission advertises RSS subscription access; the pre-existing timetable HTML source and its automation hold remain unchanged.",
+      "live_adapter_id": "NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+      "live_validation_evidence": {
+        "rss_discovery_run_id": 34299288416,
+        "rss_discovery_job_id": 102302572476,
+        "rss_endpoint_run_id": 34299383044,
+        "rss_endpoint_job_id": 102302861060,
+        "rss_http_status": 200,
+        "rss_content_type": "application/rss+xml; charset=utf-8",
+        "rss_item_count": 10,
+        "rss_sha256": "ec3dc5162f2ff4d01e699249c2fa606ea2a7c0c0082e0cb9d39cb77faacf056d",
+        "robots_http_status": 200,
+        "robots_declared_crawl_delay_seconds": 2,
+        "request_count": 2,
+        "followup_request_count": 0,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-EL-NZ-001"
+      ],
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-EL-NZ-001",
+        "canonical_source_remains_unchanged": true,
+        "canonical_timetable_html_automation_remains_held": true,
+        "machine_source_id": "WSSRC-EL-NZ-002",
+        "machine_source_canonical_dependency_count": 0,
+        "machine_source_role": "OFFICIAL_RSS_TIMETABLE_PAGE_UPDATE_SENTINEL_ONLY",
+        "canonical_timetable_page_identity": "https://elections.nz/media-and-news/2026/key-dates-for-2026-general-election",
+        "exact_match_requires_link_and_guid": true,
+        "schedule_authority": false,
+        "clock_authority": false,
+        "lifecycle_authority": false,
+        "certainty_authority": false,
+        "canonical_date_mutation_allowed": false,
+        "automatic_timetable_html_fetch_allowed": false,
+        "automatic_item_link_fetch_allowed": false,
+        "automatic_results_data_fetch_allowed": false,
+        "automatic_search_route_discovery_allowed": false,
+        "automatic_commit_allowed": false,
+        "automatic_live_or_analysis_promotion_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "elections_nz_media_news_rss",
+          "url": "https://elections.nz/media-and-news/rss",
+          "transport": "RSS_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "TEN_MOST_RECENTLY_UPDATED_PAGES_ROLLING_WINDOW",
+          "notes": "One RSS request after robots check and crawl delay; no automatic item-link follow-up."
+        },
+        {
+          "endpoint_role": "robots_policy",
+          "url": "https://elections.nz/robots.txt",
+          "transport": "TEXT_PLAIN",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "AUTOMATION_POLICY_AND_CRAWL_DELAY_GATE"
+        },
+        {
+          "endpoint_role": "canonical_timetable_manual_recheck_only",
+          "url": "https://elections.nz/media-and-news/2026/key-dates-for-2026-general-election",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "CANONICAL_TIMETABLE_AUTHORITY_NOT_AUTOMATICALLY_FETCHED_BY_BY"
         }
       ]
     }
