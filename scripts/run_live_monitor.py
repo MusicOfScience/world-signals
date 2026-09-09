@@ -28,6 +28,7 @@ from world_signals.adapters import (
     fetch_fao_release_calendar,
     fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
+    fetch_nbs_native_latest_releases_rss,
     fetch_ons_upcoming_releases,
     fetch_indec_cpi_months,
     fetch_indec_robots_policy,
@@ -55,6 +56,7 @@ from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
 from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
 from world_signals.japan_cpi_monitor import japan_cpi_schedule_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
+from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
 from world_signals.rba_mpb_monitor import (
     fetch_rba_robots_policy,
@@ -306,6 +308,60 @@ def main() -> int:
                 "rss_has_publication_clock":False,
                 "automatic_item_link_fetch_allowed":False,
                 "automatic_schedule_html_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "CHINA_NBS_LATEST_RELEASES_RSS" in configs:
+        nbs_config=configs["CHINA_NBS_LATEST_RELEASES_RSS"]
+        try:
+            nbs_items,nbs_snap=fetch_nbs_native_latest_releases_rss()
+            report["source_health"].append({
+                "adapter_id":"CHINA_NBS_LATEST_RELEASES_RSS",
+                "source_id":nbs_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":nbs_snap.as_dict(),
+                "item_count":len(nbs_items),
+                "request_budget_per_run":1,
+                "native_rss_request_count":1,
+                "schedule_request_count":0,
+                "english_rss_request_count":0,
+                "article_followup_request_count":0,
+                "data_api_followup_request_count":0,
+                "search_route_discovery_request_count":0,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "rss_publication_metadata_is_event_clock_authority":False,
+                "rss_publication_metadata_is_schedule_authority":False,
+                "canonical_clock_mutation_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_html_fetch_allowed":False,
+                "automatic_english_rss_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=nbs_native_rss_review_candidates(
+                registry.get("records",[]),nbs_items,nbs_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"CHINA_NBS_LATEST_RELEASES_RSS",
+                "source_id":nbs_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "rss_publication_metadata_is_event_clock_authority":False,
+                "canonical_clock_mutation_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_schedule_html_fetch_allowed":False,
+                "automatic_english_rss_fetch_allowed":False,
                 "automatic_commit_allowed":False,
             })
 

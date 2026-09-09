@@ -23,6 +23,7 @@ from world_signals.adapters import (
     fetch_cellar_celex_document,
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
+    fetch_nbs_native_latest_releases_rss,
     fetch_ons_upcoming_releases,
     fetch_eurostat_release_calendar,
     fetch_fao_release_calendar,
@@ -226,6 +227,42 @@ def main() -> int:
         })
     except (AdapterError,ValueError) as exc:
         failures.append({"adapter":"CBSL_MONETARY_POLICY_RSS","error":str(exc)})
+
+    try:
+        nbs_items,nbs_snap=fetch_nbs_native_latest_releases_rss()
+        report["results"].append({
+            "adapter":"CHINA_NBS_LATEST_RELEASES_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-MAC-031",
+            "snapshot":nbs_snap.as_dict(),
+            "item_count":len(nbs_items),
+            "request_budget_per_run":1,
+            "native_rss_request_count":1,
+            "schedule_request_count":0,
+            "english_rss_request_count":0,
+            "article_followup_request_count":0,
+            "data_api_followup_request_count":0,
+            "search_route_discovery_request_count":0,
+            "schedule_authority":False,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "certainty_authority":False,
+            "rss_publication_metadata_is_event_clock_authority":False,
+            "canonical_clock_mutation_allowed":False,
+            "automatic_item_link_fetch_allowed":False,
+            "automatic_schedule_html_fetch_allowed":False,
+            "automatic_english_rss_fetch_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"CHINA_NBS_LATEST_RELEASES_RSS","error":str(exc)})
+        report["results"].append({
+            "adapter":"CHINA_NBS_LATEST_RELEASES_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-MAC-031",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
 
     try:
         fao_months=["October 2026","November 2026","December 2026"]

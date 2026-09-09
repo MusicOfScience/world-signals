@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.21",
+  "version": "0.22",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -1376,6 +1376,399 @@
       "automatic_data_release_followup_allowed": false,
       "automatic_pdf_fetch_allowed": false,
       "automatic_news_followup_allowed": false,
+      "automatic_search_route_discovery_allowed": false,
+      "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CHINA_NBS_LATEST_RELEASES_RSS",
+      "source_id": "WSSRC-MAC-031",
+      "canonical_schedule_source_id": "WSSRC-MAC-007",
+      "canonical_occurrence_ids": [
+        "WSO-MAC-A-0069",
+        "WSO-CN-A-0014",
+        "WSO-MAC-A-0073",
+        "WSO-CN-A-0018",
+        "WSO-CN-A-0019",
+        "WSO-CN-A-0020",
+        "WSO-CN-A-0021",
+        "WSO-CN-A-0022",
+        "WSO-MAC-B-0049",
+        "WSO-MAC-A-0070",
+        "WSO-CN-A-0015",
+        "WSO-MAC-A-0074",
+        "WSO-CN-A-0023",
+        "WSO-CN-A-0024",
+        "WSO-CN-A-0025",
+        "WSO-CN-A-0026",
+        "WSO-CN-A-0027",
+        "WSO-MAC-B-0050",
+        "WSO-MAC-A-0071",
+        "WSO-CN-A-0016",
+        "WSO-MAC-A-0075",
+        "WSO-CN-A-0028",
+        "WSO-CN-A-0029",
+        "WSO-CN-A-0030",
+        "WSO-CN-A-0031",
+        "WSO-CN-A-0032",
+        "WSO-MAC-B-0051",
+        "WSO-MAC-A-0072",
+        "WSO-CN-A-0017",
+        "WSO-MAC-A-0076",
+        "WSO-CN-A-0033",
+        "WSO-CN-A-0034",
+        "WSO-CN-A-0035",
+        "WSO-CN-A-0036",
+        "WSO-CN-A-0037",
+        "WSO-MAC-B-0052"
+      ],
+      "identity_by_occurrence_id": {
+        "WSO-MAC-A-0069": {
+          "series_key": "CPI",
+          "series_id": "WSER-MAC-CN-CPI",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-09T09:30:00",
+          "start_utc": "2026-09-09T01:30:00Z"
+        },
+        "WSO-CN-A-0014": {
+          "series_key": "PPI",
+          "series_id": "WSER-CN-NBS-PPI",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-09T09:30:00",
+          "start_utc": "2026-09-09T01:30:00Z"
+        },
+        "WSO-MAC-A-0073": {
+          "series_key": "NEP",
+          "series_id": "WSER-MAC-CN-NEP",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-CN-A-0018": {
+          "series_key": "IP",
+          "series_id": "WSER-CN-NBS-IP",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-CN-A-0019": {
+          "series_key": "ENERGY",
+          "series_id": "WSER-CN-NBS-ENERGY",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-CN-A-0020": {
+          "series_key": "FAI",
+          "series_id": "WSER-CN-NBS-FAI",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-CN-A-0021": {
+          "series_key": "REALESTATE",
+          "series_id": "WSER-CN-NBS-REALESTATE",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-CN-A-0022": {
+          "series_key": "RETAIL",
+          "series_id": "WSER-CN-NBS-RETAIL",
+          "reference_year": 2026,
+          "reference_month": 8,
+          "start_local": "2026-09-15T10:00:00",
+          "start_utc": "2026-09-15T02:00:00Z"
+        },
+        "WSO-MAC-B-0049": {
+          "series_key": "PMI",
+          "series_id": "WSER-MAC-CN-PMI",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-09-30T09:30:00",
+          "start_utc": "2026-09-30T01:30:00Z"
+        },
+        "WSO-MAC-A-0070": {
+          "series_key": "CPI",
+          "series_id": "WSER-MAC-CN-CPI",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-14T09:30:00",
+          "start_utc": "2026-10-14T01:30:00Z"
+        },
+        "WSO-CN-A-0015": {
+          "series_key": "PPI",
+          "series_id": "WSER-CN-NBS-PPI",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-14T09:30:00",
+          "start_utc": "2026-10-14T01:30:00Z"
+        },
+        "WSO-MAC-A-0074": {
+          "series_key": "NEP",
+          "series_id": "WSER-MAC-CN-NEP",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-CN-A-0023": {
+          "series_key": "IP",
+          "series_id": "WSER-CN-NBS-IP",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-CN-A-0024": {
+          "series_key": "ENERGY",
+          "series_id": "WSER-CN-NBS-ENERGY",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-CN-A-0025": {
+          "series_key": "FAI",
+          "series_id": "WSER-CN-NBS-FAI",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-CN-A-0026": {
+          "series_key": "REALESTATE",
+          "series_id": "WSER-CN-NBS-REALESTATE",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-CN-A-0027": {
+          "series_key": "RETAIL",
+          "series_id": "WSER-CN-NBS-RETAIL",
+          "reference_year": 2026,
+          "reference_month": 9,
+          "start_local": "2026-10-19T10:00:00",
+          "start_utc": "2026-10-19T02:00:00Z"
+        },
+        "WSO-MAC-B-0050": {
+          "series_key": "PMI",
+          "series_id": "WSER-MAC-CN-PMI",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-10-31T09:30:00",
+          "start_utc": "2026-10-31T01:30:00Z"
+        },
+        "WSO-MAC-A-0071": {
+          "series_key": "CPI",
+          "series_id": "WSER-MAC-CN-CPI",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-09T09:30:00",
+          "start_utc": "2026-11-09T01:30:00Z"
+        },
+        "WSO-CN-A-0016": {
+          "series_key": "PPI",
+          "series_id": "WSER-CN-NBS-PPI",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-09T09:30:00",
+          "start_utc": "2026-11-09T01:30:00Z"
+        },
+        "WSO-MAC-A-0075": {
+          "series_key": "NEP",
+          "series_id": "WSER-MAC-CN-NEP",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-CN-A-0028": {
+          "series_key": "IP",
+          "series_id": "WSER-CN-NBS-IP",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-CN-A-0029": {
+          "series_key": "ENERGY",
+          "series_id": "WSER-CN-NBS-ENERGY",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-CN-A-0030": {
+          "series_key": "FAI",
+          "series_id": "WSER-CN-NBS-FAI",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-CN-A-0031": {
+          "series_key": "REALESTATE",
+          "series_id": "WSER-CN-NBS-REALESTATE",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-CN-A-0032": {
+          "series_key": "RETAIL",
+          "series_id": "WSER-CN-NBS-RETAIL",
+          "reference_year": 2026,
+          "reference_month": 10,
+          "start_local": "2026-11-16T10:00:00",
+          "start_utc": "2026-11-16T02:00:00Z"
+        },
+        "WSO-MAC-B-0051": {
+          "series_key": "PMI",
+          "series_id": "WSER-MAC-CN-PMI",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-11-30T09:30:00",
+          "start_utc": "2026-11-30T01:30:00Z"
+        },
+        "WSO-MAC-A-0072": {
+          "series_key": "CPI",
+          "series_id": "WSER-MAC-CN-CPI",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-09T09:30:00",
+          "start_utc": "2026-12-09T01:30:00Z"
+        },
+        "WSO-CN-A-0017": {
+          "series_key": "PPI",
+          "series_id": "WSER-CN-NBS-PPI",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-09T09:30:00",
+          "start_utc": "2026-12-09T01:30:00Z"
+        },
+        "WSO-MAC-A-0076": {
+          "series_key": "NEP",
+          "series_id": "WSER-MAC-CN-NEP",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-CN-A-0033": {
+          "series_key": "IP",
+          "series_id": "WSER-CN-NBS-IP",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-CN-A-0034": {
+          "series_key": "ENERGY",
+          "series_id": "WSER-CN-NBS-ENERGY",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-CN-A-0035": {
+          "series_key": "FAI",
+          "series_id": "WSER-CN-NBS-FAI",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-CN-A-0036": {
+          "series_key": "REALESTATE",
+          "series_id": "WSER-CN-NBS-REALESTATE",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-CN-A-0037": {
+          "series_key": "RETAIL",
+          "series_id": "WSER-CN-NBS-RETAIL",
+          "reference_year": 2026,
+          "reference_month": 11,
+          "start_local": "2026-12-15T10:00:00",
+          "start_utc": "2026-12-15T02:00:00Z"
+        },
+        "WSO-MAC-B-0052": {
+          "series_key": "PMI",
+          "series_id": "WSER-MAC-CN-PMI",
+          "reference_year": 2026,
+          "reference_month": 12,
+          "start_local": "2026-12-31T09:30:00",
+          "start_utc": "2026-12-31T01:30:00Z"
+        }
+      },
+      "monitor_role": "OFFICIAL_NBS_NATIVE_LATEST_RELEASES_RSS_PUBLICATION_SENTINEL",
+      "cadence": "DAILY",
+      "request_budget_per_run": 1,
+      "native_rss_request_count_per_run": 1,
+      "schedule_request_count_per_run": 0,
+      "english_rss_request_count_per_run": 0,
+      "article_followup_request_count_per_run": 0,
+      "data_api_followup_request_count_per_run": 0,
+      "search_route_discovery_request_count_per_run": 0,
+      "feed": {
+        "url": "https://www.stats.gov.cn/sj/zxfb/rss.xml",
+        "transport": "RSS_XML",
+        "request_policy": "ONE_OFFICIAL_NATIVE_RSS_REQUEST_PER_DAILY_MONITOR_RUN"
+      },
+      "classification_contract": {
+        "exact_configured_publication": "CHINA_NBS_CONFIGURED_RELEASE_PUBLICATION_EVIDENCE_REVIEW",
+        "completed_occurrence": "CHINA_NBS_COMPLETED_OCCURRENCE_PUBLICATION_CORROBORATION_ONLY",
+        "outside_configured_scope": "CHINA_NBS_OUTSIDE_CONFIGURED_SCOPE_OBSERVATION",
+        "structural_failure": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+        "duplicate_or_ambiguous_identity": "FAIL_CLOSED_SOURCE_HEALTH_ONLY",
+        "absence_is_not_cancellation": true,
+        "absence_is_not_delay": true,
+        "absence_is_not_completion": true,
+        "absence_is_not_certainty_change": true,
+        "feed_publication_time_is_not_canonical_event_time": true,
+        "feed_publication_date_is_not_forward_schedule_authority": true
+      },
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-MAC-007",
+        "machine_source_id": "WSSRC-MAC-031",
+        "canonical_schedule_source_unchanged": true,
+        "canonical_schedule_source_role": "NBS_ANNUAL_FORWARD_RELEASE_CALENDAR_CANONICAL_DATE_AND_CLOCK_AUTHORITY",
+        "machine_source_role": "NBS_NATIVE_LATEST_RELEASES_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL",
+        "machine_source_canonical_dependency_count": 0,
+        "rss_publication_metadata_is_event_clock_authority": false,
+        "rss_publication_metadata_is_schedule_authority": false,
+        "route_schedule_mutation_authority": false,
+        "route_clock_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+      "positive_publication_policy": "GENERATE_REVIEW_CANDIDATE_ONLY_FOR_EXACT_SERIES_REFERENCE_YEAR_MONTH_IDENTITY_MATCH",
+      "absence_policy": "FINITE_ROLLING_FEED_ABSENCE_HAS_NO_SCHEDULE_LIFECYCLE_DELAY_CANCELLATION_OR_CERTAINTY_SEMANTICS",
+      "outside_scope_policy": "OBSERVE_RELEVANT_HISTORICAL_OR_UNTRACKED_PUBLICATIONS_ONLY",
+      "schedule_authority": false,
+      "clock_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "rss_publication_metadata_is_event_clock_authority": false,
+      "rss_publication_metadata_is_schedule_authority": false,
+      "canonical_clock_mutation_allowed": false,
+      "automatic_item_link_fetch_allowed": false,
+      "automatic_schedule_html_fetch_allowed": false,
+      "automatic_english_rss_fetch_allowed": false,
+      "automatic_data_api_fetch_allowed": false,
       "automatic_search_route_discovery_allowed": false,
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
       "automatic_commit_allowed": false

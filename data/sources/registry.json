@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-09",
-  "version": "1.96",
+  "version": "1.97",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -11059,6 +11059,115 @@
           "transport": "HTML_FRAGMENT_GET",
           "preferred_for_monitoring": true,
           "completeness_scope": "EXACT_FOUR_REVIEWED_2026_MONTH_ROUTES_ONLY"
+        }
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-031",
+      "institution": "National Bureau of Statistics of China",
+      "jurisdiction": "China",
+      "domain": "macroeconomic_releases",
+      "endpoint_role": "Official NBS native Latest Releases RSS publication sentinel",
+      "authoritative_url": "https://www.stats.gov.cn/sj/zxfb/rss.xml",
+      "source_type": "official_rss_feed",
+      "information_supplied": "Native NBS Latest Releases RSS title, official link, source label, publication metadata and document identity. The feed is publication corroboration only and is not forward schedule or Canonical clock authority.",
+      "future_schedule_horizon": "not a schedule source; finite rolling publication feed",
+      "typical_advance_notice": "publication driven",
+      "machine_readable_available": "RSS/XML",
+      "source_timezone": "Asia/Shanghai",
+      "recommended_verification_cadence": "daily; one native RSS request per run",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "NBS_NATIVE_LATEST_RELEASES_RSS_PUBLICATION_SENTINEL",
+      "parser_version": "nbs-native-rss-0.1",
+      "known_limitations": [
+        "The native RSS feed is finite and rolling; absence has no schedule, lifecycle, delay, cancellation or certainty semantics.",
+        "RSS pubTime/pubDate are publication metadata only and are not Canonical event-time authority even when historically aligned with scheduled release clocks.",
+        "National Economic Performance titles use variable prose; only bounded period-prefix forms are classified and ambiguous identities fail closed.",
+        "The monitor never automatically fetches the annual release calendar, English RSS, linked article pages, NBS data APIs, PDFs, news or search routes.",
+        "Positive publication evidence creates review candidates only and cannot automatically alter Canonical schedule, clock, lifecycle or certainty.",
+        "WSSRC-MAC-007 remains the Canonical annual forward release-calendar authority with its existing endpoint-review hold unchanged."
+      ],
+      "backup_source": null,
+      "notes": "Separate machine-interface identity preserves the distinction between held Canonical calendar retrieval and expressly offered RSS subscription access.",
+      "timezone_scope": "ASIA_SHANGHAI_PUBLICATION_METADATA_IDENTITY_ONLY_NO_CANONICAL_CLOCK_AUTHORITY",
+      "licence_constraints": "NBS_TERMS_ATTRIBUTION_AND_STATED_REUSE_CONDITIONS_APPLY_NO_UNRESTRICTED_REDISTRIBUTION_ASSUMED",
+      "ingestion_permission": "OFFICIAL_DEDICATED_RSS_MINIMAL_FACTUAL_METADATA_INTERNAL_MONITORING_WITH_ATTRIBUTION",
+      "licence_review_status": "CURATED_DATA_USE_ALLOWED_REUSE_CONDITIONAL_RSS_MACHINE_INTERFACE_SEPARATELY_IDENTIFIED",
+      "automated_retrieval_permission": "OFFICIAL_DEDICATED_RSS_INTERFACE_BOUNDED_METADATA_MONITORING",
+      "redistribution_permission": "CONDITIONAL_ATTRIBUTION_MINIMAL_FACTUAL_METADATA_ONLY_NO_ARTICLE_BODY_REPUBLICATION",
+      "rights_evidence_url": "https://www.stats.gov.cn/english/nbs/200701/t20070104_59236.html",
+      "rights_summary": "NBS terms permit statistical-data use and reasonable good-faith attributed reuse subject to stated conditions; BX does not infer an unrestricted downstream redistribution licence.",
+      "automation_evidence_url": "https://www.stats.gov.cn/wzgl/rss/202302/t20230217_1912859.html",
+      "automation_summary": "NBS publishes the native RSS subscription interface for immediate automatic acquisition. WORLD SIGNALS is bounded to one daily request to that native feed with zero automatic calendar, English-feed, article, API, PDF, news or search follow-ups.",
+      "rights_reviewed_at": "2026-09-09",
+      "rights_review_scope": "BX_CONTENT_REUSE_AND_DEDICATED_RSS_MACHINE_ACCESS_SEPARATED_FROM_CALENDAR_ENDPOINT_REVIEW",
+      "rights_review_note": "Operational governance classification for WORLD SIGNALS; not a legal opinion.",
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "monitoring_priority_score": 570,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-09",
+      "monitoring_activation_status": "LIVE_READ_ONLY_PUBLICATION_SENTINEL_NO_AUTO_COMMIT",
+      "last_successful_research_verification_at": "2026-09-09",
+      "canonical_provenance_use": "MONITOR_ONLY_PUBLICATION_SENTINEL_NO_CANONICAL_SCHEDULE_AUTHORITY",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "runtime_health_state": "LIVE_GITHUB_ACTIONS_NATIVE_RSS_FETCH_PARSE_PASS_2026_09_09",
+      "governance_backfill_reviewed_at": "2026-09-09",
+      "governance_backfill_basis": "Separate first-party native RSS source created because NBS explicitly offers RSS for automatic acquisition; the pre-existing annual release-calendar source remains unchanged and under endpoint review.",
+      "live_adapter_id": "CHINA_NBS_LATEST_RELEASES_RSS",
+      "live_validation_evidence": {
+        "native_rss_diagnostic_run_id": 34254908666,
+        "native_rss_diagnostic_job_id": 102158115941,
+        "rss_http_status": 200,
+        "rss_content_type": "text/xml",
+        "rss_item_count": 500,
+        "rss_sha256": "b15a457fffcba22c65104d35e1c2dfa9021c6c8ec1b47034c153a152c3db12e7",
+        "strict_document_xml_parse_succeeded": true,
+        "item_fragment_failure_count": 0,
+        "request_count": 1,
+        "followup_request_count": 0,
+        "automatic_commit_allowed": false
+      },
+      "related_source_ids": [
+        "WSSRC-MAC-007"
+      ],
+      "source_role_contract": {
+        "canonical_schedule_source_id": "WSSRC-MAC-007",
+        "machine_source_id": "WSSRC-MAC-031",
+        "canonical_schedule_source_unchanged": true,
+        "canonical_schedule_source_role": "NBS_ANNUAL_FORWARD_RELEASE_CALENDAR_CANONICAL_DATE_AND_CLOCK_AUTHORITY",
+        "machine_source_role": "NBS_NATIVE_LATEST_RELEASES_RSS_MONITOR_ONLY_PUBLICATION_SENTINEL",
+        "machine_source_canonical_dependency_count": 0,
+        "rss_publication_metadata_is_event_clock_authority": false,
+        "rss_publication_metadata_is_schedule_authority": false,
+        "route_schedule_mutation_authority": false,
+        "route_clock_authority": false,
+        "route_lifecycle_authority": false,
+        "route_certainty_authority": false,
+        "automatic_commit_allowed": false
+      },
+      "monitor_endpoints": [
+        {
+          "endpoint_role": "nbs_native_latest_releases_rss",
+          "url": "https://www.stats.gov.cn/sj/zxfb/rss.xml",
+          "transport": "RSS_XML",
+          "preferred_for_monitoring": true,
+          "completeness_scope": "FINITE_ROLLING_NATIVE_NBS_LATEST_RELEASES",
+          "notes": "Exactly one request per daily run; no automatic item-link or schedule-source follow-up."
+        },
+        {
+          "endpoint_role": "rss_machine_interface_documentation",
+          "url": "https://www.stats.gov.cn/wzgl/rss/202302/t20230217_1912859.html",
+          "transport": "HTML_MANUAL_GOVERNANCE_REFERENCE",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "NBS_PUBLISHED_RSS_SUBSCRIPTION_DOCUMENTATION"
+        },
+        {
+          "endpoint_role": "english_rss_rejected_diagnostic_only",
+          "url": "https://www.stats.gov.cn/english/PressRelease/rss.xml",
+          "transport": "RSS_XML_DIAGNOSTIC_ONLY_NOT_PRODUCTION",
+          "preferred_for_monitoring": false,
+          "completeness_scope": "ENGLISH_TRANSLATION_SURFACE_EXCLUDED_FROM_BX_PRODUCTION_ROUTE"
         }
       ]
     }
