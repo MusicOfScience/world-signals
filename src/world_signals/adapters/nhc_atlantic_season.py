@@ -72,7 +72,7 @@ class NHCAtlanticSeasonDefinition:
 
 def parse_nhc_atlantic_climatology_html(body: bytes | str) -> NHCAtlanticSeasonDefinition:
     text = _text(body)
-    month = r"January|February|March|April|May|June|July|August|September|October|November|December"
+    month = r"(?:January|February|March|April|May|June|July|August|September|October|November|December)"
     patterns = [
         rf"Atlantic hurricane season runs from ({month}\s+\d{{1,2}}) to ({month}\s+\d{{1,2}})",
         rf"official hurricane season for the Atlantic basin is from ({month}\s+\d{{1,2}}) to ({month}\s+\d{{1,2}})",
