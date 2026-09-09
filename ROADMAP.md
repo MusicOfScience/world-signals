@@ -1,186 +1,136 @@
-# WORLD SIGNALS — code promotion roadmap
+# WORLD SIGNALS — capability roadmap
 
-This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages are architectural capabilities, not a licence for bulk population.
+This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages describe architectural capability, not permission for bulk population. Current numeric state is mechanically derived and CI-checked rather than manually repeated across historical stage prose.
+
+<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
+## Mechanically derived current state
+
+**Reference date:** 2026-09-10  
+**Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
+
+- Canonical Registry: **v0.41 / 689 occurrences**; schema **v0.52**.
+- Source Registry: **v2.02 / 257 sources**.
+- Change Ledger: **v0.27 / 62 entries**.
+- Monitor expectations: **v0.27 / 25 configured adapters / 24 unique monitor sources / 215 explicitly scoped Canonical occurrences**.
+- Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **false**.
+- Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
+- OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.
+<!-- WORLD_SIGNALS_CURRENT_STATE_END -->
 
 ## Stage 0 — research architecture and source governance — ACTIVE / MATURE
 
-Implemented foundations include:
+Maintain the Charter disciplines for identity, lifecycle, certainty, time, provenance, rights, international coverage and analytical uncertainty. Research remains continuous because schedules, institutions, endpoints and rights change.
 
-- canonical identity, lifecycle, certainty and time semantics;
-- source registry and rights/automation separation;
-- conflict and provenance rules;
-- coverage audits and noncanonical analytical overlays;
-- change history and review-candidate contracts;
-- fail-closed validation and controlled transaction patterns.
+Coverage balance remains diagnostic rather than quota-driven. Machine-interface convenience must not masquerade as importance or permission.
 
-Research remains continuous because future schedules, institutions, rights and endpoints change.
+## Stage 1 — Canonical Registry and derived projections — DONE / GUARDED
 
-## Stage 1 — executable Canonical Registry and read-only web projection — DONE
+The repository validates stable Canonical event identities and produces rebuildable browser/calendar projections. Date changes update existing identities with history rather than creating duplicates. Civil dates, native windows, recurring rules and conditional states retain their supported precision.
 
-The repository can:
+Google Calendar is not canonical state and write access remains off.
 
-- validate the canonical registry;
-- enrich events from the source registry;
-- build browser-safe projections;
-- render Calendar, Event Index, Operations, Change History and Analysis views;
-- deploy via GitHub Actions / Pages;
-- preserve source-native and UTC timing without making Melbourne canonical.
+## Stage 2 — heterogeneous Source / Change Monitor — DONE / EXPANDING CAUTIOUSLY
 
-Calendar/Pages remain disposable projections.
+The governed Monitor cohort now spans multiple source contracts and regions. The authoritative route list is `data/monitor/expectations.json`; current count is in the derived state block above.
 
-### BB — BARMM election source + Canonical coverage repair — DONE / BOUNDED
+Shared boundary:
 
-BB corrects a documented upstream omission before any further Live/Analysis expansion: the 14 September 2026 BARMM parliamentary-election polling day is admitted from competent COMELEC evidence together with one manually governed source record and one reviewed Change Ledger admission. The occurrence remains a planned civil-date `ELECTION_MILESTONE`; no polling clock time, UTC timestamp, result or market response is invented. COMELEC automation remains on rights/endpoint hold, and OPAPRU context is not promoted into a second timing authority.
+```text
+fetch -> snapshot -> parse -> assert -> match -> diff -> review candidate
+```
 
-## Stage 2 — heterogeneous Source / Change Monitor, review-only — DONE / EXPANDING CAUTIOUSLY
+Adapters do not receive schedule, lifecycle, certainty, clock or Canonical-write authority merely because they can observe a source. Source competence and unattended-monitoring permission remain separate decisions.
 
-Eight configured adapters currently exercise materially different source contracts:
+### CF — NOAA/NHC Atlantic-season pilot — VALIDATED / NOT ACTIVATED
 
-- RBA FSR RSS/RDF;
-- Colombia SUIN / Socrata legal sentinel;
-- EU Cyber Resilience Act / Cellar;
-- three EU CBAM legal-rule routes;
-- ONS release-calendar RSS;
-- EIA WPSR schedule.
+CF validated a bounded physical-climate-risk pilot for exactly two existing Atlantic hurricane-season Canonical occurrences. NHC climatology is the season-definition authority; RSS is source-health/operational corroboration only.
 
-Shared pattern:
-
-`fetch -> snapshot -> parse -> assert -> match -> diff -> review candidate`
-
-No adapter receives automatic canonical-write authority. Route presence does not erase source-specific rights, endpoint and parser gates.
+The pilot remains outside scheduled Monitor expectations. Activation requires a fresh current-source, rights, endpoint, scope and pressure review. Pilot validation is not latent permission to activate automatically.
 
 ## Stage 3 — scheduled monitoring and retained operational evidence — DONE
 
-GitHub Actions executes the governed monitor cohort on a schedule under read-only repository permissions. Runtime source health, review candidates and retained review-state evidence remain distinct from Canonical state.
+Scheduled read-only monitoring produces dated source-health and review evidence. Runtime failures, parser failures and source absence remain distinct from Canonical event state. Retained Actions evidence is not a database and does not silently become Canonical, Live or Analysis state.
 
-Source failure, parser failure and absence are never event cancellations/completions/reschedules.
+## Stage 4 — reviewed controlled transactions — IMPLEMENTED / GUARDED
 
-## Stage 4 — controlled reviewed transactions — PARTIALLY IMPLEMENTED / GUARDED
+WORLD SIGNALS uses fail-closed reviewed transaction patterns:
 
-WORLD SIGNALS already uses exact-prestate, fail-closed controlled transactions for reviewed tranches. These prove a safety pattern:
+```text
+reviewed proposal -> exact prestate -> bounded mutation -> validators -> full suite -> mutation audit -> PR
+```
 
-`reviewed proposal -> exact prestate -> controlled mutation -> validators -> full suite -> mutation audit -> reviewed PR`
+Historical checkpoints remain frozen as history while later reviewed descendants are validated against tranche-owned invariants rather than obsolete permanent count ceilings.
 
-A generic platform-independent candidate-to-canonical commit/rollback tool remains a future consolidation task. Existing tranche scripts do not constitute blanket commit authority.
+A generic automatic candidate-to-Canonical commit system is not authorised. Automatic Canonical commit remains off.
 
-Automatic canonical commit remains prohibited.
+## Stage 5 — controlled Live Intelligence — IMPLEMENTED / BOUNDED
 
-### BC — historical checkpoint / reviewed descendant contract — DONE / NO POPULATION
+Live Intelligence has moved beyond its zero-population foundation through deliberately different specimens rather than a general news feed. The controlled population has exercised:
 
-BC formalises the distinction between exact historical transaction prestates and legitimate reviewed descendants. A materialised tranche keeps its frozen historical checkpoint, but later validation is limited to invariants that tranche owns: stable IDs/relationships, structural rules and explicit version/population floors. Unrelated later registry counts, monitor cohorts and temporary population caps are not permanent ceilings.
+- unscheduled physical shock without invented Canonical identity;
+- evolving health state where later state is not silent revision;
+- scheduled economic outcome linked `OUTCOME_OF` Canonical;
+- unscheduled geopolitical development;
+- institutional development without synthetic Canonical anchoring;
+- reviewed pre-event institutional context linked `CONTEXT_FOR` an existing Canonical election occurrence.
 
-BA and AZ helpers now remain exact before first materialisation and become read-only/idempotent on reviewed descendants rather than downgrading later dataset versions or populations. BC adds no Canonical, Source, Change Ledger, Live or Analysis rows and opens no production/public gate.
+Live remains factual. Causal interpretation, market attribution, automatic ingestion, public observation projection, automatic story clustering and automatic downstream promotion remain closed.
 
-## Stage 5 — Analysis foundation and controlled sample — DONE / PAUSED FOR AUDIT
+### CG — BARMM pre-election context — DONE / BOUNDED
 
-Analysis schema `v0.4` currently supports 20 reviewed post-event specimens, 91 analytical evidence rows and 18 reviewed event types.
+CG adds one reviewed Southeast Asia `CONTEXT_FOR` relationship to the existing 14 September 2026 BARMM election occurrence. Live evidence has no authority to rewrite COMELEC-governed timing or provenance. No real-world signing clock was manufactured from publication timing.
 
-The sample exercises macro data, monetary policy, institutions, elections, sovereign financing, physical-risk windows/outlooks, financial stability, climate governance, health governance and sanctions without treating review count as representativeness.
+## Stage 6 — Live Intelligence → Analysis bridge — FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
 
-Further Analysis population is paused after AU because the remaining completed/unreviewed Japan macro release adds less immediate contract pressure than the missing Live Intelligence layer.
+The bridge selects immutable Live `observation_id` values explicitly. Live evidence is not transitively migrated into Analysis evidence, upstream Live rows remain immutable, and story/latest selectors remain prohibited.
 
-## Stage 6 — Live Intelligence foundation — DONE / AV
+Exactly one production Live input is currently populated. A second relationship requires a fresh pressure audit and a valid post-event Analysis target. The BARMM context cannot be forced downstream while its Canonical occurrence remains pre-event under the current Analysis contract.
 
-AV establishes `data/live_intelligence/` as an executable but intentionally empty layer.
+## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED
 
-Foundation capabilities:
+Analysis revisions are immutable descendants, not in-place rewrites. CD materialised the first controlled child revision for the BWC Working Group case while preserving the parent snapshot.
 
-- factual current-development observation identity;
-- explicit verification state;
-- evidence registry separate from canonical and analytical provenance;
-- optional canonical links;
-- unscheduled observations without fabricated canonical identities;
-- separate observation time, publication time and event time;
-- append-only revision/correction relationships;
-- validation that rejects causal/analytical fields;
-- metadata-only static projection;
-- CI integration.
+Automatic latest-head selection, public revision metadata and public head collapse remain off. A second production revision requires a new pressure audit.
 
-**AV v0.1 deliberately prohibited production observation/evidence population; that frozen foundation checkpoint remains preserved through AW v0.2 and AX v0.3.**
+## Stage 8 — recovery/status truth surfaces — CH IMPLEMENTING
 
-## Stage 7 — controlled Live Intelligence specimens — DONE / AW + AX
+CH addresses an operational governance weakness exposed after CG: `README.md`, `PROJECT_STATUS.md` and `ROADMAP.md` contained materially stale counts and checkpoint language even though governed registries were correct.
 
-AW selected the 26 August 2026 Bhote Koshi / Rasuwa flood in Nepal after comparing physical-shock, health-emergency, geopolitical/policy, economic-revision and market-observation candidates. Live Intelligence v0.2 proved unscheduled identity, native event time, civil-date publication precision and zero Canonical links without opening public projection.
+CH introduces `data/status/current_state.json` plus `scripts/project_state_snapshot.py` so CI derives current cross-layer state from governed files and fails when the checked-in snapshot or the marked current-state blocks drift.
 
-AX then selected the 2026 DRC Bundibugyo outbreak because successive WHO snapshots stress a different contract boundary: **state evolution is not revision**. Live Intelligence v0.3 preserves the Nepal row and adds two DRC `HEALTH_EMERGENCY` observations sharing one manually reviewed story key. The 30 August state points to the 26 August state with `state_update_of_observation_id`, while both retain null revision links.
+The snapshot is explicitly noncanonical and may not mutate upstream layers. Its write mode is limited to derived recovery surfaces and requires an explicit environment gate.
 
-AX also makes state-as-of time explicit and distinct from event, publication and WORLD SIGNALS observation time. Manual story identity is a grouping key only; automatic clustering, public projection and continuous ingestion remain closed. AX's frozen checkpoint is three observations and four primary-official evidence rows. AZ v0.4 adds one separately pressure-audited Japan economic-data observation and two primary-official evidence rows, taking the current bounded internal population to four observations and six evidence rows.
+## Stage 9 — next pressure selection — RECOMPUTE AFTER CH
 
-AZ completed the required pre-fourth-observation audit before adding the Japan FIES specimen. Before any fifth observation or broader ingestion, run another pressure audit.
+Do not preselect the next tranche. Recompute pressure from then-current `main` and compare at least:
 
+- NHC Monitor activation, with fresh official-source/rights/endpoint review;
+- another Live specimen only if it exercises a genuinely useful missing contract rather than adding count;
+- a second Live→Analysis relationship only when a valid completed Canonical target exists;
+- a second Analysis revision only when new evidence creates real revision pressure;
+- source/readiness debt where it blocks useful governed capability;
+- internationally material Canonical omissions where evidence shows a real gap.
 
-### BD — fifth Live geopolitical specimen — DONE / BOUNDED
+Explicitly exclude quarantined CE/OPEC from ordinary candidate selection.
 
-BD selects the 5 September 2026 Vietnam-Myanmar defence/security agreement as the fifth pressure-audited Live observation. It is stored as `GEOPOLITICAL_DEVELOPMENT` with one primary Government of Viet Nam evidence row and **zero Canonical links**: an unscheduled current development does not acquire a synthetic Canonical identity merely to make downstream linkage easier.
+## Stage 10 — broader Live / monitoring population — ONLY AFTER AUDIT
 
-The official article supplies an exact publication time, preserved independently, but describes the leaders' meeting only as occurring on 5 September / Saturday morning. BD therefore keeps event time at `CIVIL_DATE` and does not fabricate a summit timestamp. Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Calendar writes remain closed. A sixth Live observation requires another pressure audit.
-
-### BE — OPEC fallback lifecycle completion — DONE / PRIMARY PROVENANCE UPGRADE PENDING
-
-BE repairs the existing 6 September 2026 OPEC+ voluntary-adjustment review from `PLANNED` to `COMPLETED` using one reviewed Reuters completion-only fallback because the competent OPEC outcome statement was not retrievable on the accessible/indexed primary surface at review time. The fallback does not displace `WSSRC-COM-001` as OPEC schedule/decision authority and is retained explicitly as secondary provenance pending a later primary-source upgrade.
-
-BE creates no 4 October occurrence from secondary reporting, no sixth Live observation and no Analysis mutation. The repair raises the completed Analysis-eligible pool to 22 and leaves one completed/unreviewed OPEC anchor for a future pressure audit; queue completion is not the objective.
-
-
-### BF — sixth Live institutional specimen — DONE / BOUNDED
-
-BF selects the 4 September 2026 UN General Assembly adoption of A/RES/80/307, ‘Correct the Map’, as the sixth pressure-audited Live observation. It is stored as `INSTITUTIONAL_DEVELOPMENT` with two primary-official evidence rows: the UN adoption/vote record and African Union institutional context. The observation has zero Canonical links; no specific scheduled Canonical resolution-adoption identity is manufactured.
-
-The UN record fixes the 114th plenary meeting and 164–1–6 vote. The AU confirms Togo's role on behalf of the African Group and the Africa-led implementation framing. BF records only those institutional facts: it does not imply a compulsory single world map, territorial or sovereignty change, economic effect, market response or broader causal consequence. Event and source-publication precision remain `CIVIL_DATE`.
-
-Public observation projection, automatic ingestion, automatic story clustering, automatic Canonical commit and Google Calendar writes remain closed. A seventh Live observation requires another pressure audit.
-
-### BG — OPEC official participating-government provenance strengthening — DONE / OPEC PRIMARY STILL PENDING
-
-BG strengthens BE's completion provenance for `WSO-COM-A-0001` with Saudi Press Agency official confirmation that the seven participating OPEC+ countries met on 6 September and maintained September production requirements for October. SPA outranks the Reuters fallback for supporting official confirmation but is not the competent OPEC issuing institution.
-
-Reuters `WSSRC-COM-015` remains preserved as the evidence used for BE completion; `WSSRC-COM-001` remains OPEC schedule/decision authority; the competent OPEC outcome source remains `REQUIRED_WHEN_RETRIEVABLE`. BG changes no lifecycle, event date/time, Live observation, Analysis packet, bridge relationship or automation gate and creates no October occurrence from SPA.
-
-## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED
-
-AY established the executable bridge grammar with production population closed. AZ then pressure-audited and populated exactly one relationship: the completed July 2026 Japan FIES Canonical occurrence -> one reviewed Live `ECONOMIC_DATA_OBSERVATION` -> one Analysis review selecting that immutable observation as `FACTUAL_INPUT`.
-
-The relationship remains:
-
-`factual observation -> optional canonical context -> analytical interpretation`
-
-not:
-
-`headline -> inferred cause -> rewritten event`.
-
-Live evidence is not transitively migrated into Analysis evidence, upstream Live records remain immutable, and story/latest selectors remain prohibited. The inaugural factual input must share the review's Canonical occurrence. Production `live_inputs` are capped at one and public Live-input projection remains closed. Another pressure audit is required before any second production relationship.
-
-## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED
-
-BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot. Production revision population remains zero.
-
-A future revision must be a new immutable `analysis_id` linked by `revision_of_analysis_id`, preserve the parent row, remain on the same Canonical occurrence and advance `analysis_as_of_utc`. Revision kind and reason are explicit. Cycles and first-mode branching are prohibited. `NEW_LIVE_EVIDENCE` revisions must identify at least one novel immutable Live observation relative to the parent.
-
-Live observations never automatically revise Analysis. Live correction/state-update lineage and Analysis revision lineage remain separate. No public latest-head collapse or revision-metadata projection is opened by BA. The first production Analysis revision requires another pressure audit.
-
-## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT
-
-Do not build a high-volume news ingest by default. Expansion must establish:
-
-- source families and rights;
-- observation identity/deduplication;
-- correction/retraction handling;
-- geographic/domain balance;
-- noise controls;
-- retention and provenance;
-- separation of current observation from analytical inference.
+Do not build a high-volume news ingest by default. Expansion must establish source families and rights, observation identity/deduplication, correction/retraction handling, geographic/domain balance, noise controls, retention and provenance, and clean separation of factual observation from analytical inference.
 
 Platform independence remains mandatory.
 
-## Stage 10 — calendar export — LATER
+## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
-Generate ICS/Google Calendar output from Canonical only. Calendar remains rebuildable output; deleting an export never deletes canonical data.
+ICS or other calendar outputs must be generated from Canonical. External calendar state remains disposable and rebuildable. User travel changes display-local rendering, not canonical event time.
 
-## Stage 11 — evaluate narrow auto-commit classes — GATE CLOSED
+Google Calendar writes remain off until explicitly authorised by a later reviewed architecture.
 
-Only reconsider after the empirical commit gate is met, including prospective evidence of:
+## Stage 12 — evaluate narrow auto-commit classes — GATE CLOSED
 
-- a reschedule detected against a prior canonical snapshot on the same stable occurrence; and
-- an explicit cancellation of an existing canonical occurrence from positive authoritative evidence.
+Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 
-Even if that evidence arrives, any first auto-commit class must be narrow and separately authorised. No blanket automation follows from monitor or parser maturity.
+## Permanent quarantine
+
+PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
