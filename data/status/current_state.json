@@ -1,0 +1,88 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "DERIVED_PROJECT_STATE_SNAPSHOT",
+  "version": "0.1",
+  "reference_date": "2026-09-10",
+  "status": "DERIVED_NONCANONICAL_RECOVERY_SURFACE",
+  "derivation_policy": {
+    "governed_registries_and_contracts_remain_authoritative": true,
+    "snapshot_is_not_canonical_state": true,
+    "snapshot_is_not_calendar_state": true,
+    "snapshot_is_not_monitor_runtime_evidence": true,
+    "snapshot_may_not_mutate_upstream_layers": true
+  },
+  "canonical": {
+    "registry_version": "0.41",
+    "occurrence_count": 689,
+    "schema_version": "0.52"
+  },
+  "sources": {
+    "registry_version": "2.02",
+    "source_count": 257
+  },
+  "change_ledger": {
+    "version": "0.27",
+    "entry_count": 62
+  },
+  "coverage_overlays": {
+    "biosecurity_overlay_version": "0.16",
+    "biosecurity_canonical_checkpoint": {
+      "registry_version": "0.41",
+      "record_count": 689
+    }
+  },
+  "monitor": {
+    "expectations_version": "0.27",
+    "configured_adapter_count": 25,
+    "unique_monitor_source_count": 24,
+    "explicit_scoped_occurrence_count": 215,
+    "operations_policy_version": "0.1",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "nhc_atlantic_pilot": {
+      "source_id": "WSSRC-RISK-002",
+      "canonical_occurrence_ids": [
+        "WSO-COM-A-0049",
+        "WSO-COM-A-0050"
+      ],
+      "readiness_verdict": "PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT",
+      "registered_in_expectations": false
+    }
+  },
+  "live_intelligence": {
+    "schema_version": "0.7",
+    "observations_version": "0.7",
+    "observation_count": 7,
+    "evidence_version": "0.7",
+    "evidence_count": 10,
+    "canonical_linked_observation_count": 2,
+    "canonical_linked_occurrence_count": 2,
+    "automatic_ingestion_allowed": false,
+    "public_observation_projection_allowed": false,
+    "all_observation_auto_commit_gates_closed": true,
+    "all_observation_calendar_write_gates_closed": true
+  },
+  "analysis": {
+    "schema_version": "0.8",
+    "reviews_version": "0.18",
+    "review_count": 22,
+    "evidence_version": "0.18",
+    "evidence_count": 97,
+    "reviewed_event_type_count": 18,
+    "production_live_input_count": 1,
+    "production_revision_count": 1,
+    "public_live_input_projection_allowed": false,
+    "public_revision_metadata_projection_allowed": false,
+    "automatic_latest_analysis_selection_allowed": false
+  },
+  "write_gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "monitor_may_mutate_canonical": false,
+    "live_automatic_ingestion_allowed": false,
+    "live_public_projection_allowed": false
+  },
+  "quarantine": {
+    "opec_quarantine_record_present": true
+  }
+}
