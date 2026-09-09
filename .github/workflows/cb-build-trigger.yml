@@ -24,6 +24,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # CB generator retrigger after preserving embedded-source indentation.
           python - <<'PY'
           from pathlib import Path
           src=Path('.github/workflows/cb-build-sarb-monitor.yml').read_text().splitlines()
