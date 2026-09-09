@@ -52,8 +52,8 @@ jobs:
       - name: Commit bounded BA repair
         run: |
           set -euo pipefail
-          changed="$(git status --porcelain)"
-          test "$changed" = ' M scripts/apply_analysis_revision_contract_ba.py'
+          test "$(git status --porcelain | wc -l)" -eq 1
+          test "$(git status --porcelain | sed 's/^...//')" = 'scripts/apply_analysis_revision_contract_ba.py'
           git config user.name "Mx Hud Harding"
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
           git add scripts/apply_analysis_revision_contract_ba.py
