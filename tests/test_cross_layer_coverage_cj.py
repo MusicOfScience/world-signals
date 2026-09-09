@@ -6,7 +6,10 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from world_signals.cross_layer_coverage import build_cross_layer_coverage_audit
+from world_signals.cross_layer_coverage import (
+    LIVE_REGION_TO_CANONICAL_COMPARISON_REGION,
+    build_cross_layer_coverage_audit,
+)
 
 
 def load(path: str) -> dict:
@@ -149,6 +152,60 @@ class CrossLayerCoverageUnitTests(unittest.TestCase):
         self.assertEqual(candidate["analysis_ids"], ["AN2"])
         self.assertFalse(audit["methodology"]["automatic_live_analysis_bridge_population"])
 
+    def test_region_equivalence_is_explicit_audit_only_and_raw_label_is_preserved(self):
+        registry = {
+            "version": "regions",
+            "records": [
+                {
+                    "occurrence_id": "OA",
+                    "series_id": "SA",
+                    "region": "Africa",
+                    "category": "CAT",
+                    "institution": "Inst",
+                    "lifecycle_status": "COMPLETED",
+                }
+            ],
+        }
+        live = {
+            "version": "regions",
+            "observations": [
+                {
+                    "observation_id": "LA",
+                    "regions": ["Central Africa"],
+                    "domain_tags": ["DOMAIN"],
+                    "canonical_links": [],
+                }
+            ],
+        }
+        audit = build_cross_layer_coverage_audit(
+            registry,
+            {"version": "regions", "adapters": []},
+            live,
+            {"version": "regions", "reviews": []},
+        )
+        self.assertEqual(
+            LIVE_REGION_TO_CANONICAL_COMPARISON_REGION,
+            {"Central Africa": "Africa", "Global": "Cross-regional / Global"},
+        )
+        self.assertTrue(
+            audit["methodology"]["region_equivalence_is_explicit_audit_only_and_nonmutating"]
+        )
+        self.assertFalse(audit["region_comparison"]["governed_region_mutation"])
+        self.assertEqual(audit["lookup"]["regions"]["Africa"]["live_observation_count"], 1)
+        self.assertEqual(
+            audit["lookup"]["regions"]["Africa"]["raw_live_region_labels"],
+            ["Central Africa"],
+        )
+        raw = {row["region"]: row for row in audit["raw_region_shape"]}
+        self.assertEqual(raw["Central Africa"]["live_observation_count"], 1)
+        self.assertEqual(raw["Central Africa"]["canonical_occurrence_count"], 0)
+        self.assertNotIn(
+            "Africa",
+            audit["diagnostic_prompts"]["regions_with_canonical_series_but_no_live_observation"],
+        )
+        self.assertEqual(registry["records"][0]["region"], "Africa")
+        self.assertEqual(live["observations"][0]["regions"], ["Central Africa"])
+
     def test_unknown_cross_layer_references_fail_closed(self):
         bad_monitor = {
             "version": "bad",
@@ -198,6 +255,24 @@ class CrossLayerCoverageCurrentStateTests(unittest.TestCase):
             barmm[0]["lifecycle_statuses"]["WSO-EL-PH-BARMM-20260914"],
             "PLANNED",
         )
+
+    def test_current_region_comparison_does_not_report_granularity_artifacts_as_gaps(self):
+        regions = self.audit["lookup"]["regions"]
+        self.assertEqual(regions["Africa"]["live_observation_count"], 2)
+        self.assertEqual(regions["Africa"]["raw_live_region_labels"], ["Central Africa"])
+        self.assertEqual(regions["Cross-regional / Global"]["live_observation_count"], 1)
+        self.assertEqual(
+            regions["Cross-regional / Global"]["raw_live_region_labels"], ["Global"]
+        )
+        prompts = self.audit["diagnostic_prompts"]
+        self.assertNotIn(
+            "Africa", prompts["regions_with_canonical_series_but_no_live_observation"]
+        )
+        self.assertNotIn(
+            "Cross-regional / Global",
+            prompts["regions_with_canonical_series_but_no_live_observation"],
+        )
+        self.assertEqual(prompts["regions_with_live_observation_but_no_analysis_review"], [])
 
     def test_audit_has_no_write_or_auto_population_authority(self):
         method = self.audit["methodology"]
