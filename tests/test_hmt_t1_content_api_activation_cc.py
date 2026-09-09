@@ -20,6 +20,7 @@ class HMTT1ActivationCC(unittest.TestCase):
         new = [s for s in sources["sources"] if s.get("source_id") == "WSSRC-MKT-014"]
         self.assertEqual(len(old), 1)
         self.assertEqual(len(new), 1)
+        self.assertEqual(new[0]["canonical_dependency_count"], 0)
         self.assertEqual(new[0]["automated_monitoring_use"], "CLEARED")
         self.assertEqual(new[0]["live_adapter_id"], "HMT_T1_CONTENT_API")
         self.assertEqual(new[0]["canonical_provenance_use"], "MONITOR_ONLY_NOT_CANONICAL_AUTHORITY")
