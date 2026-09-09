@@ -1,0 +1,69 @@
+name: CH BA descendant repair
+
+on:
+  push:
+    branches:
+      - feature/post-cg-state-truth-ch
+    paths:
+      - '.github/workflows/ch-ba-descendant-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cg-state-truth-ch
+      - name: Assert exact repaired main base
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "f3415e7c748957fadec4d1665b032167fd067a03"
+          test "$(git merge-base HEAD origin/main)" = "f3415e7c748957fadec4d1665b032167fd067a03"
+      - name: Restore BA helper and add only CH descendant recognition
+        run: |
+          set -euo pipefail
+          git checkout origin/main -- scripts/apply_analysis_revision_contract_ba.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply_analysis_revision_contract_ba.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''def target_roadmap(current: str) -> str:
+              heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
+              if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:
+                  return current
+          '''.replace('          ', '')
+          new = '''def target_roadmap(current: str) -> str:
+              heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
+              ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
+              ch_descendant_heading = "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"
+              if (
+                  heading in current
+                  or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current
+                  or (ch_state_marker in current and ch_descendant_heading in current)
+              ):
+                  # Recovery prose is mutable. CH proves a reviewed BA descendant
+                  # through the derived-state marker plus the preserved revision stage.
+                  return current
+          '''.replace('          ', '')
+          if old not in text:
+              raise SystemExit('CH BA repair anchor missing')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          git diff --check
+          python -m py_compile scripts/apply_analysis_revision_contract_ba.py
+          python -m unittest tests.test_analysis_revision_contract_ba tests.test_checkpoint_contract_bc -v
+      - name: Commit bounded BA repair
+        run: |
+          set -euo pipefail
+          changed="$(git status --porcelain)"
+          test "$changed" = ' M scripts/apply_analysis_revision_contract_ba.py'
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add scripts/apply_analysis_revision_contract_ba.py
+          git commit -m "CH: restore BA helper API and allow derived roadmap descendants"
+          git push origin HEAD:feature/post-cg-state-truth-ch
