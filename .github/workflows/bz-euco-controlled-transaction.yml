@@ -1,0 +1,273 @@
+name: BZ European Council controlled transaction
+
+on:
+  push:
+    branches:
+      - feature/post-by-pressure-audit-bz
+    paths:
+      - .github/workflows/bz-euco-controlled-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply, audit, validate, remove temporary workflows, commit and push BZ
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=3ccb20539c10d0965de84efa298ba75634c19249
+          BRANCH=feature/post-by-pressure-audit-bz
+          git fetch --no-tags origin main "$BRANCH"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/$BRANCH)"
+
+          cp data/sources/registry.json /tmp/bz-sources-before.json
+          cp data/monitor/expectations.json /tmp/bz-expectations-before.json
+
+          python - <<'PY' > /tmp/bz-protected-before.json
+          import hashlib,json,subprocess
+          roots=(
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/biosecurity',
+              'data/live',
+              'data/live_intelligence',
+              'data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          snap={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          print(json.dumps(snap,sort_keys=True))
+          PY
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          plan_path=Path('data/monitor/EUROPEAN_COUNCIL_MEETINGS_RSS_BZ_PLAN_v0.1.json')
+          plan=json.loads(plan_path.read_text())
+          plan['focused_activation_gate']={
+              'run_id':34305401609,
+              'job_id':102320933729,
+              'result':'SUCCESS',
+              'repository_mutation':False,
+          }
+          plan['materialized_preflight']={
+              'run_id':34305489809,
+              'job_id':102321189156,
+              'result':'SUCCESS',
+              'full_test_count':1135,
+              'skipped_test_count':65,
+              'protected_file_count':110,
+              'poststate':{
+                  'canonical_registry_version':'0.41',
+                  'canonical_record_count':689,
+                  'source_registry_version':'1.99',
+                  'source_count':255,
+                  'monitor_expectations_version':'0.24',
+                  'configured_monitor_adapter_count':22,
+              },
+              'exact_mutation_path_count':5,
+              'static_build_passed':True,
+              'protected_layers_byte_identical':True,
+              'runner_reset_clean':True,
+              'repository_mutation':False,
+          }
+          plan['production_live_preflight']={
+              'run_id':34305636092,
+              'job_id':102321636120,
+              'result':'SUCCESS',
+              'network_request_count':1,
+              'rss_request_count':1,
+              'robots_request_count':0,
+              'direct_calendar_html_request_count':0,
+              'item_followup_request_count':0,
+              'search_route_discovery_request_count':0,
+              'rss_http_status':200,
+              'rss_content_type':'text/xml; charset=utf-8',
+              'rss_body_bytes':19201,
+              'rss_item_count_observed_not_frozen':50,
+              'rss_sha256_observed_not_frozen':'e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e',
+              'configured_date_match_count':3,
+              'review_candidate_count':0,
+              'unconfigured_future_item_count_observed_not_frozen':0,
+              'canonical_byte_identical':True,
+              'runner_reset_clean':True,
+              'repository_mutation':False,
+          }
+          plan_path.write_text(json.dumps(plan,indent=2,ensure_ascii=False)+'\n')
+
+          research=Path('data/monitor/EUROPEAN_COUNCIL_MEETINGS_RSS_BZ_RESEARCH_v0.1.md')
+          text=research.read_text()
+          marker='## Completed BZ validation gates\n'
+          if marker in text:
+              raise SystemExit('validation evidence marker already present')
+          text += '''\n## Completed BZ validation gates\n\nThe activation architecture subsequently passed all pre-transaction gates.\n\n- **Focused activation contract:** run `34305401609`, job `102320933729` — SUCCESS. The parser/comparator and guarded activation helper passed offline tests; default helper execution remained read-only and `--apply` remained environment-gated.\n- **Materialised full preflight:** run `34305489809`, job `102321189156` — SUCCESS. The exact five-file governed/runtime patch produced Canonical v0.41 / 689, Sources v1.99 / 255 and Monitor v0.24 / 22, then passed **1,135 tests with 65 skipped**, validators, Python/JavaScript checks and the static build. All **110 protected files** were byte-identical and the runner reset clean.\n- **Production-shaped live preflight:** run `34305636092`, job `102321636120` — SUCCESS. Exactly one RSS request returned HTTP 200, `text/xml; charset=utf-8`, 19,201 bytes. All three configured GUIDs matched the current Canonical dates, there were zero review candidates and zero unconfigured future meeting observations in that snapshot. There were no robots, direct-calendar HTML, item-followup or search/discovery requests. Canonical remained byte-identical and the runner reset clean.\n\nThe repeated live SHA-256 `e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e` is corroborative stability evidence only; neither that hash nor the observed 50-item count is a production invariant.\n'''
+          research.write_text(text)
+          PY
+
+          WORLD_SIGNALS_APPLY_MONITOR_BZ=1 python scripts/apply_european_council_rss_monitor_bz.py --apply > /tmp/bz-transaction-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/bz-transaction-apply.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          before_s=json.loads(Path('/tmp/bz-sources-before.json').read_text())
+          after_s=json.loads(Path('data/sources/registry.json').read_text())
+          before_m=json.loads(Path('/tmp/bz-expectations-before.json').read_text())
+          after_m=json.loads(Path('data/monitor/expectations.json').read_text())
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+
+          assert (canonical['version'],len(canonical['records']))==('0.41',689)
+          assert (before_s['version'],len(before_s['sources']))==('1.98',254)
+          assert (after_s['version'],len(after_s['sources']))==('1.99',255)
+          assert (before_m['version'],len(before_m['adapters']))==('0.23',21)
+          assert (after_m['version'],len(after_m['adapters']))==('0.24',22)
+          assert after_m['automatic_canonical_commit'] is False
+          assert after_m['google_calendar_write'] is False
+
+          bs={x['source_id']:x for x in before_s['sources']}
+          aas={x['source_id']:x for x in after_s['sources']}
+          assert set(aas)==set(bs)|{'WSSRC-INT-035'}
+          for sid,row in bs.items():
+              assert aas[sid]==row, f'pre-existing source changed: {sid}'
+          new=aas['WSSRC-INT-035']
+          assert new['canonical_dependency_count']==0
+          assert new['related_source_ids']==['WSSRC-INT-003']
+          assert new['automated_retrieval_permission']=='OFFICIAL_CONSILIUM_RSS_AUTOMATIC_LOADING_INTERFACE'
+          assert new['canonical_provenance_use']=='MONITOR_ONLY_EUROPEAN_COUNCIL_RSS_NO_CANONICAL_DATE_AUTHORITY'
+
+          bm={x['adapter_id']:x for x in before_m['adapters']}
+          am={x['adapter_id']:x for x in after_m['adapters']}
+          assert set(am)==set(bm)|{'EUROPEAN_COUNCIL_MEETINGS_RSS'}
+          for aid,row in bm.items():
+              assert am[aid]==row, f'pre-existing monitor route changed: {aid}'
+          route=am['EUROPEAN_COUNCIL_MEETINGS_RSS']
+          assert route['source_id']=='WSSRC-INT-035'
+          assert route['canonical_schedule_source_id']=='WSSRC-INT-003'
+          assert route['request_budget_per_run']==route['rss_request_count_per_run']==1
+          assert route['robots_request_count_per_run']==0
+          assert route['direct_calendar_html_request_count_per_run']==0
+          assert route['item_followup_request_count_per_run']==0
+          assert route['search_route_discovery_request_count_per_run']==0
+          for key in (
+              'schedule_authority','clock_authority','lifecycle_authority','certainty_authority',
+              'canonical_date_mutation_allowed','automatic_calendar_html_fetch_allowed',
+              'automatic_item_link_fetch_allowed','automatic_new_occurrence_creation_allowed',
+              'automatic_search_route_discovery_allowed','automatic_live_or_analysis_promotion_allowed',
+              'automatic_commit_allowed',
+          ):
+              assert route[key] is False,key
+          print('EXISTING_SOURCES_BYTE_SEMANTIC_IDENTICAL',len(bs))
+          print('EXISTING_MONITOR_ROUTES_IDENTICAL',len(bm))
+          PY
+
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_european_council_rss_monitor_bz.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            src/world_signals/live_analysis_bridge.py \
+            src/world_signals/adapters/european_council_rss.py \
+            src/world_signals/european_council_monitor.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+
+          python - <<'PY'
+          import hashlib,json,subprocess
+          before=json.load(open('/tmp/bz-protected-before.json'))
+          roots=(
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/biosecurity',
+              'data/live',
+              'data/live_intelligence',
+              'data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          after={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          assert before==after, 'protected layer hash drift'
+          print('PROTECTED_LAYERS_BYTE_IDENTICAL',len(after))
+          PY
+
+          mapfile -t TEMP_BZ < <(find .github/workflows -maxdepth 1 -type f -name 'bz-*.yml' -printf '%f\n' | sort)
+          printf 'TEMP_BZ_WORKFLOWS_BEFORE_REMOVAL %s\n' "${TEMP_BZ[*]}"
+          expected_temp=(
+            bz-bsp-diagnostic.yml
+            bz-euco-controlled-transaction.yml
+            bz-euco-diagnostic.yml
+            bz-euco-focused-tests.yml
+            bz-euco-materialized-preflight.yml
+            bz-euco-production-live-preflight.yml
+            bz-post-by-pressure-audit.yml
+          )
+          test "${TEMP_BZ[*]}" = "${expected_temp[*]}"
+          rm "${TEMP_BZ[@]/#/.github/workflows/}"
+
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/monitor/EUROPEAN_COUNCIL_MEETINGS_RSS_BZ_PLAN_v0.1.json',
+              'data/monitor/EUROPEAN_COUNCIL_MEETINGS_RSS_BZ_RESEARCH_v0.1.md',
+              'data/monitor/expectations.json',
+              'data/sources/registry.json',
+              'scripts/apply_european_council_rss_monitor_bz.py',
+              'scripts/run_adapter_smoke.py',
+              'scripts/run_live_monitor.py',
+              'src/world_signals/adapters/__init__.py',
+              'src/world_signals/adapters/european_council_rss.py',
+              'src/world_signals/european_council_monitor.py',
+              'tests/test_european_council_rss_activation_bz.py',
+              'tests/test_european_council_rss_bz.py',
+          }
+          actual=set(subprocess.run(['git','diff','--name-only','origin/main'],check=True,capture_output=True,text=True).stdout.splitlines())
+          assert actual==expected, f'final BZ diff mismatch\nmissing={sorted(expected-actual)}\nextra={sorted(actual-expected)}'
+          print('FINAL_PERMANENT_CHANGED_FILE_COUNT',len(actual))
+          for path in sorted(actual): print('FINAL_FILE',path)
+          PY
+
+          test "$(git rev-parse origin/main)" = "$BASE"
+          git status --short
+          git config user.name 'WORLD SIGNALS controlled transaction'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'BZ: activate European Council meetings RSS monitor'
+          git push origin "HEAD:$BRANCH"
+
+          git fetch --no-tags origin main "$BRANCH"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/$BRANCH)"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          test -z "$(find .github/workflows -maxdepth 1 -type f -name 'bz-*.yml' -print -quit)"
+          echo "BZ_TRANSACTION_HEAD=$(git rev-parse HEAD)"
+          echo 'BZ CONTROLLED TRANSACTION COMPLETE'
