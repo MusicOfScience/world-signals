@@ -1,0 +1,134 @@
+name: CA NASS materialized preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bz-pressure-audit-ca
+    paths:
+      - .github/workflows/ca-nass-materialized-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Materialize exact CA patch, validate repository, then reset clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=07c558c8811795f0aed40e73bd386cc70344191e
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          export PYTHONPATH=src
+
+          python - <<'PY' > /tmp/ca-protected-before.json
+          import hashlib,json,subprocess
+          roots=(
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/biosecurity',
+              'data/live',
+              'data/live_intelligence',
+              'data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          snap={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          print(json.dumps(snap,sort_keys=True))
+          PY
+
+          cp data/sources/registry.json /tmp/ca-sources-before.json
+          cp data/monitor/expectations.json /tmp/ca-expectations-before.json
+          WORLD_SIGNALS_APPLY_MONITOR_CA=1 python scripts/apply_nass_asb_ical_monitor_ca.py --apply > /tmp/ca-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/ca-apply.json
+
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          bs=json.loads(Path('/tmp/ca-sources-before.json').read_text())
+          bm=json.loads(Path('/tmp/ca-expectations-before.json').read_text())
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('2.00',255)
+          assert (m['version'],len(m['adapters']))==('0.25',23)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          before={x['source_id']:x for x in bs['sources']}; after={x['source_id']:x for x in s['sources']}
+          assert set(before)==set(after) and len(after)==255
+          for sid,row in before.items():
+              if sid!='WSSRC-COM-005': assert after[sid]==row,sid
+          br={x['adapter_id']:x for x in bm['adapters']}; ar={x['adapter_id']:x for x in m['adapters']}
+          assert set(ar)==set(br)|{'USDA_NASS_ASB_ICAL'}
+          for aid,row in br.items(): assert ar[aid]==row,aid
+          expected={
+              'data/sources/registry.json','data/monitor/expectations.json','scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py','src/world_signals/adapters/__init__.py'
+          }
+          changed=set(subprocess.run(['git','diff','--name-only'],check=True,capture_output=True,text=True).stdout.splitlines())
+          assert changed==expected,(changed,expected)
+          print('MATERIALIZED_EXACT_MUTATION_PATHS',len(changed))
+          print('EXISTING_SOURCES_IDENTICAL',len(before)-1)
+          print('EXISTING_MONITOR_ROUTES_IDENTICAL',len(br))
+          PY
+
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_nass_asb_ical_monitor_ca.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            src/world_signals/live_analysis_bridge.py \
+            src/world_signals/adapters/nass_asb_ical.py \
+            src/world_signals/nass_asb_monitor.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+
+          python - <<'PY'
+          import hashlib,json,subprocess
+          before=json.load(open('/tmp/ca-protected-before.json'))
+          roots=(
+              'data/canonical/registry.json','data/changes/ledger.json','data/biosecurity',
+              'data/live','data/live_intelligence','data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          after={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          assert before==after,'protected layer hash drift'
+          print('PROTECTED_LAYERS_BYTE_IDENTICAL',len(after))
+          PY
+
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          echo 'CA MATERIALIZED PREFLIGHT COMPLETE'
