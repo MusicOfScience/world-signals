@@ -120,8 +120,53 @@ CH adds mechanical checks that fail when:
 
 The tests intentionally distinguish the derived recovery surface from governed truth. The correct repair for future drift is to regenerate the derived surface after a reviewed governed change, not to edit governed files to satisfy documentation.
 
-## 8. Validation history
+## 8. Validation and failure history
 
-Preflight and ordinary PR CI evidence will be appended here before merge handoff. Any failed validation run is to be retained with run/job identity, failure cause, whether any commit/write gate existed, and the repair made.
+Failure history was not squashed or hidden. GitHub Actions retains the unsuccessful CH branch runs alongside the final successful run. At closeout, 22 completed failed runs remained visible in Actions. They include iterative preflight failures and short-lived bounded repair harnesses used to correct descendant compatibility. The important failure classes were:
 
-At this authoring boundary no CH workflow has authority to mutate Canonical, Source, Change Ledger, Monitor, Live or Analysis state.
+1. historical BA and AZ helpers treated obsolete recovery prose as if it were permanent governed state;
+2. BD, BF and BG historical regressions likewise froze historical `PROJECT_STATUS.md` / `ROADMAP.md` bodies rather than their substantive historical contracts;
+3. one BA repair attempt introduced an accidental helper-call/API mismatch, then a subsequent repair harness lost nested Python indentation before execution;
+4. one successful focused BA repair was initially reported failed only because the harness expected an unstaged ` M` status while `git checkout origin/main -- file` left the intended helper change staged as `M `;
+5. the BG/OPEC descendant test needed to recognise the current CH recovery surface without invoking quarantined OPEC transaction/materialisation machinery.
+
+The full CH preflight workflow itself was read-only: it had `contents: read`, no commit gate and no authority to mutate repository state. Temporary write-capable repair workflows were deliberately narrow, branch-only and used only to commit the explicitly inspected helper/test repairs; they were deleted after use. None had authority to mutate the protected governed layers listed in §5. Their commits and failed/successful Action runs remain in branch history as evidence.
+
+The repairs did **not** weaken the substantive contracts. Historical checkpoint fixtures, event identities, source/provenance assertions, population ceilings where genuinely contractual, write gates and OPEC quarantine all remain tested. The repair was to stop treating later recovery prose as a frozen descendant invariant.
+
+### Final successful read-only preflight
+
+- workflow: `CH state-truth preflight`;
+- run number: `17`;
+- Actions run ID: `34399941325`;
+- branch head tested: `889fe053b238033ab062855621fe1a7e3b75af03`;
+- exact base asserted: `f3415e7c748957fadec4d1665b032167fd067a03`;
+- result: **PASS**.
+
+The successful run established:
+
+- Canonical validation: `689` occurrences PASS, with only the three pre-existing legacy/backfill `start_utc` warnings;
+- Live Intelligence validation: schema `0.7`, `7` observations, `10` evidence PASS;
+- Analysis validation: `22` reviews, `97` evidence, Live-input bridge and revision contract PASS;
+- derived-state snapshot check PASS;
+- 7 CH-specific state-truth tests PASS;
+- 2 OPEC quarantine tests PASS;
+- complete repository suite: **1,228 tests PASS, 68 skipped**;
+- Python compilation PASS;
+- JavaScript syntax checks PASS;
+- static site build PASS for `689` events and `25` configured Monitor routes;
+- byte identity PASS for every protected governed path in §5;
+- bounded CH diff-path audit PASS.
+
+The temporary `ch-state-truth-preflight.yml` workflow is a transaction/pre-merge verification artifact, not a permanent project capability. It is removed before PR handoff. Ordinary repository CI retains the permanent `python scripts/project_state_snapshot.py --check` regression gate.
+
+## 9. Merge handoff condition
+
+CH is eligible for merge handoff only after:
+
+1. the temporary preflight workflow has been removed from the feature branch;
+2. the PR is opened against the exact current `main` lineage;
+3. ordinary PR CI, including the permanent derived-state check, completes successfully;
+4. the PR diff confirms no protected governed path changed.
+
+No merge is to be represented as complete until the user performs or confirms the merge.
