@@ -47,7 +47,7 @@ This is historical evidence only. Do not reopen, merge, cherry-pick, rebase, mat
 
 ### PR #114 — CF: Monitor pressure audit + NHC pilot — MERGED
 
-CF recomputed explicit Monitor pressure and validated a bounded NOAA/NHC Atlantic-season route over exactly two existing Canonical occurrences. The route remains a pilot: validated architecture does not equal scheduled Monitor activation.
+CF recomputed explicit Monitor pressure and validated a bounded NOAA/NHC Atlantic-season route over exactly two existing Canonical occurrences. CF itself stopped at pilot validation; scheduled activation was separately pressure-audited and reviewed in PR #117.
 
 ### PR #115 — CG: reviewed BARMM pre-election Live context — MERGED
 
@@ -55,17 +55,26 @@ CG added one primary-confirmed Southeast Asia institutional Live observation lin
 
 CG also repaired historical tests that incorrectly froze the BF Live checkpoint as the permanent current head. Historical rows remain tested by identity/semantics while reviewed descendants are allowed.
 
+### PR #116 — CH: derived recovery-state truth — MERGED
+
+CH made cross-layer current-state counts mechanically derivable and CI-checked across `README.md`, `PROJECT_STATUS.md`, `ROADMAP.md` and `data/status/current_state.json`. The derived snapshot is explicitly noncanonical and cannot mutate upstream governed layers.
+
+### PR #117 — CI: bounded NHC Atlantic-season Monitor sentinel — MERGED
+
+CI activated the CF-validated NHC route after a fresh source, rights, endpoint, scope and runtime review. The scheduled route remains bounded to two existing Atlantic hurricane-season occurrences; NHC climatology is semantic authority for the season definition and Atlantic RSS is health corroboration only. It grants no automatic Canonical, lifecycle, Calendar, Live or Analysis authority.
+
 ## Current pressure interpretation
 
 Raw population counts are not a selection rule.
 
-- **Canonical** is broad enough that no current evidence justifies bulk population.
-- **Monitor** is comparatively mature at the current configured cohort. The NHC pilot remains a legitimate activation candidate, but only after a fresh source/rights/endpoint review and a new pressure decision.
-- **Live Intelligence** is still intentionally small. Two observations now link to Canonical occurrences, exercising both `OUTCOME_OF` and `CONTEXT_FOR` relationships.
-- **Analysis** remains conservative. A second production Live→Analysis link is not currently authorised by mere count pressure. In particular, the BARMM occurrence is still pre-event and therefore cannot support a reviewed post-event Analysis packet under the present schema.
-- **OPEC CE** is excluded from ordinary candidate selection.
+- **Canonical** is broad enough that no current evidence justifies bulk population. Coverage shape should be audited before any new population tranche.
+- **Monitor** now includes the bounded NHC physical-climate-risk sentinel. Further route expansion requires fresh source/rights/endpoint evidence and a demonstrated coverage or operational need; route count alone is not pressure.
+- **Live Intelligence** remains intentionally small and heterogeneous. Two observations link to Canonical occurrences, exercising `OUTCOME_OF` and `CONTEXT_FOR` relationships.
+- **Analysis** remains conservative. The sole production Live input is the Japan FIES observation. A second production Live→Analysis relationship is not currently justified by count pressure; the BARMM occurrence remains `PLANNED` until the 14 September 2026 election has actually occurred and been authoritatively established as completed.
+- **Coverage selection** is the immediate systems question: the project needs a current cross-layer diagnostic showing where Canonical series, explicit Monitor scope, Live observations and Analysis reviews overlap or diverge before broader population resumes.
+- **OPEC CE** remains excluded from ordinary candidate selection.
 
-The next tranche after the current state-truth hardening must recompute pressure from then-current `main`; it should not assume NHC activation, another Live observation or another Analysis revision in advance.
+CJ therefore implements a read-only cross-layer coverage/pressure diagnostic. It must not produce a blended score, equalisation target or automatic population recommendation. Its outputs are evidence for the next pressure decision, not the decision itself.
 
 ## Write and authority boundaries
 
@@ -98,7 +107,8 @@ python scripts/validate_live_intelligence.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
+python scripts/run_cross_layer_coverage_audit.py
 python scripts/build_site.py
 ```
 
-The derived-state checker must remain read-only in CI. Its explicit `--write` mode is restricted to the derived snapshot and the three marked documentation blocks and requires `WORLD_SIGNALS_WRITE_DERIVED_STATE=YES`.
+The derived-state checker must remain read-only in CI. Its explicit `--write` mode is restricted to the derived snapshot and the three marked documentation blocks and requires `WORLD_SIGNALS_WRITE_DERIVED_STATE=YES`. The cross-layer coverage audit is also read-only and writes only disposable artifacts under `artifacts/coverage/`.
