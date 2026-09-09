@@ -25,6 +25,7 @@ from world_signals.adapters import (
     fetch_cellar_celex_document,
     fetch_cellar_rdf_notice,
     fetch_eia_wpsr_schedule,
+    fetch_european_council_meetings_rss,
     fetch_eurostat_release_calendar,
     fetch_fao_release_calendar,
     fetch_fao_robots_policy,
@@ -53,6 +54,7 @@ from world_signals.bsp_monetary_monitor import bsp_monetary_rss_review_candidate
 from world_signals.cbsl_monetary_monitor import cbsl_mpr_rss_review_candidates
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
+from world_signals.european_council_monitor import european_council_rss_review_candidates
 from world_signals.fao_release_monitor import fao_release_calendar_review_candidates
 from world_signals.fed_monetary_monitor import fed_monetary_rss_review_candidates
 from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
@@ -387,6 +389,63 @@ def main() -> int:
                 "canonical_date_mutation_allowed":False,
                 "automatic_timetable_html_fetch_allowed":False,
                 "automatic_item_link_fetch_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "EUROPEAN_COUNCIL_MEETINGS_RSS" in configs:
+        euco_config=configs["EUROPEAN_COUNCIL_MEETINGS_RSS"]
+        try:
+            euco_items,euco_snap=fetch_european_council_meetings_rss()
+            report["source_health"].append({
+                "adapter_id":"EUROPEAN_COUNCIL_MEETINGS_RSS",
+                "source_id":euco_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":euco_snap.as_dict(),
+                "item_count":len(euco_items),
+                "request_budget_per_run":1,
+                "request_count":1,
+                "rss_request_count":1,
+                "robots_request_count":0,
+                "direct_calendar_html_request_count":0,
+                "item_followup_request_count":0,
+                "search_route_discovery_request_count":0,
+                "feed_item_count_is_permanent_invariant":False,
+                "observed_date_source":"OFFICIAL_RSS_ITEM_LINK_PATH_ONLY",
+                "updated_field_is_event_time":False,
+                "description_field_is_event_time":False,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_date_mutation_allowed":False,
+                "automatic_calendar_html_fetch_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=european_council_rss_review_candidates(
+                registry.get("records",[]),euco_items,euco_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"EUROPEAN_COUNCIL_MEETINGS_RSS",
+                "source_id":euco_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_date_mutation_allowed":False,
+                "automatic_calendar_html_fetch_allowed":False,
+                "automatic_item_link_fetch_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
                 "automatic_live_or_analysis_promotion_allowed":False,
                 "automatic_commit_allowed":False,
             })

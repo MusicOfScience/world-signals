@@ -1,0 +1,263 @@
+{
+  "tranche": "BZ",
+  "reference_date": "2026-09-09",
+  "exact_base_main_sha": "3ccb20539c10d0965de84efa298ba75634c19249",
+  "selection": {
+    "canonical_schedule_source_id": "WSSRC-INT-003",
+    "machine_source_id": "WSSRC-INT-035",
+    "adapter_id": "EUROPEAN_COUNCIL_MEETINGS_RSS",
+    "institution": "European Council / Council of the EU",
+    "jurisdiction": "European Union",
+    "canonical_calendar_url": "https://www.consilium.europa.eu/en/meetings/calendar/",
+    "rss_documentation_url": "https://www.consilium.europa.eu/en/about-site/rss/",
+    "rss_url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=euco",
+    "copyright_url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+    "source_timezone": "Europe/Brussels",
+    "selection_reason": "The direct calendar HTML remains endpoint-held because its robots policy could not be established, while Consilium separately advertises a dedicated European Council meetings RSS feed as machine-readable material for automatic loading. The feed carries stable numeric GUIDs and date-bearing first-party meeting URLs for the three already-modelled forward European Council occurrences."
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.98",
+    "source_count": 254,
+    "monitor_expectations_version": "0.23",
+    "configured_monitor_adapter_count": 21,
+    "canonical_schedule_dependency_count": 3,
+    "canonical_schedule_automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "canonical_schedule_monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+    "canonical_schedule_runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+    "canonical_schedule_licence_review_status": "CLEARED_COUNCIL_EU_REUSE_WITH_ATTRIBUTION",
+    "machine_source_id_absent": true,
+    "adapter_id_absent": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.99",
+    "source_count": 255,
+    "monitor_expectations_version": "0.24",
+    "configured_monitor_adapter_count": 22,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-INT-B-0102",
+    "WSO-INT-B-0103",
+    "WSO-INT-B-0104"
+  ],
+  "configured_feed_identity_by_guid": {
+    "147805": {
+      "occurrence_id": "WSO-INT-B-0102",
+      "series_id": "WSER-INT-EUCO",
+      "expected_title": "European Council",
+      "baseline_start_local": "2026-10-15",
+      "baseline_end_local": "2026-10-16"
+    },
+    "147983": {
+      "occurrence_id": "WSO-INT-B-0103",
+      "series_id": "WSER-INT-EUCO",
+      "expected_title": "Informal meeting of heads of state or government",
+      "baseline_start_local": "2026-11-13",
+      "baseline_end_local": null
+    },
+    "147844": {
+      "occurrence_id": "WSO-INT-B-0104",
+      "series_id": "WSER-INT-EUCO",
+      "expected_title": "European Council",
+      "baseline_start_local": "2026-12-17",
+      "baseline_end_local": "2026-12-18"
+    }
+  },
+  "request_contract": {
+    "request_budget_per_run": 1,
+    "rss_requests_per_run": 1,
+    "robots_requests_per_run": 0,
+    "direct_calendar_html_requests_per_run": 0,
+    "item_followup_requests_per_run": 0,
+    "search_route_discovery_requests_per_run": 0,
+    "machine_access_basis": "OFFICIAL_CONSILIUM_RSS_PAGE_EXPLICITLY_DESCRIBES_RSS_AS_MACHINE_READABLE_AND_AUTOMATICALLY_LOADABLE",
+    "direct_calendar_html_remains_held": true
+  },
+  "rss_contract": {
+    "channel_title": "Council of the EU",
+    "channel_link": "https://www.consilium.europa.eu/",
+    "channel_description": "",
+    "minimum_item_count": 1,
+    "maximum_item_count": 200,
+    "current_live_item_count_is_not_a_permanent_invariant": true,
+    "current_item_child_sequence": [
+      "guid",
+      "link",
+      "title",
+      "description",
+      "updated"
+    ],
+    "required_identity_fields": [
+      "guid",
+      "link",
+      "title"
+    ],
+    "guid_shape": "ASCII_DIGITS_ONLY",
+    "official_item_link_pattern": "/en/meetings/european-council/YYYY/MM/DD/ or /en/meetings/european-council/YYYY/MM/DD-DD/",
+    "observed_date_authority": "OFFICIAL_RSS_ITEM_LINK_PATH_ONLY",
+    "updated_field_is_event_time": false,
+    "description_field_is_event_time": false,
+    "clock_authority": false
+  },
+  "classification_contract": {
+    "configured_guid_exact_current_date": "EUROPEAN_COUNCIL_RSS_DATE_MATCH_OBSERVATION",
+    "configured_guid_date_differs_from_current_canonical": "EUROPEAN_COUNCIL_RSS_DATE_CHANGE_REVIEW",
+    "configured_guid_missing_while_occurrence_not_completed": "EUROPEAN_COUNCIL_RSS_CONFIGURED_GUID_MISSING_REVIEW",
+    "configured_guid_missing_after_occurrence_completed": "EUROPEAN_COUNCIL_RSS_COMPLETED_GUID_ABSENCE_OBSERVATION",
+    "unconfigured_item_on_or_after_monitor_review_floor": "EUROPEAN_COUNCIL_RSS_UNCONFIGURED_FUTURE_MEETING_OBSERVATION",
+    "configured_guid_title_drift": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "duplicate_guid_or_malformed_link_or_invalid_date": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "absence_is_not_cancellation": true,
+    "absence_is_not_completion": true,
+    "absence_is_not_certainty_change": true,
+    "no_automatic_new_occurrence_creation": true,
+    "no_clock_inference": true,
+    "compare_against_current_canonical_not_frozen_baseline": true
+  },
+  "source_role_contract": {
+    "canonical_schedule_source_id": "WSSRC-INT-003",
+    "canonical_source_remains_unchanged": true,
+    "canonical_calendar_html_automation_remains_held": true,
+    "machine_source_id": "WSSRC-INT-035",
+    "machine_source_canonical_dependency_count": 0,
+    "machine_source_role": "OFFICIAL_EUROPEAN_COUNCIL_MEETINGS_RSS_DATE_CHANGE_SENTINEL_ONLY",
+    "schedule_authority": false,
+    "clock_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "canonical_date_mutation_allowed": false,
+    "automatic_calendar_html_fetch_allowed": false,
+    "automatic_item_link_fetch_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_search_route_discovery_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "monitor_review_window": {
+    "unconfigured_item_review_floor_local": "2026-09-09",
+    "purpose": "Surface newly advertised European Council meeting items in the remaining 2026 feed horizon without treating historical feed items as Canonical-add candidates.",
+    "review_floor_is_not_event_time_authority": true
+  },
+  "read_only_pressure_audit": {
+    "run_id": 34303098682,
+    "job_id": 102314052499,
+    "repository_mutation": false
+  },
+  "canonical_contract_inspection": {
+    "run_id": 34304030657,
+    "job_id": 102316864765,
+    "machine_source_id_confirmed_unused": "WSSRC-INT-035",
+    "repository_mutation": false
+  },
+  "direct_html_endpoint_diagnostic": {
+    "run_id": 34303557384,
+    "job_id": 102315410273,
+    "robots_http_status": 403,
+    "calendar_html_request_count": 0,
+    "result": "DIRECT_CALENDAR_HTML_ROUTE_REMAINS_HELD",
+    "repository_mutation": false
+  },
+  "rss_endpoint_diagnostic": {
+    "run_id": 34303674628,
+    "job_id": 102315763120,
+    "request_count": 1,
+    "direct_calendar_html_request_count": 0,
+    "item_followup_request_count": 0,
+    "rss_http_status": 200,
+    "rss_content_type": "text/xml; charset=utf-8",
+    "rss_body_bytes": 19201,
+    "rss_item_count": 50,
+    "rss_sha256": "e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e",
+    "configured_guid_count": 3,
+    "repository_mutation": false
+  },
+  "rss_field_contract_diagnostic": {
+    "run_id": 34304095590,
+    "job_id": 102317059187,
+    "request_count": 1,
+    "item_child_sequence": [
+      "guid",
+      "link",
+      "title",
+      "description",
+      "updated"
+    ],
+    "configured_guids_present": [
+      "147805",
+      "147983",
+      "147844"
+    ],
+    "repository_mutation": false
+  },
+  "mutation_boundary": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "scripts/run_live_monitor.py",
+    "scripts/run_adapter_smoke.py",
+    "src/world_signals/adapters/__init__.py"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/changes/ledger.json",
+    "data/biosecurity",
+    "data/live",
+    "data/live_intelligence",
+    "data/analysis"
+  ],
+  "focused_activation_gate": {
+    "run_id": 34305401609,
+    "job_id": 102320933729,
+    "result": "SUCCESS",
+    "repository_mutation": false
+  },
+  "materialized_preflight": {
+    "run_id": 34305489809,
+    "job_id": 102321189156,
+    "result": "SUCCESS",
+    "full_test_count": 1135,
+    "skipped_test_count": 65,
+    "protected_file_count": 110,
+    "poststate": {
+      "canonical_registry_version": "0.41",
+      "canonical_record_count": 689,
+      "source_registry_version": "1.99",
+      "source_count": 255,
+      "monitor_expectations_version": "0.24",
+      "configured_monitor_adapter_count": 22
+    },
+    "exact_mutation_path_count": 5,
+    "static_build_passed": true,
+    "protected_layers_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  },
+  "production_live_preflight": {
+    "run_id": 34305636092,
+    "job_id": 102321636120,
+    "result": "SUCCESS",
+    "network_request_count": 1,
+    "rss_request_count": 1,
+    "robots_request_count": 0,
+    "direct_calendar_html_request_count": 0,
+    "item_followup_request_count": 0,
+    "search_route_discovery_request_count": 0,
+    "rss_http_status": 200,
+    "rss_content_type": "text/xml; charset=utf-8",
+    "rss_body_bytes": 19201,
+    "rss_item_count_observed_not_frozen": 50,
+    "rss_sha256_observed_not_frozen": "e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e",
+    "configured_date_match_count": 3,
+    "review_candidate_count": 0,
+    "unconfigured_future_item_count_observed_not_frozen": 0,
+    "canonical_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  }
+}
