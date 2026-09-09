@@ -75,11 +75,10 @@ def assert_upstream_prestate(plan: dict[str, Any]) -> None:
     target = by_id(canonical.get("records", []), "occurrence_id", plan["target"]["canonical_occurrence_id"])
     require(target is not None, "CG target Canonical BARMM occurrence missing")
     require(target.get("series_id") == "WSER-EL-PH-BARMM-PE", "CG BARMM series identity drift")
-    timing = target.get("timing") or {}
-    require(timing.get("timing_type") == "CIVIL_DATE", "CG BARMM timing type drift")
-    require(timing.get("start_local") == "2026-09-14", "CG BARMM Canonical date drift")
-    require(timing.get("source_timezone") == "Asia/Manila", "CG BARMM native timezone drift")
-    require(timing.get("start_utc") is None, "CG BARMM must not acquire synthetic UTC timestamp")
+    require(target.get("timing_type") == "CIVIL_DATE", "CG BARMM timing type drift")
+    require(target.get("start_local") == "2026-09-14", "CG BARMM Canonical date drift")
+    require(target.get("source_timezone") == "Asia/Manila", "CG BARMM native timezone drift")
+    require(target.get("start_utc") is None, "CG BARMM must not acquire synthetic UTC timestamp")
     require(target.get("lifecycle_status") == "PLANNED", "CG BARMM lifecycle drift")
     require(target.get("certainty_status") == "CONFIRMED", "CG BARMM certainty drift")
 
