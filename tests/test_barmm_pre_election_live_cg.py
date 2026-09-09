@@ -48,10 +48,10 @@ class BarmmPreElectionLiveCGTests(unittest.TestCase):
         self.assertEqual(row["series_id"], "WSER-EL-PH-BARMM-PE")
         self.assertEqual(row["lifecycle_status"], "PLANNED")
         self.assertEqual(row["certainty_status"], "CONFIRMED")
-        self.assertEqual(row["timing"]["timing_type"], "CIVIL_DATE")
-        self.assertEqual(row["timing"]["start_local"], "2026-09-14")
-        self.assertEqual(row["timing"]["source_timezone"], "Asia/Manila")
-        self.assertIsNone(row["timing"]["start_utc"])
+        self.assertEqual(row["timing_type"], "CIVIL_DATE")
+        self.assertEqual(row["start_local"], "2026-09-14")
+        self.assertEqual(row["source_timezone"], "Asia/Manila")
+        self.assertIsNone(row["start_utc"])
 
     def test_repository_is_either_exact_prestate_or_reviewed_cg_state(self) -> None:
         schema = load("data/live_intelligence/schema.json")
