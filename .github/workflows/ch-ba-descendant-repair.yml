@@ -30,59 +30,20 @@ jobs:
           git checkout origin/main -- scripts/apply_analysis_revision_contract_ba.py
           python - <<'PY'
           from pathlib import Path
-
           path = Path('scripts/apply_analysis_revision_contract_ba.py')
           text = path.read_text(encoding='utf-8')
 
-          start = text.index('def target_roadmap(current: str) -> str:\n')
-          end = text.index('\ndef assert_preconditions(plan: dict[str, Any]) -> None:\n', start)
-          roadmap_fn = """def target_roadmap(current: str) -> str:
-              heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
-              ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
-              ch_descendant_heading = "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"
-              if (
-                  heading in current
-                  or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current
-                  or (ch_state_marker in current and ch_descendant_heading in current)
-              ):
-                  # Recovery prose is mutable. CH proves a reviewed BA descendant
-                  # through the derived-state marker plus the preserved revision stage.
-                  return current
-              marker = "## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT"
-              require(marker in current, "BA roadmap could not locate Stage 9 marker")
-              section = """ + "'''" + """## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED
+          old_if = '    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:\n'
+          new_if = '    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current or ("<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in current and "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED" in current):\n'
+          if old_if not in text:
+              raise SystemExit('CH BA roadmap anchor missing')
+          text = text.replace(old_if, new_if, 1)
 
-          BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot. Production revision population remains zero.
-
-          A future revision must be a new immutable `analysis_id` linked by `revision_of_analysis_id`, preserve the parent row, remain on the same Canonical occurrence and advance `analysis_as_of_utc`. Revision kind and reason are explicit. Cycles and first-mode branching are prohibited. `NEW_LIVE_EVIDENCE` revisions must identify at least one novel immutable Live observation relative to the parent.
-
-          Live observations never automatically revise Analysis. Live correction/state-update lineage and Analysis revision lineage remain separate. No public latest-head collapse or revision-metadata projection is opened by BA. The first production Analysis revision requires another pressure audit.
-
-          """ + "'''" + """
-              return current.replace(marker, section + marker, 1)
-          """
-          text = text[:start] + roadmap_fn + text[end:]
-
-          docs_start = text.index('    required_doc_markers = {\n', text.index('def assert_target('))
-          docs_end = text.index('    docs = validate_descendant_checkpoint', docs_start)
-          docs_block = """    if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"]:
-              required_doc_markers = {
-                  "BA roadmap": (
-                      target["roadmap"],
-                      ["## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"],
-                  ),
-              }
-          else:
-              required_doc_markers = {
-                  "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
-              }
-          if target["status"].startswith("# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"):
-              required_doc_markers["BA status"] = (
-                  target["status"],
-                  ["BA adds a **production-closed Analysis revision-lineage contract**"],
-              )
-          """
-          text = text[:docs_start] + docs_block + text[docs_end:]
+          old_marker = '        "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),\n'
+          new_marker = '        "BA roadmap": (target["roadmap"], ["## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED" if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"] else "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),\n'
+          if old_marker not in text:
+              raise SystemExit('CH BA documentation marker anchor missing')
+          text = text.replace(old_marker, new_marker, 1)
           path.write_text(text, encoding='utf-8')
           PY
           git diff --check
