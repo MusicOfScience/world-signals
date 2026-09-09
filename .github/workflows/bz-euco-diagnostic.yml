@@ -1,0 +1,98 @@
+name: BZ European Council calendar diagnostic
+
+on:
+  push:
+    branches:
+      - feature/post-by-pressure-audit-bz
+    paths:
+      - .github/workflows/bz-euco-diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact base and perform bounded Consilium probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=3ccb20539c10d0965de84efa298ba75634c19249
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          python - <<'PY'
+          import hashlib, html, json, re, urllib.request, urllib.robotparser
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          SOURCE_ID='WSSRC-INT-003'
+          ROBOTS='https://www.consilium.europa.eu/robots.txt'
+          CAL='https://www.consilium.europa.eu/en/meetings/calendar/?Entity=122132'
+          UA='WORLD-SIGNALS-read-only-monitor/0.1'
+
+          C=json.loads(Path('data/canonical/registry.json').read_text())
+          S=json.loads(Path('data/sources/registry.json').read_text())
+          src=[x for x in S['sources'] if x.get('source_id')==SOURCE_ID]
+          assert len(src)==1
+          deps=[r for r in C['records'] if r.get('source_id')==SOURCE_ID]
+          assert len(deps)==src[0]['canonical_dependency_count']==3
+          print('SOURCE',json.dumps({k:src[0].get(k) for k in ('source_id','institution','authoritative_url','automated_monitoring_use','automated_retrieval_permission','monitoring_readiness_status','runtime_health_state','canonical_dependency_count')},sort_keys=True))
+          print('CANONICAL',json.dumps([{k:r.get(k) for k in ('occurrence_id','canonical_name','start_local','end_local','source_timezone','timing_type','time_precision','lifecycle_status','certainty_status','series_id')} for r in deps],sort_keys=True))
+
+          requests=[]
+          def get(url,accept):
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
+              with urllib.request.urlopen(req,timeout=25) as resp:
+                  body=resp.read()
+                  meta={'url':url,'status':resp.status,'content_type':resp.headers.get('Content-Type'),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest(),'final_url':resp.geturl()}
+                  requests.append(meta); print('FETCH',json.dumps(meta,sort_keys=True)); return resp.headers,body
+
+          rh,rb=get(ROBOTS,'text/plain,*/*;q=0.1')
+          assert requests[-1]['status']==200
+          txt=rb.decode('utf-8','replace')
+          assert '<html' not in txt.lower() and '<!doctype' not in txt.lower()
+          assert any(line.lstrip().lower().startswith('user-agent:') for line in txt.splitlines())
+          rp=urllib.robotparser.RobotFileParser(); rp.set_url(ROBOTS); rp.parse(txt.splitlines())
+          policy={'allowed':rp.can_fetch(UA,CAL),'crawl_delay':rp.crawl_delay(UA) or rp.crawl_delay('*') or 0,'lines':len(txt.splitlines())}
+          print('ROBOTS_POLICY',json.dumps(policy,sort_keys=True))
+          assert policy['allowed'] is True
+
+          ch,cb=get(CAL,'text/html,*/*;q=0.1')
+          assert len(requests)==2
+          assert 'html' in (ch.get('Content-Type') or '').lower()
+          assert len(cb)>10000
+          raw=cb.decode('utf-8','replace'); low=raw.lower()
+          for marker in ('request rejected','access denied','captcha','cf-chl-'):
+              assert marker not in low,marker
+
+          class Visible(HTMLParser):
+              def __init__(self): super().__init__(); self.skip=0; self.parts=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag in ('script','style','noscript'): self.skip+=1
+              def handle_endtag(self,tag):
+                  if tag in ('script','style','noscript') and self.skip: self.skip-=1
+              def handle_data(self,data):
+                  if not self.skip: self.parts.append(data)
+          p=Visible(); p.feed(raw); visible=' '.join(html.unescape(' '.join(p.parts)).split())
+          assert 'Meeting calendar' in visible
+          assert 'constantly updated' in visible.lower()
+          expected_text=(
+              'European Council, 15-16 October 2026',
+              'Informal meeting of heads of state or government',
+              'European Council, 17-18 December 2026',
+          )
+          for item in expected_text: assert item.lower() in visible.lower(),item
+          assert re.search(r'13\s+November\s+2026',visible,re.I)
+          result={'configured_canonical_occurrences':3,'calendar_markers':list(expected_text),'requests':2,'followups':0,'calendar_change_review_only':True,'clock_inference':False,'lifecycle_authority':False,'certainty_authority':False,'canonical_mutation':False}
+          print('SEMANTICS',json.dumps(result,sort_keys=True))
+          print('REQUESTS',json.dumps(requests,sort_keys=True))
+          PY
