@@ -1,0 +1,87 @@
+name: CF post-CD Monitor pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-cd-monitor-pressure-cf
+    paths:
+      - '.github/workflows/cf-monitor-pressure-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cd-monitor-pressure-cf
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Assert clean post-CD base lineage
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+          test "$(git merge-base HEAD origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+      - name: Enforce OPEC quarantine
+        run: python -m unittest tests.test_opec_quarantine_cf -v
+      - name: Validate repository before audit
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+      - name: Run existing Monitor coverage audit
+        run: python scripts/run_monitor_coverage_audit.py
+      - name: Persist CF audit with quarantine boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          src_json = root / 'artifacts/monitor/monitor-coverage-audit.json'
+          src_md = root / 'artifacts/monitor/monitor-coverage-audit.md'
+          audit = json.loads(src_json.read_text(encoding='utf-8'))
+
+          audit['cf_context'] = {
+              'tranche': 'CF',
+              'base_main_sha': '9552c1db0d212af33524b80b28d91ef7a897e2d8',
+              'opec_quarantine': True,
+              'quarantined_pr': 113,
+              'quarantined_branch': 'feature/post-cd-pressure-audit-ce',
+              'candidate_selection_exclusion': ['OPEC', 'WSO-COM-A-0001', 'WSO-COM-A-0002'],
+              'selection_rule': 'OPEC quarantine is non-blocking and excluded from CF candidate selection; missing coverage is diagnostic, not a quota.'
+          }
+
+          out_json = root / 'data/monitor/POST_CD_MONITOR_PRESSURE_CF_AUDIT_v0.1.json'
+          out_json.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          md = src_md.read_text(encoding='utf-8')
+          boundary = '''\n## CF quarantine boundary\n\n- OPEC CE provenance work is quarantined under `OPEC_QUARANTINE.md`.\n- Closed PR: `#113`; preserved branch: `feature/post-cd-pressure-audit-ce`.\n- OPEC and occurrences `WSO-COM-A-0001` / `WSO-COM-A-0002` are excluded from CF candidate selection.\n- This exclusion is non-blocking technical-debt management, not a claim that OPEC is analytically unimportant.\n- Any future OPEC reactivation must follow the explicit protocol in `OPEC_QUARANTINE.md`.\n\n'''
+          out_md = root / 'data/monitor/POST_CD_MONITOR_PRESSURE_CF_AUDIT_v0.1.md'
+          out_md.write_text(md + boundary, encoding='utf-8')
+          PY
+      - name: Validate quarantine remained dormant
+        run: |
+          python -m unittest tests.test_opec_quarantine_cf -v
+          test ! -e scripts/apply_opec_primary_provenance_ce.py
+          test ! -e data/coverage/OPEC_PRIMARY_PROVENANCE_CE_PLAN_v0.1.json
+          test ! -e .github/workflows/ce-materialize-opec-primary.yml
+      - name: Commit audit artifacts only
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add data/monitor/POST_CD_MONITOR_PRESSURE_CF_AUDIT_v0.1.json data/monitor/POST_CD_MONITOR_PRESSURE_CF_AUDIT_v0.1.md
+          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/POST_CD_MONITOR_PRESSURE_CF_AUDIT_v0\.1\.(json|md)$' || true)"
+          if git diff --cached --quiet; then
+            echo "No audit change to commit"
+            exit 0
+          fi
+          git commit -m "CF: persist post-CD Monitor pressure audit"
+          git push origin HEAD:feature/post-cd-monitor-pressure-cf
