@@ -1,0 +1,67 @@
+name: CD first Analysis revision dry run
+
+on:
+  push:
+    branches:
+      - feature/post-cc-pressure-audit-cd
+    paths:
+      - '.github/workflows/cd-first-analysis-revision-dry-run.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Assert exact CD governed pre-state
+        run: |
+          git merge-base --is-ancestor c186835d9d6b36620177badfff604f309ceb35d4 HEAD
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sys import path
+          path.insert(0,'src')
+          from world_signals.analysis_revision import production_analysis_revision_count
+          from world_signals.live_analysis_bridge import production_live_input_count
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          ls=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          lo=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          le=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          a=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('2.02',257)
+          assert (m['version'],len(m['adapters']))==('0.27',25)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          assert (ls['version'],len(lo['observations']),len(le['evidence']))==('0.6',6,9)
+          assert a['version']=='0.7'
+          assert (r['version'],len(r['reviews']))==('0.17',21)
+          assert (e['version'],len(e['evidence']))==('0.17',95)
+          assert production_analysis_revision_count(r)==0
+          assert production_live_input_count(r)==1
+          print('CD_PRESTATE_PASS')
+          PY
+      - name: Compile and simulate guarded transaction
+        run: |
+          python -m py_compile scripts/apply_bwc_wg8_first_analysis_revision_cd.py tests/test_bwc_wg8_first_analysis_revision_cd.py tests/test_analysis_revision_contract_ba.py
+          python scripts/apply_bwc_wg8_first_analysis_revision_cd.py --check
+      - name: Run focused revision contracts
+        run: |
+          python -m unittest -v tests.test_analysis_revision_contract_ba tests.test_bwc_wg8_first_analysis_revision_cd
+      - name: Prove governed state remains pre-materialisation
+        run: |
+          git diff --exit-code c186835d9d6b36620177badfff604f309ceb35d4..HEAD -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          git diff --exit-code -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          echo CD_GOVERNED_PRESTATE_BYTE_CLEAN
