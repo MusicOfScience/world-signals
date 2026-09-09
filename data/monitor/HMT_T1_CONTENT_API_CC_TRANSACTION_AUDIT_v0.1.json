@@ -1,0 +1,147 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CC",
+  "reference_date": "2026-09-09",
+  "base_main_sha": "67de150ac1175c59ccfa3a844c1dcecd1dc2b4ed",
+  "candidate": {
+    "canonical_policy_source_id": "WSSRC-MKT-012",
+    "monitor_source_id": "WSSRC-MKT-014",
+    "adapter_id": "HMT_T1_CONTENT_API",
+    "occurrence_id": "WSO-MKT-A-0016",
+    "series_id": "WSER-MKT-UK-T1"
+  },
+  "governed_before": {
+    "canonical_registry": ["0.41", 689],
+    "sources": ["2.01", 256],
+    "monitor_expectations": ["0.26", 24],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "governed_after": {
+    "canonical_registry": ["0.41", 689],
+    "sources": ["2.02", 257],
+    "monitor_expectations": ["0.27", 25],
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "read_only_diagnostics": [
+    {
+      "run_id": 34322055392,
+      "job_id": 102370697091,
+      "result": "FAILED_HARNESS_ONLY",
+      "note": "Temporary pressure-audit harness used shallow checkout and requested HEAD^. No substantive diagnostic or governed mutation occurred."
+    },
+    {
+      "run_id": 34322107218,
+      "job_id": 102370859793,
+      "result": "PASS",
+      "role": "post-CB pressure audit"
+    },
+    {
+      "run_id": 34322177654,
+      "job_id": 102371081444,
+      "result": "PASS",
+      "role": "missing-domain pressure drill-down"
+    },
+    {
+      "run_id": 34322353722,
+      "job_id": 102371643902,
+      "result": "PASS",
+      "role": "exact shortlist Canonical-semantics diagnostic"
+    },
+    {
+      "run_id": 34322468430,
+      "job_id": 102372012320,
+      "result": "PASS",
+      "role": "one-request GOV.UK Content API contract diagnostic",
+      "request_count": 1,
+      "followup_request_count": 0,
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_id": "b6b2d2f2-eae6-4564-9ed1-338abb8ca2f2",
+      "public_updated_at": "2025-11-20T09:30:10+00:00"
+    }
+  ],
+  "first_materialisation_attempt": {
+    "run_id": 34323139129,
+    "job_id": 102374145190,
+    "result": "FAILED_BEFORE_COMMIT",
+    "prestate_and_ancestry": "PASS",
+    "guarded_transaction_ephemeral_workspace": "PASS",
+    "registry_validator": "PASS",
+    "live_intelligence_validator": "PASS",
+    "analysis_validator": "PASS",
+    "unittest_discovery": "FAILED",
+    "observed_test_count": 1196,
+    "observed_skipped_count": 68,
+    "failure_count": 2,
+    "failures": [
+      "Historical CB activation test incorrectly froze Sources and Monitor at the exact CB counts instead of remaining descendant-safe.",
+      "CC initially assigned canonical_dependency_count=1 to monitor-only WSSRC-MKT-014 even though no Canonical record uses that source ID; the correct direct Canonical dependency count is zero."
+    ],
+    "commit_push_reached": false,
+    "governed_changes_escaped_workflow": false
+  },
+  "corrections": {
+    "monitor_source_direct_canonical_dependency_count": 0,
+    "canonical_authority_remains": "WSSRC-MKT-012",
+    "monitor_occurrence_reach_is_route_scope_only": true,
+    "historical_cb_test_change": "Count/version assertions made descendant-safe while exact SARB source identity, rights hold, route scope, request budget and authority gates remain asserted."
+  },
+  "successful_materialisation": {
+    "run_id": 34323413849,
+    "job_id": 102375044396,
+    "result": "PASS",
+    "materialised_commit_sha": "c97638a4b150bf212fd412f9999e8c275456bf5f",
+    "ordinary_repository_validation_surface": "PASS",
+    "protected_layer_assertions": "PASS"
+  },
+  "poststate_preflight": {
+    "run_id": 34323515359,
+    "job_id": 102375363509,
+    "result": "PASS",
+    "exact_poststate_and_ancestry": "PASS",
+    "preexisting_source_objects_unchanged": 256,
+    "preexisting_monitor_routes_unchanged": 24,
+    "only_new_source_id": "WSSRC-MKT-014",
+    "only_new_adapter_id": "HMT_T1_CONTENT_API",
+    "ordinary_repository_validation_surface": "PASS",
+    "production_shaped_live_check": {
+      "result": "PASS",
+      "request_budget": 1,
+      "followup_request_budget": 0,
+      "candidate_semantics": "If baseline is unchanged, observation only. If the monitored object changes, exactly a manual HMT_T1_LEGISLATIVE_DEPENDENCY_REVIEW candidate is permitted; no legal-completion inference or Canonical mutation is permitted."
+    },
+    "protected_layer_and_generated_residue_audit": "PASS"
+  },
+  "authority_and_write_gates": {
+    "schedule_authority": false,
+    "clock_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "condition_state_authority": false,
+    "canonical_datetime_mutation_allowed": false,
+    "automatic_attachment_fetch_allowed": false,
+    "automatic_parent_page_fetch_allowed": false,
+    "automatic_legislation_followup_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "protected_layers": {
+    "canonical_registry": "UNCHANGED",
+    "change_ledger": "UNCHANGED",
+    "live_intelligence": "UNCHANGED",
+    "analysis": "UNCHANGED"
+  },
+  "temporary_workflows_to_remove_before_pr": [
+    ".github/workflows/cc-post-cb-pressure-audit.yml",
+    ".github/workflows/cc-hmt-t1-contract-diagnostic.yml",
+    ".github/workflows/cc-materialize-hmt-t1.yml",
+    ".github/workflows/cc-poststate-preflight.yml"
+  ],
+  "merge_controls": {
+    "automatic_merge_allowed": false,
+    "manual_user_merge_required": true
+  }
+}
