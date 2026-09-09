@@ -1,0 +1,100 @@
+name: BZ European Council production live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-by-pressure-audit-bz
+    paths:
+      - .github/workflows/bz-euco-production-live-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Materialize BZ route and make exactly one production-shaped RSS request
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=3ccb20539c10d0965de84efa298ba75634c19249
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          CANONICAL_BEFORE=$(sha256sum data/canonical/registry.json | awk '{print $1}')
+
+          WORLD_SIGNALS_APPLY_MONITOR_BZ=1 python scripts/apply_european_council_rss_monitor_bz.py --apply > /tmp/bz-live-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/bz-live-apply.json
+
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from pathlib import Path
+          from world_signals.adapters.european_council_rss import fetch_european_council_meetings_rss
+          from world_signals.european_council_monitor import european_council_rss_review_candidates
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          routes=[x for x in expectations['adapters'] if x.get('adapter_id')=='EUROPEAN_COUNCIL_MEETINGS_RSS']
+          assert len(routes)==1
+          config=routes[0]
+          assert config['request_budget_per_run']==1
+          assert config['rss_request_count_per_run']==1
+          assert config['robots_request_count_per_run']==0
+          assert config['direct_calendar_html_request_count_per_run']==0
+          assert config['item_followup_request_count_per_run']==0
+          assert config['search_route_discovery_request_count_per_run']==0
+
+          items,snapshot=fetch_european_council_meetings_rss()
+          candidates,observations=european_council_rss_review_candidates(canonical['records'],items,config)
+          match=[o for o in observations if o.get('type')=='EUROPEAN_COUNCIL_RSS_DATE_MATCH_OBSERVATION']
+          missing=[c for c in candidates if c.get('candidate_type')=='EUROPEAN_COUNCIL_RSS_CONFIGURED_GUID_MISSING_REVIEW']
+          moved=[c for c in candidates if c.get('candidate_type')=='EUROPEAN_COUNCIL_RSS_DATE_CHANGE_REVIEW']
+          future=[o for o in observations if o.get('type')=='EUROPEAN_COUNCIL_RSS_UNCONFIGURED_FUTURE_MEETING_OBSERVATION']
+          assert len(match)==3, f'expected 3 configured date matches, found {len(match)}'
+          assert not missing, f'configured GUID missing: {missing!r}'
+          assert not moved, f'configured date changed: {moved!r}'
+          assert not candidates, f'unexpected review candidates: {candidates!r}'
+          assert len(future)==1
+          assert future[0]['automatic_new_occurrence_creation_allowed'] is False
+          assert all(o.get('automatic_commit_allowed') is False for o in observations)
+          payload={
+              'snapshot':snapshot.as_dict(),
+              'network_request_count':1,
+              'rss_request_count':1,
+              'robots_request_count':0,
+              'direct_calendar_html_request_count':0,
+              'item_followup_request_count':0,
+              'search_route_discovery_request_count':0,
+              'feed_item_count_observed_not_frozen':len(items),
+              'configured_date_match_count':len(match),
+              'review_candidate_count':len(candidates),
+              'unconfigured_future_item_count_observed_not_frozen':future[0]['unconfigured_future_item_count'],
+              'configured_guids':sorted(config['configured_guid_to_occurrence']),
+              'observed_date_source':config['observed_date_source'],
+              'updated_field_is_event_time':config['updated_field_is_event_time'],
+              'description_field_is_event_time':config['description_field_is_event_time'],
+              'automatic_new_occurrence_creation_allowed':config['automatic_new_occurrence_creation_allowed'],
+              'automatic_commit_allowed':config['automatic_commit_allowed'],
+          }
+          print('BZ_LIVE_PREFLIGHT',json.dumps(payload,sort_keys=True,ensure_ascii=False))
+          PY
+
+          CANONICAL_AFTER=$(sha256sum data/canonical/registry.json | awk '{print $1}')
+          test "$CANONICAL_BEFORE" = "$CANONICAL_AFTER"
+          git checkout -- \
+            data/sources/registry.json \
+            data/monitor/expectations.json \
+            scripts/run_live_monitor.py \
+            scripts/run_adapter_smoke.py \
+            src/world_signals/adapters/__init__.py
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          echo 'BZ PRODUCTION LIVE PREFLIGHT CLEAN'
