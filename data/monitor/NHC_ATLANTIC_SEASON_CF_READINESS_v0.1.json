@@ -1,0 +1,47 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "NHC_ATLANTIC_SEASON_CF_READINESS",
+  "version": "0.1",
+  "source_id": "WSSRC-RISK-002",
+  "canonical_occurrence_ids": [
+    "WSO-COM-A-0049",
+    "WSO-COM-A-0050"
+  ],
+  "definition": {
+    "start_month_day": "06-01",
+    "end_month_day": "11-30",
+    "semantic_sha256": "1295e095eed4a6210eb837fe4fd606a81cf37f19e709075ab6061d9f95c98511",
+    "authority_surface": "NHC_TROPICAL_CYCLONE_CLIMATOLOGY"
+  },
+  "climatology_snapshot": {
+    "url": "https://www.nhc.noaa.gov/climo/",
+    "resolved_url": "https://www.nhc.noaa.gov/climo/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "body_sha256": "b0002d85609d1d9aa43ed2704da38216fa942d4f7216231ec4b9fc81c8b910e2",
+    "body_bytes": 60678
+  },
+  "atlantic_outlook_rss_snapshot": {
+    "url": "https://www.nhc.noaa.gov/xml/TWOAT.xml",
+    "resolved_url": "https://www.nhc.noaa.gov/xml/TWOAT.xml",
+    "status": 200,
+    "content_type": "text/xml",
+    "body_sha256": "27ca0d9ef9f0beb5d6feed95fdb7d4a86ec55be569ae4b38b07f5e5406232008",
+    "body_bytes": 1626
+  },
+  "robots_path_access": {
+    "climatology": true,
+    "rss_directory": true,
+    "atlantic_outlook_rss": true,
+    "atlantic_basin_rss": true
+  },
+  "review_candidate_count": 0,
+  "observation_count": 3,
+  "semantic_baseline_match_count": 2,
+  "rss_is_schedule_authority": false,
+  "automatic_canonical_commit": false,
+  "automatic_live_or_analysis_promotion": false,
+  "readiness_verdict": "PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT",
+  "opec_quarantine_respected": true,
+  "remote_source_body_retained": false
+}
