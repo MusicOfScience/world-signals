@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact base and probe advertised Consilium RSS
+      - name: Verify exact base and capture advertised Consilium RSS contract
         shell: bash
         run: |
           set -euo pipefail
@@ -30,74 +30,56 @@ jobs:
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
           python - <<'PY'
-          import hashlib, json, re, urllib.request, xml.etree.ElementTree as ET
+          import hashlib,json,re,urllib.request,xml.etree.ElementTree as ET
           from pathlib import Path
+          from urllib.parse import urlparse
 
           SOURCE_ID='WSSRC-INT-003'
           FEED='https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=euco'
           UA='WORLD-SIGNALS-read-only-monitor/0.1'
-
-          C=json.loads(Path('data/canonical/registry.json').read_text())
-          S=json.loads(Path('data/sources/registry.json').read_text())
-          src=[x for x in S['sources'] if x.get('source_id')==SOURCE_ID]
-          assert len(src)==1
-          deps=[r for r in C['records'] if r.get('source_id')==SOURCE_ID]
-          assert len(deps)==src[0]['canonical_dependency_count']==3
-          expected={r['occurrence_id']:(r.get('start_local'),r.get('end_local'),r.get('canonical_name')) for r in deps}
-          assert expected=={
-              'WSO-INT-B-0102':('2026-10-15','2026-10-16','European Council'),
-              'WSO-INT-B-0103':('2026-11-13',None,'Informal meeting of EU heads of state or government'),
-              'WSO-INT-B-0104':('2026-12-17','2026-12-18','European Council'),
+          expected={
+              '147805':('WSO-INT-B-0102','European Council','2026-10-15','2026-10-16'),
+              '147983':('WSO-INT-B-0103','Informal meeting of heads of state or government','2026-11-13',None),
+              '147844':('WSO-INT-B-0104','European Council','2026-12-17','2026-12-18'),
           }
-          for r in deps:
-              assert r['source_timezone']=='Europe/Brussels'
-              assert r['time_precision']=='DAY'
-              assert r['lifecycle_status']=='PLANNED'
-              assert r['certainty_status']=='CONFIRMED'
-          assert deps[0]['timing_type']=='MULTI_DAY_LOCAL'
-          assert deps[1]['timing_type']=='CIVIL_DATE'
-          assert deps[2]['timing_type']=='MULTI_DAY_LOCAL'
+          C=json.loads(Path('data/canonical/registry.json').read_text())
+          deps=[r for r in C['records'] if r.get('source_id')==SOURCE_ID]
+          assert len(deps)==3
 
           req=urllib.request.Request(FEED,headers={'User-Agent':UA,'Accept':'application/rss+xml,application/xml,text/xml,*/*;q=0.1'})
           with urllib.request.urlopen(req,timeout=25) as resp:
               body=resp.read()
               meta={'url':FEED,'status':resp.status,'content_type':resp.headers.get('Content-Type'),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest(),'final_url':resp.geturl()}
+          assert meta['status']==200 and len(body)>500
+          assert 'xml' in (meta['content_type'] or '').lower()
+          root=ET.fromstring(body); assert root.tag.rsplit('}',1)[-1].lower()=='rss'
+          channels=root.findall('channel'); assert len(channels)==1
+          channel=channels[0]
+          items=channel.findall('item'); assert 1<=len(items)<=200
           print('FETCH',json.dumps(meta,sort_keys=True))
-          assert meta['status']==200
-          assert len(body)>500
-          low=body[:1000].lower()
-          assert b'<html' not in low and b'<!doctype' not in low
-          root=ET.fromstring(body)
-          assert root.tag.lower().endswith('rss')
-          channel=root.find('channel'); assert channel is not None
-          items=channel.findall('item'); assert items
-          rows=[]
-          for item in items:
-              row={tag:(item.findtext(tag) or '').strip() for tag in ('title','link','description','pubDate','guid')}
-              rows.append(row)
-          for row in rows:
-              assert row['title'] and row['link']
-              assert row['link'].startswith('https://www.consilium.europa.eu/')
-          print('CHANNEL',json.dumps({'title':channel.findtext('title'),'description':channel.findtext('description'),'item_count':len(rows)},sort_keys=True))
-          print('ITEMS',json.dumps(rows,ensure_ascii=False,sort_keys=True))
+          print('CHANNEL_CHILD_TAGS',json.dumps([x.tag.rsplit('}',1)[-1] for x in list(channel)]))
+          print('ITEM_TAG_SEQUENCES',json.dumps(sorted({tuple(x.tag.rsplit('}',1)[-1] for x in list(item)) for item in items})))
+          print('CHANNEL_IDENTITY',json.dumps({'title':(channel.findtext('title') or '').strip(),'link':(channel.findtext('link') or '').strip(),'description':(channel.findtext('description') or '').strip(),'item_count':len(items)},sort_keys=True))
 
-          corpus=' '.join(' '.join((r['title'],r['description'],r['link'])) for r in rows)
-          checks={
-              'october_euco':bool(re.search(r'15(?:-|\s|&ndash;|–)16\s+October\s+2026|15\s+October\s+2026',corpus,re.I)),
-              'november_informal':bool(re.search(r'13\s+November\s+2026',corpus,re.I) and re.search(r'Informal meeting of (?:EU )?heads of state or government',corpus,re.I)),
-              'december_euco':bool(re.search(r'17(?:-|\s|&ndash;|–)18\s+December\s+2026|17\s+December\s+2026',corpus,re.I)),
-          }
-          print('SEMANTIC_CHECKS',json.dumps(checks,sort_keys=True))
-          print('GOVERNANCE',json.dumps({
-              'network_requests':1,
-              'direct_calendar_html_requests':0,
-              'feed_is_explicitly_advertised_machine_interface':True,
-              'candidate_source_role':'SEPARATE_MONITOR_INTERFACE_PENDING_CONTRACT_REVIEW',
-              'canonical_source_unchanged':SOURCE_ID,
-              'absence_semantics':'NONE_UNTIL_FEED_COMPLETENESS_ESTABLISHED',
-              'clock_inference':False,
-              'lifecycle_authority':False,
-              'certainty_authority':False,
-              'canonical_mutation':False,
-          },sort_keys=True))
+          seen={}
+          for item in items:
+              guid=(item.findtext('guid') or '').strip()
+              title=(item.findtext('title') or '').strip()
+              link=(item.findtext('link') or '').strip()
+              if guid in expected:
+                  assert guid not in seen
+                  p=urlparse(link)
+                  assert p.scheme=='https' and p.hostname=='www.consilium.europa.eu' and not p.query and not p.fragment
+                  m=re.fullmatch(r'/en/meetings/european-council/(\d{4})/(\d{2})/(\d{2})(?:-(\d{2}))?/',p.path)
+                  assert m,link
+                  year,month,start_day,end_day=m.groups()
+                  start=f'{year}-{month}-{start_day}'
+                  end=None if end_day is None else f'{year}-{month}-{end_day}'
+                  oid,expected_title,expected_start,expected_end=expected[guid]
+                  assert title==expected_title
+                  assert (start,end)==(expected_start,expected_end)
+                  seen[guid]={'occurrence_id':oid,'title':title,'link':link,'start_local':start,'end_local':end,'description':(item.findtext('description') or '').strip(),'pubDate':(item.findtext('pubDate') or '').strip()}
+          assert set(seen)==set(expected)
+          print('CONFIGURED_IDENTITIES',json.dumps(seen,sort_keys=True,ensure_ascii=False))
+          print('GOVERNANCE',json.dumps({'network_requests':1,'direct_calendar_html_requests':0,'item_followups':0,'configured_guid_count':3,'feed_count_is_bounded_not_frozen':True,'date_source':'OFFICIAL_ITEM_LINK_PATH_ONLY','pubDate_is_event_time':False,'description_is_event_time':False,'canonical_mutation':False},sort_keys=True))
           PY
