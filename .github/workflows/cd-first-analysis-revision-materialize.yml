@@ -1,0 +1,129 @@
+name: CD guarded first Analysis revision materialisation
+
+on:
+  push:
+    branches:
+      - feature/post-cc-pressure-audit-cd
+    paths:
+      - '.github/workflows/cd-first-analysis-revision-materialize.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Assert exact governed pre-state and ancestry
+        run: |
+          git merge-base --is-ancestor c186835d9d6b36620177badfff604f309ceb35d4 HEAD
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0,'src')
+          from world_signals.analysis_revision import production_analysis_revision_count
+          from world_signals.live_analysis_bridge import production_live_input_count
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          ls=json.loads(Path('data/live_intelligence/schema.json').read_text())
+          lo=json.loads(Path('data/live_intelligence/observations.json').read_text())
+          le=json.loads(Path('data/live_intelligence/evidence_registry.json').read_text())
+          a=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('2.02',257)
+          assert (m['version'],len(m['adapters']))==('0.27',25)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          assert (ls['version'],len(lo['observations']),len(le['evidence']))==('0.6',6,9)
+          assert a['version']=='0.7'
+          assert (r['version'],len(r['reviews']))==('0.17',21)
+          assert (e['version'],len(e['evidence']))==('0.17',95)
+          assert production_analysis_revision_count(r)==0
+          assert production_live_input_count(r)==1
+          print('CD_MATERIALIZE_PRESTATE_PASS')
+          PY
+      - name: Materialise guarded CD transaction
+        run: |
+          python -m py_compile scripts/apply_bwc_wg8_first_analysis_revision_cd.py
+          python scripts/apply_bwc_wg8_first_analysis_revision_cd.py
+      - name: Assert exact governed post-state
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0,'src')
+          from world_signals.analysis_revision import production_analysis_revision_count
+          from world_signals.live_analysis_bridge import production_live_input_count
+          a=json.loads(Path('data/analysis/schema.json').read_text())
+          r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          assert a['version']=='0.8'
+          assert (r['version'],len(r['reviews']))==('0.18',22)
+          assert (e['version'],len(e['evidence']))==('0.18',97)
+          assert production_analysis_revision_count(r)==1
+          assert production_live_input_count(r)==1
+          policy=a['analysis_revision_policy']
+          assert policy['mode']=='CONTROLLED_REVISION_LINEAGE'
+          assert policy['production_analysis_revisions_allowed'] is True
+          assert policy['maximum_production_analysis_revisions']==1
+          assert policy['maximum_children_per_revision_parent']==1
+          assert policy['public_revision_metadata_projection_allowed'] is False
+          assert policy['automatic_latest_analysis_selection_allowed'] is False
+          child=next(x for x in r['reviews'] if x['analysis_id']=='WSAN-BWC-WG8-2026-002')
+          assert child['revision_of_analysis_id']=='WSAN-BWC-WG8-2026-001'
+          assert child['analysis_revision_kind']=='NEW_EVIDENCE'
+          assert child['canonical_occurrence_id']=='WSO-BWC-WG-2026-S08'
+          assert child['second_order_effects']['status']=='OBSERVED'
+          print('CD_MATERIALIZE_POSTSTATE_PASS')
+          PY
+      - name: Ordinary full repository validation
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q scripts src tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Protected upstream and transaction-diff audit
+        run: |
+          git diff --exit-code c186835d9d6b36620177badfff604f309ceb35d4..HEAD -- data/canonical data/sources data/monitor data/changes data/live_intelligence
+          git diff --exit-code -- data/canonical data/sources data/monitor data/changes data/live_intelligence
+          git diff --check -- data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          python - <<'PY'
+          import json, subprocess
+          base='c186835d9d6b36620177badfff604f309ceb35d4'
+          old=json.loads(subprocess.check_output(['git','show',f'{base}:data/analysis/event_reviews.json']))
+          new=json.load(open('data/analysis/event_reviews.json'))
+          old_by={x['analysis_id']:x for x in old['reviews']}
+          new_by={x['analysis_id']:x for x in new['reviews']}
+          assert set(new_by)-set(old_by)=={'WSAN-BWC-WG8-2026-002'}
+          assert set(old_by)-set(new_by)==set()
+          changed=[k for k,v in old_by.items() if new_by[k]!=v]
+          assert changed==[], changed
+          print({'unchanged_preexisting_analysis_reviews':len(old_by),'new_review':'WSAN-BWC-WG8-2026-002'})
+          PY
+      - name: Commit guarded Analysis materialisation
+        run: |
+          git config user.name 'WORLD SIGNALS automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
+          git diff --cached --check
+          git commit -m 'CD: materialize first controlled Analysis revision'
+          git push origin HEAD:feature/post-cc-pressure-audit-cd
