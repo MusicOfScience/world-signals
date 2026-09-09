@@ -40,54 +40,20 @@ jobs:
           PY
       - name: Build read-only monitor coverage audit
         run: python scripts/run_monitor_coverage_audit.py
-      - name: Print pressure diagnostics
+      - name: Print pressure and shortlist diagnostics
         run: |
           python - <<'PY'
           import json
-          from collections import defaultdict
           from pathlib import Path
           a=json.loads(Path('artifacts/monitor/monitor-coverage-audit.json').read_text())
           can=json.loads(Path('data/canonical/registry.json').read_text())
-          src=json.loads(Path('data/sources/registry.json').read_text())
-          sm={r['source_id']:r for r in src['sources']}
           print('TOTALS', json.dumps(a['totals'], sort_keys=True))
-          print('READINESS', json.dumps(a['configured_source_readiness'], sort_keys=True))
           print('PROMPTS', json.dumps(a['diagnostic_prompts'], sort_keys=True))
-          print('REGIONS')
-          for r in a['by_region']:
-              print(json.dumps(r, sort_keys=True))
-          print('CATEGORIES')
-          for r in a['by_category']:
-              print(json.dumps(r, sort_keys=True))
-          print('CANDIDATES_WITH_CANONICAL')
-          for r in a['candidate_sources_with_canonical_dependencies']:
-              print(json.dumps(r, sort_keys=True))
-          print('UNBOUND_CANDIDATES')
-          for r in a['candidate_sources_without_canonical_dependencies']:
-              print(json.dumps(r, sort_keys=True))
-          missing=set(a['diagnostic_prompts']['canonical_categories_without_configured_monitor_scope'])
-          grouped=defaultdict(lambda: {'count':0,'occurrence_ids':[],'series_ids':set(),'institutions':set(),'regions':set()})
-          print('MISSING_DOMAIN_SOURCE_DETAIL')
+          shortlist={'WSSRC-HEALTH-001','WSSRC-HEALTH-002','WSSRC-MKT-009','WSSRC-MKT-012','WSSRC-MKT-013','WSSRC-RISK-002'}
+          print('SHORTLIST_CANONICAL_RECORDS')
           for r in can['records']:
-              if r.get('category') not in missing: continue
-              key=(r.get('category'),r.get('source_id'))
-              g=grouped[key]; g['count']+=1; g['occurrence_ids'].append(r.get('occurrence_id'))
-              if r.get('series_id'): g['series_ids'].add(r['series_id'])
-              if r.get('institution'): g['institutions'].add(r['institution'])
-              if r.get('region'): g['regions'].add(r['region'])
-          for (category, source_id),g in sorted(grouped.items()):
-              s=sm.get(source_id,{})
-              row={
-                'category':category,'source_id':source_id,'canonical_occurrence_count':g['count'],
-                'series_ids':sorted(g['series_ids']),'institutions':sorted(g['institutions']),'regions':sorted(g['regions']),
-                'source_institution':s.get('institution'),'jurisdiction':s.get('jurisdiction'),'source_type':s.get('source_type'),
-                'endpoint_role':s.get('endpoint_role'),'authoritative_url':s.get('authoritative_url'),
-                'machine_readable_available':s.get('machine_readable_available'),
-                'monitoring_readiness_status':s.get('monitoring_readiness_status'),
-                'automated_monitoring_use':s.get('automated_monitoring_use'),'verification_mode':s.get('verification_mode'),
-                'rights_basis':s.get('rights_basis'),'known_limitations':s.get('known_limitations'),
-              }
-              print(json.dumps(row, sort_keys=True, ensure_ascii=False))
+              if r.get('source_id') in shortlist:
+                  print(json.dumps(r, sort_keys=True, ensure_ascii=False))
           PY
       - name: Prove governed files unchanged
         run: |
