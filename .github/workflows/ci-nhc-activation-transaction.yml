@@ -17,6 +17,8 @@ jobs:
   transact:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v6
         with:
@@ -36,8 +38,6 @@ jobs:
 
       - name: Fresh live NHC endpoint robots and rights preflight
         shell: bash
-        env:
-          PYTHONPATH: src
         run: |
           set -euo pipefail
           cp data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json /tmp/nhc-readiness-before.json
@@ -132,13 +132,15 @@ jobs:
           # WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
 
           - exact merged CH base: \`c4f359c2c70f023c32990f20234aaf154dced152\`
-          - GitHub Actions run: \`${GITHUB_RUN_ID}\`
+          - GitHub Actions successful transaction run: \`${GITHUB_RUN_ID}\`
           - executed at UTC: \`$(date -u +%Y-%m-%dT%H:%M:%SZ)\`
-          - failed attempt 1 / run \`34407375556\`: harness import-path failure before network access or write gate; no governed mutation.
+          - failed attempt 1 / run \`34407375556\`: preflight script import-path harness failure before network access or write gate; no governed mutation.
+          - failed attempt 2 / run \`34407481825\`: live NHC/robots/rights preflight and CI simulation passed; focused unittest import path then failed before write gate; no governed mutation.
           - fresh NHC climatology/RSS/robots readiness: **PASS**
           - fresh NWS public-domain / appropriate-use marker recheck: **PASS**
           - Source Registry: \`v2.02 / 257\` → \`v2.03 / 257\`
           - Monitor expectations: \`v0.27 / 25\` → \`v0.28 / 26\`
+          - Monitor coverage: 24 → 25 unique configured sources; 215 → 217 scoped occurrences; 47 → 48 scoped series; 11 → 12 scoped categories.
           - route: \`NHC_ATLANTIC_SEASON\`; exact scope \`WSO-COM-A-0049\`, \`WSO-COM-A-0050\`
           - semantic baseline: NHC Atlantic season \`06-01 → 11-30\`
           - RSS role: source health only; no season-date or event-state authority
