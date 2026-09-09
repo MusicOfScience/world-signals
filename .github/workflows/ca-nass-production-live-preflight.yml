@@ -1,0 +1,97 @@
+name: CA NASS production-shaped live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bz-pressure-audit-ca
+    paths:
+      - .github/workflows/ca-nass-production-live-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Materialize CA route and execute exactly one NASS iCalendar request
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=07c558c8811795f0aed40e73bd386cc70344191e
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          export PYTHONPATH=src
+          BEFORE_CANONICAL=$(sha256sum data/canonical/registry.json | awk '{print $1}')
+
+          WORLD_SIGNALS_APPLY_MONITOR_CA=1 python scripts/apply_nass_asb_ical_monitor_ca.py --apply > /tmp/ca-live-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/ca-live-apply.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from world_signals.adapters.nass_asb_ical import fetch_nass_asb_ical
+          from world_signals.nass_asb_monitor import EXPECTED_UID_TO_OCCURRENCE,nass_asb_ical_review_candidates
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          routes=[x for x in monitor['adapters'] if x.get('adapter_id')=='USDA_NASS_ASB_ICAL']
+          assert len(routes)==1
+          route=routes[0]
+          assert route['request_budget_per_run']==1
+          assert route['ical_request_count_per_run']==1
+          assert route['robots_request_count_per_run']==0
+          assert route['calendar_html_request_count_per_run']==0
+          assert route['report_followup_request_count_per_run']==0
+          assert route['search_route_discovery_request_count_per_run']==0
+          assert route['automatic_commit_allowed'] is False
+
+          # Exactly one institutional request: fetch_nass_asb_ical performs the one advertised ICS GET.
+          items,snapshot=fetch_nass_asb_ical()
+          configured=set(EXPECTED_UID_TO_OCCURRENCE)
+          present={x.uid for x in items if x.uid in configured}
+          assert present==configured,(configured-present,present-configured)
+          candidates,observations=nass_asb_ical_review_candidates(canonical['records'],items,route)
+          matches=[x for x in observations if x.get('type')=='NASS_ASB_ICAL_DATETIME_MATCH_OBSERVATION']
+          additions=next(x for x in observations if x.get('type')=='NASS_ASB_ICAL_UNCONFIGURED_TARGET_RELEASE_OBSERVATION')
+          assert len(matches)==5,len(matches)
+          assert candidates==[],candidates
+          assert snapshot.status==200
+          assert 'text/calendar' in snapshot.content_type.lower()
+          print('CA_LIVE_RESULT',json.dumps({
+              'network_request_count':1,
+              'ical_request_count':1,
+              'robots_request_count':0,
+              'calendar_html_request_count':0,
+              'report_followup_request_count':0,
+              'search_route_discovery_request_count':0,
+              'http_status':snapshot.status,
+              'content_type':snapshot.content_type,
+              'body_bytes':snapshot.body_bytes,
+              'sha256_observed_not_frozen':snapshot.sha256,
+              'target_items_parsed':len(items),
+              'configured_uid_match_count':len(matches),
+              'review_candidate_count':len(candidates),
+              'unconfigured_future_target_count_observed_not_frozen':additions['unconfigured_future_target_count'],
+              'canonical_action':'NONE',
+              'automatic_commit_allowed':False,
+          },sort_keys=True))
+          PY
+
+          AFTER_CANONICAL=$(sha256sum data/canonical/registry.json | awk '{print $1}')
+          test "$BEFORE_CANONICAL" = "$AFTER_CANONICAL"
+          echo "CANONICAL_BYTE_IDENTICAL $AFTER_CANONICAL"
+          git reset --hard HEAD
+          git clean -fd
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          echo 'CA PRODUCTION LIVE PREFLIGHT COMPLETE'
