@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -123,7 +124,9 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
             # dormant BG/OPEC materialisation helpers merely to reconstruct old
             # prose; verify current truth plus the permanent quarantine instead.
             self.assertIn("Canonical Registry: **v0.41 / 689 occurrences**", status_source)
-            self.assertIn("Source Registry: **v2.02 / 257 sources**", status_source)
+            current_state = json.loads((ROOT / "data/status/current_state.json").read_text(encoding="utf-8"))
+            current_sources = current_state["sources"]
+            self.assertIn(f"Source Registry: **v{current_sources['registry_version']} / {current_sources['source_count']} sources**", status_source)
             self.assertIn("OPEC CE remains quarantined", status_source)
             self.assertIn("## Permanent quarantine", roadmap_source)
             self.assertIn("PR #113", roadmap_source)

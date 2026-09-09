@@ -9,12 +9,12 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
 - Canonical Registry: **v0.41 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.02 / 257 sources**.
+- Source Registry: **v2.03 / 257 sources**.
 - Change Ledger: **v0.27 / 62 entries**.
-- Monitor expectations: **v0.27 / 25 configured adapters / 24 unique monitor sources / 215 explicitly scoped Canonical occurrences**.
+- Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
-- NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **false**.
+- NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
 - OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.
 <!-- WORLD_SIGNALS_CURRENT_STATE_END -->
@@ -94,7 +94,7 @@ Analysis revisions are immutable descendants, not in-place rewrites. CD material
 
 Automatic latest-head selection, public revision metadata and public head collapse remain off. A second production revision requires a new pressure audit.
 
-## Stage 8 — recovery/status truth surfaces — CH IMPLEMENTING
+## Stage 8 — recovery/status truth surfaces — DONE / GUARDED
 
 CH addresses an operational governance weakness exposed after CG: `README.md`, `PROJECT_STATUS.md` and `ROADMAP.md` contained materially stale counts and checkpoint language even though governed registries were correct.
 
@@ -102,7 +102,7 @@ CH introduces `data/status/current_state.json` plus `scripts/project_state_snaps
 
 The snapshot is explicitly noncanonical and may not mutate upstream layers. Its write mode is limited to derived recovery surfaces and requires an explicit environment gate.
 
-## Stage 9 — next pressure selection — RECOMPUTE AFTER CH
+## Stage 9 — next pressure selection — CI NHC ACTIVATION SELECTED
 
 Do not preselect the next tranche. Recompute pressure from then-current `main` and compare at least:
 
