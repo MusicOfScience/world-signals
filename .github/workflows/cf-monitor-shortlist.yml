@@ -25,16 +25,20 @@ jobs:
         run: python -m unittest tests.test_opec_quarantine_cf -v
       - name: Build source-aware shortlist
         run: python scripts/build_cf_monitor_shortlist.py
-      - name: Commit shortlist only
+      - name: Build zero-category route diagnostic
+        run: python scripts/build_cf_zero_category_route_diagnostic.py
+      - name: Commit diagnostic artifacts only
         run: |
           set -euo pipefail
           git config user.name "Mx Hud Harding"
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add data/monitor/POST_CD_MONITOR_PRESSURE_CF_SHORTLIST_v0.1.md
-          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/POST_CD_MONITOR_PRESSURE_CF_SHORTLIST_v0\.1\.md$' || true)"
+          git add \
+            data/monitor/POST_CD_MONITOR_PRESSURE_CF_SHORTLIST_v0.1.md \
+            data/monitor/POST_CD_MONITOR_ZERO_CATEGORY_CF_DIAGNOSTIC_v0.1.md
+          test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/POST_CD_MONITOR_(PRESSURE_CF_SHORTLIST|ZERO_CATEGORY_CF_DIAGNOSTIC)_v0\.1\.md$' || true)"
           if git diff --cached --quiet; then
-            echo "No shortlist change to commit"
+            echo "No diagnostic change to commit"
             exit 0
           fi
-          git commit -m "CF: persist Monitor candidate shortlist"
+          git commit -m "CF: persist Monitor route diagnostics"
           git push origin HEAD:feature/post-cd-monitor-pressure-cf
