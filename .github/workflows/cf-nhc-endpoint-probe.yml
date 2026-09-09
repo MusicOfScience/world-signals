@@ -6,6 +6,7 @@ on:
       - feature/post-cd-monitor-pressure-cf
     paths:
       - '.github/workflows/cf-nhc-endpoint-probe.yml'
+      - 'scripts/probe_nhc_monitor_cf.py'
 
 permissions:
   contents: write
@@ -53,5 +54,9 @@ jobs:
             data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.json \
             data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0.1.md
           test -z "$(git diff --cached --name-only | grep -Ev '^data/monitor/NHC_ATLANTIC_SEASON_CF_ENDPOINT_PROBE_v0\.1\.(json|md)$' || true)"
+          if git diff --cached --quiet; then
+            echo "No probe output change to commit"
+            exit 0
+          fi
           git commit -m "CF: persist bounded NHC endpoint probe"
           git push origin HEAD:feature/post-cd-monitor-pressure-cf
