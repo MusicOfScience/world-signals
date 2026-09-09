@@ -30,12 +30,13 @@ jobs:
           git checkout origin/main -- scripts/apply_analysis_revision_contract_ba.py
           python - <<'PY'
           from pathlib import Path
+
           path = Path('scripts/apply_analysis_revision_contract_ba.py')
           text = path.read_text(encoding='utf-8')
 
           start = text.index('def target_roadmap(current: str) -> str:\n')
           end = text.index('\ndef assert_preconditions(plan: dict[str, Any]) -> None:\n', start)
-          roadmap_fn = '''def target_roadmap(current: str) -> str:
+          roadmap_fn = """def target_roadmap(current: str) -> str:
               heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
               ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
               ch_descendant_heading = "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"
@@ -49,7 +50,7 @@ jobs:
                   return current
               marker = "## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT"
               require(marker in current, "BA roadmap could not locate Stage 9 marker")
-              section = """## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED
+              section = """ + "'''" + """## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED
 
           BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot. Production revision population remains zero.
 
@@ -57,14 +58,17 @@ jobs:
 
           Live observations never automatically revise Analysis. Live correction/state-update lineage and Analysis revision lineage remain separate. No public latest-head collapse or revision-metadata projection is opened by BA. The first production Analysis revision requires another pressure audit.
 
-          """
+          """ + "'''" + """
               return current.replace(marker, section + marker, 1)
-          '''.replace('          ', '')
+          """
+          # The workflow YAML indentation contributes ten spaces to each line.
+          # Strip exactly those ten, preserving the Python function's own indent.
+          roadmap_fn = '\n'.join(line[10:] if line.startswith('          ') else line for line in roadmap_fn.splitlines()) + '\n'
           text = text[:start] + roadmap_fn + text[end:]
 
           docs_start = text.index('    required_doc_markers = {\n', text.index('def assert_target('))
           docs_end = text.index('    docs = validate_descendant_checkpoint', docs_start)
-          docs_block = '''    if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"]:
+          docs_block = """    if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"]:
               required_doc_markers = {
                   "BA roadmap": (
                       target["roadmap"],
@@ -80,7 +84,8 @@ jobs:
                   target["status"],
                   ["BA adds a **production-closed Analysis revision-lineage contract**"],
               )
-          '''.replace('          ', '')
+          """
+          docs_block = '\n'.join(line[10:] if line.startswith('          ') else line for line in docs_block.splitlines()) + '\n'
           text = text[:docs_start] + docs_block + text[docs_end:]
           path.write_text(text, encoding='utf-8')
           PY
