@@ -1,122 +1,86 @@
 # WORLD SIGNALS
 
-WORLD SIGNALS is a platform-independent political-economic intelligence system for tracking scheduled events, authoritative-source changes, current developments and their interactions across economics, politics, geopolitics, markets, trade, commodities, climate, health and institutions.
+WORLD SIGNALS is a platform-independent global political-economic intelligence system for tracking scheduled events, authoritative-source changes, current developments and structured analytical interpretation across economics, monetary and fiscal policy, politics, elections, geopolitics, institutions, trade, sanctions, markets, commodities, energy, climate, physical risk, health/biosecurity, technology and critical infrastructure.
 
 **Live read-only interface:** https://musicofscience.github.io/world-signals/
 
-The repository is the operational implementation. `WORLD_SIGNALS_PROJECT_CHARTER.md` is the authoritative architectural specification; `PROJECT_STATUS.md` is the durable recovery checkpoint. Registry and contract files remain the final source of operational truth.
+`WORLD_SIGNALS_PROJECT_CHARTER.md` is the authoritative architectural and methodological specification. Governed registries/contracts remain operational truth. `data/status/current_state.json`, the current-state block below and the matching blocks in `PROJECT_STATUS.md` / `ROADMAP.md` are mechanically derived recovery surfaces and are checked by CI.
 
-## Current checkpoint
+<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
+## Mechanically derived current state
 
-Post-#78 / AX evolving-state Live Intelligence checkpoint:
+**Reference date:** 2026-09-10  
+**Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.38 — 688 occurrences**
-- Canonical schema: **v0.52**
-- Source Registry: **v1.80 — 243 sources**
-- reviewed Change Ledger: **v0.24 — 59 entries**
-- Source/Change Monitor expectations: **v0.10 — 8 configured adapters**
-- Monitor operations policy: **v0.1**
-- Live Intelligence: **v0.3 — 3 reviewed internal observations / 4 primary-official evidence rows; public observation projection closed**
-- Analysis schema: **v0.4**
-- Analysis: **v0.16 — 20 reviews / 91 evidence rows / 18 reviewed event types**
-- production `EXACT_TIMESTAMP_SERIES`: **0**
-- Automatic canonical commits: **OFF / gate closed**
-- Google Calendar writes: **OFF**
-
-These numbers are a checkpoint, not a substitute for the governed files. After later merges, verify the registries/contracts on `main` before relying on prose documentation.
+- Canonical Registry: **v0.41 / 689 occurrences**; schema **v0.52**.
+- Source Registry: **v2.02 / 257 sources**.
+- Change Ledger: **v0.27 / 62 entries**.
+- Monitor expectations: **v0.27 / 25 configured adapters / 24 unique monitor sources / 215 explicitly scoped Canonical occurrences**.
+- Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **false**.
+- Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
+- OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.
+<!-- WORLD_SIGNALS_CURRENT_STATE_END -->
 
 ## Layer contract
 
 ```text
-AUTHORITATIVE SOURCES
-        |
-        v
-Source / Change Monitor
-FETCH -> SNAPSHOT -> PARSE -> ASSERT -> MATCH -> DIFF
-        |
-        +--> source health / review candidates
-        |
-        v
-reviewed canonical transaction when authorised
-        |
-        v
-CANONICAL REGISTRY ------------------> Calendar / Pages projections
-        |
-        +-----------------------------> Live Intelligence links/context
-
-current developments / observations --> LIVE INTELLIGENCE --> ANALYSIS
-                                      factual layer          interpretation
+CANONICAL REGISTRY
+      |
+      +--> Calendar / Pages projections
+      |
+      v
+SOURCE / CHANGE MONITOR
+      |
+      v
+LIVE INTELLIGENCE
+      |
+      v
+ANALYSIS
 ```
 
-The layers are deliberately separate:
+The layers remain deliberately distinct:
 
-1. **Canonical Registry** — authoritative event identities, lifecycle and timing.
-2. **Calendar** — disposable human-facing projection from Canonical.
-3. **Source / Change Monitor** — authoritative-source verification, source health and review candidates.
-4. **Live Intelligence** — factual current-development observations; AX v0.3 contains three controlled internal observations across the Nepal shock and one manually grouped DRC evolving-outbreak story, while still exposing zero public observations.
-5. **Analysis** — expectations, surprise, market response, connections, alternatives, second-order effects and falsifiers.
+1. **Canonical Registry** — what the event is: stable identities, lifecycle, certainty, timing and provenance.
+2. **Calendar** — rebuildable human-facing projection from Canonical.
+3. **Source / Change Monitor** — source health, authoritative change detection and review candidates; no automatic Canonical mutation.
+4. **Live Intelligence** — evidence-backed factual observations around scheduled and unscheduled developments; no causal interpretation.
+5. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
 
-The browser is **not** the database. GitHub Pages is **not** the canonical registry. Source health is **not** event state. Live Intelligence is **not** Analysis. A source failure or absence cannot itself cancel, complete or reschedule an event, and it cannot itself create a Live Intelligence fact.
+Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
 
-## Web UX
+## Source and monitoring governance
 
-The Pages application is a read-only projection built from `web/` and repository data by `.github/workflows/pages.yml`. GitHub Actions is the sole Pages publishing path; generated `docs/` output is build-time material and is not tracked.
+Source competence and automation permission are independent questions. A source may be authoritative for Canonical provenance while remaining unsuitable or unauthorised for unattended monitoring. Machine-only monitor identities may therefore be separate from Canonical provenance identities.
 
-Current visible layers include:
+Configured Monitor routes are governed in `data/monitor/expectations.json`. Route presence does not grant lifecycle, certainty, schedule, clock, Canonical-write, Live-promotion or Analysis-promotion authority unless an explicit reviewed contract says so. Source failure, absence and parser failure remain source-health evidence rather than event-state evidence.
 
-- **Calendar** — exact-date events on civil days; timed events display in device timezone when canonical UTC exists while preserving native source timezone; uncertain/month-native windows are not pinned to invented days.
-- **Event index** — searchable/filterable canonical event inventory.
-- **Monitor routes** — configured read-only Source/Change Monitor routes, explicitly not current runtime health.
-- **Operations** — source governance, dated retained monitor evidence, candidate evidence and retained review state.
-- **Biosecurity system map** — noncanonical cross-domain coverage overlay inside Operations.
-- **Change history** — reviewed canonical ledger showing what changed and why.
-- **Analysis** — reviewed post-event analytical specimens linked to canonical occurrences.
+The NOAA/NHC Atlantic-season route is a validated pilot only. Its CF readiness record remains separate from scheduled Monitor expectations; activation requires a fresh reviewed decision rather than inferring permission from pilot validation.
 
-AX emits `docs/data/live_intelligence.json` as **curated-store metadata only**. The repository contains three reviewed internal observations and four evidence rows, but the projection still contains zero public observations and makes no claim to be a current-news or runtime intelligence feed.
+## Live Intelligence
 
-## Monitoring and review state
+The controlled internal Live layer currently exercises several distinct contracts rather than a general news feed: unscheduled physical shock, evolving health state, scheduled economic outcome, geopolitical development, institutional development and reviewed pre-event Canonical context.
 
-The scheduled Source/Change Monitor currently has **8 heterogeneous configured adapters**:
+Canonical linking is optional. Unscheduled real-world developments do not acquire invented Canonical identities merely to make the graph denser. Event time, source publication time, state-as-of time and WORLD SIGNALS observation time remain separate concepts.
 
-- RBA Financial Stability Review RSS;
-- Colombia SUIN / Socrata Decree 111/1996 sentinel;
-- EU Cyber Resilience Act Article 71 / Cellar topology sentinel;
-- EU CBAM verifier-report milestone;
-- EU CBAM certificate-sale milestone;
-- EU CBAM annual declaration / surrender deadline;
-- ONS release-calendar RSS;
-- EIA Weekly Petroleum Status Report schedule.
+Automatic ingestion, automatic story clustering, public observation projection, automatic Canonical commit and Calendar writes remain closed.
 
-These routes are review-only. They can fetch, parse, compare and generate evidence/review candidates under route-specific permissions; they cannot mutate canonical state automatically.
+## Analysis
 
-Review-candidate identity is separate from monitor-run identity. Stable `WSRV-*` propositions can aggregate repeated equivalent observations while preserving materially different proposals as siblings. Retained Actions evidence is bounded by its retention horizon; durable checkpoint architecture remains noncanonical.
+Analysis is post-event and anchored to existing completed Canonical occurrences. Live observations may be selected only through reviewed immutable `observation_id` relationships under the bridge contract; Live evidence is not transitively promoted into Analysis evidence.
 
-## Live Intelligence controlled population
-
-AV v0.1 established the zero-population contract. AW v0.2 admitted one reviewed Nepal physical-shock specimen. AX v0.3 adds two successive WHO snapshots of the 2026 DRC Bundibugyo outbreak to test evolving-state semantics without opening broad ingestion.
-
-The controlled state:
-
-- preserves the Nepal shock unchanged, without fabricating a Canonical occurrence;
-- preserves the authoritative Nepal `Asia/Kathmandu` local time `08:40` and matching `02:55Z`;
-- adds two DRC `HEALTH_EMERGENCY` observations sharing one manually reviewed story key;
-- preserves the 26 August and 30 August DRC epidemiological states as separate observations rather than silently overwriting the earlier snapshot;
-- keeps `state_update_of_observation_id` distinct from `revision_of_observation_id`: later state is not automatically a correction of earlier history;
-- separates state-as-of time, evidence publication time, event time and WORLD SIGNALS observation time, preserving civil-date precision where that is all the source supplies;
-- treats the story key only as a reviewed grouping identity, never as a Canonical event, causal claim or analytical conclusion;
-- prohibits automatic story clustering, causal interpretation, market-move attribution, Analysis-evidence migration and automatic ingestion;
-- contains exactly three internal observations and four primary-official evidence rows;
-- keeps public observation projection closed at zero.
-
-Any fourth observation, continuous outbreak ingestion or broader Live population requires another pressure audit.
-
-## Analysis state
-
-Analysis currently contains **20 reviewed post-event specimens across 18 event types**, with **91 analytical evidence rows**. The sole completed/unreviewed canonical occurrence at the post-AU checkpoint is `WSO-MAC-B-0041` (Japan Family Income and Expenditure Survey, July 2026). It is a valid future specimen, not a backlog obligation.
+Revision lineage is immutable: a later analytical judgement is a new Analysis snapshot linked to its parent, not an in-place rewrite. Automatic latest-head selection and public revision-head collapse remain prohibited.
 
 ## Time and uncertainty
 
-Canonical event time preserves the source's native IANA timezone and UTC timestamp where available. Australia/Melbourne is a default home/reference display context, never canonical storage time. The schema also supports source-native date/month windows and civil-date objects without manufacturing false clock precision.
+Canonical event time preserves source-native IANA timezone and UTC time when those exist. Australia/Melbourne is a home/reference display context, never canonical storage time. Civil dates, native month windows, recurring rules, provisional timing and unresolved timing remain at their supported precision rather than being promoted to synthetic timestamps.
+
+Intrinsic importance, expected market sensitivity and observed market response remain separate. Analysis must distinguish what happened, what was expected, what surprised, what moved, plausible connections, noise, alternative explanations and second-order effects without post-hoc causal storytelling.
+
+## OPEC quarantine
+
+`OPEC_QUARANTINE.md` and closed/unmerged PR #113 preserve the failed CE provenance transaction as historical evidence. Normal work must not reopen, merge, cherry-pick, rebase, materialise or use that branch as a base. Any future OPEC work starts from then-current `main` under a fresh bounded design.
 
 ## Run locally
 
@@ -124,20 +88,30 @@ Canonical event time preserves the source's native IANA timezone and UTC timesta
 python scripts/validate_registry.py
 python scripts/validate_live_intelligence.py
 python scripts/validate_analysis.py
+python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
 python scripts/build_site.py
 ```
 
-`python scripts/build_site.py` generates `docs/` locally. The directory is intentionally ignored; Pages builds a fresh projection in GitHub Actions.
+`python scripts/build_site.py` generates derived site output locally. Generated site material is not Canonical state.
 
-## Recovery
+To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 
-For continuation after a chat/thread interruption, read in this order:
+```bash
+WORLD_SIGNALS_WRITE_DERIVED_STATE=YES python scripts/project_state_snapshot.py --write
+```
 
-1. `WORLD_SIGNALS_PROJECT_CHARTER.md`
-2. the current override at the top of `PROJECT_STATUS.md`
-3. Canonical / Source / Monitor / Live Intelligence / Analysis governed files referenced there
-4. latest relevant pressure audits and transaction audits
-5. current `main` commit and Actions runs
+That command updates derived recovery surfaces only. It grants no authority to mutate Canonical, Sources, Change Ledger, Monitor, Live or Analysis governed populations.
 
-Do not reconstruct operational truth from prose checkpoints or conversation history alone when the governed files can be checked directly.
+## Recovery order
+
+For continuation after a thread, branch or deployment interruption:
+
+1. `WORLD_SIGNALS_PROJECT_CHARTER.md`;
+2. current `main` commit and intervening PRs;
+3. governed Canonical / Source / Change Ledger / Monitor / Live / Analysis files;
+4. `data/status/current_state.json` and the CI-validated current-state blocks;
+5. latest relevant pressure / transaction audits;
+6. `OPEC_QUARANTINE.md` whenever OPEC is implicated.
+
+Do not reconstruct operational truth from conversation history or stale prose when governed files can be checked directly.
