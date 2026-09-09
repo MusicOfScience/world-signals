@@ -1,0 +1,1898 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "MONITOR_COVERAGE_AUDIT",
+  "version": "0.1",
+  "canonical_registry_version": "0.41",
+  "source_registry_version": "2.02",
+  "monitor_expectations_version": "0.27",
+  "methodology": {
+    "configured_scope_is_not_monitor_completeness": true,
+    "occurrence_density_is_not_route_diversity": true,
+    "missing_region_or_category_is_review_prompt_not_quota": true,
+    "source_readiness_and_rights_govern_route_viability": true,
+    "canonical_source_dependency_is_not_automatic_monitor_permission": true,
+    "explicit_occurrence_scope_only_no_series_inference": true,
+    "automatic_canonical_commit": false,
+    "automatic_adapter_enablement": false
+  },
+  "totals": {
+    "configured_adapter_count": 25,
+    "unique_monitor_source_count": 24,
+    "scoped_occurrence_count": 215,
+    "scoped_series_count": 47,
+    "scoped_institution_count": 22,
+    "scoped_region_count": 9,
+    "scoped_category_count": 11
+  },
+  "configured_source_readiness": {
+    "monitoring_readiness_status_counts": {
+      "LIVE_VALIDATED_NO_AUTO_COMMIT": 16,
+      "PILOT_VALIDATED_NO_AUTO_COMMIT": 6,
+      "LIVE_VALIDATED_FIRST_PARTY_CONTENT_API_NO_AUTO_COMMIT": 1,
+      "LIVE_VALIDATED_ROBOTS_CONFORMANT_NO_AUTO_COMMIT": 1
+    },
+    "automated_monitoring_use_counts": {
+      "CLEARED": 19,
+      "CLEARED_BOUNDED_OFFICIAL_ICAL": 1,
+      "CLEARED_BOUNDED_OFFICIAL_RSS": 1,
+      "CLEARED_BOUNDED_RELEASE_CALENDAR": 1,
+      "CLEARED_BOUNDED_RELEASE_SCHEDULE": 1,
+      "ENDPOINT_REVIEW_REQUIRED": 1
+    },
+    "verification_mode_counts": {
+      "AUTOMATED_PILOT": 24
+    }
+  },
+  "diagnostic_prompts": {
+    "canonical_regions_without_configured_monitor_scope": [],
+    "canonical_categories_without_configured_monitor_scope": [
+      "CLIMATE_ENVIRONMENT",
+      "HEALTH_BIOSECURITY",
+      "PHYSICAL_CLIMATE_RISK"
+    ],
+    "note": "Absence from configured monitor scope is a qualitative review prompt, not evidence that a route should be added."
+  },
+  "by_region": [
+    {
+      "region": "Africa",
+      "canonical_unique_series_count": 11,
+      "configured_monitor_occurrence_count": 4,
+      "configured_monitor_unique_series_count": 2,
+      "configured_monitor_unique_institution_count": 2
+    },
+    {
+      "region": "Cross-regional / Global",
+      "canonical_unique_series_count": 54,
+      "configured_monitor_occurrence_count": 27,
+      "configured_monitor_unique_series_count": 5,
+      "configured_monitor_unique_institution_count": 4
+    },
+    {
+      "region": "East Asia",
+      "canonical_unique_series_count": 29,
+      "configured_monitor_occurrence_count": 61,
+      "configured_monitor_unique_series_count": 12,
+      "configured_monitor_unique_institution_count": 3
+    },
+    {
+      "region": "Europe",
+      "canonical_unique_series_count": 35,
+      "configured_monitor_occurrence_count": 40,
+      "configured_monitor_unique_series_count": 16,
+      "configured_monitor_unique_institution_count": 6
+    },
+    {
+      "region": "Latin America",
+      "canonical_unique_series_count": 11,
+      "configured_monitor_occurrence_count": 5,
+      "configured_monitor_unique_series_count": 2,
+      "configured_monitor_unique_institution_count": 2
+    },
+    {
+      "region": "North America",
+      "canonical_unique_series_count": 21,
+      "configured_monitor_occurrence_count": 22,
+      "configured_monitor_unique_series_count": 2,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "region": "Oceania / Pacific",
+      "canonical_unique_series_count": 25,
+      "configured_monitor_occurrence_count": 52,
+      "configured_monitor_unique_series_count": 6,
+      "configured_monitor_unique_institution_count": 2
+    },
+    {
+      "region": "South Asia",
+      "canonical_unique_series_count": 9,
+      "configured_monitor_occurrence_count": 2,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "region": "Southeast Asia",
+      "canonical_unique_series_count": 11,
+      "configured_monitor_occurrence_count": 2,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    }
+  ],
+  "by_category": [
+    {
+      "category": "AGRICULTURE_FOOD",
+      "canonical_unique_series_count": 9,
+      "configured_monitor_occurrence_count": 11,
+      "configured_monitor_unique_series_count": 4,
+      "configured_monitor_unique_institution_count": 3
+    },
+    {
+      "category": "CLIMATE_ENVIRONMENT",
+      "canonical_unique_series_count": 11,
+      "configured_monitor_occurrence_count": 0,
+      "configured_monitor_unique_series_count": 0,
+      "configured_monitor_unique_institution_count": 0
+    },
+    {
+      "category": "CORPORATE_FINANCIAL_MARKET_STRUCTURE",
+      "canonical_unique_series_count": 5,
+      "configured_monitor_occurrence_count": 1,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "ELECTIONS_GOVERNANCE",
+      "canonical_unique_series_count": 14,
+      "configured_monitor_occurrence_count": 6,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "ENERGY_COMMODITIES",
+      "canonical_unique_series_count": 9,
+      "configured_monitor_occurrence_count": 16,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "FINANCIAL_STABILITY_REGULATION",
+      "canonical_unique_series_count": 5,
+      "configured_monitor_occurrence_count": 2,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "FISCAL_SOVEREIGN_FINANCE",
+      "canonical_unique_series_count": 30,
+      "configured_monitor_occurrence_count": 11,
+      "configured_monitor_unique_series_count": 2,
+      "configured_monitor_unique_institution_count": 2
+    },
+    {
+      "category": "HEALTH_BIOSECURITY",
+      "canonical_unique_series_count": 5,
+      "configured_monitor_occurrence_count": 0,
+      "configured_monitor_unique_series_count": 0,
+      "configured_monitor_unique_institution_count": 0
+    },
+    {
+      "category": "INTERNATIONAL_INSTITUTIONS",
+      "canonical_unique_series_count": 22,
+      "configured_monitor_occurrence_count": 3,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "MACROECONOMIC_RELEASE",
+      "canonical_unique_series_count": 45,
+      "configured_monitor_occurrence_count": 86,
+      "configured_monitor_unique_series_count": 24,
+      "configured_monitor_unique_institution_count": 5
+    },
+    {
+      "category": "MONETARY_FINANCIAL_POLICY",
+      "canonical_unique_series_count": 34,
+      "configured_monitor_occurrence_count": 74,
+      "configured_monitor_unique_series_count": 10,
+      "configured_monitor_unique_institution_count": 6
+    },
+    {
+      "category": "PHYSICAL_CLIMATE_RISK",
+      "canonical_unique_series_count": 4,
+      "configured_monitor_occurrence_count": 0,
+      "configured_monitor_unique_series_count": 0,
+      "configured_monitor_unique_institution_count": 0
+    },
+    {
+      "category": "TECHNOLOGY_CRITICAL_INFRASTRUCTURE",
+      "canonical_unique_series_count": 5,
+      "configured_monitor_occurrence_count": 2,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    },
+    {
+      "category": "TRADE_SANCTIONS_INDUSTRIAL_POLICY",
+      "canonical_unique_series_count": 5,
+      "configured_monitor_occurrence_count": 3,
+      "configured_monitor_unique_series_count": 1,
+      "configured_monitor_unique_institution_count": 1
+    }
+  ],
+  "adapter_inventory": [
+    {
+      "adapter_id": "BSP_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-REGJ-006",
+      "source_institution": "Bangko Sentral ng Pilipinas",
+      "monitor_role": "OFFICIAL_BSP_MONETARY_POLICY_STANCE_PUBLICATION_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-REG-J-0008",
+        "WSO-REG-J-0009"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Southeast Asia"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-REGJ-PH-BSP-MB"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CBN_MPC_CALENDAR",
+      "source_id": "WSSRC-CB-014",
+      "source_institution": "Central Bank of Nigeria",
+      "monitor_role": "OFFICIAL_CBN_MPC_MEETING_WINDOW_SCHEDULE_SENTINEL",
+      "cadence": "DAILY_WHILE_FUTURE_TRACKED_OCCURRENCES_REMAIN",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-CBN-MPC-307",
+        "WSO-CBN-MPC-308"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Africa"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-CB-NG-CBN-MPC"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CBSL_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-REGJ-007",
+      "source_institution": "Central Bank of Sri Lanka",
+      "monitor_role": "OFFICIAL_CBSL_MONETARY_POLICY_REVIEW_PUBLICATION_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-REG-J-0006",
+        "WSO-REG-J-0007"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "South Asia"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-REGJ-LK-CBSL-MPB"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "CHINA_NBS_LATEST_RELEASES_RSS",
+      "source_id": "WSSRC-MAC-031",
+      "source_institution": "National Bureau of Statistics of China",
+      "monitor_role": "OFFICIAL_NBS_NATIVE_LATEST_RELEASES_RSS_PUBLICATION_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MAC-A-0069",
+        "WSO-CN-A-0014",
+        "WSO-MAC-A-0073",
+        "WSO-CN-A-0018",
+        "WSO-CN-A-0019",
+        "WSO-CN-A-0020",
+        "WSO-CN-A-0021",
+        "WSO-CN-A-0022",
+        "WSO-MAC-B-0049",
+        "WSO-MAC-A-0070",
+        "WSO-CN-A-0015",
+        "WSO-MAC-A-0074",
+        "WSO-CN-A-0023",
+        "WSO-CN-A-0024",
+        "WSO-CN-A-0025",
+        "WSO-CN-A-0026",
+        "WSO-CN-A-0027",
+        "WSO-MAC-B-0050",
+        "WSO-MAC-A-0071",
+        "WSO-CN-A-0016",
+        "WSO-MAC-A-0075",
+        "WSO-CN-A-0028",
+        "WSO-CN-A-0029",
+        "WSO-CN-A-0030",
+        "WSO-CN-A-0031",
+        "WSO-CN-A-0032",
+        "WSO-MAC-B-0051",
+        "WSO-MAC-A-0072",
+        "WSO-CN-A-0017",
+        "WSO-MAC-A-0076",
+        "WSO-CN-A-0033",
+        "WSO-CN-A-0034",
+        "WSO-CN-A-0035",
+        "WSO-CN-A-0036",
+        "WSO-CN-A-0037",
+        "WSO-MAC-B-0052"
+      ],
+      "scope": {
+        "occurrence_count": 36,
+        "unique_series_count": 9,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-CN-NBS-ENERGY",
+        "WSER-CN-NBS-FAI",
+        "WSER-CN-NBS-IP",
+        "WSER-CN-NBS-PPI",
+        "WSER-CN-NBS-REALESTATE",
+        "WSER-CN-NBS-RETAIL",
+        "WSER-MAC-CN-CPI",
+        "WSER-MAC-CN-NEP",
+        "WSER-MAC-CN-PMI"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "COLOMBIA_SUIN_DECREE_111_1996",
+      "source_id": "WSSRC-REG4-002",
+      "source_institution": "Colombia Open Data / Ministry of Justice and Law",
+      "monitor_role": "LEGAL_INSTRUMENT_PRESENCE_VERSION_SENTINEL",
+      "cadence": "DAILY_DURING_ACTIVE_BUDGET_PROCESS",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-REG-D-0001"
+      ],
+      "scope": {
+        "occurrence_count": 1,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Latin America"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-REG4-CO-BUDGET"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EIA_WPSR_SCHEDULE",
+      "source_id": "WSSRC-COM-003",
+      "source_institution": "U.S. Energy Information Administration",
+      "monitor_role": "PUBLICATION_SCHEDULE_RULE_AND_EXCEPTION_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-COM-A-0013",
+        "WSO-COM-A-0014",
+        "WSO-COM-A-0015",
+        "WSO-COM-A-0016",
+        "WSO-COM-A-0017",
+        "WSO-COM-A-0018",
+        "WSO-COM-A-0019",
+        "WSO-COM-A-0020",
+        "WSO-COM-A-0021",
+        "WSO-COM-A-0022",
+        "WSO-COM-A-0023",
+        "WSO-COM-A-0024",
+        "WSO-COM-A-0025",
+        "WSO-COM-A-0026",
+        "WSO-COM-A-0027",
+        "WSO-COM-A-0028"
+      ],
+      "scope": {
+        "occurrence_count": 16,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Cross-regional / Global"
+      ],
+      "categories": [
+        "ENERGY_COMMODITIES"
+      ],
+      "series_ids": [
+        "WSER-COM-EIA-WPSR"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EUROPEAN_COUNCIL_MEETINGS_RSS",
+      "source_id": "WSSRC-INT-035",
+      "source_institution": "European Council / Council of the EU",
+      "monitor_role": "OFFICIAL_EUROPEAN_COUNCIL_MEETINGS_RSS_DATE_CHANGE_SENTINEL",
+      "cadence": "daily",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-INT-B-0102",
+        "WSO-INT-B-0103",
+        "WSO-INT-B-0104"
+      ],
+      "scope": {
+        "occurrence_count": 3,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "INTERNATIONAL_INSTITUTIONS"
+      ],
+      "series_ids": [
+        "WSER-INT-EUCO"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EUROSTAT_RELEASE_CALENDAR_ICS",
+      "source_id": "WSSRC-MAC-005",
+      "source_institution": "Eurostat",
+      "monitor_role": "EXACT_RELEASE_TITLE_CIVIL_DATE_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MAC-A-0030",
+        "WSO-MAC-A-0031",
+        "WSO-MAC-A-0032",
+        "WSO-MAC-A-0033",
+        "WSO-MAC-A-0034",
+        "WSO-MAC-A-0035",
+        "WSO-MAC-A-0036",
+        "WSO-MAC-B-0053",
+        "WSO-MAC-B-0054",
+        "WSO-MAC-B-0055",
+        "WSO-MAC-B-0056",
+        "WSO-MAC-B-0057"
+      ],
+      "scope": {
+        "occurrence_count": 12,
+        "unique_series_count": 6,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-EA-GDP",
+        "WSER-MAC-EA-HICP-FLASH",
+        "WSER-MAC-EA-HICP-FULL",
+        "WSER-MAC-EA-RETAIL",
+        "WSER-MAC-EA-TRADE",
+        "WSER-MAC-EA-UNEMP"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CBAM_ANNUAL_DEADLINE_RULE",
+      "source_id": "WSSRC-TRD-006",
+      "source_institution": "European Commission — Taxation and Customs Union",
+      "monitor_role": "PAIRED_RECURRING_DEADLINE_RULE_PLUS_PARENT_ACT_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
+      "cadence": "MONTHLY; WEEKLY_INSIDE_120_DAYS_OF_2027_09_30",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-TRD-A-0008"
+      ],
+      "scope": {
+        "occurrence_count": 1,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-TRD-EU-CBAM"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CBAM_CERTIFICATE_SALE_RULE",
+      "source_id": "WSSRC-TRD-005",
+      "source_institution": "European Commission — Taxation and Customs Union",
+      "monitor_role": "IMMUTABLE_AMENDING_RULE_PLUS_PARENT_ACT_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
+      "cadence": "MONTHLY; WEEKLY_INSIDE_90_DAYS_OF_2027_02_01",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-TRD-A-0007"
+      ],
+      "scope": {
+        "occurrence_count": 1,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-TRD-EU-CBAM"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CBAM_VERIFICATION_RULE",
+      "source_id": "WSSRC-TRD-005",
+      "source_institution": "European Commission — Taxation and Customs Union",
+      "monitor_role": "IMMUTABLE_MILESTONE_RULE_PLUS_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
+      "cadence": "MONTHLY; WEEKLY_INSIDE_90_DAYS_OF_2027_01_01",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-TRD-A-0006"
+      ],
+      "scope": {
+        "occurrence_count": 1,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-TRD-EU-CBAM"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "EU_CELLAR_CRA_ARTICLE_71",
+      "source_id": "WSSRC-TECH-001",
+      "source_institution": "European Union / EUR-Lex",
+      "monitor_role": "IMMUTABLE_RULE_BASELINE_PLUS_CELLAR_RDF_LEGAL_TOPOLOGY_SENTINEL",
+      "cadence": "DAILY_AROUND_APPLICATION_BOUNDARIES_ELSE_MONTHLY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-TECH-A-0001",
+        "WSO-TECH-A-0007"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TECHNOLOGY_CRITICAL_INFRASTRUCTURE"
+      ],
+      "series_ids": [
+        "WSER-TECH-EU-CRA"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "FAO_RELEASE_CALENDAR",
+      "source_id": "WSSRC-COM-010",
+      "source_institution": "Food and Agriculture Organization of the United Nations",
+      "monitor_role": "OFFICIAL_FAO_FFPI_AMIS_RELEASE_DATE_CHANGE_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-COM-A-0042",
+        "WSO-COM-A-0043",
+        "WSO-COM-A-0044",
+        "WSO-COM-A-0045",
+        "WSO-COM-A-0046",
+        "WSO-COM-A-0047"
+      ],
+      "scope": {
+        "occurrence_count": 6,
+        "unique_series_count": 2,
+        "unique_institution_count": 2,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Cross-regional / Global"
+      ],
+      "categories": [
+        "AGRICULTURE_FOOD"
+      ],
+      "series_ids": [
+        "WSER-COM-AMIS",
+        "WSER-COM-FAO-FFPI"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_CALENDAR",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "FED_MONETARY_POLICY_RSS",
+      "source_id": "WSSRC-CB-015",
+      "source_institution": "Board of Governors of the Federal Reserve System",
+      "monitor_role": "OFFICIAL_FOMC_STATEMENT_AND_MINUTES_PUBLICATION_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-08f11832f0335c85",
+        "WSO-9eba0c2ef8365a9f",
+        "WSO-4e25032b0df35d00",
+        "WSO-7b898efc6e9f5329",
+        "WSO-723fbab6b29755d8",
+        "WSO-36cb750a65f053fd",
+        "WSO-e8d32490a7f85587",
+        "WSO-08fe7646168b556e",
+        "WSO-b217176c19ee5503",
+        "WSO-224df0d92ea05a98",
+        "WSO-dd3b44bfc1255815",
+        "WSO-9fd13c55f79f5c3e",
+        "WSO-d5079228484e529f",
+        "WSO-ea219f3d4bb25478",
+        "WSO-120dfe059f7a574e",
+        "WSO-32bf69f2d0b758a8",
+        "WSO-0f521f2656035f06",
+        "WSO-297c7daa100d5c84",
+        "WSO-c8f8e3177abb5863",
+        "WSO-52f58e46fa1451fe",
+        "WSO-02db9fca7dc952c2",
+        "WSO-d8fae34438965253"
+      ],
+      "scope": {
+        "occurrence_count": 22,
+        "unique_series_count": 2,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WS.CB.FED.FOMC_MINUTES",
+        "WS.CB.FED.FOMC_POLICY_DECISION"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "HMT_T1_CONTENT_API",
+      "source_id": "WSSRC-MKT-014",
+      "source_institution": "HM Treasury / GOV.UK",
+      "monitor_role": "CONDITIONAL_LEGISLATIVE_DEPENDENCY_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MKT-A-0016"
+      ],
+      "scope": {
+        "occurrence_count": 1,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "CORPORATE_FINANCIAL_MARKET_STRUCTURE"
+      ],
+      "series_ids": [
+        "WSER-MKT-UK-T1"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_FIRST_PARTY_CONTENT_API_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "INDEC_CPI_CALENDAR",
+      "source_id": "WSSRC-REG2-009",
+      "source_institution": "INDEC",
+      "monitor_role": "OFFICIAL_INDEC_CPI_INTERACTIVE_CALENDAR_SCHEDULE_AND_CLOCK_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-REG-B-0008",
+        "WSO-REG-B-0009",
+        "WSO-REG-B-0010",
+        "WSO-REG-B-0011"
+      ],
+      "scope": {
+        "occurrence_count": 4,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Latin America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-REG2-AR-CPI"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_CPI_RELEASE_SCHEDULE",
+      "source_id": "WSSRC-MAC-014",
+      "source_institution": "Statistics Bureau of Japan",
+      "monitor_role": "OFFICIAL_JAPAN_NATIONAL_CPI_RELEASE_DATE_DRIFT_SENTINEL",
+      "cadence": "WEEKLY; DAILY_INSIDE_7_DAYS_OF_CONFIGURED_RELEASE",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MAC-A-0050",
+        "WSO-MAC-A-0051",
+        "WSO-MAC-A-0052",
+        "WSO-MAC-A-0053",
+        "WSO-MAC-A-0054",
+        "WSO-MAC-A-0055",
+        "WSO-MAC-A-0056"
+      ],
+      "scope": {
+        "occurrence_count": 7,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-CPI"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED_BOUNDED_RELEASE_SCHEDULE",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_HHSPEND_STATISTICS_DASHBOARD_API",
+      "source_id": "WSSRC-MAC-030",
+      "source_institution": "Statistics Bureau of Japan / Ministry of Internal Affairs and Communications",
+      "monitor_role": "REFERENCE_PERIOD_DATA_AVAILABILITY_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MAC-B-0041",
+        "WSO-MAC-B-0042",
+        "WSO-MAC-B-0043",
+        "WSO-MAC-B-0044",
+        "WSO-MAC-B-0045",
+        "WSO-MAC-B-0046",
+        "WSO-MAC-B-0047",
+        "WSO-MAC-B-0048"
+      ],
+      "scope": {
+        "occurrence_count": 8,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-HHSPEND"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "JAPAN_MOF_JGB_RSS",
+      "source_id": "WSSRC-FIS-029",
+      "source_institution": "Japan Ministry of Finance",
+      "monitor_role": "OFFICIAL_JAPAN_MOF_JGB_PUBLICATION_AND_CHANGE_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-FIS-A-0015",
+        "WSO-FIS-A-0016",
+        "WSO-FIS-A-0017",
+        "WSO-FIS-A-0018",
+        "WSO-FIS-A-0019",
+        "WSO-FIS-A-0020",
+        "WSO-FIS-A-0021",
+        "WSO-FIS-A-0022",
+        "WSO-FIS-A-0023",
+        "WSO-FIS-A-0024"
+      ],
+      "scope": {
+        "occurrence_count": 10,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-FIS-JP-JGB"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "NZ_ELECTION_TIMETABLE_CHANGE_RSS",
+      "source_id": "WSSRC-EL-NZ-002",
+      "source_institution": "Electoral Commission New Zealand",
+      "monitor_role": "OFFICIAL_ELECTIONS_NZ_RSS_TIMETABLE_PAGE_UPDATE_SENTINEL",
+      "cadence": "EVERY_6_HOURS_DURING_ELECTION_PERIOD",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-EL-A-0005",
+        "WSO-EL-A-0006",
+        "WSO-EL-A-0007",
+        "WSO-EL-A-0008",
+        "WSO-EL-A-0009",
+        "WSO-EL-A-0010"
+      ],
+      "scope": {
+        "occurrence_count": 6,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "ELECTIONS_GOVERNANCE"
+      ],
+      "series_ids": [
+        "WSER-EL-NZ-GEN"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "ONS_RELEASE_CALENDAR_RSS",
+      "source_id": "WSSRC-MAC-006",
+      "source_institution": "Office for National Statistics",
+      "monitor_role": "UPCOMING_RELEASE_DATETIME_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-MAC-A-0037",
+        "WSO-MAC-A-0038",
+        "WSO-MAC-A-0039",
+        "WSO-MAC-A-0040",
+        "WSO-MAC-A-0041",
+        "WSO-MAC-A-0042",
+        "WSO-MAC-A-0043",
+        "WSO-MAC-A-0044",
+        "WSO-MAC-A-0045",
+        "WSO-MAC-A-0046",
+        "WSO-MAC-A-0047",
+        "WSO-MAC-A-0048",
+        "WSO-MAC-A-0049",
+        "WSO-MAC-B-0035",
+        "WSO-MAC-B-0036",
+        "WSO-MAC-B-0037",
+        "WSO-MAC-B-0038",
+        "WSO-MAC-B-0039",
+        "WSO-MAC-B-0040"
+      ],
+      "scope": {
+        "occurrence_count": 19,
+        "unique_series_count": 6,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-UK-CPI",
+        "WSER-MAC-UK-GDP",
+        "WSER-MAC-UK-IP",
+        "WSER-MAC-UK-LAB",
+        "WSER-MAC-UK-MGDP",
+        "WSER-MAC-UK-TRADE"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "RBA_FSR_RSS",
+      "source_id": "WSSRC-FIN-001",
+      "source_institution": "Reserve Bank of Australia",
+      "monitor_role": "PUBLICATION_COMPLETION_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-FIN-B-0001",
+        "WSO-FIN-B-0004"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "FINANCIAL_STABILITY_REGULATION"
+      ],
+      "series_ids": [
+        "WSER-FIN-AU-RBA-FSR"
+      ],
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "RBA_MPB_CALENDAR",
+      "source_id": "WSSRC-CB-002",
+      "source_institution": "Reserve Bank of Australia",
+      "monitor_role": "RBA_MPB_AUTHORITATIVE_SCHEDULE_CHANGE_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-dc0f874659ce5c3b",
+        "WSO-d2a7c4e4416b505b",
+        "WSO-90410e15e0eb58f9",
+        "WSO-8d62481833075169",
+        "WSO-d5572390cbdc5417",
+        "WSO-7177a9874ef955d4",
+        "WSO-526a30d56bd953b5",
+        "WSO-d9dc751b12bc5e36",
+        "WSO-28dcb6e4fc7753c0",
+        "WSO-c40afa0e4c6d520d",
+        "WSO-f00f628fd0405f37",
+        "WSO-f124183ede6a52dc",
+        "WSO-35db2fe91f5152c1",
+        "WSO-d3dc319ae3d65f06",
+        "WSO-1936855fa18e55e8",
+        "WSO-f23f920db2ad57c8",
+        "WSO-7273e5c7fb085626",
+        "WSO-ce3cf9121dec5594",
+        "WSO-84d3f1c9889a5da1",
+        "WSO-2ab726f35230524f",
+        "WSO-00bc4d4600c15b14",
+        "WSO-a396f211c5535207",
+        "WSO-5f0897d76d6e50cd",
+        "WSO-723839c3553a5a08",
+        "WSO-bc7d4eaaf59c523d",
+        "WSO-7fdd5247fb2256cf",
+        "WSO-7601ce4da3e05100",
+        "WSO-a9615ec64e235120",
+        "WSO-b214d39ef23f5622",
+        "WSO-5ea47c72496450bc",
+        "WSO-8d2308fe45bb5c1a",
+        "WSO-a7c66c42517f5649",
+        "WSO-16b7fd5a2d22557b",
+        "WSO-302b59dfbeab5cfc",
+        "WSO-3c4f8cde41d552fa",
+        "WSO-e21cbbc6dfd45213",
+        "WSO-87cc09b3ea3450e5",
+        "WSO-7c3dc3fae3765940",
+        "WSO-82ffb892ae4d54b7",
+        "WSO-0f044fd899005da9",
+        "WSO-e48e65691f0e5954",
+        "WSO-cc69f7c69b2b54fa",
+        "WSO-f98f53d8ae355227",
+        "WSO-b52bb5efa4d95686"
+      ],
+      "scope": {
+        "occurrence_count": 44,
+        "unique_series_count": 4,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WS.CB.RBA.MONETARY_POLICY_DECISION",
+        "WS.CB.RBA.MPB_MEETING_WINDOW",
+        "WS.CB.RBA.MPB_MINUTES",
+        "WS.CB.RBA.MPB_PRESS_CONFERENCE"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_ROBOTS_CONFORMANT_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "SARB_MPC_STATEMENTS_RSS",
+      "source_id": "WSSRC-REG-013",
+      "source_institution": "South African Reserve Bank",
+      "monitor_role": "OFFICIAL_SARB_MPC_STATEMENT_PUBLICATION_RSS_SENTINEL",
+      "cadence": "DAILY",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-REG-A-0009",
+        "WSO-REG-A-0010"
+      ],
+      "scope": {
+        "occurrence_count": 2,
+        "unique_series_count": 1,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Africa"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-REG-ZA-SARB"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED_BOUNDED_OFFICIAL_RSS",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "USDA_NASS_ASB_ICAL",
+      "source_id": "WSSRC-COM-005",
+      "source_institution": "USDA NASS",
+      "monitor_role": "OFFICIAL_NASS_ASB_ICAL_DATETIME_CHANGE_SENTINEL",
+      "cadence": "daily",
+      "explicit_canonical_occurrence_ids": [
+        "WSO-COM-A-0030",
+        "WSO-COM-A-0032",
+        "WSO-COM-A-0034",
+        "WSO-COM-A-0036",
+        "WSO-COM-A-0037"
+      ],
+      "scope": {
+        "occurrence_count": 5,
+        "unique_series_count": 2,
+        "unique_institution_count": 1,
+        "unique_region_count": 1,
+        "unique_category_count": 1
+      },
+      "regions": [
+        "Cross-regional / Global"
+      ],
+      "categories": [
+        "AGRICULTURE_FOOD"
+      ],
+      "series_ids": [
+        "WSER-COM-USDA-CROP",
+        "WSER-COM-USDA-GRAIN"
+      ],
+      "monitoring_readiness_status": "LIVE_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED_BOUNDED_OFFICIAL_ICAL",
+      "verification_mode": "AUTOMATED_PILOT",
+      "automatic_commit_allowed": false
+    }
+  ],
+  "candidate_sources_with_canonical_dependencies": [
+    {
+      "source_id": "WSSRC-CB-008",
+      "institution": "Bank of Canada",
+      "jurisdiction": "Canada",
+      "domain": "monetary_policy",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 11,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WS.CB.BOC.POLICY_RATE_ANNOUNCEMENT"
+      ]
+    },
+    {
+      "source_id": "WSSRC-FIS-008",
+      "institution": "Bank of Canada / Department of Finance Canada",
+      "jurisdiction": "Canada",
+      "domain": "fiscal_sovereign",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 5,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-FIS-CA-BOND"
+      ]
+    },
+    {
+      "source_id": "WSSRC-TECH-002",
+      "institution": "European Union / EUR-Lex",
+      "jurisdiction": "European Union",
+      "domain": "technology_critical_infrastructure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 1,
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TECHNOLOGY_CRITICAL_INFRASTRUCTURE"
+      ],
+      "series_ids": [
+        "WSER-TECH-EU-CHIPS"
+      ]
+    },
+    {
+      "source_id": "WSSRC-TECH-003",
+      "institution": "European Commission / EUR-Lex",
+      "jurisdiction": "European Union",
+      "domain": "technology_critical_infrastructure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 2,
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TECHNOLOGY_CRITICAL_INFRASTRUCTURE"
+      ],
+      "series_ids": [
+        "WSER-TECH-EU-AIACT"
+      ]
+    },
+    {
+      "source_id": "WSSRC-CB-013",
+      "institution": "Reserve Bank of Australia",
+      "jurisdiction": "Australia",
+      "domain": "monetary_policy",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 11,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MONETARY_FINANCIAL_POLICY"
+      ],
+      "series_ids": [
+        "WS.CB.RBA.MPB_MINUTES"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-011",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 6,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-CPI"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-012",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 6,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-LF"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-013",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 5,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-GDP"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-021",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 6,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-MHSI"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-023",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_RIGHTS_PENDING",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 6,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-TRADE"
+      ]
+    },
+    {
+      "source_id": "WSSRC-FIS-004",
+      "institution": "Australian Office of Financial Management",
+      "jurisdiction": "Australia",
+      "domain": "fiscal_sovereign",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 3,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-FIS-AU-CGT"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-009",
+      "institution": "U.S. Bureau of Labor Statistics",
+      "jurisdiction": "United States",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-US-CPI"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-010",
+      "institution": "U.S. Bureau of Labor Statistics",
+      "jurisdiction": "United States",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-US-EMP"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-018",
+      "institution": "U.S. Bureau of Economic Analysis",
+      "jurisdiction": "United States",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-US-PIO"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-019",
+      "institution": "Federal Reserve Board",
+      "jurisdiction": "United States",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-US-IP"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-020",
+      "institution": "U.S. Census Bureau",
+      "jurisdiction": "United States",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "North America"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-US-RETAIL"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-022",
+      "institution": "Australian Bureau of Statistics",
+      "jurisdiction": "Australia",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_RESEARCH_VALIDATED_AUTOMATION_ROUTE_CANDIDATE",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 4,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-AU-WPI"
+      ]
+    },
+    {
+      "source_id": "WSSRC-COM-003",
+      "institution": "U.S. Energy Information Administration",
+      "jurisdiction": "United States/Global",
+      "domain": "energy_commodities",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 16,
+      "regions": [
+        "Cross-regional / Global"
+      ],
+      "categories": [
+        "ENERGY_COMMODITIES"
+      ],
+      "series_ids": [
+        "WSER-COM-EIA-WPSR"
+      ]
+    },
+    {
+      "source_id": "WSSRC-FIN-001",
+      "institution": "Reserve Bank of Australia",
+      "jurisdiction": "Australia",
+      "domain": "financial_stability_regulation",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 2,
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "categories": [
+        "FINANCIAL_STABILITY_REGULATION"
+      ],
+      "series_ids": [
+        "WSER-FIN-AU-RBA-FSR"
+      ]
+    },
+    {
+      "source_id": "WSSRC-FIS-007",
+      "institution": "Japan Ministry of Finance",
+      "jurisdiction": "Japan",
+      "domain": "fiscal_sovereign",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 10,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-FIS-JP-JGB"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-015",
+      "institution": "Statistics Bureau of Japan",
+      "jurisdiction": "Japan",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 7,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-LF"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-016",
+      "institution": "Economic and Social Research Institute, Cabinet Office",
+      "jurisdiction": "Japan",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 5,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-GDP"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-024",
+      "institution": "Statistics Bureau of Japan",
+      "jurisdiction": "Japan",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 8,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-HHSPEND"
+      ]
+    },
+    {
+      "source_id": "WSSRC-MAC-025",
+      "institution": "Japan Customs / Ministry of Finance",
+      "jurisdiction": "Japan",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 8,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "MACROECONOMIC_RELEASE"
+      ],
+      "series_ids": [
+        "WSER-MAC-JP-TRADE-PRELIM"
+      ]
+    },
+    {
+      "source_id": "WSSRC-REG-002",
+      "institution": "Korea Law",
+      "jurisdiction": "South Korea",
+      "domain": "fiscal_sovereign_finance",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 1,
+      "regions": [
+        "East Asia"
+      ],
+      "categories": [
+        "FISCAL_SOVEREIGN_FINANCE"
+      ],
+      "series_ids": [
+        "WSER-REG-KR-BUDGET"
+      ]
+    },
+    {
+      "source_id": "WSSRC-TECH-001",
+      "institution": "European Union / EUR-Lex",
+      "jurisdiction": "European Union",
+      "domain": "technology_critical_infrastructure",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 2,
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TECHNOLOGY_CRITICAL_INFRASTRUCTURE"
+      ],
+      "series_ids": [
+        "WSER-TECH-EU-CRA"
+      ]
+    },
+    {
+      "source_id": "WSSRC-TRD-005",
+      "institution": "European Commission — Taxation and Customs Union",
+      "jurisdiction": "European Union",
+      "domain": "trade_sanctions_industrial_policy",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 2,
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-TRD-EU-CBAM"
+      ]
+    },
+    {
+      "source_id": "WSSRC-TRD-006",
+      "institution": "European Commission — Taxation and Customs Union",
+      "jurisdiction": "European Union",
+      "domain": "trade_sanctions_industrial_policy",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 1,
+      "regions": [
+        "Europe"
+      ],
+      "categories": [
+        "TRADE_SANCTIONS_INDUSTRIAL_POLICY"
+      ],
+      "series_ids": [
+        "WSER-TRD-EU-CBAM"
+      ]
+    }
+  ],
+  "candidate_sources_without_canonical_dependencies": [
+    {
+      "source_id": "WSSRC-CORP-001",
+      "institution": "U.S. Securities and Exchange Commission",
+      "jurisdiction": "United States",
+      "domain": "corporate_market_structure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-CORP-005",
+      "institution": "Financial Conduct Authority",
+      "jurisdiction": "United Kingdom",
+      "domain": "corporate_market_structure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-CORP-007",
+      "institution": "European Union / EUR-Lex",
+      "jurisdiction": "European Union",
+      "domain": "corporate_market_structure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-CORP-012",
+      "institution": "U.S. Securities and Exchange Commission",
+      "jurisdiction": "United States",
+      "domain": "corporate_market_structure",
+      "monitoring_readiness_status": "ENDPOINT_TEST_PRIORITY",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-FIS-024",
+      "institution": "Deutsche Bundesbank",
+      "jurisdiction": "Germany",
+      "domain": "fiscal_sovereign_finance",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-FIS-028",
+      "institution": "Japan Ministry of Finance",
+      "jurisdiction": "Japan",
+      "domain": "fiscal_sovereign",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-MAC-029",
+      "institution": "Statistics Bureau of Japan",
+      "jurisdiction": "Japan",
+      "domain": "macroeconomic_releases",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+      "verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-REG-003",
+      "institution": "Korea Law",
+      "jurisdiction": "South Korea",
+      "domain": "fiscal_sovereign_finance",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": null,
+      "verification_mode": null,
+      "already_configured_monitor_source": false,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    },
+    {
+      "source_id": "WSSRC-REG4-002",
+      "institution": "Colombia Open Data / Ministry of Justice and Law",
+      "jurisdiction": "Colombia",
+      "domain": "fiscal_sovereign_finance",
+      "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+      "automated_monitoring_use": "CLEARED",
+      "verification_mode": "AUTOMATED_PILOT",
+      "already_configured_monitor_source": true,
+      "canonical_occurrence_count": 0,
+      "regions": [],
+      "categories": [],
+      "series_ids": [],
+      "candidate_class": "UNBOUND_SOURCE_REGISTRY_HOLDING_NOT_MONITOR_COVERAGE"
+    }
+  ],
+  "cf_context": {
+    "tranche": "CF",
+    "base_main_sha": "9552c1db0d212af33524b80b28d91ef7a897e2d8",
+    "opec_quarantine": true,
+    "quarantined_pr": 113,
+    "quarantined_branch": "feature/post-cd-pressure-audit-ce",
+    "candidate_selection_exclusion": [
+      "OPEC",
+      "WSO-COM-A-0001",
+      "WSO-COM-A-0002"
+    ],
+    "selection_rule": "OPEC quarantine is non-blocking and excluded from CF candidate selection; missing coverage is diagnostic, not a quota."
+  }
+}
