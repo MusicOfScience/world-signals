@@ -6,13 +6,19 @@ This record prevents the parked OPEC provenance transaction from silently becomi
 
 ## Quarantined lineage
 
-- Closed PR: `#113` — `QUARANTINED — CE: satisfy OPEC primary outcome provenance`
+- Closed PR: `#113` — `QUARANTINED — CE OPEC primary outcome provenance`
 - Preserved branch: `feature/post-cd-pressure-audit-ce`
 - Branch head at quarantine: `3c36554fa2fae52e35db0ac6b337e31f19b9685e`
 - Base `main` at quarantine: `9552c1db0d212af33524b80b28d91ef7a897e2d8`
 - First guarded materialisation failure: run `34337483630`, job `102420174247`
 
-The branch is intentionally retained as an evidence package. It is not an integration branch and must not be mechanically rebased, reopened, copied forward wholesale, or used as the base for unrelated work.
+The branch is intentionally retained as an evidence package. It is not an integration branch and must not be mechanically rebased, reopened, copied forward wholesale, cherry-picked, or used as the base for unrelated work.
+
+## Permanent integration guard
+
+`tests/test_opec_quarantine_cf.py` is the executable companion to this record. It must remain in ordinary CI while the quarantine is active. The test fails if known CE transaction machinery is reintroduced on a live branch without a deliberate, separately reviewed change to the quarantine guard itself.
+
+Any future PR that alters or removes this record or its regression guard must explain why OPEC is being deliberately reactivated and satisfy the protocol below. Silence, branch reuse, or incidental conflict resolution is not sufficient authority.
 
 ## What is quarantined
 
