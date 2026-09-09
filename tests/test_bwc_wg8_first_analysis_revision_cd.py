@@ -4,7 +4,6 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
-import subprocess
 import sys
 import unittest
 
@@ -25,12 +24,38 @@ from world_signals.analysis_revision_projection import (
 from world_signals.live_analysis_bridge import production_live_input_count
 
 
+FROZEN_PARENT_PAYLOAD_PATH = (
+    ROOT / "data/analysis/NONMARKET_INSTITUTIONAL_ANALYSIS_W_PAYLOAD_v0.1.json"
+)
+
+# Exact Git blob identities of every CD protected upstream file at the
+# post-CC base c186835d9d6b36620177badfff604f309ceb35d4.  These make the
+# immutability proof independent of checkout depth: pull_request CI checks out
+# a depth-1 synthetic merge commit, so the historical base object itself is not
+# necessarily present even though its file bytes are.
+BASE_PROTECTED_GIT_BLOBS = {
+    "data/canonical/registry.json": "09ddfdfcf19a49e738cc0e203c1e945dc960f0cf",
+    "data/sources/registry.json": "2f4a37f2560da10624e9622834b83fc0984041ce",
+    "data/monitor/expectations.json": "7ab105477537f0902cd8200bc2072d961706e73a",
+    "data/changes/ledger.json": "5f3140b6e729072b701ddf993ea60f914f509482",
+    "data/live_intelligence/schema.json": "f4975b387747bc670ca3441e95daae86442536ef",
+    "data/live_intelligence/observations.json": "72a12a35876923460941a7c393aed242ce94dd8c",
+    "data/live_intelligence/evidence_registry.json": "d366fb4959647d79502064fb5d9c9991db5a8773",
+}
+
+
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def stable_hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def git_blob_hash(path: Path) -> str:
+    data = path.read_bytes()
+    header = f"blob {len(data)}\0".encode("ascii")
+    return hashlib.sha1(header + data).hexdigest()
 
 
 class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
@@ -86,16 +111,12 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         self.assertFalse(policy["automatic_latest_analysis_selection_allowed"])
         self.assertFalse(policy["public_revision_head_collapse_allowed"])
 
-    def test_parent_snapshot_is_exactly_preserved_from_post_cc_base(self):
-        base = self.plan["exact_base_main_sha"]
-        raw = subprocess.check_output(
-            ["git", "show", f"{base}:data/analysis/event_reviews.json"]
+    def test_parent_snapshot_is_exactly_preserved_from_frozen_source_artifact(self):
+        frozen = load(FROZEN_PARENT_PAYLOAD_PATH)
+        frozen_parent = next(
+            r for r in frozen["reviews"] if r["analysis_id"] == apply_cd.PARENT_ID
         )
-        old = json.loads(raw)
-        old_parent = next(
-            r for r in old["reviews"] if r["analysis_id"] == apply_cd.PARENT_ID
-        )
-        self.assertEqual(self.parent, old_parent)
+        self.assertEqual(self.parent, frozen_parent)
         self.assertTrue(all(field not in self.parent for field in REVISION_FIELDS))
 
     def test_child_is_new_snapshot_of_same_canonical_occurrence(self):
@@ -213,13 +234,11 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
                 current_schema["version"],
                 self.plan["target_state"]["analysis_schema_version"],
             )
-            base = self.plan["exact_base_main_sha"]
+            self.assertEqual(set(self.plan["protected_paths"]), set(BASE_PROTECTED_GIT_BLOBS))
             for path in self.plan["protected_paths"]:
-                base_bytes = subprocess.check_output(["git", "show", f"{base}:{path}"])
-                current_bytes = (ROOT / path).read_bytes()
                 self.assertEqual(
-                    hashlib.sha256(current_bytes).hexdigest(),
-                    hashlib.sha256(base_bytes).hexdigest(),
+                    git_blob_hash(ROOT / path),
+                    BASE_PROTECTED_GIT_BLOBS[path],
                     path,
                 )
         self.assertEqual(len(self.live_observations["observations"]), 6)
