@@ -1,0 +1,143 @@
+name: BY NZ election production-shaped live preflight
+
+on:
+  push:
+    branches:
+      - feature/post-bx-pressure-audit-by
+    paths:
+      - .github/workflows/by-nz-election-live-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and materialise BY only in runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=a3bca03f36eb5af9036017aad926f75f6762267f
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          sha256sum data/canonical/registry.json | awk '{print $1}' > /tmp/by-canonical-before.sha
+          WORLD_SIGNALS_APPLY_MONITOR_BY=1 python scripts/apply_nz_election_rss_monitor_by.py --apply
+      - name: Execute exactly robots then crawl-delay then advertised RSS and compare
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib,json,time
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,str(Path.cwd()/'src'))
+          from world_signals.adapters.nz_election_rss import (
+              NZ_ELECTION_TIMETABLE_URL,
+              fetch_nz_election_robots_policy,
+              fetch_nz_election_rss,
+          )
+          from world_signals.nz_election_monitor import nz_election_timetable_change_review_candidates
+
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          expectations=json.loads(Path('data/monitor/expectations.json').read_text())
+          routes=[r for r in expectations['adapters'] if r.get('adapter_id')=='NZ_ELECTION_TIMETABLE_CHANGE_RSS']
+          assert len(routes)==1
+          config=routes[0]
+
+          allowed,delay,robots_snap=fetch_nz_election_robots_policy()
+          assert allowed is True
+          assert delay >= 2
+          time.sleep(delay)
+          items,rss_snap=fetch_nz_election_rss()
+          candidates,observations=nz_election_timetable_change_review_candidates(
+              canonical['records'],items,config
+          )
+          target=[item for item in items if item.guid==NZ_ELECTION_TIMETABLE_URL]
+          assert len(target) in (0,1)
+          assert len(candidates)==len(target),(len(candidates),len(target))
+          if candidates:
+              c=candidates[0]
+              assert c['candidate_type']=='NZ_ELECTION_TIMETABLE_PAGE_UPDATED_REVIEW'
+              assert c['occurrence_ids']==[f'WSO-EL-A-{n:04d}' for n in range(5,11)]
+              assert c['bundle_review_required'] is True
+              assert c['proposed_canonical_date_changes'] is None
+              assert c['event_state_inference']=='NONE'
+              assert c['automatic_timetable_html_fetch_allowed'] is False
+              assert c['automatic_commit_allowed'] is False
+          else:
+              healthy=[o for o in observations if o['type']=='NZ_ELECTION_TIMETABLE_SENTINEL_HEALTHY_ROLLING_WINDOW_OBSERVATION']
+              assert len(healthy)==1
+              assert healthy[0]['absence_is_not_evidence_page_unchanged'] is True
+              assert healthy[0]['event_state_inference']=='NONE'
+
+          result={
+              'tranche':'BY',
+              'reference_date':'2026-09-09',
+              'base_sha':'a3bca03f36eb5af9036017aad926f75f6762267f',
+              'request_count':2,
+              'robots_request_count':1,
+              'rss_request_count':1,
+              'timetable_html_request_count':0,
+              'item_followup_request_count':0,
+              'results_data_request_count':0,
+              'search_route_discovery_request_count':0,
+              'robots_snapshot':robots_snap.as_dict(),
+              'rss_snapshot':rss_snap.as_dict(),
+              'crawl_delay_seconds':delay,
+              'rolling_feed_item_count':len(items),
+              'target_timetable_page_present':bool(target),
+              'target_timetable_page_pubdate':None if not target else target[0].pub_date_raw,
+              'review_candidate_count':len(candidates),
+              'review_candidate_types':[c['candidate_type'] for c in candidates],
+              'observation_types':[o['type'] for o in observations],
+              'rolling_feed_completeness':'FINITE_ROLLING_WINDOW_NOT_EXHAUSTIVE_CHANGE_LOG',
+              'absence_has_event_state_semantics':False,
+              'rss_pubdate_is_event_time':False,
+              'automatic_timetable_html_fetch_allowed':False,
+              'automatic_item_link_fetch_allowed':False,
+              'automatic_canonical_commit':False,
+              'google_calendar_write':False,
+          }
+          Path('/tmp/by-nz-election-live.json').write_text(json.dumps(result,indent=2,ensure_ascii=False,sort_keys=True)+'\n')
+          print(Path('/tmp/by-nz-election-live.json').read_text())
+          PY
+          test "$(sha256sum data/canonical/registry.json | awk '{print $1}')" = "$(cat /tmp/by-canonical-before.sha)"
+      - name: Re-run full repository gate after live parse
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q src scripts
+          for f in web/app.js web/horizon.js web/native-calendar.js web/history.js web/operations.js web/biosecurity.js web/analysis.js; do node --check "$f"; done
+          python scripts/build_site.py
+      - name: Restore runner and prove byte-clean
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site __pycache__ scripts/__pycache__ src/world_signals/__pycache__ src/world_signals/adapters/__pycache__ tests/__pycache__
+          git clean -fdx artifacts review_candidates || true
+          git checkout -- data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          test -z "$(git status --porcelain)"
+      - name: Upload live evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: by-nz-election-live-preflight
+          path: /tmp/by-nz-election-live.json
+          if-no-files-found: error
+          retention-days: 1
