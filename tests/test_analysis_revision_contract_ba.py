@@ -40,6 +40,10 @@ def later_than(raw: str, seconds: int = 1) -> str:
     return (parsed + timedelta(seconds=seconds)).isoformat().replace("+00:00", "Z")
 
 
+def version_tuple(raw: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in raw.split("."))
+
+
 class AnalysisRevisionContractBATests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -53,6 +57,27 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
             row["analysis_id"]: row for row in cls.reviews["reviews"]
         }
         cls.parent = cls.review_by_id["WSAN-JP-FIES-202607-001"]
+
+    def ba_foundation_reviews(self):
+        """Return only the 21 immutable snapshots BA governed.
+
+        Later pressure-audited descendants may append revision rows. BA's tests
+        must freeze its historical foundation without pretending BA is the
+        repository's terminal state.
+        """
+        count = self.plan["target_state"]["analysis_review_count"]
+        dataset = deepcopy(self.reviews)
+        dataset["reviews"] = deepcopy(self.reviews["reviews"][:count])
+        return dataset
+
+    def foundation_schema(self):
+        schema = deepcopy(self.target["analysis_schema"])
+        policy = schema["analysis_revision_policy"]
+        policy["mode"] = "FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS"
+        policy["production_analysis_revisions_allowed"] = False
+        policy.pop("maximum_production_analysis_revisions", None)
+        policy.pop("maximum_children_per_revision_parent", None)
+        return schema
 
     def controlled_schema(self, maximum: int = 1):
         schema = deepcopy(self.target["analysis_schema"])
@@ -77,7 +102,11 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
             self.plan["exact_base_main_sha"],
             "802ca5b94b6e80a055ac363f48a6c8392f038048",
         )
-        self.assertEqual(self.target["analysis_schema"]["version"], "0.7")
+        self.assertEqual(self.plan["target_state"]["analysis_schema_version"], "0.7")
+        self.assertGreaterEqual(
+            version_tuple(self.target["analysis_schema"]["version"]), (0, 7)
+        )
+        self.assertEqual(self.plan["target_state"]["production_analysis_revision_count"], 0)
         self.assertEqual(self.plan["target_state"]["analysis_review_count"], 21)
         self.assertEqual(self.plan["target_state"]["analysis_evidence_count"], 95)
         self.assertGreaterEqual(len(self.reviews["reviews"]), 21)
@@ -108,26 +137,27 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         )
         self.assertTrue(revision.ok, revision.errors)
 
-    def test_existing_21_snapshots_are_not_rewritten_as_revisions(self):
-        for review in self.reviews["reviews"]:
+    def test_original_21_snapshots_are_not_rewritten_as_revisions(self):
+        foundation = self.ba_foundation_reviews()
+        self.assertEqual(len(foundation["reviews"]), 21)
+        for review in foundation["reviews"]:
             self.assertTrue(all(field not in review for field in REVISION_FIELDS))
         self.assertEqual(
-            set(analysis_revision_heads(self.reviews)),
-            {row["analysis_id"] for row in self.reviews["reviews"]},
+            set(analysis_revision_heads(foundation)),
+            {row["analysis_id"] for row in foundation["reviews"]},
         )
+        self.assertEqual(production_analysis_revision_count(foundation), 0)
 
     def test_foundation_gate_rejects_any_production_revision(self):
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         reviews["reviews"].append(self.child_of(self.parent))
-        report = validate_analysis_revisions(
-            self.target["analysis_schema"], reviews
-        )
+        report = validate_analysis_revisions(self.foundation_schema(), reviews)
         self.assertFalse(report.ok)
         self.assertTrue(any("production revision gate is closed" in e for e in report.errors))
 
     def test_hypothetical_first_controlled_revision_is_new_snapshot_not_parent_mutation(self):
         schema = self.controlled_schema()
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         parent_before = deepcopy(self.parent)
         child = self.child_of(parent_before)
         reviews["reviews"].append(child)
@@ -140,7 +170,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_revision_metadata_without_parent_fails_closed_even_when_malformed(self):
         schema = self.controlled_schema(maximum=2)
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         row = deepcopy(self.parent)
         row["analysis_id"] = "WSAN-TEST-MALFORMED-001"
         row["analysis_as_of_utc"] = later_than(self.parent["analysis_as_of_utc"])
@@ -153,7 +183,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_unknown_parent_and_self_parent_fail_closed(self):
         schema = self.controlled_schema(maximum=2)
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         unknown = self.child_of(self.parent, "WSAN-TEST-UNKNOWN-001")
         unknown["revision_of_analysis_id"] = "WSAN-NOT-REAL"
         self_parent = self.child_of(self.parent, "WSAN-TEST-SELF-001")
@@ -166,10 +196,10 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_revision_cannot_jump_to_different_canonical_occurrence(self):
         schema = self.controlled_schema()
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         child = self.child_of(self.parent)
         other = next(
-            row for row in self.reviews["reviews"]
+            row for row in reviews["reviews"]
             if row["canonical_occurrence_id"] != self.parent["canonical_occurrence_id"]
         )
         child["canonical_occurrence_id"] = other["canonical_occurrence_id"]
@@ -180,7 +210,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_revision_as_of_must_strictly_advance(self):
         schema = self.controlled_schema()
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         child = self.child_of(self.parent)
         child["analysis_as_of_utc"] = self.parent["analysis_as_of_utc"]
         reviews["reviews"].append(child)
@@ -190,7 +220,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_first_controlled_mode_rejects_branching(self):
         schema = self.controlled_schema(maximum=2)
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         first = self.child_of(self.parent, "WSAN-TEST-BRANCH-A")
         second = self.child_of(self.parent, "WSAN-TEST-BRANCH-B")
         second["analysis_as_of_utc"] = later_than(self.parent["analysis_as_of_utc"], 2)
@@ -201,7 +231,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_revision_cycles_fail_closed(self):
         schema = self.controlled_schema(maximum=2)
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         a = self.child_of(self.parent, "WSAN-TEST-CYCLE-A")
         b = self.child_of(self.parent, "WSAN-TEST-CYCLE-B")
         a["revision_of_analysis_id"] = b["analysis_id"]
@@ -215,7 +245,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
 
     def test_new_live_evidence_revision_requires_novel_explicit_observation(self):
         schema = self.controlled_schema()
-        reviews = deepcopy(self.reviews)
+        reviews = self.ba_foundation_reviews()
         child = self.child_of(self.parent)
         child["analysis_revision_kind"] = "NEW_LIVE_EVIDENCE"
         child["live_inputs"] = deepcopy(self.parent.get("live_inputs") or [])

@@ -360,7 +360,9 @@ class JapanHouseholdSpendingMonitorBLTests(unittest.TestCase):
         live_data = json.loads((ROOT / "data/live_intelligence/observations.json").read_text())
         analysis = json.loads((ROOT / "data/analysis/event_reviews.json").read_text())
         self.assertEqual((live_data["version"], len(live_data["observations"])), ("0.6", 6))
-        self.assertEqual((analysis["version"], len(analysis["reviews"])), ("0.17", 21))
+        analysis_version = tuple(int(part) for part in analysis["version"].split("."))
+        self.assertGreaterEqual(analysis_version, (0, 17))
+        self.assertGreaterEqual(len(analysis["reviews"]), 21)
 
 
 if __name__ == "__main__":
