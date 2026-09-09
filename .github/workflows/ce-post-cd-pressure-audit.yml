@@ -20,113 +20,106 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Read-only architecture pressure snapshot
+      - name: Read-only corrected architecture pressure snapshot
         run: |
           python - <<'PY'
           import json
           from collections import Counter
           from pathlib import Path
+          import subprocess
 
           def load(path):
               return json.loads(Path(path).read_text(encoding='utf-8'))
 
-          paths = {
-              'canonical': 'data/canonical/registry.json',
-              'sources': 'data/sources/registry.json',
-              'monitor': 'data/monitor/expectations.json',
-              'changes': 'data/changes/ledger.json',
-              'live_obs': 'data/live_intelligence/observations.json',
-              'live_ev': 'data/live_intelligence/evidence_registry.json',
-              'analysis_schema': 'data/analysis/schema.json',
-              'analysis_reviews': 'data/analysis/event_reviews.json',
-              'analysis_ev': 'data/analysis/evidence_registry.json',
+          canonical = load('data/canonical/registry.json')
+          sources = load('data/sources/registry.json')
+          monitor = load('data/monitor/expectations.json')
+          live_schema = load('data/live_intelligence/schema.json')
+          live_obs = load('data/live_intelligence/observations.json')
+          live_ev = load('data/live_intelligence/evidence_registry.json')
+          analysis_schema = load('data/analysis/schema.json')
+          reviews = load('data/analysis/event_reviews.json')
+          analysis_ev = load('data/analysis/evidence_registry.json')
+
+          records = canonical['records']
+          by_id = {r['occurrence_id']: r for r in records}
+          monitored = {cid for a in monitor['adapters'] for cid in a.get('canonical_occurrence_ids', [])}
+          live_ids = {
+              link['occurrence_id']
+              for obs in live_obs['observations']
+              for link in obs.get('canonical_links', [])
+              if link.get('occurrence_id')
           }
-          docs = {k: load(v) for k, v in paths.items()}
-          print('HEAD', __import__('subprocess').check_output(['git','rev-parse','HEAD'], text=True).strip())
-          print('TOP_LEVEL_KEYS')
-          for k, d in docs.items():
-              print(k, sorted(d.keys()))
-          print('VERSIONS')
-          for k, d in docs.items():
-              print(k, d.get('version'))
+          analysed = {r['canonical_occurrence_id'] for r in reviews['reviews']}
 
-          list_candidates = {
-              'canonical': ['occurrences','records','events'],
-              'sources': ['sources','records'],
-              'monitor': ['adapters'],
-              'changes': ['changes','entries','ledger'],
-              'live_obs': ['observations'],
-              'live_ev': ['evidence'],
-              'analysis_reviews': ['reviews'],
-              'analysis_ev': ['evidence'],
-          }
-          lists = {}
-          print('COUNTS')
-          for k, candidates in list_candidates.items():
-              d = docs[k]
-              name = next((x for x in candidates if isinstance(d.get(x), list)), None)
-              arr = d.get(name, []) if name else []
-              lists[k] = arr
-              print(k, name, len(arr))
+          print('HEAD', subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip())
+          print('BASE_MAIN', subprocess.check_output(['git','rev-parse','origin/main'], text=True).strip())
+          print('STATE', {
+              'canonical': (canonical['version'], len(records)),
+              'sources': (sources['version'], len(sources['sources'])),
+              'monitor': (monitor['version'], len(monitor['adapters']), len(monitored)),
+              'live': (live_schema['version'], live_obs['version'], len(live_obs['observations']), len(live_ev['evidence']), len(live_ids)),
+              'analysis': (analysis_schema['version'], reviews['version'], len(reviews['reviews']), len(analysis_ev['evidence']), len(analysed)),
+          })
+          print('LIVE_POLICY', live_schema['population_policy'])
+          print('ANALYSIS_LIVE_INPUT_POLICY', analysis_schema['live_input_policy'])
+          print('ANALYSIS_REVISION_POLICY', analysis_schema['analysis_revision_policy'])
 
-          for k in ['canonical','sources','monitor','live_obs','analysis_reviews']:
-              arr = lists.get(k, [])
-              print('SAMPLE_KEYS', k, sorted(arr[0].keys()) if arr else [])
+          print('LIVE_CANONICAL_LINKS', sorted(live_ids))
+          print('LIVE_OBSERVATION_TYPES', Counter(o['observation_type'] for o in live_obs['observations']))
+          print('LIVE_REGIONS', Counter(x for o in live_obs['observations'] for x in o.get('regions', [])))
+          print('LIVE_DOMAINS', Counter(x for o in live_obs['observations'] for x in o.get('domain_tags', [])))
+          print('LIVE_EVIDENCE_CLASSES', Counter(e['evidence_class'] for e in live_ev['evidence']))
 
-          canon = lists.get('canonical', [])
-          by_id = {}
-          for r in canon:
-              cid = r.get('occurrence_id') or r.get('canonical_occurrence_id') or r.get('id')
-              if cid:
-                  by_id[cid] = r
-          print('CANONICAL_ID_COUNT', len(by_id))
+          def covered_counter(ids, field):
+              return Counter(by_id[i].get(field) for i in ids if i in by_id)
+          for field in ['region','category','event_type']:
+              allc = Counter(r.get(field) for r in records)
+              print('MONITOR_'+field.upper(), covered_counter(monitored, field))
+              print('LIVE_'+field.upper(), covered_counter(live_ids, field))
+              print('ANALYSIS_'+field.upper(), covered_counter(analysed, field))
+              print('MONITOR_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(monitored, field).get(k,0)==0))
+              print('LIVE_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(live_ids, field).get(k,0)==0))
+              print('ANALYSIS_ZERO_'+field.upper(), sorted((k,v) for k,v in allc.items() if covered_counter(analysed, field).get(k,0)==0))
 
-          def show_counter(label, field, n=30):
-              c = Counter(str(r.get(field)) for r in canon)
-              print(label, c.most_common(n))
+          def when(r):
+              return r.get('start_utc') or r.get('start_local') or r.get('publication_datetime') or r.get('date_earliest') or ''
 
-          for f in ['region','region_code','category','event_type','certainty_status','activation_mode','lifecycle_status','status','importance','intrinsic_importance','expected_market_sensitivity']:
-              if any(f in r for r in canon):
-                  show_counter('CANON_'+f.upper(), f)
+          completed = [r for r in records if r.get('lifecycle_status') == 'COMPLETED']
+          active = [r for r in records if r.get('lifecycle_status') == 'ACTIVE']
+          print('COMPLETED_COUNT', len(completed))
+          print('COMPLETED_RECORDS')
+          for r in sorted(completed, key=when):
+              cid = r['occurrence_id']
+              print({
+                  'id': cid,
+                  'when': when(r),
+                  'region': r.get('region'),
+                  'category': r.get('category'),
+                  'event_type': r.get('event_type'),
+                  'institution': r.get('institution'),
+                  'name': r.get('canonical_name'),
+                  'source_id': r.get('source_id'),
+                  'importance': r.get('intrinsic_importance'),
+                  'market_sensitivity': r.get('expected_market_sensitivity'),
+                  'monitored': cid in monitored,
+                  'live_linked': cid in live_ids,
+                  'analysed': cid in analysed,
+              })
+          print('ACTIVE_RECORDS')
+          for r in sorted(active, key=when):
+              cid = r['occurrence_id']
+              print({
+                  'id': cid, 'when': when(r), 'region': r.get('region'), 'category': r.get('category'),
+                  'event_type': r.get('event_type'), 'institution': r.get('institution'), 'name': r.get('canonical_name'),
+                  'monitored': cid in monitored, 'live_linked': cid in live_ids, 'analysed': cid in analysed,
+              })
 
-          adapters = lists.get('monitor', [])
-          monitored = set()
-          for a in adapters:
-              monitored.update(a.get('canonical_occurrence_ids', []))
-          print('MONITORED_CANONICAL_IDS', len(monitored))
+          print('COMPLETED_MONITORED_UNLIVE')
+          for r in sorted((r for r in completed if r['occurrence_id'] in monitored and r['occurrence_id'] not in live_ids), key=when):
+              print(r['occurrence_id'], when(r), r.get('region'), r.get('category'), r.get('event_type'), r.get('institution'), r.get('canonical_name'), 'analysed='+str(r['occurrence_id'] in analysed))
 
-          live_ids = set()
-          for r in lists.get('live_obs', []):
-              for f in ['canonical_occurrence_id','occurrence_id']:
-                  if r.get(f): live_ids.add(r[f])
-          print('LIVE_CANONICAL_IDS', len(live_ids))
-
-          analysis_ids = set()
-          for r in lists.get('analysis_reviews', []):
-              if r.get('canonical_occurrence_id'): analysis_ids.add(r['canonical_occurrence_id'])
-          print('ANALYSIS_CANONICAL_IDS', len(analysis_ids))
-
-          def coverage(label, ids, field):
-              all_vals = Counter(str(r.get(field)) for r in canon)
-              covered_vals = Counter(str(by_id[i].get(field)) for i in ids if i in by_id)
-              print(label, field, 'covered', covered_vals.most_common(50))
-              missing = [(v, c, covered_vals.get(v,0)) for v,c in all_vals.items() if covered_vals.get(v,0)==0]
-              print(label, field, 'zero_coverage', sorted(missing, key=lambda x:(-x[1],x[0])))
-
-          for field in ['region','region_code','category','event_type']:
-              if any(field in r for r in canon):
-                  for label, ids in [('MONITOR',monitored),('LIVE',live_ids),('ANALYSIS',analysis_ids)]:
-                      coverage(label, ids, field)
-
-          reviews = lists.get('analysis_reviews', [])
-          revision_children = [r for r in reviews if r.get('revision_of_analysis_id')]
-          print('ANALYSIS_REVISION_CHILDREN', len(revision_children), [r.get('analysis_id') for r in revision_children])
-          live_input_reviews = [r for r in reviews if r.get('live_input_observation_ids') or r.get('live_observation_ids')]
-          print('ANALYSIS_REVIEWS_WITH_LIVE_INPUT_FIELDS', len(live_input_reviews), [r.get('analysis_id') for r in live_input_reviews])
-
-          print('UNANALYSED_MONITORED_SAMPLE')
-          x = sorted(monitored - analysis_ids)
-          for cid in x[:80]:
-              r = by_id.get(cid, {})
-              print(cid, r.get('region') or r.get('region_code'), r.get('category'), r.get('event_type'), r.get('institution'), r.get('title') or r.get('event_name'), r.get('start_local') or r.get('start_utc') or r.get('release_utc'))
+          print('COMPLETED_UNANALYSED_MARKET_STRUCTURE')
+          for r in sorted((r for r in completed if r.get('category') == 'CORPORATE_FINANCIAL_MARKET_STRUCTURE' and r['occurrence_id'] not in analysed), key=when):
+              print(r['occurrence_id'], when(r), r.get('region'), r.get('event_type'), r.get('institution'), r.get('canonical_name'), 'monitored='+str(r['occurrence_id'] in monitored), 'live='+str(r['occurrence_id'] in live_ids))
           PY
