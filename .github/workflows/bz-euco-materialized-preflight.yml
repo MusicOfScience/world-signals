@@ -1,0 +1,147 @@
+name: BZ European Council materialized preflight
+
+on:
+  push:
+    branches:
+      - feature/post-by-pressure-audit-bz
+    paths:
+      - .github/workflows/bz-euco-materialized-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Materialize exact BZ patch, validate fully, and reset byte-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=3ccb20539c10d0965de84efa298ba75634c19249
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+
+          python - <<'PY' > /tmp/bz-protected-before.json
+          import hashlib,json,subprocess
+          roots=(
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/biosecurity',
+              'data/live',
+              'data/live_intelligence',
+              'data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              p=subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines()
+              paths.extend(p)
+          snap={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          print(json.dumps(snap,sort_keys=True))
+          PY
+
+          python scripts/apply_european_council_rss_monitor_bz.py > /tmp/bz-check.json
+          grep -q 'READ_ONLY_PREFLIGHT' /tmp/bz-check.json
+          test -z "$(git status --porcelain)"
+
+          WORLD_SIGNALS_APPLY_MONITOR_BZ=1 python scripts/apply_european_council_rss_monitor_bz.py --apply > /tmp/bz-apply.json
+          grep -q 'APPLIED_GOVERNED_RUNTIME_PATCH' /tmp/bz-apply.json
+
+          cat > /tmp/bz-expected-files.txt <<'EOF'
+          data/monitor/expectations.json
+          data/sources/registry.json
+          scripts/run_adapter_smoke.py
+          scripts/run_live_monitor.py
+          src/world_signals/adapters/__init__.py
+          EOF
+          git diff --name-only | sort > /tmp/bz-actual-files.txt
+          diff -u /tmp/bz-expected-files.txt /tmp/bz-actual-files.txt
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          C=json.loads(Path('data/canonical/registry.json').read_text())
+          S=json.loads(Path('data/sources/registry.json').read_text())
+          M=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert (C['version'],len(C['records']))==('0.41',689)
+          assert (S['version'],len(S['sources']))==('1.99',255)
+          assert (M['version'],len(M['adapters']))==('0.24',22)
+          assert M['automatic_canonical_commit'] is False
+          assert M['google_calendar_write'] is False
+          machine=[x for x in S['sources'] if x.get('source_id')=='WSSRC-INT-035']
+          route=[x for x in M['adapters'] if x.get('adapter_id')=='EUROPEAN_COUNCIL_MEETINGS_RSS']
+          assert len(machine)==len(route)==1
+          assert machine[0]['canonical_dependency_count']==0
+          assert route[0]['request_budget_per_run']==route[0]['rss_request_count_per_run']==1
+          assert route[0]['direct_calendar_html_request_count_per_run']==0
+          assert route[0]['item_followup_request_count_per_run']==0
+          assert route[0]['automatic_commit_allowed'] is False
+          print('POSTSTATE Sources 1.99/255 Monitor 0.24/22 Canonical 0.41/689')
+          PY
+
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile \
+            scripts/fetch_latest_monitor_snapshot.py \
+            scripts/fetch_retained_review_state.py \
+            scripts/validate_live_intelligence.py \
+            scripts/validate_analysis.py \
+            scripts/apply_analysis_revision_contract_ba.py \
+            scripts/apply_european_council_rss_monitor_bz.py \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/analysis.py \
+            src/world_signals/analysis_revision.py \
+            src/world_signals/analysis_revision_projection.py \
+            src/world_signals/live_analysis_bridge.py \
+            src/world_signals/adapters/european_council_rss.py \
+            src/world_signals/european_council_monitor.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+
+          git diff --name-only | sort > /tmp/bz-after-build-files.txt
+          diff -u /tmp/bz-expected-files.txt /tmp/bz-after-build-files.txt
+
+          python - <<'PY'
+          import hashlib,json,subprocess
+          before=json.load(open('/tmp/bz-protected-before.json'))
+          roots=(
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/biosecurity',
+              'data/live',
+              'data/live_intelligence',
+              'data/analysis',
+          )
+          paths=[]
+          for root in roots:
+              paths.extend(subprocess.run(['git','ls-files',root],check=True,capture_output=True,text=True).stdout.splitlines())
+          after={p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in sorted(set(paths))}
+          assert before==after, 'protected layer hash drift'
+          print('PROTECTED_LAYERS_BYTE_IDENTICAL',len(after))
+          PY
+
+          git checkout -- \
+            data/sources/registry.json \
+            data/monitor/expectations.json \
+            scripts/run_live_monitor.py \
+            scripts/run_adapter_smoke.py \
+            src/world_signals/adapters/__init__.py
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse origin/main)" = "$BASE"
+          echo 'BZ MATERIALIZED PREFLIGHT CLEAN'
