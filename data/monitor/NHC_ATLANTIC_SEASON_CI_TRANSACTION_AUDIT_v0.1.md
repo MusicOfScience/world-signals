@@ -1,7 +1,7 @@
 # WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
 
 - exact merged CH base: `c4f359c2c70f023c32990f20234aaf154dced152`
-- successful guarded transaction run: `34409681551`
+- successful guarded transaction run: `34409681551`; job `102660934387`.
 - executed at UTC: `2026-09-09T21:58:37Z`
 - run `34407375556`: import-path harness failure before network or write gate; no governed mutation.
 - run `34407481825`: live preflight and simulation passed; unittest import-path failure before write gate; no governed mutation.
@@ -14,6 +14,9 @@
 - run `34408832296`: export repair, live preflight, activation, validators, build and full **1,235-test** suite passed; NHC runtime row was present and HEALTHY with every NHC authority/write assertion closed. The run failed only because the temporary qualification expected a nonexistent `configured_adapter_count` summary key instead of the runner's actual `adapter_entries` / `expected_adapter_entries` schema. No branch materialisation was pushed.
 - repair: the controlled activation helper owns adapter-package export wiring, its permanent regression verifies that surface, and runtime qualification now uses the actual summary contract.
 - descendant repairs preserve historical CG/CD/CC/BG/CH checkpoints while permitting reviewed Source/Monitor descendants; NHC registration is valid only with its exact bounded route and closed authority gates.
+- final guarded validation: **1,235 tests OK, 68 skipped**; Canonical, Live and Analysis validators passed; Python compile, seven JavaScript syntax checks and static build passed.
+- final registered runtime: process RC `0`; **26 healthy / 0 degraded** adapter entries; NHC itself HEALTHY; `canonical_unchanged=true`; all expected adapters observed.
+- final containment gates: protected Canonical / Change Ledger / Monitor operations policy / Live / Analysis / OPEC-quarantine paths byte-identical to merged CH base; bounded-diff proof **PASS**.
 - fresh NHC climatology/RSS/robots and NWS rights/appropriate-use recheck: **PASS**.
 - Source Registry: `v2.02 / 257` → `v2.03 / 257`.
 - Monitor expectations: `v0.27 / 25` → `v0.28 / 26`.
