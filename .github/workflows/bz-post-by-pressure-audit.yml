@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Verify exact post-BY base and compute source-aware pressure audit
+      - name: Verify exact post-BY base and inspect European Council contract
         shell: bash
         run: |
           set -euo pipefail
@@ -29,83 +29,19 @@ jobs:
           git fetch --no-tags origin main
           test "$(git rev-parse origin/main)" = "$BASE"
           test "$(git merge-base HEAD origin/main)" = "$BASE"
-          mkdir -p artifacts
           python - <<'PY'
           import json
-          from collections import Counter,defaultdict
           from pathlib import Path
-
           C=json.loads(Path('data/canonical/registry.json').read_text())
           S=json.loads(Path('data/sources/registry.json').read_text())
           M=json.loads(Path('data/monitor/expectations.json').read_text())
-          records=C['records']; sources=S['sources']; adapters=M['adapters']
-
-          configured={oid for a in adapters for oid in a.get('canonical_occurrence_ids',[]) if isinstance(oid,str)}
-          routed={a.get('source_id') for a in adapters if isinstance(a.get('source_id'),str)}
-          by_source=defaultdict(list)
-          for r in records:
-              sid=r.get('source_id')
-              if isinstance(sid,str): by_source[sid].append(r)
-
-          def cov(key):
-              buckets=defaultdict(lambda:[0,0])
-              for r in records:
-                  k=r.get(key) or 'UNKNOWN'; buckets[k][0]+=1
-                  if r.get('occurrence_id') in configured: buckets[k][1]+=1
-              return [{'key':k,'total':v[0],'monitored':v[1],'coverage_pct':round(100*v[1]/v[0],1)} for k,v in sorted(buckets.items(),key=lambda kv:(kv[1][1]/kv[1][0],-kv[1][0],kv[0]))]
-
-          candidates=[]
-          for s in sources:
-              sid=s.get('source_id'); deps=s.get('canonical_dependency_count',0)
-              if not isinstance(deps,int) or deps<=0 or sid in routed: continue
-              rs=by_source.get(sid,[])
-              candidates.append({
-                'source_id':sid,
-                'institution':s.get('institution'),
-                'jurisdiction':s.get('jurisdiction'),
-                'domain':s.get('domain'),
-                'endpoint_role':s.get('endpoint_role'),
-                'authoritative_url':s.get('authoritative_url'),
-                'machine_readable_available':s.get('machine_readable_available'),
-                'canonical_dependency_count':deps,
-                'derived_record_count':len(rs),
-                'regions':dict(Counter((r.get('region') or 'UNKNOWN') for r in rs)),
-                'categories':dict(Counter((r.get('category') or 'UNKNOWN') for r in rs)),
-                'lifecycles':dict(Counter((r.get('lifecycle_status') or 'UNKNOWN') for r in rs)),
-                'certainty':dict(Counter((r.get('certainty_status') or 'UNKNOWN') for r in rs)),
-                'monitoring_priority_score':s.get('monitoring_priority_score'),
-                'automated_monitoring_use':s.get('automated_monitoring_use'),
-                'automated_retrieval_permission':s.get('automated_retrieval_permission'),
-                'monitoring_readiness_status':s.get('monitoring_readiness_status'),
-                'monitoring_activation_status':s.get('monitoring_activation_status'),
-                'verification_mode':s.get('verification_mode'),
-                'runtime_health_state':s.get('runtime_health_state'),
-                'parser_type':s.get('parser_type'),
-                'parser_version':s.get('parser_version'),
-                'rights_summary':s.get('rights_summary'),
-                'automation_summary':s.get('automation_summary'),
-                'known_limitations':s.get('known_limitations'),
-                'monitor_endpoints':s.get('monitor_endpoints'),
-              })
-
-          payload={
-            'exact_base':'3ccb20539c10d0965de84efa298ba75634c19249',
-            'canonical':{'version':C.get('version'),'count':len(records)},
-            'sources':{'version':S.get('version'),'count':len(sources)},
-            'monitor':{'version':M.get('version'),'count':len(adapters),'automatic_canonical_commit':M.get('automatic_canonical_commit'),'google_calendar_write':M.get('google_calendar_write')},
-            'configured_occurrence_count':len(configured),
-            'coverage_by_region':cov('region'),
-            'coverage_by_category':cov('category'),
-            'configured_routes':[{'adapter_id':a.get('adapter_id'),'source_id':a.get('source_id'),'occurrences':len(a.get('canonical_occurrence_ids',[])),'monitor_role':a.get('monitor_role')} for a in adapters],
-            'unrouted_sources_with_dependencies':sorted(candidates,key=lambda x:(-x['canonical_dependency_count'],x['source_id'] or '')),
-          }
-          Path('artifacts/bz-source-aware-pressure-audit.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
-          print('candidate_count',len(candidates))
-          for x in payload['coverage_by_category'][:8]: print('CATEGORY',x)
-          for x in payload['coverage_by_region'][:5]: print('REGION',x)
+          src=[x for x in S['sources'] if x.get('source_id')=='WSSRC-INT-003']
+          assert len(src)==1
+          rows=[x for x in C['records'] if x.get('source_id')=='WSSRC-INT-003']
+          assert len(rows)==3
+          assert not any(x.get('source_id')=='WSSRC-INT-030' for x in S['sources'])
+          assert not any(x.get('adapter_id')=='EUROPEAN_COUNCIL_MEETINGS_RSS' for x in M['adapters'])
+          print('BASELINE',json.dumps({'canonical_version':C['version'],'canonical_count':len(C['records']),'sources_version':S['version'],'sources_count':len(S['sources']),'monitor_version':M['version'],'monitor_count':len(M['adapters']),'automatic_canonical_commit':M['automatic_canonical_commit'],'google_calendar_write':M['google_calendar_write']},sort_keys=True))
+          print('SOURCE_OBJECT',json.dumps(src[0],sort_keys=True,ensure_ascii=False))
+          print('CANONICAL_ROWS',json.dumps(rows,sort_keys=True,ensure_ascii=False))
           PY
-      - uses: actions/upload-artifact@v6
-        with:
-          name: bz-source-aware-pressure-audit
-          path: artifacts/bz-source-aware-pressure-audit.json
-          if-no-files-found: error
