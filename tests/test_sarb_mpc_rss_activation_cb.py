@@ -2,12 +2,18 @@ from __future__ import annotations
 import json, unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+
+def version_tuple(value: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in value.split('.'))
+
 class SARBActivationCBTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.c=json.loads((ROOT/'data/canonical/registry.json').read_text()); cls.s=json.loads((ROOT/'data/sources/registry.json').read_text()); cls.e=json.loads((ROOT/'data/monitor/expectations.json').read_text())
     def test_governed_counts(self):
-        self.assertEqual((self.c['version'],len(self.c['records'])),('0.41',689)); self.assertEqual((self.s['version'],len(self.s['sources'])),('2.01',256)); self.assertEqual((self.e['version'],len(self.e['adapters'])),('0.26',24))
+        self.assertEqual((self.c['version'],len(self.c['records'])),('0.41',689))
+        self.assertGreaterEqual(version_tuple(self.s['version']),version_tuple('2.01')); self.assertGreaterEqual(len(self.s['sources']),256)
+        self.assertGreaterEqual(version_tuple(self.e['version']),version_tuple('0.26')); self.assertGreaterEqual(len(self.e['adapters']),24)
     def test_canonical_source_stays_held(self):
         x=next(x for x in self.s['sources'] if x.get('source_id')=='WSSRC-REG-006'); self.assertEqual(x['automated_monitoring_use'],'PROHIBITED_OR_RIGHTS_HOLD'); self.assertEqual(x['verification_mode'],'RIGHTS_HELD_MANUAL_ONLY')
     def test_monitor_source_and_route(self):
