@@ -1,0 +1,271 @@
+name: CD poststate closeout
+
+on:
+  push:
+    branches:
+      - feature/post-cc-pressure-audit-cd
+    paths:
+      - '.github/workflows/cd-poststate-closeout.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Assert exact poststate and ancestry
+        run: |
+          test "$(git rev-parse origin/main)" = "c186835d9d6b36620177badfff604f309ceb35d4"
+          git merge-base --is-ancestor c186835d9d6b36620177badfff604f309ceb35d4 HEAD
+          git merge-base --is-ancestor a954f29262144b7ccb29db35cad89808e9e4d4b7 HEAD
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'src')
+          from world_signals.analysis_revision import production_analysis_revision_count
+          from world_signals.live_analysis_bridge import production_live_input_count
+
+          def load(path):
+              return json.loads(Path(path).read_text())
+
+          c=load('data/canonical/registry.json')
+          s=load('data/sources/registry.json')
+          m=load('data/monitor/expectations.json')
+          ls=load('data/live_intelligence/schema.json')
+          lo=load('data/live_intelligence/observations.json')
+          le=load('data/live_intelligence/evidence_registry.json')
+          a=load('data/analysis/schema.json')
+          r=load('data/analysis/event_reviews.json')
+          e=load('data/analysis/evidence_registry.json')
+
+          assert (c['version'],len(c['records'])) == ('0.41',689)
+          assert (s['version'],len(s['sources'])) == ('2.02',257)
+          assert (m['version'],len(m['adapters'])) == ('0.27',25)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          assert (ls['version'],len(lo['observations']),len(le['evidence'])) == ('0.6',6,9)
+          assert a['version'] == '0.8'
+          assert (r['version'],len(r['reviews'])) == ('0.18',22)
+          assert (e['version'],len(e['evidence'])) == ('0.18',97)
+          assert production_analysis_revision_count(r) == 1
+          assert production_live_input_count(r) == 1
+          p=a['analysis_revision_policy']
+          assert p['mode'] == 'CONTROLLED_REVISION_LINEAGE'
+          assert p['production_analysis_revisions_allowed'] is True
+          assert p['maximum_production_analysis_revisions'] == 1
+          assert p['maximum_children_per_revision_parent'] == 1
+          assert p['public_revision_metadata_projection_allowed'] is False
+          assert p['automatic_latest_analysis_selection_allowed'] is False
+          assert p['public_revision_head_collapse_allowed'] is False
+          print('CD_POSTSTATE_EXACT_PASS')
+          PY
+
+      - name: Prove parent and evidence immutability
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          base='c186835d9d6b36620177badfff604f309ceb35d4'
+
+          old_r=json.loads(subprocess.check_output(['git','show',f'{base}:data/analysis/event_reviews.json']))
+          new_r=json.loads(Path('data/analysis/event_reviews.json').read_text())
+          old_by={x['analysis_id']:x for x in old_r['reviews']}
+          new_by={x['analysis_id']:x for x in new_r['reviews']}
+          assert len(old_by)==21
+          assert set(new_by)-set(old_by)=={'WSAN-BWC-WG8-2026-002'}
+          assert not (set(old_by)-set(new_by))
+          assert all(new_by[k] == v for k,v in old_by.items())
+
+          old_e=json.loads(subprocess.check_output(['git','show',f'{base}:data/analysis/evidence_registry.json']))
+          new_e=json.loads(Path('data/analysis/evidence_registry.json').read_text())
+          old_ev={x['evidence_id']:x for x in old_e['evidence']}
+          new_ev={x['evidence_id']:x for x in new_e['evidence']}
+          assert len(old_ev)==95
+          assert set(new_ev)-set(old_ev)=={
+              'WSEV-BWC-WG9-UN-INDICO-20260817',
+              'WSEV-BWC-WG9-SHIB-REV7-20260827',
+          }
+          assert not (set(old_ev)-set(new_ev))
+          assert all(new_ev[k] == v for k,v in old_ev.items())
+          print({'unchanged_reviews':21,'unchanged_evidence':95,'new_reviews':1,'new_evidence':2})
+          PY
+
+      - name: Verify public revision boundary
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0,'src')
+          from world_signals.analysis_revision import REVISION_FIELDS
+          from world_signals.analysis_revision_projection import public_analysis_projection_with_revision_contract
+
+          load=lambda p: json.loads(Path(p).read_text())
+          schema=load('data/analysis/schema.json')
+          evidence=load('data/analysis/evidence_registry.json')
+          reviews=load('data/analysis/event_reviews.json')
+          canonical=load('data/canonical/registry.json')
+          projection=public_analysis_projection_with_revision_contract(schema,evidence,reviews,canonical)
+          by_id={x['analysis_id']:x for x in projection['reviews']}
+          assert 'WSAN-BWC-WG8-2026-001' in by_id
+          assert 'WSAN-BWC-WG8-2026-002' in by_id
+          assert all(field not in by_id['WSAN-BWC-WG8-2026-002'] for field in REVISION_FIELDS)
+          md=projection['metadata']
+          assert md['public_revision_metadata_projection_allowed'] is False
+          assert md['automatic_latest_analysis_selection_allowed'] is False
+          assert md['derived_revision_head_projection_allowed'] is False
+          print('CD_PUBLIC_REVISION_BOUNDARY_PASS')
+          PY
+
+      - name: Ordinary full repository validation
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q scripts src tests
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+
+      - name: Protected-layer and governed-diff audit
+        run: |
+          base=c186835d9d6b36620177badfff604f309ceb35d4
+          git diff --exit-code "$base"..HEAD -- data/canonical data/sources data/monitor data/changes data/live_intelligence
+          git diff --check "$base"..HEAD
+          python - <<'PY'
+          import subprocess
+          base='c186835d9d6b36620177badfff604f309ceb35d4'
+          out=subprocess.check_output(['git','diff','--name-only',f'{base}..HEAD'], text=True).splitlines()
+          forbidden=[p for p in out if p.startswith(('data/canonical/','data/sources/','data/monitor/','data/changes/','data/live_intelligence/'))]
+          assert not forbidden, forbidden
+          print({'changed_file_count_before_cleanup':len(out),'protected_layer_changes':forbidden})
+          PY
+
+      - name: Record transaction audit and remove temporary CD workflows
+        env:
+          MATERIALISATION_RUN_ID: '34326983574'
+          MATERIALISATION_JOB_ID: '102386403830'
+        run: |
+          cat > data/analysis/BWC_WG8_FIRST_ANALYSIS_REVISION_CD_TRANSACTION_AUDIT_v0.1.md <<EOF
+          # WORLD SIGNALS — CD first controlled Analysis revision transaction audit v0.1
+
+          ## Boundary
+
+          - Tranche: CD
+          - Branch: \`feature/post-cc-pressure-audit-cd\`
+          - Exact merged base: \`c186835d9d6b36620177badfff604f309ceb35d4\` (post-CC / PR #111)
+          - Guarded materialisation commit: \`a954f29262144b7ccb29db35cad89808e9e4d4b7\`
+          - Successful guarded materialisation run: \`${MATERIALISATION_RUN_ID}\`
+          - Successful guarded materialisation job: \`${MATERIALISATION_JOB_ID}\`
+          - Final post-state closeout run: \`${GITHUB_RUN_ID}\`
+
+          ## Architectural decision
+
+          Post-CC pressure recomputation showed the Monitor layer was no longer the thinnest interface: 25 configured monitor routes covered 215 Canonical occurrences across all nine regions, while Analysis had 21 reviewed snapshots but zero production revision descendants. CD therefore did not add another monitor merely to fill uncovered categories. It opened the already-reviewed Analysis revision contract to exactly one production child.
+
+          ## Selected pressure case
+
+          Parent \`WSAN-BWC-WG8-2026-001\` reviewed the eighth Biological Weapons Convention Working Group session and treated later institutional follow-through as a prospective second-order watch item. Newly admitted evidence from the ninth Working Group session provided a defensible later snapshot without changing the stable Canonical occurrence identity.
+
+          Child \`WSAN-BWC-WG8-2026-002\`:
+          - revision kind: \`NEW_EVIDENCE\`;
+          - same Canonical occurrence: \`WSO-BWC-WG-2026-S08\`;
+          - strictly later \`analysis_as_of_utc\`;
+          - second-order status advances from \`PLAUSIBLE_WATCH_ITEM\` to \`OBSERVED\` only for institutional process follow-through;
+          - does **not** promote draft-final-report progress to final substantive consensus;
+          - creates no market movement and no causal claim.
+
+          New Analysis-only evidence:
+          - \`WSEV-BWC-WG9-UN-INDICO-20260817\` — primary official ninth-session evidence;
+          - \`WSEV-BWC-WG9-SHIB-REV7-20260827\` — institutional catalogue evidence used narrowly for document-process observation, not PDF-body inference.
+
+          Neither evidence row has Canonical provenance effect.
+
+          ## Governed post-state
+
+          - Canonical: \`v0.41 / 689\` — unchanged
+          - Sources: \`v2.02 / 257\` — unchanged
+          - Monitor: \`v0.27 / 25\` — unchanged; automatic Canonical commit OFF; Google Calendar write OFF
+          - Live Intelligence: \`v0.6 / 6 observations / 9 evidence\` — unchanged
+          - Analysis schema: \`0.7 → 0.8\`
+          - Analysis reviews: \`0.17 / 21 → 0.18 / 22\`
+          - Analysis evidence: \`0.17 / 95 → 0.18 / 97\`
+          - Production Analysis revisions: \`0 → 1\`
+          - Production Live→Analysis inputs: remains exactly \`1\`
+
+          Revision policy remains deliberately bounded:
+          - maximum production revisions: \`1\`;
+          - maximum children per parent: \`1\`;
+          - public revision metadata projection: OFF;
+          - automatic latest-analysis selection: OFF;
+          - public revision-head collapse: OFF.
+
+          ## Immutability proofs
+
+          Closeout compared the post-state directly with the exact merged base and proved:
+          - all 21 pre-existing Analysis reviews are byte-semantically unchanged;
+          - all 95 pre-existing Analysis evidence rows are byte-semantically unchanged;
+          - only one review and two Analysis evidence rows were appended;
+          - Canonical, Sources, Monitor, Changes and Live Intelligence are unchanged;
+          - the public projection contains both analytical snapshots but strips revision-lineage metadata and does not derive or select a latest head.
+
+          ## Failure history preserved
+
+          CD did not erase failed validation attempts.
+
+          1. The first guarded materialisation reached the intended Analysis post-state in-job but the repository-wide suite exposed six historical tests that incorrectly treated the old \`0.17 / 21\` Analysis checkpoint as a permanent ceiling. The commit gate did not run.
+          2. Those tests were repaired narrowly to preserve their historical checkpoint assertions while allowing reviewed descendants. No source, monitor, revision-lineage, write-gate or causal-evidence rule was weakened.
+          3. Guarded materialisation run \`34326705152\` then narrowed the remaining failure to one CD-only harness assertion that replayed the deliberately one-shot simulator after in-job materialisation. Again, the commit gate did not run.
+          4. The final repair changed that test to compare protected upstream files to the exact post-CC base on post-state rather than replaying the transaction.
+          5. Guarded materialisation run \`${MATERIALISATION_RUN_ID}\`, job \`${MATERIALISATION_JOB_ID}\`, then passed exact pre-state, exact post-state, the entire repository suite, protected-layer audit and commit gate.
+
+          The failed attempts therefore produced no partial governed Analysis commit.
+
+          ## Successful materialisation validation
+
+          Run \`${MATERIALISATION_RUN_ID}\` recorded:
+          - Canonical validator: 689 occurrences PASS;
+          - Live Intelligence: schema 0.6, 6 observations, 9 evidence PASS;
+          - Analysis: 22 reviews, 97 evidence, Live→Analysis bridge and revision contract PASS;
+          - unit tests: 1,206 run, 68 skipped, all passing;
+          - Python compileall PASS;
+          - JavaScript syntax checks PASS;
+          - static build PASS for 689 events, 25 configured monitor routes, 257 governed sources and 22 analytical reviews;
+          - protected upstream diff PASS.
+
+          ## Closeout
+
+          Final closeout run \`${GITHUB_RUN_ID}\` revalidated the materialised post-state without invoking the transaction, re-proved parent/evidence immutability and the public projection boundary, reran ordinary repository validation, then removed all temporary \`cd-*\` GitHub Actions workflows before committing this audit.
+
+          Google Calendar remains an output/interface layer only. No automatic Canonical mutation, automatic Analysis-head selection or auto-merge capability was enabled.
+          EOF
+
+          rm -f .github/workflows/cd-*.yml
+          test -z "$(find .github/workflows -maxdepth 1 -type f -name 'cd-*' -print -quit)"
+          git diff --check
+          git status --short
+
+      - name: Commit closeout only after all gates pass
+        run: |
+          git config user.name 'WORLD SIGNALS automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A .github/workflows data/analysis/BWC_WG8_FIRST_ANALYSIS_REVISION_CD_TRANSACTION_AUDIT_v0.1.md
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          git commit -m 'CD: record poststate audit and remove temporary workflows'
+          git push origin HEAD:feature/post-cc-pressure-audit-cd
+          echo CD_POSTSTATE_CLOSEOUT_COMMITTED
