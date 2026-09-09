@@ -1,0 +1,26 @@
+# WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
+
+- exact merged CH base: `c4f359c2c70f023c32990f20234aaf154dced152`
+- successful guarded transaction run: `34409681551`
+- executed at UTC: `2026-09-09T21:58:37Z`
+- run `34407375556`: import-path harness failure before network or write gate; no governed mutation.
+- run `34407481825`: live preflight and simulation passed; unittest import-path failure before write gate; no governed mutation.
+- run `34407564966`: live preflight, focused tests and ephemeral activation passed; full suite exposed six frozen historical descendant assertions; runner discarded before commit.
+- run `34407905276`: temporary workflow parse/dispatch failure; no job and no mutation.
+- run `34408028455`: no-job parse/dispatch failure while malformed temporary workflow remained at branch head; no mutation.
+- run `34408040662`: descendant repairs and full 1,234-test post-activation suite passed; whole-monitor process returned non-zero before route-specific inspection; runner discarded before commit.
+- run `34408250069`: live preflight, descendant repairs, activation and full suite passed; route-specific runtime qualification failed because the monitor process never emitted its artifact.
+- diagnostic run `34408508815`: proved that failure was an import-surface defect, not NHC degradation: the NHC fetchers were not exported from `world_signals.adapters`. No governed mutation.
+- run `34408832296`: export repair, live preflight, activation, validators, build and full **1,235-test** suite passed; NHC runtime row was present and HEALTHY with every NHC authority/write assertion closed. The run failed only because the temporary qualification expected a nonexistent `configured_adapter_count` summary key instead of the runner's actual `adapter_entries` / `expected_adapter_entries` schema. No branch materialisation was pushed.
+- repair: the controlled activation helper owns adapter-package export wiring, its permanent regression verifies that surface, and runtime qualification now uses the actual summary contract.
+- descendant repairs preserve historical CG/CD/CC/BG/CH checkpoints while permitting reviewed Source/Monitor descendants; NHC registration is valid only with its exact bounded route and closed authority gates.
+- fresh NHC climatology/RSS/robots and NWS rights/appropriate-use recheck: **PASS**.
+- Source Registry: `v2.02 / 257` → `v2.03 / 257`.
+- Monitor expectations: `v0.27 / 25` → `v0.28 / 26`.
+- Monitor coverage: 24 → 25 unique sources; 215 → 217 scoped occurrences; 47 → 48 series; 11 → 12 categories.
+- exact NHC scope: `WSO-COM-A-0049`, `WSO-COM-A-0050`; semantic baseline `06-01 → 11-30`.
+- RSS is source-health corroboration only; actual scheduler cadence is daily; request budget is two first-party requests per run.
+- runtime qualification requires NHC itself to be HEALTHY and all 26 configured adapter entries to be represented; unrelated source degradation has no NHC or event-state meaning.
+- Canonical / Change Ledger / Monitor operations policy / Live / Analysis mutation: **NONE**.
+- automatic Canonical commit / Google Calendar write / automatic Live-Analysis promotion: **OFF**.
+- OPEC CE quarantine: **RESPECTED**.

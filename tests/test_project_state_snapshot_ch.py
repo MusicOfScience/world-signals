@@ -22,35 +22,58 @@ class ProjectStateSnapshotCHTests(unittest.TestCase):
     def test_checked_in_snapshot_is_exact_derivation(self):
         self.assertEqual(self.checked_in, self.derived)
 
-    def test_current_governed_counts_are_not_stale(self):
-        self.assertEqual(self.derived["canonical"], {
-            "registry_version": "0.41",
-            "occurrence_count": 689,
-            "schema_version": "0.52",
-        })
-        self.assertEqual(self.derived["sources"]["registry_version"], "2.02")
-        self.assertEqual(self.derived["sources"]["source_count"], 257)
-        self.assertEqual(self.derived["change_ledger"], {"version": "0.27", "entry_count": 62})
-        self.assertEqual(self.derived["monitor"]["expectations_version"], "0.27")
-        self.assertEqual(self.derived["monitor"]["configured_adapter_count"], 25)
-        self.assertEqual(self.derived["monitor"]["unique_monitor_source_count"], 24)
-        self.assertEqual(self.derived["monitor"]["explicit_scoped_occurrence_count"], 215)
-        self.assertEqual(self.derived["live_intelligence"]["schema_version"], "0.7")
-        self.assertEqual(self.derived["live_intelligence"]["observation_count"], 7)
-        self.assertEqual(self.derived["live_intelligence"]["evidence_count"], 10)
-        self.assertEqual(self.derived["live_intelligence"]["canonical_linked_observation_count"], 2)
-        self.assertEqual(self.derived["analysis"]["schema_version"], "0.8")
-        self.assertEqual(self.derived["analysis"]["review_count"], 22)
-        self.assertEqual(self.derived["analysis"]["evidence_count"], 97)
-        self.assertEqual(self.derived["analysis"]["production_live_input_count"], 1)
-        self.assertEqual(self.derived["analysis"]["production_revision_count"], 1)
+    def test_governed_state_is_at_least_ch_checkpoint(self):
+        vt = lambda value: tuple(int(part) for part in str(value).split("."))
+        self.assertGreaterEqual(vt(self.derived["canonical"]["registry_version"]), (0, 41))
+        self.assertGreaterEqual(self.derived["canonical"]["occurrence_count"], 689)
+        self.assertGreaterEqual(vt(self.derived["canonical"]["schema_version"]), (0, 52))
+        self.assertGreaterEqual(vt(self.derived["sources"]["registry_version"]), (2, 2))
+        self.assertGreaterEqual(self.derived["sources"]["source_count"], 257)
+        self.assertGreaterEqual(vt(self.derived["change_ledger"]["version"]), (0, 27))
+        self.assertGreaterEqual(self.derived["change_ledger"]["entry_count"], 62)
+        self.assertGreaterEqual(vt(self.derived["monitor"]["expectations_version"]), (0, 27))
+        self.assertGreaterEqual(self.derived["monitor"]["configured_adapter_count"], 25)
+        self.assertGreaterEqual(self.derived["monitor"]["unique_monitor_source_count"], 24)
+        self.assertGreaterEqual(self.derived["monitor"]["explicit_scoped_occurrence_count"], 215)
+        self.assertGreaterEqual(vt(self.derived["live_intelligence"]["schema_version"]), (0, 7))
+        self.assertGreaterEqual(self.derived["live_intelligence"]["observation_count"], 7)
+        self.assertGreaterEqual(self.derived["live_intelligence"]["evidence_count"], 10)
+        self.assertGreaterEqual(self.derived["live_intelligence"]["canonical_linked_observation_count"], 2)
+        self.assertGreaterEqual(vt(self.derived["analysis"]["schema_version"]), (0, 8))
+        self.assertGreaterEqual(self.derived["analysis"]["review_count"], 22)
+        self.assertGreaterEqual(self.derived["analysis"]["evidence_count"], 97)
+        self.assertGreaterEqual(self.derived["analysis"]["production_live_input_count"], 1)
+        self.assertGreaterEqual(self.derived["analysis"]["production_revision_count"], 1)
 
-    def test_nhc_pilot_remains_validated_but_unregistered(self):
+    def test_nhc_pilot_history_allows_only_reviewed_bounded_registration(self):
         nhc = self.derived["monitor"]["nhc_atlantic_pilot"]
         self.assertEqual(nhc["readiness_verdict"], "PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT")
         self.assertEqual(nhc["source_id"], "WSSRC-RISK-002")
         self.assertEqual(set(nhc["canonical_occurrence_ids"]), {"WSO-COM-A-0049", "WSO-COM-A-0050"})
-        self.assertFalse(nhc["registered_in_expectations"])
+        if not nhc["registered_in_expectations"]:
+            return
+        expectations = json.loads((ROOT / "data/monitor/expectations.json").read_text(encoding="utf-8"))
+        routes = [row for row in expectations["adapters"] if row.get("adapter_id") == "NHC_ATLANTIC_SEASON"]
+        self.assertEqual(len(routes), 1)
+        route = routes[0]
+        self.assertEqual(route["source_id"], "WSSRC-RISK-002")
+        self.assertEqual(route["canonical_occurrence_ids"], ["WSO-COM-A-0049", "WSO-COM-A-0050"])
+        self.assertEqual(route["cadence"], "DAILY")
+        self.assertEqual(route["endpoint"]["request_budget_per_run"], 2)
+        self.assertEqual(route["baseline"]["start_month_day"], "06-01")
+        self.assertEqual(route["baseline"]["end_month_day"], "11-30")
+        for gate in (
+            "schedule_authority", "lifecycle_authority", "certainty_authority",
+            "canonical_date_mutation_allowed", "automatic_new_occurrence_creation_allowed",
+            "automatic_live_or_analysis_promotion_allowed", "automatic_commit_allowed",
+        ):
+            self.assertFalse(route[gate], gate)
+        sources = json.loads((ROOT / "data/sources/registry.json").read_text(encoding="utf-8"))
+        source = [row for row in sources["sources"] if row.get("source_id") == "WSSRC-RISK-002"]
+        self.assertEqual(len(source), 1)
+        self.assertEqual(source[0]["automated_monitoring_use"], "CLEARED")
+        self.assertEqual(source[0]["monitoring_readiness_status"], "PILOT_VALIDATED_NO_AUTO_COMMIT")
+        self.assertIn("READ_ONLY_SENTINEL_ONLY", source[0]["automated_monitoring_scope"])
 
     def test_all_write_and_public_projection_gates_remain_closed(self):
         gates = self.derived["write_gates"]

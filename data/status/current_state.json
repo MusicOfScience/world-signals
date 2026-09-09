@@ -17,7 +17,7 @@
     "schema_version": "0.52"
   },
   "sources": {
-    "registry_version": "2.02",
+    "registry_version": "2.03",
     "source_count": 257
   },
   "change_ledger": {
@@ -32,10 +32,10 @@
     }
   },
   "monitor": {
-    "expectations_version": "0.27",
-    "configured_adapter_count": 25,
-    "unique_monitor_source_count": 24,
-    "explicit_scoped_occurrence_count": 215,
+    "expectations_version": "0.28",
+    "configured_adapter_count": 26,
+    "unique_monitor_source_count": 25,
+    "explicit_scoped_occurrence_count": 217,
     "operations_policy_version": "0.1",
     "automatic_canonical_commit": false,
     "google_calendar_write": false,
@@ -46,7 +46,7 @@
         "WSO-COM-A-0050"
       ],
       "readiness_verdict": "PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT",
-      "registered_in_expectations": false
+      "registered_in_expectations": true
     }
   },
   "live_intelligence": {

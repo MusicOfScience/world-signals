@@ -5,6 +5,7 @@ from pathlib import Path
 import unittest
 
 from scripts.apply_nhc_atlantic_season_monitor_ci import (
+    ADAPTER_EXPORTS,
     ADAPTER_ID,
     CANONICAL,
     EXPECTATIONS,
@@ -16,6 +17,7 @@ from scripts.apply_nhc_atlantic_season_monitor_ci import (
     TARGET_IDS,
     assert_prestate,
     build_poststate,
+    patch_adapter_exports,
 )
 
 
@@ -110,6 +112,15 @@ class NHCAtlanticSeasonActivationCITests(unittest.TestCase):
             self.assertEqual(row["time_precision"], "DAY")
             self.assertEqual(row["source_id"], SOURCE_ID)
             self.assertIsNone(row.get("start_utc"))
+
+    def test_adapter_package_exports_nhc_fetchers_in_simulated_or_poststate(self):
+        exports = ADAPTER_EXPORTS.read_text(encoding="utf-8")
+        if "from .nhc_atlantic_season import (" not in exports:
+            exports = patch_adapter_exports(exports)
+        self.assertIn("fetch_nhc_atlantic_climatology", exports)
+        self.assertIn("fetch_nhc_atlantic_outlook_health", exports)
+        self.assertIn("NHC_CLIMATOLOGY_URL", exports)
+        self.assertIn("NHC_ATLANTIC_OUTLOOK_RSS_URL", exports)
 
     def test_runtime_wiring_is_present_in_simulated_or_poststate(self):
         canonical, sources, expectations = self.state()

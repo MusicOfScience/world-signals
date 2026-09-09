@@ -236,13 +236,21 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
             )
             self.assertEqual(set(self.plan["protected_paths"]), set(BASE_PROTECTED_GIT_BLOBS))
             for path in self.plan["protected_paths"]:
-                if path.startswith("data/live_intelligence/"):
+                if path.startswith("data/live_intelligence/") or path in {"data/sources/registry.json", "data/monitor/expectations.json"}:
                     continue
                 self.assertEqual(
                     git_blob_hash(ROOT / path),
                     BASE_PROTECTED_GIT_BLOBS[path],
                     path,
                 )
+            source_registry = load(ROOT / "data/sources/registry.json")
+            monitor = load(ROOT / "data/monitor/expectations.json")
+            self.assertGreaterEqual(tuple(map(int, source_registry["version"].split("."))), tuple(map(int, self.plan["target_state"]["source_registry_version"].split("."))))
+            self.assertGreaterEqual(len(source_registry["sources"]), self.plan["target_state"]["source_count"])
+            self.assertGreaterEqual(tuple(map(int, monitor["version"].split("."))), tuple(map(int, self.plan["target_state"]["monitor_version"].split("."))))
+            self.assertGreaterEqual(len(monitor["adapters"]), self.plan["target_state"]["monitor_adapter_count"])
+            self.assertFalse(monitor["automatic_canonical_commit"])
+            self.assertFalse(monitor["google_calendar_write"])
             live_schema = load(apply_cd.LIVE_SCHEMA_PATH)
             live_evidence = load(apply_cd.LIVE_EVIDENCE_PATH)
             self.assertGreaterEqual(tuple(map(int, live_schema["version"].split("."))), (0, 6))

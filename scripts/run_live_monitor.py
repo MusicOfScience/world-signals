@@ -31,6 +31,8 @@ from world_signals.adapters import (
     fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
     fetch_nass_asb_ical,
+    fetch_nhc_atlantic_climatology,
+    fetch_nhc_atlantic_outlook_health,
     fetch_nbs_native_latest_releases_rss,
     fetch_nz_election_robots_policy,
     fetch_nz_election_rss,
@@ -66,6 +68,7 @@ from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candida
 from world_signals.japan_cpi_monitor import japan_cpi_schedule_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
 from world_signals.nass_asb_monitor import nass_asb_ical_review_candidates
+from world_signals.nhc_atlantic_season_monitor import nhc_atlantic_season_review_candidates
 from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
 from world_signals.nz_election_monitor import nz_election_timetable_change_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
@@ -456,6 +459,52 @@ def main() -> int:
                 "automatic_commit_allowed":False,
             })
 
+
+    if "NHC_ATLANTIC_SEASON" in configs:
+        nhc_config=configs["NHC_ATLANTIC_SEASON"]
+        try:
+            nhc_definition,nhc_climo_snap=fetch_nhc_atlantic_climatology()
+            nhc_rss_snap=fetch_nhc_atlantic_outlook_health()
+            report["source_health"].append({
+                "adapter_id":"NHC_ATLANTIC_SEASON",
+                "source_id":nhc_config["source_id"],
+                "state":"HEALTHY",
+                "climatology_snapshot":nhc_climo_snap.as_dict(),
+                "atlantic_outlook_rss_snapshot":nhc_rss_snap.as_dict(),
+                "definition":nhc_definition.as_dict(),
+                "request_budget_per_run":2,
+                "climatology_request_count":1,
+                "rss_health_request_count":1,
+                "followup_request_count":0,
+                "rss_has_season_date_authority":False,
+                "storm_activity_has_event_state_authority":False,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_date_mutation_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=nhc_atlantic_season_review_candidates(
+                registry.get("records",[]),nhc_definition,nhc_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"NHC_ATLANTIC_SEASON",
+                "source_id":nhc_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "rss_absence_is_not_event_state":True,
+                "storm_activity_is_not_event_state":True,
+                "schedule_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "automatic_commit_allowed":False,
+            })
 
     if "HMT_T1_CONTENT_API" in configs:
         hmt_config=configs["HMT_T1_CONTENT_API"]

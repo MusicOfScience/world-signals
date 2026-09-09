@@ -17,6 +17,7 @@ CANONICAL = ROOT / "data/canonical/registry.json"
 SOURCES = ROOT / "data/sources/registry.json"
 EXPECTATIONS = ROOT / "data/monitor/expectations.json"
 RUNNER = ROOT / "scripts/run_live_monitor.py"
+ADAPTER_EXPORTS = ROOT / "src/world_signals/adapters/__init__.py"
 ROADMAP = ROOT / "ROADMAP.md"
 PLAN = ROOT / "data/monitor/NHC_ATLANTIC_SEASON_CI_PLAN_v0.1.json"
 
@@ -157,6 +158,27 @@ def transform_expectations(expectations: dict) -> dict:
     return out
 
 
+def patch_adapter_exports(text: str) -> str:
+    if "from .nhc_atlantic_season import (" in text:
+        raise RuntimeError("NHC adapter export surface already present")
+    marker = "from .nass_asb_ical import (\n"
+    if text.count(marker) != 1:
+        raise RuntimeError("NHC adapter export insertion marker drift")
+    block = """from .nhc_atlantic_season import (
+    NHC_ATLANTIC_OUTLOOK_RSS_URL,
+    NHC_CLIMATOLOGY_URL,
+    NHC_ROBOTS_URL,
+    NHC_RIGHTS_URL,
+    NHCAtlanticSeasonDefinition,
+    fetch_nhc_atlantic_climatology,
+    fetch_nhc_atlantic_outlook_health,
+    parse_nhc_atlantic_climatology_html,
+    validate_nhc_rss_xml,
+)
+"""
+    return text.replace(marker, block + marker, 1)
+
+
 def patch_runner(text: str) -> str:
     if 'if "NHC_ATLANTIC_SEASON" in configs:' in text:
         raise RuntimeError("NHC runtime handler already present")
@@ -240,6 +262,8 @@ def main() -> int:
     expectations = load(EXPECTATIONS)
     runner_text = RUNNER.read_text(encoding="utf-8")
     roadmap_text = ROADMAP.read_text(encoding="utf-8")
+    adapter_exports_text = ADAPTER_EXPORTS.read_text(encoding="utf-8")
+    new_adapter_exports = patch_adapter_exports(adapter_exports_text)
     assert_prestate(canonical, sources, expectations)
     new_sources, new_expectations, new_runner, new_roadmap, pre, post = build_poststate(
         canonical, sources, expectations, runner_text, roadmap_text
@@ -269,6 +293,7 @@ def main() -> int:
     write_json(SOURCES, new_sources)
     write_json(EXPECTATIONS, new_expectations)
     RUNNER.write_text(new_runner, encoding="utf-8")
+    ADAPTER_EXPORTS.write_text(new_adapter_exports, encoding="utf-8")
     ROADMAP.write_text(new_roadmap, encoding="utf-8")
     result["status"] = "CI_MATERIALIZED_BOUNDED_NHC_MONITOR"
     print(json.dumps(result, indent=2))
