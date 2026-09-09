@@ -1,0 +1,85 @@
+name: CD post-CC pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-cc-pressure-audit-cd
+    paths:
+      - '.github/workflows/cd-post-cc-pressure-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Assert exact post-CC baseline and governed state
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          base='c186835d9d6b36620177badfff604f309ceb35d4'
+          subprocess.run(['git','merge-base','--is-ancestor',base,'HEAD'],check=True)
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          l=json.loads(Path('data/live_intelligence/registry.json').read_text()) if Path('data/live_intelligence/registry.json').exists() else None
+          a=json.loads(Path('data/analysis/registry.json').read_text()) if Path('data/analysis/registry.json').exists() else None
+          assert (c['version'],len(c['records']))==('0.41',689)
+          assert (s['version'],len(s['sources']))==('2.02',257)
+          assert (m['version'],len(m['adapters']))==('0.27',25)
+          assert m['automatic_canonical_commit'] is False
+          assert m['google_calendar_write'] is False
+          print('BASE',base)
+          print('GOVERNED',{'canonical':[c['version'],len(c['records'])],'sources':[s['version'],len(s['sources'])],'monitor':[m['version'],len(m['adapters'])]})
+          print('LIVE_REGISTRY', None if l is None else {'version':l.get('version'),'records':len(l.get('observations',l.get('records',[])))})
+          print('ANALYSIS_REGISTRY', None if a is None else {'version':a.get('version'),'records':len(a.get('records',[]))})
+          PY
+      - name: Recompute monitor coverage audit
+        run: python scripts/run_monitor_coverage_audit.py
+      - name: Print architecture frontier diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('data/canonical/registry.json').read_text())
+          s=json.loads(Path('data/sources/registry.json').read_text())
+          m=json.loads(Path('data/monitor/expectations.json').read_text())
+          audit=json.loads(Path('artifacts/monitor/monitor-coverage-audit.json').read_text())
+          print('MONITOR_TOTALS',json.dumps(audit.get('totals',{}),sort_keys=True))
+          print('DIAGNOSTIC_PROMPTS',json.dumps(audit.get('diagnostic_prompts',{}),sort_keys=True))
+          adapters=m['adapters']
+          print('MONITOR_ROLES',json.dumps(sorted({x.get('monitor_role') for x in adapters if x.get('monitor_role')}),ensure_ascii=False))
+          print('AUTHORITY_GATE_COUNTS')
+          keys=['schedule_authority','clock_authority','lifecycle_authority','certainty_authority','condition_state_authority','canonical_datetime_mutation_allowed','automatic_new_occurrence_creation_allowed','automatic_live_or_analysis_promotion_allowed','automatic_commit_allowed']
+          for k in keys:
+              vals=[x.get(k) for x in adapters if k in x]
+              print(k,{'true':sum(v is True for v in vals),'false':sum(v is False for v in vals),'missing':len(adapters)-len(vals)})
+          print('CANONICAL_STATUS_COUNTS')
+          from collections import Counter
+          for field in ['certainty_status','activation_mode','event_state','time_status','timing_type','category']:
+              ctr=Counter(r.get(field) for r in c['records'])
+              print(field,json.dumps(ctr.most_common(),ensure_ascii=False))
+          print('SOURCE_MONITOR_USE_COUNTS')
+          print(json.dumps(Counter(x.get('automated_monitoring_use') for x in s['sources']),sort_keys=True))
+          print('SOURCE_CANONICAL_USE_COUNTS')
+          print(json.dumps(Counter(x.get('canonical_provenance_use') for x in s['sources']),sort_keys=True))
+          PY
+      - name: Prove governed layers unchanged
+        run: |
+          git diff --exit-code c186835d9d6b36620177badfff604f309ceb35d4..HEAD -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes data/live_intelligence data/analysis scripts src tests web
+      - name: Upload pressure audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: cd-post-cc-pressure-audit-${{ github.run_id }}
+          path: artifacts/monitor
+          if-no-files-found: error
+          retention-days: 90
