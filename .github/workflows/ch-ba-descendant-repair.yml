@@ -61,9 +61,6 @@ jobs:
           """ + "'''" + """
               return current.replace(marker, section + marker, 1)
           """
-          # The workflow YAML indentation contributes ten spaces to each line.
-          # Strip exactly those ten, preserving the Python function's own indent.
-          roadmap_fn = '\n'.join(line[10:] if line.startswith('          ') else line for line in roadmap_fn.splitlines()) + '\n'
           text = text[:start] + roadmap_fn + text[end:]
 
           docs_start = text.index('    required_doc_markers = {\n', text.index('def assert_target('))
@@ -85,7 +82,6 @@ jobs:
                   ["BA adds a **production-closed Analysis revision-lineage contract**"],
               )
           """
-          docs_block = '\n'.join(line[10:] if line.startswith('          ') else line for line in docs_block.splitlines()) + '\n'
           text = text[:docs_start] + docs_block + text[docs_end:]
           path.write_text(text, encoding='utf-8')
           PY
