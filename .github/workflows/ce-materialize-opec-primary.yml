@@ -6,12 +6,17 @@ on:
       - feature/post-cd-pressure-audit-ce
     paths:
       - '.github/workflows/ce-materialize-opec-primary.yml'
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   materialize:
+    if: github.head_ref == 'feature/post-cd-pressure-audit-ce' || github.ref == 'refs/heads/feature/post-cd-pressure-audit-ce'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
