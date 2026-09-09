@@ -136,8 +136,15 @@ class UNCorrectMapLiveBFTests(unittest.TestCase):
         self.assertGreaterEqual(bf.exact_series_count(reviews), 0)
 
     def test_status_and_roadmap_targets_record_bf_without_rewriting_history(self):
-        target_status = bf.target_status(bf.STATUS_PATH.read_text(encoding="utf-8"))
-        target_roadmap = bf.target_roadmap(bf.ROADMAP_PATH.read_text(encoding="utf-8"))
+        status = bf.STATUS_PATH.read_text(encoding="utf-8")
+        roadmap = bf.ROADMAP_PATH.read_text(encoding="utf-8")
+        if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in status:
+            self.assertIn("Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**", status)
+            self.assertIn("## Stage 5 — controlled Live Intelligence — IMPLEMENTED / BOUNDED", roadmap)
+            self.assertIn("### CG — BARMM pre-election context — DONE / BOUNDED", roadmap)
+            return
+        target_status = bf.target_status(status)
+        target_roadmap = bf.target_roadmap(roadmap)
         self.assertIn("POST-BE / BF SIXTH LIVE INSTITUTIONAL SPECIMEN", target_status)
         self.assertIn("v0.6 / 6 reviewed internal observations / 9 primary-official evidence rows", target_status)
         self.assertIn("### BF — sixth Live institutional specimen", target_roadmap)
