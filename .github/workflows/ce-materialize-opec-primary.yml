@@ -1,0 +1,87 @@
+name: CE materialize OPEC primary provenance
+
+on:
+  push:
+    branches:
+      - feature/post-cd-pressure-audit-ce
+    paths:
+      - '.github/workflows/ce-materialize-opec-primary.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cd-pressure-audit-ce
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Assert exact merged base
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+          test "$(git merge-base HEAD origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+          test -z "$(git status --porcelain)"
+      - name: Preflight simulated CE transaction
+        run: python scripts/apply_opec_primary_provenance_ce.py --check
+      - name: Validate prestate repository
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+      - name: Materialize reviewed CE transaction in working tree
+        env:
+          WORLD_SIGNALS_APPLY_OPEC_PRIMARY_PROVENANCE_CE: YES
+        run: python scripts/apply_opec_primary_provenance_ce.py --apply
+      - name: Validate materialized repository
+        run: |
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m py_compile scripts/apply_opec_primary_provenance_ce.py
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+          python scripts/build_site.py
+      - name: Audit bounded working-tree mutation
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          allowed = {
+              'data/canonical/registry.json',
+              'data/changes/ledger.json',
+              'data/coverage/biosecurity_overlay.json',
+          }
+          changed = set(subprocess.check_output(['git','diff','--name-only'], text=True).splitlines())
+          if changed != allowed:
+              raise SystemExit(f'CE unexpected materialized paths: {sorted(changed)}')
+          PY
+          git diff --exit-code -- data/sources/registry.json data/monitor data/live_intelligence data/analysis
+          test ! -e artifacts
+          test ! -e site
+      - name: Recheck main before commit
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
+      - name: Commit guarded CE materialisation
+        run: |
+          set -euo pipefail
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json
+          git commit -m "CE: satisfy OPEC primary outcome provenance"
+          git push origin HEAD:feature/post-cd-pressure-audit-ce
