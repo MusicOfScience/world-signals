@@ -32,12 +32,13 @@ jobs:
           from pathlib import Path
           path = Path('scripts/apply_analysis_revision_contract_ba.py')
           text = path.read_text(encoding='utf-8')
-          old = '''def target_roadmap(current: str) -> str:
+
+          old_roadmap = '''def target_roadmap(current: str) -> str:
               heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
               if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:
                   return current
           '''.replace('          ', '')
-          new = '''def target_roadmap(current: str) -> str:
+          new_roadmap = '''def target_roadmap(current: str) -> str:
               heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
               ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
               ch_descendant_heading = "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"
@@ -50,9 +51,30 @@ jobs:
                   # through the derived-state marker plus the preserved revision stage.
                   return current
           '''.replace('          ', '')
-          if old not in text:
-              raise SystemExit('CH BA repair anchor missing')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          if old_roadmap not in text:
+              raise SystemExit('CH BA roadmap anchor missing')
+          text = text.replace(old_roadmap, new_roadmap, 1)
+
+          old_docs = '''    required_doc_markers = {
+              "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
+          }
+          '''.replace('          ', '')
+          new_docs = '''    if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"]:
+              required_doc_markers = {
+                  "BA roadmap": (
+                      target["roadmap"],
+                      ["## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"],
+                  ),
+              }
+          else:
+              required_doc_markers = {
+                  "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
+              }
+          '''.replace('          ', '')
+          if old_docs not in text:
+              raise SystemExit('CH BA documentation anchor missing')
+          text = text.replace(old_docs, new_docs, 1)
+          path.write_text(text, encoding='utf-8')
           PY
           git diff --check
           python -m py_compile scripts/apply_analysis_revision_contract_ba.py
