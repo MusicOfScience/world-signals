@@ -1,0 +1,64 @@
+name: CH AZ descendant repair
+
+on:
+  push:
+    branches:
+      - feature/post-cg-state-truth-ch
+    paths:
+      - '.github/workflows/ch-az-descendant-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: feature/post-cg-state-truth-ch
+      - name: Assert exact repaired main base
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "f3415e7c748957fadec4d1665b032167fd067a03"
+          test "$(git merge-base HEAD origin/main)" = "f3415e7c748957fadec4d1665b032167fd067a03"
+      - name: Repair only AZ roadmap descendant recognition
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply_japan_fies_live_analysis_az.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''def target_roadmap(current: str) -> str:
+              if "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current or "AZ then pressure-audited and populated exactly one relationship" in current:
+                  return current
+          '''.replace('          ', '')
+          new = '''def target_roadmap(current: str) -> str:
+              ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
+              ch_stage = "## Stage 6 — Live Intelligence → Analysis bridge — FIRST PRODUCTION LINK DONE / PUBLIC CLOSED"
+              if (
+                  "## Stage 8 — prospective Live Intelligence → Analysis linkage — AZ FIRST PRODUCTION LINK DONE / PUBLIC CLOSED" in current
+                  or "AZ then pressure-audited and populated exactly one relationship" in current
+                  or (ch_state_marker in current and ch_stage in current)
+              ):
+                  # Later reviewed recovery roadmaps may renumber capability stages.
+                  # CH's derived-state marker plus the preserved production-link
+                  # semantics prove AZ is a historical ancestor without freezing prose.
+                  return current
+          '''.replace('          ', '')
+          if old not in text:
+              raise SystemExit('CH AZ repair anchor missing')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- scripts/apply_japan_fies_live_analysis_az.py
+      - name: Commit bounded helper repair
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain | grep -v '^ M scripts/apply_japan_fies_live_analysis_az.py$')"
+          git config user.name "Mx Hud Harding"
+          git config user.email "58031940+MusicOfScience@users.noreply.github.com"
+          git add scripts/apply_japan_fies_live_analysis_az.py
+          git commit -m "CH: make AZ roadmap helper descendant-safe for derived recovery docs"
+          git push origin HEAD:feature/post-cg-state-truth-ch
