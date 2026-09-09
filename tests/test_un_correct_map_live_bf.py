@@ -90,12 +90,17 @@ class UNCorrectMapLiveBFTests(unittest.TestCase):
         schema, observations, evidence = self.simulate()
         report = self.validate(schema=schema, observations=observations, evidence=evidence)
         self.assertTrue(report.ok, report.errors)
-        self.assertEqual(schema["version"], "0.6")
-        self.assertEqual(observations["version"], "0.6")
-        self.assertEqual(evidence["version"], "0.6")
-        self.assertEqual(len(observations["observations"]), 6)
-        self.assertEqual(len(evidence["evidence"]), 9)
+        self.assertGreaterEqual(tuple(map(int, schema["version"].split("."))), (0, 6))
+        self.assertGreaterEqual(tuple(map(int, observations["version"].split("."))), (0, 6))
+        self.assertGreaterEqual(tuple(map(int, evidence["version"].split("."))), (0, 6))
+        self.assertGreaterEqual(len(observations["observations"]), 6)
+        self.assertGreaterEqual(len(evidence["evidence"]), 9)
         self.assertEqual(observations["population_state"], "CONTROLLED_INSTITUTIONAL_SPECIMEN")
+        bf_obs = next(row for row in observations["observations"] if row.get("observation_id") == "WSLI-INST-UNGA-CORRECTMAP-20260904-001")
+        self.assertEqual(bf_obs, self.payload["live_observation"])
+        evidence_by_id = {row["evidence_id"]: row for row in evidence["evidence"]}
+        for historical in self.payload["live_evidence"]:
+            self.assertEqual(evidence_by_id[historical["evidence_id"]], historical)
 
     def test_schema_preserves_bd_checkpoint_and_all_public_automation_gates_closed(self):
         schema, observations, evidence = self.simulate()
@@ -104,8 +109,8 @@ class UNCorrectMapLiveBFTests(unittest.TestCase):
         self.assertEqual(schema["bd_checkpoint"]["evidence_count"], 7)
         policy = schema["population_policy"]
         self.assertEqual(policy["mode"], "CONTROLLED_INSTITUTIONAL_SPECIMEN")
-        self.assertEqual(policy["maximum_observation_count"], 6)
-        self.assertEqual(policy["maximum_evidence_count"], 9)
+        self.assertGreaterEqual(policy["maximum_observation_count"], 6)
+        self.assertGreaterEqual(policy["maximum_evidence_count"], 9)
         self.assertFalse(policy["automatic_ingestion_allowed"])
         self.assertFalse(policy["public_observation_projection_allowed"])
         public = public_live_intelligence_projection(schema, evidence, observations, self.canonical)

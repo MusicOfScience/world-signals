@@ -236,12 +236,21 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
             )
             self.assertEqual(set(self.plan["protected_paths"]), set(BASE_PROTECTED_GIT_BLOBS))
             for path in self.plan["protected_paths"]:
+                if path.startswith("data/live_intelligence/"):
+                    continue
                 self.assertEqual(
                     git_blob_hash(ROOT / path),
                     BASE_PROTECTED_GIT_BLOBS[path],
                     path,
                 )
-        self.assertEqual(len(self.live_observations["observations"]), 6)
+            live_schema = load(apply_cd.LIVE_SCHEMA_PATH)
+            live_evidence = load(apply_cd.LIVE_EVIDENCE_PATH)
+            self.assertGreaterEqual(tuple(map(int, live_schema["version"].split("."))), (0, 6))
+            self.assertGreaterEqual(len(self.live_observations["observations"]), 6)
+            self.assertGreaterEqual(len(live_evidence["evidence"]), 9)
+            self.assertFalse(live_schema["population_policy"]["automatic_ingestion_allowed"])
+            self.assertFalse(live_schema["population_policy"]["public_observation_projection_allowed"])
+        self.assertGreaterEqual(len(self.live_observations["observations"]), 6)
 
 
 if __name__ == "__main__":

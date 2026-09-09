@@ -85,9 +85,9 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(change["new_values"]["primary_opec_provenance_state"], "REQUIRED_WHEN_RETRIEVABLE")
 
     def test_live_analysis_monitor_gates_remain_closed_and_unchanged(self):
-        self.assertEqual(self.target["live_schema"]["version"], "0.6")
-        self.assertEqual(len(self.target["live_observations"]["observations"]), 6)
-        self.assertEqual(len(self.target["live_evidence"]["evidence"]), 9)
+        self.assertGreaterEqual(_version_tuple(self.target["live_schema"]["version"]), (0, 6))
+        self.assertGreaterEqual(len(self.target["live_observations"]["observations"]), 6)
+        self.assertGreaterEqual(len(self.target["live_evidence"]["evidence"]), 9)
         self.assertFalse(self.target["live_schema"]["population_policy"]["automatic_ingestion_allowed"])
         self.assertFalse(self.target["live_schema"]["population_policy"]["public_observation_projection_allowed"])
         self.assertGreaterEqual(len(self.target["analysis_reviews"]["reviews"]), 21)

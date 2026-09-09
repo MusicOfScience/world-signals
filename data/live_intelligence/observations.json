@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.6",
-  "reference_date": "2026-09-07",
+  "version": "0.7",
+  "reference_date": "2026-09-10",
   "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
   "observations": [
     {
@@ -188,7 +188,37 @@
       },
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-INST-PHL-BARMM-PREELECT-20260909-001",
+      "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "GPH-MILF ceasefire coordination reinforced ahead of the BARMM parliamentary election",
+      "summary": "Philippine Information Agency reported on 9 September 2026 that government representatives, Moro Islamic Liberation Front ground commanders and other stakeholders signed ceasefire-related coordination guidelines and a pledge to promote a peaceful electoral process ahead of the 14 September BARMM parliamentary election. This observation records the institutional coordination as factual pre-election context only; it does not predict election security, integrity, results, peace-process outcomes or market effects, and it does not change the Canonical election date or provenance.",
+      "domain_tags": [
+        "POLITICS",
+        "INSTITUTIONS"
+      ],
+      "jurisdictions": [
+        "Philippines"
+      ],
+      "regions": [
+        "Southeast Asia"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-PHL-BARMM-PIA-PEACE-20260909"
+      ],
+      "canonical_links": [
+        {
+          "occurrence_id": "WSO-EL-PH-BARMM-20260914",
+          "relationship": "CONTEXT_FOR"
+        }
+      ],
+      "revision_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false,
+      "observed_at_utc": "2026-09-09T17:05:16Z"
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through BF: AW Nepal physical shock, AX DRC evolving-state pair, AZ Japan FIES economic data, BD Vietnam-Myanmar geopolitical development, and one UN General Assembly institutional development. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CG: seven observations, including the first reviewed CONTEXT_FOR link from current pre-election institutional context to an existing Canonical occurrence. Public projection and automatic ingestion remain closed."
 }

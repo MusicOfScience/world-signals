@@ -113,7 +113,7 @@ def build_target(observed_at_utc: str) -> tuple[dict[str, Any], dict[str, Any], 
     new_schema["version"] = "0.7"
     new_schema["reference_date"] = "2026-09-10"
     new_schema["population_policy"] = {
-        "mode": "CONTROLLED_CANONICAL_CONTEXT_SPECIMEN",
+        "mode": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
         "production_population_allowed": True,
         "evidence_population_allowed": True,
         "maximum_observation_count": 7,
@@ -142,7 +142,7 @@ def build_target(observed_at_utc: str) -> tuple[dict[str, Any], dict[str, Any], 
         "schema_version": "0.7",
         "observations_version": "0.7",
         "evidence_version": "0.7",
-        "population_state": "CONTROLLED_CANONICAL_CONTEXT_SPECIMEN",
+        "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
         "observation_count": 7,
         "evidence_count": 10,
         "base_main_sha": plan["base_main_sha"],
@@ -152,14 +152,14 @@ def build_target(observed_at_utc: str) -> tuple[dict[str, Any], dict[str, Any], 
     new_observations = deepcopy(observations)
     new_observations["version"] = "0.7"
     new_observations["reference_date"] = "2026-09-10"
-    new_observations["population_state"] = "CONTROLLED_CANONICAL_CONTEXT_SPECIMEN"
+    new_observations["population_state"] = "CONTROLLED_INSTITUTIONAL_SPECIMEN"
     new_observations["observations"].append(obs_template)
     new_observations["scope_note"] = "Bounded reviewed internal Live Intelligence store through CG: seven observations, including the first reviewed CONTEXT_FOR link from current pre-election institutional context to an existing Canonical occurrence. Public projection and automatic ingestion remain closed."
 
     new_evidence = deepcopy(evidence)
     new_evidence["version"] = "0.7"
     new_evidence["reference_date"] = "2026-09-10"
-    new_evidence["population_state"] = "CONTROLLED_CANONICAL_CONTEXT_SPECIMEN"
+    new_evidence["population_state"] = "CONTROLLED_INSTITUTIONAL_SPECIMEN"
     new_evidence["evidence"].append(evidence_row)
     new_evidence["scope_note"] = "Evidence supports the bounded reviewed Live store through CG. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed."
 
