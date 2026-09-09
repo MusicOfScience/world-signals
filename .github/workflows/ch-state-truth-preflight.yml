@@ -88,6 +88,9 @@ jobs:
               'scripts/apply_analysis_revision_contract_ba.py',
               'scripts/apply_japan_fies_live_analysis_az.py',
               'tests/test_project_state_snapshot_ch.py',
+              'tests/test_vietnam_myanmar_live_bd.py',
+              'tests/test_un_correct_map_live_bf.py',
+              'tests/test_opec_official_confirmation_bg.py',
           }
           changed = set(subprocess.check_output(
               ['git', 'diff', '--name-only', 'origin/main...HEAD'], text=True
