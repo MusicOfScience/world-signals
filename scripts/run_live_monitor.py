@@ -54,6 +54,8 @@ from world_signals.adapters import (
 from world_signals.io import load_json
 from world_signals.bsp_monetary_monitor import bsp_monetary_rss_review_candidates
 from world_signals.cbsl_monetary_monitor import cbsl_mpr_rss_review_candidates
+from world_signals.adapters.hmt_t1_content_api import fetch_hmt_t1_content_api
+from world_signals.hmt_t1_monitor import hmt_t1_dependency_review_candidate
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy, cbn_mpc_schedule_review_candidates
 from world_signals.eurostat_monitor import eurostat_release_calendar_review_candidates
 from world_signals.european_council_monitor import european_council_rss_review_candidates
@@ -454,6 +456,54 @@ def main() -> int:
                 "automatic_commit_allowed":False,
             })
 
+
+    if "HMT_T1_CONTENT_API" in configs:
+        hmt_config=configs["HMT_T1_CONTENT_API"]
+        try:
+            hmt_state,hmt_snap=fetch_hmt_t1_content_api()
+            report["source_health"].append({
+                "adapter_id":"HMT_T1_CONTENT_API",
+                "source_id":hmt_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":hmt_snap.as_dict(),
+                "content_id":hmt_state.content_id,
+                "public_updated_at":hmt_state.public_updated_at,
+                "withdrawn":hmt_state.withdrawn,
+                "pending_markers":hmt_state.pending_markers,
+                "semantic_sha256":hmt_state.semantic_sha256,
+                "request_budget_per_run":1,
+                "request_count":1,
+                "followup_request_count":0,
+                "human_page_request_count":0,
+                "parent_publication_request_count":0,
+                "attachment_request_count":0,
+                "legislation_followup_request_count":0,
+                "parliament_followup_request_count":0,
+                "search_request_count":0,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "condition_state_authority":False,
+                "canonical_datetime_mutation_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidate,observation=hmt_t1_dependency_review_candidate(registry.get("records",[]),hmt_state,hmt_config)
+            _append_candidate(report,candidate,observation)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"HMT_T1_CONTENT_API",
+                "source_id":hmt_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "event_state_inference":"NONE",
+                "condition_state_inference":"NONE",
+                "automatic_followup_fetch_allowed":False,
+                "automatic_commit_allowed":False,
+            })
 
     if "SARB_MPC_STATEMENTS_RSS" in configs:
         sarb_config=configs["SARB_MPC_STATEMENTS_RSS"]

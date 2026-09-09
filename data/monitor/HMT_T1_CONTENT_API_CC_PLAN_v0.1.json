@@ -1,0 +1,108 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CC",
+  "reference_date": "2026-09-09",
+  "exact_base_main_sha": "67de150ac1175c59ccfa3a844c1dcecd1dc2b4ed",
+  "selection": {
+    "canonical_policy_source_id": "WSSRC-MKT-012",
+    "machine_source_id": "WSSRC-MKT-014",
+    "adapter_id": "HMT_T1_CONTENT_API",
+    "series_id": "WSER-MKT-UK-T1",
+    "occurrence_id": "WSO-MKT-A-0016",
+    "content_api_docs_url": "https://content-api.publishing.service.gov.uk/",
+    "content_api_reference_url": "https://content-api.publishing.service.gov.uk/reference.html",
+    "content_api_url": "https://www.gov.uk/api/content/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk",
+    "human_page_url": "https://www.gov.uk/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk",
+    "rights_evidence_url": "https://www.gov.uk/help/terms-conditions"
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.01",
+    "source_count": 256,
+    "monitor_expectations_version": "0.26",
+    "configured_monitor_adapter_count": 24,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.02",
+    "source_count": 257,
+    "monitor_expectations_version": "0.27",
+    "configured_monitor_adapter_count": 25,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_contract": {
+    "occurrence_id": "WSO-MKT-A-0016",
+    "series_id": "WSER-MKT-UK-T1",
+    "source_id": "WSSRC-MKT-012",
+    "category": "CORPORATE_FINANCIAL_MARKET_STRUCTURE",
+    "activation_mode": "CONDITIONAL",
+    "certainty_status": "PROVISIONAL",
+    "condition_state": "PENDING_DEPENDENCY",
+    "start_local": "2027-10-11",
+    "time_status": "PROVISIONAL",
+    "timing_type": "JURISDICTIONAL_CIVIL_DATE"
+  },
+  "machine_identity": {
+    "content_id": "b6b2d2f2-eae6-4564-9ed1-338abb8ca2f2",
+    "base_path": "/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk",
+    "title": "Policy note – Mandating T+1 settlement in the UK",
+    "document_type": "html_publication",
+    "schema_name": "html_publication",
+    "baseline_public_updated_at": "2025-11-20T09:30:10+00:00"
+  },
+  "baseline_pending_markers": {
+    "draft_not_final": "This is a draft SI and should not be treated as final",
+    "intends_lay_final": "intends to lay the final SI",
+    "affirmative_procedure": "subject to the affirmative procedure",
+    "both_houses": "approved by both Houses of Parliament",
+    "implementation_date": "11 October 2027"
+  },
+  "request_contract": {
+    "max_requests_per_run": 1,
+    "content_api_requests": 1,
+    "human_page_requests": 0,
+    "parent_publication_requests": 0,
+    "attachment_requests": 0,
+    "legislation_followup_requests": 0,
+    "parliament_followup_requests": 0,
+    "search_requests": 0
+  },
+  "authority_gates": {
+    "schedule_authority": false,
+    "clock_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "condition_state_authority": false,
+    "canonical_datetime_mutation_allowed": false,
+    "automatic_attachment_fetch_allowed": false,
+    "automatic_parent_page_fetch_allowed": false,
+    "automatic_legislation_followup_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "review_contract": {
+    "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_OR_DEPENDENCY_STATE_MUTATION",
+    "raw_transport_hash_policy": "RAW_TRANSPORT_OR_BODY_HASH_CHANGE_ALONE_IS_NOT_LEGAL_STATE_EVIDENCE",
+    "positive_change_policy": "GENERATE_HMT_T1_DEPENDENCY_REVIEW_CANDIDATE_REQUIRE_SEPARATE_AUTHORITATIVE_UK_LEGAL_VERIFICATION",
+    "unchanged_policy": "OBSERVE_PENDING_DEPENDENCY_BASELINE_NO_CANONICAL_ACTION",
+    "withdrawal_policy": "GENERATE_REVIEW_CANDIDATE_NO_CANCELLATION_INFERENCE"
+  },
+  "diagnostics": {
+    "pressure_audit_success_run_id": 34322353722,
+    "pressure_audit_success_job_id": 102371643902,
+    "content_api_contract_run_id": 34322468430,
+    "content_api_contract_job_id": 102372012320,
+    "content_api_status": 200,
+    "content_api_content_type": "application/json; charset=utf-8",
+    "content_api_body_bytes": 21083,
+    "content_api_body_sha256": "5cf82ebdd7bab2b2a0b9322d635cfedfc873b49fecca63f7751d41fa9d00ff91",
+    "followup_request_count": 0,
+    "repository_byte_clean": true
+  }
+}

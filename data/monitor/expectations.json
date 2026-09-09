@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_MONITOR_EXPECTATIONS",
-  "version": "0.26",
+  "version": "0.27",
   "automatic_canonical_commit": false,
   "google_calendar_write": false,
   "adapters": [
@@ -2094,6 +2094,47 @@
       "automatic_new_occurrence_creation_allowed": false,
       "automatic_live_or_analysis_promotion_allowed": false,
       "live_intelligence_policy": "NO_AUTOMATIC_PROMOTION_TO_LIVE_INTELLIGENCE_OR_ANALYSIS",
+      "automatic_commit_allowed": false
+    },
+    {
+      "adapter_id": "HMT_T1_CONTENT_API",
+      "source_id": "WSSRC-MKT-014",
+      "canonical_occurrence_ids": [
+        "WSO-MKT-A-0016"
+      ],
+      "monitor_role": "CONDITIONAL_LEGISLATIVE_DEPENDENCY_SENTINEL",
+      "cadence": "DAILY",
+      "baseline_public_updated_at": "2025-11-20T09:30:10+00:00",
+      "machine_identity": {
+        "content_id": "b6b2d2f2-eae6-4564-9ed1-338abb8ca2f2",
+        "base_path": "/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk",
+        "title": "Policy note – Mandating T+1 settlement in the UK",
+        "document_type": "html_publication",
+        "schema_name": "html_publication"
+      },
+      "baseline_pending_markers": {
+        "draft_not_final": "This is a draft SI and should not be treated as final",
+        "intends_lay_final": "intends to lay the final SI",
+        "affirmative_procedure": "subject to the affirmative procedure",
+        "both_houses": "approved by both Houses of Parliament",
+        "implementation_date": "11 October 2027"
+      },
+      "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_OR_DEPENDENCY_STATE_MUTATION",
+      "positive_change_policy": "GENERATE_HMT_T1_DEPENDENCY_REVIEW_CANDIDATE_REQUIRE_SEPARATE_AUTHORITATIVE_UK_LEGAL_VERIFICATION",
+      "raw_transport_hash_policy": "RAW_TRANSPORT_OR_BODY_HASH_CHANGE_ALONE_IS_NOT_LEGAL_STATE_EVIDENCE",
+      "withdrawal_policy": "GENERATE_REVIEW_CANDIDATE_NO_CANCELLATION_INFERENCE",
+      "request_budget_per_run": 1,
+      "schedule_authority": false,
+      "clock_authority": false,
+      "lifecycle_authority": false,
+      "certainty_authority": false,
+      "condition_state_authority": false,
+      "canonical_datetime_mutation_allowed": false,
+      "automatic_attachment_fetch_allowed": false,
+      "automatic_parent_page_fetch_allowed": false,
+      "automatic_legislation_followup_allowed": false,
+      "automatic_new_occurrence_creation_allowed": false,
+      "automatic_live_or_analysis_promotion_allowed": false,
       "automatic_commit_allowed": false
     }
   ]
