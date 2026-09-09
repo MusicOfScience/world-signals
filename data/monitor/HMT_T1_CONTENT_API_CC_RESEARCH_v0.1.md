@@ -30,6 +30,8 @@ CC proposes a separate monitor-only source `WSSRC-MKT-014` for the GOV.UK Conten
 
 GOV.UK documents the Content API as a JSON interface for applications accessing GOV.UK content, including applications that need to keep incorporated content up to date. It requires no authentication and publishes a client rate limit far above the proposed WORLD SIGNALS request budget. The HM Treasury page is Crown copyright material made available under the Open Government Licence v3.0. CC treats that as clearance only for this bounded first-party Content API route; it is not a licence to crawl linked legislation, attachments or unrelated GOV.UK surfaces.
 
+`WSSRC-MKT-014` has **zero direct Canonical dependencies**. The Canonical occurrence remains owned by `WSSRC-MKT-012`; the monitor-only source reaches `WSO-MKT-A-0016` solely through the configured monitor route scope. This distinction is required by the source-registry dependency helpers and prevents a machine-interface identity from being misrepresented as Canonical provenance authority.
+
 ## Read-only pressure diagnostics
 
 The first post-CB pressure workflow initially failed before any project diagnostic because the temporary harness used the default shallow checkout and then requested `HEAD^`. That failure is preserved as harness evidence:
@@ -93,6 +95,28 @@ The monitor therefore:
 10. requires manual authoritative UK legal verification before any governed event-state change.
 
 If the HM Treasury page is revised merely for editorial reasons, the candidate remains review-only. If it is revised to report a new legal milestone, that is still only a prompt to verify the legal instrument through the appropriate authoritative source.
+
+## First guarded materialisation attempt
+
+The first guarded materialisation run is intentionally preserved rather than rewritten out of the history:
+
+- run `34323139129`
+- job `102374145190`
+- exact pre-state and ancestry: PASS
+- guarded transaction in the ephemeral workspace: PASS
+- registry validator: PASS
+- Live Intelligence validator: PASS
+- Analysis validator: PASS
+- full unittest discovery: FAILED with two failures after 1,196 tests (68 skipped)
+- commit/push step: not reached
+- therefore no materialised governed changes escaped the workflow workspace
+
+The failures had different meanings:
+
+1. `test_sarb_mpc_rss_activation_cb` froze the repository at CB's exact Sources/Monitor counts (`v2.01/256`, `v0.26/24`). CC correctly advances those descendant layers, so the CB test is being made descendant-safe while retaining exact CB source, route, request-budget and authority-gate assertions.
+2. `test_source_governance_verification_closeout_a` exposed a genuine CC governance error: the proposed monitor-only `WSSRC-MKT-014` had been assigned `canonical_dependency_count: 1`, although no Canonical record uses that source ID. The correct value is `0`; the single occurrence is reached only by the monitor route and remains sourced to `WSSRC-MKT-012`.
+
+The first-run failure is therefore useful validation evidence: it caught both a historical test-maintenance problem and a real source-governance classification defect before any production-shaped state was committed.
 
 ## Governed target
 
