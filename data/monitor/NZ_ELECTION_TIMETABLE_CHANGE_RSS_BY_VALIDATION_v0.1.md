@@ -167,9 +167,40 @@ Live semantic result:
 
 After the live parse, the complete repository validators/tests/build passed again and the runner restored byte-clean.
 
+## Controlled governed transaction
+
+Run `34301969070`, job `102310582522` — **SUCCESS**.
+
+The controlled transaction re-established the exact post-BX ancestry immediately before applying and immediately before pushing the governed patch. `origin/main` remained:
+
+`a3bca03f36eb5af9036017aad926f75f6762267f`
+
+The transaction:
+
+- ran the helper in check-only mode before materialisation;
+- applied only the five previously validated governed/runtime files;
+- proved the staged set was exactly those five files;
+- preserved `WSSRC-EL-NZ-001` object-for-object;
+- created only the monitor identity `WSSRC-EL-NZ-002` and route `NZ_ELECTION_TIMETABLE_CHANGE_RSS` at the governed layer;
+- confirmed Canonical v0.41 / 689 unchanged;
+- confirmed Sources v1.98 / 254;
+- confirmed Monitor expectations v0.23 / 21;
+- kept automatic Canonical commit OFF and Google Calendar write OFF;
+- passed registry, Live Intelligence and Analysis validators;
+- passed **1,102 unit tests with 63 intentionally skipped**;
+- passed Python compilation, all JavaScript syntax checks and static build;
+- proved protected data layers byte-identical;
+- pushed governed commit `cd2ef381665fc583f20ca17a5b4777acd9a3f40b` (`BY: activate NZ election timetable RSS sentinel`).
+
+The temporary controlled-transaction workflow was then removed via the repository contents interface rather than broadening the workflow token's permissions. Its retirement commit was:
+
+`86cd3b04282dce226ab142510689290614169339`
+
+No BY diagnostic, preflight or transaction workflow remains in the branch.
+
 ## Validation conclusion
 
-BY's intended architecture is validated:
+BY's architecture is validated and the governed activation has completed:
 
 **Canonical election timetable authority stays held/manual for HTML retrieval; the separately advertised RSS feed becomes a bounded source-page update sentinel only.**
 
