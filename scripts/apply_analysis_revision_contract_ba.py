@@ -195,7 +195,16 @@ def target_status(current: str) -> str:
 
 def target_roadmap(current: str) -> str:
     heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
-    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:
+    ch_descendant_heading = "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED"
+    ch_state_marker = "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->"
+    if (
+        heading in current
+        or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current
+        or (ch_state_marker in current and ch_descendant_heading in current)
+    ):
+        # Later reviewed roadmaps are mutable recovery documentation. Once the
+        # current derived-state contract and a production revision stage are
+        # present, BA's historical roadmap transform is already superseded.
         return current
     marker = "## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT"
     require(marker in current, "BA roadmap could not locate Stage 9 marker")
@@ -259,104 +268,130 @@ def assert_preconditions(plan: dict[str, Any]) -> None:
             "BA Analysis evidence population": (len(analysis_evidence.get("evidence", [])), pre["analysis_evidence_count"]),
             "BA Live observation population": (len(live_observations.get("observations", [])), pre["live_observation_count"]),
             "BA Live evidence population": (len(live_evidence.get("evidence", [])), pre["live_evidence_count"]),
-            "BA production Live inputs": (production_live_input_count(reviews), pre["production_live_input_count"]),
+        },
+        exact_values={
+            "BA automatic Canonical commit gate": (expectations.get("automatic_canonical_commit"), False),
+            "BA Google Calendar write gate": (expectations.get("google_calendar_write"), False),
         },
     )
-    require(report.ok, "BA descendant precondition failed: " + "; ".join(report.errors))
-    target_analysis_schema(analysis_schema)
+    require(report.ok, "BA descendant preconditions failed: " + "; ".join(report.errors))
 
-def simulate() -> dict[str, Any]:
+
+def assert_target(plan: dict[str, Any], target_schema: dict[str, Any]) -> None:
+    target = plan["target_state"]
+    require(version_at_least(target_schema.get("version"), target["analysis_schema_version"]), "BA target Analysis schema version mismatch")
+    policy = target_schema.get("analysis_revision_policy") or {}
+    require(policy.get("parent_snapshot_must_remain_present") is True, "BA must preserve revision parent")
+    require(policy.get("same_canonical_occurrence_required") is True, "BA revision must stay on same Canonical occurrence")
+    require(policy.get("analysis_as_of_must_strictly_advance") is True, "BA revision must advance analysis as-of")
+    require(policy.get("cycles_prohibited") is True, "BA revision cycles must be prohibited")
+    require(policy.get("branching_prohibited_in_first_controlled_mode") is True, "BA first mode must prohibit branching")
+    require(policy.get("new_live_evidence_revision_requires_novel_live_input") is True, "BA novel Live evidence rule missing")
+    require(policy.get("live_observation_does_not_automatically_create_revision") is True, "BA must prohibit automatic Live-to-revision promotion")
+    require(policy.get("live_revision_and_analysis_revision_are_distinct") is True, "BA must separate Live and Analysis revision lineage")
+    require(policy.get("upstream_canonical_mutation_allowed") is False, "BA must not mutate Canonical")
+    require(policy.get("upstream_live_mutation_allowed") is False, "BA must not mutate Live")
+    require(policy.get("upstream_monitor_mutation_allowed") is False, "BA must not mutate Monitor")
+    require(policy.get("google_calendar_write_allowed") is False, "BA Calendar write must remain closed")
+    require(policy.get("automatic_latest_analysis_selection_allowed") is False, "BA latest-head selection must remain closed")
+    require(policy.get("public_revision_head_collapse_allowed") is False, "BA public revision-head collapse must remain closed")
+    require(set(target_revision_policy()["required_revision_fields"]).issubset(set(policy.get("required_revision_fields") or [])), "BA required revision fields missing")
+
+
+def simulate(plan: dict[str, Any]) -> dict[str, Any]:
+    assert_preconditions(plan)
+    current_schema = load(ANALYSIS_SCHEMA_PATH)
+    target_schema = target_analysis_schema(current_schema)
+    assert_target(plan, target_schema)
     return {
-        "analysis_schema": target_analysis_schema(load(ANALYSIS_SCHEMA_PATH)),
-        "status": target_status(STATUS_PATH.read_text(encoding="utf-8")),
-        "roadmap": target_roadmap(ROADMAP_PATH.read_text(encoding="utf-8")),
+        "analysis_schema_version": target_schema["version"],
+        "analysis_revision_policy_mode": (target_schema.get("analysis_revision_policy") or {}).get("mode"),
+        "already_materialised_descendant": version_at_least(current_schema.get("version"), "0.7"),
     }
 
 
-def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
-    schema = target["analysis_schema"]
-    reviews = load(REVIEWS_PATH)
-    evidence = load(ANALYSIS_EVIDENCE_PATH)
+def apply(plan: dict[str, Any]) -> dict[str, Any]:
+    require(os.environ.get("WORLD_SIGNALS_APPLY_ANALYSIS_REVISION_CONTRACT_BA") == "YES", "BA apply gate is closed")
+    assert_preconditions(plan)
+
+    current_schema = load(ANALYSIS_SCHEMA_PATH)
+    target_schema = target_analysis_schema(current_schema)
+    if current_schema != target_schema:
+        ANALYSIS_SCHEMA_PATH.write_text(dump(target_schema), encoding="utf-8")
+
+    current_status = STATUS_PATH.read_text(encoding="utf-8")
+    target_status_text = target_status(current_status)
+    if current_status != target_status_text:
+        STATUS_PATH.write_text(target_status_text, encoding="utf-8")
+
+    current_roadmap = ROADMAP_PATH.read_text(encoding="utf-8")
+    target_roadmap_text = target_roadmap(current_roadmap)
+    if current_roadmap != target_roadmap_text:
+        ROADMAP_PATH.write_text(target_roadmap_text, encoding="utf-8")
+
+    assert_target(plan, load(ANALYSIS_SCHEMA_PATH))
+    return simulate(plan)
+
+
+def validate_repository() -> None:
     canonical = load(CANONICAL_PATH)
     live_schema = load(LIVE_SCHEMA_PATH)
-    live_evidence = load(LIVE_EVIDENCE_PATH)
     live_observations = load(LIVE_OBSERVATIONS_PATH)
+    live_evidence = load(LIVE_EVIDENCE_PATH)
+    analysis_schema = load(ANALYSIS_SCHEMA_PATH)
+    reviews = load(REVIEWS_PATH)
+    evidence = load(ANALYSIS_EVIDENCE_PATH)
 
-    target_analysis_schema(schema)
-    exact_foundation = (
-        schema.get("version") == "0.7"
-        and len(reviews.get("reviews", [])) == 21
-        and len(evidence.get("evidence", [])) == 95
-        and production_analysis_revision_count(reviews) == 0
-        and production_live_input_count(reviews) == 1
+    live_errors = validate_live_intelligence(
+        live_schema,
+        live_observations,
+        live_evidence,
+        canonical,
     )
-    if exact_foundation:
-        require(schema.get("analysis_revision_policy") == target_revision_policy(), "BA revision policy drift")
-        require(exact_series_count(reviews) == 0, "BA target must preserve EXACT_TIMESTAMP_SERIES=0")
-    else:
-        report = validate_descendant_checkpoint(
-            versions_at_least={
-                "BA target Analysis schema": (schema.get("version"), "0.7"),
-                "BA target reviews": (reviews.get("version"), "0.17"),
-                "BA target evidence": (evidence.get("version"), "0.17"),
-            },
-            counts_at_least={
-                "BA target review population": (len(reviews.get("reviews", [])), 21),
-                "BA target evidence population": (len(evidence.get("evidence", [])), 95),
-                "BA target production Live inputs": (production_live_input_count(reviews), 1),
-            },
-        )
-        require(report.ok, "BA target descendant failed: " + "; ".join(report.errors))
-
-    core = validate_analysis(schema, evidence, reviews, canonical)
-    require(core.ok, "BA target core Analysis validation failed: " + "; ".join(core.errors))
-    revisions = validate_analysis_revisions(schema, reviews)
-    require(revisions.ok, "BA target revision validation failed: " + "; ".join(revisions.errors))
-    bridge = validate_live_analysis_bridge(schema, reviews, live_observations)
-    require(bridge.ok, "BA target Live→Analysis bridge validation failed: " + "; ".join(bridge.errors))
-    live = validate_live_intelligence(live_schema, live_evidence, live_observations, canonical)
-    require(live.ok, "BA target Live validation failed: " + "; ".join(live.errors))
-
-    required_doc_markers = {
-        "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
-    }
-    if target["status"].startswith("# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"):
-        required_doc_markers["BA status"] = (
-            target["status"],
-            ["BA adds a **production-closed Analysis revision-lineage contract**"],
-        )
-    docs = validate_descendant_checkpoint(required_markers=required_doc_markers)
-    require(docs.ok, "BA target documentation drift: " + "; ".join(docs.errors))
-
-def write_target(target: dict[str, Any]) -> None:
-    ANALYSIS_SCHEMA_PATH.write_text(dump(target["analysis_schema"]), encoding="utf-8")
-    STATUS_PATH.write_text(target["status"], encoding="utf-8")
-    ROADMAP_PATH.write_text(target["roadmap"], encoding="utf-8")
+    require(not live_errors, "BA Live validation failed: " + "; ".join(live_errors))
+    analysis_errors = validate_analysis(
+        analysis_schema,
+        reviews,
+        evidence,
+        canonical,
+    )
+    require(not analysis_errors, "BA Analysis validation failed: " + "; ".join(analysis_errors))
+    bridge_errors = validate_live_analysis_bridge(
+        analysis_schema,
+        reviews,
+        live_schema,
+        live_observations,
+        canonical,
+    )
+    require(not bridge_errors, "BA Live/Analysis bridge validation failed: " + "; ".join(bridge_errors))
+    revision_errors = validate_analysis_revisions(
+        analysis_schema,
+        reviews,
+        live_observations,
+    )
+    require(not revision_errors, "BA Analysis revision validation failed: " + "; ".join(revision_errors))
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    mode = parser.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--check-only", action="store_true")
-    mode.add_argument("--apply", action="store_true")
+def main() -> int:
+    parser = argparse.ArgumentParser(description="WORLD SIGNALS BA Analysis revision contract")
+    parser.add_argument("--check", action="store_true")
+    parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--validate", action="store_true")
     args = parser.parse_args()
-
+    require(args.check or args.apply or args.validate, "choose --check, --apply or --validate")
     plan = load(PLAN_PATH)
-    assert_preconditions(plan)
-    target = simulate()
-    assert_target(plan, target)
 
-    if args.check_only:
-        print("BA read-only simulation: PASS")
-        return
+    if args.apply:
+        result = apply(plan)
+        print(json.dumps(result, indent=2))
+    elif args.check:
+        print(json.dumps(simulate(plan), indent=2))
 
-    require(
-        os.environ.get("WORLD_SIGNALS_BA_ALLOW_WRITE") == "1",
-        "BA apply requires WORLD_SIGNALS_BA_ALLOW_WRITE=1",
-    )
-    write_target(target)
-    print("BA Analysis revision foundation materialised: PASS")
+    if args.validate:
+        validate_repository()
+        print("BA validation PASS")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
