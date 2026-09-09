@@ -122,13 +122,14 @@ The tests intentionally distinguish the derived recovery surface from governed t
 
 ## 8. Validation and failure history
 
-Failure history was not squashed or hidden. GitHub Actions retains the unsuccessful CH branch runs alongside the final successful run. At closeout, 22 completed failed runs remained visible in Actions. They include iterative preflight failures and short-lived bounded repair harnesses used to correct descendant compatibility. The important failure classes were:
+Failure history was not squashed or hidden. GitHub Actions retains the unsuccessful CH branch runs alongside the final successful run. At final temporary-workflow retirement, 23 completed failed runs remained visible in Actions. They include iterative preflight failures, short-lived bounded repair harnesses used to correct descendant compatibility, and one final expected closeout-whitelist anomaly described below. The important failure classes were:
 
 1. historical BA and AZ helpers treated obsolete recovery prose as if it were permanent governed state;
 2. BD, BF and BG historical regressions likewise froze historical `PROJECT_STATUS.md` / `ROADMAP.md` bodies rather than their substantive historical contracts;
 3. one BA repair attempt introduced an accidental helper-call/API mismatch, then a subsequent repair harness lost nested Python indentation before execution;
 4. one successful focused BA repair was initially reported failed only because the harness expected an unstaged ` M` status while `git checkout origin/main -- file` left the intended helper change staged as `M `;
-5. the BG/OPEC descendant test needed to recognise the current CH recovery surface without invoking quarantined OPEC transaction/materialisation machinery.
+5. the BG/OPEC descendant test needed to recognise the current CH recovery surface without invoking quarantined OPEC transaction/materialisation machinery;
+6. after the permanent audit closeout commit, temporary preflight run #18 / Actions run `34400466760` passed the exact-base assertion, governed/derived validators, all 1,228 repository tests, compilation and static build, then failed only in the temporary exact diff whitelist because that soon-to-be-retired workflow still expected `.github/workflows/ch-state-truth-preflight.yml` to appear among changed paths. The actual changed-path set already omitted that temporary workflow. This was a harness retirement mismatch, not a governed-state, validation, test or build failure. The workflow had `contents: read` only and no write authority, and it was deleted immediately afterward.
 
 The full CH preflight workflow itself was read-only: it had `contents: read`, no commit gate and no authority to mutate repository state. Temporary write-capable repair workflows were deliberately narrow, branch-only and used only to commit the explicitly inspected helper/test repairs; they were deleted after use. None had authority to mutate the protected governed layers listed in §5. Their commits and failed/successful Action runs remain in branch history as evidence.
 
