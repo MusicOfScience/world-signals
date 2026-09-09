@@ -31,9 +31,20 @@ jobs:
           step_idx=src.index(step)
           start=next(i for i in range(step_idx,len(src)) if src[i].strip()=='set -euo pipefail')
           body=[]
+          in_triple=False
           for line in src[start:]:
-              body.append(line[10:] if line.startswith('          ') else line)
+              stripped=line.lstrip()
+              opens=("research='''", "adapter=r'''", "monitor=r'''", "apply_script=r'''", "tests=r'''", "activation=r'''")
+              if not in_triple:
+                  rendered=line[10:] if line.startswith('          ') else line
+                  body.append(rendered)
+                  if any(rendered.lstrip().startswith(x) for x in opens):
+                      in_triple=True
+              else:
+                  body.append(line)
+                  if line == "'''":
+                      in_triple=False
           Path('/tmp/cb-builder.sh').write_text('\n'.join(body)+'\n')
-          print('CB_BUILDER_LINES',len(body))
+          print('CB_BUILDER_LINES',len(body),'TRIPLE_CLOSED',not in_triple)
           PY
           bash /tmp/cb-builder.sh
