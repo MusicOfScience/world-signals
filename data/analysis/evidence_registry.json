@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.17",
-  "reference_date": "2026-09-06",
+  "version": "0.18",
+  "reference_date": "2026-09-09",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
     {
@@ -1911,6 +1911,45 @@
       "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
       "canonical_provenance_effect": "NONE",
       "distribution_note": "Analytical benchmark/context only. The Reuters URL date reflects its web publication path and is not used to retime the Canonical 4 September Asia/Tokyo release."
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG9-UN-INDICO-20260817",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "United Nations Office at Geneva / Indico.UN",
+      "host_or_distribution": "United Nations Indico",
+      "title": "Ninth Session of the Working Group on the Strengthening of the Biological Weapons Convention",
+      "url": "https://indico.un.org/event/1018822/timetable/?view=standard_numbered",
+      "published_at": null,
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The ninth session of the Working Group on the Strengthening of the Biological Weapons Convention took place in Geneva from 17 to 21 August 2026.",
+        "The ninth session is observed institutional follow-through after the February 2026 eighth session; occurrence of the meeting does not itself establish substantive consensus or adoption of a final package."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE"
+    },
+    {
+      "evidence_id": "WSEV-BWC-WG9-SHIB-REV7-20260827",
+      "evidence_class": "ACADEMIC_OR_INSTITUTIONAL",
+      "provider": "Sussex Harvard Information Bank / CBW Events",
+      "host_or_distribution": "SHIB-CBW Events catalogue",
+      "title": "Biological Weapons Convention Working Group plus associated Meetings of States Parties",
+      "url": "https://shib-temp.cbw-events.org.uk/bwc-wg_plus_msp/",
+      "published_at": null,
+      "roles": [
+        "SECOND_ORDER_OBSERVATION",
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "supports": [
+        "The specialist catalogue records BWC/WG/9/CRP.1/Rev.7 dated 27 August 2026 with the title 'Revised draft final report of the Working Group on the Strengthening of the Convention'.",
+        "The catalogue links that record to the corresponding UNODA Documents Library file; WORLD SIGNALS uses this row only for document identity, date and draft-status label, not to infer agreement on individual passages."
+      ],
+      "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+      "canonical_provenance_effect": "NONE",
+      "distribution_note": "Primary document URL retained for provenance/navigation: https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionNinth_session_(2026)/2026-08-27_BWC_WG_9_CRP1_Rev7.pdf . CD does not infer PDF-body semantics from this catalogue record."
     }
   ]
 }

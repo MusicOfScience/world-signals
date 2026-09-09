@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "EVENT_ANALYSIS_REVIEWS",
-  "version": "0.17",
-  "reference_date": "2026-09-06",
+  "version": "0.18",
+  "reference_date": "2026-09-09",
   "canonical_checkpoint": {
     "registry_version": "0.38",
     "record_count": 688
@@ -3270,6 +3270,111 @@
       ],
       "canonical_mutation_prohibited": true,
       "google_calendar_write": false
+    },
+    {
+      "analysis_id": "WSAN-BWC-WG8-2026-002",
+      "review_state": "REVIEWED_SAMPLE",
+      "review_phase": "POST_EVENT",
+      "analysis_as_of_utc": "2026-09-09T07:48:00Z",
+      "canonical_occurrence_id": "WSO-BWC-WG-2026-S08",
+      "canonical_series_id": "WSER-INT-BWC-WG-STRENGTHENING",
+      "canonical_event_type": "TREATY_WORKING_GROUP_SESSION",
+      "canonical_institution": "Biological Weapons Convention / UNODA",
+      "canonical_release_utc": null,
+      "scope": "BWC Working Group eighth session with newly admitted ninth-session institutional follow-through: preserving the eighth-session historical result while updating the later process dependency from prospective to observed",
+      "what_happened": {
+        "summary": "The eighth session continued negotiations on measures to strengthen and institutionalise the Biological Weapons Convention. During the session the Chair circulated successive revisions of the draft final report, with Rev.3 issued on 13 February without prejudice to future discussions. The session adopted its procedural report by consensus; the official record does not establish adoption of the substantive final strengthening report at this session.",
+        "actuals": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-OUTCOME",
+          "WSEV-BWC-WG8-UNODA-DOCUMENTS"
+        ]
+      },
+      "what_was_expected": {
+        "summary": "The Working Group's governing mandate called for a consensus report with conclusions and recommendations and urged completion as soon as possible, preferably before the end of 2025. That was an overall institutional aspiration, not a defensible forecast that the eighth session itself would conclude the substantive package.",
+        "benchmarks": [
+          {
+            "metric": "working_group_completion_guidance",
+            "value": "complete as soon as possible, preferably before the end of 2025, with a consensus report at completion",
+            "unit": "qualitative_institutional_guidance",
+            "benchmark_type": "OFFICIAL_PRIOR_GUIDANCE",
+            "evidence_refs": [
+              "WSEV-BWC-WG8-UNODA-MANDATE"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE"
+        ]
+      },
+      "what_surprised": {
+        "status": "NOT_ESTABLISHED",
+        "summary": "No defensible contemporaneous benchmark has been identified that makes adoption or non-adoption of a substantive final package at the eighth session a measurable surprise. The earlier preferred completion window had already passed, but soft institutional guidance is not converted into a session-specific forecast.",
+        "comparisons": [],
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE",
+          "WSEV-BWC-WG8-UNODA-OUTCOME"
+        ]
+      },
+      "what_moved": [],
+      "what_appears_connected": {
+        "interaction_type": "LEGAL_OR_OPERATIONAL_DEPENDENCY",
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "confidence": "HIGH",
+        "summary": "The eighth session sits inside the same consensus-based institutional process that continued through the ninth session in August 2026. The observed ninth-session occurrence and later Rev.7 draft-final-report identity are operational follow-through on the unresolved text, not evidence of external causality or final adoption.",
+        "evidence_refs": [
+          "WSEV-BWC-WG8-UNODA-MANDATE",
+          "WSEV-BWC-WG8-UNODA-OUTCOME",
+          "WSEV-BWC-WG9-UN-INDICO-20260817",
+          "WSEV-BWC-WG9-SHIB-REV7-20260827",
+          "WSEV-BWC-WG10-UNODA-SCHEDULE"
+        ]
+      },
+      "what_may_be_noise": [
+        {
+          "summary": "Revision numbers and draft-document proliferation are not scalar measures of negotiating success. The existence of BWC/WG/9/CRP.1/Rev.7 is used only as evidence that a document still labelled a revised draft final report existed after the ninth session.",
+          "evidence_refs": [
+            "WSEV-BWC-WG9-SHIB-REV7-20260827"
+          ]
+        },
+        {
+          "summary": "The absence of a market-movement entry remains intentional. Institutional continuation does not require a market proxy and does not establish a security, health or geopolitical effect.",
+          "evidence_refs": [
+            "WSEV-BWC-WG9-UN-INDICO-20260817"
+          ]
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "summary": "Continued work across the ninth and scheduled tenth sessions may reflect unresolved substantive differences, the Convention's consensus procedure, deliberate sequencing, or a combination. The chronology alone does not identify which explanation dominates.",
+          "evidence_refs": [
+            "WSEV-BWC-WG8-UNODA-MANDATE",
+            "WSEV-BWC-WG9-UN-INDICO-20260817",
+            "WSEV-BWC-WG10-UNODA-SCHEDULE"
+          ]
+        }
+      ],
+      "second_order_effects": {
+        "status": "OBSERVED",
+        "summary": "The parent packet treated later-session continuation as a watch item. That follow-through is now observed: the ninth session took place on 17–21 August 2026 and the specialist document catalogue records a Rev.7 artefact dated 27 August that remained titled a revised draft final report. UNODA still schedules a tenth session for 7–11 December 2026. These facts establish continuation of the institutional pathway, not completion of the final consensus package.",
+        "evidence_refs": [
+          "WSEV-BWC-WG9-UN-INDICO-20260817",
+          "WSEV-BWC-WG9-SHIB-REV7-20260827",
+          "WSEV-BWC-WG10-UNODA-SCHEDULE"
+        ]
+      },
+      "falsifiers": [
+        "If an authoritative eighth-session record establishes that the substantive final strengthening report itself was adopted by consensus on 13 February 2026, the historical eighth-session conclusion must be revised.",
+        "If an authoritative ninth-session record establishes that the Working Group's final consensus report was adopted during the ninth session, the CD conclusion that final consensus remained open after that session must be withdrawn.",
+        "If BWC/WG/9/CRP.1/Rev.7 is shown to be a final adopted Working Group report rather than a revised draft artefact, the document-status interpretation must be corrected.",
+        "If the scheduled tenth session is cancelled, materially rescheduled or superseded by an earlier final consensus mechanism, the forward watch point must be updated without rewriting either historical parent snapshot."
+      ],
+      "analytical_conclusion": "The parent conclusion about the eighth session stands: it advanced negotiating text and achieved procedural consensus without establishing adoption of the substantive final package. Newly admitted ninth-session evidence changes the follow-through assessment, not that history: later institutional continuation is now observed rather than merely prospective, while the post-session Rev.7 draft identity and still-scheduled tenth session do not establish final consensus.",
+      "canonical_mutation_prohibited": true,
+      "google_calendar_write": false,
+      "revision_of_analysis_id": "WSAN-BWC-WG8-2026-001",
+      "analysis_revision_kind": "NEW_EVIDENCE",
+      "analysis_revision_reason": "Admits evidence of the intervening ninth BWC Working Group session and the later Rev.7 draft-final-report identity, which were absent from the parent packet. This moves second-order follow-through from prospective to observed while preserving the parent eighth-session historical conclusion and unresolved final-consensus boundary."
     }
   ]
 }

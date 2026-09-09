@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.7",
-  "reference_date": "2026-09-06",
+  "version": "0.8",
+  "reference_date": "2026-09-09",
   "architecture_position": "ANALYSIS",
   "upstream_layers": [
     "CANONICAL_REGISTRY",
@@ -179,7 +179,8 @@
     "Further production Live-input population beyond the AZ bounded relationship requires another pressure audit.",
     "BA v0.7 introduces a prospective Analysis revision-lineage contract while production revisions remain closed and the existing 21 reviewed snapshots remain unchanged.",
     "A future Analysis revision must be a new immutable analysis_id with an explicit direct parent, preserved parent snapshot, same Canonical occurrence and strictly later analysis_as_of_utc; silent in-place analytical history rewrite is prohibited.",
-    "Live observations never automatically revise Analysis, Live revision/state-update lineage remains distinct from Analysis revision lineage, automatic latest-Analysis selection remains prohibited, and further production revision population requires another pressure audit."
+    "Live observations never automatically revise Analysis, Live revision/state-update lineage remains distinct from Analysis revision lineage, automatic latest-Analysis selection remains prohibited, and further production revision population requires another pressure audit.",
+    "CD v0.8 opens the pressure-audited controlled revision lineage to exactly one production Analysis revision; any second production revision requires another pressure audit and public revision-head collapse remains closed."
   ],
   "market_measurement_policy": {
     "canonical_event_time_and_market_measurement_precision_are_independent": true,
@@ -259,8 +260,8 @@
     "factual_input_requires_matching_canonical_occurrence": true
   },
   "analysis_revision_policy": {
-    "mode": "FOUNDATION_ONLY_NO_PRODUCTION_REVISIONS",
-    "production_analysis_revisions_allowed": false,
+    "mode": "CONTROLLED_REVISION_LINEAGE",
+    "production_analysis_revisions_allowed": true,
     "public_revision_metadata_projection_allowed": false,
     "required_revision_fields": [
       "revision_of_analysis_id",
@@ -294,6 +295,8 @@
     "google_calendar_write_allowed": false,
     "automatic_latest_analysis_selection_allowed": false,
     "public_revision_head_collapse_allowed": false,
-    "future_production_revision_requires_pressure_audit": true
+    "future_production_revision_requires_pressure_audit": true,
+    "maximum_production_analysis_revisions": 1,
+    "maximum_children_per_revision_parent": 1
   }
 }
