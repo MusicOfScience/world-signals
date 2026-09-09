@@ -1,0 +1,17 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "NHC_ATLANTIC_SEASON_CF_ROBOTS_PROBE",
+  "version": "0.1",
+  "robots_url": "https://www.nhc.noaa.gov/robots.txt",
+  "user_agent": "WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)",
+  "target_path_access": {
+    "climatology": true,
+    "rss_directory": true,
+    "atlantic_outlook_rss": true,
+    "atlantic_basin_rss": true
+  },
+  "all_required_paths_allowed": true,
+  "policy": "FAIL_CLOSED_IF_ANY_REQUIRED_PATH_DISALLOWED",
+  "opec_quarantine_respected": true,
+  "source_body_retained": false
+}

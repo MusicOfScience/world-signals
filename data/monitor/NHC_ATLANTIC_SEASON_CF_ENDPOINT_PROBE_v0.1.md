@@ -20,10 +20,10 @@ This is a bounded endpoint/semantic probe. It does not create a Monitor route or
 |---|---:|---|---:|---|
 | climatology | 200 | text/html; charset=UTF-8 | 60678 | `b0002d85609d1d9aa43ed2704da38216fa942d4f7216231ec4b9fc81c8b910e2` |
 | rss_directory | 200 | text/html; charset=UTF-8 | 70092 | `ab71d9a46dc7c65bf212faececd0024feb93cb8610f26f14eaa34babc8501985` |
-| atlantic_outlook_rss | 200 | text/xml | 1626 | `8a94edb04ee058d6316fab71b2d65527117c26329b8637850c06d8d3df90af27` |
-| atlantic_basin_rss | 200 | text/xml | 2091 | `2f732a5d7e96f162855a93ed93c2ad096a7f5b171dac07a6873c00c2cb0ae84c` |
+| atlantic_outlook_rss | 200 | text/xml | 1626 | `876868b25845d2cbf2b75e919512c208a944fa5e9b61bfbfdcd1af022d063868` |
+| atlantic_basin_rss | 200 | text/xml | 2091 | `b9c29aa2225f0420550c212c273441a7d0f4ceb4a7c1a320f2389b562dc6ae20` |
 | robots | 200 | text/plain; charset=UTF-8 | 46 | `2fb8cf32fee88638246fb9e9637eddf72ddb9161e3d5d30a20e77ca602ee36fd` |
-| rights | 200 | text/html; charset=UTF-8 | 41616 | `701f917c4bf9fdc15468dad889054c51c02d7c28b81045f7fe20a3c0cc201098` |
+| rights | 200 | text/html; charset=UTF-8 | 41596 | `2de6e0d8719c50de2dc7f53ca1fb5287eec08c23603fc44b59807e06f992ef4d` |
 
 ## Semantic checks
 
