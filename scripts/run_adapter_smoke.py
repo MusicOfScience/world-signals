@@ -28,6 +28,7 @@ from world_signals.adapters import (
     fetch_nz_election_robots_policy,
     fetch_nz_election_rss,
     fetch_ons_upcoming_releases,
+    fetch_european_council_meetings_rss,
     fetch_eurostat_release_calendar,
     fetch_fao_release_calendar,
     fetch_fao_robots_policy,
@@ -268,6 +269,44 @@ def main() -> int:
             "adapter":"NZ_ELECTION_TIMETABLE_CHANGE_RSS",
             "status":"FAIL",
             "source_id":"WSSRC-EL-NZ-002",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
+
+    try:
+        euco_items,euco_snap=fetch_european_council_meetings_rss()
+        report["results"].append({
+            "adapter":"EUROPEAN_COUNCIL_MEETINGS_RSS",
+            "status":"PASS",
+            "source_id":"WSSRC-INT-035",
+            "snapshot":euco_snap.as_dict(),
+            "item_count":len(euco_items),
+            "request_budget_per_run":1,
+            "rss_request_count":1,
+            "robots_request_count":0,
+            "direct_calendar_html_request_count":0,
+            "item_followup_request_count":0,
+            "search_route_discovery_request_count":0,
+            "feed_item_count_is_permanent_invariant":False,
+            "observed_date_source":"OFFICIAL_RSS_ITEM_LINK_PATH_ONLY",
+            "updated_field_is_event_time":False,
+            "description_field_is_event_time":False,
+            "schedule_authority":False,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "certainty_authority":False,
+            "canonical_date_mutation_allowed":False,
+            "automatic_calendar_html_fetch_allowed":False,
+            "automatic_item_link_fetch_allowed":False,
+            "automatic_new_occurrence_creation_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append({"adapter":"EUROPEAN_COUNCIL_MEETINGS_RSS","error":str(exc)})
+        report["results"].append({
+            "adapter":"EUROPEAN_COUNCIL_MEETINGS_RSS",
+            "status":"FAIL",
+            "source_id":"WSSRC-INT-035",
             "error":str(exc),
             "canonical_action":"NONE",
         })

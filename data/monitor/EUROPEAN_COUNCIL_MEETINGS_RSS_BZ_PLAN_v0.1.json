@@ -87,8 +87,18 @@
     "minimum_item_count": 1,
     "maximum_item_count": 200,
     "current_live_item_count_is_not_a_permanent_invariant": true,
-    "current_item_child_sequence": ["guid", "link", "title", "description", "updated"],
-    "required_identity_fields": ["guid", "link", "title"],
+    "current_item_child_sequence": [
+      "guid",
+      "link",
+      "title",
+      "description",
+      "updated"
+    ],
+    "required_identity_fields": [
+      "guid",
+      "link",
+      "title"
+    ],
     "guid_shape": "ASCII_DIGITS_ONLY",
     "official_item_link_pattern": "/en/meetings/european-council/YYYY/MM/DD/ or /en/meetings/european-council/YYYY/MM/DD-DD/",
     "observed_date_authority": "OFFICIAL_RSS_ITEM_LINK_PATH_ONLY",
@@ -172,8 +182,18 @@
     "run_id": 34304095590,
     "job_id": 102317059187,
     "request_count": 1,
-    "item_child_sequence": ["guid", "link", "title", "description", "updated"],
-    "configured_guids_present": ["147805", "147983", "147844"],
+    "item_child_sequence": [
+      "guid",
+      "link",
+      "title",
+      "description",
+      "updated"
+    ],
+    "configured_guids_present": [
+      "147805",
+      "147983",
+      "147844"
+    ],
     "repository_mutation": false
   },
   "mutation_boundary": [
@@ -190,5 +210,54 @@
     "data/live",
     "data/live_intelligence",
     "data/analysis"
-  ]
+  ],
+  "focused_activation_gate": {
+    "run_id": 34305401609,
+    "job_id": 102320933729,
+    "result": "SUCCESS",
+    "repository_mutation": false
+  },
+  "materialized_preflight": {
+    "run_id": 34305489809,
+    "job_id": 102321189156,
+    "result": "SUCCESS",
+    "full_test_count": 1135,
+    "skipped_test_count": 65,
+    "protected_file_count": 110,
+    "poststate": {
+      "canonical_registry_version": "0.41",
+      "canonical_record_count": 689,
+      "source_registry_version": "1.99",
+      "source_count": 255,
+      "monitor_expectations_version": "0.24",
+      "configured_monitor_adapter_count": 22
+    },
+    "exact_mutation_path_count": 5,
+    "static_build_passed": true,
+    "protected_layers_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  },
+  "production_live_preflight": {
+    "run_id": 34305636092,
+    "job_id": 102321636120,
+    "result": "SUCCESS",
+    "network_request_count": 1,
+    "rss_request_count": 1,
+    "robots_request_count": 0,
+    "direct_calendar_html_request_count": 0,
+    "item_followup_request_count": 0,
+    "search_route_discovery_request_count": 0,
+    "rss_http_status": 200,
+    "rss_content_type": "text/xml; charset=utf-8",
+    "rss_body_bytes": 19201,
+    "rss_item_count_observed_not_frozen": 50,
+    "rss_sha256_observed_not_frozen": "e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e",
+    "configured_date_match_count": 3,
+    "review_candidate_count": 0,
+    "unconfigured_future_item_count_observed_not_frozen": 0,
+    "canonical_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  }
 }

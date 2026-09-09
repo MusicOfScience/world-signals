@@ -233,3 +233,13 @@ If the later offline, materialised and live gates succeed:
 - Analysis: unchanged;
 - automatic Canonical commit: OFF;
 - Google Calendar writes: OFF.
+
+## Completed BZ validation gates
+
+The activation architecture subsequently passed all pre-transaction gates.
+
+- **Focused activation contract:** run `34305401609`, job `102320933729` — SUCCESS. The parser/comparator and guarded activation helper passed offline tests; default helper execution remained read-only and `--apply` remained environment-gated.
+- **Materialised full preflight:** run `34305489809`, job `102321189156` — SUCCESS. The exact five-file governed/runtime patch produced Canonical v0.41 / 689, Sources v1.99 / 255 and Monitor v0.24 / 22, then passed **1,135 tests with 65 skipped**, validators, Python/JavaScript checks and the static build. All **110 protected files** were byte-identical and the runner reset clean.
+- **Production-shaped live preflight:** run `34305636092`, job `102321636120` — SUCCESS. Exactly one RSS request returned HTTP 200, `text/xml; charset=utf-8`, 19,201 bytes. All three configured GUIDs matched the current Canonical dates, there were zero review candidates and zero unconfigured future meeting observations in that snapshot. There were no robots, direct-calendar HTML, item-followup or search/discovery requests. Canonical remained byte-identical and the runner reset clean.
+
+The repeated live SHA-256 `e66b98f10784ae653b83b306bc982824c6664c8593d2163f13d3b70c08b2422e` is corroborative stability evidence only; neither that hash nor the observed 50-item count is a production invariant.
