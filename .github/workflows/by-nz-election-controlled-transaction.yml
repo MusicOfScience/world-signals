@@ -1,0 +1,162 @@
+name: BY NZ election controlled activation transaction
+
+on:
+  push:
+    branches:
+      - feature/post-bx-pressure-audit-by
+    paths:
+      - .github/workflows/by-nz-election-controlled-transaction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify exact ancestry and freeze protected state
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=a3bca03f36eb5af9036017aad926f75f6762267f
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          test -z "$(git status --porcelain)"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          excluded={Path('data/sources/registry.json'),Path('data/monitor/expectations.json')}
+          rows=[]
+          for path in sorted(Path('data').rglob('*')):
+              if path.is_file() and path not in excluded:
+                  rows.append((path.as_posix(),hashlib.sha256(path.read_bytes()).hexdigest()))
+          Path('/tmp/by-protected-before.json').write_text(json.dumps(rows,indent=2)+'\n')
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          old=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-EL-NZ-001']
+          assert len(old)==1
+          Path('/tmp/by-nz-schedule-before.json').write_text(json.dumps(old[0],sort_keys=True,ensure_ascii=False)+'\n')
+          PY
+      - name: Check helper then apply exact governed transition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/apply_nz_election_rss_monitor_by.py
+          test -z "$(git status --porcelain)"
+          WORLD_SIGNALS_APPLY_MONITOR_BY=1 python scripts/apply_nz_election_rss_monitor_by.py --apply
+      - name: Audit exact five-file mutation boundary and governed state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed==expected,(sorted(changed),sorted(expected))
+          canonical=json.loads(Path('data/canonical/registry.json').read_text())
+          sources=json.loads(Path('data/sources/registry.json').read_text())
+          monitor=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert canonical['version']=='0.41' and len(canonical['records'])==689
+          assert sources['version']=='1.98' and len(sources['sources'])==254
+          assert monitor['version']=='0.23' and len(monitor['adapters'])==21
+          assert monitor['automatic_canonical_commit'] is False
+          assert monitor['google_calendar_write'] is False
+          old=json.loads(Path('/tmp/by-nz-schedule-before.json').read_text())
+          current=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-EL-NZ-001']
+          assert len(current)==1 and current[0]==old
+          machine=[x for x in sources['sources'] if x.get('source_id')=='WSSRC-EL-NZ-002']
+          assert len(machine)==1
+          assert machine[0]['canonical_dependency_count']==0
+          assert machine[0]['automated_monitoring_use']=='CLEARED'
+          assert machine[0]['canonical_provenance_use']=='MONITOR_ONLY_TIMETABLE_PAGE_UPDATE_SENTINEL_NO_CANONICAL_DATE_AUTHORITY'
+          routes=[x for x in monitor['adapters'] if x.get('adapter_id')=='NZ_ELECTION_TIMETABLE_CHANGE_RSS']
+          assert len(routes)==1
+          r=routes[0]
+          assert r['source_id']=='WSSRC-EL-NZ-002'
+          assert r['canonical_schedule_source_id']=='WSSRC-EL-NZ-001'
+          assert len(r['canonical_occurrence_ids'])==6
+          assert r['request_budget_per_run']==2
+          assert r['robots_request_count_per_run']==1
+          assert r['rss_request_count_per_run']==1
+          assert r['minimum_inter_request_delay_seconds']==2
+          assert r['rolling_feed_completeness']=='FINITE_ROLLING_WINDOW_NOT_EXHAUSTIVE_CHANGE_LOG'
+          assert r['absence_semantics']=='NONE'
+          for key in ('timetable_html_request_count_per_run','item_followup_request_count_per_run','results_data_request_count_per_run','search_route_discovery_request_count_per_run'):
+              assert r[key]==0,(key,r[key])
+          for key in ('schedule_authority','clock_authority','lifecycle_authority','certainty_authority','canonical_date_mutation_allowed','automatic_timetable_html_fetch_allowed','automatic_item_link_fetch_allowed','automatic_results_data_fetch_allowed','automatic_search_route_discovery_allowed','automatic_live_or_analysis_promotion_allowed','automatic_commit_allowed'):
+              assert r[key] is False,(key,r[key])
+          PY
+      - name: Run complete repository validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python -m unittest discover -s tests -v
+          python -m compileall -q src scripts
+          for f in web/app.js web/horizon.js web/native-calendar.js web/history.js web/operations.js web/biosecurity.js web/analysis.js; do node --check "$f"; done
+          python scripts/build_site.py
+      - name: Prove protected layers remain byte-identical
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          before=[tuple(x) for x in json.loads(Path('/tmp/by-protected-before.json').read_text())]
+          excluded={Path('data/sources/registry.json'),Path('data/monitor/expectations.json')}
+          after=[]
+          for path in sorted(Path('data').rglob('*')):
+              if path.is_file() and path not in excluded:
+                  after.append((path.as_posix(),hashlib.sha256(path.read_bytes()).hexdigest()))
+          assert after==before
+          PY
+      - name: Clean generated output and audit exact staged set
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site __pycache__ scripts/__pycache__ src/world_signals/__pycache__ src/world_signals/adapters/__pycache__ tests/__pycache__
+          git clean -fdx artifacts review_candidates || true
+          git add -- data/sources/registry.json data/monitor/expectations.json scripts/run_live_monitor.py scripts/run_adapter_smoke.py src/world_signals/adapters/__init__.py
+          python - <<'PY'
+          import subprocess
+          expected={
+              'data/sources/registry.json',
+              'data/monitor/expectations.json',
+              'scripts/run_live_monitor.py',
+              'scripts/run_adapter_smoke.py',
+              'src/world_signals/adapters/__init__.py',
+          }
+          staged=set(subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines())
+          unstaged=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert staged==expected,(sorted(staged),sorted(expected))
+          assert not unstaged,sorted(unstaged)
+          PY
+      - name: Recheck main then commit and push governed files only
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=a3bca03f36eb5af9036017aad926f75f6762267f
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+          git config user.name 'WORLD SIGNALS controlled transaction'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m 'BY: activate NZ election timetable RSS sentinel'
+          git push origin HEAD:feature/post-bx-pressure-audit-by
+          git rev-parse HEAD
