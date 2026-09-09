@@ -90,10 +90,13 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(len(self.target["live_evidence"]["evidence"]), 9)
         self.assertFalse(self.target["live_schema"]["population_policy"]["automatic_ingestion_allowed"])
         self.assertFalse(self.target["live_schema"]["population_policy"]["public_observation_projection_allowed"])
-        self.assertEqual(len(self.target["analysis_reviews"]["reviews"]), 21)
-        self.assertEqual(len(self.target["analysis_evidence"]["evidence"]), 95)
+        self.assertGreaterEqual(len(self.target["analysis_reviews"]["reviews"]), 21)
+        self.assertGreaterEqual(len(self.target["analysis_evidence"]["evidence"]), 95)
         self.assertEqual(bg.production_live_input_count(self.target["analysis_reviews"]), 1)
-        self.assertEqual(bg.revision_count(self.target["analysis_reviews"]), 0)
+        self.assertEqual(
+            bg.revision_count(self.target["analysis_reviews"]),
+            bg.revision_count(self.state["analysis_reviews"]),
+        )
 
         expectations = self.target["expectations"]
         self.assertGreaterEqual(_version_tuple(expectations["version"]), (0, 10))

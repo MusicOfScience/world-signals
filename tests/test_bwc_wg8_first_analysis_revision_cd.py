@@ -37,7 +37,25 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.plan = load(apply_cd.PLAN_PATH)
-        cls.target = apply_cd.simulate()
+        schema = load(apply_cd.ANALYSIS_SCHEMA_PATH)
+        reviews = load(apply_cd.REVIEWS_PATH)
+        evidence = load(apply_cd.ANALYSIS_EVIDENCE_PATH)
+        post = cls.plan["target_state"]
+        materialized = (
+            schema.get("version") == post["analysis_schema_version"]
+            and reviews.get("version") == post["analysis_reviews_version"]
+            and len(reviews.get("reviews", [])) == post["analysis_review_count"]
+            and evidence.get("version") == post["analysis_evidence_version"]
+            and len(evidence.get("evidence", [])) == post["analysis_evidence_count"]
+        )
+        if materialized:
+            cls.target = {
+                "analysis_schema": schema,
+                "reviews": reviews,
+                "evidence": evidence,
+            }
+        else:
+            cls.target = apply_cd.simulate()
         apply_cd.assert_target(cls.plan, cls.target)
         cls.canonical = load(apply_cd.CANONICAL_PATH)
         cls.live_observations = load(apply_cd.LIVE_OBSERVATIONS_PATH)

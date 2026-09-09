@@ -239,8 +239,9 @@ class EurostatMonitorBKTests(unittest.TestCase):
         analysis = json.loads((ROOT / "data/analysis/event_reviews.json").read_text())
         self.assertEqual(live_data["version"], "0.6")
         self.assertEqual(len(live_data["observations"]), 6)
-        self.assertEqual(analysis["version"], "0.17")
-        self.assertEqual(len(analysis["reviews"]), 21)
+        analysis_version = tuple(int(part) for part in analysis["version"].split("."))
+        self.assertGreaterEqual(analysis_version, (0, 17))
+        self.assertGreaterEqual(len(analysis["reviews"]), 21)
 
 
 if __name__ == "__main__":

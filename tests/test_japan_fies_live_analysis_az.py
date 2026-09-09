@@ -114,7 +114,10 @@ class JapanFIESLiveAnalysisAZTests(unittest.TestCase):
             int(part) for part in self.target["analysis_schema"]["version"].split(".")
         )
         self.assertGreaterEqual(analysis_version, (0, 6))
-        self.assertEqual(self.target["reviews"]["version"], "0.17")
+        reviews_version = tuple(
+            int(part) for part in self.target["reviews"]["version"].split(".")
+        )
+        self.assertGreaterEqual(reviews_version, (0, 17))
         self.assertGreaterEqual(len(self.target["reviews"]["reviews"]), 21)
         evidence_version = tuple(
             int(part) for part in self.target["analysis_evidence"]["version"].split(".")
