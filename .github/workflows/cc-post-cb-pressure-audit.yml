@@ -1,0 +1,73 @@
+name: CC post-CB pressure audit
+
+on:
+  push:
+    branches:
+      - feature/post-cb-pressure-audit-cc
+    paths:
+      - '.github/workflows/cc-post-cb-pressure-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Assert exact post-CB baseline
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          expected='67de150ac1175c59ccfa3a844c1dcecd1dc2b4ed'
+          import subprocess
+          head=subprocess.check_output(['git','rev-parse','HEAD^']).decode().strip()
+          assert head == expected, (head, expected)
+          can=json.loads(Path('data/canonical/registry.json').read_text())
+          src=json.loads(Path('data/sources/registry.json').read_text())
+          mon=json.loads(Path('data/monitor/expectations.json').read_text())
+          assert can['version']=='0.41' and len(can['records'])==689
+          assert src['version']=='2.01' and len(src['sources'])==256
+          assert mon['version']=='0.26' and len(mon['adapters'])==24
+          assert mon['automatic_canonical_commit'] is False
+          assert mon['google_calendar_write'] is False
+          print({'base': head, 'canonical': [can['version'],len(can['records'])], 'sources':[src['version'],len(src['sources'])], 'monitor':[mon['version'],len(mon['adapters'])]})
+          PY
+      - name: Build read-only monitor coverage audit
+        run: python scripts/run_monitor_coverage_audit.py
+      - name: Print pressure diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('artifacts/monitor/monitor-coverage-audit.json').read_text())
+          print('TOTALS', json.dumps(a['totals'], sort_keys=True))
+          print('PROMPTS', json.dumps(a['diagnostic_prompts'], sort_keys=True))
+          print('REGIONS')
+          for r in a['by_region']:
+              print(json.dumps(r, sort_keys=True))
+          print('CATEGORIES')
+          for r in a['by_category']:
+              print(json.dumps(r, sort_keys=True))
+          print('CANDIDATES_WITH_CANONICAL')
+          for r in a['candidate_sources_with_canonical_dependencies']:
+              print(json.dumps(r, sort_keys=True))
+          print('UNBOUND_CANDIDATES')
+          for r in a['candidate_sources_without_canonical_dependencies']:
+              print(json.dumps(r, sort_keys=True))
+          PY
+      - name: Prove governed files unchanged
+        run: |
+          git diff --exit-code HEAD^ -- data/canonical/registry.json data/sources/registry.json data/monitor/expectations.json data/changes/ledger.json data/live_intelligence data/analysis
+      - name: Upload pressure audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: cc-post-cb-pressure-audit-${{ github.run_id }}
+          path: artifacts/monitor
+          if-no-files-found: error
+          retention-days: 90
