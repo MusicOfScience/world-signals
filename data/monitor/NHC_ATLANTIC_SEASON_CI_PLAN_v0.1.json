@@ -1,0 +1,93 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "NHC_ATLANTIC_SEASON_CI_PLAN",
+  "version": "0.1",
+  "reference_date": "2026-09-10",
+  "exact_base_sha": "c4f359c2c70f023c32990f20234aaf154dced152",
+  "selection": {
+    "source_id": "WSSRC-RISK-002",
+    "series_id": "WSER-RISK-ATL-HURR",
+    "adapter_id": "NHC_ATLANTIC_SEASON",
+    "canonical_occurrence_ids": [
+      "WSO-COM-A-0049",
+      "WSO-COM-A-0050"
+    ],
+    "category": "PHYSICAL_CLIMATE_RISK",
+    "event_type": "PHYSICAL_RISK_WINDOW"
+  },
+  "prestate": {
+    "canonical": ["0.41", 689],
+    "sources": ["2.02", 257],
+    "monitor": ["0.27", 25],
+    "live": ["0.7", 7, 10],
+    "analysis": [22, 97],
+    "nhc_registered": false
+  },
+  "target_poststate": {
+    "canonical": ["0.41", 689],
+    "sources": ["2.03", 257],
+    "monitor": ["0.28", 26],
+    "live": ["0.7", 7, 10],
+    "analysis": [22, 97],
+    "nhc_registered": true
+  },
+  "semantic_contract": {
+    "authority_surface": "NHC_TROPICAL_CYCLONE_CLIMATOLOGY",
+    "climatology_url": "https://www.nhc.noaa.gov/climo/",
+    "atlantic_outlook_rss_url": "https://www.nhc.noaa.gov/xml/TWOAT.xml",
+    "robots_url": "https://www.nhc.noaa.gov/robots.txt",
+    "rights_url": "https://www.weather.gov/disclaimer/",
+    "start_month_day": "06-01",
+    "end_month_day": "11-30",
+    "semantic_sha256": "1295e095eed4a6210eb837fe4fd606a81cf37f19e709075ab6061d9f95c98511",
+    "rss_role": "SOURCE_HEALTH_CORROBORATION_ONLY_NO_SEASON_DATE_SEMANTICS"
+  },
+  "runtime_contract": {
+    "shared_scheduler_actual_frequency": "DAILY",
+    "request_budget_per_run": 2,
+    "climatology_requests_per_run": 1,
+    "rss_health_requests_per_run": 1,
+    "followup_requests_per_run": 0,
+    "source_failure_policy": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "semantic_drift_policy": "GENERATE_REVIEW_CANDIDATE_REQUIRE_AUTHORITATIVE_NHC_REVERIFICATION",
+    "rss_absence_or_activity_event_state_inference": "NONE"
+  },
+  "authority_gates": {
+    "schedule_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "canonical_date_mutation_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false,
+    "google_calendar_write": false
+  },
+  "source_governance_target": {
+    "automated_monitoring_use": "CLEARED",
+    "automated_monitoring_scope": "NHC_ATLANTIC_SEASON_DEFINITION_AND_OUTLOOK_HEALTH_READ_ONLY_SENTINEL_ONLY",
+    "automated_retrieval_permission": "CLEARED_BOUNDED_PUBLIC_DOMAIN_LOW_RATE_NHC_ENDPOINTS",
+    "verification_mode": "AUTOMATED_PILOT",
+    "monitoring_readiness_status": "PILOT_VALIDATED_NO_AUTO_COMMIT",
+    "monitoring_activation_status": "PILOT_READ_ONLY_SEASON_DEFINITION_SENTINEL_NO_AUTO_COMMIT",
+    "live_adapter_id": "NHC_ATLANTIC_SEASON",
+    "monitor_parser_type": "HTML_SEASON_DEFINITION_PLUS_RSS_HEALTH_SENTINEL",
+    "monitor_parser_version": "nhc-atlantic-season-0.1"
+  },
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/operations_policy.json",
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "OPEC_QUARANTINE.md",
+    "tests/test_opec_quarantine_cf.py"
+  ],
+  "opec_quarantine_respected": true,
+  "automatic_merge_allowed": false
+}
