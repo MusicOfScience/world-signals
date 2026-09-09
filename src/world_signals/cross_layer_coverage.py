@@ -4,6 +4,15 @@ from collections import Counter
 from typing import Any
 
 
+# Audit-only equivalence for comparing Live's intentionally finer region labels
+# with the current Canonical region vocabulary. These mappings never rewrite
+# governed rows and must remain explicit rather than guessed from geography.
+LIVE_REGION_TO_CANONICAL_COMPARISON_REGION = {
+    "Central Africa": "Africa",
+    "Global": "Cross-regional / Global",
+}
+
+
 def _unique_map(rows: list[dict[str, Any]], key: str, label: str) -> dict[str, dict[str, Any]]:
     out: dict[str, dict[str, Any]] = {}
     for row in rows:
@@ -34,6 +43,45 @@ def _analysis_live_input_ids(reviews: list[dict[str, Any]]) -> set[str]:
     return used
 
 
+def _comparison_region_for_live(region: str) -> str:
+    return LIVE_REGION_TO_CANONICAL_COMPARISON_REGION.get(region, region)
+
+
+def _live_row_comparison_regions(row: dict[str, Any]) -> set[str]:
+    return {
+        _comparison_region_for_live(region)
+        for region in (row.get("regions") or [])
+        if isinstance(region, str) and region
+    }
+
+
+def _build_raw_region_shape(
+    canonical_rows: list[dict[str, Any]],
+    live_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    canonical_regions = {row.get("region") for row in canonical_rows if row.get("region")}
+    live_regions = {
+        region
+        for row in live_rows
+        for region in (row.get("regions") or [])
+        if isinstance(region, str) and region
+    }
+    out: list[dict[str, Any]] = []
+    for region in sorted(canonical_regions | live_regions):
+        out.append(
+            {
+                "region": region,
+                "canonical_occurrence_count": sum(
+                    1 for row in canonical_rows if row.get("region") == region
+                ),
+                "live_observation_count": sum(
+                    1 for row in live_rows if region in (row.get("regions") or [])
+                ),
+            }
+        )
+    return out
+
+
 def build_cross_layer_coverage_audit(
     registry: dict[str, Any],
     expectations: dict[str, Any],
@@ -46,6 +94,10 @@ def build_cross_layer_coverage_audit(
     granting any write, promotion or population authority. Canonical categories
     and Live domain tags remain separate taxonomies rather than being forced into
     an artificial one-to-one mapping.
+
+    Live region labels may be more granular than Canonical region labels. A tiny,
+    explicit audit-only equivalence table is used for comparison prompts while raw
+    labels are retained separately. No governed value is mutated or normalised.
     """
 
     canonical_rows = list(registry.get("records") or [])
@@ -98,23 +150,25 @@ def build_cross_layer_coverage_audit(
     if unknown_used:
         raise ValueError(f"analysis references unknown live observations: {unknown_used}")
 
+    raw_region_shape = _build_raw_region_shape(canonical_rows, live_rows)
     canonical_regions = sorted({row.get("region") for row in canonical_rows if row.get("region")})
-    live_regions = sorted(
+    comparison_live_regions = sorted(
         {
-            region
+            comparison_region
             for row in live_rows
-            for region in (row.get("regions") or [])
-            if isinstance(region, str) and region
+            for comparison_region in _live_row_comparison_regions(row)
         }
     )
-    all_regions = sorted(set(canonical_regions) | set(live_regions))
+    comparison_regions = sorted(set(canonical_regions) | set(comparison_live_regions))
 
     by_region: list[dict[str, Any]] = []
-    for region in all_regions:
+    for region in comparison_regions:
         canonical_region_rows = [row for row in canonical_rows if row.get("region") == region]
         canonical_region_ids = {row["occurrence_id"] for row in canonical_region_rows}
         monitor_region_ids = canonical_region_ids & monitor_occurrence_ids
-        live_region_rows = [row for row in live_rows if region in (row.get("regions") or [])]
+        live_region_rows = [
+            row for row in live_rows if region in _live_row_comparison_regions(row)
+        ]
         linked_live_region_rows = [
             row
             for row in live_region_rows
@@ -125,6 +179,14 @@ def build_cross_layer_coverage_audit(
             for review in review_rows
             if canonical_by_id[review["canonical_occurrence_id"]].get("region") == region
         ]
+        raw_live_region_labels = sorted(
+            {
+                raw_region
+                for row in live_region_rows
+                for raw_region in (row.get("regions") or [])
+                if isinstance(raw_region, str) and raw_region
+            }
+        )
         by_region.append(
             {
                 "region": region,
@@ -146,6 +208,7 @@ def build_cross_layer_coverage_audit(
                 "analysis_with_live_input_count": sum(
                     1 for review in analysis_region_rows if review.get("live_inputs")
                 ),
+                "raw_live_region_labels": raw_live_region_labels,
             }
         )
 
@@ -279,14 +342,15 @@ def build_cross_layer_coverage_audit(
         ),
         "note": (
             "These are qualitative review prompts only. Absence at a downstream layer does not imply "
-            "that the layer should be populated, and counts are not quotas."
+            "that the layer should be populated, and counts are not quotas. Region prompts use only the "
+            "explicit audit comparison mappings; raw governed labels remain unchanged."
         ),
     }
 
     return {
         "project": "WORLD SIGNALS",
         "dataset": "CROSS_LAYER_COVERAGE_PRESSURE_AUDIT",
-        "version": "0.1",
+        "version": "0.2",
         "checkpoints": {
             "canonical_registry_version": registry.get("version"),
             "monitor_expectations_version": expectations.get("version"),
@@ -298,6 +362,7 @@ def build_cross_layer_coverage_audit(
             "count_only_selection_prohibited": True,
             "quota_filling_prohibited": True,
             "canonical_categories_and_live_domain_tags_not_forced_into_one_taxonomy": True,
+            "region_equivalence_is_explicit_audit_only_and_nonmutating": True,
             "monitor_scope_is_explicit_occurrence_scope_only": True,
             "downstream_absence_is_review_prompt_not_population_authority": True,
             "automatic_canonical_commit": False,
@@ -305,6 +370,15 @@ def build_cross_layer_coverage_audit(
             "automatic_live_population": False,
             "automatic_live_analysis_bridge_population": False,
             "automatic_analysis_population": False,
+        },
+        "region_comparison": {
+            "live_to_canonical_equivalence": dict(LIVE_REGION_TO_CANONICAL_COMPARISON_REGION),
+            "raw_labels_preserved": True,
+            "governed_region_mutation": False,
+            "note": (
+                "Only explicit listed equivalences are used. Unlisted Live labels compare as themselves; "
+                "the audit does not infer geographic parents."
+            ),
         },
         "totals": {
             "canonical_occurrence_count": len(canonical_rows),
@@ -333,6 +407,7 @@ def build_cross_layer_coverage_audit(
             ),
         },
         "by_region": by_region,
+        "raw_region_shape": raw_region_shape,
         "by_canonical_category": by_category,
         "live_by_domain_tag": live_by_domain_tag,
         "bridge_frontier": {
