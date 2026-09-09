@@ -1,0 +1,256 @@
+{
+  "tranche": "CA",
+  "reference_date": "2026-09-09",
+  "exact_base_main_sha": "07c558c8811795f0aed40e73bd386cc70344191e",
+  "selection": {
+    "source_id": "WSSRC-COM-005",
+    "adapter_id": "USDA_NASS_ASB_ICAL",
+    "institution": "USDA NASS",
+    "jurisdiction": "United States/Global",
+    "calendar_page_url": "https://www.nass.usda.gov/Publications/",
+    "ical_url": "https://www.nass.usda.gov/Publications/Calendar/2026/NassReleases2026.ics",
+    "security_policy_url": "https://www.nass.usda.gov/About_NASS/Security_Statement/index.php",
+    "rights_url": "https://www.nass.usda.gov/Data_and_Statistics/Citation_Request/",
+    "source_timezone": "America/New_York",
+    "selection_reason": "NASS explicitly publishes its 2026 Agricultural Statistics Board calendar in iCalendar format, permits non-excessive automated retrieval with contact information, and states most NASS website information is public domain. The same existing source identity already represents the Agricultural Statistics Board calendar and records PDF + ICS machine readability, so CA upgrades that source in place rather than creating duplicate provenance."
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "1.99",
+    "source_count": 255,
+    "monitor_expectations_version": "0.24",
+    "configured_monitor_adapter_count": 22,
+    "source_canonical_dependency_count": 5,
+    "source_automated_monitoring_use": "ENDPOINT_REVIEW_REQUIRED",
+    "source_automated_retrieval_permission": "PENDING_ENDPOINT_OPERATIONAL_REVIEW",
+    "source_monitoring_readiness_status": "ENDPOINT_REVIEW_REQUIRED",
+    "source_runtime_health_state": "UNKNOWN_NOT_LIVE_POLLED",
+    "source_verification_mode": "MANUAL_AUTHORITATIVE_RECHECK",
+    "source_licence_review_status": "CLEARED_PUBLIC_DOMAIN_GENERAL_NASS_INFORMATION",
+    "source_canonical_provenance_use": "CLEARED_CURATED_FACTUAL_METADATA",
+    "machine_readable_available": "PDF + ICS",
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "postconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.00",
+    "source_count": 255,
+    "monitor_expectations_version": "0.25",
+    "configured_monitor_adapter_count": 23,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "canonical_occurrence_ids": [
+    "WSO-COM-A-0030",
+    "WSO-COM-A-0032",
+    "WSO-COM-A-0034",
+    "WSO-COM-A-0036",
+    "WSO-COM-A-0037"
+  ],
+  "configured_feed_identity_by_uid": {
+    "a763c1f5-aef0-435a-a183-2f8191f08d99": {
+      "occurrence_id": "WSO-COM-A-0030",
+      "series_id": "WSER-COM-USDA-CROP",
+      "expected_summary": "Crop Production",
+      "baseline_start_local": "2026-09-11T12:00:00"
+    },
+    "7172110f-8719-4672-9026-f708df320e71": {
+      "occurrence_id": "WSO-COM-A-0032",
+      "series_id": "WSER-COM-USDA-CROP",
+      "expected_summary": "Crop Production",
+      "baseline_start_local": "2026-10-09T12:00:00"
+    },
+    "cf36624c-7ddb-4293-ad32-c52b78d0e299": {
+      "occurrence_id": "WSO-COM-A-0034",
+      "series_id": "WSER-COM-USDA-CROP",
+      "expected_summary": "Crop Production",
+      "baseline_start_local": "2026-11-10T12:00:00"
+    },
+    "49647b19-c690-45dc-a48f-54d12ea99307": {
+      "occurrence_id": "WSO-COM-A-0036",
+      "series_id": "WSER-COM-USDA-CROP",
+      "expected_summary": "Crop Production",
+      "baseline_start_local": "2026-12-10T12:00:00"
+    },
+    "4b58e729-3b3b-4f2a-a86e-2ee17637ad46": {
+      "occurrence_id": "WSO-COM-A-0037",
+      "series_id": "WSER-COM-USDA-GRAIN",
+      "expected_summary": "Grain Stocks",
+      "baseline_start_local": "2026-09-30T12:00:00"
+    }
+  },
+  "request_contract": {
+    "request_budget_per_run": 1,
+    "ical_requests_per_run": 1,
+    "robots_requests_per_run": 0,
+    "calendar_html_requests_per_run": 0,
+    "report_followup_requests_per_run": 0,
+    "search_route_discovery_requests_per_run": 0,
+    "machine_access_basis": "OFFICIAL_NASS_ICAL_PLUS_EXPLICIT_NONEXCESSIVE_ROBOT_POLICY_WITH_CONTACT_UA",
+    "user_agent_contact_required": true
+  },
+  "ical_contract": {
+    "minimum_event_count": 1,
+    "maximum_event_count": 1000,
+    "current_live_event_count_is_not_a_permanent_invariant": true,
+    "required_target_fields": [
+      "UID",
+      "SUMMARY",
+      "DTSTART"
+    ],
+    "target_uid_shape": "UUID",
+    "dtstart_shape": "FLOATING_YYYYMMDDTHHMMSS_NO_TZID",
+    "floating_datetime_timezone": "America/New_York",
+    "floating_timezone_basis": "FIRST_PARTY_NASS_REPORTS_BY_DATE_PAGES_LABEL_TARGET_RELEASES_ET",
+    "dtend_is_event_end": false,
+    "dtstamp_is_event_time": false,
+    "sequence_is_event_state": false,
+    "description_is_event_time": false,
+    "clock_authority": false,
+    "timezone_contract_requires_independent_first_party_ET_CONVENTION": true
+  },
+  "classification_contract": {
+    "configured_uid_exact_current_datetime": "NASS_ASB_ICAL_DATETIME_MATCH_OBSERVATION",
+    "configured_uid_datetime_differs_from_current_canonical": "NASS_ASB_ICAL_DATETIME_CHANGE_REVIEW",
+    "configured_uid_missing_while_occurrence_not_completed": "NASS_ASB_ICAL_CONFIGURED_UID_MISSING_REVIEW",
+    "configured_uid_missing_after_occurrence_completed": "NASS_ASB_ICAL_COMPLETED_UID_ABSENCE_OBSERVATION",
+    "unconfigured_target_summary_on_or_after_review_floor": "NASS_ASB_ICAL_UNCONFIGURED_TARGET_RELEASE_OBSERVATION",
+    "configured_uid_summary_drift": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "duplicate_uid_or_malformed_ics_or_invalid_datetime": "SOURCE_HEALTH_ONLY_NO_EVENT_MUTATION",
+    "absence_is_not_cancellation": true,
+    "absence_is_not_completion": true,
+    "absence_is_not_certainty_change": true,
+    "no_automatic_new_occurrence_creation": true,
+    "no_direct_clock_write": true,
+    "compare_against_current_canonical_not_frozen_baseline": true
+  },
+  "source_role_contract": {
+    "source_id": "WSSRC-COM-005",
+    "source_identity_reused_in_place": true,
+    "duplicate_machine_source_created": false,
+    "canonical_dependency_count": 5,
+    "source_remains_canonical_schedule_authority": true,
+    "monitor_role": "OFFICIAL_NASS_ASB_ICAL_DATETIME_CHANGE_SENTINEL",
+    "schedule_authority": false,
+    "clock_authority": false,
+    "lifecycle_authority": false,
+    "certainty_authority": false,
+    "canonical_datetime_mutation_allowed": false,
+    "automatic_calendar_html_fetch_allowed": false,
+    "automatic_report_followup_allowed": false,
+    "automatic_new_occurrence_creation_allowed": false,
+    "automatic_search_route_discovery_allowed": false,
+    "automatic_live_or_analysis_promotion_allowed": false,
+    "automatic_commit_allowed": false
+  },
+  "monitor_review_window": {
+    "unconfigured_item_review_floor_local": "2026-09-09T00:00:00",
+    "target_summaries": [
+      "Crop Production",
+      "Grain Stocks"
+    ],
+    "purpose": "Surface newly advertised remaining-2026 Crop Production or Grain Stocks items without treating historical events as Canonical-add candidates.",
+    "review_floor_is_not_event_time_authority": true
+  },
+  "read_only_pressure_audit": {
+    "run_id": 34306324400,
+    "job_id": 102323665121,
+    "repository_mutation": false
+  },
+  "ical_endpoint_diagnostic": {
+    "run_id": 34306617952,
+    "job_id": 102324539796,
+    "request_count": 1,
+    "ical_http_status": 200,
+    "ical_content_type": "text/calendar",
+    "ical_body_bytes": 120961,
+    "ical_event_count_observed_not_frozen": 567,
+    "ical_sha256_observed_not_frozen": "23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a",
+    "configured_uid_count": 5,
+    "configured_uid_match_count": 5,
+    "repository_mutation": false
+  },
+  "official_policy_findings": {
+    "calendar_machine_format": "NASS explicitly offers the 2026 Agricultural Statistics Board calendar in iCalendar format.",
+    "automated_access": "NASS prohibits excessive automated retrieval and may block robots without owner contact information; CA uses one request with the repository URL in the User-Agent.",
+    "content_reuse": "NASS states most website information is public domain and may be freely downloaded and reproduced, with acknowledgement requested.",
+    "clock_convention": "NASS Reports by Date pages label the configured September-December target release times as ET; this independently governs interpretation of floating ICS datetimes as America/New_York."
+  },
+  "mutation_boundary": [
+    "data/sources/registry.json",
+    "data/monitor/expectations.json",
+    "scripts/run_live_monitor.py",
+    "scripts/run_adapter_smoke.py",
+    "src/world_signals/adapters/__init__.py"
+  ],
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/changes/ledger.json",
+    "data/biosecurity",
+    "data/live",
+    "data/live_intelligence",
+    "data/analysis"
+  ],
+  "focused_activation_gate": {
+    "run_id": 34307460147,
+    "job_id": 102327017370,
+    "result": "SUCCESS",
+    "test_count": 36,
+    "repository_mutation": false,
+    "notes": "Earlier focused run 34307089558 / 102325920998 failed before test import because the temporary workflow omitted PYTHONPATH=src; implementation assertions did not run. Harness was repaired and subsequent gates passed."
+  },
+  "materialized_preflight": {
+    "run_id": 34307535574,
+    "job_id": 102327236940,
+    "result": "SUCCESS",
+    "full_test_count": 1173,
+    "skipped_test_count": 67,
+    "protected_file_count": 110,
+    "exact_mutation_path_count": 5,
+    "preexisting_source_objects_unchanged": 254,
+    "preexisting_monitor_routes_unchanged": 22,
+    "poststate": {
+      "canonical_registry_version": "0.41",
+      "canonical_record_count": 689,
+      "source_registry_version": "2.00",
+      "source_count": 255,
+      "monitor_expectations_version": "0.25",
+      "configured_monitor_adapter_count": 23
+    },
+    "static_build_passed": true,
+    "protected_layers_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  },
+  "production_live_preflight": {
+    "failed_harness_attempt": {
+      "run_id": 34307710661,
+      "job_id": 102327747468,
+      "result": "FAIL_HARNESS_ONLY_AFTER_FETCH_AND_COMPARE",
+      "reason": "Temporary reporting code referenced FetchSnapshot.sha256 instead of body_sha256; source fetch/comparator had completed before the reporting accessor failed."
+    },
+    "run_id": 34307783031,
+    "job_id": 102327960135,
+    "result": "SUCCESS",
+    "network_request_count": 1,
+    "ical_request_count": 1,
+    "robots_request_count": 0,
+    "calendar_html_request_count": 0,
+    "report_followup_request_count": 0,
+    "search_route_discovery_request_count": 0,
+    "ical_http_status": 200,
+    "ical_content_type": "text/calendar",
+    "ical_body_bytes": 120961,
+    "ical_sha256_observed_not_frozen": "23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a",
+    "target_items_parsed": 16,
+    "configured_uid_match_count": 5,
+    "review_candidate_count": 0,
+    "unconfigured_future_target_count_observed_not_frozen": 0,
+    "canonical_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  }
+}

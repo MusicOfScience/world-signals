@@ -24,6 +24,7 @@ from world_signals.adapters import (
     fetch_cellar_celex_document,
     fetch_cellar_identifier_notice,
     fetch_cellar_rdf_notice,
+    fetch_nass_asb_ical,
     fetch_nbs_native_latest_releases_rss,
     fetch_nz_election_robots_policy,
     fetch_nz_election_rss,
@@ -307,6 +308,41 @@ def main() -> int:
             "adapter":"EUROPEAN_COUNCIL_MEETINGS_RSS",
             "status":"FAIL",
             "source_id":"WSSRC-INT-035",
+            "error":str(exc),
+            "canonical_action":"NONE",
+        })
+
+    try:
+        nass_items,nass_snap=fetch_nass_asb_ical()
+        report["results"].append({
+            "adapter":"USDA_NASS_ASB_ICAL",
+            "status":"PASS",
+            "source_id":"WSSRC-COM-005",
+            "snapshot":nass_snap.as_dict(),
+            "target_item_count":len(nass_items),
+            "request_budget_per_run":1,
+            "ical_request_count":1,
+            "robots_request_count":0,
+            "calendar_html_request_count":0,
+            "report_followup_request_count":0,
+            "search_route_discovery_request_count":0,
+            "floating_datetime_timezone":"America/New_York",
+            "dtend_is_event_end":False,
+            "dtstamp_is_event_time":False,
+            "sequence_is_event_state":False,
+            "schedule_authority":False,
+            "clock_authority":False,
+            "lifecycle_authority":False,
+            "certainty_authority":False,
+            "canonical_datetime_mutation_allowed":False,
+            "automatic_commit_allowed":False,
+        })
+    except (AdapterError,ValueError) as exc:
+        failures.append(str(exc))
+        report["results"].append({
+            "adapter":"USDA_NASS_ASB_ICAL",
+            "status":"FAIL",
+            "source_id":"WSSRC-COM-005",
             "error":str(exc),
             "canonical_action":"NONE",
         })
