@@ -28,6 +28,78 @@ jobs:
           test "$(git rev-parse origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
           test "$(git merge-base HEAD origin/main)" = "9552c1db0d212af33524b80b28d91ef7a897e2d8"
           test -z "$(git status --porcelain)"
+      - name: Repair demonstrated descendant-safety harness faults
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'CE repair anchor missing: {path}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace(
+              'tests/test_opec_fallback_completion_be.py',
+              '''        self.assertEqual(row["status_history"][-1]["lifecycle_status"], "COMPLETED")\n        self.assertEqual(row["status_history"][-1]["primary_provenance_upgrade_state"], "REQUIRED_WHEN_RETRIEVABLE")\n''',
+              '''        completion_rows = [\n            x for x in row["status_history"]\n            if x.get("source_assertion_id") == self.plan["completion_basis"]["assertion_id"]\n        ]\n        self.assertEqual(len(completion_rows), 1)\n        self.assertEqual(completion_rows[0]["lifecycle_status"], "COMPLETED")\n        self.assertEqual(completion_rows[0]["primary_provenance_upgrade_state"], "REQUIRED_WHEN_RETRIEVABLE")\n''',
+          )
+
+          replace(
+              'scripts/apply_opec_official_confirmation_bg.py',
+              '''    require(source is not None and related(target, SPA_ID) is not None, "BG partial materialisation detected")\n    require(target.get("last_successful_assertion_id") == plan["provenance_basis"]["assertion_id"], "BG materialised assertion drift")\n    return True\n''',
+              '''    require(source is not None and related(target, SPA_ID) is not None, "BG partial materialisation detected")\n    require(related(target, SPA_ID).get("primary_opec_provenance_state") == "REQUIRED_WHEN_RETRIEVABLE", "BG historical SPA provenance drift")\n    require(plan["provenance_basis"]["change_id"] in {x.get("change_id") for x in state["ledger"].get("changes", [])}, "BG historical ledger identity missing")\n    return True\n''',
+          )
+
+          replace(
+              'tests/test_opec_official_confirmation_bg.py',
+              '''        self.assertEqual(row["last_successful_assertion_id"], self.plan["provenance_basis"]["assertion_id"])\n''',
+              '''        self.assertIn(\n            self.plan["provenance_basis"]["assertion_id"],\n            {x.get("source_assertion_id") for x in self.target["ledger"].get("changes", [])},\n        )\n''',
+          )
+          replace(
+              'tests/test_opec_official_confirmation_bg.py',
+              '''        self.assertEqual(len(self.target["ledger"]["changes"]), 62)\n        change = self.target["ledger"]["changes"][-1]\n        self.assertEqual(change["change_id"], "WSCHANGE-5c0629586cdf3ce7")\n''',
+              '''        changes = self.target["ledger"]["changes"]\n        matches = [x for x in changes if x.get("change_id") == "WSCHANGE-5c0629586cdf3ce7"]\n        self.assertEqual(len(matches), 1)\n        change = matches[0]\n        exact_bg = (\n            str(self.target["canonical"].get("version")) == self.plan["postconditions"]["canonical_registry_version"]\n            and str(self.target["ledger"].get("version")) == self.plan["postconditions"]["change_ledger_version"]\n        )\n        if exact_bg:\n            self.assertEqual(len(changes), 62)\n            self.assertEqual(changes[-1]["change_id"], change["change_id"])\n        else:\n            self.assertGreaterEqual(len(changes), 62)\n''',
+          )
+          replace(
+              'tests/test_opec_official_confirmation_bg.py',
+              '''        self.assertEqual(row["last_successful_assertion_id"], self.plan["provenance_basis"]["assertion_id"])\n''',
+              '''        self.assertIn(\n            self.plan["provenance_basis"]["assertion_id"],\n            {x.get("source_assertion_id") for x in self.target["ledger"].get("changes", [])},\n        )\n''',
+          )
+
+          replace(
+              'tests/test_opec_primary_provenance_ce.py',
+              '''        cls.assertGreaterEqual = lambda *args, **kwargs: None\n''',
+              '',
+          )
+
+          p = Path('scripts/apply_opec_primary_provenance_ce.py')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('import copy\nimport json\n', 'import copy\nfrom datetime import datetime\nimport json\n', 1)
+          text = text.replace('from typing import Any\n', 'from typing import Any\nfrom zoneinfo import ZoneInfo\n', 1)
+          text = text.replace(
+              'def ledger_entry(before: dict[str, Any], after: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:',
+              'def ledger_entry(before: dict[str, Any], after: dict[str, Any], plan: dict[str, Any], committed_at: str) -> dict[str, Any]:',
+              1,
+          )
+          text = text.replace('"reviewed_at": "2026-09-09T20:00:00+10:00",', '"reviewed_at": committed_at,', 1)
+          text = text.replace('"committed_at": "2026-09-09T20:00:00+10:00",', '"committed_at": committed_at,', 1)
+          text = text.replace(
+              'def simulate(state: dict[str, dict[str, Any]], plan: dict[str, Any]) -> dict[str, dict[str, Any]]:\n    assert_prestate(state, plan)\n',
+              'def simulate(state: dict[str, dict[str, Any]], plan: dict[str, Any], committed_at: str | None = None) -> dict[str, dict[str, Any]]:\n    assert_prestate(state, plan)\n    if committed_at is None:\n        committed_at = datetime.now(ZoneInfo("Australia/Melbourne")).isoformat(timespec="seconds")\n',
+              1,
+          )
+          text = text.replace(
+              'out["ledger"]["changes"].append(ledger_entry(by_occurrence(state["canonical"])[TARGET_ID], target, plan))',
+              'out["ledger"]["changes"].append(ledger_entry(by_occurrence(state["canonical"])[TARGET_ID], target, plan, committed_at))',
+              1,
+          )
+          if '2026-09-09T20:00:00+10:00' in text:
+              raise SystemExit('invented CE ledger clock survived repair')
+          p.write_text(text, encoding='utf-8')
+          PY
+          python -m py_compile scripts/apply_opec_primary_provenance_ce.py scripts/apply_opec_official_confirmation_bg.py tests/test_opec_primary_provenance_ce.py tests/test_opec_official_confirmation_bg.py tests/test_opec_fallback_completion_be.py
       - name: Preflight simulated CE transaction
         run: python scripts/apply_opec_primary_provenance_ce.py --check
       - name: Validate prestate repository
@@ -64,6 +136,11 @@ jobs:
               'data/canonical/registry.json',
               'data/changes/ledger.json',
               'data/coverage/biosecurity_overlay.json',
+              'scripts/apply_opec_primary_provenance_ce.py',
+              'scripts/apply_opec_official_confirmation_bg.py',
+              'tests/test_opec_primary_provenance_ce.py',
+              'tests/test_opec_official_confirmation_bg.py',
+              'tests/test_opec_fallback_completion_be.py',
           }
           changed = set(subprocess.check_output(['git','diff','--name-only'], text=True).splitlines())
           if changed != allowed:
@@ -82,6 +159,8 @@ jobs:
           set -euo pipefail
           git config user.name "Mx Hud Harding"
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json
-          git commit -m "CE: satisfy OPEC primary outcome provenance"
+          git add data/canonical/registry.json data/changes/ledger.json data/coverage/biosecurity_overlay.json \
+            scripts/apply_opec_primary_provenance_ce.py scripts/apply_opec_official_confirmation_bg.py \
+            tests/test_opec_primary_provenance_ce.py tests/test_opec_official_confirmation_bg.py tests/test_opec_fallback_completion_be.py
+          git commit -m "CE: satisfy OPEC primary provenance with descendant-safe guards"
           git push origin HEAD:feature/post-cd-pressure-audit-ce
