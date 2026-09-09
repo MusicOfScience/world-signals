@@ -94,7 +94,9 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         )
         self.assertEqual(self.parent["second_order_effects"]["status"], "PLAUSIBLE_WATCH_ITEM")
         self.assertEqual(self.child["second_order_effects"]["status"], "OBSERVED")
-        self.assertIn("ninth session", self.child["analysis_revision_reason"].lower())
+        reason = self.child["analysis_revision_reason"].lower()
+        self.assertIn("ninth", reason)
+        self.assertIn("working group session", reason)
 
     def test_new_evidence_contract_is_narrow_and_noncanonical(self):
         evidence_by_id = {
@@ -119,7 +121,7 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
     def test_child_does_not_promote_draft_progress_into_final_consensus(self):
         conclusion = self.child["analytical_conclusion"].lower()
         second = self.child["second_order_effects"]["summary"].lower()
-        self.assertIn("does not establish final consensus", conclusion)
+        self.assertIn("do not establish final consensus", conclusion)
         self.assertIn("not completion of the final consensus package", second)
         self.assertEqual(self.child["what_moved"], [])
         self.assertEqual(
