@@ -195,7 +195,7 @@ def target_status(current: str) -> str:
 
 def target_roadmap(current: str) -> str:
     heading = "## Stage 8A — Analysis revision lineage — BA FOUNDATION DONE / PRODUCTION CLOSED"
-    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current:
+    if heading in current or "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot." in current or ("<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in current and "## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED" in current):
         return current
     marker = "## Stage 9 — broader Live Intelligence population / monitoring — ONLY AFTER AUDIT"
     require(marker in current, "BA roadmap could not locate Stage 9 marker")
@@ -318,7 +318,7 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     require(live.ok, "BA target Live validation failed: " + "; ".join(live.errors))
 
     required_doc_markers = {
-        "BA roadmap": (target["roadmap"], ["BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
+        "BA roadmap": (target["roadmap"], ["## Stage 7 — Analysis revision lineage — FIRST PRODUCTION REVISION DONE / PUBLIC CLOSED" if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in target["roadmap"] else "BA establishes the prospective grammar for changing an analytical judgement without rewriting the prior snapshot."]),
     }
     if target["status"].startswith("# CURRENT RECOVERY OVERRIDE — POST-AZ / BA ANALYSIS REVISION FOUNDATION"):
         required_doc_markers["BA status"] = (

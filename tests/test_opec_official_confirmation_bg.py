@@ -116,8 +116,24 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(matches, [])
 
     def test_status_and_roadmap_record_bounded_bg_contract(self):
-        status = bg.target_status(bg.STATUS_PATH.read_text(encoding="utf-8"), self.plan)
-        roadmap = bg.target_roadmap(bg.ROADMAP_PATH.read_text(encoding="utf-8"))
+        status_source = bg.STATUS_PATH.read_text(encoding="utf-8")
+        roadmap_source = bg.ROADMAP_PATH.read_text(encoding="utf-8")
+        if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in status_source:
+            # CH makes recovery prose a derived descendant surface. Do not invoke
+            # dormant BG/OPEC materialisation helpers merely to reconstruct old
+            # prose; verify current truth plus the permanent quarantine instead.
+            self.assertIn("Canonical Registry: **v0.41 / 689 occurrences**", status_source)
+            self.assertIn("Source Registry: **v2.02 / 257 sources**", status_source)
+            self.assertIn("OPEC CE remains quarantined", status_source)
+            self.assertIn("## Permanent quarantine", roadmap_source)
+            self.assertIn("PR #113", roadmap_source)
+            quarantine = (ROOT / "OPEC_QUARANTINE.md").read_text(encoding="utf-8")
+            self.assertIn("QUARANTINED / NON-BLOCKING / MANUAL REACTIVATION ONLY", quarantine)
+            self.assertIn("Closed PR: `#113`", quarantine)
+            self.assertIn("must not be mechanically rebased, reopened, copied forward wholesale, cherry-picked", quarantine)
+            return
+        status = bg.target_status(status_source, self.plan)
+        roadmap = bg.target_roadmap(roadmap_source)
         self.assertIn("BG OPEC OFFICIAL-CONFIRMATION PROVENANCE STRENGTHENING", status)
         self.assertIn("v0.41 / 689 occurrences", status)
         self.assertIn("v1.83 / 246 sources", status)
