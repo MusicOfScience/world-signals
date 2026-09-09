@@ -2,10 +2,8 @@ name: CI NHC activation transaction
 
 on:
   push:
-    branches:
-      - feature/post-ch-nhc-monitor-activation-ci
-    paths:
-      - '.github/workflows/ci-nhc-activation-transaction.yml'
+    branches: [feature/post-ch-nhc-monitor-activation-ci]
+    paths: ['.github/workflows/ci-nhc-activation-transaction.yml']
   workflow_dispatch:
 
 permissions:
@@ -24,7 +22,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: feature/post-ch-nhc-monitor-activation-ci
-
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
@@ -37,64 +34,55 @@ jobs:
           test "$(git rev-parse origin/main)" = "c4f359c2c70f023c32990f20234aaf154dced152"
           test "$(git merge-base HEAD origin/main)" = "c4f359c2c70f023c32990f20234aaf154dced152"
 
-      - name: Fresh live NHC endpoint and robots preflight
+      - name: Fresh live NHC endpoint robots and rights preflight
         shell: bash
+        env:
+          PYTHONPATH: src
         run: |
           set -euo pipefail
           cp data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json /tmp/nhc-readiness-before.json
-          python scripts/run_nhc_readiness_cf.py | tee /tmp/nhc-ci-readiness.json
+          python scripts/run_nhc_readiness_cf.py > /tmp/nhc-ci-readiness.json
           python - <<'PY'
           import json
           from pathlib import Path
+          from urllib.request import Request, urlopen
           x=json.loads(Path('data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json').read_text())
           assert x['readiness_verdict']=='PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT'
-          assert x['definition']['start_month_day']=='06-01'
-          assert x['definition']['end_month_day']=='11-30'
-          assert x['review_candidate_count']==0
-          assert all(x['robots_path_access'].values())
-          assert x['climatology_snapshot']['status']==200
-          assert x['atlantic_outlook_rss_snapshot']['status']==200
+          assert (x['definition']['start_month_day'],x['definition']['end_month_day'])==('06-01','11-30')
+          assert x['review_candidate_count']==0 and all(x['robots_path_access'].values())
+          assert x['climatology_snapshot']['status']==200 and x['atlantic_outlook_rss_snapshot']['status']==200
+          req=Request('https://www.weather.gov/disclaimer/',headers={'User-Agent':'WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)'})
+          with urlopen(req,timeout=30) as r:
+              body=r.read().decode('utf-8','replace').lower(); status=r.status
+          assert status==200 and 'public domain' in body
+          assert 'appropriate use' in body or 'appropriate-use' in body
+          print('CI_NHC_LIVE_PREFLIGHT_PASS')
           PY
           cp /tmp/nhc-readiness-before.json data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json
 
-      - name: Fresh NWS rights and appropriate-use recheck
+      - name: Simulate and run focused regressions
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from urllib.request import Request, urlopen
-          url='https://www.weather.gov/disclaimer/'
-          req=Request(url, headers={'User-Agent':'WORLD-SIGNALS/0.2 (+https://github.com/MusicOfScience/world-signals)'})
-          with urlopen(req, timeout=30) as r:
-              body=r.read().decode('utf-8','replace').lower()
-              status=r.status
-          assert status==200, status
-          assert 'public domain' in body
-          assert 'appropriate use' in body or 'appropriate-use' in body
-          print('NHC_CI_RIGHTS_RECHECK_PASS')
-          PY
-
-      - name: Simulate controlled CI transform
-        run: python scripts/apply_nhc_atlantic_season_monitor_ci.py --check
-
-      - name: Run focused pre-transaction regressions
-        run: |
+          python scripts/apply_nhc_atlantic_season_monitor_ci.py --check
           python -m unittest tests.test_nhc_atlantic_season_cf -v
           python -m unittest tests.test_nhc_atlantic_season_activation_ci -v
           python -m unittest tests.test_opec_quarantine_cf -v
 
-      - name: Materialise bounded source route and runtime wiring
+      - name: Materialise bounded route and refresh derived state
+        shell: bash
         env:
           WORLD_SIGNALS_APPLY_MONITOR_CI: 'YES'
-        run: python scripts/apply_nhc_atlantic_season_monitor_ci.py --apply
-
-      - name: Refresh derived noncanonical recovery state
-        env:
           WORLD_SIGNALS_WRITE_DERIVED_STATE: 'YES'
-        run: python scripts/project_state_snapshot.py --write
-
-      - name: Validate governed and derived state
         run: |
+          set -euo pipefail
+          python scripts/apply_nhc_atlantic_season_monitor_ci.py --apply
+          python scripts/project_state_snapshot.py --write
+
+      - name: Validate full repository
+        shell: bash
+        run: |
+          set -euo pipefail
           python scripts/validate_registry.py
           python scripts/validate_live_intelligence.py
           python scripts/validate_analysis.py
@@ -102,14 +90,7 @@ jobs:
           python -m unittest tests.test_nhc_atlantic_season_cf -v
           python -m unittest tests.test_nhc_atlantic_season_activation_ci -v
           python -m unittest tests.test_opec_quarantine_cf -v
-
-      - name: Run full repository regression suite
-        run: python -m unittest discover -s tests -v
-
-      - name: Compile and build
-        shell: bash
-        run: |
-          set -euo pipefail
+          python -m unittest discover -s tests -v
           python -m py_compile scripts/*.py src/world_signals/*.py src/world_signals/adapters/*.py tests/*.py
           node --check web/app.js
           node --check web/horizon.js
@@ -120,7 +101,7 @@ jobs:
           node --check web/analysis.js
           python scripts/build_site.py
 
-      - name: Exercise current live-monitor runtime with NHC registered
+      - name: Exercise registered NHC runtime
         shell: bash
         run: |
           set -euo pipefail
@@ -130,116 +111,56 @@ jobs:
           from pathlib import Path
           r=json.loads(Path('artifacts/live-monitor.json').read_text())
           h=[x for x in r['source_health'] if x.get('adapter_id')=='NHC_ATLANTIC_SEASON']
-          assert len(h)==1, h
-          assert h[0]['state']=='HEALTHY', h[0]
-          assert h[0]['request_budget_per_run']==2
-          assert h[0]['rss_has_season_date_authority'] is False
+          assert len(h)==1 and h[0]['state']=='HEALTHY', h
+          assert h[0]['request_budget_per_run']==2 and h[0]['rss_has_season_date_authority'] is False
           assert r['canonical_unchanged'] is True
-          assert r['source_health_summary']['all_expected_adapters_observed'] is True, r['source_health_summary']
+          assert r['source_health_summary']['all_expected_adapters_observed'] is True
           print('CI_NHC_RUNTIME_PASS')
           PY
 
-      - name: Remove generated runtime and build residue
+      - name: Audit protected layers bounded diff and commit materialised state
         shell: bash
         run: |
           set -euo pipefail
           rm -rf docs site artifacts review_candidates/live
           cp /tmp/nhc-readiness-before.json data/monitor/NHC_ATLANTIC_SEASON_CF_READINESS_v0.1.json
-
-      - name: Prove protected governed layers unchanged
-        shell: bash
-        run: |
-          set -euo pipefail
-          protected=(
-            data/canonical/registry.json
-            data/canonical/schema.json
-            data/changes/ledger.json
-            data/coverage/biosecurity_overlay.json
-            data/monitor/operations_policy.json
-            data/live_intelligence/schema.json
-            data/live_intelligence/observations.json
-            data/live_intelligence/evidence_registry.json
-            data/analysis/schema.json
-            data/analysis/event_reviews.json
-            data/analysis/evidence_registry.json
-            OPEC_QUARANTINE.md
-            tests/test_opec_quarantine_cf.py
-          )
+          protected=(data/canonical/registry.json data/canonical/schema.json data/changes/ledger.json data/coverage/biosecurity_overlay.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json OPEC_QUARANTINE.md tests/test_opec_quarantine_cf.py)
           for path in "${protected[@]}"; do
-            test "$(git rev-parse origin/main:$path)" = "$(git hash-object "$path")" || {
-              echo "protected path changed: $path" >&2
-              exit 1
-            }
+            test "$(git rev-parse origin/main:$path)" = "$(git hash-object "$path")" || { echo "protected path changed: $path" >&2; exit 1; }
           done
-
-      - name: Write transaction audit and verify bounded diff
-        shell: bash
-        run: |
-          set -euo pipefail
           cat > data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md <<EOF
           # WORLD SIGNALS — NHC Atlantic-season CI transaction audit v0.1
 
           - exact merged CH base: \`c4f359c2c70f023c32990f20234aaf154dced152\`
           - GitHub Actions run: \`${GITHUB_RUN_ID}\`
           - executed at UTC: \`$(date -u +%Y-%m-%dT%H:%M:%SZ)\`
+          - failed attempt 1 / run \`34407375556\`: harness import-path failure before network access or write gate; no governed mutation.
           - fresh NHC climatology/RSS/robots readiness: **PASS**
           - fresh NWS public-domain / appropriate-use marker recheck: **PASS**
           - Source Registry: \`v2.02 / 257\` → \`v2.03 / 257\`
           - Monitor expectations: \`v0.27 / 25\` → \`v0.28 / 26\`
           - route: \`NHC_ATLANTIC_SEASON\`; exact scope \`WSO-COM-A-0049\`, \`WSO-COM-A-0050\`
-          - authoritative semantic baseline: NHC Atlantic season \`06-01 → 11-30\`
+          - semantic baseline: NHC Atlantic season \`06-01 → 11-30\`
           - RSS role: source health only; no season-date or event-state authority
-          - shared scheduler cadence: daily; request budget: two first-party requests per run
-          - Canonical Registry mutation: **NONE**
-          - Change Ledger mutation: **NONE**
-          - Monitor operations-policy mutation: **NONE**
-          - Live Intelligence mutation: **NONE**
-          - Analysis mutation: **NONE**
-          - automatic Canonical commit: **OFF**
-          - Google Calendar writes: **OFF**
-          - automatic Live/Analysis promotion: **OFF**
+          - actual shared scheduler cadence: daily; request budget: two first-party requests per run
+          - Canonical / Change Ledger / Monitor operations policy / Live / Analysis mutation: **NONE**
+          - automatic Canonical commit / Google Calendar write / automatic Live-Analysis promotion: **OFF**
           - OPEC CE quarantine: **RESPECTED**
           - full live-monitor runtime observed the NHC adapter and preserved Canonical hash.
           EOF
           python - <<'PY'
           import subprocess
-          allowed={
-            '.github/workflows/ci-nhc-activation-transaction.yml',
-            'README.md',
-            'PROJECT_STATUS.md',
-            'ROADMAP.md',
-            'data/monitor/POST_CH_PRESSURE_AUDIT_CI_v0.1.md',
-            'data/monitor/NHC_ATLANTIC_SEASON_CI_PLAN_v0.1.json',
-            'data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md',
-            'data/monitor/expectations.json',
-            'data/sources/registry.json',
-            'data/status/current_state.json',
-            'scripts/apply_nhc_atlantic_season_monitor_ci.py',
-            'scripts/run_live_monitor.py',
-            'tests/test_nhc_atlantic_season_activation_ci.py',
-          }
+          allowed={'.github/workflows/ci-nhc-activation-transaction.yml','README.md','PROJECT_STATUS.md','ROADMAP.md','data/monitor/POST_CH_PRESSURE_AUDIT_CI_v0.1.md','data/monitor/NHC_ATLANTIC_SEASON_CI_PLAN_v0.1.json','data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md','data/monitor/expectations.json','data/sources/registry.json','data/status/current_state.json','scripts/apply_nhc_atlantic_season_monitor_ci.py','scripts/run_live_monitor.py','tests/test_nhc_atlantic_season_activation_ci.py'}
           committed=set(subprocess.check_output(['git','diff','--name-only','origin/main...HEAD'],text=True).splitlines())
           working=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
           untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
           actual=committed|working|untracked
-          if actual != allowed:
-              raise SystemExit(f'CI unexpected paths: {sorted(actual ^ allowed)}; actual={sorted(actual)}')
+          if actual!=allowed: raise SystemExit(f'CI unexpected paths: {sorted(actual ^ allowed)}; actual={sorted(actual)}')
           print('CI_BOUNDED_DIFF_PASS')
           PY
-
-      - name: Commit reviewed materialised state
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name "Mx Hud Harding"
           git config user.email "58031940+MusicOfScience@users.noreply.github.com"
-          git add \
-            README.md PROJECT_STATUS.md ROADMAP.md \
-            data/sources/registry.json \
-            data/monitor/expectations.json \
-            data/status/current_state.json \
-            scripts/run_live_monitor.py \
-            data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md
+          git add README.md PROJECT_STATUS.md ROADMAP.md data/sources/registry.json data/monitor/expectations.json data/status/current_state.json scripts/run_live_monitor.py data/monitor/NHC_ATLANTIC_SEASON_CI_TRANSACTION_AUDIT_v0.1.md
           git diff --cached --quiet && { echo 'No materialised CI changes to commit' >&2; exit 1; }
           git commit -m "CI: materialise bounded NHC season monitor"
           git push origin HEAD:feature/post-ch-nhc-monitor-activation-ci
