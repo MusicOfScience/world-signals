@@ -96,7 +96,11 @@
     "minimum_event_count": 1,
     "maximum_event_count": 1000,
     "current_live_event_count_is_not_a_permanent_invariant": true,
-    "required_target_fields": ["UID", "SUMMARY", "DTSTART"],
+    "required_target_fields": [
+      "UID",
+      "SUMMARY",
+      "DTSTART"
+    ],
     "target_uid_shape": "UUID",
     "dtstart_shape": "FLOATING_YYYYMMDDTHHMMSS_NO_TZID",
     "floating_datetime_timezone": "America/New_York",
@@ -144,7 +148,10 @@
   },
   "monitor_review_window": {
     "unconfigured_item_review_floor_local": "2026-09-09T00:00:00",
-    "target_summaries": ["Crop Production", "Grain Stocks"],
+    "target_summaries": [
+      "Crop Production",
+      "Grain Stocks"
+    ],
     "purpose": "Surface newly advertised remaining-2026 Crop Production or Grain Stocks items without treating historical events as Canonical-add candidates.",
     "review_floor_is_not_event_time_authority": true
   },
@@ -186,5 +193,64 @@
     "data/live",
     "data/live_intelligence",
     "data/analysis"
-  ]
+  ],
+  "focused_activation_gate": {
+    "run_id": 34307460147,
+    "job_id": 102327017370,
+    "result": "SUCCESS",
+    "test_count": 36,
+    "repository_mutation": false,
+    "notes": "Earlier focused run 34307089558 / 102325920998 failed before test import because the temporary workflow omitted PYTHONPATH=src; implementation assertions did not run. Harness was repaired and subsequent gates passed."
+  },
+  "materialized_preflight": {
+    "run_id": 34307535574,
+    "job_id": 102327236940,
+    "result": "SUCCESS",
+    "full_test_count": 1173,
+    "skipped_test_count": 67,
+    "protected_file_count": 110,
+    "exact_mutation_path_count": 5,
+    "preexisting_source_objects_unchanged": 254,
+    "preexisting_monitor_routes_unchanged": 22,
+    "poststate": {
+      "canonical_registry_version": "0.41",
+      "canonical_record_count": 689,
+      "source_registry_version": "2.00",
+      "source_count": 255,
+      "monitor_expectations_version": "0.25",
+      "configured_monitor_adapter_count": 23
+    },
+    "static_build_passed": true,
+    "protected_layers_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  },
+  "production_live_preflight": {
+    "failed_harness_attempt": {
+      "run_id": 34307710661,
+      "job_id": 102327747468,
+      "result": "FAIL_HARNESS_ONLY_AFTER_FETCH_AND_COMPARE",
+      "reason": "Temporary reporting code referenced FetchSnapshot.sha256 instead of body_sha256; source fetch/comparator had completed before the reporting accessor failed."
+    },
+    "run_id": 34307783031,
+    "job_id": 102327960135,
+    "result": "SUCCESS",
+    "network_request_count": 1,
+    "ical_request_count": 1,
+    "robots_request_count": 0,
+    "calendar_html_request_count": 0,
+    "report_followup_request_count": 0,
+    "search_route_discovery_request_count": 0,
+    "ical_http_status": 200,
+    "ical_content_type": "text/calendar",
+    "ical_body_bytes": 120961,
+    "ical_sha256_observed_not_frozen": "23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a",
+    "target_items_parsed": 16,
+    "configured_uid_match_count": 5,
+    "review_candidate_count": 0,
+    "unconfigured_future_target_count_observed_not_frozen": 0,
+    "canonical_byte_identical": true,
+    "runner_reset_clean": true,
+    "repository_mutation": false
+  }
 }

@@ -30,6 +30,7 @@ from world_signals.adapters import (
     fetch_fao_release_calendar,
     fetch_fao_robots_policy,
     fetch_fed_monetary_policy_rss,
+    fetch_nass_asb_ical,
     fetch_nbs_native_latest_releases_rss,
     fetch_nz_election_robots_policy,
     fetch_nz_election_rss,
@@ -61,6 +62,7 @@ from world_signals.indec_cpi_monitor import indec_cpi_calendar_review_candidates
 from world_signals.japan_mof_jgb_monitor import japan_mof_jgb_rss_review_candidates
 from world_signals.japan_cpi_monitor import japan_cpi_schedule_review_candidates
 from world_signals.japan_household_spending_monitor import japan_household_spending_review_candidates
+from world_signals.nass_asb_monitor import nass_asb_ical_review_candidates
 from world_signals.nbs_release_monitor import nbs_native_rss_review_candidates
 from world_signals.nz_election_monitor import nz_election_timetable_change_review_candidates
 from world_signals.ons_monitor import ons_release_calendar_review_candidates
@@ -445,6 +447,66 @@ def main() -> int:
                 "canonical_date_mutation_allowed":False,
                 "automatic_calendar_html_fetch_allowed":False,
                 "automatic_item_link_fetch_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+
+    if "USDA_NASS_ASB_ICAL" in configs:
+        nass_config=configs["USDA_NASS_ASB_ICAL"]
+        try:
+            nass_items,nass_snap=fetch_nass_asb_ical()
+            report["source_health"].append({
+                "adapter_id":"USDA_NASS_ASB_ICAL",
+                "source_id":nass_config["source_id"],
+                "state":"HEALTHY",
+                "snapshot":nass_snap.as_dict(),
+                "target_item_count":len(nass_items),
+                "request_budget_per_run":1,
+                "request_count":1,
+                "ical_request_count":1,
+                "robots_request_count":0,
+                "calendar_html_request_count":0,
+                "report_followup_request_count":0,
+                "search_route_discovery_request_count":0,
+                "feed_event_count_is_permanent_invariant":False,
+                "floating_datetime_timezone":"America/New_York",
+                "floating_timezone_basis":"FIRST_PARTY_NASS_REPORTS_BY_DATE_PAGES_LABEL_TARGET_RELEASES_ET",
+                "dtend_is_event_end":False,
+                "dtstamp_is_event_time":False,
+                "sequence_is_event_state":False,
+                "description_is_event_time":False,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_datetime_mutation_allowed":False,
+                "automatic_calendar_html_fetch_allowed":False,
+                "automatic_report_followup_allowed":False,
+                "automatic_new_occurrence_creation_allowed":False,
+                "automatic_live_or_analysis_promotion_allowed":False,
+                "automatic_commit_allowed":False,
+            })
+            candidates,observations=nass_asb_ical_review_candidates(
+                registry.get("records",[]),nass_items,nass_config
+            )
+            report["review_candidates"].extend(candidates)
+            report["observations"].extend(observations)
+        except (AdapterError,ValueError) as exc:
+            report["source_health"].append({
+                "adapter_id":"USDA_NASS_ASB_ICAL",
+                "source_id":nass_config["source_id"],
+                "state":"DEGRADED",
+                "error":str(exc),
+                "canonical_action":"NONE",
+                "absence_is_not_event_state":True,
+                "schedule_authority":False,
+                "clock_authority":False,
+                "lifecycle_authority":False,
+                "certainty_authority":False,
+                "canonical_datetime_mutation_allowed":False,
+                "automatic_calendar_html_fetch_allowed":False,
+                "automatic_report_followup_allowed":False,
                 "automatic_new_occurrence_creation_allowed":False,
                 "automatic_live_or_analysis_promotion_allowed":False,
                 "automatic_commit_allowed":False,

@@ -218,3 +218,13 @@ If all offline, materialised and live gates pass:
 - Analysis unchanged;
 - automatic Canonical commit OFF;
 - Google Calendar write OFF.
+
+## Completed CA validation gates
+
+The activation architecture subsequently passed the full pre-transaction sequence.
+
+- **Focused activation contract:** run `34307460147`, job `102327017370` — SUCCESS; **36/36 tests passed**, including parser/comparator adversarial cases, read-only helper execution and the explicit apply environment gate. An earlier temporary focused workflow run (`34307089558` / `102325920998`) failed before importing tests because `PYTHONPATH=src` was omitted; no implementation assertion ran in that failed harness attempt.
+- **Materialised full preflight:** run `34307535574`, job `102327236940` — SUCCESS. The exact five-file governed/runtime patch produced Canonical v0.41 / 689, Sources v2.00 / 255 and Monitor v0.25 / 23; preserved 254 unrelated source objects and all 22 existing routes; then passed **1,173 tests with 67 skipped**, validators, compile/JavaScript checks and the static build. All **110 protected files** were byte-identical and the runner reset clean.
+- **Production-shaped live preflight:** run `34307783031`, job `102327960135` — SUCCESS. Exactly one NASS iCalendar request returned HTTP 200 / `text/calendar` / 120,961 bytes. All five configured UIDs matched current Canonical datetimes, there were zero review candidates and zero unconfigured future target releases in that snapshot. There were no robots, HTML, report-followup or search/discovery requests, and Canonical remained byte-identical. The preceding temporary run (`34307710661` / `102327747468`) had already completed the source fetch and comparator but failed when reporting an incorrectly named snapshot attribute; the accessor was corrected without changing source or comparator logic.
+
+The repeated live SHA-256 `23ceabbd75ca89c98ff42859997abef67fe444e2829945747cbadc1788175a9a`, 120,961-byte size and observed event counts are corroborative snapshot evidence only, not production invariants.
