@@ -1,0 +1,168 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CK",
+  "title": "Pacific Islands Forum Leaders Meeting canonical/source repair",
+  "reference_date": "2026-09-10",
+  "base_main_sha": "286af17018562fe211db47dd22112a75b842a367",
+  "selection_basis": {
+    "source": "CJ corrected cross-layer coverage/pressure audit",
+    "reason": "Oceania/Pacific review exposed a genuine upstream institutional signal omission rather than a downstream count target.",
+    "quota_filling_prohibited": true,
+    "second_live_analysis_link_selected": false,
+    "monitor_zero_category_selected": false,
+    "opec_ce_excluded": true
+  },
+  "preconditions": {
+    "canonical_registry_version": "0.41",
+    "canonical_record_count": 689,
+    "canonical_schema_version": "0.52",
+    "source_registry_version": "2.03",
+    "source_record_count": 257,
+    "change_ledger_version": "0.27",
+    "change_ledger_count": 62,
+    "biosecurity_overlay_version": "0.16",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.41",
+      "record_count": 689
+    },
+    "monitor_expectations_version": "0.28",
+    "monitor_adapter_count": 26,
+    "live_observation_count": 7,
+    "live_evidence_count": 10,
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_live_input_count": 1,
+    "production_revision_count": 1,
+    "required_existing_primary_source": {
+      "source_id": "WSSRC-INT-012",
+      "institution": "Pacific Islands Forum / Palau host",
+      "authoritative_url": "https://55piflm.gov.pw/",
+      "source_timezone": "Pacific/Palau",
+      "canonical_dependency_count": 0
+    },
+    "required_absent_occurrence_ids": [
+      "WSO-INT-PIF-LM-055-2026"
+    ],
+    "required_absent_series_ids": [
+      "WSER-INT-PIF-LM"
+    ],
+    "required_absent_source_ids": [
+      "WSSRC-INT-036"
+    ],
+    "required_absent_change_ids": [
+      "WSCHANGE-3ea939a7693546d5be"
+    ]
+  },
+  "series": {
+    "series_id": "WSER-INT-PIF-LM",
+    "name": "Pacific Islands Forum Leaders Meeting",
+    "institution": "Pacific Islands Forum",
+    "category": "INTERNATIONAL_INSTITUTIONS",
+    "region": "Oceania / Pacific",
+    "event_type": "INSTITUTIONAL_MEETING",
+    "recurrence_semantics": "ANNUAL_SOURCE_ANNOUNCED_NO_RULE_GENERATED_EXACT_DATE"
+  },
+  "occurrence": {
+    "occurrence_id": "WSO-INT-PIF-LM-055-2026",
+    "series_id": "WSER-INT-PIF-LM",
+    "canonical_name": "55th Pacific Islands Forum Leaders Meeting",
+    "short_calendar_title": "PIF Leaders Meeting",
+    "institution": "Pacific Islands Forum",
+    "category": "INTERNATIONAL_INSTITUTIONS",
+    "region": "Oceania / Pacific",
+    "event_type": "INSTITUTIONAL_MEETING",
+    "certainty_status": "CONFIRMED",
+    "lifecycle_status": "COMPLETED",
+    "location": "Koror, Palau",
+    "source_id": "WSSRC-INT-012",
+    "primary_source_assertion_id": "WSA-CK-c7e79f34ea09e1af",
+    "completion_source_id": "WSSRC-INT-036",
+    "completion_source_assertion_id": "WSA-CK-cb548530485b6f03",
+    "change_id": "WSCHANGE-3ea939a7693546d5be",
+    "timing": {
+      "timing_type": "ALL_DAY_RANGE",
+      "start_local": "2026-08-30",
+      "end_local": "2026-09-04",
+      "source_timezone": "Pacific/Palau",
+      "start_utc": null,
+      "end_utc": null,
+      "time_precision": "DAY_RANGE",
+      "all_day_semantics": true,
+      "time_status": "SOURCE_CONFIRMED",
+      "time_basis": "OFFICIAL_HOST_EVENT_RANGE"
+    },
+    "primary_schedule_url": "https://55piflm.gov.pw/",
+    "completion_url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+    "institutional_significance_url": "https://www.pm.gov.au/media/55th-pacific-islands-forum-leaders-meeting-palau"
+  },
+  "supporting_source": {
+    "source_id": "WSSRC-INT-036",
+    "institution": "Office of the Prime Minister, Cook Islands",
+    "jurisdiction": "Cook Islands",
+    "domain": "international_institutions",
+    "endpoint_role": "55th PIF Leaders Meeting post-event completion/outcome corroboration",
+    "authoritative_url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+    "source_type": "official_member_government_post_event_release",
+    "information_supplied": "First-party confirmation that the 55th PIF Leaders Meeting concluded and that outcomes were captured in the 2026 Forum Communique.",
+    "future_schedule_horizon": "historical 2026 completion evidence only",
+    "source_timezone": "Pacific/Rarotonga",
+    "canonical_dependency_count": 0,
+    "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+    "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+    "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+    "licence_review_status": "ALL_RIGHTS_RESERVED_NO_GENERAL_REUSE_PERMISSION_IDENTIFIED",
+    "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD",
+    "redistribution_permission": "NOT_CLEARED",
+    "rights_evidence": "Site footer states © 2025 All rights reserved; no general reuse licence located in CK research.",
+    "monitor_route_authorised": false
+  },
+  "future_host_context": {
+    "year": 2027,
+    "host_country": "New Zealand",
+    "host_city": "Auckland",
+    "authority_url": "https://www.beehive.govt.nz/release/new-zealand-begins-pacific-leadership-role",
+    "exact_dates_found": false,
+    "canonical_dated_occurrence_authorised": false,
+    "rule_generated_date_prohibited": true
+  },
+  "expected_post_state": {
+    "canonical_registry_version": "0.42",
+    "canonical_record_count": 690,
+    "source_registry_version": "2.04",
+    "source_record_count": 258,
+    "change_ledger_version": "0.28",
+    "change_ledger_count": 63,
+    "biosecurity_overlay_version": "0.17",
+    "biosecurity_overlay_checkpoint": {
+      "registry_version": "0.42",
+      "record_count": 690
+    },
+    "monitor_expectations_version": "0.28",
+    "monitor_adapter_count": 26,
+    "live_observation_count": 7,
+    "live_evidence_count": 10,
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_live_input_count": 1,
+    "production_revision_count": 1
+  },
+  "authority_gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "automatic_monitor_route_creation": false,
+    "automatic_monitor_to_live": false,
+    "automatic_live_population": false,
+    "automatic_live_to_analysis": false,
+    "automatic_analysis_population": false,
+    "public_live_projection": false,
+    "public_analysis_projection": false
+  },
+  "protected_boundaries": [
+    "Do not create a 2027 dated occurrence from host confirmation alone.",
+    "Do not infer opening or closing clock time for the 2026 whole-event range.",
+    "Do not duplicate WSSRC-INT-012.",
+    "Do not activate a PIF Monitor route.",
+    "Do not populate a 2026 Forum Communique Live observation inside CK unless separately pressure-audited and explicitly added to the plan.",
+    "Do not touch OPEC CE quarantine material."
+  ]
+}
