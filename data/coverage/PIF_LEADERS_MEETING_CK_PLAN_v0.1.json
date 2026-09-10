@@ -80,7 +80,7 @@
     "completion_source_assertion_id": "WSA-CK-cb548530485b6f03",
     "change_id": "WSCHANGE-3ea939a7693546d5be",
     "timing": {
-      "timing_type": "ALL_DAY_RANGE",
+      "timing_type": "MULTI_DAY_LOCAL",
       "start_local": "2026-08-30",
       "end_local": "2026-09-04",
       "source_timezone": "Pacific/Palau",
@@ -88,8 +88,8 @@
       "end_utc": null,
       "time_precision": "DAY_RANGE",
       "all_day_semantics": true,
-      "time_status": "SOURCE_CONFIRMED",
-      "time_basis": "OFFICIAL_HOST_EVENT_RANGE"
+      "time_status": "CONFIRMED",
+      "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE"
     },
     "primary_schedule_url": "https://55piflm.gov.pw/",
     "completion_url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
