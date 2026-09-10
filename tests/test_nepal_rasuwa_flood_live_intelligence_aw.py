@@ -12,6 +12,10 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+
+def dotted_version(value):
+    return tuple(int(part) for part in str(value).split("."))
+
 from world_signals.live_intelligence import (
     public_live_intelligence_projection,
     validate_live_intelligence,
@@ -64,7 +68,7 @@ class NepalRasuwaFloodLiveIntelligenceAWTests(unittest.TestCase):
         self.assertEqual(pre["live_intelligence_evidence_count"], 0)
 
     def test_target_is_v02_one_observation_two_evidence_rows(self):
-        self.assertGreaterEqual(float(self.schema["version"]), 0.2)
+        self.assertGreaterEqual(dotted_version(self.schema["version"]), (0, 2))
         self.assertEqual(self.observations["version"], self.schema["version"])
         self.assertEqual(self.evidence["version"], self.schema["version"])
         self.assertGreaterEqual(len(self.observations["observations"]), 1)
@@ -182,7 +186,7 @@ class NepalRasuwaFloodLiveIntelligenceAWTests(unittest.TestCase):
         )
         meta = projection["metadata"]
         self.assertEqual(meta["projection_type"], "LIVE_INTELLIGENCE_CURATED_STORE_NOT_RUNTIME_FEED")
-        self.assertGreaterEqual(float(meta["schema_version"]), 0.2)
+        self.assertGreaterEqual(dotted_version(meta["schema_version"]), (0, 2))
         self.assertTrue(str(meta["population_mode"]).startswith("CONTROLLED_"))
         self.assertGreaterEqual(meta["internal_observation_count"], 1)
         self.assertGreaterEqual(meta["internal_evidence_count"], 2)

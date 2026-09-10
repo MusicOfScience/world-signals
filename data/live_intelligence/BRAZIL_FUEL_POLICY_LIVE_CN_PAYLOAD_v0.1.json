@@ -1,0 +1,64 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CN",
+  "target_version": "0.10",
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-BRA-MF-FUEL-POLICY-20260909",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Brazil — Ministry of Finance",
+      "title": "Governo Federal adota novas medidas para combustíveis após novos aumentos do petróleo",
+      "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-federal-adota-novas-medidas-para-combustiveis-apos-novos-aumentos-do-petroleo/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-09"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official Finance Ministry announcement. The page displays 09/09/2026 18h47 but the reviewed page does not itself establish an IANA timezone for that clock time, so CN preserves publication precision only as a civil date. The article says the Federal Government adopted/signed a temporary gasoline/ethanol tax measure and diesel-subsidy measure on 9 September. Fresh post-CM Planalto index review had not yet surfaced the new substantive legal-instrument pair, so this evidence row does not assert Diário Oficial publication, legal instrument numbers or entry into force."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-POL-BRA-FUEL-POLICY-20260909-001",
+    "observed_at_utc": "2026-09-10T06:34:45Z",
+    "observation_type": "POLICY_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "Brazil announces adopted temporary gasoline-ethanol tax relief and diesel subsidy measure",
+    "summary": "Brazil's Ministry of Finance reported that the Federal Government adopted two temporary fuel-policy measures on 9 September 2026. The ministry says a signed decree reduces PIS/Pasep and Cofins on gasoline by R$0.63 per litre and zeroes those contributions on hydrated ethanol for the stated 10 September–9 October period, while a signed measure provisional authorises an adjustable subsidy for road diesel, initially R$1.00 per litre. The ministry frames the package as a response to international oil-price volatility and fuel-supply restrictions associated by the government with geopolitical conflicts. This Live observation records the official policy adoption/announcement and stated parameters only: it does not assert that the newly announced substantive instruments had already been published in the Diário Oficial or entered into force at CN review time, does not assign unverified legal instrument numbers, and does not claim observed pump-price, inflation, supply or market effects.",
+    "domain_tags": [
+      "ECONOMICS",
+      "COMMODITIES",
+      "GEOPOLITICS"
+    ],
+    "jurisdictions": [
+      "Brazil"
+    ],
+    "regions": [
+      "Latin America"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-BRA-MF-FUEL-POLICY-20260909"
+    ],
+    "canonical_links": [],
+    "revision_of_observation_id": null,
+    "event_time": {
+      "precision": "CIVIL_DATE",
+      "event_date": "2026-09-09"
+    },
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "scope_exclusions": [
+    "No Canonical occurrence is created for this unscheduled policy intervention.",
+    "No claim is made that the newly announced substantive decree or measure provisional had been published in the Diário Oficial or entered into force at CN review time.",
+    "No new substantive legal instrument number is inferred from adjacent Planalto records.",
+    "The related extraordinary-credit MP 1.389/2026 is contextual and is not treated as the newly announced substantive policy pair.",
+    "The source's displayed 18h47 publication clock time is not converted to UTC because the reviewed page does not itself establish the source timezone.",
+    "Government-stated geopolitical context is retained as attribution and is not converted into an independent WORLD SIGNALS causal conclusion.",
+    "No observed consumer-price, inflation, supply or market response is asserted.",
+    "No Monitor route, Source Registry authority, Analysis review, automatic ingestion or public Live projection is created."
+  ]
+}
