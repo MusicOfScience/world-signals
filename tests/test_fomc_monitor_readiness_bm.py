@@ -26,7 +26,8 @@ class FOMCMonitorReadinessBMTests(unittest.TestCase):
 
     def test_bm_is_readiness_truth_repair_not_production_activation(self):
         canonical, sources, monitor = self._live_state()
-        self.assertEqual((canonical["version"], len(canonical["records"])), ("0.41", 689))
+        self.assertGreaterEqual(tuple(map(int, canonical["version"].split("."))), (0, 41))
+        self.assertGreaterEqual(len(canonical["records"]), 689)
         self.assertGreaterEqual(_version_tuple(monitor["version"]), (0, 12))
         self.assertGreaterEqual(len(monitor["adapters"]), 10)
         if monitor["version"] == "0.12":
@@ -105,9 +106,11 @@ class FOMCMonitorReadinessBMTests(unittest.TestCase):
         self.assertGreaterEqual(len(analysis["reviews"]), 21)
         self.assertGreaterEqual(evidence_version, (0, 17))
         self.assertGreaterEqual(len(analysis_evidence["evidence"]), 95)
-        self.assertEqual((ledger["version"], len(ledger["changes"])), ("0.27", 62))
-        self.assertEqual(overlay["canonical_checkpoint"]["registry_version"], "0.41")
-        self.assertEqual(overlay["canonical_checkpoint"]["record_count"], 689)
+        canonical = json.loads((ROOT / "data/canonical/registry.json").read_text())
+        self.assertGreaterEqual(_version_tuple(ledger["version"]), (0, 27))
+        self.assertGreaterEqual(len(ledger["changes"]), 62)
+        self.assertEqual(overlay["canonical_checkpoint"]["registry_version"], canonical["version"])
+        self.assertEqual(overlay["canonical_checkpoint"]["record_count"], len(canonical["records"]))
 
     def test_bl_descendant_repair_is_narrow_and_idempotent(self):
         original = (ROOT / "tests/test_japan_household_spending_monitor_bl.py").read_text()

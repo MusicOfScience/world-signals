@@ -78,8 +78,8 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         else:
             self.assertGreaterEqual(_version_tuple(self.target["sources"]["version"]), (1, 83))
             self.assertGreaterEqual(len(self.target["sources"]["sources"]), 246)
-        self.assertEqual(len(self.target["ledger"]["changes"]), 62)
-        change = self.target["ledger"]["changes"][-1]
+        self.assertGreaterEqual(len(self.target["ledger"]["changes"]), 62)
+        change = next(row for row in self.target["ledger"]["changes"] if row.get("change_id") == "WSCHANGE-5c0629586cdf3ce7")
         self.assertEqual(change["change_id"], "WSCHANGE-5c0629586cdf3ce7")
         self.assertEqual(change["change_type"], "SOURCE_PROVENANCE_STRENGTHENING")
         self.assertTrue(change["new_values"]["reuters_fallback_preserved"])
@@ -123,8 +123,9 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
             # CH makes recovery prose a derived descendant surface. Do not invoke
             # dormant BG/OPEC materialisation helpers merely to reconstruct old
             # prose; verify current truth plus the permanent quarantine instead.
-            self.assertIn("Canonical Registry: **v0.41 / 689 occurrences**", status_source)
             current_state = json.loads((ROOT / "data/status/current_state.json").read_text(encoding="utf-8"))
+            current_canonical = current_state["canonical"]
+            self.assertIn(f"Canonical Registry: **v{current_canonical['registry_version']} / {current_canonical['occurrence_count']} occurrences**", status_source)
             current_sources = current_state["sources"]
             self.assertIn(f"Source Registry: **v{current_sources['registry_version']} / {current_sources['source_count']} sources**", status_source)
             self.assertIn("OPEC CE remains quarantined", status_source)

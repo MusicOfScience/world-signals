@@ -93,7 +93,8 @@ class JapanMOFJGBRSSActivationBRTests(unittest.TestCase):
         return SOURCES, EXPECTATIONS, None, None, None
 
     def test_exact_preflight_or_complete_br_descendant(self):
-        self.assertEqual((CANONICAL["version"], len(CANONICAL["records"])), ("0.41", 689))
+        self.assertGreaterEqual(tuple(map(int, CANONICAL["version"].split("."))), (0, 41))
+        self.assertGreaterEqual(len(CANONICAL["records"]), 689)
         if self._is_pre():
             TX.preflight(CANONICAL, SOURCES, EXPECTATIONS, PLAN)
         elif self._is_exact_br_post():

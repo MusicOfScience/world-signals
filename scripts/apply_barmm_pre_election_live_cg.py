@@ -60,9 +60,9 @@ def assert_upstream_prestate(plan: dict[str, Any]) -> None:
     reviews = load(ANALYSIS_REVIEWS_PATH)
     analysis_evidence = load(ANALYSIS_EVIDENCE_PATH)
 
-    require(canonical.get("version") == pre["canonical_registry_version"], "CG Canonical version drift")
-    require(len(canonical.get("records", [])) == pre["canonical_record_count"], "CG Canonical population drift")
     version_tuple = lambda value: tuple(int(part) for part in str(value).split("."))
+    require(version_tuple(canonical.get("version")) >= version_tuple(pre["canonical_registry_version"]), "CG Canonical version regressed below historical checkpoint")
+    require(len(canonical.get("records", [])) >= pre["canonical_record_count"], "CG Canonical population regressed below historical checkpoint")
     require(version_tuple(sources.get("version")) >= version_tuple(pre["source_registry_version"]), "CG Source Registry regressed below historical checkpoint")
     require(len(sources.get("sources", [])) >= pre["source_count"], "CG Source population regressed below historical checkpoint")
     require(version_tuple(expectations.get("version")) >= version_tuple(pre["monitor_expectations_version"]), "CG Monitor expectations regressed below historical checkpoint")

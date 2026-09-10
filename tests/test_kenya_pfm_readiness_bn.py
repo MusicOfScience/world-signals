@@ -26,7 +26,8 @@ class KenyaPFMReadinessBNTests(unittest.TestCase):
 
     def test_bn_is_readiness_only_not_production_activation(self):
         canonical, sources, monitor = self._live_state()
-        self.assertEqual((canonical["version"], len(canonical["records"])), ("0.41", 689))
+        self.assertGreaterEqual(tuple(map(int, canonical["version"].split("."))), (0, 41))
+        self.assertGreaterEqual(len(canonical["records"]), 689)
         self.assertGreaterEqual(_version_tuple(monitor["version"]), (0, 12))
         self.assertGreaterEqual(len(monitor["adapters"]), 10)
         if monitor["version"] == "0.12":

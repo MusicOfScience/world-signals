@@ -8,9 +8,9 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 **Reference date:** 2026-09-10  
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.41 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.03 / 257 sources**.
-- Change Ledger: **v0.27 / 62 entries**.
+- Canonical Registry: **v0.42 / 689 occurrences**; schema **v0.52**.
+- Source Registry: **v2.04 / 258 sources**.
+- Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.

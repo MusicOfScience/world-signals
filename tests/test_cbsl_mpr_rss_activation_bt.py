@@ -81,7 +81,8 @@ class CBSLActivationTests(unittest.TestCase):
 
     def test_plan_is_frozen_to_exact_post_bs_governed_state_or_valid_descendant(self) -> None:
         self.assertEqual(PLAN["exact_base_main_sha"], "2b74c10905760c98c75b3598df96441f99841b00")
-        self.assertEqual((CANONICAL["version"], len(CANONICAL["records"])), ("0.41", 689))
+        self.assertGreaterEqual(tuple(map(int, CANONICAL["version"].split("."))), (0, 41))
+        self.assertGreaterEqual(len(CANONICAL["records"]), 689)
         if self._is_pre():
             self.assertEqual((SOURCES["version"], len(SOURCES["sources"])), ("1.92", 250))
             self.assertEqual((EXPECTATIONS["version"], len(EXPECTATIONS["adapters"])), ("0.17", 15))

@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.27",
-  "reference_date": "2026-09-07",
+  "version": "0.28",
+  "reference_date": "2026-09-10",
   "changes": [
     {
       "change_id": "WSCHANGE-b5a5e064f7f9e408b8",
@@ -1910,6 +1910,35 @@
       "canonical_mutation_committed": true,
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "change_id": "WSCHANGE-a0c0439ff446f93311",
+      "occurrence_id": "WSO-INT-A-0001",
+      "change_type": "LIFECYCLE_COMPLETION",
+      "old_values": {
+        "lifecycle_status": "ACTIVE",
+        "last_successful_assertion_id": "WSA-99e20d013c0dc998"
+      },
+      "new_values": {
+        "lifecycle_status": "COMPLETED",
+        "last_successful_assertion_id": "WSA-CK-cb548530485b6f03"
+      },
+      "source_assertion_id": "WSA-CK-cb548530485b6f03",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-10T10:35:42+10:00",
+      "review_basis": [
+        "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+        "Cook Islands Office of the Prime Minister reported on 4 September 2026 that the Prime Minister concluded participation in the 55th Pacific Islands Forum Leaders Meeting and that Leaders' Retreat outcomes were captured in the 2026 Forum Communique. Completion is verified from this first-party post-event evidence, not inferred from elapsed time.",
+        "Stable occurrence WSO-INT-A-0001 and series WSER-INT-PIF-LEADERS are preserved; CK corrects lifecycle/provenance only.",
+        "Existing Palau timing fields remain unchanged, including Pacific/Palau civil-date semantics and null UTC endpoints.",
+        "Completion is admitted from first-party post-event evidence and is not inferred from elapsed time.",
+        "Auckland/New Zealand 2027 host confirmation supplies no authoritative meeting dates and creates no dated successor occurrence."
+      ],
+      "commit_mode": "REVIEWED_PIF_LIFECYCLE_COMPLETION_CK",
+      "committed_at": "2026-09-10T10:35:42+10:00",
+      "registry_version_before": "0.41",
+      "registry_version_after": "0.42",
+      "canonical_mutation_committed": true
     }
   ]
 }

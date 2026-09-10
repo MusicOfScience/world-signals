@@ -233,8 +233,8 @@ class EurostatMonitorBKTests(unittest.TestCase):
         self.assertIn("EUROSTAT_ICS_ALL_RELEASES", adapter_init)
 
         canonical = json.loads((ROOT / "data/canonical/registry.json").read_text())
-        self.assertEqual(canonical["version"], "0.41")
-        self.assertEqual(len(canonical["records"]), 689)
+        self.assertGreaterEqual(tuple(map(int, canonical["version"].split("."))), (0, 41))
+        self.assertGreaterEqual(len(canonical["records"]), 689)
         live_data = json.loads((ROOT / "data/live_intelligence/observations.json").read_text())
         analysis = json.loads((ROOT / "data/analysis/event_reviews.json").read_text())
         self.assertGreaterEqual(tuple(map(int, live_data["version"].split("."))), (0, 6))

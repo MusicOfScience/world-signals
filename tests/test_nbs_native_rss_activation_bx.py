@@ -64,7 +64,8 @@ def effective_poststate() -> tuple[dict, dict, str, str, str]:
 
 class NBSNativeRSSActivationBXTests(unittest.TestCase):
     def test_frozen_prestate_or_descendant_poststate_is_coherent(self):
-        self.assertEqual((CANONICAL.get("version"), len(CANONICAL.get("records", []))), ("0.41", 689))
+        self.assertGreaterEqual(tuple(map(int, str(CANONICAL.get("version")).split("."))), (0, 41))
+        self.assertGreaterEqual(len(CANONICAL.get("records", [])), 689)
         if not exact_prestate():
             self.assertGreaterEqual(float(SOURCES.get("version")), 1.97)
             self.assertGreaterEqual(len(SOURCES.get("sources", [])), 253)

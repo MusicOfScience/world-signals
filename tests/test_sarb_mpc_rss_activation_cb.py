@@ -11,7 +11,8 @@ class SARBActivationCBTests(unittest.TestCase):
     def setUpClass(cls):
         cls.c=json.loads((ROOT/'data/canonical/registry.json').read_text()); cls.s=json.loads((ROOT/'data/sources/registry.json').read_text()); cls.e=json.loads((ROOT/'data/monitor/expectations.json').read_text())
     def test_governed_counts(self):
-        self.assertEqual((self.c['version'],len(self.c['records'])),('0.41',689))
+        self.assertGreaterEqual(version_tuple(self.c['version']), version_tuple('0.41'))
+        self.assertGreaterEqual(len(self.c['records']), 689)
         self.assertGreaterEqual(version_tuple(self.s['version']),version_tuple('2.01')); self.assertGreaterEqual(len(self.s['sources']),256)
         self.assertGreaterEqual(version_tuple(self.e['version']),version_tuple('0.26')); self.assertGreaterEqual(len(self.e['adapters']),24)
     def test_canonical_source_stays_held(self):
