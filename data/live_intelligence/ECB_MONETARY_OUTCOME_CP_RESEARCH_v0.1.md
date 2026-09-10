@@ -1,18 +1,18 @@
-# CP — ECB monetary-policy outcome readiness research v0.3
+# CP — ECB monetary-policy outcome research v0.4
 
 ## Status
 
-**READ-ONLY / POST-RELEASE EVIDENCE BLOCKED / NO OUTCOME POPULATION AUTHORISED**
+**PRIMARY ECB OUTCOME RECOVERED / PRODUCTION PLAN FROZEN / PREWRITE CONTRACT GREEN / NO GOVERNED POPULATION YET**
 
-Reviewed after merge of PR #123 from exact `main` commit `e1f5c97c183381f7d29bf6957aecd87cacaa96a0` on 10 September 2026. Latest post-release recheck updated at approximately `2026-09-10T14:28Z` (`00:28` on 11 September Australia/Melbourne).
+CP remains based on exact post-PR #123 `main` commit `e1f5c97c183381f7d29bf6957aecd87cacaa96a0`. This file preserves both the earlier retrieval failures and the later first-party breakthrough; those failures are part of the research history and are not rewritten as though the outcome had always been available through the normal HTML/search surfaces.
 
 ## Why CP was selected
 
-The post-CO pressure audit left Europe as the only Canonical region without a Live specimen, but that zero is only diagnostic. CP was selected conditionally because the 10 September ECB monetary-policy decision is independently systemically important and, once authoritatively established, could exercise a scheduled monetary-policy `OUTCOME_OF` Live contract using an already-stable Canonical identity. Regional diversification is a benefit, not the selection rule.
+The post-CO pressure audit left Europe as the only Canonical region without a Live specimen, but that zero was only diagnostic. CP was selected conditionally because the 10 September 2026 ECB monetary-policy decision is independently systemically important, already belongs to a stable scheduled Canonical family, and can exercise a controlled scheduled `OUTCOME_OF` Live contract. Regional diversification is a benefit, not the selection rule.
 
 ## Exact Canonical identity
 
-Identity-aware inspection of the actual post-#123 `main` Canonical registry resolves the scheduled decision as:
+Identity-aware inspection of the post-#123 Canonical registry resolves the decision as:
 
 - occurrence: `WSO-ad4d0618a65059f2`
 - series: `WS.CB.ECB.MONETARY_POLICY_DECISION`
@@ -34,131 +34,175 @@ Identity-aware inspection of the actual post-#123 `main` Canonical registry reso
 - lifecycle in merged `main`: `PLANNED`
 - certainty: `CONFIRMED`
 - parent meeting window: `WSO-b2fa91dfcbae5c38`
-- related occurrence: `WSO-90f504a4e4925486` (separate linked event; do not collapse it into the decision)
+- related occurrence: `WSO-90f504a4e4925486`, which remains a separate linked event.
 
-This exact identity and timing contract must be preserved. No duplicate ECB decision occurrence may be created, and Live evidence may not rewrite Canonical timing.
+The transaction must preserve this identity and every Canonical timing field. It must not create a duplicate occurrence or overwrite the native clock from Live evidence.
 
-## Source roles
+## Source roles and governance
 
 ### `WSSRC-CB-003` — schedule authority
 
-ECB Governing Council meeting calendar: `https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html`.
+ECB Governing Council meeting calendar:
 
-It is the Canonical schedule source for the decision family. Existing source governance classifies factual schedule metadata for curated use, while unattended retrieval remains endpoint-review-required.
+`https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html`
 
-### `WSSRC-CB-004` — outcome publication authority
+This remains the schedule source for the Canonical family.
 
-ECB monetary-policy decisions/accounts publication surface: `https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html`.
+### `WSSRC-CB-004` — outcome authority
 
-This is the registered primary source family for the actual decision outcome. Existing source governance clears ECB factual website information for curated use with attribution/accuracy conditions, but unattended retrieval remains endpoint-review-required. CP therefore uses manual authoritative recheck unless a separately reviewed Monitor route is later authorised.
+ECB monetary-policy decision/account publication family:
 
-## Initial official preflight
+`https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html`
 
-ECB official pages reviewed on 10 September 2026 stated:
+Current repository governance permits curated factual provenance but does **not** grant production unattended retrieval:
+
+- `canonical_provenance_use`: `CLEARED_CURATED_FACTUAL_METADATA`
+- `automated_monitoring_use`: `ENDPOINT_REVIEW_REQUIRED`
+- `verification_mode`: `MANUAL_AUTHORITATIVE_RECHECK`
+
+The successful read-only research probe does not change those permissions and does not authorise an ECB Monitor route.
+
+## Retrieval history — fail closed before primary evidence
+
+### Initial preflight
+
+Before the scheduled release, ECB official pages stated:
 
 - Governing Council monetary-policy meeting: 9–10 September 2026 in Berlin;
-- publication of monetary-policy decisions: 14:15 Europe/Berlin time on 10 September;
-- press conference: 14:45;
-- macroeconomic projections: 15:45.
+- monetary-policy decisions scheduled for 14:15 Europe/Berlin on 10 September;
+- press conference scheduled for 14:45;
+- macroeconomic projections later that afternoon.
 
-At the initial CP preflight point (approximately `2026-09-10T11:30Z`, 21:30 Australia/Melbourne), the 14:15 Europe/Berlin decision-release point had not yet occurred and no 10 September decision outcome was available on the reviewed official decision surface.
+No outcome row was prepared from schedule passage. The scheduled clock was never treated as completion evidence.
 
-The scheduled clock is not completion evidence. Elapsed time must never be used as a substitute for a published result.
+### Post-release rechecks
 
-## Post-release authoritative recheck — 13:56Z
+After 14:15 Europe/Berlin, the normal official HTML/search surfaces remained stale. The decision index continued to expose 23 July as the latest retrievable decision and the 10 September press-conference surface still rendered pre-release material. A bounded Bundesbank/Banque de France cross-check also failed to expose the new decision text.
 
-The scheduled release point had passed. Fresh official-domain checks were run against:
+Contemporaneous secondary reporting indicated that a decision had occurred, but CP did not admit that reporting as a substitute for the registered ECB primary outcome source. No rate payload, Canonical completion or Live observation was authorised from secondary evidence.
 
-- the ECB weekly schedule, which still records the 10 September monetary-policy meeting and the scheduled 14:15 decision publication;
-- the ECB press-conference surface for 10 September, which at review time still rendered pre-release wording and the previously effective 17 June rates;
-- the ECB monetary-policy decision publication family and exact-date/prefix searches for a 10 September 2026 decision release;
-- exact-text searches derived from contemporaneous reporting, constrained to `ecb.europa.eu`.
-
-At approximately `2026-09-10T13:56Z`, the reviewed official ECB web/search surfaces still did **not** expose a retrievable 10 September monetary-policy decision press release or monetary-policy statement. Exact searches continued to resolve earlier 2026 decision releases rather than the 10 September outcome.
-
-This was treated as an authoritative-retrieval/indexing gap, **not** as evidence that the Governing Council made no decision and **not** as permission to infer completion from schedule passage.
-
-## Second primary-source recheck — 14:28Z
-
-A broader first-party sweep was then performed rather than lowering the evidence threshold.
-
-The ECB official decision index still exposed 23 July 2026 as the latest retrievable monetary-policy decision. The 10 September press-conference surface still rendered pre-release wording and the previously effective 17 June rates, while the ECB weekly schedule continued to record the 10 September decision publication, press conference and later macroeconomic-projection publication.
-
-A separate official ECB television-downlink page was retrievable for the Berlin press conference and documented the planned 10 September transmission window, including the 14:45–15:45 live press conference and a later rough-cut transmission. This is useful corroboration of the scheduled media operation but is **not** substituted for the missing decision text and does not independently establish the monetary-policy outcome.
-
-The ECB also publishes an official press RSS feed at:
+The ECB press RSS route was identified at:
 
 `https://www.ecb.europa.eu/rss/press.html`
 
-That route is a potentially valuable primary fallback because its stated scope includes ECB press releases and press-conference material. The current research toolchain could identify the route but could not inspect the RSS payload because the retrieval path rejected the RSS MIME type. This is recorded as a tooling/retrieval limitation, not as evidence that the feed lacked a 10 September item.
+The ordinary research path could identify the feed but could not inspect the RSS payload because of the MIME/retrieval limitation. That limitation was recorded as a tooling problem, not as evidence that the decision did not exist.
 
-A bounded Eurosystem-member cross-check was also made. Deutsche Bundesbank first-party material confirms that the 9–10 September meeting was hosted in Berlin and scheduled a 10 September press conference, but the reviewed result surface did not expose the monetary-policy outcome. Banque de France's current policy-rate page still described 23 July as the latest Governing Council decision and 10 September as the next decision, again indicating stale propagation rather than reliable negative evidence.
+## First-party breakthrough — read-only Actions probe
 
-Repeated exact official-domain searches for the expected 10 September publication prefixes and decision wording did not surface a current ECB release. Because these searches were now reproducing the same stale primary surfaces, further identical search retries were judged low-value unless a new first-party route or fresh indexing state becomes available.
+A temporary GitHub Actions research workflow was introduced with **`contents: read` only**. It had no permission or code path to mutate Canonical, Change Ledger, Monitor, Live, Analysis or Calendar state. Its sole purpose was to fetch ECB first-party surfaces and upload disposable research artifacts.
 
-The conclusion therefore remains fail-closed: **the outcome likely occurred, but CP still lacks directly retrievable competent primary evidence for the exact outcome payload.**
+### Probe run `34499129443`
 
-## Secondary reporting observed but not admitted as CP outcome evidence
+The ECB press RSS feed returned successfully and exposed exact 10 September first-party links, including:
 
-Reuters published contemporaneous reporting at `2026-09-10T12:19:12Z` stating that the ECB raised its benchmark deposit rate by 25 basis points to 2.50% and attributing language to an ECB statement:
+- decision: `https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html`
+- monetary-policy statement: `https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2026/html/ecb.is260910~6a45359cfc.en.html`
 
-`https://www.reuters.com/business/ecb-raises-interest-rates-fight-off-inflation-jump-2026-09-10/`
+This proved that the earlier blocker was propagation/retrieval in the normal research surfaces, not absence of an ECB publication.
 
-A later Reuters press-conference report also described a quarter-point increase to 2.50%:
+### Probe run `34499242250`
 
-`https://www.reuters.com/markets/us/lagarde-comments-ecb-press-conference-2026-09-10/`
+The read-only probe followed those exact ECB links and recovered the authoritative outcome.
 
-These reports strongly indicate that a decision and press conference occurred, but they are **not** substituted for the registered ECB primary outcome source in CP. They do not authorise:
+ECB RSS metadata for the exact decision item:
 
-- Canonical lifecycle completion;
-- a Live `OUTCOME_OF` observation;
-- a rate-value payload;
-- expectation/surprise classification;
-- market-reaction or causal claims.
+- title: `Monetary policy decisions`
+- publication: `Thu, 10 Sep 2026 14:15:00 +0200`
+- UTC: `2026-09-10T12:15:00Z`
 
-Their role in this research file is diagnostic only: they show that the remaining blocker is primary-source retrieval, not mere passage of the scheduled release time.
+ECB RSS metadata for the exact monetary-policy statement:
+
+- publication: `Thu, 10 Sep 2026 15:00:00 +0200`
+- UTC: `2026-09-10T13:00:00Z`
+
+The ECB decision page states that the Governing Council **raised all three key ECB interest rates by 25 basis points**. The new rates are:
+
+- deposit facility: **2.50%**
+- main refinancing operations: **2.65%**
+- marginal lending facility: **2.90%**
+
+The decision specifies that these rates apply **with effect from 16 September 2026**. The monetary-policy statement independently repeats the 25-basis-point decision.
+
+No secondary source is needed for the CP factual outcome.
+
+### Probe run `34499606294` — exact repository prestate
+
+A final read-only probe froze the branch prestate before transaction design:
+
+- Canonical Registry: `v0.42 / 689`
+- Source Registry: `v2.04 / 258`
+- Change Ledger: `v0.28 / 63`
+- biosecurity overlay: `v0.17`, checkpointing Canonical `v0.42 / 689`
+- Live schema/observations/evidence: `v0.11 / 10 observations / 14 evidence rows`
+- ECB target lifecycle: `PLANNED`
+- target last successful assertion: `WSA-901c19618e13196f`
+- target last verified: `2026-09-02`
+- target related documents: none.
+
+Probe artifact `10161268742` has digest `sha256:d58df81beb0fa930dff1fcb25e222e9504521d8d497d34eeae9f32bdfffc8983`.
+
+## Factual scope admitted to CP
+
+CP admits only the policy-decision facts directly established by the ECB:
+
+1. all three key ECB rates were increased by 25 basis points;
+2. the resulting rates are 2.50%, 2.65% and 2.90%;
+3. the new rates take effect on 16 September 2026;
+4. the exact decision publication is first-party ECB evidence and its 14:15 +0200 publication time is supplied by the ECB's own RSS item for that exact URL.
+
+CP deliberately does **not** fold the following into the Live observation:
+
+- staff macroeconomic projection values;
+- press-conference Q&A or interpretation;
+- analyst expectations;
+- surprise classification;
+- asset-price or market reaction;
+- causal attribution;
+- second-order analysis.
+
+Those remain separate source/event or Analysis questions if later justified.
 
 ## Lifecycle architecture decision
 
-The current Live readiness contract correctly fails closed while `WSO-ad4d0618a65059f2` remains `PLANNED`.
+The existing Live contract correctly refuses an `OUTCOME_OF` observation against a `PLANNED` Canonical anchor. CP therefore freezes a two-stage governed transaction inside the tranche:
 
-Existing WORLD SIGNALS precedent supports an explicit lifecycle transaction rather than a Live side effect:
+1. **Stage 1 — Canonical lifecycle:** update the existing occurrence `PLANNED → COMPLETED` using the ECB first-party decision publication; append status history and Change Ledger provenance; preserve stable identity, timing, certainty and sensitivity fields; do not add or modify a Source Registry identity.
+2. **Stage 2 — Live outcome:** only after Stage 1 yields a validated `COMPLETED` anchor, add one bounded `PRIMARY_CONFIRMED` `POLICY_DEVELOPMENT` observation linked `OUTCOME_OF` `WSO-ad4d0618a65059f2`.
 
-1. obtain first-party ECB result evidence from the registered outcome family;
-2. record a bounded Canonical `LIFECYCLE_COMPLETION` for the existing occurrence, preserving stable identity and every timing field;
-3. append normal status history and Change Ledger provenance;
-4. do not add a Source Registry identity unless fresh evidence proves the existing source contract is insufficient;
-5. only after the anchor is `COMPLETED`, review one bounded Live factual observation linked `OUTCOME_OF` that occurrence.
+The two stages may be committed by one guarded transaction only after ordered simulation proves that no committed state can contain a Live `OUTCOME_OF` row against the still-`PLANNED` anchor.
 
-Whether the lifecycle and Live mutations are committed atomically or as two guarded steps inside CP must be decided in the frozen production plan before materialisation. In either design, no Live row may exist against a still-`PLANNED` anchor.
+Frozen production artifacts:
 
-## Required sequence once primary ECB evidence is retrievable
+- `data/live_intelligence/ECB_MONETARY_OUTCOME_CP_PRODUCTION_PLAN_v0.1.json`
+- `data/live_intelligence/ECB_MONETARY_OUTCOME_CP_PAYLOAD_v0.1.json`
+- `src/world_signals/ecb_monetary_outcome_cp.py`
+- `tests/test_ecb_monetary_outcome_cp.py`
 
-If and only if a fresh official recheck retrieves the 10 September monetary-policy decision:
+## Prewrite validation
 
-1. verify the exact publication against `WSSRC-CB-004` and preserve the source wording;
-2. verify that the publication corresponds to stable Canonical occurrence `WSO-ad4d0618a65059f2`;
-3. inspect whether the source supplies an exact publication timestamp or only a civil publication date; do not fabricate precision;
-4. freeze the evidence-backed lifecycle change, Change Ledger row and protected-field set;
-5. freeze the bounded Live evidence/payload separately from any expectation, surprise or market interpretation;
-6. run focused pre-write contract tests before any governed mutation;
-7. materialise only through the established guarded transaction path;
-8. keep press conference, macroeconomic projections, meeting window and later account/minutes as separate source/event concepts unless the factual decision release itself explicitly requires otherwise;
-9. do not create an ECB Monitor route merely because the page is publicly reachable;
-10. preserve automatic Canonical commit, Calendar write, automatic Monitor→Live, automatic Live→Analysis and public projections as closed.
+The first full prewrite run, `34500135027`, failed closed before any governed mutation because of two defects in the newly written CP test code: one literal-word expectation did not match the already-bounded payload wording, and the test treated the overlay validator's returned error list as an object. Neither failure exposed a governed-data or transaction-semantic defect.
 
-## Abort / defer conditions
+The test assumptions were repaired narrowly. Full prewrite run `34500457145` then passed:
 
-CP remains no-write or must be reselected if any of the following holds on fresh review:
+- Canonical validator;
+- Live validator;
+- Analysis validator;
+- derived-state check;
+- complete historical unittest discovery — **1,321 tests / 68 historical-prestate skips**;
+- Python compilation;
+- seven JavaScript `node --check` validations;
+- static build.
 
-- the official 10 September decision cannot be retrieved from a competent ECB primary surface;
-- outcome wording cannot be cleanly matched to the stable Canonical occurrence;
-- source timing/provenance materially differs from the existing Canonical contract;
-- an official correction/retraction/conflict is present and requires the CM contract;
-- lifecycle completion cannot be supported independently of elapsed schedule time.
+The CP tests specifically prove that Stage 2 rejects a `PLANNED` ECB anchor, stable Canonical timing/identity is preserved in simulation, CM correction/conflict semantics remain intact, Source/Monitor/Analysis populations remain outside scope, public gates remain closed and Live population overflow fails closed.
 
 ## Current conclusion
 
-CP remains substantively well selected, but it is **BLOCKED ON PRIMARY ECB OUTCOME RETRIEVAL AND NOT READY FOR GOVERNED OUTCOME POPULATION**.
+The primary-evidence blocker is cleared and the bounded transaction is **ready for a guarded materialisation attempt**, but no governed CP population has yet been written at this checkpoint.
 
-The stable identity, timing, source roles and lifecycle boundary are resolved. The official RSS fallback and bounded Eurosystem-member cross-check are now preserved so future recovery does not repeat the same retrieval dead ends. Secondary reporting remains explicitly quarantined from production evidence. No Canonical, Source Registry, Change Ledger, Monitor, Live, Analysis, Calendar or OPEC-quarantine governed state is authorised to change from these rechecks alone.
+The next allowed sequence is:
+
+`exact branch/base recheck → temporary one-shot apply helper → temporary guarded workflow → exact prestate → simulation → focused tests → ephemeral/materialised target validation → complete historical suite → compilation/JS/static build → protected-layer hashes → bounded diff → commit only if every gate passes`.
+
+The temporary read-only ECB probe workflow remains temporary infrastructure and must be removed before any merge handoff. Any temporary write-capable workflow/helper introduced for materialisation must likewise be absent from the final PR head.
+
+Automatic Canonical commit remains off outside this explicitly reviewed transaction. Google Calendar write, automatic Monitor→Live, automatic Live→Analysis and public projections remain off. OPEC quarantine remains untouched.
