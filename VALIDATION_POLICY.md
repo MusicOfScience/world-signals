@@ -12,7 +12,8 @@ The governing design is:
 2. one ordinary PR validation runner;
 3. one fail-closed validation profile selected from the actual base/head tree difference;
 4. coverage/pressure generation inside the same ordinary validation runner;
-5. no relaxation of Canonical, Calendar, Monitor, Live, Analysis or public-projection write gates.
+5. optional validation-only self-hosted execution without changing project-layer semantics;
+6. no relaxation of Canonical, Calendar, Monitor, Live, Analysis or public-projection write gates.
 
 A cheaper profile is **not** a weaker interpretation of a risky change. Unknown, mixed, executable, governed, deleted, renamed or operationally sensitive changes escalate to `FULL`.
 
@@ -91,16 +92,43 @@ If parent history is unavailable, the commit is not a conventional merge, or tre
 - checks out the actual PR head rather than a synthetic merge ref;
 - obtains the exact base SHA for classification;
 - cancels obsolete in-progress runs for the same PR;
-- installs Python 3.13 only for `FULL` runs;
-- uses the runner's existing Python for bounded safe/post-merge checks;
+- pins Python 3.13 for every validation profile so hosted and self-hosted execution do not silently diverge;
+- pins Node 24 only for `FULL`, where browser JavaScript syntax checks are required;
 - runs coverage/pressure in the same job;
 - uploads a compact validation summary and coverage evidence with 30-day retention.
+
+The job defaults to `ubuntu-latest`. If the repository variable `WORLD_SIGNALS_VALIDATION_RUNNER` is set to a trusted self-hosted runner label, only the ordinary validation job is redirected to that runner. The daily Monitor and Pages deployment remain GitHub-hosted unless a later, separately reviewed operational tranche changes them.
 
 The separate `Audit WORLD SIGNALS coverage` workflow remains available for **manual diagnostic use only**. It is no longer an automatic second runner on every relevant PR/main change.
 
 The scheduled live monitor continues to run daily. Its regression tests run on code/configuration-triggered or manual executions, but not on every routine scheduled poll; ordinary repository CI is responsible for regression testing the monitor code before merge.
 
 Pages deployment and the live-monitor schedule are intentionally not reduced by this tranche. They provide useful current operational output and should be optimised only from measured evidence, not merely because hosted minutes are finite.
+
+## Self-hosted validation boundary
+
+Self-hosting changes only **where the validator executes**. It does not alter:
+
+- the validation profile selected from the exact tree difference;
+- the merge-handoff standard;
+- source rights or automated-retrieval permissions;
+- Canonical/Calendar/Monitor/Live/Analysis write gates;
+- production monitoring schedules;
+- public projections.
+
+The recommended repository-level runner uses a dedicated custom label such as `world-signals-validation`. The repository variable then contains only that label:
+
+```text
+WORLD_SIGNALS_VALIDATION_RUNNER=world-signals-validation
+```
+
+Unset/delete the variable to return validation to `ubuntu-latest`.
+
+A self-hosted runner executes repository workflow code with the privileges of the local account running the service/process. It must therefore be used only for trusted WORLD SIGNALS repository work. Do not expose it to untrusted fork pull requests or reuse it casually for unrelated repositories.
+
+The runner does not need to be permanently online. It may be started for a validation session and stopped afterward. The current workflow keeps scheduled Monitor and Pages activity off that machine.
+
+See `SELF_HOSTED_VALIDATION.md` for the operational runbook. Always use GitHub's current runner-registration commands/token shown in repository Settings rather than storing a registration token or generated command in this repository.
 
 ## Merge-handoff consequence
 
@@ -110,7 +138,9 @@ A PR may receive `MERGE NOW` only when the actual final head has a successful or
 
 A `SAFE_RESEARCH_DOCS` success is a valid ordinary CI result **only because the exact-head classifier and bounded checks are part of that same successful run**. A stale green base run, an inferred equivalence, or a hosted-runner admission failure is not a substitute.
 
-If GitHub Actions cannot supply a runner, the merge state remains `DO NOT MERGE` unless a separately reviewed project policy later authorises another exact-head execution mechanism. Local validation can diagnose and prepare; it does not silently override the current human handoff rule.
+A successful run on a correctly configured trusted self-hosted runner is an ordinary exact-head validation result; self-hosted execution is not a lower evidence class. Conversely, merely running commands manually without the workflow's exact-head/profile evidence does not silently become a merge-authorising CI result.
+
+If neither GitHub-hosted nor the configured self-hosted runner can execute the required job, the merge state remains `DO NOT MERGE` unless a later reviewed validation policy explicitly authorises another exact-head mechanism.
 
 ## Portable local use
 
@@ -139,7 +169,7 @@ python3 scripts/validate_world_signals.py \
   --classify-only
 ```
 
-The entry point uses only repository-local code and standard command-line tools. This keeps validation platform-independent and makes a future self-hosted runner an execution choice rather than an architectural dependency.
+The entry point uses repository-local code plus standard command-line tools. This keeps validation platform-independent; GitHub-hosted, self-hosted and local execution are execution choices rather than architectural dependencies.
 
 ## Compute discipline
 
@@ -155,4 +185,4 @@ Operational rules for future development:
 
 ## Self-hosted runner compatibility
 
-The portable validator is intentionally runner-neutral. A future GitHub self-hosted runner can execute the same entry point without changing Canonical/Monitor/Live/Analysis architecture or validation semantics. Self-hosting should be treated as an operational execution option, not as a dependency and not as authority to bypass source-rights or write-gate controls.
+The portable validator is runner-neutral. A GitHub self-hosted runner can execute the same entry point without changing Canonical/Monitor/Live/Analysis architecture or validation semantics. Self-hosting is an operational execution option, not a dependency and not authority to bypass source-rights or write-gate controls.
