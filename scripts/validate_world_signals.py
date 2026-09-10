@@ -107,9 +107,10 @@ def verify_safe_research_surface(
 
     safe_paths: list[str] = []
     for status, paths in rows:
-        # Renames/copies/deletions deliberately escalate to FULL. A fast path
-        # may add or edit research evidence, but it may not erase or move it.
-        if status not in {"A", "M"} or len(paths) != 1:
+        # Only net-new research evidence may use the fast path. Existing
+        # research files can be referenced by historical tests/contracts, so
+        # modifications, renames, copies and deletions all escalate to FULL.
+        if status != "A" or len(paths) != 1:
             raise ValidationError(
                 f"safe-research profile rejects change status {status!r}: {paths}"
             )
@@ -130,6 +131,37 @@ def verify_safe_research_surface(
 
         # Force UTF-8 decoding of the head blob.
         run_capture(["git", "show", f"{head_ref}:{path}"])
+
+        # A net-new research file should not already be a machine-consumed
+        # contract. Exact literal references from non-Markdown tracked files
+        # therefore force FULL. No-match (grep exit 1) is the expected state.
+        grep = subprocess.run(
+            [
+                "git",
+                "grep",
+                "-F",
+                "--",
+                path,
+                head_ref,
+                "--",
+                ":(exclude)**/*.md",
+                ":(exclude)*.md",
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if grep.returncode not in {0, 1}:
+            raise ValidationError(
+                f"unable to prove research file is unreferenced: {path}\n{grep.stderr}"
+            )
+        if grep.returncode == 0 and grep.stdout.strip():
+            raise ValidationError(
+                f"safe-research file is referenced by a non-Markdown tracked file: {path}"
+            )
+
         safe_paths.append(path)
 
     run_capture(["git", "diff", "--check", base_ref, head_ref])
