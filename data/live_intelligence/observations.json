@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.10",
+  "version": "0.11",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
+  "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -276,7 +276,38 @@
       },
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-TRD-CAN-US-SURTAX-20260908-001",
+      "observed_at_utc": "2026-09-10T10:22:39Z",
+      "observation_type": "POLICY_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Canada applies 15–50% counter-tariffs to listed U.S.-origin goods from 8 September",
+      "summary": "Canada's Department of Finance and Canada Border Services Agency state that, from 8 September 2026, certain goods originating in the United States and imported into Canada are subject to surtaxes of 15%, 25% or 50% under the United States Surtax Order (2026), as applicable. The Department of Finance describes the countermeasures as covering $27.6 billion in imports from the United States and drawing on products targeted by U.S. Section 338 and Section 232 tariffs, with sectors including steel, dairy, appliances, agricultural equipment, pulp and paper, and electronics. This Live observation records the Canadian implementation only. It does not promote the Finance page's timezone-unspecified 12:01 a.m. clock to an exact timestamp, does not imply that the whole reported import scope faces one tariff rate, does not fold the separate U.S. 8 September proclamations into the Canadian act, does not independently adjudicate either government's claims about discrimination, retaliation, fairness or legality, and does not claim observed price, inflation, trade-flow, currency, equity or other market effects.",
+      "domain_tags": [
+        "TRADE",
+        "ECONOMICS",
+        "GEOPOLITICS"
+      ],
+      "jurisdictions": [
+        "Canada"
+      ],
+      "regions": [
+        "North America"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-CAN-FIN-USTARIFFS-20260825",
+        "WSEV-LI-CAN-CBSA-SURTAX-20260907"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "CIVIL_DATE",
+        "event_date": "2026-09-08"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CN: nine observations. CN adds one unscheduled primary-confirmed Brazilian fuel-policy development with zero Canonical links; the observation records the government's adoption/signing announcement without upgrading unresolved legal-publication/effect status. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CO: ten observations. CO adds one primary-confirmed Canadian counter-tariff implementation with zero Canonical links; separate U.S. response actions, causal attribution, market effects and story grouping remain outside the observation. Public projection and automatic ingestion remain closed."
 }
