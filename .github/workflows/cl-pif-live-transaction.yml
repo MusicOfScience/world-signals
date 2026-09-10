@@ -60,7 +60,7 @@ jobs:
       - name: Run focused CL contract tests before write
         run: python -m unittest discover -s tests -p 'test_pif_partner_framework_live_cl.py' -v
 
-      - name: Apply CG descendant-safe repairs ephemerally
+      - name: Apply historical descendant-safe repairs ephemerally
         run: python scripts/repair_cl_cg_descendant_tmp.py
 
       - name: Compile CL and repaired CG helpers
@@ -133,6 +133,9 @@ jobs:
           data/status/current_state.json
           scripts/apply_barmm_pre_election_live_cg.py
           tests/test_barmm_pre_election_live_cg.py
+          tests/test_cross_layer_coverage_cj.py
+          tests/test_un_correct_map_live_bf.py
+          tests/test_vietnam_myanmar_live_bd.py
           EOF
           )
           actual="$(git diff --name-only HEAD | sort)"
@@ -153,7 +156,7 @@ jobs:
             data/analysis/evidence_registry.json \
             tests/test_opec_quarantine_cf.py
 
-      - name: Commit reviewed CL materialisation and CG descendant repair
+      - name: Commit reviewed CL materialisation and descendant repairs
         shell: bash
         run: |
           set -euo pipefail
@@ -166,7 +169,10 @@ jobs:
             data/live_intelligence/evidence_registry.json \
             data/status/current_state.json \
             scripts/apply_barmm_pre_election_live_cg.py \
-            tests/test_barmm_pre_election_live_cg.py
+            tests/test_barmm_pre_election_live_cg.py \
+            tests/test_cross_layer_coverage_cj.py \
+            tests/test_un_correct_map_live_bf.py \
+            tests/test_vietnam_myanmar_live_bd.py
           git diff --cached --quiet && { echo 'Expected CL materialisation diff is empty'; exit 1; }
-          git commit -m "CL: materialise PIF Live outcome and preserve CG lineage"
+          git commit -m "CL: materialise PIF Live outcome and preserve lineage"
           git push origin HEAD:feature/post-ck-pif-live-outcome-cl
