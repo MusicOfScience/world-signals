@@ -144,18 +144,25 @@ def target_canonical_registry(registry: dict[str, Any], payload: dict[str, Any],
     return out
 
 
-def target_change_ledger(ledger: dict[str, Any], payload: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
+def _ledger_payload_matches(existing: dict[str, Any], frozen: dict[str, Any]) -> bool:
+    return {key: value for key, value in existing.items() if key != "committed_at"} == frozen and isinstance(existing.get("committed_at"), str) and bool(existing["committed_at"].strip())
+
+
+def target_change_ledger(ledger: dict[str, Any], payload: dict[str, Any], plan: dict[str, Any], committed_at: str | None = None) -> dict[str, Any]:
+    frozen = payload["change_ledger"]
     existing = _one(ledger.get("changes") or [], "change_id", CHANGE_ID)
     if existing is not None:
-        if version_at_least(ledger.get("version"), TARGET_LEDGER_VERSION) and existing == payload["change_ledger"]:
+        if version_at_least(ledger.get("version"), TARGET_LEDGER_VERSION) and _ledger_payload_matches(existing, frozen):
             return deepcopy(ledger)
         raise ValueError("CP ledger is partially or inconsistently materialised")
     if str(ledger.get("version")) != plan["preconditions"]["change_ledger_version"]:
         raise ValueError("CP ledger prestate drift")
+    row = deepcopy(frozen)
+    row["committed_at"] = committed_at or frozen["reviewed_at"]
     out = deepcopy(ledger)
     out["version"] = TARGET_LEDGER_VERSION
     out["reference_date"] = plan["reference_date"]
-    out["changes"].append(deepcopy(payload["change_ledger"]))
+    out["changes"].append(row)
     return out
 
 
@@ -268,12 +275,12 @@ def target_evidence(evidence: dict[str, Any], payload: dict[str, Any], plan: dic
     return out
 
 
-def build_target_state(registry: dict[str, Any], sources: dict[str, Any], ledger: dict[str, Any], overlay: dict[str, Any], schema: dict[str, Any], observations: dict[str, Any], evidence: dict[str, Any], payload: dict[str, Any], plan: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def build_target_state(registry: dict[str, Any], sources: dict[str, Any], ledger: dict[str, Any], overlay: dict[str, Any], schema: dict[str, Any], observations: dict[str, Any], evidence: dict[str, Any], payload: dict[str, Any], plan: dict[str, Any], committed_at: str | None = None) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     post_already = version_at_least(registry.get("version"), TARGET_CANONICAL_VERSION) and version_at_least(observations.get("version"), TARGET_LIVE_VERSION)
     if not post_already:
         _require_prestate(registry, sources, ledger, overlay, schema, observations, evidence, plan)
     post_registry = target_canonical_registry(registry, payload, plan)
-    post_ledger = target_change_ledger(ledger, payload, plan)
+    post_ledger = target_change_ledger(ledger, payload, plan, committed_at=committed_at)
     post_overlay = target_overlay(overlay, plan)
     post_schema = target_live_schema(schema, plan)
     post_observations = target_observations(observations, payload, plan, post_registry)
@@ -321,6 +328,11 @@ def validate_cp_contract(registry: dict[str, Any], sources: dict[str, Any], ledg
                 errors.append(f"CP protected Canonical field drift: {key}")
     if change is None or change.get("source_assertion_id") != ASSERTION_ID or change.get("change_type") != "LIFECYCLE_COMPLETION":
         errors.append("CP lifecycle Change Ledger row missing or malformed")
+    elif not _ledger_payload_matches(change, payload_frozen := {key: value for key, value in change.items() if key != "committed_at"}):
+        # Defensive shape check; exact frozen-payload comparison is performed by idempotent targeting.
+        errors.append("CP lifecycle Change Ledger commit timestamp missing")
+    if change is not None and (not isinstance(change.get("committed_at"), str) or not change["committed_at"].strip()):
+        errors.append("CP lifecycle Change Ledger commit timestamp missing")
     if obs is None:
         errors.append("CP Live observation missing")
     else:
