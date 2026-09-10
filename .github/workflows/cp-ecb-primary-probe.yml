@@ -1,0 +1,78 @@
+name: CP read-only ECB primary probe
+
+on:
+  push:
+    branches:
+      - 'feature/post-co-ecb-monetary-outcome-cp'
+    paths:
+      - '.github/workflows/cp-ecb-primary-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Fetch ECB primary surfaces read-only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          import json
+          import re
+          import datetime
+
+          urls = {
+              'press_rss': 'https://www.ecb.europa.eu/rss/press.html',
+              'decision_index': 'https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html',
+              'press_conference': 'https://www.ecb.europa.eu/press/press_conference/html/index.en.html',
+              'weekly_schedule': 'https://www.ecb.europa.eu/press/calendars/weekly/html/index.en.html',
+          }
+          out = Path('artifacts/cp-ecb-primary-probe')
+          out.mkdir(parents=True, exist_ok=True)
+          report = {
+              'run_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'read_only': True,
+              'urls': {},
+          }
+          needles = ['10 September 2026', 'ecb.mp260910', 'ecb.is260910', '2.50%', '2.65%', '2.90%']
+          for name, url in urls.items():
+              entry = {'url': url}
+              try:
+                  req = Request(url, headers={'User-Agent': 'WORLD-SIGNALS-CP-read-only-research/1.0'})
+                  with urlopen(req, timeout=30) as r:
+                      raw = r.read()
+                      entry['status'] = getattr(r, 'status', None)
+                      entry['content_type'] = r.headers.get('Content-Type')
+                      entry['bytes'] = len(raw)
+                  text = raw.decode('utf-8', errors='replace')
+                  (out / f'{name}.txt').write_text(text, encoding='utf-8')
+                  entry['needle_hits'] = {n: (n in text) for n in needles}
+                  entry['mp_links'] = sorted(set(re.findall(r'https?://[^\"\'<> ]*ecb\.mp260910[^\"\'<> ]*', text)))
+                  entry['is_links'] = sorted(set(re.findall(r'https?://[^\"\'<> ]*ecb\.is260910[^\"\'<> ]*', text)))
+                  if name == 'press_rss':
+                      snippets = []
+                      for pat in ('10 September 2026', 'ecb.mp260910', 'ecb.is260910', '2.50%', '2.65%', '2.90%'):
+                          i = text.find(pat)
+                          if i >= 0:
+                              snippets.append(text[max(0, i-1000): i+3000])
+                      (out / 'rss_relevant_snippets.txt').write_text('\n\n---\n\n'.join(snippets), encoding='utf-8')
+              except Exception as exc:
+                  entry['error'] = f'{type(exc).__name__}: {exc}'
+              report['urls'][name] = entry
+          (out / 'report.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Upload probe artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cp-ecb-primary-probe
+          path: artifacts/cp-ecb-primary-probe/
+          if-no-files-found: error
