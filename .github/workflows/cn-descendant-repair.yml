@@ -32,96 +32,8 @@ jobs:
           test "$(git rev-parse origin/main)" = "9386114de527b117987058cb1b9cd98066dab8e4"
           test "$(git merge-base HEAD origin/main)" = "9386114de527b117987058cb1b9cd98066dab8e4"
 
-      - name: Apply only reviewed descendant-safe test repairs
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-
-          cm_path = Path('tests/test_live_correction_conflict_cm.py')
-          cm = cm_path.read_text(encoding='utf-8')
-          old = '''    def test_cm_is_no_population_contract_descendant(self):
-        self.assertEqual(self.schema["version"], "0.9")
-        self.assertEqual(self.observations["version"], "0.9")
-        self.assertEqual(self.evidence["version"], "0.9")
-        self.assertEqual(len(self.observations["observations"]), 8)
-        self.assertEqual(len(self.evidence["evidence"]), 11)
-        self.assertEqual(self.schema["population_policy"]["maximum_observation_count"], 8)
-        self.assertEqual(self.schema["population_policy"]["maximum_evidence_count"], 11)
-        self.assertFalse(self.schema["population_policy"]["automatic_ingestion_allowed"])
-        self.assertFalse(self.schema["public_projection_policy"]["observation_projection_allowed"])
-'''
-          new = '''    def test_cm_is_no_population_contract_descendant(self):
-        def dotted(value):
-            return tuple(int(part) for part in str(value).split("."))
-
-        self.assertGreaterEqual(dotted(self.schema["version"]), (0, 9))
-        self.assertEqual(self.observations["version"], self.schema["version"])
-        self.assertEqual(self.evidence["version"], self.schema["version"])
-        self.assertGreaterEqual(len(self.observations["observations"]), 8)
-        self.assertGreaterEqual(len(self.evidence["evidence"]), 11)
-        self.assertGreaterEqual(
-            self.schema["population_policy"]["maximum_observation_count"],
-            len(self.observations["observations"]),
-        )
-        self.assertGreaterEqual(
-            self.schema["population_policy"]["maximum_evidence_count"],
-            len(self.evidence["evidence"]),
-        )
-        self.assertFalse(self.schema["population_policy"]["automatic_ingestion_allowed"])
-        self.assertFalse(self.schema["public_projection_policy"]["observation_projection_allowed"])
-'''
-          if cm.count(old) != 1:
-              raise SystemExit('CM descendant assertion block did not match exactly once')
-          cm = cm.replace(old, new)
-          old_ids = '''        self.assertEqual(
-            {row["observation_id"] for row in self.observations["observations"]},
-            expected_observation_ids,
-        )
-'''
-          new_ids = '''        self.assertTrue(
-            expected_observation_ids.issubset(
-                {row["observation_id"] for row in self.observations["observations"]}
-            )
-        )
-'''
-          if cm.count(old_ids) != 1:
-              raise SystemExit('CM historical identity assertion did not match exactly once')
-          cm = cm.replace(old_ids, new_ids)
-          cm_path.write_text(cm, encoding='utf-8')
-
-          aw_path = Path('tests/test_nepal_rasuwa_flood_live_intelligence_aw.py')
-          aw = aw_path.read_text(encoding='utf-8')
-          marker = '''ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
-'''
-          helper = '''ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
-
-
-def dotted_version(value):
-    return tuple(int(part) for part in str(value).split("."))
-'''
-          if aw.count(marker) != 1:
-              raise SystemExit('AW import marker did not match exactly once')
-          aw = aw.replace(marker, helper)
-          old1 = '        self.assertGreaterEqual(float(self.schema["version"]), 0.2)'
-          new1 = '        self.assertGreaterEqual(dotted_version(self.schema["version"]), (0, 2))'
-          old2 = '        self.assertGreaterEqual(float(meta["schema_version"]), 0.2)'
-          new2 = '        self.assertGreaterEqual(dotted_version(meta["schema_version"]), (0, 2))'
-          if aw.count(old1) != 1 or aw.count(old2) != 1:
-              raise SystemExit('AW float version assertions did not match exactly once each')
-          aw = aw.replace(old1, new1).replace(old2, new2)
-          aw_path.write_text(aw, encoding='utf-8')
-
-          txn = Path('.github/workflows/cn-brazil-fuel-policy-live-transaction.yml')
-          text = txn.read_text(encoding='utf-8')
-          tag = '# Rerun after descendant-safe repair of failed run 34446405883\n'
-          if tag not in text:
-              text = tag + text
-          txn.write_text(text, encoding='utf-8')
-          PY
+      - name: Apply reviewed descendant-safe test repairs
+        run: python scripts/cn_descendant_repair_tmp.py
 
       - name: Verify focused historical and CN contracts
         shell: bash
@@ -131,19 +43,19 @@ def dotted_version(value):
           python -m unittest discover -s tests -p 'test_nepal_rasuwa_flood_live_intelligence_aw.py' -v
           python -m unittest discover -s tests -p 'test_brazil_fuel_policy_live_cn.py' -v
 
-      - name: Remove repair workflow and enforce repair boundary
+      - name: Remove repair machinery and enforce repair boundary
         shell: bash
         run: |
           set -euo pipefail
+          rm scripts/cn_descendant_repair_tmp.py
           rm .github/workflows/cn-descendant-repair.yml
-          changed="$(git status --short)"
-          printf '%s\n' "$changed"
           python - <<'PY'
           import subprocess
           allowed = {
               'tests/test_live_correction_conflict_cm.py',
               'tests/test_nepal_rasuwa_flood_live_intelligence_aw.py',
               '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
+              'scripts/cn_descendant_repair_tmp.py',
               '.github/workflows/cn-descendant-repair.yml',
           }
           rows = subprocess.check_output(['git','status','--porcelain'], text=True).splitlines()
@@ -155,12 +67,14 @@ def dotted_version(value):
               'tests/test_live_correction_conflict_cm.py',
               'tests/test_nepal_rasuwa_flood_live_intelligence_aw.py',
               '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
+              'scripts/cn_descendant_repair_tmp.py',
               '.github/workflows/cn-descendant-repair.yml',
           }
           missing = sorted(required - changed)
           if missing:
               raise SystemExit(f'CN descendant repair missing expected paths: {missing}')
           PY
+          test ! -e scripts/cn_descendant_repair_tmp.py
           test ! -e .github/workflows/cn-descendant-repair.yml
 
       - name: Commit reviewed descendant repair and retrigger CN transaction
