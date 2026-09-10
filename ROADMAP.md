@@ -117,9 +117,9 @@ Result:
 
 Stage 9 is therefore complete. NHC activation is no longer an unfinished roadmap candidate.
 
-## Stage 10 — cross-layer coverage audit before broader population — CJ / READ-ONLY
+## Stage 10 — cross-layer coverage audit before broader population — ACTIVE / AUDIT-GUIDED
 
-The architecture is now mature enough that the next risk is not missing machinery but **population bias**: adding whatever is easy to monitor, easy to source or already familiar. Before broader Live or Monitor growth, WORLD SIGNALS needs a current diagnostic across the full layer chain.
+The architecture is mature enough that the principal expansion risk is **population bias**: adding whatever is easy to monitor, easy to source or already familiar. Broader Live, Monitor or Analysis growth therefore follows current cross-layer evidence rather than raw counts or convenience.
 
 ### Stage 10A — CJ cross-layer coverage / pressure diagnostic — DONE / CI-GENERATED
 
@@ -146,61 +146,50 @@ Its artifacts are disposable read-only evidence under `artifacts/coverage/`; gov
 
 The first artifact exposed a cross-layer region-granularity issue rather than two true gaps. CJ v0.2 therefore uses only two explicit audit-only comparison mappings — `Central Africa -> Africa` and `Global -> Cross-regional / Global` — while preserving all governed raw labels. No other geographic parent is inferred.
 
-Corrected run `34412482858` reports:
+Corrected CJ run `34412482858` reported the post-#117 boundary: 689 Canonical occurrences / 203 series, 26 Monitor adapters / 217 explicitly scoped occurrences / 48 series, 7 Live observations / 2 Canonical-linked, 22 Analysis reviews / 1 production Live input / 1 production revision, and zero unused completed same-anchor Live→Analysis candidates.
 
-- Canonical: **689 occurrences / 203 series**;
-- Monitor: **26 adapters / 217 explicitly scoped occurrences / 48 series**;
-- Live: **7 observations / 2 Canonical-linked**;
-- Analysis: **22 reviews / 1 production Live input / 1 production revision**;
-- every Canonical region has at least some configured Monitor scope;
-- Europe, Latin America, North America and Oceania / Pacific currently have no controlled Live observation;
-- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` have no configured Monitor scope;
-- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` has no Analysis review;
-- the Live→Analysis frontier has **zero** unused completed same-anchor candidates; BARMM remains the one linked non-completed target.
+The permanent CJ audit and evidence trail are in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`.
 
-The category zeroes are not latent route permissions. Existing WHO / UNFCCC / CBD / IPCC source-governance records behind the two Monitor gaps remain rights-held/manual-only at this checkpoint. NHC was activated only because a separate fresh review cleared its distinct endpoint/rights case.
+### Stage 10B — CK Pacific Islands Forum lifecycle/provenance repair — DONE / GUARDED
 
-The permanent audit and evidence trail are in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`.
+CJ's Pacific prompt initially appeared to reveal a missing Pacific Islands Forum Leaders Meeting family. CK's first guarded transaction disproved that specific conclusion before any write: the stable Canonical occurrence `WSO-INT-A-0001` and series `WSER-INT-PIF-LEADERS` already existed, sourced by `WSSRC-INT-012` and host-bound by `WSHB-PIF-2026-PW`.
 
-### Stage 10B — CK Pacific Islands Forum upstream repair — NEXT SELECTED AFTER CJ MERGE
+The actual defect was narrower and operationally important: the 55th Pacific Islands Forum Leaders Meeting retained `ACTIVE` lifecycle state after its authoritative 30 August–4 September 2026 Palau meeting window had concluded.
 
-The corrected Oceania / Pacific prompt led upstream rather than to arbitrary Live filling. Current repository search finds no identifiable Canonical series or occurrence for the **Pacific Islands Forum Leaders Meeting**, despite official evidence that it is the annual apex political meeting of the 18-member Pacific Islands Forum.
+CK therefore:
 
-Official current research establishes:
+1. preserves the existing PIF occurrence, series, source and host-binding identities;
+2. preserves the exact `MULTI_DAY_LOCAL`, DAY-precision, `Pacific/Palau` civil range without synthetic UTC endpoints;
+3. changes lifecycle only from `ACTIVE` to `COMPLETED` using first-party post-event evidence rather than elapsed-time inference;
+4. adds supporting-only Cook Islands PMO source `WSSRC-INT-036` with zero primary Canonical dependencies and no unattended-monitoring permission;
+5. appends one reviewed lifecycle change to the Change Ledger;
+6. preserves New Zealand/Auckland as 2027 host context only and creates no dated 2027 occurrence;
+7. creates no PIF Monitor, Live or Analysis row and opens no automatic write/promotion gate;
+8. leaves OPEC CE quarantine untouched.
 
-- the Leaders Meeting is annual and is the Forum's apex consensus decision meeting;
-- the 55th meeting was held in Koror, Palau, **30 August–4 September 2026**;
-- authoritative post-event material confirms it concluded and its outcomes were captured in the 2026 Forum Communiqué;
-- New Zealand is confirmed to host the 2027 Leaders Meeting in Auckland;
-- no authoritative 2027 meeting dates were located, so CK must not invent them.
+CK also adds a material identity-discovery control: a claim that an important family is absent must interrogate stable IDs, source dependencies, institution keys and host bindings where available, not only literal human-readable names.
 
-CK is therefore selected as the next bounded tranche **after #118/CJ is merged**, on a fresh branch from then-current `main`.
+The guarded transaction exposed and repaired historical descendant assertions that had accidentally turned old Canonical/Source/Ledger checkpoints into permanent ceilings. Exact historical prestate tests remain exact; descendant/coherence tests now validate lineage floors and tranche-owned invariants. The successful transaction passed all 1,256 historical tests plus validators, compilation, seven JavaScript checks, static build and bounded-diff/protected-layer gates.
 
-Minimum CK scope:
+Permanent transaction evidence is in `data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md`.
 
-1. prove again that no equivalent PIF series/occurrence already exists under another identity;
-2. create one stable PIF Leaders Meeting series identity if the omission is confirmed;
-3. add the completed 55th PIF Leaders Meeting occurrence for Koror, Palau, 30 August–4 September 2026 using civil-date range precision;
-4. register or reuse the minimum authoritative source identities needed for schedule and completion provenance, with source-governance fields explicitly reviewed;
-5. preserve the 2027 Auckland host fact as context only until authoritative dates support a 2027 occurrence;
-6. separately pressure-test whether the 2026 Forum Communiqué warrants one bounded Oceania / Pacific Live outcome observation linked `OUTCOME_OF`; CJ does **not** pre-authorise that population;
-7. add no automatic Monitor route by default and open no Canonical/Calendar/Live/Analysis write gate.
+### Stage 10C — post-CK re-audit and bounded broadening/deepening — NEXT
 
-If CK finds an existing hidden identity, insufficient primary provenance, or incompatible timing semantics, it must stop or change design rather than duplicate or fabricate.
+Do **not** carry forward CJ's old candidate ranking mechanically. Rerun the read-only cross-layer diagnostic against the post-CK governed state, then select the next bounded tranche from current evidence.
 
-### Stage 10C — broader Live / monitoring population — ONLY AFTER BOUNDED UPSTREAM REPAIR / RE-AUDIT
+Candidate classes are deliberately unordered:
 
-After CK, rerun the cross-layer audit and choose from evidence rather than carrying forward today's ranking mechanically. Candidate classes remain:
-
-1. **Canonical/source repair** where an internationally material signal family is genuinely absent or stale;
+1. **Live expansion** where a new observation exercises a missing or materially useful factual contract and has adequate first-party provenance;
 2. **Monitor expansion** where important existing Canonical scope has a competent, rights-cleared, bounded machine route;
-3. **Live expansion** where a new observation would exercise a missing or materially useful factual contract rather than merely increase volume;
-4. **Live→Analysis** only where a linked Canonical occurrence is completed, the Analysis contract has a valid target, and fresh pressure justifies another production input;
+3. **Canonical/source repair** where identity-aware discovery establishes a real upstream omission, stale lifecycle or provenance defect;
+4. **Live→Analysis** only where an immutable Live observation is already linked to a completed same-anchor Canonical occurrence and fresh pressure justifies another production input;
 5. **Analysis revision** only where later evidence changes an existing analytical judgement rather than merely adding chronology.
+
+The 2026 PIF Forum Communiqué may be considered as one possible Oceania / Pacific Live outcome candidate because the underlying Canonical occurrence is now evidence-backed `COMPLETED`, but neither the regional zero count nor CK itself authorises that row. The audit must compare it against other current pressures.
 
 BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
 
-Broader population must also establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
+Broader population must continue to establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
