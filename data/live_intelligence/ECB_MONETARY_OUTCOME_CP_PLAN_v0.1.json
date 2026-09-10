@@ -1,0 +1,51 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CP",
+  "status": "READ_ONLY_READINESS_NO_OUTCOME_POPULATION_AUTHORISED",
+  "base_main_sha": "e1f5c97c183381f7d29bf6957aecd87cacaa96a0",
+  "reference_date": "2026-09-10",
+  "candidate": {
+    "institution": "European Central Bank",
+    "canonical_occurrence_id": "WSO-ad4d0618a65059f2",
+    "canonical_series_id": "WS.CB.ECB.MONETARY_POLICY_DECISION",
+    "canonical_name": "ECB Governing Council monetary policy decision — 2026-09-10",
+    "canonical_source_id": "WSSRC-CB-003",
+    "outcome_source_id": "WSSRC-CB-004",
+    "canonical_native_datetime": "2026-09-10T14:15:00",
+    "canonical_native_timezone": "Europe/Berlin",
+    "canonical_utc": "2026-09-10T12:15:00Z",
+    "preflight_lifecycle": "PLANNED"
+  },
+  "preflight": {
+    "as_of_utc": "2026-09-10T11:30:00Z",
+    "official_outcome_available": false,
+    "scheduled_release_time_is_completion_evidence": false,
+    "identity_resolved": true,
+    "duplicate_canonical_identity_allowed": false
+  },
+  "required_sequence_after_official_release": [
+    "verify WSSRC-CB-004 outcome wording",
+    "match outcome to WSO-ad4d0618a65059f2",
+    "evidence-backed Canonical lifecycle completion with history/ledger treatment",
+    "only then review one bounded Live OUTCOME_OF observation"
+  ],
+  "prohibited_in_cp_readiness": {
+    "canonical_mutation_before_outcome": true,
+    "live_population_before_outcome": true,
+    "duplicate_canonical_occurrence": true,
+    "elapsed_time_completion_inference": true,
+    "new_ecb_monitor_route": true,
+    "automatic_monitor_to_live": true,
+    "automatic_live_to_analysis": true,
+    "market_causality_claim": true,
+    "public_projection": true,
+    "opec_quarantine_mutation": true
+  },
+  "post_release_abort_or_reselect_if": [
+    "official decision is unavailable",
+    "decision cannot be matched cleanly to the existing Canonical identity",
+    "official source timing or provenance materially conflicts with the Canonical contract",
+    "correction/retraction/conflicting-report handling is required",
+    "lifecycle completion cannot be supported by authoritative result evidence"
+  ]
+}
