@@ -42,7 +42,6 @@
       "The outcome publication is competent curated provenance under existing WSSRC-CB-004 governance; no automated Monitor permission is inferred."
     ],
     "commit_mode": "REVIEWED_ECB_MONETARY_LIFECYCLE_COMPLETION_CP",
-    "committed_at": "2026-09-11T02:03:10+10:00",
     "registry_version_before": "0.42",
     "registry_version_after": "0.43",
     "canonical_mutation_committed": true,
