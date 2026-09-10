@@ -1,0 +1,126 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CM",
+  "title": "Live correction / retraction / conflicting-report contract hardening",
+  "status": "REVIEWED_PLAN_NO_PRODUCTION_POPULATION",
+  "reference_date": "2026-09-10",
+  "exact_base_main_sha": "1e4a6bbc8670fc36a452740401461f28e313c031",
+  "preconditions": {
+    "canonical": {"version": "0.42", "occurrence_count": 689},
+    "sources": {"version": "2.04", "source_count": 258},
+    "change_ledger": {"version": "0.28", "entry_count": 63},
+    "monitor": {"expectations_version": "0.28", "adapter_count": 26},
+    "live": {
+      "schema_version": "0.8",
+      "observations_version": "0.8",
+      "observation_count": 8,
+      "evidence_version": "0.8",
+      "evidence_count": 11,
+      "canonical_linked_observation_count": 3
+    },
+    "analysis": {
+      "review_count": 22,
+      "evidence_count": 97,
+      "production_live_input_count": 1,
+      "production_revision_count": 1
+    },
+    "opec_quarantine_present": true
+  },
+  "design": {
+    "target_live_version": "0.9",
+    "production_population_delta": {
+      "observations": 0,
+      "evidence": 0,
+      "canonical_links": 0
+    },
+    "conflict_field": {
+      "name": "conflict_description",
+      "shape": "NON_EMPTY_STRING",
+      "required_when_verification_state": "CONFLICTING_REPORTS",
+      "prohibited_when_verification_state_is_not": "CONFLICTING_REPORTS"
+    },
+    "correction_retraction_contract": {
+      "states": ["CORRECTED", "RETRACTED"],
+      "requires_revision_of_observation_id": true,
+      "revision_target_must_exist": true,
+      "requires_evidence_role": "CORRECTION_OR_REVISION",
+      "observed_at_must_be_strictly_later_than_target": true,
+      "self_reference_prohibited": true,
+      "revision_cycles_prohibited": true,
+      "state_update_and_revision_must_remain_distinct": true
+    },
+    "conflicting_reports_contract": {
+      "minimum_unique_evidence_refs": 2,
+      "minimum_distinct_providers": 2,
+      "provider_identity_normalisation": "strip_then_casefold",
+      "requires_conflict_description": true,
+      "requires_revision_target": false,
+      "winner_selection_required": false,
+      "synthetic_consensus_required": false
+    },
+    "data_revision_separation": {
+      "external_data_revision_does_not_require_prior_live_observation": true,
+      "revision_target_description_required": true,
+      "correction_or_revision_evidence_required": true
+    }
+  },
+  "expected_poststate": {
+    "canonical": {"version": "0.42", "occurrence_count": 689},
+    "sources": {"version": "2.04", "source_count": 258},
+    "change_ledger": {"version": "0.28", "entry_count": 63},
+    "monitor": {"expectations_version": "0.28", "adapter_count": 26},
+    "live": {
+      "schema_version": "0.9",
+      "observations_version": "0.9",
+      "observation_count": 8,
+      "evidence_version": "0.9",
+      "evidence_count": 11,
+      "canonical_linked_observation_count": 3,
+      "population_ceiling_observations": 8,
+      "population_ceiling_evidence": 11,
+      "automatic_ingestion_allowed": false,
+      "public_observation_projection_allowed": false
+    },
+    "analysis": {
+      "review_count": 22,
+      "evidence_count": 97,
+      "production_live_input_count": 1,
+      "production_revision_count": 1
+    }
+  },
+  "required_tests": [
+    "valid corrected observation passes with earlier target and correction evidence",
+    "corrected or retracted observation without correction evidence fails",
+    "corrected or retracted observation not later than target fails",
+    "corrected or retracted observation without revision target fails",
+    "valid conflicting reports passes with two unique evidence rows from two providers and conflict description",
+    "conflicting reports with fewer than two unique evidence refs fails",
+    "conflicting reports with two evidence rows from one normalised provider fails",
+    "conflicting reports without non-empty conflict description fails",
+    "non-conflicting observation carrying conflict_description fails",
+    "DATA_REVISION remains valid without synthetic prior Live observation",
+    "revision and state-update cycles/separation remain enforced",
+    "all existing eight observations and eleven evidence rows remain unchanged and valid"
+  ],
+  "allowed_mutation_classes": [
+    "Live schema contract",
+    "Live validator implementation",
+    "Live dataset version metadata only",
+    "synthetic contract tests",
+    "derived current-state/recovery surfaces",
+    "CM research/plan/audit documentation"
+  ],
+  "protected_boundaries": [
+    "no production Live observation or evidence row",
+    "no Waqa Moana reinterpretation or conflict row",
+    "no Canonical mutation",
+    "no Source Registry mutation",
+    "no Change Ledger mutation",
+    "no Monitor mutation or route activation",
+    "no Analysis mutation or second Live-to-Analysis link",
+    "no Calendar write",
+    "no public Live projection",
+    "no automatic ingestion or promotion",
+    "OPEC CE quarantine untouched"
+  ]
+}
