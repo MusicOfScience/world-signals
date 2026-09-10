@@ -33,7 +33,7 @@ jobs:
           git fetch origin main feature/post-co-ecb-monetary-outcome-cp
           test "$(git rev-parse origin/main)" = "e1f5c97c183381f7d29bf6957aecd87cacaa96a0"
           test "$(git merge-base HEAD origin/main)" = "e1f5c97c183381f7d29bf6957aecd87cacaa96a0"
-          test "$(git rev-parse HEAD^)" = "fe84734481907d78178742989c4a2b4cf7a13341"
+          test "$(git rev-parse HEAD^)" = "3633107504c6da849a39438c969a9940751d2a88"
           test "$(git rev-parse origin/feature/post-co-ecb-monetary-outcome-cp)" = "$GITHUB_SHA"
 
       - name: Freeze protected hashes and exact pre-CP governed rows
@@ -216,7 +216,7 @@ jobs:
               'data/live_intelligence/evidence_registry.json',
               'scripts/apply_ecb_monetary_outcome_cp.py',
           }
-          changed = set(subprocess.check_output(['git','diff','--name-only'], text=True).splitlines())
+          changed = set(subprocess.check_output(['git','diff','--name-only','HEAD'], text=True).splitlines())
           required = {
               'data/canonical/registry.json',
               'data/changes/ledger.json',
