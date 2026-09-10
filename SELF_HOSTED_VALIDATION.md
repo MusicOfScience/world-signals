@@ -17,6 +17,14 @@ The following remain GitHub-hosted under CR:
 
 The local machine therefore does not need to remain online continuously. Start the runner when WORLD SIGNALS needs validation; stop it afterward.
 
+## Bootstrap property
+
+CR can use this route to validate **CR itself** before CR is merged.
+
+GitHub's normal `pull_request` workflow requires the workflow file to exist on the default branch; `ci.yml` already exists on WORLD SIGNALS `main`. The workflow run then uses the workflow version at the pull-request event's associated ref/SHA. Therefore the CR pull request can carry the new validation-runner routing and execute that version on the configured self-hosted runner without first merging an unvalidated workflow change.
+
+This does not waive exact-head validation. CR still requires `FULL` because it changes workflow code, executable validation code, tests and merge-governance documents.
+
 ## Security boundary
 
 A self-hosted runner executes workflow code on the local machine under the permissions of the account/process that runs the runner. Treat it as trusted execution infrastructure.
@@ -29,6 +37,8 @@ For WORLD SIGNALS:
 - do not store registration tokens, credentials, API keys or GitHub-generated setup commands in this repository;
 - keep workflow permissions at the minimum required; the ordinary validation workflow uses `contents: read`;
 - stop/remove the runner if the machine is lost, transferred or no longer trusted.
+
+The CR workflow additionally forces future fork pull requests back to GitHub-hosted `ubuntu-latest` even when the self-hosted repository variable is set. Same-repository branches, pushes and manual runs may use the configured local label.
 
 ## One-time setup
 
@@ -77,7 +87,8 @@ world-signals-validation
 The validation workflow resolves its runner as:
 
 ```text
-WORLD_SIGNALS_VALIDATION_RUNNER if set; otherwise ubuntu-latest
+trusted same-repository run + WORLD_SIGNALS_VALIDATION_RUNNER set -> that runner label
+otherwise -> ubuntu-latest
 ```
 
 This variable contains a runner label only. It is not a secret and must never contain a registration token.
