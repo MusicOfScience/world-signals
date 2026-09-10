@@ -36,6 +36,10 @@ jobs:
         with:
           python-version: '3.13'
       - name: Monitor regression tests
+        # Code/configuration changes already receive full repository validation.
+        # A routine scheduled poll should test the live route, not rebuy the same
+        # regression suite every day.
+        if: github.event_name != 'schedule'
         run: python -m unittest tests.test_adapters tests.test_live_monitor tests.test_legal_monitor tests.test_monitor_operations_policy -v
       - name: Run read-only live monitor
         run: python scripts/run_live_monitor.py
