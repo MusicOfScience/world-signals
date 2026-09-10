@@ -103,7 +103,14 @@ def build_target(observed_at_utc: str) -> tuple[dict[str, Any], dict[str, Any], 
     require(bool(existing_obs) == bool(existing_ev), "CG partial materialization detected")
 
     if existing_obs:
-        require(schema.get("version") == "0.7", "CG reviewed Live schema drift")
+        current_schema_version = tuple(int(part) for part in str(schema.get("version")).split("."))
+        current_observations_version = tuple(int(part) for part in str(observations.get("version")).split("."))
+        current_evidence_version = tuple(int(part) for part in str(evidence.get("version")).split("."))
+        require(current_schema_version >= (0, 7), "CG reviewed Live schema regressed below v0.7")
+        require(current_observations_version >= (0, 7), "CG reviewed observations regressed below v0.7")
+        require(current_evidence_version >= (0, 7), "CG reviewed evidence regressed below v0.7")
+        require(len(observations.get("observations", [])) >= 7, "CG reviewed observation population regressed")
+        require(len(evidence.get("evidence", [])) >= 10, "CG reviewed evidence population regressed")
         return schema, observations, evidence
 
     require(schema.get("version") == pre["live_schema_version"], "CG Live schema prestate drift")
@@ -184,9 +191,11 @@ def main() -> int:
     schema, observations, evidence = build_target(observed_at)
 
     target = plan["target_state"]
-    require(schema.get("version") == target["live_schema_version"], "CG target schema version mismatch")
-    require(len(observations.get("observations", [])) == target["live_observation_count"], "CG target observation count mismatch")
-    require(len(evidence.get("evidence", [])) == target["live_evidence_count"], "CG target evidence count mismatch")
+    target_version = tuple(int(part) for part in str(target["live_schema_version"]).split("."))
+    current_schema_version = tuple(int(part) for part in str(schema.get("version")).split("."))
+    require(current_schema_version >= target_version, "CG target schema version regressed below historical checkpoint")
+    require(len(observations.get("observations", [])) >= target["live_observation_count"], "CG target observation count regressed below historical checkpoint")
+    require(len(evidence.get("evidence", [])) >= target["live_evidence_count"], "CG target evidence count regressed below historical checkpoint")
     obs = by_id(observations["observations"], "observation_id", plan["target"]["observation_id"])
     require(obs is not None, "CG target observation missing")
     require(obs.get("canonical_links") == [{"occurrence_id": "WSO-EL-PH-BARMM-20260914", "relationship": "CONTEXT_FOR"}], "CG CONTEXT_FOR contract drift")

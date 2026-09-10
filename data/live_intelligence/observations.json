@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.7",
+  "version": "0.8",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
+  "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -218,7 +218,35 @@
       "automatic_canonical_commit": false,
       "google_calendar_write": false,
       "observed_at_utc": "2026-09-09T17:05:16Z"
+    },
+    {
+      "observation_id": "WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001",
+      "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "PIF Leaders’ Retreat resolves Pacific-led framework for engagement with partners",
+      "summary": "The Government of the Cook Islands reported on 4 September 2026 that, at the 55th Pacific Islands Forum Leaders’ Retreat, Forum leaders resolved the framework that will guide how the Pacific engages its partners, reinforcing a transparent, accountable and Pacific-led approach to partnerships in support of the 2050 Strategy for the Blue Pacific Continent. The source states that this and other outcomes are captured in the 2026 Forum Communiqué. This observation records that institutional outcome only; it does not infer the positions or intentions of individual external partners, implementation effects, market consequences, or the content of other communiqué decisions.",
+      "domain_tags": [
+        "INSTITUTIONS",
+        "GEOPOLITICS"
+      ],
+      "jurisdictions": [],
+      "regions": [
+        "Oceania / Pacific"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-PIF-COOKPM-PARTNERS-20260904"
+      ],
+      "canonical_links": [
+        {
+          "occurrence_id": "WSO-INT-A-0001",
+          "relationship": "OUTCOME_OF"
+        }
+      ],
+      "revision_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false,
+      "observed_at_utc": "2026-09-10T04:10:51Z"
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CG: seven observations, including the first reviewed CONTEXT_FOR link from current pre-election institutional context to an existing Canonical occurrence. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CL: eight observations, including one scheduled PIF institutional outcome linked OUTCOME_OF a completed Canonical occurrence. Waqa Moana remains excluded from the CL payload pending direct reconciliation of final institutional wording. Public projection and automatic ingestion remain closed."
 }

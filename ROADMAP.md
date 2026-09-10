@@ -12,7 +12,7 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.8 / 8 observations / 11 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -180,42 +180,72 @@ Fresh first-party PIF outcome research identifies a more specific pressure than 
 
 Permanent selection evidence is `data/coverage/POST_CK_PRESSURE_AUDIT_CL_v0.1.md`.
 
-### Stage 10D — CL bounded PIF scheduled institutional-outcome Live specimen — NEXT AFTER CK MERGE
+### Stage 10D — CL bounded PIF scheduled institutional-outcome Live specimen — DONE / GUARDED
 
-CL is selected for **fresh post-merge design**, not pre-authorised mutation.
+CL starts from exact post-#119 main `aef4642863438e2170ae9a49160b7368c850b819` and materialises one bounded `PRIMARY_CONFIRMED` `INSTITUTIONAL_DEVELOPMENT`:
 
-Subject to re-verification from the exact then-current `main`, the proposed contract is:
+- `WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001`;
+- region `Oceania / Pacific`;
+- domain tags `INSTITUTIONS` + `GEOPOLITICS`;
+- `OUTCOME_OF` → completed `WSO-INT-A-0001`;
+- one primary-official Cook Islands PMO evidence row;
+- no manufactured `event_time`;
+- no market, surprise, causal or second-order claim.
 
-1. add exactly one factual Live Intelligence observation;
-2. reuse existing `INSTITUTIONAL_DEVELOPMENT` unless schema review establishes a more precise already-controlled type;
-3. set verification to `PRIMARY_CONFIRMED`;
-4. represent region as `Oceania / Pacific`;
-5. link `OUTCOME_OF` → completed `WSO-INT-A-0001`;
-6. focus the factual claim on the Leaders' Retreat agreement on the Pacific-led framework for engagement with partners, adding other outcomes only when separately first-party evidenced;
-7. do not reduce the whole Forum Communiqué to a scalar outcome;
-8. create no market-movement, surprise, causal-attribution or second-order-effect claim in Live;
-9. keep Live evidence separate from Canonical provenance and Analysis evidence;
-10. create no PIF Monitor route and no automatic Live→Analysis promotion;
-11. keep automatic Canonical commit, Calendar write and public Live projection closed;
-12. keep OPEC CE quarantine excluded.
+Live advances from v0.7 / 7 observations / 10 evidence / 2 Canonical-linked to **v0.8 / 8 / 11 / 3**. Canonical, Sources, Change Ledger, Monitor and Analysis remain unchanged.
 
-Why CL rather than another zero-fill:
+Fresh preflight narrowed the proposed payload. The Australian Prime Minister's Waqa Moana release used `unanimously endorsed`, while indexed final-communiqué text used `agreed in principle` and noted further national consultations. Because the authoritative Forum Secretariat PDF was not directly retrievable through the controlled automated path, CL excludes Waqa rather than silently choosing the stronger wording. The discrepancy is preserved as evidence pressure, not resolved by assertion.
 
-- the Canonical anchor is stable, HIGH-importance and now evidence-backed `COMPLETED`;
-- first-party post-event evidence is fresh and specific;
-- scheduled institutional outcome is a materially new Live contract relative to the current controlled specimen set;
-- Pacific geographic broadening is a benefit but not the selection rule;
-- no second Live→Analysis candidate exists yet, so forcing the bridge would violate current evidence.
+The guarded transaction also repaired descendant-unsafe CG/CJ/BF/BD tests that had frozen historical Live v0.7 current-state values or population labels as permanent ceilings. Their historical specimen semantics and safety gates remain tested. Successful run `34436154025` passed the complete **1,262-test** suite plus validators, compilation, seven JavaScript checks, static build and bounded/protected-layer gates. Permanent transaction evidence is `data/live_intelligence/PIF_PARTNER_FRAMEWORK_LIVE_CL_TRANSACTION_AUDIT_v0.1.md`.
 
-CL must stop or redesign if fresh post-merge source verification or repository preconditions do not support the proposed observation.
+Automatic ingestion, Canonical commit, Calendar write, PIF Monitor creation, Live→Analysis promotion and public Live projection remain closed.
 
-### Stage 10E — further broadening / deepening — AFTER CL AUDIT
+### Stage 10E — post-CL pressure re-audit — DONE / CM SELECTED
 
-After CL, rerun pressure rather than treating Europe, Latin America, North America, corporate/market Analysis or source-readiness debt as a FIFO queue. Candidate classes remain Live expansion, rights-cleared Monitor expansion, identity-aware Canonical/source repair, valid same-anchor Live→Analysis, or evidence-driven Analysis revision.
+Read-only coverage run `34436436416` reports:
+
+- Canonical 689 occurrences / 203 series;
+- Monitor 26 adapters / 217 scoped occurrences / 48 series;
+- Live 8 observations / 3 Canonical-linked;
+- Analysis 22 reviews / 1 production Live input / 1 production revision;
+- completed linked Live observations with an existing unused Analysis target: **0**;
+- completed linked Live observations without an Analysis review: **1** — the new PIF outcome;
+- linked non-completed observations: **1** — BARMM pre-election context;
+- Europe, Latin America and North America remain zero-Live prompts;
+- Monitor category zeroes and the corporate/market Analysis zero remain non-authorising prompts.
+
+PIF is not bridge-ready. No same-anchor Analysis review exists, and the current bridge policy remains `CONTROLLED_SINGLE_PRODUCTION_LINK` with its one production slot already occupied by Japan FIES. Creating an Analysis review merely to manufacture a bridge target is prohibited by the evidence-first architecture.
+
+The stronger pressure is correction/conflict handling. CL's Waqa source disagreement demonstrates why named verification states are insufficient without executable semantics. The permanent pressure decision is `data/coverage/POST_CL_PRESSURE_AUDIT_CM_v0.1.md`.
+
+### Stage 10F — CM Live correction / retraction / conflicting-report contract hardening — NEXT AFTER CL MERGE
+
+CM is selected for **fresh post-merge design** and should add no production observation merely to exercise the contract.
+
+Minimum CM pressure:
+
+1. start from exact then-current post-CL `main`;
+2. preserve all eight current Live observations and eleven evidence rows unless an explicitly reviewed schema migration requires otherwise;
+3. keep state updates distinct from corrections/retractions and preserve external `DATA_REVISION` semantics;
+4. require `CORRECTED` / `RETRACTED` observations to reference the prior observation and at least one evidence row carrying `CORRECTION_OR_REVISION`;
+5. require correction/retraction observation time to be later than its revision target;
+6. retain self-reference and revision-cycle prohibitions;
+7. design a bounded `CONFLICTING_REPORTS` contract requiring multiple evidence records from distinct providers plus an explicit factual description of the disagreement;
+8. never require a conflicting-report state to choose a winner or manufacture consensus;
+9. prove valid/invalid shapes with synthetic fixtures rather than creating a production conflict/retraction row for coverage;
+10. treat Waqa as motivating historical evidence only; do not reinterpret or populate it automatically;
+11. keep Canonical, Sources, Change Ledger, Monitor, Analysis, Calendar/public projection and OPEC quarantine unchanged;
+12. keep automatic ingestion, automatic Canonical commit, automatic Monitor→Live and automatic Live→Analysis closed.
+
+The precise field shape for conflict description remains a CM design question, not a pre-authorised schema decision.
+
+### Stage 10G — further broadening / deepening — AFTER CM AUDIT
+
+After CM, rerun pressure rather than treating Europe, Latin America, North America, corporate/market Analysis or PIF bridge potential as a FIFO queue. Candidate classes remain evidence-driven Live expansion, rights-cleared Monitor expansion, identity-aware Canonical/source repair, independently justified Analysis, valid same-anchor Live→Analysis, or evidence-driven Analysis revision.
 
 BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
 
-Broader population must continue to establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
+Broader population must continue to establish geographic/domain balance, noise controls, retention and provenance; CM specifically addresses correction/retraction/conflict handling before any high-volume Live ingest is considered. Platform independence remains mandatory.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 

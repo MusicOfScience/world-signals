@@ -1,0 +1,124 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CL",
+  "title": "Pacific Islands Forum partner-engagement framework Live outcome",
+  "reference_date": "2026-09-10",
+  "base_main_sha": "aef4642863438e2170ae9a49160b7368c850b819",
+  "selection_source": "data/coverage/POST_CK_PRESSURE_AUDIT_CL_v0.1.md",
+  "selection": "PIF_SCHEDULED_INSTITUTIONAL_OUTCOME",
+  "pre_state": {
+    "canonical_registry_version": "0.42",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.04",
+    "source_count": 258,
+    "change_ledger_version": "0.28",
+    "change_ledger_count": 63,
+    "monitor_expectations_version": "0.28",
+    "monitor_adapter_count": 26,
+    "live_schema_version": "0.7",
+    "live_observation_count": 7,
+    "live_evidence_count": 10,
+    "canonical_linked_live_observation_count": 2,
+    "analysis_schema_version": "0.8",
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_analysis_revision_count": 1,
+    "production_live_input_count": 1
+  },
+  "required_anchor": {
+    "occurrence_id": "WSO-INT-A-0001",
+    "series_id": "WSER-INT-PIF-LEADERS",
+    "canonical_name": "55th Pacific Islands Forum Leaders Meeting",
+    "category": "INTERNATIONAL_INSTITUTIONS",
+    "region": "Oceania / Pacific",
+    "institution": "Pacific Islands Forum",
+    "lifecycle_status": "COMPLETED",
+    "certainty_status": "CONFIRMED",
+    "timing_type": "MULTI_DAY_LOCAL",
+    "start_local": "2026-08-30",
+    "end_local": "2026-09-04",
+    "source_timezone": "Pacific/Palau",
+    "time_precision": "DAY",
+    "source_id": "WSSRC-INT-012",
+    "completion_assertion_id": "WSA-CK-cb548530485b6f03"
+  },
+  "target_state": {
+    "live_schema_version": "0.8",
+    "live_observation_count": 8,
+    "live_evidence_count": 11,
+    "canonical_linked_live_observation_count": 3,
+    "automatic_ingestion_allowed": false,
+    "public_observation_projection_allowed": false,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "target": {
+    "canonical_occurrence_id": "WSO-INT-A-0001",
+    "canonical_relationship": "OUTCOME_OF",
+    "observation_id": "WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001",
+    "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "region": "Oceania / Pacific",
+    "domain_tags": [
+      "INSTITUTIONS",
+      "GEOPOLITICS"
+    ],
+    "evidence_ids": [
+      "WSEV-LI-PIF-COOKPM-PARTNERS-20260904"
+    ]
+  },
+  "evidence_decision": {
+    "included_primary_source": {
+      "provider": "Government of the Cook Islands — Office of the Prime Minister",
+      "url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+      "claim_scope": "Leaders' Retreat resolved the framework guiding Pacific engagement with partners, reinforcing a transparent, accountable and Pacific-led approach in support of the 2050 Strategy."
+    },
+    "excluded_after_fresh_preflight": [
+      {
+        "subject": "Waqa Moana",
+        "australian_official_wording": "unanimously endorsed",
+        "indexed_final_communique_wording": "agreed in principle",
+        "additional_qualification": "further national consultations noted in the indexed communiqué text",
+        "decision": "EXCLUDE_FROM_CL_LIVE_PAYLOAD",
+        "reason": "The stronger and qualified formulations were not reconciled through directly retrievable Pacific Islands Forum Secretariat evidence in the current automated research path. WORLD SIGNALS must not silently choose the stronger wording."
+      }
+    ]
+  },
+  "protected_layers": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "OPEC_QUARANTINE.md",
+    "tests/test_opec_quarantine_cf.py"
+  ],
+  "authorized_governed_writes": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json"
+  ],
+  "authority_gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "automatic_monitor_route_creation": false,
+    "automatic_monitor_to_live": false,
+    "automatic_live_to_analysis": false,
+    "automatic_analysis_population": false,
+    "public_live_projection": false,
+    "public_analysis_projection": false
+  },
+  "notes": [
+    "CL is selected for contract novelty and primary evidence, not to fill an Oceania/Pacific quota.",
+    "The observation records one institutional outcome only; it does not summarise the entire 2026 Forum Communiqué.",
+    "No event_time is manufactured because the factual claim is adequately bounded by the completed multi-day Canonical occurrence and the primary post-event evidence publication date.",
+    "Live evidence remains separate from Canonical provenance, Source/Change Monitor evidence and Analysis evidence.",
+    "The Cook Islands page is used as reviewed factual evidence only and does not grant unattended monitoring or reuse authority.",
+    "OPEC CE quarantine is excluded from CL."
+  ]
+}

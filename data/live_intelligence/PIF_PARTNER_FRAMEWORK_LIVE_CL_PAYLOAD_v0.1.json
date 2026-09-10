@@ -1,0 +1,56 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CL",
+  "observation_template": {
+    "observation_id": "WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001",
+    "observation_type": "INSTITUTIONAL_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "PIF Leaders’ Retreat resolves Pacific-led framework for engagement with partners",
+    "summary": "The Government of the Cook Islands reported on 4 September 2026 that, at the 55th Pacific Islands Forum Leaders’ Retreat, Forum leaders resolved the framework that will guide how the Pacific engages its partners, reinforcing a transparent, accountable and Pacific-led approach to partnerships in support of the 2050 Strategy for the Blue Pacific Continent. The source states that this and other outcomes are captured in the 2026 Forum Communiqué. This observation records that institutional outcome only; it does not infer the positions or intentions of individual external partners, implementation effects, market consequences, or the content of other communiqué decisions.",
+    "domain_tags": [
+      "INSTITUTIONS",
+      "GEOPOLITICS"
+    ],
+    "jurisdictions": [],
+    "regions": [
+      "Oceania / Pacific"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-PIF-COOKPM-PARTNERS-20260904"
+    ],
+    "canonical_links": [
+      {
+        "occurrence_id": "WSO-INT-A-0001",
+        "relationship": "OUTCOME_OF"
+      }
+    ],
+    "revision_of_observation_id": null,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-PIF-COOKPM-PARTNERS-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of the Cook Islands — Office of the Prime Minister",
+      "title": "Prime Minister concludes 55th Pacific Islands Forum Leaders Meeting",
+      "url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official member-government post-event evidence. It states that the Leaders’ Retreat resolved the framework guiding Pacific engagement with partners and describes the approach as transparent, accountable and Pacific-led in support of the 2050 Strategy. CL uses this page as reviewed factual evidence only; it does not grant the source unattended-monitoring authority or alter Canonical provenance."
+    }
+  ],
+  "scope_exclusions": [
+    "Waqa Moana is excluded from this payload because fresh CL research found materially different official/indexed formulations of its status that were not reconciled through directly retrievable Forum Secretariat evidence.",
+    "No claim is made about the full contents of the 2026 Forum Communiqué.",
+    "No market response, surprise, causal attribution or second-order effect is encoded in Live Intelligence.",
+    "No event_time is manufactured from the source publication date or the multi-day Canonical occurrence."
+  ]
+}

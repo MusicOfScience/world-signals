@@ -12,7 +12,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.8 / 8 observations / 11 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -69,37 +69,33 @@ CJ added the read-only Canonical→Monitor→Live→Analysis coverage diagnostic
 
 CJ then flagged the Pacific Islands Forum Leaders Meeting as apparently absent from Canonical. CK subsequently proved that specific absence conclusion wrong: the stable PIF occurrence and series already existed but were not found by the literal-name discovery path used in the pressure review. The CJ audit remains historical evidence; CK adds a stronger identity-discovery control rather than rewriting CJ's frozen artifact.
 
+### PR #119 — CK: PIF lifecycle/provenance completion repair — MERGED
+
+CK corrected CJ's apparent PIF absence finding after an identity-aware probe found the existing stable `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS` family. It preserved the event's Palau civil-date timing, host binding and sensitivity metadata, moved lifecycle from `ACTIVE` to first-party-evidence-backed `COMPLETED`, added one supporting-only Cook Islands completion source, and repaired descendant-unsafe historical Canonical/Source/Ledger assertions. No PIF Monitor, Live or Analysis row was created in CK.
+
 ## Current pressure interpretation
 
-Raw population counts are not a selection rule. CK has now corrected the most material issue exposed by CJ's Pacific prompt while also demonstrating that coverage diagnostics must query governed identities, not only human-readable names.
+CL is now materialised on the feature branch as one bounded scheduled institutional-outcome Live specimen. Population counts remain diagnostic rather than selection rules.
 
-- **Canonical:** 689 occurrences. `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS` was already present with the correct 30 August–4 September 2026 Palau civil range and stable host binding. CK preserves every timing, identity, host and sensitivity field and changes only its evidence-backed lifecycle/provenance state from `ACTIVE` to `COMPLETED`.
-- **Sources:** the existing Palau host source `WSSRC-INT-012` remains unchanged. CK adds supporting-only first-party Cook Islands completion source `WSSRC-INT-036`; it has zero primary Canonical dependencies and no unattended-monitoring permission.
-- **Monitor:** 26 adapters / 217 scoped occurrences / 48 scoped series. No PIF Monitor route was created. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` zero-scope findings remain review prompts rather than automation permission because the relevant source-governance holdings remain restricted/manual-only at this checkpoint.
-- **Live Intelligence:** 7 observations / 2 Canonical-linked. CK creates no PIF Live row. Europe, Latin America, North America and Oceania / Pacific remain useful coverage prompts, not quotas.
-- **Analysis:** 22 reviews / 1 production Live input / 1 production revision. PIF completion increases the pool of evidence-backed completed Canonical anchors, but it does not itself authorise a new Analysis review or a Live→Analysis bridge.
-- **BARMM:** remains a `PLANNED` 14 September 2026 election occurrence. Do not manufacture post-event analysis before authoritative completion/outcome evidence exists.
-- **OPEC CE:** remains excluded from ordinary candidate selection and untouched by CK.
+- **Canonical:** unchanged v0.42 / 689. The completed PIF anchor `WSO-INT-A-0001` remains byte-semantically unchanged by CL: 30 August–4 September 2026, `Pacific/Palau`, DAY precision, confirmed lifecycle completion from CK.
+- **Sources / Change Ledger / Monitor:** unchanged v2.04 / 258 sources, v0.28 / 63 changes and v0.28 / 26 Monitor adapters. CL creates no PIF Monitor route and acquires no automation permission from the Cook Islands evidence page.
+- **Live Intelligence:** v0.8 / 8 observations / 11 evidence / 3 Canonical-linked. CL adds exactly one `PRIMARY_CONFIRMED` `INSTITUTIONAL_DEVELOPMENT`, `WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001`, linked `OUTCOME_OF` the completed PIF anchor. Its factual scope is the Leaders' Retreat resolution of a Pacific-led framework for engagement with partners. It does not represent the whole Forum Communiqué and contains no Analysis fields.
+- **Fresh evidence correction:** CL excluded Waqa Moana after finding unreconciled institutional-status wording: the Australian PM release used `unanimously endorsed`, while indexed final-communiqué text used `agreed in principle` and noted further national consultations. The final Forum Secretariat PDF was not directly retrievable through the controlled automated path, so CL did not choose a stronger formulation or invent a reconciliation.
+- **Analysis:** unchanged 22 reviews / 1 production Live input / 1 production revision. The post-CL frontier now contains one completed linked Live observation without an Analysis review — PIF — but still **zero bridge-ready completed same-anchor candidates**. PIF is not automatically promoted into Analysis.
+- **BARMM:** remains linked pre-election context for the `PLANNED` 14 September 2026 occurrence; no post-event outcome or Analysis is manufactured before authoritative completion evidence.
+- **OPEC CE:** remains quarantined and excluded.
 
-CK's permanent transaction evidence is `data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md`. The successful guarded transaction also repaired a class of historical descendant tests that had frozen old Canonical/Source/Ledger checkpoints as permanent ceilings while preserving exact historical prestate tests.
+CL's permanent transaction evidence is `data/live_intelligence/PIF_PARTNER_FRAMEWORK_LIVE_CL_TRANSACTION_AUDIT_v0.1.md`. Successful guarded run `34436154025` passed exact-base gating, focused CL tests, all governed validators, derived-state consistency, **1,262 tests** with 68 historical-prestate skips, Python compilation, seven JavaScript checks, static build and bounded/protected-layer gates. Temporary write-capable scaffolding was removed after materialisation.
 
-### Post-CK re-audit — CL selected for fresh post-merge design
+### Post-CL pressure — CM selected for fresh post-merge design
 
-Read-only coverage run `34422209848` confirms that CK does not create a second Live→Analysis candidate: there are still zero unused completed same-anchor Live observations suitable for that bridge. The Monitor category zeroes remain blocked by source/rights posture, and the empty corporate/financial-market Analysis category remains a prompt rather than a queue.
+Read-only coverage run `34436436416` confirms Live is now 8 / 3 linked and removes Oceania / Pacific from the zero-Live prompt set. Europe, Latin America and North America remain prompts only. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` still have no configured Monitor scope, and `CORPORATE_FINANCIAL_MARKET_STRUCTURE` still has no Analysis review; none is a queue.
 
-Fresh first-party review of the completed PIF meeting establishes a stronger bounded next candidate: one factual **scheduled institutional outcome** observation linked `OUTCOME_OF` `WSO-INT-A-0001`. Cook Islands PMO reports that the Leaders' Retreat agreed a Pacific-led framework for engagement with partners and that the meeting's outcomes are captured in the 2026 Forum Communiqué; separate Australian ministerial material confirms an additional PIF-endorsed regional security initiative.
+The stronger current pressure is a capability weakness exposed by CL's source disagreement. Live already names `CONFLICTING_REPORTS`, `CORRECTED` and `RETRACTED`, but the executable contract is not mature enough for broader population: correction/retraction does not yet require correction-role evidence or later chronology, and conflicting-report state does not yet require distinct providers plus an explicit factual disagreement description.
 
-CL is therefore selected **for design after CK/#119 merges**, not for mutation on the CK branch. Selection basis:
+`data/coverage/POST_CL_PRESSURE_AUDIT_CM_v0.1.md` therefore selects **CM — Live correction / retraction / conflicting-report contract hardening** for fresh design only after CL is merged. CM should be a no-production-population foundation: strengthen schema/validator invariants and prove them with synthetic fixtures, while preserving all eight Live rows and eleven evidence rows. It must not reinterpret Waqa, create a synthetic conflict specimen, open public projection, create another Live→Analysis link, or mutate Canonical/Monitor/Analysis state.
 
-1. stable HIGH-importance Canonical anchor is now first-party evidence-backed `COMPLETED`;
-2. fresh primary outcome evidence is sufficiently specific for a factual Live observation;
-3. `OUTCOME_OF` would exercise a new Live contract: scheduled institutional outcome, distinct from the existing scheduled economic outcome and unlinked institutional-development specimens;
-4. it would broaden Live into Oceania / Pacific, but the region's zero count is supporting context rather than the selection rule;
-5. no market movement, causal attribution, surprise or Analysis judgement needs to be manufactured.
-
-Permanent selection evidence: `data/coverage/POST_CK_PRESSURE_AUDIT_CL_v0.1.md`.
-
-CL must begin from the exact then-current `main` after user merge and reverify official evidence and repository preconditions. CK does not pre-authorise the Live write, any PIF Monitor route, downstream Analysis, public projection, Canonical mutation or Calendar write.
+The post-CL audit also explicitly rejects two tempting shortcuts: creating a PIF Analysis review merely to manufacture a bridge target, and backfilling a mechanical market-structure event merely to erase the last Analysis category zero.
 
 ## Write and authority boundaries
 
