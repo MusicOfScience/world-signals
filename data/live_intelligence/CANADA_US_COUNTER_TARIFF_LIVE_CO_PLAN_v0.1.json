@@ -1,0 +1,133 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CO",
+  "reference_date": "2026-09-10",
+  "exact_base_main_sha": "b2b9e85933dd1c5924af1228f47427d6b38bf967",
+  "decision": "ADD_ONE_BOUNDED_CANADA_TRADE_POLICY_IMPLEMENTATION_LIVE_SPECIMEN",
+  "selection_source": "post-CN cross-layer audit plus fresh primary-source comparison",
+  "research_source": "data/live_intelligence/CANADA_US_COUNTER_TARIFF_LIVE_CO_RESEARCH_v0.1.md",
+  "target": {
+    "observation_id": "WSLI-TRD-CAN-US-SURTAX-20260908-001",
+    "evidence_ids": [
+      "WSEV-LI-CAN-FIN-USTARIFFS-20260825",
+      "WSEV-LI-CAN-CBSA-SURTAX-20260907"
+    ],
+    "observation_type": "POLICY_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "jurisdictions": [
+      "Canada"
+    ],
+    "regions": [
+      "North America"
+    ],
+    "domain_tags": [
+      "TRADE",
+      "ECONOMICS",
+      "GEOPOLITICS"
+    ],
+    "canonical_links_required": 0,
+    "primary_official_urls": [
+      "https://www.canada.ca/en/department-finance/news/2026/08/list-of-products-from-the-united-states-subject-to-counter-tariffs-effective-september-8-2026.html",
+      "https://www.cbsa.gc.ca/publications/cn-ad/cn26-23-eng.html"
+    ]
+  },
+  "pre_state": {
+    "canonical_registry_version": "0.42",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.04",
+    "source_count": 258,
+    "change_ledger_version": "0.28",
+    "change_ledger_count": 63,
+    "monitor_expectations_version": "0.28",
+    "monitor_adapter_count": 26,
+    "live_schema_version": "0.10",
+    "live_observation_count": 9,
+    "live_evidence_count": 12,
+    "canonical_linked_live_observation_count": 3,
+    "analysis_schema_version": "0.8",
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 1
+  },
+  "target_state": {
+    "live_schema_version": "0.11",
+    "live_observation_count": 10,
+    "live_evidence_count": 14,
+    "canonical_linked_live_observation_count": 3,
+    "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
+    "maximum_observation_count": 10,
+    "maximum_evidence_count": 14,
+    "automatic_ingestion_allowed": false,
+    "automatic_story_clustering_allowed": false,
+    "public_observation_projection_allowed": false,
+    "canonical_mutation_allowed": false,
+    "source_registry_mutation_allowed": false,
+    "change_ledger_mutation_allowed": false,
+    "monitor_mutation_allowed": false,
+    "calendar_mutation_allowed": false,
+    "analysis_mutation_allowed": false,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 1
+  },
+  "time_contract": {
+    "observed_at_utc": "2026-09-10T10:22:39Z",
+    "event_time_precision": "CIVIL_DATE",
+    "event_date": "2026-09-08",
+    "finance_source_publication_precision": "CIVIL_DATE",
+    "finance_source_published_date": "2026-08-25",
+    "cbsa_source_publication_precision": "CIVIL_DATE",
+    "cbsa_source_published_date": "2026-09-07",
+    "displayed_effective_clock_time_not_canonicalised": "12:01 a.m.",
+    "effective_clock_timezone_not_established_by_reviewed_finance_page": true,
+    "invented_event_utc_prohibited": true
+  },
+  "policy_status_contract": {
+    "live_claim": "CANADA_COUNTER_TARIFFS_APPLY_FROM_2026_09_08",
+    "rates": [15, 25, 50],
+    "finance_reported_import_scope_billion": 27.6,
+    "scope_currency_inferred_by_world_signals": false,
+    "single_rate_for_entire_scope_asserted": false,
+    "us_september_8_response_in_same_observation": false,
+    "manual_story_id_created": false,
+    "market_move_asserted": false,
+    "inflation_effect_asserted": false,
+    "trade_flow_effect_asserted": false,
+    "independent_legality_or_fairness_judgment_asserted": false
+  },
+  "authorised_governed_writes": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/status/current_state.json",
+    "README.md",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md"
+  ],
+  "protected_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "OPEC_QUARANTINE.md",
+    "tests/test_opec_quarantine_cf.py"
+  ],
+  "gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "public_live_observation_projection": false,
+    "automatic_live_ingestion": false,
+    "monitor_route_created": false,
+    "analysis_population_changed": false,
+    "correction_conflict_contract_weakened": false,
+    "us_response_collapsed_into_canada_observation": false,
+    "eleventh_live_observation_requires_new_pressure_audit": true
+  },
+  "manual_merge_only": true
+}
