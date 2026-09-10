@@ -33,7 +33,7 @@ jobs:
           git fetch origin main feature/post-co-ecb-monetary-outcome-cp
           test "$(git rev-parse origin/main)" = "e1f5c97c183381f7d29bf6957aecd87cacaa96a0"
           test "$(git merge-base HEAD origin/main)" = "e1f5c97c183381f7d29bf6957aecd87cacaa96a0"
-          test "$(git rev-parse HEAD^)" = "ea86cef2039db6a725e31e9c3ddc2a026c736979"
+          test "$(git rev-parse HEAD^)" = "fe84734481907d78178742989c4a2b4cf7a13341"
           test "$(git rev-parse origin/feature/post-co-ecb-monetary-outcome-cp)" = "$GITHUB_SHA"
 
       - name: Freeze protected hashes and exact pre-CP governed rows
