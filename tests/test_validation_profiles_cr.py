@@ -98,6 +98,25 @@ class ValidationProfileContractTests(unittest.TestCase):
         self.assertIn('"automatic_governed_write_authority": False', source)
         self.assertIn('"google_calendar_write_authority": False', source)
 
+    def test_ci_self_hosted_route_has_hosted_fallback_and_fork_guard(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        self.assertIn("WORLD_SIGNALS_VALIDATION_RUNNER", workflow)
+        self.assertIn("github.event.pull_request.head.repo.full_name == github.repository", workflow)
+        self.assertIn("'ubuntu-latest'", workflow)
+        self.assertIn("Fetch merge second parent for post-merge proof", workflow)
+        self.assertIn("actions/setup-python@v6", workflow)
+        self.assertIn("actions/setup-node@v7", workflow)
+        self.assertIn("node-version: '24'", workflow)
+
+    def test_duplicate_coverage_trigger_and_scheduled_monitor_regressions_stay_off(self):
+        coverage = (ROOT / ".github" / "workflows" / "coverage-audit.yml").read_text(encoding="utf-8")
+        self.assertIn("workflow_dispatch:", coverage)
+        self.assertNotIn("\n  pull_request:", coverage)
+        self.assertNotIn("\n  push:", coverage)
+
+        monitor = (ROOT / ".github" / "workflows" / "live-monitor.yml").read_text(encoding="utf-8")
+        self.assertIn("if: github.event_name != 'schedule'", monitor)
+
 
 if __name__ == "__main__":
     unittest.main()
