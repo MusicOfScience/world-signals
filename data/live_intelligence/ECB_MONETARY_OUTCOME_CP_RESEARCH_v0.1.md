@@ -1,10 +1,10 @@
-# CP — ECB monetary-policy outcome readiness research v0.2
+# CP — ECB monetary-policy outcome readiness research v0.3
 
 ## Status
 
 **READ-ONLY / POST-RELEASE EVIDENCE BLOCKED / NO OUTCOME POPULATION AUTHORISED**
 
-Reviewed after merge of PR #123 from exact `main` commit `e1f5c97c183381f7d29bf6957aecd87cacaa96a0` on 10 September 2026. Post-release recheck updated at approximately `2026-09-10T13:56Z` (`23:56` Australia/Melbourne).
+Reviewed after merge of PR #123 from exact `main` commit `e1f5c97c183381f7d29bf6957aecd87cacaa96a0` on 10 September 2026. Latest post-release recheck updated at approximately `2026-09-10T14:28Z` (`00:28` on 11 September Australia/Melbourne).
 
 ## Why CP was selected
 
@@ -67,7 +67,7 @@ The scheduled clock is not completion evidence. Elapsed time must never be used 
 
 ## Post-release authoritative recheck — 13:56Z
 
-The scheduled release point has now passed. Fresh official-domain checks were run against:
+The scheduled release point had passed. Fresh official-domain checks were run against:
 
 - the ECB weekly schedule, which still records the 10 September monetary-policy meeting and the scheduled 14:15 decision publication;
 - the ECB press-conference surface for 10 September, which at review time still rendered pre-release wording and the previously effective 17 June rates;
@@ -76,7 +76,27 @@ The scheduled release point has now passed. Fresh official-domain checks were ru
 
 At approximately `2026-09-10T13:56Z`, the reviewed official ECB web/search surfaces still did **not** expose a retrievable 10 September monetary-policy decision press release or monetary-policy statement. Exact searches continued to resolve earlier 2026 decision releases rather than the 10 September outcome.
 
-This is treated as an authoritative-retrieval/indexing gap, **not** as evidence that the Governing Council made no decision and **not** as permission to infer completion from schedule passage.
+This was treated as an authoritative-retrieval/indexing gap, **not** as evidence that the Governing Council made no decision and **not** as permission to infer completion from schedule passage.
+
+## Second primary-source recheck — 14:28Z
+
+A broader first-party sweep was then performed rather than lowering the evidence threshold.
+
+The ECB official decision index still exposed 23 July 2026 as the latest retrievable monetary-policy decision. The 10 September press-conference surface still rendered pre-release wording and the previously effective 17 June rates, while the ECB weekly schedule continued to record the 10 September decision publication, press conference and later macroeconomic-projection publication.
+
+A separate official ECB television-downlink page was retrievable for the Berlin press conference and documented the planned 10 September transmission window, including the 14:45–15:45 live press conference and a later rough-cut transmission. This is useful corroboration of the scheduled media operation but is **not** substituted for the missing decision text and does not independently establish the monetary-policy outcome.
+
+The ECB also publishes an official press RSS feed at:
+
+`https://www.ecb.europa.eu/rss/press.html`
+
+That route is a potentially valuable primary fallback because its stated scope includes ECB press releases and press-conference material. The current research toolchain could identify the route but could not inspect the RSS payload because the retrieval path rejected the RSS MIME type. This is recorded as a tooling/retrieval limitation, not as evidence that the feed lacked a 10 September item.
+
+A bounded Eurosystem-member cross-check was also made. Deutsche Bundesbank first-party material confirms that the 9–10 September meeting was hosted in Berlin and scheduled a 10 September press conference, but the reviewed result surface did not expose the monetary-policy outcome. Banque de France's current policy-rate page still described 23 July as the latest Governing Council decision and 10 September as the next decision, again indicating stale propagation rather than reliable negative evidence.
+
+Repeated exact official-domain searches for the expected 10 September publication prefixes and decision wording did not surface a current ECB release. Because these searches were now reproducing the same stale primary surfaces, further identical search retries were judged low-value unless a new first-party route or fresh indexing state becomes available.
+
+The conclusion therefore remains fail-closed: **the outcome likely occurred, but CP still lacks directly retrievable competent primary evidence for the exact outcome payload.**
 
 ## Secondary reporting observed but not admitted as CP outcome evidence
 
@@ -141,4 +161,4 @@ CP remains no-write or must be reselected if any of the following holds on fresh
 
 CP remains substantively well selected, but it is **BLOCKED ON PRIMARY ECB OUTCOME RETRIEVAL AND NOT READY FOR GOVERNED OUTCOME POPULATION**.
 
-The stable identity, timing, source roles and lifecycle boundary are resolved. Secondary reporting is explicitly quarantined from production evidence. No Canonical, Source Registry, Change Ledger, Monitor, Live, Analysis, Calendar or OPEC-quarantine governed state is authorised to change from this recheck alone.
+The stable identity, timing, source roles and lifecycle boundary are resolved. The official RSS fallback and bounded Eurosystem-member cross-check are now preserved so future recovery does not repeat the same retrieval dead ends. Secondary reporting remains explicitly quarantined from production evidence. No Canonical, Source Registry, Change Ledger, Monitor, Live, Analysis, Calendar or OPEC-quarantine governed state is authorised to change from these rechecks alone.
