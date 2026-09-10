@@ -1,0 +1,97 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CP",
+  "reference_date": "2026-09-10",
+  "canonical_lifecycle": {
+    "occurrence_id": "WSO-ad4d0618a65059f2",
+    "series_id": "WS.CB.ECB.MONETARY_POLICY_DECISION",
+    "source_assertion_id": "WSA-CP-19be487885570ab9",
+    "completion_source_id": "WSSRC-CB-004",
+    "completion_url": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html",
+    "completion_basis": "ECB first-party decision publication states that the Governing Council decided on 10 September 2026 to raise all three key ECB interest rates by 25 basis points. The ECB press RSS feed timestamps that decision publication at 14:15 +0200. Completion is established by the published decision, not by elapsed schedule time.",
+    "new_lifecycle_status": "COMPLETED",
+    "last_verified_at": "2026-09-10",
+    "related_document": {
+      "source_id": "WSSRC-CB-004",
+      "role": "COMPLETION_AND_OUTCOME_CONFIRMATION",
+      "source_locator": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html"
+    },
+    "notes": "Decision occurrence only. Meeting window, press conference, projections/reports and minutes/accounts remain separate linked series. Completion is verified from the ECB's 10 September 2026 first-party monetary-policy decision publication; Canonical timing remains unchanged."
+  },
+  "change_ledger": {
+    "change_id": "WSCHANGE-e94c7fb7c8d8bd02",
+    "occurrence_id": "WSO-ad4d0618a65059f2",
+    "change_type": "LIFECYCLE_COMPLETION",
+    "old_values": {
+      "lifecycle_status": "PLANNED",
+      "last_successful_assertion_id": "WSA-901c19618e13196f"
+    },
+    "new_values": {
+      "lifecycle_status": "COMPLETED",
+      "last_successful_assertion_id": "WSA-CP-19be487885570ab9"
+    },
+    "source_assertion_id": "WSA-CP-19be487885570ab9",
+    "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+    "reviewed_at": "2026-09-11T02:03:10+10:00",
+    "review_basis": [
+      "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html",
+      "https://www.ecb.europa.eu/rss/press.html",
+      "ECB first-party decision publication states that the Governing Council raised all three key ECB interest rates by 25 basis points and sets the new rates effective 16 September 2026.",
+      "The ECB press RSS item timestamps the decision publication at 14:15 +0200 on 10 September 2026, matching the existing Canonical decision clock; publication evidence establishes completion independently of elapsed time.",
+      "Stable occurrence, series, schedule-source identity and every Canonical timing field are preserved.",
+      "The outcome publication is competent curated provenance under existing WSSRC-CB-004 governance; no automated Monitor permission is inferred."
+    ],
+    "commit_mode": "REVIEWED_ECB_MONETARY_LIFECYCLE_COMPLETION_CP",
+    "committed_at": "2026-09-11T02:03:10+10:00",
+    "registry_version_before": "0.42",
+    "registry_version_after": "0.43",
+    "canonical_mutation_committed": true,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-ECB-MP-20260910",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Central Bank",
+      "title": "Monetary policy decisions",
+      "url": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html",
+      "roles": ["FACTUAL_OBSERVATION", "SOURCE_CONFIRMATION"],
+      "publication_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "published_at_utc": "2026-09-10T12:15:00Z"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "ECB first-party decision page states that all three key interest rates were raised by 25 basis points, to 2.50% for the deposit facility, 2.65% for main refinancing operations and 2.90% for the marginal lending facility, effective 16 September 2026. Exact publication time is supplied by the ECB's own press RSS item for this exact decision URL. Live evidence does not alter Canonical timing or provenance."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-MON-ECB-RATES-20260910-001",
+    "observed_at_utc": "2026-09-10T16:03:10Z",
+    "observation_type": "POLICY_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "ECB raises all three key interest rates by 25 basis points",
+    "summary": "The European Central Bank announced on 10 September 2026 that the Governing Council raised all three key ECB interest rates by 25 basis points. The deposit facility rate, main refinancing operations rate and marginal lending facility rate will be 2.50%, 2.65% and 2.90% respectively from 16 September 2026. This observation records the official rate decision only; it does not encode staff projections, expectations, surprise, market reaction, press-conference interpretation or causal analysis.",
+    "domain_tags": ["ECONOMICS", "MARKETS"],
+    "jurisdictions": ["Euro area"],
+    "regions": ["Europe"],
+    "evidence_refs": ["WSEV-LI-ECB-MP-20260910"],
+    "canonical_links": [
+      {
+        "occurrence_id": "WSO-ad4d0618a65059f2",
+        "relationship": "OUTCOME_OF"
+      }
+    ],
+    "revision_of_observation_id": null,
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "scope_exclusions": [
+    "ECB staff macroeconomic projections are not folded into this decision observation.",
+    "The monetary-policy statement and press-conference Q&A are corroborating/explanatory material, not separate CP production observations.",
+    "No analyst expectation or surprise classification is encoded.",
+    "No asset-price move or causal attribution is encoded.",
+    "No change is made to the existing Canonical native time, timezone, UTC time, precision, certainty, importance or sensitivity fields.",
+    "No Source Registry, Monitor, Analysis, Calendar, public projection or OPEC-quarantine mutation is authorised."
+  ]
+}
