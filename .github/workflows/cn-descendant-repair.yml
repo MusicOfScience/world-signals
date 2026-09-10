@@ -33,7 +33,11 @@ jobs:
           test "$(git merge-base HEAD origin/main)" = "9386114de527b117987058cb1b9cd98066dab8e4"
 
       - name: Apply reviewed descendant-safe test repairs
-        run: python scripts/cn_descendant_repair_tmp.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/cn_descendant_repair_tmp.py
+          git checkout -- .github/workflows/cn-brazil-fuel-policy-live-transaction.yml
 
       - name: Verify focused historical and CN contracts
         shell: bash
@@ -43,46 +47,28 @@ jobs:
           python -m unittest discover -s tests -p 'test_nepal_rasuwa_flood_live_intelligence_aw.py' -v
           python -m unittest discover -s tests -p 'test_brazil_fuel_policy_live_cn.py' -v
 
-      - name: Remove repair machinery and enforce repair boundary
+      - name: Enforce test-only repair boundary
         shell: bash
         run: |
           set -euo pipefail
-          rm scripts/cn_descendant_repair_tmp.py
-          rm .github/workflows/cn-descendant-repair.yml
           python - <<'PY'
           import subprocess
           allowed = {
               'tests/test_live_correction_conflict_cm.py',
               'tests/test_nepal_rasuwa_flood_live_intelligence_aw.py',
-              '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
-              'scripts/cn_descendant_repair_tmp.py',
-              '.github/workflows/cn-descendant-repair.yml',
           }
           rows = subprocess.check_output(['git','status','--porcelain'], text=True).splitlines()
           changed = {row[3:] for row in rows if row.strip()}
-          unexpected = sorted(changed - allowed)
-          if unexpected:
-              raise SystemExit(f'CN descendant repair touched unexpected paths: {unexpected}')
-          required = {
-              'tests/test_live_correction_conflict_cm.py',
-              'tests/test_nepal_rasuwa_flood_live_intelligence_aw.py',
-              '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
-              'scripts/cn_descendant_repair_tmp.py',
-              '.github/workflows/cn-descendant-repair.yml',
-          }
-          missing = sorted(required - changed)
-          if missing:
-              raise SystemExit(f'CN descendant repair missing expected paths: {missing}')
+          if changed != allowed:
+              raise SystemExit(f'CN descendant repair diff must be exactly {sorted(allowed)}, got {sorted(changed)}')
           PY
-          test ! -e scripts/cn_descendant_repair_tmp.py
-          test ! -e .github/workflows/cn-descendant-repair.yml
 
-      - name: Commit reviewed descendant repair and retrigger CN transaction
+      - name: Commit reviewed descendant test repair
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'world-signals-cn-repair'
           git config user.email 'actions@users.noreply.github.com'
-          git add -A
+          git add tests/test_live_correction_conflict_cm.py tests/test_nepal_rasuwa_flood_live_intelligence_aw.py
           git commit -m 'CN: make historical Live tests descendant-safe'
           git push origin HEAD:feature/post-cm-brazil-fuel-policy-live-cn
