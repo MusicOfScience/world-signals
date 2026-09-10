@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.7",
+  "version": "0.8",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through CG. Live evidence remains separate from Canonical provenance and Analysis evidence; public observation projection remains closed.",
+  "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through CL. CL adds one primary-official Cook Islands post-event evidence row for the PIF partner-engagement framework outcome; Live evidence remains separate from Canonical provenance and Analysis evidence, and public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -176,6 +176,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Official Philippine government information-agency reporting that GPH representatives, MILF ground commanders and other stakeholders signed ceasefire-related coordination guidelines and a pledge for a peaceful electoral process ahead of the 14 September 2026 BARMM parliamentary election. The page does not supply a source-native exact date/time for the signing beyond describing it as recent, so CG does not manufacture event_time."
+    },
+    {
+      "evidence_id": "WSEV-LI-PIF-COOKPM-PARTNERS-20260904",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Government of the Cook Islands — Office of the Prime Minister",
+      "title": "Prime Minister concludes 55th Pacific Islands Forum Leaders Meeting",
+      "url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-04"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official member-government post-event evidence. It states that the Leaders’ Retreat resolved the framework guiding Pacific engagement with partners and describes the approach as transparent, accountable and Pacific-led in support of the 2050 Strategy. CL uses this page as reviewed factual evidence only; it does not grant the source unattended-monitoring authority or alter Canonical provenance."
     }
   ]
 }

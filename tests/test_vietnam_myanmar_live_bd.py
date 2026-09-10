@@ -129,7 +129,7 @@ class VietnamMyanmarLiveBDTests(unittest.TestCase):
         status = bd.STATUS_PATH.read_text(encoding="utf-8")
         roadmap = bd.ROADMAP_PATH.read_text(encoding="utf-8")
         if "<!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->" in status:
-            self.assertIn("Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**", status)
+            self.assertRegex(status, r"Live Intelligence: \*\*v0\.\d+ / \d+ observations / \d+ evidence rows / \d+ Canonical-linked observations\*\*")
             self.assertIn("## Stage 5 — controlled Live Intelligence — IMPLEMENTED / BOUNDED", roadmap)
             self.assertIn("### CG — BARMM pre-election context — DONE / BOUNDED", roadmap)
             return

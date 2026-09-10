@@ -12,7 +12,7 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.8 / 8 observations / 11 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.

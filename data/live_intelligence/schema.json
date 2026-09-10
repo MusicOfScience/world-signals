@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.7",
+  "version": "0.8",
   "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -224,7 +224,13 @@
     "CG Live evidence has no Canonical provenance or timing authority; the COMELEC-governed 14 September 2026 election identity remains unchanged.",
     "CG does not infer a real-world signing timestamp from a 9 September publication date or the source wording 'recently'.",
     "Public observation projection, automatic ingestion, automatic Canonical commit and Google Calendar writes remain prohibited in CG v0.7.",
-    "An eighth Live observation, automatic context linking, second production Live-to-Analysis link, further Analysis revision or NHC Monitor activation requires another pressure audit."
+    "CG v0.7 remains the frozen seven-observation/ten-evidence checkpoint; CL is the separately pressure-audited eighth observation.",
+    "CL v0.8 adds one primary-confirmed PIF INSTITUTIONAL_DEVELOPMENT linked OUTCOME_OF WSO-INT-A-0001 and bounded to the partner-engagement framework outcome.",
+    "CL excludes Waqa Moana from the Live payload because fresh research found unreconciled stronger Australian official wording and more qualified indexed final-communiqué wording; no stronger institutional status is silently selected.",
+    "CL does not manufacture event_time from a post-event publication date or collapse the multi-day Canonical occurrence into a synthetic clock/range.",
+    "CL Live evidence has no Canonical provenance, Monitor-route or Analysis-population authority.",
+    "Public observation projection, automatic ingestion, automatic Canonical commit and Google Calendar writes remain prohibited in CL v0.8.",
+    "A ninth Live observation, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -237,15 +243,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_INSTITUTIONAL_SPECIMEN",
+    "mode": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 7,
-    "maximum_evidence_count": 10,
+    "maximum_observation_count": 8,
+    "maximum_evidence_count": 11,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CG adds exactly one pressure-audited BARMM pre-election INSTITUTIONAL_DEVELOPMENT linked CONTEXT_FOR the existing 14 September 2026 Canonical election occurrence."
+    "reason": "CL adds exactly one pressure-audited PIF scheduled institutional outcome linked OUTCOME_OF the completed 55th Pacific Islands Forum Leaders Meeting."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -296,5 +302,15 @@
     "evidence_count": 10,
     "base_main_sha": "6c96794cb553c6b34df93536141340c2af8db44a",
     "historical_contract": "CG adds one reviewed Southeast Asia elections-context Live observation and exercises CONTEXT_FOR without changing Canonical, Monitor or Analysis state."
+  },
+  "cl_checkpoint": {
+    "schema_version": "0.8",
+    "observations_version": "0.8",
+    "evidence_version": "0.8",
+    "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
+    "observation_count": 8,
+    "evidence_count": 11,
+    "base_main_sha": "aef4642863438e2170ae9a49160b7368c850b819",
+    "historical_contract": "CL preserves the completed PIF Canonical identity and adds one reviewed factual partner-engagement-framework outcome through OUTCOME_OF without changing Canonical, Monitor or Analysis state."
   }
 }
