@@ -64,7 +64,7 @@ A `main` push may use the lightweight post-merge profile only when Git proves th
 - the head is a conventional two-parent merge; and
 - the merge tree is byte-identical to parent 2, the reviewed PR head.
 
-If this cannot be proved, the push escalates to `FULL`.
+The workflow explicitly fetches the second parent before classification so a shallow checkout cannot accidentally make that proof impossible. If equivalence still cannot be proved, the push escalates to `FULL`.
 
 ### Workflow consolidation
 
@@ -75,6 +75,18 @@ CR also:
 - leaves the standalone coverage workflow available only for deliberate manual diagnostics;
 - removes daily regression-test repetition from scheduled monitor polls while retaining those tests on code/configuration-triggered and manual monitor runs;
 - leaves Pages and the daily monitor schedule themselves unchanged.
+
+### Optional self-hosted validation
+
+Ordinary validation defaults to GitHub-hosted `ubuntu-latest`. The repository variable `WORLD_SIGNALS_VALIDATION_RUNNER` may instead contain a dedicated self-hosted label such as `world-signals-validation`.
+
+This redirect applies only to the ordinary validation job. Scheduled Monitor and Pages workflows remain GitHub-hosted.
+
+The workflow has an explicit trust boundary: a configured local label may be used for same-repository pull requests, pushes and manual runs, but a future fork pull request always falls back to `ubuntu-latest`. This avoids executing untrusted fork workflow content on a local machine merely because the repository variable is set.
+
+Python 3.13 is provisioned for every profile; Node 24 is provisioned only for `FULL`. GitHub's current `actions/setup-node` release was independently checked during CR design and v7 is current as of 2026-09-11 research time.
+
+Operational instructions are in `SELF_HOSTED_VALIDATION.md`. Registration tokens and GitHub-generated runner setup commands are intentionally not stored in the repository.
 
 ## Structural savings
 
@@ -87,6 +99,8 @@ For a governed/code PR, the expensive historical suite should normally run once 
 When multiple commits are pushed while one PR validation is still executing, the obsolete run is cancelled.
 
 The daily live monitor keeps one scheduled runner but no longer rebuying its regression suite on a routine poll reduces execution time inside that runner.
+
+A self-hosted validation runner can additionally move ordinary validation execution off the metered GitHub-hosted pool without making self-hosting an architectural dependency. Removing the repository runner variable returns validation to `ubuntu-latest` with no code change.
 
 These are structural reductions, not a promise of a fixed monthly minute count. Guarded transactions, deliberate live-source probes and manual workflows remain real compute costs and must still be justified by their tranche contracts.
 
@@ -110,9 +124,23 @@ No profile has Canonical, Calendar, Live, Analysis or public-projection write au
 
 A GitHub Actions hosted-runner admission failure remains a failed merge gate. CR does not convert an unexecuted job into a success.
 
+A successful trusted self-hosted execution of the ordinary exact-head workflow is ordinary CI evidence, not a weaker validation class. A manual terminal run remains development/preflight evidence unless a later reviewed policy changes the handoff contract.
+
+## Repository-input review
+
+CR inspected the current validation/build input graph before permitting the research fast path:
+
+- `scripts/build_site.py` reads governed JSON and web assets, not arbitrary research Markdown;
+- `scripts/run_coverage_audit.py` reads Canonical and Source Registry JSON;
+- `scripts/run_cross_layer_coverage_audit.py` reads Canonical, Monitor, Live and Analysis JSON;
+- `scripts/project_state_snapshot.py` reads governed JSON plus the marked current-state blocks in README/PROJECT_STATUS/ROADMAP;
+- repository search found no generic `glob`/`rglob` ingestion of arbitrary Markdown research files.
+
+Because historical tests/contracts may still reference specific already-merged research records, the fast path was deliberately narrowed from “added or modified research Markdown” to **net-new research Markdown only**. A new research path that is already literally referenced by tracked non-Markdown content also escalates to `FULL`.
+
 ## Local preflight completed during CR design
 
-Before repository validation is available, the new classifier/contract was exercised in a temporary local Git repository:
+Before repository validation is available, an earlier version of the new classifier/contract was exercised in a temporary local Git repository:
 
 - net-new approved research Markdown -> `SAFE_RESEARCH_DOCS`;
 - ordinary/unknown Markdown -> `FULL`;
@@ -120,14 +148,26 @@ Before repository validation is available, the new classifier/contract was exerc
 - conventional merge with head tree equal to parent 2 -> `POST_MERGE`;
 - non-equivalent merge -> `FULL`.
 
-The CR unit module also passed seven local contract tests covering safe-path recognition, fail-closed escalation, merge-tree classification, full-profile contents and write-gate absence. The three edited YAML workflow files were parsed successfully as YAML.
+The initial CR unit module passed seven local contract tests and the three edited YAML workflow files parsed successfully as YAML before the later self-hosted/fork-guard and workflow-wiring assertions were added.
 
-These local checks are **development evidence only**. They are not a substitute for the required final-head GitHub Actions run under `HANDOFF_PROTOCOL.md`.
+The **current expanded branch test module has not yet been represented as a completed repository validation run**. It now also asserts that:
+
+- self-hosted validation retains the `ubuntu-latest` fallback and same-repository/fork trust guard;
+- the post-merge workflow explicitly fetches parent 2;
+- standalone coverage has no automatic `pull_request` or `push` trigger;
+- scheduled Monitor polling does not run the regression-test step.
+
+These development checks and code reviews are not substitutes for the required final-head `FULL` run under `HANDOFF_PROTOCOL.md`.
 
 ## Activation / handoff
 
 Do not open a PR merely to consume a hosted-runner attempt while hosted execution is unavailable.
 
-When runner capacity is available again, CR should be opened from its exact branch head and must receive `FULL` ordinary validation because the tranche changes workflow, executable validation code, tests and merge-governance documents. Only after that exact-head run, integrated coverage evidence and structural diff/residue review pass may CR receive a `MERGE NOW` handoff.
+There are two valid activation routes:
+
+1. wait until GitHub-hosted runner capacity is available again; or
+2. configure the optional repository-level self-hosted validation runner under `SELF_HOSTED_VALIDATION.md` and set `WORLD_SIGNALS_VALIDATION_RUNNER` to its trusted label.
+
+Once one route is executable, CR should be opened from its exact branch head and must receive `FULL` ordinary validation because the tranche changes workflow, executable validation code, tests and merge-governance documents. Only after that exact-head run, integrated coverage evidence and structural diff/residue review pass may CR receive a `MERGE NOW` handoff.
 
 After CR merges, the blocked CQ research PR can be reconciled onto the new `main`; because its intended net change is two newly added unreferenced research Markdown files, it should then be eligible for `SAFE_RESEARCH_DOCS` if and only if the exact-head classifier independently proves that state.
