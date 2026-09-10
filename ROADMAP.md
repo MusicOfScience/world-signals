@@ -218,34 +218,62 @@ PIF is not bridge-ready. No same-anchor Analysis review exists, and the current 
 
 The stronger pressure is correction/conflict handling. CL's Waqa source disagreement demonstrates why named verification states are insufficient without executable semantics. The permanent pressure decision is `data/coverage/POST_CL_PRESSURE_AUDIT_CM_v0.1.md`.
 
-### Stage 10F — CM Live correction / retraction / conflicting-report contract hardening — NEXT AFTER CL MERGE
+### Stage 10F — CM Live correction / retraction / conflicting-report contract hardening — DONE / GUARDED
 
-CM is selected for **fresh post-merge design** and should add no production observation merely to exercise the contract.
+CM starts from exact merged #120 main `1e4a6bbc8670fc36a452740401461f28e313c031` and hardens the executable Live correction/retraction/conflict grammar **without production population**.
 
-Minimum CM pressure:
+Result:
 
-1. start from exact then-current post-CL `main`;
-2. preserve all eight current Live observations and eleven evidence rows unless an explicitly reviewed schema migration requires otherwise;
-3. keep state updates distinct from corrections/retractions and preserve external `DATA_REVISION` semantics;
-4. require `CORRECTED` / `RETRACTED` observations to reference the prior observation and at least one evidence row carrying `CORRECTION_OR_REVISION`;
-5. require correction/retraction observation time to be later than its revision target;
-6. retain self-reference and revision-cycle prohibitions;
-7. design a bounded `CONFLICTING_REPORTS` contract requiring multiple evidence records from distinct providers plus an explicit factual description of the disagreement;
-8. never require a conflicting-report state to choose a winner or manufacture consensus;
-9. prove valid/invalid shapes with synthetic fixtures rather than creating a production conflict/retraction row for coverage;
-10. treat Waqa as motivating historical evidence only; do not reinterpret or populate it automatically;
-11. keep Canonical, Sources, Change Ledger, Monitor, Analysis, Calendar/public projection and OPEC quarantine unchanged;
-12. keep automatic ingestion, automatic Canonical commit, automatic Monitor→Live and automatic Live→Analysis closed.
+- Live contract metadata advances from v0.8 to **v0.9** while remaining exactly **8 observations / 11 evidence rows / 3 Canonical-linked observations**;
+- every production observation and evidence object is preserved exactly from the merged CL base;
+- `CORRECTED` / `RETRACTED` now require an explicit prior Live target, `CORRECTION_OR_REVISION` evidence and strictly later `observed_at_utc`;
+- `CONFLICTING_REPORTS` now requires at least two unique evidence records from at least two distinct normalised providers plus a factual `conflict_description`;
+- Live does not choose a winning source or manufacture consensus from disagreement;
+- `DATA_REVISION` remains the separate external-data revision concept and does not require synthetic prior Live history;
+- no production conflict/correction/retraction row is added and Waqa Moana remains un-reinterpreted historical pressure evidence;
+- automatic ingestion, public Live projection, Canonical/Calendar write and automatic downstream promotion remain closed.
 
-The precise field shape for conflict description remains a CM design question, not a pre-authorised schema decision.
+Guarded run `34441432538` / job `102757107224` passed on its first attempt, including **1,276 tests / 68 historical-prestate skips**, all governed validators, derived-state consistency, compilation, seven JavaScript checks, static build, exact production-row invariance, protected-layer nonmutation and bounded final diff. Temporary transaction machinery removed itself before commit. Permanent evidence is `data/live_intelligence/LIVE_CORRECTION_CONFLICT_CM_TRANSACTION_AUDIT_v0.1.md`.
 
-### Stage 10G — further broadening / deepening — AFTER CM AUDIT
+### Stage 10G — post-CM pressure re-audit — DONE / CN SELECTED
 
-After CM, rerun pressure rather than treating Europe, Latin America, North America, corporate/market Analysis or PIF bridge potential as a FIFO queue. Candidate classes remain evidence-driven Live expansion, rights-cleared Monitor expansion, identity-aware Canonical/source repair, independently justified Analysis, valid same-anchor Live→Analysis, or evidence-driven Analysis revision.
+Read-only coverage run `34441643238` confirms CM changed capability rather than population:
 
-BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
+- Canonical remains 689 occurrences / 203 series;
+- Monitor remains 26 adapters / 217 scoped occurrences / 48 series;
+- Live remains 8 observations / 3 Canonical-linked;
+- Analysis remains 22 reviews / 1 production Live input / 1 production revision;
+- PIF remains one completed linked observation without an Analysis review;
+- no unused completed same-anchor Analysis target exists;
+- BARMM remains linked to a non-completed 14 September occurrence;
+- Europe, Latin America and North America remain zero-Live prompts, not queues;
+- Monitor and market-structure Analysis zeroes remain non-authorising prompts.
 
-Broader population must continue to establish geographic/domain balance, noise controls, retention and provenance; CM specifically addresses correction/retraction/conflict handling before any high-volume Live ingest is considered. Platform independence remains mandatory.
+The qualitative pressure review compared current North American trade escalation and European oil-security context with a 9 September Brazilian fuel-policy intervention. It selects **CN — Brazil fuel-policy Live broadening** because the Brazilian development is independently important and exercises a novel unscheduled cross-domain combination: fiscal/tax policy + fuel/commodity shock + government-stated geopolitical context in Latin America. Regional diversification is a benefit, not a quota rule.
+
+The selection remains conditional on a fresh post-CM-merge legal-status check. At review time, the Brazilian Finance Ministry announcement clearly supports an announced/adopted policy-development claim, but the complete final legal-instrument trail was not yet cleanly retrievable. CN must not silently upgrade announcement language to `in force`, invent legal numbering, manufacture exact source/event UTC timing or claim observed consumer-price/inflation effects.
+
+Permanent selection evidence is `data/coverage/POST_CM_PRESSURE_AUDIT_CN_v0.1.md`.
+
+### Stage 10H — CN Brazil fuel-policy Live broadening — NEXT AFTER CM MERGE
+
+CN is selected for **fresh post-merge design**, not pre-written population.
+
+Minimum CN pressure:
+
+1. start from exact then-current post-CM `main`;
+2. freshly recheck Ministério da Fazenda, Presidency/Planalto and Diário Oficial sources for the 9 September fuel package, including corrections, legal numbers and effective status;
+3. revise or abandon the candidate if the post-merge evidence materially changes the package;
+4. if retained, keep the Live claim bounded to what competent first-party evidence supports — likely an unscheduled `POLICY_DEVELOPMENT` for Brazil rather than an invented Canonical occurrence;
+5. preserve event time no finer than the supported civil date unless a competent source establishes a source-native clock;
+6. do not promote the source page's displayed `18h47` to exact UTC without a competently established timezone;
+7. distinguish the government's stated geopolitical/oil-shock rationale from WORLD SIGNALS causal attribution;
+8. do not claim consumer prices fell, inflation changed, fuel supply improved or markets moved without separate evidence;
+9. create no Monitor route or automation permission from public accessibility;
+10. keep Analysis population and public projection closed;
+11. preserve the CM correction/conflict contract and OPEC CE quarantine.
+
+Canada–U.S. tariff escalation and EU oil-security context remain valid future Live candidates. They are deferred, not discarded, and should be reconsidered by later pressure rather than appended automatically.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
