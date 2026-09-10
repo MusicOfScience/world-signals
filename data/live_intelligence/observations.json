@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.11",
+  "version": "0.12",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
+  "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -307,7 +307,37 @@
       },
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-MON-ECB-RATES-20260910-001",
+      "observed_at_utc": "2026-09-10T16:03:10Z",
+      "observation_type": "POLICY_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "ECB raises all three key interest rates by 25 basis points",
+      "summary": "The European Central Bank announced on 10 September 2026 that the Governing Council raised all three key ECB interest rates by 25 basis points. The deposit facility rate, main refinancing operations rate and marginal lending facility rate will be 2.50%, 2.65% and 2.90% respectively from 16 September 2026. This observation records the official rate decision only; it does not encode staff projections, expectations, surprise, market reaction, press-conference interpretation or causal analysis.",
+      "domain_tags": [
+        "ECONOMICS",
+        "MARKETS"
+      ],
+      "jurisdictions": [
+        "Euro area"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-ECB-MP-20260910"
+      ],
+      "canonical_links": [
+        {
+          "occurrence_id": "WSO-ad4d0618a65059f2",
+          "relationship": "OUTCOME_OF"
+        }
+      ],
+      "revision_of_observation_id": null,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CO: ten observations. CO adds one primary-confirmed Canadian counter-tariff implementation with zero Canonical links; separate U.S. response actions, causal attribution, market effects and story grouping remain outside the observation. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CP: eleven observations. CP adds one primary-confirmed ECB rate-decision outcome linked to the completed scheduled Canonical decision occurrence. Projections, expectations, surprise, market attribution and Analysis remain outside the observation; public projection and automatic ingestion remain closed."
 }

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.11",
+  "version": "0.12",
   "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -273,7 +273,13 @@
     "CO makes no independent legality/fairness judgment and no observed price, inflation, trade-flow, currency, equity or other market-effect claim.",
     "CO creates no Canonical occurrence, Source Registry authority, Monitor route or Analysis review; automatic ingestion, automatic Canonical commit, Google Calendar writes and public Live projection remain prohibited.",
     "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CO v0.11.",
-    "An eleventh Live observation, U.S. response specimen, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
+    "CO v0.11 remains the frozen ten-observation/fourteen-evidence checkpoint; CP is the separately pressure-audited eleventh observation.",
+    "CP v0.12 adds one PRIMARY_CONFIRMED ECB POLICY_DEVELOPMENT linked OUTCOME_OF WSO-ad4d0618a65059f2 after a separately auditable first-party lifecycle completion of that existing Canonical decision occurrence.",
+    "CP records the 25-basis-point increase in all three key ECB interest rates and their 2.50%, 2.65% and 2.90% levels effective 16 September 2026; staff projections and press-conference interpretation remain outside the Live observation.",
+    "CP uses the ECB decision publication and exact ECB RSS publication timestamp as primary evidence; Live evidence has no authority to rewrite Canonical timing or source provenance.",
+    "CP creates no new ECB source identity or Monitor route and opens no automatic ingestion, Canonical, Calendar, Analysis or public-projection gate.",
+    "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CP v0.12.",
+    "A twelfth Live observation, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -286,15 +292,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
+    "mode": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 10,
-    "maximum_evidence_count": 14,
+    "maximum_observation_count": 11,
+    "maximum_evidence_count": 15,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CO adds exactly one pressure-audited Canadian counter-tariff implementation observation using two bounded primary-official evidence rows; U.S. response actions, Canonical creation, Monitor routing and Analysis remain outside the specimen."
+    "reason": "CP adds exactly one reviewed ECB rate-decision outcome linked OUTCOME_OF the separately completed scheduled Canonical occurrence, supported by one primary-official ECB evidence row."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -387,5 +393,17 @@
     "canonical_linked_observation_count": 3,
     "base_main_sha": "b2b9e85933dd1c5924af1228f47427d6b38bf967",
     "historical_contract": "CO adds one bounded Canadian trade-policy implementation observation while keeping the distinct U.S. response outside the row and preserving all upstream/downstream write boundaries."
+  },
+  "cp_checkpoint": {
+    "schema_version": "0.12",
+    "observations_version": "0.12",
+    "evidence_version": "0.12",
+    "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
+    "observation_count": 11,
+    "evidence_count": 15,
+    "canonical_linked_observation_count": 4,
+    "base_main_sha": "e1f5c97c183381f7d29bf6957aecd87cacaa96a0",
+    "canonical_occurrence_id": "WSO-ad4d0618a65059f2",
+    "historical_contract": "CP adds one bounded ECB rate-decision outcome only after first-party lifecycle completion, while preserving timing identity and all automatic/public gates."
   }
 }
