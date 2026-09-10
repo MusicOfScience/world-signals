@@ -236,13 +236,24 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
             )
             self.assertEqual(set(self.plan["protected_paths"]), set(BASE_PROTECTED_GIT_BLOBS))
             for path in self.plan["protected_paths"]:
-                if path.startswith("data/live_intelligence/") or path in {"data/sources/registry.json", "data/monitor/expectations.json"}:
+                if path.startswith("data/live_intelligence/") or path in {
+                    "data/canonical/registry.json",
+                    "data/sources/registry.json",
+                    "data/monitor/expectations.json",
+                    "data/changes/ledger.json",
+                }:
                     continue
                 self.assertEqual(
                     git_blob_hash(ROOT / path),
                     BASE_PROTECTED_GIT_BLOBS[path],
                     path,
                 )
+            canonical = load(ROOT / "data/canonical/registry.json")
+            ledger = load(ROOT / "data/changes/ledger.json")
+            self.assertGreaterEqual(tuple(map(int, canonical["version"].split("."))), (0, 41))
+            self.assertGreaterEqual(len(canonical["records"]), 689)
+            self.assertGreaterEqual(tuple(map(int, ledger["version"].split("."))), (0, 27))
+            self.assertGreaterEqual(len(ledger["changes"]), 62)
             source_registry = load(ROOT / "data/sources/registry.json")
             monitor = load(ROOT / "data/monitor/expectations.json")
             self.assertGreaterEqual(tuple(map(int, source_registry["version"].split("."))), tuple(map(int, self.plan["target_state"]["source_registry_version"].split("."))))

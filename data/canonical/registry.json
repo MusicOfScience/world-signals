@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.41",
-  "reference_date": "2026-09-07",
+  "version": "0.42",
+  "reference_date": "2026-09-10",
   "record_count": 689,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
@@ -34440,7 +34440,7 @@
       "record_class": "OCCURRENCE",
       "certainty_status": "CONFIRMED",
       "activation_mode": "EXPLICITLY_SCHEDULED",
-      "lifecycle_status": "ACTIVE",
+      "lifecycle_status": "COMPLETED",
       "condition_state": "NOT_REQUIRED",
       "condition_description": null,
       "trigger_source_id": null,
@@ -34463,21 +34463,36 @@
       "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
       "source_id": "WSSRC-INT-012",
       "primary_source_assertion_id": "WSA-99e20d013c0dc998",
-      "last_successful_assertion_id": "WSA-99e20d013c0dc998",
+      "last_successful_assertion_id": "WSA-CK-cb548530485b6f03",
       "status_history": [
         {
           "as_of": "2026-09-02",
           "certainty_status": "CONFIRMED",
           "lifecycle_status": "ACTIVE"
+        },
+        {
+          "as_of": "2026-09-10",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "Post-event completion verified from first-party Cook Islands PMO evidence; not inferred from elapsed time.",
+          "source_assertion_id": "WSA-CK-cb548530485b6f03",
+          "basis": "Cook Islands Office of the Prime Minister reported on 4 September 2026 that the Prime Minister concluded participation in the 55th Pacific Islands Forum Leaders Meeting and that Leaders' Retreat outcomes were captured in the 2026 Forum Communique. Completion is verified from this first-party post-event evidence, not inferred from elapsed time."
         }
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-10",
       "next_verification_due": "SOURCE_SPECIFIC",
       "parent_occurrence_id": null,
       "related_occurrence_ids": [],
-      "related_documents": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-INT-036",
+          "role": "COMPLETION_AND_OUTCOME_CORROBORATION",
+          "source_locator": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/"
+        }
+      ],
       "intrinsic_importance": "HIGH",
       "expected_market_sensitivity": "MEDIUM_HIGH",
       "geopolitical_sensitivity": "HIGH",
@@ -34502,7 +34517,7 @@
       "publication_bundle_type": "SINGLE_RELEASE",
       "render_cluster_key": null,
       "calendar_aggregation_policy": "STANDALONE",
-      "notes": "Spans the project reference date, therefore ACTIVE."
+      "notes": "The Palau host source continues to govern the 30 August–4 September 2026 civil-date range. Cook Islands PMO first-party post-event evidence verifies completion and Forum outcomes; completion is not inferred from elapsed time."
     },
     {
       "occurrence_id": "WSO-INT-A-0002",

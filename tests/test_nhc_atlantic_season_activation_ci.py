@@ -57,7 +57,8 @@ class NHCAtlanticSeasonActivationCITests(unittest.TestCase):
             self.assertIn("Stage 8 — recovery/status truth surfaces — DONE / GUARDED", new_roadmap)
         else:
             self.assertEqual(len(routes), 1)
-            self.assertEqual((sources["version"], len(sources["sources"])), ("2.03", 257))
+            self.assertGreaterEqual(tuple(map(int, sources["version"].split("."))), (2, 3))
+            self.assertGreaterEqual(len(sources["sources"]), 257)
             self.assertEqual((expectations["version"], len(expectations["adapters"])), ("0.28", 26))
 
     def test_post_route_is_exact_two_occurrence_review_only_sentinel(self):

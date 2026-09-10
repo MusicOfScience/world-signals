@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "TIER1_SOURCE_REGISTRY",
   "reference_date": "2026-09-10",
-  "version": "2.03",
+  "version": "2.04",
   "sources": [
     {
       "source_id": "WSSRC-CB-001",
@@ -11609,6 +11609,54 @@
         "followup_request_count": 0,
         "automatic_commit_allowed": false
       }
+    },
+    {
+      "source_id": "WSSRC-INT-036",
+      "institution": "Office of the Prime Minister, Cook Islands",
+      "jurisdiction": "Cook Islands",
+      "domain": "international_institutions",
+      "endpoint_role": "55th PIF Leaders Meeting post-event completion/outcome corroboration",
+      "authoritative_url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+      "source_type": "official_member_government_post_event_release",
+      "information_supplied": "First-party confirmation that participation in the 55th PIF Leaders Meeting concluded and that Leaders' Retreat outcomes were captured in the 2026 Forum Communique.",
+      "future_schedule_horizon": "historical 2026 completion evidence only",
+      "typical_advance_notice": "post-event publication",
+      "machine_readable_available": "HTML",
+      "source_timezone": "Pacific/Rarotonga",
+      "recommended_verification_cadence": "manual historical recheck only",
+      "activation_status": "ACTIVE_GUARDED",
+      "parser_type": "MANUAL_HTML_PROVENANCE",
+      "known_limitations": [
+        "Supporting post-event completion/outcome corroboration only; not forward schedule authority.",
+        "No general reuse licence or production automated-retrieval permission was established in CK."
+      ],
+      "backup_source": null,
+      "notes": "Supporting-only Cook Islands first-party completion evidence for WSO-INT-A-0001; zero primary Canonical dependencies.",
+      "timezone_scope": "FIXED",
+      "parser_version": null,
+      "runtime_health_state": "MANUAL_RESEARCH_ROUTE_VERIFIED_PRODUCTION_AUTOMATION_HOLD",
+      "licence_constraints": "ALL_RIGHTS_RESERVED_NO_GENERAL_REUSE_PERMISSION_IDENTIFIED",
+      "ingestion_permission": "CURATED_FACTUAL_METADATA_MANUAL_REFERENCE_ALLOWED",
+      "licence_review_status": "ALL_RIGHTS_RESERVED_NO_GENERAL_REUSE_PERMISSION_IDENTIFIED",
+      "automated_retrieval_permission": "PRODUCTION_AUTOMATION_HOLD",
+      "redistribution_permission": "NOT_CLEARED",
+      "monitoring_readiness_status": "RIGHTS_OR_LICENSE_HOLD",
+      "monitoring_priority_score": 0,
+      "canonical_dependency_count": 0,
+      "monitoring_readiness_assessed_at": "2026-09-10",
+      "rights_evidence_url": "https://www.pmoffice.gov.ck/2026/09/04/prime-minister-concludes-55th-pacific-islands-forum-leaders-meeting/",
+      "rights_summary": "Site footer states All rights reserved; no general reuse licence was established in CK research.",
+      "automation_summary": "Public first-party access is not treated as permission for unattended production retrieval; CK retains manual supporting provenance only.",
+      "rights_reviewed_at": "2026-09-10",
+      "rights_review_scope": "CK_PIF_SUPPORTING_SOURCE_RIGHTS_REVIEW",
+      "rights_review_note": "Operational WORLD SIGNALS source-governance classification; not legal advice.",
+      "last_successful_research_verification_at": "2026-09-10",
+      "canonical_provenance_use": "MANUAL_INFORMATIONAL_REFERENCE_ONLY",
+      "automated_monitoring_use": "PROHIBITED_OR_RIGHTS_HOLD",
+      "verification_mode": "RIGHTS_HELD_MANUAL_ONLY",
+      "governance_backfill_reviewed_at": "2026-09-10",
+      "governance_backfill_basis": "Cook Islands PMO supplies first-party post-event corroboration; no general automation/reuse permission was established, so the source is supporting manual provenance only.",
+      "monitoring_activation_status": "MANUAL_AUTHORITATIVE_RECHECK_ONLY"
     }
   ],
   "activation_backlog": [

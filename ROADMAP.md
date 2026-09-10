@@ -8,9 +8,9 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 **Reference date:** 2026-09-10  
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.41 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.03 / 257 sources**.
-- Change Ledger: **v0.27 / 62 entries**.
+- Canonical Registry: **v0.42 / 689 occurrences**; schema **v0.52**.
+- Source Registry: **v2.04 / 258 sources**.
+- Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
@@ -117,9 +117,9 @@ Result:
 
 Stage 9 is therefore complete. NHC activation is no longer an unfinished roadmap candidate.
 
-## Stage 10 — cross-layer coverage audit before broader population — CJ / READ-ONLY
+## Stage 10 — cross-layer coverage audit before broader population — ACTIVE / AUDIT-GUIDED
 
-The architecture is now mature enough that the next risk is not missing machinery but **population bias**: adding whatever is easy to monitor, easy to source or already familiar. Before broader Live or Monitor growth, WORLD SIGNALS needs a current diagnostic across the full layer chain.
+The architecture is mature enough that the principal expansion risk is **population bias**: adding whatever is easy to monitor, easy to source or already familiar. Broader Live, Monitor or Analysis growth therefore follows current cross-layer evidence rather than raw counts or convenience.
 
 ### Stage 10A — CJ cross-layer coverage / pressure diagnostic — DONE / CI-GENERATED
 
@@ -132,75 +132,90 @@ CJ adds a reusable read-only audit comparing:
 - production Live-input use;
 - the Live→Analysis frontier, distinguishing used Live observations, completed same-anchor linked observations, linked observations whose Canonical target is not completed, and unlinked Live observations.
 
-The diagnostic must not:
-
-- produce a blended coverage score;
-- equalise counts between regions or categories;
-- force Canonical categories and Live domain tags into one taxonomy;
-- create Monitor routes;
-- populate Live or Analysis;
-- open Canonical/Calendar/public-projection gates;
-- convert a review prompt into an automatic finding of undercoverage.
+The diagnostic must not produce a blended coverage score, equalise regional/category counts, force Canonical categories and Live tags into one taxonomy, create Monitor routes, populate Live/Analysis, or open write/public-projection gates.
 
 Its artifacts are disposable read-only evidence under `artifacts/coverage/`; governed registries remain authoritative.
 
 The first artifact exposed a cross-layer region-granularity issue rather than two true gaps. CJ v0.2 therefore uses only two explicit audit-only comparison mappings — `Central Africa -> Africa` and `Global -> Cross-regional / Global` — while preserving all governed raw labels. No other geographic parent is inferred.
 
-Corrected run `34412482858` reports:
+The permanent CJ audit and evidence trail are in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`.
 
-- Canonical: **689 occurrences / 203 series**;
-- Monitor: **26 adapters / 217 explicitly scoped occurrences / 48 series**;
-- Live: **7 observations / 2 Canonical-linked**;
-- Analysis: **22 reviews / 1 production Live input / 1 production revision**;
-- every Canonical region has at least some configured Monitor scope;
-- Europe, Latin America, North America and Oceania / Pacific currently have no controlled Live observation;
-- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` have no configured Monitor scope;
-- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` has no Analysis review;
-- the Live→Analysis frontier has **zero** unused completed same-anchor candidates; BARMM remains the one linked non-completed target.
+### Stage 10B — CK Pacific Islands Forum lifecycle/provenance repair — DONE / GUARDED
 
-The category zeroes are not latent route permissions. Existing WHO / UNFCCC / CBD / IPCC source-governance records behind the two Monitor gaps remain rights-held/manual-only at this checkpoint. NHC was activated only because a separate fresh review cleared its distinct endpoint/rights case.
+CJ's Pacific prompt initially appeared to reveal a missing Pacific Islands Forum Leaders Meeting family. CK's first guarded transaction disproved that specific conclusion before any write: the stable Canonical occurrence `WSO-INT-A-0001` and series `WSER-INT-PIF-LEADERS` already existed, sourced by `WSSRC-INT-012` and host-bound by `WSHB-PIF-2026-PW`.
 
-The permanent audit and evidence trail are in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`.
+The actual defect was narrower and operationally important: the 55th Pacific Islands Forum Leaders Meeting retained `ACTIVE` lifecycle state after its authoritative 30 August–4 September 2026 Palau meeting window had concluded.
 
-### Stage 10B — CK Pacific Islands Forum upstream repair — NEXT SELECTED AFTER CJ MERGE
+CK therefore:
 
-The corrected Oceania / Pacific prompt led upstream rather than to arbitrary Live filling. Current repository search finds no identifiable Canonical series or occurrence for the **Pacific Islands Forum Leaders Meeting**, despite official evidence that it is the annual apex political meeting of the 18-member Pacific Islands Forum.
+1. preserves the existing PIF occurrence, series, source and host-binding identities;
+2. preserves the exact `MULTI_DAY_LOCAL`, DAY-precision, `Pacific/Palau` civil range without synthetic UTC endpoints;
+3. changes lifecycle only from `ACTIVE` to `COMPLETED` using first-party post-event evidence rather than elapsed-time inference;
+4. adds supporting-only Cook Islands PMO source `WSSRC-INT-036` with zero primary Canonical dependencies and no unattended-monitoring permission;
+5. appends one reviewed lifecycle change to the Change Ledger;
+6. preserves New Zealand/Auckland as 2027 host context only and creates no dated 2027 occurrence;
+7. creates no PIF Monitor, Live or Analysis row and opens no automatic write/promotion gate;
+8. leaves OPEC CE quarantine untouched.
 
-Official current research establishes:
+CK also adds a material identity-discovery control: a claim that an important family is absent must interrogate stable IDs, source dependencies, institution keys and host bindings where available, not only literal human-readable names.
 
-- the Leaders Meeting is annual and is the Forum's apex consensus decision meeting;
-- the 55th meeting was held in Koror, Palau, **30 August–4 September 2026**;
-- authoritative post-event material confirms it concluded and its outcomes were captured in the 2026 Forum Communiqué;
-- New Zealand is confirmed to host the 2027 Leaders Meeting in Auckland;
-- no authoritative 2027 meeting dates were located, so CK must not invent them.
+The guarded transaction exposed and repaired historical descendant assertions that had accidentally turned old Canonical/Source/Ledger checkpoints into permanent ceilings. Exact historical prestate tests remain exact; descendant/coherence tests now validate lineage floors and tranche-owned invariants. The successful transaction passed all 1,256 historical tests plus validators, compilation, seven JavaScript checks, static build and bounded-diff/protected-layer gates.
 
-CK is therefore selected as the next bounded tranche **after #118/CJ is merged**, on a fresh branch from then-current `main`.
+Permanent transaction evidence is in `data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md`.
 
-Minimum CK scope:
+### Stage 10C — post-CK pressure re-audit — DONE / CL SELECTED FOR FRESH DESIGN
 
-1. prove again that no equivalent PIF series/occurrence already exists under another identity;
-2. create one stable PIF Leaders Meeting series identity if the omission is confirmed;
-3. add the completed 55th PIF Leaders Meeting occurrence for Koror, Palau, 30 August–4 September 2026 using civil-date range precision;
-4. register or reuse the minimum authoritative source identities needed for schedule and completion provenance, with source-governance fields explicitly reviewed;
-5. preserve the 2027 Auckland host fact as context only until authoritative dates support a 2027 occurrence;
-6. separately pressure-test whether the 2026 Forum Communiqué warrants one bounded Oceania / Pacific Live outcome observation linked `OUTCOME_OF`; CJ does **not** pre-authorise that population;
-7. add no automatic Monitor route by default and open no Canonical/Calendar/Live/Analysis write gate.
+Post-CK read-only coverage run `34422209848` confirms:
 
-If CK finds an existing hidden identity, insufficient primary provenance, or incompatible timing semantics, it must stop or change design rather than duplicate or fabricate.
+- Canonical remains 689 occurrences / 203 series;
+- Monitor remains 26 adapters / 217 explicitly scoped occurrences / 48 series;
+- Live remains 7 observations / 2 Canonical-linked;
+- Analysis remains 22 reviews / 1 production Live input / 1 production revision;
+- the Live→Analysis frontier still has **zero** unused completed same-anchor candidates;
+- Europe, Latin America, North America and Oceania / Pacific remain zero-Live prompts, not queues;
+- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` Monitor zeroes remain non-authorising under current source/rights posture;
+- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` remains an Analysis prompt, not an automatic target.
 
-### Stage 10C — broader Live / monitoring population — ONLY AFTER BOUNDED UPSTREAM REPAIR / RE-AUDIT
+Fresh first-party PIF outcome research identifies a more specific pressure than any of those zero counts: the completed PIF anchor now has sufficiently specific official evidence that Leaders' Retreat agreed a Pacific-led framework for engagement with partners, with other regional outcomes separately evidenced.
 
-After CK, rerun the cross-layer audit and choose from evidence rather than carrying forward today's ranking mechanically. Candidate classes remain:
+Permanent selection evidence is `data/coverage/POST_CK_PRESSURE_AUDIT_CL_v0.1.md`.
 
-1. **Canonical/source repair** where an internationally material signal family is genuinely absent or stale;
-2. **Monitor expansion** where important existing Canonical scope has a competent, rights-cleared, bounded machine route;
-3. **Live expansion** where a new observation would exercise a missing or materially useful factual contract rather than merely increase volume;
-4. **Live→Analysis** only where a linked Canonical occurrence is completed, the Analysis contract has a valid target, and fresh pressure justifies another production input;
-5. **Analysis revision** only where later evidence changes an existing analytical judgement rather than merely adding chronology.
+### Stage 10D — CL bounded PIF scheduled institutional-outcome Live specimen — NEXT AFTER CK MERGE
+
+CL is selected for **fresh post-merge design**, not pre-authorised mutation.
+
+Subject to re-verification from the exact then-current `main`, the proposed contract is:
+
+1. add exactly one factual Live Intelligence observation;
+2. reuse existing `INSTITUTIONAL_DEVELOPMENT` unless schema review establishes a more precise already-controlled type;
+3. set verification to `PRIMARY_CONFIRMED`;
+4. represent region as `Oceania / Pacific`;
+5. link `OUTCOME_OF` → completed `WSO-INT-A-0001`;
+6. focus the factual claim on the Leaders' Retreat agreement on the Pacific-led framework for engagement with partners, adding other outcomes only when separately first-party evidenced;
+7. do not reduce the whole Forum Communiqué to a scalar outcome;
+8. create no market-movement, surprise, causal-attribution or second-order-effect claim in Live;
+9. keep Live evidence separate from Canonical provenance and Analysis evidence;
+10. create no PIF Monitor route and no automatic Live→Analysis promotion;
+11. keep automatic Canonical commit, Calendar write and public Live projection closed;
+12. keep OPEC CE quarantine excluded.
+
+Why CL rather than another zero-fill:
+
+- the Canonical anchor is stable, HIGH-importance and now evidence-backed `COMPLETED`;
+- first-party post-event evidence is fresh and specific;
+- scheduled institutional outcome is a materially new Live contract relative to the current controlled specimen set;
+- Pacific geographic broadening is a benefit but not the selection rule;
+- no second Live→Analysis candidate exists yet, so forcing the bridge would violate current evidence.
+
+CL must stop or redesign if fresh post-merge source verification or repository preconditions do not support the proposed observation.
+
+### Stage 10E — further broadening / deepening — AFTER CL AUDIT
+
+After CL, rerun pressure rather than treating Europe, Latin America, North America, corporate/market Analysis or source-readiness debt as a FIFO queue. Candidate classes remain Live expansion, rights-cleared Monitor expansion, identity-aware Canonical/source repair, valid same-anchor Live→Analysis, or evidence-driven Analysis revision.
 
 BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
 
-Broader population must also establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
+Broader population must continue to establish correction/retraction handling, geographic/domain balance, noise controls, retention and provenance before any high-volume Live ingest is considered. Platform independence remains mandatory.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
