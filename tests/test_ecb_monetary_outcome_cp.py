@@ -144,8 +144,11 @@ class ECBMonetaryOutcomeCPTests(unittest.TestCase):
         self.assertEqual(after["start_utc"], "2026-09-10T12:15:00Z")
 
     def test_stage_two_cannot_link_to_planned_anchor(self):
+        planned_registry = copy.deepcopy(self.registry)
+        target = next(r for r in planned_registry["records"] if r["occurrence_id"] == OCCURRENCE_ID)
+        target["lifecycle_status"] = "PLANNED"
         with self.assertRaisesRegex(ValueError, "COMPLETED ECB Canonical anchor"):
-            target_observations(self.observations, self.payload, self.plan, self.registry)
+            target_observations(self.observations, self.payload, self.plan, planned_registry)
 
     def test_simulated_final_state_validates(self):
         post_registry, post_ledger, post_overlay, post_schema, post_obs, post_ev = self.simulate()
