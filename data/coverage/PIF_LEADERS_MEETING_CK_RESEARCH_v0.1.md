@@ -1,6 +1,6 @@
 # WORLD SIGNALS — Pacific Islands Forum Leaders Meeting CK research v0.1
 
-**Status:** FROZEN FOR CK DESIGN  
+**Status:** FROZEN FOR CK TRANSACTION DESIGN  
 **Reference date:** 2026-09-10  
 **Exact base:** `286af17018562fe211db47dd22112a75b842a367` (merged PR #118)  
 **Scope:** bounded Canonical/source repair only; no Monitor, Live or Analysis population authorised by this document.
@@ -26,7 +26,7 @@ Reuse, do not duplicate:
 - source timezone: `Pacific/Palau`
 - current Canonical dependency count: 0
 
-CK must preserve the existing source-governance/rights posture unless fresh evidence independently justifies a change. Canonical provenance competence does not create unattended-monitoring permission.
+CK preserves the existing source-governance/rights posture and changes only its Canonical dependency count from 0 to 1. Canonical provenance competence does not create unattended-monitoring permission.
 
 ## Current authoritative evidence
 
@@ -40,7 +40,7 @@ The official host site identifies the 55th Pacific Islands Forum Leaders Meeting
 - finish: Friday, 4 September 2026;
 - location: Koror, Palau.
 
-This supports civil-date range precision in the native `Pacific/Palau` timezone. It does not support manufacturing opening/closing clock times for the whole meeting.
+This supports a multi-day civil event in the native `Pacific/Palau` timezone. It does not support manufacturing opening/closing clock times for the whole meeting.
 
 ### 2. Australian Prime Minister — institutional significance / attendance corroboration
 
@@ -54,6 +54,8 @@ The Australian Prime Minister's 31 August 2026 release describes the Pacific Isl
 
 The Cook Islands Prime Minister's Office reported on 4 September 2026 that the Prime Minister had concluded the 55th PIF Leaders Meeting and that the Forum agreed significant regional outcomes captured in the 2026 Forum Communiqué. This is competent first-party member-government post-event evidence that the meeting concluded. Completion must be based on such evidence, never on elapsed time alone.
 
+The completion release is retained as a **distinct supporting source identity**, `WSSRC-INT-036`. It is not collapsed into the Palau host source because timing authority and post-event completion/outcome corroboration are different source roles.
+
 ### 4. New Zealand Government — 2027 host context only
 
 `https://www.beehive.govt.nz/release/new-zealand-begins-pacific-leadership-role`
@@ -66,7 +68,7 @@ On 4 September 2026, the New Zealand Government confirmed that New Zealand will 
 
 ## Ontology decision
 
-Proposed stable series:
+Stable series:
 
 - series ID: `WSER-INT-PIF-LM`
 - family: Pacific Islands Forum Leaders Meeting
@@ -76,31 +78,36 @@ Proposed stable series:
 - institution: Pacific Islands Forum
 - recurrence semantics: annual institutional meeting, but exact future dates remain source-announced rather than rule-generated.
 
-The meeting is politically and economically cross-domain in subject matter — regional security, climate, resilience, fisheries, ocean governance, development and institutional architecture — but its Canonical primary category should remain institutional governance rather than being duplicated across thematic categories.
+The meeting is politically and economically cross-domain in subject matter — regional security, climate, resilience, fisheries, ocean governance, development and institutional architecture — but its Canonical primary category remains institutional governance rather than being duplicated across thematic categories.
 
 ## 2026 occurrence design
 
-Proposed stable occurrence:
+Stable occurrence:
 
 - occurrence ID: `WSO-INT-PIF-LM-055-2026`
 - canonical name: `55th Pacific Islands Forum Leaders Meeting`
 - short calendar title: `PIF Leaders Meeting`
 - certainty: `CONFIRMED`
 - lifecycle: `COMPLETED`
-- timing type: multi-day all-day civil range
+- timing type: `MULTI_DAY_LOCAL`
 - start local: `2026-08-30`
 - end local: `2026-09-04`
+- precision: `DAY_RANGE`
+- time status: `CONFIRMED`
+- time basis: `EXPLICIT_AUTHORITATIVE_SCHEDULE`
+- all-day semantics: `true`
 - source timezone: `Pacific/Palau`
 - start UTC: null
 - end UTC: null
 - location: `Koror, Palau`
 - primary source: `WSSRC-INT-012`
+- completion support: `WSSRC-INT-036`
 
-No UTC endpoints should be synthesized for an all-day civil-date range merely because the timezone is known.
+This uses the established Canonical multi-day institutional-meeting model. It deliberately differs from `ALL_DAY_RANGE` season/window semantics used for risk windows such as hurricane seasons. No UTC endpoints are synthesized for the all-day civil-date range merely because the timezone is known.
 
 ## 2027 handling
 
-New Zealand / Auckland is confirmed as host context. Exact dates are not currently authoritative. CK should not add a dated 2027 occurrence. If the schema later admits an unscheduled/TBC annual successor identity without fabricated time, that must be a separately reviewed design decision rather than being smuggled into this historical repair.
+New Zealand / Auckland is confirmed as host context. Exact dates are not currently authoritative. CK does not add a dated 2027 occurrence. If the schema later admits an undated/TBC annual successor identity without fabricated time, that must be a separately reviewed design decision rather than being smuggled into this historical repair.
 
 ## Live / Analysis boundary
 
@@ -113,9 +120,9 @@ Likewise, Canonical admission does not create a Monitor route. Any future Forum 
 Subject to exact-prestate simulation and validation:
 
 - Canonical: `v0.41 / 689` → `v0.42 / 690`;
-- Source Registry: source count remains `257`; `WSSRC-INT-012` dependency count becomes 1 and registry version increments only if that governed row is updated;
-- Change Ledger: one reviewed historical-occurrence admission entry;
-- Biosecurity overlay: semantic content unchanged, Canonical checkpoint refreshed only if required by the overlay contract;
+- Source Registry: `v2.03 / 257` → `v2.04 / 258`; existing `WSSRC-INT-012` dependency count becomes 1 and new `WSSRC-INT-036` is supporting-only with dependency count 0;
+- Change Ledger: `v0.27 / 62` → `v0.28 / 63` with one reviewed historical-occurrence admission entry;
+- Biosecurity overlay: semantic content unchanged; version/checkpoint advances only to follow Canonical (`v0.17`, Canonical `v0.42 / 690`);
 - Monitor expectations/operations: unchanged;
 - Live: unchanged;
 - Analysis: unchanged;
@@ -125,16 +132,16 @@ Subject to exact-prestate simulation and validation:
 
 ## Required implementation checks
 
-A CK transaction, if materialised, must prove at minimum:
+A CK transaction must prove at minimum:
 
 1. exact base is merged post-CJ `main`;
 2. no PIF occurrence/series identity collision exists;
-3. `WSSRC-INT-012` is reused rather than duplicated;
-4. only one 2026 PIF occurrence is admitted;
-5. timing remains `2026-08-30` through `2026-09-04`, `Pacific/Palau`, with no synthetic UTC clock;
-6. lifecycle `COMPLETED` is supported by first-party post-event evidence, not elapsed time;
-7. no 2027 exact date is created;
-8. no Monitor route, Live observation or Analysis review is populated;
-9. all automatic write/public projection gates remain closed;
-10. `OPEC_QUARANTINE.md` and quarantined CE material remain untouched.
-
+3. `WSSRC-INT-012` is reused rather than duplicated and only its dependency count changes;
+4. `WSSRC-INT-036` is supporting-only and opens no automated route;
+5. only one 2026 PIF occurrence is admitted;
+6. timing remains `MULTI_DAY_LOCAL`, `2026-08-30` through `2026-09-04`, `DAY_RANGE`, `Pacific/Palau`, with no synthetic UTC clock;
+7. lifecycle `COMPLETED` is supported by first-party post-event evidence, not elapsed time;
+8. no 2027 exact date is created;
+9. no Monitor route, Live observation or Analysis review is populated;
+10. all automatic write/public projection gates remain closed;
+11. `OPEC_QUARANTINE.md` and quarantined CE material remain untouched.
