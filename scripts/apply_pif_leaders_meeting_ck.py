@@ -37,6 +37,15 @@ QUARANTINE_PATH = ROOT / "OPEC_QUARANTINE.md"
 APPLY_ENV = "WORLD_SIGNALS_APPLY_PIF_LEADERS_CK"
 APPLY_VALUE = "REVIEWED_APPLY"
 
+ALLOWED_TARGET_FIELDS = {
+    "lifecycle_status",
+    "last_successful_assertion_id",
+    "status_history",
+    "last_verified_at",
+    "related_documents",
+    "notes",
+}
+
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -62,10 +71,12 @@ def overlay_semantics(overlay: dict) -> dict:
     }
 
 
-def source_without_dependency(row: dict) -> dict:
-    out = copy.deepcopy(row)
-    out.pop("canonical_dependency_count", None)
-    return out
+def changed_fields(before: dict, after: dict) -> set[str]:
+    return {
+        key
+        for key in set(before) | set(after)
+        if before.get(key) != after.get(key)
+    }
 
 
 def counts_analysis_live_inputs(reviews: dict) -> tuple[int, int]:
@@ -76,6 +87,47 @@ def counts_analysis_live_inputs(reviews: dict) -> tuple[int, int]:
         if review.get("revision_of_analysis_id"):
             revisions += 1
     return live_inputs, revisions
+
+
+def exact_target_fields(row: dict) -> dict:
+    keys = (
+        "occurrence_id",
+        "series_id",
+        "canonical_name",
+        "category",
+        "subcategory",
+        "jurisdiction",
+        "region",
+        "institution",
+        "institution_key",
+        "event_type",
+        "certainty_status",
+        "lifecycle_status",
+        "timing_type",
+        "start_local",
+        "end_local",
+        "source_timezone",
+        "start_utc",
+        "end_utc",
+        "time_precision",
+        "all_day_semantics",
+        "time_status",
+        "time_basis",
+        "source_id",
+        "primary_source_assertion_id",
+        "last_successful_assertion_id",
+        "last_verified_at",
+        "intrinsic_importance",
+        "expected_market_sensitivity",
+        "geopolitical_sensitivity",
+        "host_binding_id",
+        "schedule_authority_scope",
+        "host_confirmed",
+        "host_jurisdiction",
+        "host_city",
+        "notes",
+    )
+    return {key: row.get(key) for key in keys}
 
 
 def preflight(
@@ -123,79 +175,70 @@ def preflight(
     source_rows = sources.get("sources", [])
     by_occ = {row.get("occurrence_id"): row for row in records}
     by_source = {row.get("source_id"): row for row in source_rows}
-    series_ids = {row.get("series_id") for row in records}
     change_ids = {row.get("change_id") for row in ledger.get("changes", [])}
 
-    for occurrence_id in p["required_absent_occurrence_ids"]:
-        if occurrence_id in by_occ:
-            errors.append(f"occurrence identity collision: {occurrence_id}")
-    for series_id in p["required_absent_series_ids"]:
-        if series_id in series_ids:
-            errors.append(f"series identity collision: {series_id}")
-    for source_id in p["required_absent_source_ids"]:
-        if source_id in by_source:
-            errors.append(f"source identity collision: {source_id}")
-    for change_id in p["required_absent_change_ids"]:
-        if change_id in change_ids:
-            errors.append(f"change identity collision: {change_id}")
+    target_expected = p["required_existing_occurrence"]
+    target = by_occ.get(target_expected["occurrence_id"])
+    if target is None:
+        errors.append("required existing PIF occurrence missing")
+    else:
+        actual = exact_target_fields(target)
+        expected = {key: target_expected.get(key) for key in actual}
+        if actual != expected:
+            for key in actual:
+                if actual[key] != expected[key]:
+                    errors.append(
+                        f"PIF target field drift: {key} expected {expected[key]!r} got {actual[key]!r}"
+                    )
+        if target.get("related_documents") != []:
+            errors.append("PIF target related_documents no longer at exact CK prestate")
+        if target.get("status_history") != [
+            {
+                "as_of": "2026-09-02",
+                "certainty_status": "CONFIRMED",
+                "lifecycle_status": "ACTIVE",
+            }
+        ]:
+            errors.append("PIF target status_history no longer at exact CK prestate")
 
-    expected_source = p["required_existing_primary_source"]
-    primary_source = by_source.get(expected_source["source_id"])
+    source_expected = p["required_existing_primary_source"]
+    primary_source = by_source.get(source_expected["source_id"])
     if primary_source is None:
         errors.append("required PIF host source missing")
     else:
-        for key in ("institution", "authoritative_url", "source_timezone", "canonical_dependency_count"):
-            if primary_source.get(key) != expected_source[key]:
+        for key, expected in source_expected.items():
+            if key == "source_id":
+                continue
+            if primary_source.get(key) != expected:
                 errors.append(f"PIF source field drift: {key}")
         actual_dependency_count = sum(
-            1 for row in records if row.get("source_id") == expected_source["source_id"]
+            1 for row in records if row.get("source_id") == source_expected["source_id"]
         )
-        if actual_dependency_count != 0 or actual_dependency_count != primary_source.get("canonical_dependency_count"):
+        if actual_dependency_count != 1 or actual_dependency_count != primary_source.get("canonical_dependency_count"):
             errors.append("PIF source dependency count does not match Canonical truth")
 
-    item = plan["occurrence"]
-    timing = item["timing"]
-    expected_timing = {
-        "timing_type": "MULTI_DAY_LOCAL",
-        "start_local": "2026-08-30",
-        "end_local": "2026-09-04",
-        "source_timezone": "Pacific/Palau",
-        "start_utc": None,
-        "end_utc": None,
-        "time_precision": "DAY_RANGE",
-        "all_day_semantics": True,
-        "time_status": "CONFIRMED",
-        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
-    }
-    if timing != expected_timing:
-        errors.append(f"PIF timing contract drift: {timing!r}")
-    if item.get("lifecycle_status") != "COMPLETED" or item.get("certainty_status") != "CONFIRMED":
-        errors.append("PIF reviewed lifecycle/certainty contract drift")
-    if item.get("source_id") != expected_source["source_id"]:
-        errors.append("PIF primary source identity drift")
-
     support = plan["supporting_source"]
+    if support["source_id"] in by_source:
+        errors.append(f"supporting source identity collision: {support['source_id']}")
+    if plan["change"]["change_id"] in change_ids:
+        errors.append(f"change identity collision: {plan['change']['change_id']}")
     if support.get("canonical_dependency_count") != 0:
-        errors.append("supporting completion source must have zero primary Canonical dependencies")
+        errors.append("supporting source must have zero primary Canonical dependencies")
     if support.get("automated_monitoring_use") != "PROHIBITED_OR_RIGHTS_HOLD":
-        errors.append("supporting completion source automation gate unexpectedly open")
+        errors.append("supporting source automation gate unexpectedly open")
     if support.get("verification_mode") != "RIGHTS_HELD_MANUAL_ONLY":
-        errors.append("supporting completion source verification posture drift")
-    if support.get("monitor_route_authorised") is not False:
-        errors.append("supporting completion source must not authorise a Monitor route")
+        errors.append("supporting source verification posture drift")
 
     future = plan["future_host_context"]
-    if future.get("year") != 2027 or future.get("exact_dates_found") is not False:
+    if future.get("exact_dates_found") is not False or future.get("canonical_dated_occurrence_authorised") is not False:
         errors.append("2027 host-context/date boundary drift")
-    if future.get("canonical_dated_occurrence_authorised") is not False:
-        errors.append("2027 dated Canonical occurrence must remain unauthorised")
 
     if any(
-        item["occurrence_id"] in (adapter.get("canonical_occurrence_ids") or [])
-        or adapter.get("source_id") in {item["source_id"], support["source_id"]}
+        adapter.get("source_id") in {target_expected["source_id"], support["source_id"]}
+        or target_expected["occurrence_id"] in (adapter.get("canonical_occurrence_ids") or [])
         for adapter in expectations.get("adapters", [])
     ):
-        errors.append("PIF already appears in Monitor expectations before CK")
+        errors.append("PIF unexpectedly appears in Monitor expectations before CK")
 
     validation = validate_registry(registry, sources)
     errors.extend(f"Canonical pre-state: {error}" for error in validation.errors)
@@ -219,7 +262,6 @@ def build_supporting_source(primary_source: dict, item: dict, reference_date: st
         "live_validation_evidence",
         "source_role_contract",
         "related_source_ids",
-        "health_source_route_state",
     ):
         out.pop(key, None)
     out.update(
@@ -244,7 +286,7 @@ def build_supporting_source(primary_source: dict, item: dict, reference_date: st
             "No general reuse licence or production automated-retrieval permission was established in CK.",
         ],
         backup_source=None,
-        notes="Supporting-only Cook Islands first-party completion evidence for the 55th PIF Leaders Meeting; zero primary Canonical dependencies.",
+        notes="Supporting-only Cook Islands first-party completion evidence for WSO-INT-A-0001; zero primary Canonical dependencies.",
         timezone_scope="FIXED",
         runtime_health_state="MANUAL_RESEARCH_ROUTE_VERIFIED_PRODUCTION_AUTOMATION_HOLD",
         licence_constraints="ALL_RIGHTS_RESERVED_NO_GENERAL_REUSE_PERMISSION_IDENTIFIED",
@@ -273,132 +315,69 @@ def build_supporting_source(primary_source: dict, item: dict, reference_date: st
     return out
 
 
-def build_occurrence(item: dict, reference_date: str) -> dict:
-    timing = item["timing"]
-    return {
-        "occurrence_id": item["occurrence_id"],
-        "series_id": item["series_id"],
-        "external_source_id": None,
-        "canonical_name": item["canonical_name"],
-        "short_calendar_title": item["short_calendar_title"],
-        "category": item["category"],
-        "subcategory": "multilateral_regional_governance",
-        "jurisdiction": "Pacific Islands Forum",
-        "region": item["region"],
-        "institution": item["institution"],
-        "event_type": item["event_type"],
-        "record_class": "OCCURRENCE",
-        "certainty_status": item["certainty_status"],
-        "activation_mode": "EXPLICITLY_SCHEDULED",
-        "lifecycle_status": item["lifecycle_status"],
-        "condition_state": "NOT_REQUIRED",
-        "condition_description": None,
-        "trigger_source_id": None,
-        "trigger_assertion_id": None,
-        "triggered_at": None,
-        "trigger_verification_status": "NOT_APPLICABLE",
-        "timing_type": timing["timing_type"],
-        "start_local": timing["start_local"],
-        "end_local": timing["end_local"],
-        "source_timezone": timing["source_timezone"],
-        "start_utc": timing["start_utc"],
-        "end_utc": timing["end_utc"],
-        "date_earliest": None,
-        "date_latest": None,
-        "time_precision": timing["time_precision"],
-        "all_day_semantics": timing["all_day_semantics"],
-        "reference_period": None,
-        "publication_datetime": None,
-        "time_status": timing["time_status"],
-        "time_basis": timing["time_basis"],
-        "location": item["location"],
-        "source_id": item["source_id"],
-        "primary_source_assertion_id": item["primary_source_assertion_id"],
-        "last_successful_assertion_id": item["completion_source_assertion_id"],
-        "status_history": [
-            {
-                "as_of": reference_date,
-                "certainty_status": item["certainty_status"],
-                "lifecycle_status": item["lifecycle_status"],
-                "condition_state": "NOT_REQUIRED",
-                "change_reason": "Historical occurrence admitted after first-party post-event verification; completion is not inferred from elapsed time.",
-                "source_assertion_id": item["completion_source_assertion_id"],
-                "basis": "Cook Islands Office of the Prime Minister reported on 4 September 2026 that participation in the 55th PIF Leaders Meeting had concluded and that outcomes were captured in the 2026 Forum Communiqué.",
-            }
-        ],
-        "first_announced_at": None,
-        "first_discovered_at": reference_date,
-        "last_verified_at": reference_date,
-        "next_verification_due": "SOURCE_SPECIFIC",
-        "parent_occurrence_id": None,
-        "related_occurrence_ids": [],
-        "related_documents": [
-            {
-                "source_id": item["completion_source_id"],
-                "role": "COMPLETION_AND_OUTCOME_CORROBORATION",
-                "source_locator": item["completion_url"],
-            }
-        ],
-        "intrinsic_importance": "HIGH",
-        "expected_market_sensitivity": "LOW",
-        "geopolitical_sensitivity": "HIGH",
-        "transmission_channels": [
-            "regional_governance",
-            "geopolitics",
-            "security",
-            "climate_policy",
-            "fisheries_oceans",
-            "development_finance",
-            "trade",
-        ],
-        "render_policy": "INCLUDE",
-        "visibility_tier": "ESSENTIAL",
-        "deadline_is_actual_event_time": False,
-        "derivation_sources": [item["source_id"], item["completion_source_id"]],
-        "coverage_program_id": "WSCP-POST-CJ-CROSS-LAYER-PRESSURE",
-        "coverage_repair_reason": "PACIFIC_APEX_INSTITUTIONAL_SIGNAL_CANONICAL_OMISSION",
-        "population_horizon_policy": "SINGLE_VERIFIED_COMPLETED_2026_OCCURRENCE",
-        "selection_rationale": "CJ found a stronger upstream Oceania/Pacific omission than a quota-driven Live specimen: the annual PIF Leaders Meeting had a governed source but no Canonical series/occurrence.",
-        "future_schedule_deferred": "2027 Auckland host confirmed; exact dates not authoritatively established in CK and no dated successor is created.",
-        "population_tranche": "PIF_LEADERS_MEETING_CK",
-        "notes": "Palau host evidence supplies the 30 August–4 September 2026 civil range in Pacific/Palau. Cook Islands PMO supplies separate first-party completion/outcome corroboration. No opening/closing clock or UTC boundary is inferred, and 2027 host context is not converted into invented dates.",
-    }
+def update_target_occurrence(before: dict, plan: dict) -> dict:
+    after = copy.deepcopy(before)
+    change = plan["change"]
+    support = plan["supporting_source"]
+    after["lifecycle_status"] = "COMPLETED"
+    after["last_successful_assertion_id"] = change["completion_source_assertion_id"]
+    after["last_verified_at"] = plan["reference_date"]
+    after["status_history"] = copy.deepcopy(before["status_history"]) + [
+        {
+            "as_of": plan["reference_date"],
+            "certainty_status": "CONFIRMED",
+            "lifecycle_status": "COMPLETED",
+            "condition_state": "NOT_REQUIRED",
+            "change_reason": "Post-event completion verified from first-party Cook Islands PMO evidence; not inferred from elapsed time.",
+            "source_assertion_id": change["completion_source_assertion_id"],
+            "basis": change["completion_basis"],
+        }
+    ]
+    after["related_documents"] = copy.deepcopy(before.get("related_documents") or []) + [
+        {
+            "source_id": support["source_id"],
+            "role": "COMPLETION_AND_OUTCOME_CORROBORATION",
+            "source_locator": support["authoritative_url"],
+        }
+    ]
+    after["notes"] = (
+        "The Palau host source continues to govern the 30 August–4 September 2026 civil-date range. "
+        "Cook Islands PMO first-party post-event evidence verifies completion and Forum outcomes; "
+        "completion is not inferred from elapsed time."
+    )
+    return after
 
 
-def build_ledger_change(item: dict, committed_at: str, before_version: str, after_version: str) -> dict:
-    timing = item["timing"]
+def build_ledger_change(plan: dict, committed_at: str) -> dict:
+    change = plan["change"]
+    target = plan["preconditions"]["required_existing_occurrence"]
     return {
-        "change_id": item["change_id"],
-        "occurrence_id": item["occurrence_id"],
-        "change_type": "HISTORICAL_OCCURRENCE_ADMISSION",
-        "old_values": {"canonical_presence": False},
-        "new_values": {
-            "canonical_presence": True,
-            "series_id": item["series_id"],
-            "certainty_status": item["certainty_status"],
-            "lifecycle_status": item["lifecycle_status"],
-            "timing_type": timing["timing_type"],
-            "start_local": timing["start_local"],
-            "end_local": timing["end_local"],
-            "source_timezone": timing["source_timezone"],
-            "start_utc": None,
-            "end_utc": None,
-            "time_precision": timing["time_precision"],
+        "change_id": change["change_id"],
+        "occurrence_id": target["occurrence_id"],
+        "change_type": "LIFECYCLE_COMPLETION",
+        "old_values": {
+            "lifecycle_status": "ACTIVE",
+            "last_successful_assertion_id": target["last_successful_assertion_id"],
         },
-        "source_assertion_id": item["completion_source_assertion_id"],
+        "new_values": {
+            "lifecycle_status": "COMPLETED",
+            "last_successful_assertion_id": change["completion_source_assertion_id"],
+        },
+        "source_assertion_id": change["completion_source_assertion_id"],
         "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
         "reviewed_at": committed_at,
         "review_basis": [
-            item["primary_schedule_url"],
-            item["completion_url"],
-            "Existing WSSRC-INT-012 source identity is reused as timing/venue authority; a separate Cook Islands PMO supporting source records completion/outcome corroboration.",
+            change["completion_url"],
+            change["completion_basis"],
+            "Stable occurrence WSO-INT-A-0001 and series WSER-INT-PIF-LEADERS are preserved; CK corrects lifecycle/provenance only.",
+            "Existing Palau timing fields remain unchanged, including Pacific/Palau civil-date semantics and null UTC endpoints.",
             "Completion is admitted from first-party post-event evidence and is not inferred from elapsed time.",
             "Auckland/New Zealand 2027 host confirmation supplies no authoritative meeting dates and creates no dated successor occurrence.",
         ],
-        "commit_mode": "REVIEWED_PIF_LEADERS_MEETING_CK",
+        "commit_mode": "REVIEWED_PIF_LIFECYCLE_COMPLETION_CK",
         "committed_at": committed_at,
-        "registry_version_before": before_version,
-        "registry_version_after": after_version,
+        "registry_version_before": plan["preconditions"]["canonical_registry_version"],
+        "registry_version_after": plan["expected_post_state"]["canonical_registry_version"],
         "canonical_mutation_committed": True,
     }
 
@@ -410,7 +389,6 @@ def build_post_state(
     ledger: dict,
     overlay: dict,
     expectations: dict,
-    live_schema: dict,
     live_observations: dict,
     live_evidence: dict,
     analysis_schema: dict,
@@ -420,48 +398,42 @@ def build_post_state(
     committed_at: str,
 ) -> tuple[dict, dict, dict, dict]:
     expected = plan["expected_post_state"]
-    reference_date = plan["reference_date"]
-    item = plan["occurrence"]
+    target_id = plan["preconditions"]["required_existing_occurrence"]["occurrence_id"]
     support = plan["supporting_source"]
 
     old_records = copy.deepcopy(registry["records"])
-    old_source_rows = copy.deepcopy(sources["sources"])
+    old_sources = copy.deepcopy(sources["sources"])
     old_changes = copy.deepcopy(ledger["changes"])
     old_overlay_semantics = overlay_semantics(overlay)
 
+    target_index = next(i for i, row in enumerate(registry["records"]) if row["occurrence_id"] == target_id)
+    target_before = copy.deepcopy(registry["records"][target_index])
+    target_after = update_target_occurrence(target_before, plan)
+
     post_registry = copy.deepcopy(registry)
     post_registry["version"] = expected["canonical_registry_version"]
-    post_registry["reference_date"] = reference_date
-    post_registry["records"].append(build_occurrence(item, reference_date))
+    post_registry["reference_date"] = plan["reference_date"]
+    post_registry["records"][target_index] = target_after
     post_registry["record_count"] = len(post_registry["records"])
 
     post_sources = copy.deepcopy(sources)
     post_sources["version"] = expected["source_registry_version"]
-    post_sources["reference_date"] = reference_date
-    post_by_source = {row["source_id"]: row for row in post_sources["sources"]}
-    primary_before = copy.deepcopy(post_by_source[item["source_id"]])
-    post_by_source[item["source_id"]]["canonical_dependency_count"] = 1
-    post_sources["sources"].append(build_supporting_source(primary_before, support, reference_date))
+    post_sources["reference_date"] = plan["reference_date"]
+    primary_source = next(row for row in sources["sources"] if row["source_id"] == target_before["source_id"])
+    post_sources["sources"].append(
+        build_supporting_source(primary_source, support, plan["reference_date"])
+    )
 
     post_ledger = copy.deepcopy(ledger)
     post_ledger["version"] = expected["change_ledger_version"]
-    post_ledger["reference_date"] = reference_date
-    post_ledger["changes"].append(
-        build_ledger_change(
-            item,
-            committed_at,
-            plan["preconditions"]["canonical_registry_version"],
-            expected["canonical_registry_version"],
-        )
-    )
+    post_ledger["reference_date"] = plan["reference_date"]
+    post_ledger["changes"].append(build_ledger_change(plan, committed_at))
 
     post_overlay = copy.deepcopy(overlay)
     post_overlay["version"] = expected["biosecurity_overlay_version"]
     post_overlay["canonical_checkpoint"] = copy.deepcopy(expected["biosecurity_overlay_checkpoint"])
 
     errors: list[str] = []
-    if post_registry["records"][:-1] != old_records:
-        errors.append("pre-existing Canonical records changed")
     if post_registry["record_count"] != expected["canonical_record_count"]:
         errors.append("post Canonical record count mismatch")
     if len(post_sources["sources"]) != expected["source_record_count"]:
@@ -473,44 +445,64 @@ def build_post_state(
     if overlay_semantics(post_overlay) != old_overlay_semantics:
         errors.append("biosecurity overlay semantic content changed")
 
-    original_by_source = {row["source_id"]: row for row in old_source_rows}
-    final_by_source = {row["source_id"]: row for row in post_sources["sources"]}
-    for source_id, before in original_by_source.items():
-        after = final_by_source[source_id]
-        if source_id == item["source_id"]:
-            if source_without_dependency(after) != source_without_dependency(before):
-                errors.append("existing PIF source changed outside canonical_dependency_count")
-            if before.get("canonical_dependency_count") != 0 or after.get("canonical_dependency_count") != 1:
-                errors.append("existing PIF source dependency change is not exactly 0→1")
+    for i, before in enumerate(old_records):
+        after = post_registry["records"][i]
+        if before["occurrence_id"] == target_id:
+            actual_changed = changed_fields(before, after)
+            if actual_changed != ALLOWED_TARGET_FIELDS:
+                errors.append(
+                    f"PIF target changed fields {sorted(actual_changed)} != allowed {sorted(ALLOWED_TARGET_FIELDS)}"
+                )
         elif after != before:
-            errors.append(f"unrelated source changed: {source_id}")
+            errors.append(f"unrelated Canonical occurrence changed: {before['occurrence_id']}")
 
-    new_occurrence = post_registry["records"][-1]
-    if new_occurrence["occurrence_id"] != item["occurrence_id"]:
-        errors.append("unexpected appended Canonical occurrence")
-    if new_occurrence["timing_type"] != "MULTI_DAY_LOCAL" or new_occurrence["time_precision"] != "DAY_RANGE":
-        errors.append("PIF multi-day temporal semantics drift")
-    if new_occurrence["start_utc"] is not None or new_occurrence["end_utc"] is not None:
-        errors.append("PIF civil-date range must not synthesize UTC endpoints")
-    if new_occurrence["source_timezone"] != "Pacific/Palau":
-        errors.append("PIF native timezone drift")
-    if new_occurrence["lifecycle_status"] != "COMPLETED":
-        errors.append("PIF post-state lifecycle is not COMPLETED")
+    if target_after["series_id"] != "WSER-INT-PIF-LEADERS":
+        errors.append("PIF stable series identity changed")
+    if target_after["lifecycle_status"] != "COMPLETED" or target_after["certainty_status"] != "CONFIRMED":
+        errors.append("PIF lifecycle/certainty post-state drift")
+    for key, expected_value in {
+        "timing_type": "MULTI_DAY_LOCAL",
+        "start_local": "2026-08-30",
+        "end_local": "2026-09-04",
+        "source_timezone": "Pacific/Palau",
+        "start_utc": None,
+        "end_utc": None,
+        "time_precision": "DAY",
+        "all_day_semantics": True,
+        "time_status": "CONFIRMED",
+        "time_basis": "EXPLICIT_AUTHORITATIVE_SCHEDULE",
+        "intrinsic_importance": "HIGH",
+        "expected_market_sensitivity": "MEDIUM_HIGH",
+        "geopolitical_sensitivity": "HIGH",
+        "host_binding_id": "WSHB-PIF-2026-PW",
+        "host_jurisdiction": "Palau",
+        "host_city": "Koror",
+    }.items():
+        if target_after.get(key) != expected_value:
+            errors.append(f"PIF protected target field drift: {key}")
 
-    support_after = final_by_source.get(support["source_id"])
-    if not support_after:
-        errors.append("supporting Cook Islands source missing")
-    else:
-        if support_after.get("canonical_dependency_count") != 0:
-            errors.append("supporting Cook Islands source gained a primary dependency")
-        if support_after.get("automated_monitoring_use") != "PROHIBITED_OR_RIGHTS_HOLD":
-            errors.append("supporting Cook Islands source automation gate opened")
-        if support_after.get("live_adapter_id"):
-            errors.append("supporting Cook Islands source unexpectedly has a Live/Monitor adapter")
+    if old_sources != post_sources["sources"][:-1]:
+        errors.append("pre-existing Source Registry rows changed")
+    support_after = post_sources["sources"][-1]
+    if support_after.get("source_id") != support["source_id"]:
+        errors.append("unexpected supporting source appended")
+    if support_after.get("canonical_dependency_count") != 0:
+        errors.append("supporting Cook Islands source gained a primary dependency")
+    if support_after.get("automated_monitoring_use") != "PROHIBITED_OR_RIGHTS_HOLD":
+        errors.append("supporting Cook Islands source automation gate opened")
+    if support_after.get("live_adapter_id"):
+        errors.append("supporting Cook Islands source unexpectedly has an adapter")
 
-    if any(row.get("series_id") == item["series_id"] and row.get("occurrence_id") != item["occurrence_id"] for row in post_registry["records"]):
-        errors.append("CK created an additional PIF occurrence")
-    if any("PIF" in str(row.get("canonical_name", "")) and "2027" in str(row.get("canonical_name", "")) for row in post_registry["records"]):
+    if any(
+        row.get("series_id") == "WSER-INT-PIF-LM"
+        or row.get("occurrence_id") == "WSO-INT-PIF-LM-055-2026"
+        for row in post_registry["records"]
+    ):
+        errors.append("obsolete duplicate PIF identity was materialised")
+    if any(
+        row.get("series_id") == "WSER-INT-PIF-LEADERS" and "2027" in row.get("occurrence_id", "")
+        for row in post_registry["records"]
+    ):
         errors.append("CK created a 2027 PIF occurrence")
 
     validation = validate_registry(post_registry, post_sources)
@@ -528,57 +520,69 @@ def build_post_state(
     return post_registry, post_sources, post_ledger, post_overlay
 
 
-def audit_markdown(plan: dict, committed_at: str, hashes_before: dict[str, str], hashes_after: dict[str, str]) -> str:
-    item = plan["occurrence"]
-    support = plan["supporting_source"]
+def audit_markdown(plan: dict, committed_at: str, protected_ok: bool) -> str:
     expected = plan["expected_post_state"]
-    protected_ok = all(hashes_before[key] == hashes_after[key] for key in hashes_before)
-    return f"""# WORLD SIGNALS — PIF Leaders Meeting CK transaction audit v0.1
+    change = plan["change"]
+    failed = plan["failed_attempts"]
+    return f"""# WORLD SIGNALS — PIF Leaders Meeting CK transaction audit v0.2
 
 **Status:** MATERIALISED / GUARDED  
 **Reference date:** {plan['reference_date']}  
 **Base main:** `{plan['base_main_sha']}`  
 **Committed at:** `{committed_at}`
 
+## Correction to the initial CK premise
+
+CJ's text-based discovery recorded the 55th Pacific Islands Forum Leaders Meeting as absent from Canonical. CK's guarded transaction disproved that assumption before any write. The existing stable identity is `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS`, sourced by `WSSRC-INT-012` and host-bound by `WSHB-PIF-2026-PW`.
+
+CK therefore performs **lifecycle/provenance completion repair only**. It creates no replacement occurrence or series.
+
+## Failed guarded attempts preserved
+
+1. run `{failed[0]['run_id']}` / job `{failed[0]['job_id']}` — exact base passed; obsolete admission simulation failed on the incorrect zero-dependency assumption; no write occurred.
+2. run `{failed[1]['run_id']}` / job `{failed[1]['job_id']}` — exact base and read-only identity probe passed; probe found the existing PIF occurrence/source; obsolete admission simulation failed; no write occurred.
+
 ## Reviewed mutation
 
-- admitted one stable series: `{plan['series']['series_id']}`;
-- admitted one completed occurrence: `{item['occurrence_id']}` — {item['canonical_name']};
-- timing: `{item['timing']['start_local']}` through `{item['timing']['end_local']}`, `MULTI_DAY_LOCAL`, `DAY_RANGE`, native timezone `Pacific/Palau`, no synthetic UTC endpoints;
-- reused primary Palau host source `{item['source_id']}` and changed only its Canonical dependency count 0→1;
-- added supporting-only Cook Islands completion source `{support['source_id']}` with zero primary Canonical dependencies and production automation held;
-- no dated 2027 occurrence created; Auckland/New Zealand remains host context only until authoritative dates exist.
+- target: `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS`;
+- lifecycle: **ACTIVE → COMPLETED**;
+- certainty remains `CONFIRMED`;
+- all timing fields remain unchanged: `MULTI_DAY_LOCAL`, 30 August–4 September 2026, `Pacific/Palau`, DAY precision, null UTC endpoints;
+- intrinsic importance remains `HIGH`; expected market sensitivity remains `MEDIUM_HIGH`; geopolitical sensitivity remains `HIGH`;
+- host binding `WSHB-PIF-2026-PW` remains unchanged;
+- existing source `WSSRC-INT-012` remains byte-identical;
+- new supporting-only completion source `WSSRC-INT-036` has zero primary Canonical dependencies and production automation held;
+- no dated 2027 occurrence is created.
 
 ## Governed state transition
 
 - Canonical: v0.41 / 689 → **v{expected['canonical_registry_version']} / {expected['canonical_record_count']}**;
 - Sources: v2.03 / 257 → **v{expected['source_registry_version']} / {expected['source_record_count']}**;
 - Change Ledger: v0.27 / 62 → **v{expected['change_ledger_version']} / {expected['change_ledger_count']}**;
-- Biosecurity overlay: v0.16 → **v{expected['biosecurity_overlay_version']}**, semantic content unchanged, Canonical checkpoint advanced to v0.42 / 690;
-- Monitor expectations: unchanged v0.28 / 26 adapters;
-- Live Intelligence: unchanged 7 observations / 10 evidence rows;
-- Analysis: unchanged 22 reviews / 97 evidence rows / 1 production Live input / 1 production revision.
+- Biosecurity overlay: v0.16 → **v{expected['biosecurity_overlay_version']}**, semantic content unchanged, Canonical checkpoint v0.42 / 689;
+- Monitor expectations unchanged v0.28 / 26 adapters;
+- Live Intelligence unchanged 7 observations / 10 evidence rows;
+- Analysis unchanged 22 reviews / 97 evidence rows / 1 production Live input / 1 production revision.
+
+## Completion provenance
+
+Completion assertion: `{change['completion_source_assertion_id']}`. Cook Islands PMO first-party post-event evidence states that participation in the 55th PIF Leaders Meeting had concluded and that Leaders' Retreat outcomes were captured in the 2026 Forum Communiqué. Completion is not inferred from elapsed time.
+
+## Identity-discovery control
+
+Future material-family absence claims should not rely on literal name search alone. Stable occurrence/series identities, source dependencies, institution keys and host bindings must also be interrogated where available before creating a new Canonical identity.
 
 ## Authority boundary
 
 - automatic Canonical commit: **OFF**;
 - Google Calendar write: **OFF**;
 - PIF Monitor route: **NOT CREATED**;
-- Monitor→Live: **OFF**;
-- PIF communiqué Live observation: **NOT CREATED**;
+- PIF Live observation: **NOT CREATED**;
 - Live→Analysis: **OFF**;
 - public Live/Analysis projection: **OFF**;
 - OPEC CE quarantine: **UNTOUCHED**.
 
-## Protected-layer hash check
-
-Protected non-CK layers byte-identical across the transaction: **{str(protected_ok).lower()}**.
-
-The protected hash set covers Monitor expectations/operations, Live schema/observations/evidence, Analysis schema/reviews/evidence and `OPEC_QUARANTINE.md`.
-
-## Provenance discipline
-
-The Palau host site supplies the whole-event date range and venue. Cook Islands PMO supplies separate first-party post-event completion/outcome corroboration. Completion is not inferred from elapsed time. The confirmed 2027 Auckland host context is not upgraded into an unsourced date.
+Protected Monitor, Live, Analysis and OPEC files byte-identical across the transaction: **{str(protected_ok).lower()}**.
 """
 
 
@@ -636,7 +640,6 @@ def main() -> int:
         ledger,
         overlay,
         expectations,
-        live_schema,
         live_observations,
         live_evidence,
         analysis_schema,
@@ -648,6 +651,8 @@ def main() -> int:
 
     result = {
         "status": "SIMULATION_PASS" if not args.apply else "MATERIALISED",
+        "target_occurrence_id": "WSO-INT-A-0001",
+        "stable_series_id": "WSER-INT-PIF-LEADERS",
         "canonical": {
             "version": post_registry["version"],
             "record_count": post_registry["record_count"],
@@ -689,7 +694,7 @@ def main() -> int:
         raise SystemExit("PROTECTED-LAYER MUTATION: " + ", ".join(changed_protected))
 
     AUDIT_PATH.write_text(
-        audit_markdown(plan, committed_at, hashes_before, hashes_after),
+        audit_markdown(plan, committed_at, protected_ok=True),
         encoding="utf-8",
     )
     print(json.dumps(result, indent=2, ensure_ascii=False))
