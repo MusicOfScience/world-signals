@@ -1,3 +1,4 @@
+# Rerun after descendant-safe repair of failed run 34446405883
 name: CN Brazil fuel-policy Live guarded transaction
 
 on:
@@ -148,12 +149,11 @@ jobs:
               raise SystemExit('CN did not add exactly one Live evidence row')
           PY
 
-      - name: Remove temporary write machinery and enforce bounded diff
+      - name: Remove temporary apply helper and enforce bounded transaction diff
         shell: bash
         run: |
           set -euo pipefail
           rm scripts/apply_brazil_fuel_policy_live_cn_tmp.py
-          rm .github/workflows/cn-brazil-fuel-policy-live-transaction.yml
           python - <<'PY'
           import os, subprocess
           allowed = {
@@ -165,7 +165,6 @@ jobs:
               'PROJECT_STATUS.md',
               'ROADMAP.md',
               'scripts/apply_brazil_fuel_policy_live_cn_tmp.py',
-              '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
           }
           base = os.environ['PRE_TRANSACTION_SHA']
           changed = set(subprocess.check_output(['git','diff','--name-only',base], text=True).splitlines())
@@ -181,14 +180,12 @@ jobs:
               'PROJECT_STATUS.md',
               'ROADMAP.md',
               'scripts/apply_brazil_fuel_policy_live_cn_tmp.py',
-              '.github/workflows/cn-brazil-fuel-policy-live-transaction.yml',
           }
           missing = sorted(required - changed)
           if missing:
               raise SystemExit(f'CN expected transaction paths missing: {missing}')
           PY
           test ! -e scripts/apply_brazil_fuel_policy_live_cn_tmp.py
-          test ! -e .github/workflows/cn-brazil-fuel-policy-live-transaction.yml
 
       - name: Commit reviewed CN materialisation
         shell: bash
