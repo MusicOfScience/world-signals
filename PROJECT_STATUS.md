@@ -63,32 +63,39 @@ CH made cross-layer current-state counts mechanically derivable and CI-checked a
 
 CI activated the CF-validated NHC route after a fresh source, rights, endpoint, scope and runtime review. The scheduled route remains bounded to two existing Atlantic hurricane-season occurrences; NHC climatology is semantic authority for the season definition and Atlantic RSS is health corroboration only. It grants no automatic Canonical, lifecycle, Calendar, Live or Analysis authority.
 
+### PR #118 — CJ: cross-layer coverage / pressure diagnostic — MERGED
+
+CJ added the read-only Canonical→Monitor→Live→Analysis coverage diagnostic and reconciled the post-#117 recovery prose. Its first regional comparison also exposed and corrected two audit-only taxonomy-granularity artifacts rather than treating them as real coverage gaps.
+
+CJ then flagged the Pacific Islands Forum Leaders Meeting as apparently absent from Canonical. CK subsequently proved that specific absence conclusion wrong: the stable PIF occurrence and series already existed but were not found by the literal-name discovery path used in the pressure review. The CJ audit remains historical evidence; CK adds a stronger identity-discovery control rather than rewriting CJ's frozen artifact.
+
 ## Current pressure interpretation
 
-Raw population counts are not a selection rule. CJ's corrected cross-layer audit now gives an evidence-backed next-pressure boundary.
+Raw population counts are not a selection rule. CK has now corrected the most material issue exposed by CJ's Pacific prompt while also demonstrating that coverage diagnostics must query governed identities, not only human-readable names.
 
-- **Canonical:** 689 occurrences / 203 series. The CJ review identified a likely upstream omission of the annual Pacific Islands Forum Leaders Meeting, an apex 18-member Pacific political institution. This is a stronger repair candidate than bulk Canonical growth.
-- **Monitor:** 26 adapters / 217 scoped occurrences / 48 scoped series. Every Canonical region has at least some configured Monitor scope. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` remain zero-scope categories, but their underlying WHO / UNFCCC / CBD / IPCC sources are rights-held/manual-only at this checkpoint; zero scope is not automation permission.
-- **Live Intelligence:** 7 observations / 2 Canonical-linked. After explicit audit-only regional equivalence, Europe, Latin America, North America and Oceania / Pacific have no controlled Live specimen. These are review prompts, not a population queue.
-- **Analysis:** 22 reviews / 1 production Live input / 1 production revision. The sole production Live input remains Japan FIES. `CORPORATE_FINANCIAL_MARKET_STRUCTURE` has no Analysis review, but that count does not itself justify adding one.
-- **Live→Analysis frontier:** there are zero unused completed same-anchor candidates. BARMM remains linked to a `PLANNED` 14 September 2026 occurrence and cannot be promoted into post-event Analysis before completion/outcome evidence exists.
-- **OPEC CE:** remains excluded from ordinary candidate selection.
+- **Canonical:** 689 occurrences. `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS` was already present with the correct 30 August–4 September 2026 Palau civil range and stable host binding. CK preserves every timing, identity, host and sensitivity field and changes only its evidence-backed lifecycle/provenance state from `ACTIVE` to `COMPLETED`.
+- **Sources:** the existing Palau host source `WSSRC-INT-012` remains unchanged. CK adds supporting-only first-party Cook Islands completion source `WSSRC-INT-036`; it has zero primary Canonical dependencies and no unattended-monitoring permission.
+- **Monitor:** 26 adapters / 217 scoped occurrences / 48 scoped series. No PIF Monitor route was created. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` zero-scope findings remain review prompts rather than automation permission because the relevant source-governance holdings remain restricted/manual-only at this checkpoint.
+- **Live Intelligence:** 7 observations / 2 Canonical-linked. CK creates no PIF Live row. Europe, Latin America, North America and Oceania / Pacific remain useful coverage prompts, not quotas.
+- **Analysis:** 22 reviews / 1 production Live input / 1 production revision. PIF completion increases the pool of evidence-backed completed Canonical anchors, but it does not itself authorise a new Analysis review or a Live→Analysis bridge.
+- **BARMM:** remains a `PLANNED` 14 September 2026 election occurrence. Do not manufacture post-event analysis before authoritative completion/outcome evidence exists.
+- **OPEC CE:** remains excluded from ordinary candidate selection and untouched by CK.
 
-CJ implements the read-only diagnostic and records its corrected evidence in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`. The audit uses only two explicit, nonmutating comparison mappings (`Central Africa -> Africa`; `Global -> Cross-regional / Global`) to avoid manufacturing gaps from taxonomy granularity.
+CK's permanent transaction evidence is `data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md`. The successful guarded transaction also repaired a class of historical descendant tests that had frozen old Canonical/Source/Ledger checkpoints as permanent ceilings while preserving exact historical prestate tests.
 
-### Next selected after CJ merge — CK Pacific Islands Forum upstream repair
+### Next pressure after CK — re-audit before selecting CL
 
-Subject to a fresh branch from post-CJ `main`, CK should:
+Do not mechanically continue CJ's old ranking. Once CK's final branch is clean, rerun the read-only cross-layer audit against the post-CK governed state and choose the next bounded tranche from current evidence.
 
-1. confirm no hidden equivalent PIF series/occurrence exists;
-2. establish a stable Pacific Islands Forum Leaders Meeting series if the omission is real;
-3. add the completed 55th Leaders Meeting in Koror, Palau, **30 August–4 September 2026**, preserving civil-date range precision;
-4. register/reuse minimum authoritative provenance sources with current source-governance review;
-5. preserve New Zealand/Auckland as confirmed 2027 host context without inventing meeting dates;
-6. separately decide whether the 2026 Forum Communiqué justifies one bounded Oceania / Pacific Live `OUTCOME_OF` specimen; CJ does not pre-authorise it;
-7. create no automatic Monitor route and open no automatic Canonical/Calendar/Live/Analysis gate.
+Candidate classes are deliberately unordered:
 
-If primary provenance or identity checks fail, CK must stop or redesign rather than duplicate or fabricate.
+1. a new controlled Live specimen only if it exercises a materially useful factual contract and has adequate first-party provenance;
+2. a Monitor route only where source competence, rights, endpoint behaviour and bounded scope are separately cleared;
+3. a Canonical/source repair only where identity-aware discovery establishes a real upstream omission or stale state;
+4. another Live→Analysis production input only where an immutable Live observation and completed same-anchor Canonical occurrence already support it;
+5. an Analysis revision only where later evidence changes an existing judgement rather than merely extending chronology.
+
+The PIF 2026 Forum Communiqué may be considered as one possible Oceania / Pacific Live outcome candidate, but CK does **not** pre-authorise it and regional zero-count filling is not a valid reason by itself.
 
 ## Write and authority boundaries
 
