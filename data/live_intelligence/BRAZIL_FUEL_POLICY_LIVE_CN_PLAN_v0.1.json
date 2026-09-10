@@ -1,0 +1,126 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CN",
+  "reference_date": "2026-09-10",
+  "exact_base_main_sha": "9386114de527b117987058cb1b9cd98066dab8e4",
+  "decision": "ADD_ONE_BOUNDED_UNSCHEDULED_POLICY_LIVE_SPECIMEN",
+  "selection_source": "data/coverage/POST_CM_PRESSURE_AUDIT_CN_v0.1.md",
+  "research_source": "data/live_intelligence/BRAZIL_FUEL_POLICY_LIVE_CN_RESEARCH_v0.1.md",
+  "target": {
+    "observation_id": "WSLI-POL-BRA-FUEL-POLICY-20260909-001",
+    "evidence_ids": [
+      "WSEV-LI-BRA-MF-FUEL-POLICY-20260909"
+    ],
+    "observation_type": "POLICY_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "jurisdictions": [
+      "Brazil"
+    ],
+    "regions": [
+      "Latin America"
+    ],
+    "domain_tags": [
+      "ECONOMICS",
+      "COMMODITIES",
+      "GEOPOLITICS"
+    ],
+    "canonical_links_required": 0,
+    "primary_official_url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-federal-adota-novas-medidas-para-combustiveis-apos-novos-aumentos-do-petroleo/"
+  },
+  "pre_state": {
+    "canonical_registry_version": "0.42",
+    "canonical_record_count": 689,
+    "source_registry_version": "2.04",
+    "source_count": 258,
+    "change_ledger_version": "0.28",
+    "change_ledger_count": 63,
+    "monitor_expectations_version": "0.28",
+    "monitor_adapter_count": 26,
+    "live_schema_version": "0.9",
+    "live_observation_count": 8,
+    "live_evidence_count": 11,
+    "canonical_linked_live_observation_count": 3,
+    "analysis_schema_version": "0.8",
+    "analysis_review_count": 22,
+    "analysis_evidence_count": 97,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 1
+  },
+  "target_state": {
+    "live_schema_version": "0.10",
+    "live_observation_count": 9,
+    "live_evidence_count": 12,
+    "canonical_linked_live_observation_count": 3,
+    "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
+    "maximum_observation_count": 9,
+    "maximum_evidence_count": 12,
+    "automatic_ingestion_allowed": false,
+    "automatic_story_clustering_allowed": false,
+    "public_observation_projection_allowed": false,
+    "canonical_mutation_allowed": false,
+    "source_registry_mutation_allowed": false,
+    "change_ledger_mutation_allowed": false,
+    "monitor_mutation_allowed": false,
+    "calendar_mutation_allowed": false,
+    "analysis_mutation_allowed": false,
+    "production_live_input_count": 1,
+    "production_analysis_revision_count": 1
+  },
+  "time_contract": {
+    "observed_at_utc": "2026-09-10T06:34:45Z",
+    "event_time_precision": "CIVIL_DATE",
+    "event_date": "2026-09-09",
+    "source_publication_precision": "CIVIL_DATE",
+    "source_published_date": "2026-09-09",
+    "displayed_source_clock_time_not_canonicalised": "18:47",
+    "source_timezone_not_established_by_reviewed_page": true,
+    "invented_event_clock_time_prohibited": true,
+    "invented_publication_utc_prohibited": true
+  },
+  "legal_status_contract": {
+    "live_claim": "OFFICIAL_GOVERNMENT_ANNOUNCEMENT_OF_ADOPTED_SIGNED_POLICY_MEASURES",
+    "new_substantive_decree_number_asserted": false,
+    "new_substantive_measure_provisional_number_asserted": false,
+    "dou_publication_asserted": false,
+    "in_force_asserted": false,
+    "related_mp_1389_is_context_only": true,
+    "consumer_price_effect_asserted": false,
+    "inflation_effect_asserted": false,
+    "market_move_asserted": false,
+    "independent_geopolitical_causation_asserted": false
+  },
+  "authorised_governed_writes": [
+    "data/live_intelligence/schema.json",
+    "data/live_intelligence/observations.json",
+    "data/live_intelligence/evidence_registry.json",
+    "data/status/current_state.json",
+    "README.md",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md"
+  ],
+  "protected_paths": [
+    "data/canonical/registry.json",
+    "data/canonical/schema.json",
+    "data/sources/registry.json",
+    "data/changes/ledger.json",
+    "data/coverage/biosecurity_overlay.json",
+    "data/monitor/expectations.json",
+    "data/monitor/operations_policy.json",
+    "data/analysis/schema.json",
+    "data/analysis/event_reviews.json",
+    "data/analysis/evidence_registry.json",
+    "OPEC_QUARANTINE.md",
+    "tests/test_opec_quarantine_cf.py"
+  ],
+  "gates": {
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false,
+    "public_live_observation_projection": false,
+    "automatic_live_ingestion": false,
+    "monitor_route_created": false,
+    "analysis_population_changed": false,
+    "correction_conflict_contract_weakened": false,
+    "tenth_live_observation_requires_new_pressure_audit": true
+  },
+  "manual_merge_only": true
+}
