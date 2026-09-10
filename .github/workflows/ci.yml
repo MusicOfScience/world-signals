@@ -15,7 +15,10 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Defaults to GitHub-hosted compute. Setting the repository variable
+    # WORLD_SIGNALS_VALIDATION_RUNNER to a self-hosted runner label redirects
+    # only this validation job; scheduled monitoring and Pages remain hosted.
+    runs-on: ${{ vars.WORLD_SIGNALS_VALIDATION_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
@@ -28,6 +31,10 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
 
       - name: Classify validation surface
         id: validation-profile
@@ -48,10 +55,10 @@ jobs:
           echo "profile=$profile" >> "$GITHUB_OUTPUT"
           echo "Selected validation profile: **$profile**" >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-node@v7
         if: steps.validation-profile.outputs.profile == 'FULL'
         with:
-          python-version: '3.13'
+          node-version: '24'
 
       - name: Run portable validation
         shell: bash
