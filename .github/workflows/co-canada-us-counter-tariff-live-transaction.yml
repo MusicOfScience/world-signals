@@ -1,3 +1,4 @@
+# Rerun after descendant-safe repair of failed run 34466470104
 name: CO Canada counter-tariff Live guarded transaction
 
 on:
@@ -57,8 +58,8 @@ jobs:
       - name: Simulate reviewed CO target
         run: python scripts/apply_canada_us_counter_tariff_live_co_tmp.py --simulate
 
-      - name: Run focused CO contract tests before write
-        run: python -m unittest discover -s tests -p 'test_canada_us_counter_tariff_live_co.py' -v
+      - name: Run focused CN descendant and CO contract tests before write
+        run: python -m unittest tests.test_brazil_fuel_policy_live_cn tests.test_canada_us_counter_tariff_live_co -v
 
       - name: Materialise reviewed CO Live transaction
         env:
