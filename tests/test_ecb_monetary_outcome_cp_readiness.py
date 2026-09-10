@@ -45,6 +45,8 @@ class EcbMonetaryOutcomeCPReadinessTests(unittest.TestCase):
         self.assertEqual(row["source_timezone"], "Europe/Berlin")
         self.assertEqual(row["start_utc"], "2026-09-10T12:15:00Z")
         self.assertEqual(row["time_precision"], "MINUTE")
+        self.assertEqual(row["time_status"], "CONFIRMED")
+        self.assertEqual(row["time_basis"], "AUTHORITATIVE_STANDARD_PUBLICATION_RULE")
         self.assertEqual(row["certainty_status"], "CONFIRMED")
         self.assertIn(row["lifecycle_status"], {"PLANNED", "COMPLETED"})
 
@@ -76,14 +78,63 @@ class EcbMonetaryOutcomeCPReadinessTests(unittest.TestCase):
         elif links:
             self.assertEqual(lifecycle, "COMPLETED")
 
-    def test_frozen_preflight_records_no_outcome_authorisation(self):
-        self.assertEqual(self.plan["status"], "READ_ONLY_READINESS_NO_OUTCOME_POPULATION_AUTHORISED")
-        self.assertFalse(self.plan["preflight"]["official_outcome_available"])
-        self.assertFalse(self.plan["preflight"]["scheduled_release_time_is_completion_evidence"])
+    def test_initial_preflight_remains_frozen(self):
+        initial = self.plan["initial_preflight"]
+        self.assertEqual(initial["as_of_utc"], "2026-09-10T11:30:00Z")
+        self.assertFalse(initial["official_outcome_available"])
+        self.assertFalse(initial["scheduled_release_time_is_completion_evidence"])
+        self.assertTrue(initial["identity_resolved"])
+        self.assertFalse(initial["duplicate_canonical_identity_allowed"])
+
+    def test_post_release_recheck_remains_fail_closed(self):
+        self.assertEqual(
+            self.plan["status"],
+            "READ_ONLY_POST_RELEASE_PRIMARY_EVIDENCE_BLOCKED_NO_OUTCOME_POPULATION_AUTHORISED",
+        )
+        recheck = self.plan["post_release_recheck"]
+        self.assertTrue(recheck["scheduled_release_time_passed"])
+        self.assertFalse(recheck["official_ecb_outcome_retrievable_on_reviewed_primary_surfaces"])
+        self.assertTrue(recheck["secondary_reporting_indicates_decision_occurred"])
+        self.assertFalse(recheck["secondary_reporting_admitted_as_canonical_completion_evidence"])
+        self.assertFalse(recheck["secondary_reporting_admitted_as_live_outcome_evidence"])
+        self.assertFalse(recheck["governed_write_authorised"])
+        self.assertEqual(
+            recheck["status_interpretation"],
+            "PRIMARY_SOURCE_RETRIEVAL_OR_INDEXING_GAP_NOT_EVIDENCE_OF_NO_DECISION",
+        )
+
+    def test_readiness_does_not_pre_assume_production_payload(self):
+        design = self.plan["transaction_design_state"]
+        self.assertFalse(design["final_transaction_shape_frozen"])
+        self.assertFalse(design["atomic_lifecycle_plus_live_selected"])
+        self.assertFalse(design["two_step_lifecycle_then_live_selected"])
+        self.assertFalse(design["canonical_target_version_assumed"])
+        self.assertFalse(design["change_ledger_target_version_assumed"])
+        self.assertFalse(design["live_target_version_assumed"])
+        self.assertFalse(design["live_evidence_row_count_assumed"])
+        self.assertFalse(design["live_observation_id_assumed"])
+        self.assertFalse(design["rate_decision_assumed_from_secondary_reporting"])
+        self.assertFalse(design["source_registry_new_identity_expected"])
+        self.assertEqual(
+            design["source_registry_existing_outcome_source_must_be_reused_if_competent"],
+            OUTCOME_SOURCE_ID,
+        )
+
+    def test_readiness_safety_gates_remain_closed(self):
+        prohibited = self.plan["prohibited_in_cp_readiness"]
+        self.assertTrue(prohibited["canonical_mutation_before_primary_outcome"])
+        self.assertTrue(prohibited["live_population_before_primary_outcome"])
+        self.assertTrue(prohibited["duplicate_canonical_occurrence"])
+        self.assertTrue(prohibited["elapsed_time_completion_inference"])
+        self.assertTrue(prohibited["secondary_news_as_substitute_for_registered_primary_outcome_source"])
+        self.assertTrue(prohibited["new_ecb_monitor_route"])
+        self.assertTrue(prohibited["automatic_monitor_to_live"])
+        self.assertTrue(prohibited["automatic_live_to_analysis"])
+        self.assertTrue(prohibited["market_causality_claim"])
+        self.assertTrue(prohibited["public_projection"])
+        self.assertTrue(prohibited["opec_quarantine_mutation"])
         self.assertEqual(self.plan["candidate"]["canonical_occurrence_id"], OCCURRENCE_ID)
         self.assertEqual(self.plan["candidate"]["outcome_source_id"], OUTCOME_SOURCE_ID)
-        self.assertTrue(self.plan["prohibited_in_cp_readiness"]["elapsed_time_completion_inference"])
-        self.assertTrue(self.plan["prohibited_in_cp_readiness"]["live_population_before_outcome"])
 
 
 if __name__ == "__main__":
