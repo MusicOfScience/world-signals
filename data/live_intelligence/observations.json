@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.9",
+  "version": "0.10",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
+  "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -246,7 +246,37 @@
       "automatic_canonical_commit": false,
       "google_calendar_write": false,
       "observed_at_utc": "2026-09-10T04:10:51Z"
+    },
+    {
+      "observation_id": "WSLI-POL-BRA-FUEL-POLICY-20260909-001",
+      "observed_at_utc": "2026-09-10T06:34:45Z",
+      "observation_type": "POLICY_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Brazil announces adopted temporary gasoline-ethanol tax relief and diesel subsidy measure",
+      "summary": "Brazil's Ministry of Finance reported that the Federal Government adopted two temporary fuel-policy measures on 9 September 2026. The ministry says a signed decree reduces PIS/Pasep and Cofins on gasoline by R$0.63 per litre and zeroes those contributions on hydrated ethanol for the stated 10 September–9 October period, while a signed measure provisional authorises an adjustable subsidy for road diesel, initially R$1.00 per litre. The ministry frames the package as a response to international oil-price volatility and fuel-supply restrictions associated by the government with geopolitical conflicts. This Live observation records the official policy adoption/announcement and stated parameters only: it does not assert that the newly announced substantive instruments had already been published in the Diário Oficial or entered into force at CN review time, does not assign unverified legal instrument numbers, and does not claim observed pump-price, inflation, supply or market effects.",
+      "domain_tags": [
+        "ECONOMICS",
+        "COMMODITIES",
+        "GEOPOLITICS"
+      ],
+      "jurisdictions": [
+        "Brazil"
+      ],
+      "regions": [
+        "Latin America"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-BRA-MF-FUEL-POLICY-20260909"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "CIVIL_DATE",
+        "event_date": "2026-09-09"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CM: the eight CL observations are retained unchanged while v0.9 hardens correction, retraction and conflicting-report semantics using synthetic contract tests only. Waqa Moana remains excluded; public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CN: nine observations. CN adds one unscheduled primary-confirmed Brazilian fuel-policy development with zero Canonical links; the observation records the government's adoption/signing announcement without upgrading unresolved legal-publication/effect status. Public projection and automatic ingestion remain closed."
 }

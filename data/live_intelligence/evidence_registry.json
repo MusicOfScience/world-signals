@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.9",
+  "version": "0.10",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
-  "scope_note": "Evidence supports the unchanged eight-observation Live store through CM. No production evidence row is added; v0.9 hardens correction, retraction and conflicting-report validation using synthetic fixtures only. Live evidence remains separate from Canonical provenance and Analysis evidence, and public observation projection remains closed.",
+  "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through CN. CN adds one primary-official Brazil Ministry of Finance announcement row at civil-date publication precision; it supplies no Canonical provenance, unattended-monitoring authority or Analysis conclusion.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -193,6 +193,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary official member-government post-event evidence. It states that the Leaders’ Retreat resolved the framework guiding Pacific engagement with partners and describes the approach as transparent, accountable and Pacific-led in support of the 2050 Strategy. CL uses this page as reviewed factual evidence only; it does not grant the source unattended-monitoring authority or alter Canonical provenance."
+    },
+    {
+      "evidence_id": "WSEV-LI-BRA-MF-FUEL-POLICY-20260909",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Brazil — Ministry of Finance",
+      "title": "Governo Federal adota novas medidas para combustíveis após novos aumentos do petróleo",
+      "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-federal-adota-novas-medidas-para-combustiveis-apos-novos-aumentos-do-petroleo/",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-09"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official Finance Ministry announcement. The page displays 09/09/2026 18h47 but the reviewed page does not itself establish an IANA timezone for that clock time, so CN preserves publication precision only as a civil date. The article says the Federal Government adopted/signed a temporary gasoline/ethanol tax measure and diesel-subsidy measure on 9 September. Fresh post-CM Planalto index review had not yet surfaced the new substantive legal-instrument pair, so this evidence row does not assert Diário Oficial publication, legal instrument numbers or entry into force."
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.9",
+  "version": "0.10",
   "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -258,7 +258,14 @@
     "conflict_description is reserved for CONFLICTING_REPORTS observations; ordinary verified observations may not carry hidden conflict semantics.",
     "DATA_REVISION remains an external-data revision concept and does not require a synthetic prior WORLD SIGNALS Live observation.",
     "CM does not reinterpret or populate Waqa Moana; the CL source-wording discrepancy remains preserved as historical pressure evidence only.",
-    "A ninth Live observation, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
+    "CM v0.9 remains the frozen eight-observation/eleven-evidence checkpoint; CN is the separately pressure-audited ninth observation.",
+    "CN v0.10 adds one PRIMARY_CONFIRMED unscheduled Brazil POLICY_DEVELOPMENT with zero Canonical links and one primary-official Ministry of Finance evidence row.",
+    "CN records only the government's 9 September adoption/signing announcement and stated fuel-policy parameters; it does not infer Diário Oficial publication, entry into force or legal instrument numbers not established by the reviewed sources.",
+    "CN preserves both event time and source-publication time at CIVIL_DATE precision; the source page's displayed 18h47 is not converted to UTC without an established source timezone.",
+    "CN retains the government's geopolitical-conflict framing as attributed source context and does not convert it into independent WORLD SIGNALS causal analysis or observed inflation, pump-price, supply or market effects.",
+    "CN creates no Canonical occurrence, Source Registry authority, Monitor route or Analysis review; automatic ingestion, automatic Canonical commit, Google Calendar writes and public Live projection remain prohibited.",
+    "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CN v0.10.",
+    "A tenth Live observation, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -271,15 +278,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_POPULATION_WITH_CORRECTION_CONFLICT_CONTRACT",
+    "mode": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 8,
-    "maximum_evidence_count": 11,
+    "maximum_observation_count": 9,
+    "maximum_evidence_count": 12,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CM retains the reviewed CL population at eight observations and eleven evidence rows while hardening correction, retraction and conflicting-report validation; no production row is added."
+    "reason": "CN adds exactly one pressure-audited unscheduled Brazilian fuel-policy development using bounded primary-official evidence; legal publication/effect, Canonical creation, Monitor routing and Analysis remain outside the specimen."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -350,5 +357,16 @@
     "evidence_count": 11,
     "base_main_sha": "1e4a6bbc8670fc36a452740401461f28e313c031",
     "historical_contract": "CM preserves all eight CL observations and eleven evidence rows while adding a no-population executable contract for CORRECTED, RETRACTED and CONFLICTING_REPORTS semantics."
+  },
+  "cn_checkpoint": {
+    "schema_version": "0.10",
+    "observations_version": "0.10",
+    "evidence_version": "0.10",
+    "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
+    "observation_count": 9,
+    "evidence_count": 12,
+    "canonical_linked_observation_count": 3,
+    "base_main_sha": "9386114de527b117987058cb1b9cd98066dab8e4",
+    "historical_contract": "CN adds one bounded unscheduled Brazilian policy-adoption observation while preserving the CM correction/conflict contract and all upstream/downstream write boundaries."
   }
 }
