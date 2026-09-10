@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.42",
+  "version": "0.43",
   "reference_date": "2026-09-10",
   "record_count": 689,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
@@ -192,7 +192,7 @@
       "record_class": "OCCURRENCE",
       "certainty_status": "CONFIRMED",
       "activation_mode": "EXPLICITLY_SCHEDULED",
-      "lifecycle_status": "PLANNED",
+      "lifecycle_status": "COMPLETED",
       "condition_state": "NOT_REQUIRED",
       "condition_description": null,
       "trigger_source_id": null,
@@ -216,24 +216,39 @@
       "location": null,
       "source_id": "WSSRC-CB-003",
       "primary_source_assertion_id": "WSA-901c19618e13196f",
-      "last_successful_assertion_id": "WSA-901c19618e13196f",
+      "last_successful_assertion_id": "WSA-CP-19be487885570ab9",
       "status_history": [
         {
           "as_of": "2026-09-02",
           "certainty_status": "CONFIRMED",
           "lifecycle_status": "PLANNED",
           "basis": "Authoritative issuing-institution schedule verified in controlled Tier-1 population pass."
+        },
+        {
+          "as_of": "2026-09-10",
+          "certainty_status": "CONFIRMED",
+          "lifecycle_status": "COMPLETED",
+          "condition_state": "NOT_REQUIRED",
+          "change_reason": "ECB first-party monetary-policy decision publication verifies completion; not inferred from elapsed time.",
+          "source_assertion_id": "WSA-CP-19be487885570ab9",
+          "basis": "ECB first-party decision publication states that the Governing Council decided on 10 September 2026 to raise all three key ECB interest rates by 25 basis points. The ECB press RSS feed timestamps that decision publication at 14:15 +0200. Completion is established by the published decision, not by elapsed schedule time."
         }
       ],
       "first_announced_at": null,
       "first_discovered_at": "2026-09-02",
-      "last_verified_at": "2026-09-02",
+      "last_verified_at": "2026-09-10",
       "next_verification_due": "2026-09-09",
       "parent_occurrence_id": "WSO-b2fa91dfcbae5c38",
       "related_occurrence_ids": [
         "WSO-90f504a4e4925486"
       ],
-      "related_documents": [],
+      "related_documents": [
+        {
+          "source_id": "WSSRC-CB-004",
+          "role": "COMPLETION_AND_OUTCOME_CONFIRMATION",
+          "source_locator": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html"
+        }
+      ],
       "intrinsic_importance": "UNRATED_PENDING_CALIBRATION",
       "expected_market_sensitivity": "UNRATED_PENDING_CALIBRATION",
       "geopolitical_sensitivity": "UNRATED_PENDING_CALIBRATION",
@@ -248,7 +263,7 @@
       "canonicality_state": "STAGED_VERIFIED",
       "population_tranche": "MONETARY_POLICY_A",
       "regular_meeting_ordinal": 6,
-      "notes": "Decision occurrence only. Meeting window, press conference, projections/reports and minutes/accounts are separate linked series to be populated subsequently.",
+      "notes": "Decision occurrence only. Meeting window, press conference, projections/reports and minutes/accounts remain separate linked series. Completion is verified from the ECB's 10 September 2026 first-party monetary-policy decision publication; Canonical timing remains unchanged.",
       "visibility_tier": "ESSENTIAL"
     },
     {

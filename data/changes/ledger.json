@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OCCURRENCE_CHANGES",
-  "version": "0.28",
+  "version": "0.29",
   "reference_date": "2026-09-10",
   "changes": [
     {
@@ -1939,6 +1939,37 @@
       "registry_version_before": "0.41",
       "registry_version_after": "0.42",
       "canonical_mutation_committed": true
+    },
+    {
+      "change_id": "WSCHANGE-e94c7fb7c8d8bd02",
+      "occurrence_id": "WSO-ad4d0618a65059f2",
+      "change_type": "LIFECYCLE_COMPLETION",
+      "old_values": {
+        "lifecycle_status": "PLANNED",
+        "last_successful_assertion_id": "WSA-901c19618e13196f"
+      },
+      "new_values": {
+        "lifecycle_status": "COMPLETED",
+        "last_successful_assertion_id": "WSA-CP-19be487885570ab9"
+      },
+      "source_assertion_id": "WSA-CP-19be487885570ab9",
+      "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+      "reviewed_at": "2026-09-11T02:03:10+10:00",
+      "review_basis": [
+        "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html",
+        "https://www.ecb.europa.eu/rss/press.html",
+        "ECB first-party decision publication states that the Governing Council raised all three key ECB interest rates by 25 basis points and sets the new rates effective 16 September 2026.",
+        "The ECB press RSS item timestamps the decision publication at 14:15 +0200 on 10 September 2026, matching the existing Canonical decision clock; publication evidence establishes completion independently of elapsed time.",
+        "Stable occurrence, series, schedule-source identity and every Canonical timing field are preserved.",
+        "The outcome publication is competent curated provenance under existing WSSRC-CB-004 governance; no automated Monitor permission is inferred."
+      ],
+      "commit_mode": "REVIEWED_ECB_MONETARY_LIFECYCLE_COMPLETION_CP",
+      "registry_version_before": "0.42",
+      "registry_version_after": "0.43",
+      "canonical_mutation_committed": true,
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false,
+      "committed_at": "2026-09-11T02:28:58+10:00"
     }
   ]
 }

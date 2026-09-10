@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.11",
+  "version": "0.12",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through CO. CO adds two primary-official Canadian rows: Department of Finance tariff scope/effective-date evidence and CBSA operative border-application evidence. Neither supplies Canonical provenance, unattended-monitoring authority or Analysis conclusions.",
+  "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through CP. CP adds one primary-official ECB decision row; the exact publication timestamp comes from the ECB's own press RSS item for the exact decision URL. It grants no automated Monitor authority or Analytical conclusion.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -244,6 +244,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary official CBSA administrative notice dated Ottawa, 7 September 2026. It states that, effective 8 September 2026, certain U.S.-origin goods imported into Canada are subject under the United States Surtax Order (2026) to surtaxes of 15%, 25% or 50% of value for duty, as applicable. The notice establishes operative border application for the bounded CO claim; it does not grant unattended-monitoring or Canonical provenance authority."
+    },
+    {
+      "evidence_id": "WSEV-LI-ECB-MP-20260910",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "European Central Bank",
+      "title": "Monetary policy decisions",
+      "url": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "published_at_utc": "2026-09-10T12:15:00Z"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "ECB first-party decision page states that all three key interest rates were raised by 25 basis points, to 2.50% for the deposit facility, 2.65% for main refinancing operations and 2.90% for the marginal lending facility, effective 16 September 2026. Exact publication time is supplied by the ECB's own press RSS item for this exact decision URL. Live evidence does not alter Canonical timing or provenance."
     }
   ]
 }
