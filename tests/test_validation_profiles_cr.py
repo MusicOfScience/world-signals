@@ -35,7 +35,7 @@ class ValidationProfileContractTests(unittest.TestCase):
     def test_safe_research_classifier_is_fail_closed(self):
         safe_rows = [
             ("A", ["data/coverage/FOO_RESEARCH_v0.1.md"]),
-            ("M", ["data/analysis/BAR_PRESSURE_v0.2.md"]),
+            ("A", ["data/analysis/BAR_PRESSURE_v0.2.md"]),
         ]
         with mock.patch.object(module, "changed_entries", return_value=safe_rows), mock.patch.object(
             module, "verify_safe_research_surface", return_value=[row[1][0] for row in safe_rows]
@@ -56,8 +56,9 @@ class ValidationProfileContractTests(unittest.TestCase):
         ):
             self.assertEqual(module.classify_pull_request("BASE", "HEAD"), "FULL")
 
-    def test_deletion_rename_and_unknown_paths_cannot_use_fast_path(self):
+    def test_modification_deletion_rename_and_unknown_paths_cannot_use_fast_path(self):
         for rows in (
+            [("M", ["data/coverage/FOO_RESEARCH_v0.1.md"])],
             [("D", ["data/coverage/FOO_RESEARCH_v0.1.md"])],
             [("R100", ["data/coverage/OLD_RESEARCH_v0.1.md", "data/coverage/NEW_RESEARCH_v0.1.md"])],
             [("A", ["data/coverage/ordinary-notes.md"])],
