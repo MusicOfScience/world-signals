@@ -34,6 +34,20 @@ jobs:
           test "$(git merge-base HEAD origin/main)" = "$BASE"
           test "$(git rev-parse --abbrev-ref HEAD)" = "feature/post-cj-pif-canonical-source-repair-ck"
 
+      - name: Probe existing PIF identity read-only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('.')
+          registry = json.loads((root/'data/canonical/registry.json').read_text())
+          sources = json.loads((root/'data/sources/registry.json').read_text())
+          rows = [r for r in registry['records'] if r.get('source_id') == 'WSSRC-INT-012' or r.get('host_binding_id') == 'WSHB-PIF-2026-PW' or 'Pacific Islands Forum' in str(r.get('canonical_name',''))]
+          src = next(s for s in sources['sources'] if s.get('source_id') == 'WSSRC-INT-012')
+          print('PIF_EXISTING_ROWS=' + json.dumps(rows, ensure_ascii=False, sort_keys=True))
+          print('PIF_SOURCE=' + json.dumps(src, ensure_ascii=False, sort_keys=True))
+          PY
+
       - name: Simulate CK transaction
         run: python scripts/apply_pif_leaders_meeting_ck.py
 
