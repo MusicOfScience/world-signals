@@ -35,6 +35,25 @@
     "status_interpretation": "PRIMARY_SOURCE_RETRIEVAL_OR_INDEXING_GAP_NOT_EVIDENCE_OF_NO_DECISION",
     "governed_write_authorised": false
   },
+  "latest_primary_recheck": {
+    "as_of_utc": "2026-09-10T14:28:00Z",
+    "official_decision_index_latest_visible_decision_date": "2026-07-23",
+    "official_press_conference_surface_still_rendered_pre_release_state": true,
+    "official_weekly_schedule_still_records_2026_09_10_decision_and_press_conference": true,
+    "official_tv_downlink_surface_records_2026_09_10_press_conference_transmission_schedule": true,
+    "official_press_rss_route_discovered": "https://www.ecb.europa.eu/rss/press.html",
+    "official_press_rss_payload_retrievable_in_current_research_toolchain": false,
+    "eurosystem_member_surfaces_reviewed": [
+      "Deutsche Bundesbank",
+      "Banque de France"
+    ],
+    "eurosystem_member_surfaces_exposed_current_decision_outcome": false,
+    "official_ecb_outcome_retrievable_on_reviewed_primary_surfaces": false,
+    "secondary_reporting_admitted_as_substitute": false,
+    "status_interpretation": "PERSISTENT_PRIMARY_SURFACE_OR_TOOLCHAIN_RETRIEVAL_GAP_NO_NEGATIVE_EVENT_INFERENCE",
+    "governed_write_authorised": false,
+    "repeat_search_without_new_primary_surface_value": "LOW"
+  },
   "required_sequence_after_primary_outcome_retrieval": [
     "verify WSSRC-CB-004 outcome wording",
     "match outcome to WSO-ad4d0618a65059f2",
