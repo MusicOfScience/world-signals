@@ -1,32 +1,78 @@
 name: Validate WORLD SIGNALS
 
 on:
+  pull_request:
   push:
     branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: world-signals-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
+        with:
+          # Validate the actual PR head rather than GitHub's synthetic merge ref.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+
+      - name: Fetch exact pull-request base
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+
+      - name: Classify validation surface
+        id: validation-profile
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          args=(--event "$GITHUB_EVENT_NAME" --head-ref "$HEAD_SHA" --classify-only)
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            args+=(--base-ref "$BASE_SHA")
+          fi
+          profile="$(python3 scripts/validate_world_signals.py "${args[@]}")"
+          case "$profile" in
+            FULL|SAFE_RESEARCH_DOCS|POST_MERGE) ;;
+            *) echo "Unexpected validation profile: $profile" >&2; exit 1 ;;
+          esac
+          echo "profile=$profile" >> "$GITHUB_OUTPUT"
+          echo "Selected validation profile: **$profile**" >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/setup-python@v6
+        if: steps.validation-profile.outputs.profile == 'FULL'
         with:
           python-version: '3.13'
-      - run: python scripts/validate_registry.py
-      - run: python scripts/validate_live_intelligence.py
-      - run: python scripts/validate_analysis.py
-      - run: python scripts/project_state_snapshot.py --check
-      - run: python -m unittest discover -s tests -v
-      - run: python -m py_compile scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_analysis.py scripts/project_state_snapshot.py scripts/run_cross_layer_coverage_audit.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/live_intelligence.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py src/world_signals/cross_layer_coverage.py
-      - run: node --check web/app.js
-      - run: node --check web/horizon.js
-      - run: node --check web/native-calendar.js
-      - run: node --check web/history.js
-      - run: node --check web/operations.js
-      - run: node --check web/biosecurity.js
-      - run: node --check web/analysis.js
-      - run: python scripts/build_site.py
+
+      - name: Run portable validation
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          VALIDATION_PROFILE: ${{ steps.validation-profile.outputs.profile }}
+        run: |
+          args=(--event "$GITHUB_EVENT_NAME" --head-ref "$HEAD_SHA" --profile "$VALIDATION_PROFILE")
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            args+=(--base-ref "$BASE_SHA")
+          fi
+          python3 scripts/validate_world_signals.py "${args[@]}"
+
+      - name: Upload validation and coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-signals-validation-${{ github.run_id }}
+          path: |
+            artifacts/validation/summary.json
+            artifacts/coverage
+          if-no-files-found: ignore
+          retention-days: 30
