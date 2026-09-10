@@ -120,7 +120,7 @@ class ECBMonetaryOutcomeCPTests(unittest.TestCase):
         self.assertEqual(ev["publication_time"], {"precision": "EXACT_TIMESTAMP", "published_at_utc": "2026-09-10T12:15:00Z"})
         self.assertEqual(ev["canonical_provenance_effect"], "NONE")
         joined = " ".join(self.payload["scope_exclusions"]).lower()
-        for boundary in ("projections", "expectation", "market", "source registry", "analysis", "opec"):
+        for boundary in ("projections", "expectation", "asset-price", "source registry", "analysis", "opec"):
             self.assertIn(boundary, joined)
 
     def test_simulated_stage_one_preserves_canonical_identity_and_clock(self):
@@ -152,8 +152,8 @@ class ECBMonetaryOutcomeCPTests(unittest.TestCase):
         self.assertEqual(validate_cp_contract(post_registry, self.sources, post_ledger, post_overlay, post_schema, post_obs, post_ev, self.plan), [])
         reg = validate_registry(post_registry, self.sources)
         self.assertTrue(reg.ok, reg.errors)
-        overlay = validate_biosecurity_overlay(post_registry, post_overlay)
-        self.assertTrue(overlay.ok, overlay.errors)
+        overlay_errors = validate_biosecurity_overlay(post_registry, post_overlay)
+        self.assertEqual(overlay_errors, [])
         live = validate_live_intelligence(post_schema, post_ev, post_obs, post_registry)
         self.assertTrue(live.ok, live.errors)
 
