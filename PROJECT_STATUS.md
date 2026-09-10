@@ -12,7 +12,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.8 / 8 observations / 11 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.9 / 8 observations / 11 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -75,27 +75,31 @@ CK corrected CJ's apparent PIF absence finding after an identity-aware probe fou
 
 ## Current pressure interpretation
 
-CL is now materialised on the feature branch as one bounded scheduled institutional-outcome Live specimen. Population counts remain diagnostic rather than selection rules.
+CM is now materialised on the feature branch as a **no-production-population Live contract hardening tranche**. The mechanically derived block above is current: Live is v0.9 while production remains exactly 8 observations / 11 evidence / 3 Canonical-linked.
 
-- **Canonical:** unchanged v0.42 / 689. The completed PIF anchor `WSO-INT-A-0001` remains byte-semantically unchanged by CL: 30 August–4 September 2026, `Pacific/Palau`, DAY precision, confirmed lifecycle completion from CK.
-- **Sources / Change Ledger / Monitor:** unchanged v2.04 / 258 sources, v0.28 / 63 changes and v0.28 / 26 Monitor adapters. CL creates no PIF Monitor route and acquires no automation permission from the Cook Islands evidence page.
-- **Live Intelligence:** v0.8 / 8 observations / 11 evidence / 3 Canonical-linked. CL adds exactly one `PRIMARY_CONFIRMED` `INSTITUTIONAL_DEVELOPMENT`, `WSLI-INST-PIF-PARTNER-FRAMEWORK-20260904-001`, linked `OUTCOME_OF` the completed PIF anchor. Its factual scope is the Leaders' Retreat resolution of a Pacific-led framework for engagement with partners. It does not represent the whole Forum Communiqué and contains no Analysis fields.
-- **Fresh evidence correction:** CL excluded Waqa Moana after finding unreconciled institutional-status wording: the Australian PM release used `unanimously endorsed`, while indexed final-communiqué text used `agreed in principle` and noted further national consultations. The final Forum Secretariat PDF was not directly retrievable through the controlled automated path, so CL did not choose a stronger formulation or invent a reconciliation.
-- **Analysis:** unchanged 22 reviews / 1 production Live input / 1 production revision. The post-CL frontier now contains one completed linked Live observation without an Analysis review — PIF — but still **zero bridge-ready completed same-anchor candidates**. PIF is not automatically promoted into Analysis.
-- **BARMM:** remains linked pre-election context for the `PLANNED` 14 September 2026 occurrence; no post-event outcome or Analysis is manufactured before authoritative completion evidence.
+- **Canonical:** unchanged v0.42 / 689 occurrences. CM creates or mutates no Canonical identity, timing, lifecycle or provenance.
+- **Sources / Change Ledger / Monitor:** unchanged v2.04 / 258 sources, v0.28 / 63 changes and v0.28 / 26 Monitor adapters. CM grants no automation permission and creates no route.
+- **Live Intelligence:** v0.9 / 8 / 11 / 3 linked. `CORRECTED` / `RETRACTED` now require an explicit prior Live target, correction/revision evidence and strictly later observation time. `CONFLICTING_REPORTS` requires at least two unique evidence records from at least two distinct normalised providers plus a factual `conflict_description`. No winner or synthetic consensus is required. `conflict_description` is prohibited outside the conflict state.
+- **Population:** all eight production observation objects and all eleven evidence objects are preserved exactly from merged CL. No current production row uses `CONFLICTING_REPORTS`, `CORRECTED` or `RETRACTED`.
+- **External revisions:** `DATA_REVISION` remains distinct and may describe a newly observed revision to external data without inventing prior WORLD SIGNALS Live history.
+- **Analysis:** unchanged 22 reviews / 97 evidence / 1 production Live input / 1 production revision. No automatic Live→Analysis relationship was created.
+- **Waqa Moana:** remains historical motivating evidence only. CM does not reinterpret, resolve or populate it.
+- **BARMM:** remains pre-election context for the planned 14 September 2026 occurrence; no outcome or post-event Analysis is manufactured early.
 - **OPEC CE:** remains quarantined and excluded.
 
-CL's permanent transaction evidence is `data/live_intelligence/PIF_PARTNER_FRAMEWORK_LIVE_CL_TRANSACTION_AUDIT_v0.1.md`. Successful guarded run `34436154025` passed exact-base gating, focused CL tests, all governed validators, derived-state consistency, **1,262 tests** with 68 historical-prestate skips, Python compilation, seven JavaScript checks, static build and bounded/protected-layer gates. Temporary write-capable scaffolding was removed after materialisation.
+CM permanent transaction evidence is `data/live_intelligence/LIVE_CORRECTION_CONFLICT_CM_TRANSACTION_AUDIT_v0.1.md`. Guarded run `34441432538` / job `102757107224` passed on the first attempt, including **1,276 tests** with 68 historical-prestate skips, all governed validators, derived-state consistency, Python compilation, seven JavaScript checks, static build, exact production-row invariance, protected-layer nonmutation and bounded final diff. Temporary transaction machinery was removed before materialisation commit.
 
-### Post-CL pressure — CM selected for fresh post-merge design
+### Post-CM pressure — CN selected for fresh post-merge design
 
-Read-only coverage run `34436436416` confirms Live is now 8 / 3 linked and removes Oceania / Pacific from the zero-Live prompt set. Europe, Latin America and North America remain prompts only. `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` still have no configured Monitor scope, and `CORPORATE_FINANCIAL_MARKET_STRUCTURE` still has no Analysis review; none is a queue.
+Read-only coverage run `34441643238` confirms the expected no-population result. Canonical remains 689 / 203 series, Monitor 26 adapters / 217 occurrences / 48 series, Live 8 / 3 linked, and Analysis 22 reviews / 1 Live input / 1 revision. Europe, Latin America and North America remain zero-Live prompts. PIF remains completed-linked without an Analysis review, but there is still no unused completed same-anchor Analysis target. Monitor category zeroes and the corporate/market Analysis zero remain prompts rather than queues.
 
-The stronger current pressure is a capability weakness exposed by CL's source disagreement. Live already names `CONFLICTING_REPORTS`, `CORRECTED` and `RETRACTED`, but the executable contract is not mature enough for broader population: correction/retraction does not yet require correction-role evidence or later chronology, and conflicting-report state does not yet require distinct providers plus an explicit factual disagreement description.
+Fresh qualitative comparison identifies a stronger next population candidate: Brazil's 9 September 2026 fuel-policy intervention. The Ministério da Fazenda states that the Federal Government adopted measures reducing federal PIS/Pasep and Cofins on gasoline and hydrated ethanol and authorising an adjustable road-diesel subsidy amid international oil-price volatility and supply restrictions that the government associates with geopolitical conflict.
 
-`data/coverage/POST_CL_PRESSURE_AUDIT_CM_v0.1.md` therefore selects **CM — Live correction / retraction / conflicting-report contract hardening** for fresh design only after CL is merged. CM should be a no-production-population foundation: strengthen schema/validator invariants and prove them with synthetic fixtures, while preserving all eight Live rows and eleven evidence rows. It must not reinterpret Waqa, create a synthetic conflict specimen, open public projection, create another Live→Analysis link, or mutate Canonical/Monitor/Analysis state.
+`data/coverage/POST_CM_PRESSURE_AUDIT_CN_v0.1.md` therefore selects **CN — Brazil fuel-policy Live broadening** for fresh design only after CM merges. The candidate is selected because it is independently important and exercises an unscheduled Latin American fiscal/commodity/geopolitical transmission signal, not because Latin America has a zero.
 
-The post-CL audit also explicitly rejects two tempting shortcuts: creating a PIF Analysis review merely to manufacture a bridge target, and backfilling a mechanical market-structure event merely to erase the last Analysis category zero.
+The selection is deliberately conditional. At the time of review, the Ministry announcement is clearer than the fully retrievable final legal-instrument trail. CN must freshly recheck Presidency/Planalto, Diário Oficial and Ministry sources after merge; must revise or abandon the candidate if evidence changes; and must not pre-write `in force`, exact legal numbering, exact UTC publication/event time, observed price/inflation effects, a Canonical occurrence, a Monitor route or an Analysis conclusion without separate support.
+
+Current North American Canada–U.S. tariff escalation and European oil-security context remain credible future Live candidates but are deferred rather than appended mechanically. PIF Analysis and a market-structure review remain unjustified if their only purpose is to manufacture a bridge candidate or erase a histogram zero.
 
 ## Write and authority boundaries
 

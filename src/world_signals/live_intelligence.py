@@ -5,6 +5,8 @@ from datetime import date, datetime, timezone
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from world_signals.live_correction_conflict import validate_correction_conflict_contract
+
 
 @dataclass(frozen=True)
 class LiveIntelligenceValidationReport:
@@ -286,6 +288,10 @@ def validate_live_intelligence(
         if row.get("observation_id")
     }
 
+    errors.extend(
+        validate_correction_conflict_contract(schema, evidence_by_id, observations)
+    )
+
     for row in observations:
         observation_id = row.get("observation_id") or "<missing-observation-id>"
         missing = sorted(field for field in required_observation_fields if field not in row)
@@ -348,9 +354,6 @@ def validate_live_intelligence(
                 errors.append(
                     f"{observation_id}: DATA_REVISION requires evidence with CORRECTION_OR_REVISION role"
                 )
-        if row.get("verification_state") in {"CORRECTED", "RETRACTED"} and not revision_ref:
-            errors.append(f"{observation_id}: corrected/retracted live observation requires revision reference")
-
         story_id = row.get("story_id")
         if story_id is not None:
             if grouping.get("manual_reviewed_story_id_allowed") is not True:

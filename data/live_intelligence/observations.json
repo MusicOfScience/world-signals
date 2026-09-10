@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-10",
   "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
   "observations": [
@@ -248,5 +248,5 @@
       "observed_at_utc": "2026-09-10T04:10:51Z"
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CL: eight observations, including one scheduled PIF institutional outcome linked OUTCOME_OF a completed Canonical occurrence. Waqa Moana remains excluded from the CL payload pending direct reconciliation of final institutional wording. Public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through CM: the eight CL observations are retained unchanged while v0.9 hardens correction, retraction and conflicting-report semantics using synthetic contract tests only. Waqa Moana remains excluded; public projection and automatic ingestion remain closed."
 }
