@@ -6,6 +6,7 @@ on:
       - feature/post-cj-pif-canonical-source-repair-ck
     paths:
       - data/coverage/PIF_LEADERS_MEETING_CK_PLAN_v0.1.json
+      - scripts/repair_ck_descendant_assertions_tmp.py
       - .github/workflows/ck-pif-transaction.yml
 
 permissions:
@@ -55,6 +56,12 @@ jobs:
       - name: Run focused CK contract tests before write
         run: python -m unittest discover -s tests -p 'test_pif_leaders_meeting_ck.py' -v
 
+      - name: Apply descendant-safe historical-test repairs ephemerally
+        run: python scripts/repair_ck_descendant_assertions_tmp.py
+
+      - name: Compile repaired historical helper
+        run: python -m py_compile scripts/apply_barmm_pre_election_live_cg.py
+
       - name: Materialise reviewed CK transaction
         env:
           WORLD_SIGNALS_APPLY_PIF_LEADERS_CK: REVIEWED_APPLY
@@ -84,6 +91,7 @@ jobs:
         run: |
           python -m py_compile \
             scripts/apply_pif_leaders_meeting_ck.py \
+            scripts/apply_barmm_pre_election_live_cg.py \
             scripts/project_state_snapshot.py \
             scripts/validate_registry.py \
             scripts/validate_live_intelligence.py \
@@ -116,6 +124,24 @@ jobs:
           data/coverage/biosecurity_overlay.json
           data/sources/registry.json
           data/status/current_state.json
+          scripts/apply_barmm_pre_election_live_cg.py
+          tests/test_bsp_monetary_rss_activation_bs.py
+          tests/test_bwc_wg8_first_analysis_revision_cd.py
+          tests/test_cbsl_mpr_rss_activation_bt.py
+          tests/test_eurostat_monitor_bk.py
+          tests/test_fao_release_calendar_activation_bv.py
+          tests/test_fomc_monitor_readiness_bm.py
+          tests/test_hmt_t1_content_api_activation_cc.py
+          tests/test_indec_cpi_calendar_activation_bu.py
+          tests/test_japan_cpi_schedule_activation_bw.py
+          tests/test_japan_household_spending_monitor_bl.py
+          tests/test_japan_mof_jgb_rss_activation_br.py
+          tests/test_kenya_pfm_readiness_bn.py
+          tests/test_nbs_native_rss_activation_bx.py
+          tests/test_nhc_atlantic_season_activation_ci.py
+          tests/test_opec_fallback_completion_be.py
+          tests/test_opec_official_confirmation_bg.py
+          tests/test_sarb_mpc_rss_activation_cb.py
           EOF
           )
           actual="$(git diff --name-only HEAD | sort)"
@@ -124,7 +150,7 @@ jobs:
           test "$actual" = "$expected"
           git diff --exit-code HEAD -- OPEC_QUARANTINE.md data/monitor/expectations.json data/monitor/operations_policy.json data/live_intelligence/schema.json data/live_intelligence/observations.json data/live_intelligence/evidence_registry.json data/analysis/schema.json data/analysis/event_reviews.json data/analysis/evidence_registry.json
 
-      - name: Commit reviewed CK materialisation
+      - name: Commit reviewed CK materialisation and descendant repairs
         shell: bash
         run: |
           set -euo pipefail
@@ -137,7 +163,25 @@ jobs:
             data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md \
             data/coverage/biosecurity_overlay.json \
             data/sources/registry.json \
-            data/status/current_state.json
+            data/status/current_state.json \
+            scripts/apply_barmm_pre_election_live_cg.py \
+            tests/test_bsp_monetary_rss_activation_bs.py \
+            tests/test_bwc_wg8_first_analysis_revision_cd.py \
+            tests/test_cbsl_mpr_rss_activation_bt.py \
+            tests/test_eurostat_monitor_bk.py \
+            tests/test_fao_release_calendar_activation_bv.py \
+            tests/test_fomc_monitor_readiness_bm.py \
+            tests/test_hmt_t1_content_api_activation_cc.py \
+            tests/test_indec_cpi_calendar_activation_bu.py \
+            tests/test_japan_cpi_schedule_activation_bw.py \
+            tests/test_japan_household_spending_monitor_bl.py \
+            tests/test_japan_mof_jgb_rss_activation_br.py \
+            tests/test_kenya_pfm_readiness_bn.py \
+            tests/test_nbs_native_rss_activation_bx.py \
+            tests/test_nhc_atlantic_season_activation_ci.py \
+            tests/test_opec_fallback_completion_be.py \
+            tests/test_opec_official_confirmation_bg.py \
+            tests/test_sarb_mpc_rss_activation_cb.py
           git diff --cached --quiet && { echo 'Expected CK materialisation diff is empty'; exit 1; }
-          git commit -m "CK: materialise Pacific Islands Forum canonical repair"
+          git commit -m "CK: materialise PIF lifecycle repair and descendant-safe tests"
           git push origin HEAD:feature/post-cj-pif-canonical-source-repair-ck
