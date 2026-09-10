@@ -17,6 +17,7 @@ def replace_once(path: str, old: str, new: str) -> None:
 
 
 def main() -> int:
+    # CG owns a frozen v0.7 historical checkpoint, not a permanent ceiling on reviewed Live descendants.
     replace_once(
         "scripts/apply_barmm_pre_election_live_cg.py",
         '''    if existing_obs:\n        require(schema.get("version") == "0.7", "CG reviewed Live schema drift")\n        return schema, observations, evidence\n''',
@@ -31,6 +32,38 @@ def main() -> int:
         "tests/test_barmm_pre_election_live_cg.py",
         '''        else:\n            self.assertEqual(schema["version"], "0.7")\n            self.assertEqual(observations["version"], "0.7")\n            self.assertEqual(evidence["version"], "0.7")\n            self.assertEqual(len(observations["observations"]), 7)\n            self.assertEqual(len(evidence["evidence"]), 10)\n            self.assertIn(ev_id, evidence_ids)\n            row = next(row for row in observations["observations"] if row["observation_id"] == obs_id)\n            self.assertRegex(row["observed_at_utc"], r"^2026-09-(09|10)T\\d{2}:\\d{2}:\\d{2}Z$")\n            self.assertNotIn("event_time", row)\n            self.assertEqual(schema["population_policy"]["maximum_observation_count"], 7)\n            self.assertEqual(schema["population_policy"]["maximum_evidence_count"], 10)\n            self.assertFalse(schema["population_policy"]["automatic_ingestion_allowed"])\n            self.assertFalse(schema["population_policy"]["public_observation_projection_allowed"])\n''',
         '''        else:\n            self.assertGreaterEqual(tuple(map(int, schema["version"].split("."))), (0, 7))\n            self.assertGreaterEqual(tuple(map(int, observations["version"].split("."))), (0, 7))\n            self.assertGreaterEqual(tuple(map(int, evidence["version"].split("."))), (0, 7))\n            self.assertGreaterEqual(len(observations["observations"]), 7)\n            self.assertGreaterEqual(len(evidence["evidence"]), 10)\n            self.assertIn(ev_id, evidence_ids)\n            row = next(row for row in observations["observations"] if row["observation_id"] == obs_id)\n            self.assertRegex(row["observed_at_utc"], r"^2026-09-(09|10)T\\d{2}:\\d{2}:\\d{2}Z$")\n            self.assertNotIn("event_time", row)\n            self.assertGreaterEqual(schema["population_policy"]["maximum_observation_count"], 7)\n            self.assertGreaterEqual(schema["population_policy"]["maximum_evidence_count"], 10)\n            self.assertFalse(schema["population_policy"]["automatic_ingestion_allowed"])\n            self.assertFalse(schema["population_policy"]["public_observation_projection_allowed"])\n''',
+    )
+
+    # CJ's first cross-layer artifact is a historical floor, not a permanent Live population ceiling.
+    replace_once(
+        "tests/test_cross_layer_coverage_cj.py",
+        '''        self.assertEqual(totals["live_observation_count"], 7)\n        self.assertEqual(totals["canonical_linked_live_observation_count"], 2)\n''',
+        '''        self.assertGreaterEqual(totals["live_observation_count"], 7)\n        self.assertGreaterEqual(totals["canonical_linked_live_observation_count"], 2)\n''',
+    )
+
+    # BF's historical population label may acquire a more specific controlled descendant label.
+    # Its actual safety invariants remain the closed automation/public gates and frozen BF row/evidence.
+    replace_once(
+        "tests/test_un_correct_map_live_bf.py",
+        '''        self.assertEqual(observations["population_state"], "CONTROLLED_INSTITUTIONAL_SPECIMEN")\n''',
+        '''        self.assertTrue(observations["population_state"].startswith("CONTROLLED_"))\n''',
+    )
+    replace_once(
+        "tests/test_un_correct_map_live_bf.py",
+        '''        self.assertEqual(policy["mode"], "CONTROLLED_INSTITUTIONAL_SPECIMEN")\n''',
+        '''        self.assertTrue(policy["mode"].startswith("CONTROLLED_"))\n''',
+    )
+    replace_once(
+        "tests/test_un_correct_map_live_bf.py",
+        '''            self.assertIn("Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**", status)\n''',
+        '''            self.assertRegex(status, r"Live Intelligence: \\*\\*v0\\.\\d+ / \\d+ observations / \\d+ evidence rows / \\d+ Canonical-linked observations\\*\\*")\n''',
+    )
+
+    # BD likewise owns its historical specimen, not the live value of the derived recovery block.
+    replace_once(
+        "tests/test_vietnam_myanmar_live_bd.py",
+        '''            self.assertIn("Live Intelligence: **v0.7 / 7 observations / 10 evidence rows / 2 Canonical-linked observations**", status)\n''',
+        '''            self.assertRegex(status, r"Live Intelligence: \\*\\*v0\\.\\d+ / \\d+ observations / \\d+ evidence rows / \\d+ Canonical-linked observations\\*\\*")\n''',
     )
     return 0
 
