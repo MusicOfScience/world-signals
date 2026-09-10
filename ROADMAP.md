@@ -132,21 +132,11 @@ CJ adds a reusable read-only audit comparing:
 - production Live-input use;
 - the Live→Analysis frontier, distinguishing used Live observations, completed same-anchor linked observations, linked observations whose Canonical target is not completed, and unlinked Live observations.
 
-The diagnostic must not:
-
-- produce a blended coverage score;
-- equalise counts between regions or categories;
-- force Canonical categories and Live domain tags into one taxonomy;
-- create Monitor routes;
-- populate Live or Analysis;
-- open Canonical/Calendar/public-projection gates;
-- convert a review prompt into an automatic finding of undercoverage.
+The diagnostic must not produce a blended coverage score, equalise regional/category counts, force Canonical categories and Live tags into one taxonomy, create Monitor routes, populate Live/Analysis, or open write/public-projection gates.
 
 Its artifacts are disposable read-only evidence under `artifacts/coverage/`; governed registries remain authoritative.
 
 The first artifact exposed a cross-layer region-granularity issue rather than two true gaps. CJ v0.2 therefore uses only two explicit audit-only comparison mappings — `Central Africa -> Africa` and `Global -> Cross-regional / Global` — while preserving all governed raw labels. No other geographic parent is inferred.
-
-Corrected CJ run `34412482858` reported the post-#117 boundary: 689 Canonical occurrences / 203 series, 26 Monitor adapters / 217 explicitly scoped occurrences / 48 series, 7 Live observations / 2 Canonical-linked, 22 Analysis reviews / 1 production Live input / 1 production revision, and zero unused completed same-anchor Live→Analysis candidates.
 
 The permanent CJ audit and evidence trail are in `data/coverage/POST_CI_CROSS_LAYER_PRESSURE_CJ_v0.1.md`.
 
@@ -173,19 +163,55 @@ The guarded transaction exposed and repaired historical descendant assertions th
 
 Permanent transaction evidence is in `data/coverage/PIF_LEADERS_MEETING_CK_TRANSACTION_AUDIT_v0.1.md`.
 
-### Stage 10C — post-CK re-audit and bounded broadening/deepening — NEXT
+### Stage 10C — post-CK pressure re-audit — DONE / CL SELECTED FOR FRESH DESIGN
 
-Do **not** carry forward CJ's old candidate ranking mechanically. Rerun the read-only cross-layer diagnostic against the post-CK governed state, then select the next bounded tranche from current evidence.
+Post-CK read-only coverage run `34422209848` confirms:
 
-Candidate classes are deliberately unordered:
+- Canonical remains 689 occurrences / 203 series;
+- Monitor remains 26 adapters / 217 explicitly scoped occurrences / 48 series;
+- Live remains 7 observations / 2 Canonical-linked;
+- Analysis remains 22 reviews / 1 production Live input / 1 production revision;
+- the Live→Analysis frontier still has **zero** unused completed same-anchor candidates;
+- Europe, Latin America, North America and Oceania / Pacific remain zero-Live prompts, not queues;
+- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` Monitor zeroes remain non-authorising under current source/rights posture;
+- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` remains an Analysis prompt, not an automatic target.
 
-1. **Live expansion** where a new observation exercises a missing or materially useful factual contract and has adequate first-party provenance;
-2. **Monitor expansion** where important existing Canonical scope has a competent, rights-cleared, bounded machine route;
-3. **Canonical/source repair** where identity-aware discovery establishes a real upstream omission, stale lifecycle or provenance defect;
-4. **Live→Analysis** only where an immutable Live observation is already linked to a completed same-anchor Canonical occurrence and fresh pressure justifies another production input;
-5. **Analysis revision** only where later evidence changes an existing analytical judgement rather than merely adding chronology.
+Fresh first-party PIF outcome research identifies a more specific pressure than any of those zero counts: the completed PIF anchor now has sufficiently specific official evidence that Leaders' Retreat agreed a Pacific-led framework for engagement with partners, with other regional outcomes separately evidenced.
 
-The 2026 PIF Forum Communiqué may be considered as one possible Oceania / Pacific Live outcome candidate because the underlying Canonical occurrence is now evidence-backed `COMPLETED`, but neither the regional zero count nor CK itself authorises that row. The audit must compare it against other current pressures.
+Permanent selection evidence is `data/coverage/POST_CK_PRESSURE_AUDIT_CL_v0.1.md`.
+
+### Stage 10D — CL bounded PIF scheduled institutional-outcome Live specimen — NEXT AFTER CK MERGE
+
+CL is selected for **fresh post-merge design**, not pre-authorised mutation.
+
+Subject to re-verification from the exact then-current `main`, the proposed contract is:
+
+1. add exactly one factual Live Intelligence observation;
+2. reuse existing `INSTITUTIONAL_DEVELOPMENT` unless schema review establishes a more precise already-controlled type;
+3. set verification to `PRIMARY_CONFIRMED`;
+4. represent region as `Oceania / Pacific`;
+5. link `OUTCOME_OF` → completed `WSO-INT-A-0001`;
+6. focus the factual claim on the Leaders' Retreat agreement on the Pacific-led framework for engagement with partners, adding other outcomes only when separately first-party evidenced;
+7. do not reduce the whole Forum Communiqué to a scalar outcome;
+8. create no market-movement, surprise, causal-attribution or second-order-effect claim in Live;
+9. keep Live evidence separate from Canonical provenance and Analysis evidence;
+10. create no PIF Monitor route and no automatic Live→Analysis promotion;
+11. keep automatic Canonical commit, Calendar write and public Live projection closed;
+12. keep OPEC CE quarantine excluded.
+
+Why CL rather than another zero-fill:
+
+- the Canonical anchor is stable, HIGH-importance and now evidence-backed `COMPLETED`;
+- first-party post-event evidence is fresh and specific;
+- scheduled institutional outcome is a materially new Live contract relative to the current controlled specimen set;
+- Pacific geographic broadening is a benefit but not the selection rule;
+- no second Live→Analysis candidate exists yet, so forcing the bridge would violate current evidence.
+
+CL must stop or redesign if fresh post-merge source verification or repository preconditions do not support the proposed observation.
+
+### Stage 10E — further broadening / deepening — AFTER CL AUDIT
+
+After CL, rerun pressure rather than treating Europe, Latin America, North America, corporate/market Analysis or source-readiness debt as a FIFO queue. Candidate classes remain Live expansion, rights-cleared Monitor expansion, identity-aware Canonical/source repair, valid same-anchor Live→Analysis, or evidence-driven Analysis revision.
 
 BARMM remains pre-event until the 14 September 2026 election occurs and is authoritatively established as completed. Do not pre-write its post-event Analysis or infer an outcome from pre-election context.
 
