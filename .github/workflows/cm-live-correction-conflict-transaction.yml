@@ -1,0 +1,144 @@
+name: CM Live correction conflict guarded transaction
+
+on:
+  push:
+    branches:
+      - feature/post-cl-live-correction-conflict-contract-cm
+
+permissions:
+  contents: write
+
+jobs:
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Verify exact post-CL main boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=1e4a6bbc8670fc36a452740401461f28e313c031
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE"
+          test "$(git merge-base HEAD origin/main)" = "$BASE"
+
+      - name: Materialise CM contract in ephemeral worktree
+        run: python scripts/apply_live_correction_conflict_cm_tmp.py
+
+      - name: Focused CM contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_live_correction_conflict_cm.py' -v
+          python -m unittest discover -s tests -p 'test_live_intelligence_foundation_av.py' -v
+
+      - name: Governed validators and derived-state check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_registry.py
+          python scripts/validate_live_intelligence.py
+          python scripts/validate_analysis.py
+          python scripts/project_state_snapshot.py --check
+
+      - name: Complete historical suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Python compilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            src/world_signals/live_intelligence.py \
+            src/world_signals/live_correction_conflict.py \
+            scripts/validate_live_intelligence.py \
+            scripts/project_state_snapshot.py
+
+      - name: JavaScript syntax checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/horizon.js
+          node --check web/native-calendar.js
+          node --check web/history.js
+          node --check web/operations.js
+          node --check web/biosecurity.js
+          node --check web/analysis.js
+
+      - name: Static build
+        run: python scripts/build_site.py
+
+      - name: Prove production rows and protected layers did not mutate
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=1e4a6bbc8670fc36a452740401461f28e313c031
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          base = "1e4a6bbc8670fc36a452740401461f28e313c031"
+          def at_base(path):
+              return json.loads(subprocess.check_output(["git", "show", f"{base}:{path}"], text=True))
+          current_obs = json.loads(Path("data/live_intelligence/observations.json").read_text())
+          current_ev = json.loads(Path("data/live_intelligence/evidence_registry.json").read_text())
+          assert current_obs["observations"] == at_base("data/live_intelligence/observations.json")["observations"]
+          assert current_ev["evidence"] == at_base("data/live_intelligence/evidence_registry.json")["evidence"]
+          assert len(current_obs["observations"]) == 8
+          assert len(current_ev["evidence"]) == 11
+          assert not {r["verification_state"] for r in current_obs["observations"]} & {"CONFLICTING_REPORTS", "CORRECTED", "RETRACTED"}
+          PY
+          git diff --exit-code "$BASE" -- \
+            data/canonical \
+            data/sources \
+            data/changes \
+            data/monitor \
+            data/analysis \
+            data/coverage/biosecurity_overlay.json \
+            OPEC_QUARANTINE.md \
+            tests/test_opec_quarantine_cf.py
+
+      - name: Remove temporary write machinery and enforce bounded final diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=1e4a6bbc8670fc36a452740401461f28e313c031
+          git rm .github/workflows/cm-live-correction-conflict-transaction.yml
+          git rm scripts/apply_live_correction_conflict_cm_tmp.py
+          actual=$(mktemp)
+          expected=$(mktemp)
+          git diff --name-only "$BASE" | sort > "$actual"
+          cat > "$expected" <<'EOF'
+          PROJECT_STATUS.md
+          README.md
+          ROADMAP.md
+          data/live_intelligence/LIVE_CORRECTION_CONFLICT_CM_PLAN_v0.1.json
+          data/live_intelligence/LIVE_CORRECTION_CONFLICT_CM_RESEARCH_v0.1.md
+          data/live_intelligence/evidence_registry.json
+          data/live_intelligence/observations.json
+          data/live_intelligence/schema.json
+          data/status/current_state.json
+          src/world_signals/live_correction_conflict.py
+          src/world_signals/live_intelligence.py
+          tests/test_live_correction_conflict_cm.py
+          EOF
+          sort -o "$expected" "$expected"
+          diff -u "$expected" "$actual"
+
+      - name: Commit reviewed CM transaction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name world-signals-cm
+          git config user.email actions@users.noreply.github.com
+          git add -A
+          git commit -m "CM: harden Live correction and conflict contract"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
