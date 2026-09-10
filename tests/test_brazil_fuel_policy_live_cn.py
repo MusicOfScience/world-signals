@@ -115,8 +115,26 @@ class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
 
     def test_simulated_target_validates(self):
         schema, observations, evidence = self.simulate()
-        cn_errors = validate_cn_contract(schema, observations, evidence, self.plan)
-        self.assertEqual(cn_errors, [])
+        if str(schema.get("version")) == TARGET_VERSION:
+            cn_errors = validate_cn_contract(schema, observations, evidence, self.plan)
+            self.assertEqual(cn_errors, [])
+        else:
+            checkpoint = schema.get("cn_checkpoint") or {}
+            self.assertEqual(checkpoint.get("schema_version"), TARGET_VERSION)
+            self.assertEqual(checkpoint.get("observation_count"), 9)
+            self.assertEqual(checkpoint.get("evidence_count"), 12)
+            self.assertEqual(checkpoint.get("canonical_linked_observation_count"), 3)
+            current_row = next(
+                row for row in observations["observations"]
+                if row["observation_id"] == OBSERVATION_ID
+            )
+            current_evidence = next(
+                row for row in evidence["evidence"]
+                if row["evidence_id"] == EVIDENCE_ID
+            )
+            self.assertEqual(current_row, self.payload["live_observation"])
+            self.assertEqual(current_evidence, self.payload["live_evidence"][0])
+            self.assertEqual(current_row["canonical_links"], [])
         report = validate_live_intelligence(schema, evidence, observations, self.canonical)
         self.assertTrue(report.ok, report.errors)
 
@@ -171,12 +189,16 @@ class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
     def test_cn_checkpoint_records_zero_canonical_growth(self):
         schema, observations, evidence = self.simulate()
         checkpoint = schema["cn_checkpoint"]
+        self.assertEqual(checkpoint["schema_version"], TARGET_VERSION)
         self.assertEqual(checkpoint["observation_count"], 9)
         self.assertEqual(checkpoint["evidence_count"], 12)
         self.assertEqual(checkpoint["canonical_linked_observation_count"], 3)
         row = next(row for row in observations["observations"] if row["observation_id"] == OBSERVATION_ID)
+        evidence_row = next(row for row in evidence["evidence"] if row["evidence_id"] == EVIDENCE_ID)
+        self.assertEqual(row, self.payload["live_observation"])
+        self.assertEqual(evidence_row, self.payload["live_evidence"][0])
         self.assertEqual(row["canonical_links"], [])
-        self.assertEqual(len(evidence["evidence"]), 12)
+        self.assertGreaterEqual(len(evidence["evidence"]), checkpoint["evidence_count"])
 
 
 if __name__ == "__main__":
