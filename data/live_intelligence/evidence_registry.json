@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-10",
   "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through CL. CL adds one primary-official Cook Islands post-event evidence row for the PIF partner-engagement framework outcome; Live evidence remains separate from Canonical provenance and Analysis evidence, and public observation projection remains closed.",
+  "scope_note": "Evidence supports the unchanged eight-observation Live store through CM. No production evidence row is added; v0.9 hardens correction, retraction and conflicting-report validation using synthetic fixtures only. Live evidence remains separate from Canonical provenance and Analysis evidence, and public observation projection remains closed.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",

@@ -50,10 +50,10 @@
     }
   },
   "live_intelligence": {
-    "schema_version": "0.8",
-    "observations_version": "0.8",
+    "schema_version": "0.9",
+    "observations_version": "0.9",
     "observation_count": 8,
-    "evidence_version": "0.8",
+    "evidence_version": "0.9",
     "evidence_count": 11,
     "canonical_linked_observation_count": 3,
     "canonical_linked_occurrence_count": 3,

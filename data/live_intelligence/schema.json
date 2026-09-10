@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -178,7 +178,29 @@
     "data_revision_requires_revision_target_description": true,
     "corrected_or_retracted_live_observation_requires_revision_reference": true,
     "state_update_is_not_revision": true,
-    "state_update_preserves_prior_snapshot": true
+    "state_update_preserves_prior_snapshot": true,
+    "corrected_or_retracted_requires_correction_evidence": true,
+    "corrected_or_retracted_observed_at_must_follow_target": true
+  },
+  "correction_conflict_policy": {
+    "mode": "FOUNDATION_CONTRACT_NO_PRODUCTION_SPECIMEN",
+    "corrected_or_retracted_states": [
+      "CORRECTED",
+      "RETRACTED"
+    ],
+    "corrected_or_retracted_requires_revision_reference": true,
+    "corrected_or_retracted_requires_correction_evidence": true,
+    "corrected_or_retracted_observed_at_must_follow_target": true,
+    "conflict_state": "CONFLICTING_REPORTS",
+    "conflict_description_field": "conflict_description",
+    "conflict_description_required": true,
+    "conflict_description_prohibited_outside_conflict_state": true,
+    "minimum_unique_conflict_evidence_refs": 2,
+    "minimum_distinct_conflict_providers": 2,
+    "provider_identity_normalisation": "STRIP_CASEFOLD",
+    "conflict_requires_winner_selection": false,
+    "conflict_requires_synthetic_consensus": false,
+    "external_data_revision_requires_prior_live_observation": false
   },
   "public_projection_policy": {
     "observation_projection_allowed": false,
@@ -230,6 +252,12 @@
     "CL does not manufacture event_time from a post-event publication date or collapse the multi-day Canonical occurrence into a synthetic clock/range.",
     "CL Live evidence has no Canonical provenance, Monitor-route or Analysis-population authority.",
     "Public observation projection, automatic ingestion, automatic Canonical commit and Google Calendar writes remain prohibited in CL v0.8.",
+    "CM v0.9 hardens Live correction, retraction and conflicting-report semantics without adding a ninth production observation or twelfth evidence row.",
+    "A CORRECTED or RETRACTED Live observation must preserve an explicit prior Live target, cite correction/revision evidence and be observed strictly later than the target; silent in-place history rewrite remains prohibited.",
+    "CONFLICTING_REPORTS requires at least two unique evidence records from at least two distinct normalised providers plus an explicit factual conflict_description; Live does not choose a winning source or synthetic consensus merely because reports disagree.",
+    "conflict_description is reserved for CONFLICTING_REPORTS observations; ordinary verified observations may not carry hidden conflict semantics.",
+    "DATA_REVISION remains an external-data revision concept and does not require a synthetic prior WORLD SIGNALS Live observation.",
+    "CM does not reinterpret or populate Waqa Moana; the CL source-wording discrepancy remains preserved as historical pressure evidence only.",
     "A ninth Live observation, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
@@ -243,7 +271,7 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
+    "mode": "CONTROLLED_POPULATION_WITH_CORRECTION_CONFLICT_CONTRACT",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
     "maximum_observation_count": 8,
@@ -251,7 +279,7 @@
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CL adds exactly one pressure-audited PIF scheduled institutional outcome linked OUTCOME_OF the completed 55th Pacific Islands Forum Leaders Meeting."
+    "reason": "CM retains the reviewed CL population at eight observations and eleven evidence rows while hardening correction, retraction and conflicting-report validation; no production row is added."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -312,5 +340,15 @@
     "evidence_count": 11,
     "base_main_sha": "aef4642863438e2170ae9a49160b7368c850b819",
     "historical_contract": "CL preserves the completed PIF Canonical identity and adds one reviewed factual partner-engagement-framework outcome through OUTCOME_OF without changing Canonical, Monitor or Analysis state."
+  },
+  "cm_checkpoint": {
+    "schema_version": "0.9",
+    "observations_version": "0.9",
+    "evidence_version": "0.9",
+    "population_state": "CONTROLLED_CANONICAL_LINKED_INSTITUTIONAL_OUTCOME_SPECIMEN",
+    "observation_count": 8,
+    "evidence_count": 11,
+    "base_main_sha": "1e4a6bbc8670fc36a452740401461f28e313c031",
+    "historical_contract": "CM preserves all eight CL observations and eleven evidence rows while adding a no-population executable contract for CORRECTED, RETRACTED and CONFLICTING_REPORTS semantics."
   }
 }
