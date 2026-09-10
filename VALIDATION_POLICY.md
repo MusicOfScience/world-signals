@@ -48,7 +48,7 @@ The full suite remains the default for local/manual validation and for any class
 
 ### `SAFE_RESEARCH_DOCS`
 
-Available only for a pull request whose **entire net diff** consists of added or modified regular UTF-8 Markdown blobs under `data/` whose filenames are explicitly research/audit surfaces containing one of:
+Available only for a pull request whose **entire net diff** consists only of newly added regular UTF-8 Markdown blobs under `data/` whose filenames are explicitly research/audit surfaces containing one of:
 
 - `_RESEARCH_`;
 - `_AUDIT_`;
@@ -56,7 +56,9 @@ Available only for a pull request whose **entire net diff** consists of added or
 - `_CLOSEOUT_`;
 - `_DIAGNOSTIC_`.
 
-The fast path rejects deletions, renames, copies, executable file modes, non-Markdown files, top-level documents and unknown naming patterns. A rejected or unprovable surface escalates to `FULL`.
+The fast path rejects modifications to already-merged research records, deletions, renames, copies, executable file modes, non-Markdown files, top-level documents and unknown naming patterns. It also rejects a new research file if its exact path is already referenced by a tracked non-Markdown file. A rejected or unprovable surface escalates to `FULL`.
+
+This append-only rule still permits normal drafting: a research file may be revised repeatedly on its feature branch and remains an `A`dded file relative to `main` until the PR merges.
 
 The safe-research profile still validates the **actual PR head**. It runs:
 
