@@ -6,6 +6,7 @@ on:
       - feature/post-cj-pif-canonical-source-repair-ck
     paths:
       - data/coverage/PIF_LEADERS_MEETING_CK_PLAN_v0.1.json
+      - .github/workflows/ck-pif-transaction.yml
 
 permissions:
   contents: write
