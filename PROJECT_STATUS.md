@@ -12,7 +12,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.28 / 63 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.10 / 9 observations / 12 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.11 / 10 observations / 14 evidence rows / 3 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -31,9 +31,21 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 8. `data/analysis/` governed stores/schema.
 9. `data/status/current_state.json` as a mechanically derived cross-check.
 10. Latest pressure and transaction audits.
-11. `OPEC_QUARANTINE.md` whenever OPEC is implicated.
+11. `HANDOFF_PROTOCOL.md` for the human merge-control boundary.
+12. `OPEC_QUARANTINE.md` whenever OPEC is implicated.
 
 The snapshot and prose documents are not permitted to override the governed files. CI should fail if their current-state blocks drift from derivable registry/contract state.
+
+## Human merge-control boundary
+
+`HANDOFF_PROTOCOL.md` is a mandatory recovery control. Every pull-request handoff to the user must say exactly one of:
+
+- **MERGE NOW — PR #N**; or
+- **DO NOT MERGE — PR #N**.
+
+A PR URL or clickable link must **not** be supplied while the state is `DO NOT MERGE`. Earlier green runs never authorise merging after a later commit; required checks must pass on the actual final head. The user performs merges. The assistant does not.
+
+Every next-chat or recovery handover must repeat this rule explicitly so ambiguity at the final human control point cannot defeat otherwise guarded repository work.
 
 ## Recent merged lineage
 
@@ -43,7 +55,7 @@ CD materialised one immutable child Analysis revision for the BWC Working Group 
 
 ### PR #113 — CE OPEC primary outcome provenance — CLOSED / UNMERGED / QUARANTINED
 
-This is historical evidence only. Do not reopen, merge, cherry-pick, rebase, materialise or use the CE branch as a base during routine work. OPEC provenance debt is non-blocking for unrelated work.
+Historical evidence only. Do not reopen, merge, cherry-pick, rebase, materialise or use the CE branch as a base during routine work. OPEC provenance debt is non-blocking for unrelated work.
 
 ### PR #114 — CF: Monitor pressure audit + NHC pilot — MERGED
 
@@ -53,53 +65,79 @@ CF recomputed explicit Monitor pressure and validated a bounded NOAA/NHC Atlanti
 
 CG added one primary-confirmed Southeast Asia institutional Live observation linked `CONTEXT_FOR` the existing 14 September 2026 BARMM election occurrence. It did not mutate Canonical timing or provenance and did not create Analysis automatically.
 
-CG also repaired historical tests that incorrectly froze the BF Live checkpoint as the permanent current head. Historical rows remain tested by identity/semantics while reviewed descendants are allowed.
-
 ### PR #116 — CH: derived recovery-state truth — MERGED
 
 CH made cross-layer current-state counts mechanically derivable and CI-checked across `README.md`, `PROJECT_STATUS.md`, `ROADMAP.md` and `data/status/current_state.json`. The derived snapshot is explicitly noncanonical and cannot mutate upstream governed layers.
 
 ### PR #117 — CI: bounded NHC Atlantic-season Monitor sentinel — MERGED
 
-CI activated the CF-validated NHC route after a fresh source, rights, endpoint, scope and runtime review. The scheduled route remains bounded to two existing Atlantic hurricane-season occurrences; NHC climatology is semantic authority for the season definition and Atlantic RSS is health corroboration only. It grants no automatic Canonical, lifecycle, Calendar, Live or Analysis authority.
+CI activated the CF-validated NHC route after fresh source, rights, endpoint, scope and runtime review. The scheduled route remains bounded to two existing Atlantic hurricane-season occurrences and grants no automatic Canonical, lifecycle, Calendar, Live or Analysis authority.
 
 ### PR #118 — CJ: cross-layer coverage / pressure diagnostic — MERGED
 
-CJ added the read-only Canonical→Monitor→Live→Analysis coverage diagnostic and reconciled the post-#117 recovery prose. Its first regional comparison also exposed and corrected two audit-only taxonomy-granularity artifacts rather than treating them as real coverage gaps.
-
-CJ then flagged the Pacific Islands Forum Leaders Meeting as apparently absent from Canonical. CK subsequently proved that specific absence conclusion wrong: the stable PIF occurrence and series already existed but were not found by the literal-name discovery path used in the pressure review. The CJ audit remains historical evidence; CK adds a stronger identity-discovery control rather than rewriting CJ's frozen artifact.
+CJ added the read-only Canonical→Monitor→Live→Analysis coverage diagnostic. CK later demonstrated that CJ's literal-name PIF absence check was insufficient, strengthening identity discovery without rewriting the frozen CJ artifact.
 
 ### PR #119 — CK: PIF lifecycle/provenance completion repair — MERGED
 
-CK corrected CJ's apparent PIF absence finding after an identity-aware probe found the existing stable `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS` family. It preserved the event's Palau civil-date timing, host binding and sensitivity metadata, moved lifecycle from `ACTIVE` to first-party-evidence-backed `COMPLETED`, added one supporting-only Cook Islands completion source, and repaired descendant-unsafe historical Canonical/Source/Ledger assertions. No PIF Monitor, Live or Analysis row was created in CK.
+CK preserved the existing `WSO-INT-A-0001` / `WSER-INT-PIF-LEADERS` identity, repaired stale lifecycle `ACTIVE → COMPLETED` using first-party evidence, added one supporting-only Cook Islands source, and repaired descendant-unsafe historical checkpoint assertions. No PIF Monitor, Live or Analysis row was created in CK.
 
-## Current pressure interpretation
+### PR #120 — CL: bounded PIF Live institutional outcome — MERGED
 
-CM is now materialised on the feature branch as a **no-production-population Live contract hardening tranche**. The mechanically derived block above is current: Live is v0.9 while production remains exactly 8 observations / 11 evidence / 3 Canonical-linked.
+CL added one primary-confirmed PIF partner-engagement framework outcome linked `OUTCOME_OF` the completed PIF Canonical occurrence. It deliberately excluded Waqa Moana because reviewed official formulations did not align cleanly enough to justify choosing a stronger wording.
 
-- **Canonical:** unchanged v0.42 / 689 occurrences. CM creates or mutates no Canonical identity, timing, lifecycle or provenance.
-- **Sources / Change Ledger / Monitor:** unchanged v2.04 / 258 sources, v0.28 / 63 changes and v0.28 / 26 Monitor adapters. CM grants no automation permission and creates no route.
-- **Live Intelligence:** v0.9 / 8 / 11 / 3 linked. `CORRECTED` / `RETRACTED` now require an explicit prior Live target, correction/revision evidence and strictly later observation time. `CONFLICTING_REPORTS` requires at least two unique evidence records from at least two distinct normalised providers plus a factual `conflict_description`. No winner or synthetic consensus is required. `conflict_description` is prohibited outside the conflict state.
-- **Population:** all eight production observation objects and all eleven evidence objects are preserved exactly from merged CL. No current production row uses `CONFLICTING_REPORTS`, `CORRECTED` or `RETRACTED`.
-- **External revisions:** `DATA_REVISION` remains distinct and may describe a newly observed revision to external data without inventing prior WORLD SIGNALS Live history.
-- **Analysis:** unchanged 22 reviews / 97 evidence / 1 production Live input / 1 production revision. No automatic Live→Analysis relationship was created.
-- **Waqa Moana:** remains historical motivating evidence only. CM does not reinterpret, resolve or populate it.
-- **BARMM:** remains pre-election context for the planned 14 September 2026 occurrence; no outcome or post-event Analysis is manufactured early.
-- **OPEC CE:** remains quarantined and excluded.
+### PR #121 — CM: Live correction / retraction / conflict contract hardening — MERGED
 
-CM permanent transaction evidence is `data/live_intelligence/LIVE_CORRECTION_CONFLICT_CM_TRANSACTION_AUDIT_v0.1.md`. Guarded run `34441432538` / job `102757107224` passed on the first attempt, including **1,276 tests** with 68 historical-prestate skips, all governed validators, derived-state consistency, Python compilation, seven JavaScript checks, static build, exact production-row invariance, protected-layer nonmutation and bounded final diff. Temporary transaction machinery was removed before materialisation commit.
+CM changed capability rather than population. Live correction/retraction states now require explicit prior-target, evidence and chronology controls; `CONFLICTING_REPORTS` requires genuinely plural source evidence plus a factual conflict description. CM does not adjudicate a winner or manufacture consensus.
 
-### Post-CM pressure — CN selected for fresh post-merge design
+### PR #122 — CN: bounded Brazil fuel-policy Live specimen — MERGED
 
-Read-only coverage run `34441643238` confirms the expected no-population result. Canonical remains 689 / 203 series, Monitor 26 adapters / 217 occurrences / 48 series, Live 8 / 3 linked, and Analysis 22 reviews / 1 Live input / 1 revision. Europe, Latin America and North America remain zero-Live prompts. PIF remains completed-linked without an Analysis review, but there is still no unused completed same-anchor Analysis target. Monitor category zeroes and the corporate/market Analysis zero remain prompts rather than queues.
+CN added one unscheduled Brazilian fuel-policy development using official Finance Ministry evidence, while refusing to overstate legal publication/effective status, exact UTC timing, inflation effects or market effects. Live advanced to v0.10 / 9 observations / 12 evidence / 3 Canonical-linked.
 
-Fresh qualitative comparison identifies a stronger next population candidate: Brazil's 9 September 2026 fuel-policy intervention. The Ministério da Fazenda states that the Federal Government adopted measures reducing federal PIS/Pasep and Cofins on gasoline and hydrated ethanol and authorising an adjustable road-diesel subsidy amid international oil-price volatility and supply restrictions that the government associates with geopolitical conflict.
+## Current pressure interpretation — CO materialised, final handoff closeout in progress
 
-`data/coverage/POST_CM_PRESSURE_AUDIT_CN_v0.1.md` therefore selects **CN — Brazil fuel-policy Live broadening** for fresh design only after CM merges. The candidate is selected because it is independently important and exercises an unscheduled Latin American fiscal/commodity/geopolitical transmission signal, not because Latin America has a zero.
+CO starts from exact merged post-CN `main` `b2b9e85933dd1c5924af1228f47427d6b38bf967` and materialises one Canadian counter-tariff implementation observation:
 
-The selection is deliberately conditional. At the time of review, the Ministry announcement is clearer than the fully retrievable final legal-instrument trail. CN must freshly recheck Presidency/Planalto, Diário Oficial and Ministry sources after merge; must revise or abandon the candidate if evidence changes; and must not pre-write `in force`, exact legal numbering, exact UTC publication/event time, observed price/inflation effects, a Canonical occurrence, a Monitor route or an Analysis conclusion without separate support.
+- `WSLI-TRD-CAN-US-SURTAX-20260908-001`;
+- one sovereign Canadian policy action only;
+- two primary-official evidence rows: Department of Finance Canada and CBSA;
+- civil-date event precision `2026-09-08`;
+- no unsupported conversion of the Finance page's displayed `12:01 a.m.` to exact UTC;
+- no synthetic Canonical occurrence or story identity;
+- no collapse of the separate 8 September U.S. presidential response into the Canadian row;
+- no market-effect, causality, legality/fairness or Analysis claim.
 
-Current North American Canada–U.S. tariff escalation and European oil-security context remain credible future Live candidates but are deferred rather than appended mechanically. PIF Analysis and a market-structure review remain unjustified if their only purpose is to manufacture a bridge candidate or erase a histogram zero.
+Live advances to **v0.11 / 10 observations / 14 evidence rows / 3 Canonical-linked observations**. Canonical, Sources, Change Ledger, Monitor and Analysis remain unchanged.
+
+CO guarded transaction attempt 1 (`34466470104`) failed closed at the complete historical suite after the new specimen had passed simulation, focused tests and governed validators. It exposed two CN descendant assertions that froze the historical v0.10 / 9 / 12 checkpoint as a permanent ceiling. The repair changed only `tests/test_brazil_fuel_policy_live_cn.py`; CN's frozen checkpoint and exact target validator remain exact.
+
+Guarded attempt 2 (`34466775930`) succeeded with **1,301 tests / 68 historical-prestate skips**, all governed validators, derived-state consistency, Python compilation, seven JavaScript checks, static build, protected-layer nonmutation, exact preservation of all nine pre-CO Live observations and twelve evidence rows, exact +1 observation / +2 evidence rows, and bounded transaction diff. Materialisation commit: `51ba15ce2f651370af63abe4b7df1dd050aa7834`. One-shot workflow cleanup commit: `8d4f1b6f8b1c73e30a5efef44b7f09138cb9f9a6`. Permanent evidence: `data/live_intelligence/CANADA_US_COUNTER_TARIFF_LIVE_CO_TRANSACTION_AUDIT_v0.1.md`.
+
+The cleaned CO PR-head `70fb4b3569467076ff010506988202d6ca3057da` subsequently passed ordinary PR validation run `34467313510` and read-only coverage run `34467313601`. Coverage artifact `10148053040` has digest `sha256:9d040c2cdca7cae94a1f9fa5db2cfc9f50449f71bb8a2e9473fa9ce7f6e567be`.
+
+Those green runs are now historical because later CO closeout commits add handoff and pressure-selection evidence. The eventual merge instruction must therefore remain **DO NOT MERGE** until required checks pass again on the actual final head.
+
+## Post-CO pressure — CP selected conditionally for fresh post-merge preflight
+
+The post-CO cross-layer audit reports:
+
+- Canonical 689 occurrences / 203 series;
+- Monitor 26 adapters / 217 explicitly scoped occurrences / 48 series;
+- Live 10 observations / 3 Canonical-linked;
+- Analysis 22 reviews / 1 production Live input / 1 production revision;
+- completed linked observations with an existing unused Analysis target: **0**;
+- PIF remains one completed linked observation without an Analysis review;
+- BARMM remains linked to a non-completed 14 September occurrence;
+- Europe is the only Canonical region with no Live observation;
+- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` remain Monitor prompts, not automation permission;
+- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` remains an Analysis prompt, not a quota target.
+
+Fresh qualitative review selects **CP conditionally as the ECB 10 September 2026 monetary-policy decision Live outcome**, but only for fresh design after CO merges. The selection is not justified by Europe's zero alone. The ECB decision is independently systemically important, already belongs to an existing scheduled Canonical family, and would exercise a controlled scheduled monetary-policy `OUTCOME_OF` Live linkage.
+
+At the time of selection the ECB outcome had not yet been published. CP therefore has a hard preflight: verify the official monetary-policy decision exists; resolve the exact existing 10 September Canonical occurrence without creating a duplicate; preserve source-native timing; keep expectation/surprise/market movement/causal interpretation out of Live; and abort/defer/reselect if the outcome is not yet available or identity/source semantics are not clean.
+
+European Commission Oil Coordination Group evidence from 8 September remains a valid deferred Europe/energy/geopolitics candidate. PIF Analysis, a second Live→Analysis link, and corporate/market-structure Analysis remain deferred where their only justification would be graph completion or histogram filling.
+
+Permanent CP selection evidence: `data/coverage/POST_CO_PRESSURE_AUDIT_CP_v0.1.md`.
 
 ## Write and authority boundaries
 
@@ -120,7 +158,7 @@ Calendar/Pages remain derived outputs. Melbourne remains a display/reference tim
 
 ## Recovery incident note — CH branch initialisation
 
-During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained here rather than hidden; future branch initialisation must create the branch before any contents write.
+During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.
 
 ## Validation entry point
 

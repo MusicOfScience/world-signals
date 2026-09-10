@@ -9,20 +9,20 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from world_signals.brazil_fuel_policy_cn import (
-    EVIDENCE_ID,
+from world_signals.canada_us_counter_tariff_co import (
+    EVIDENCE_IDS,
     OBSERVATION_ID,
     TARGET_VERSION,
     target_evidence,
     target_live_schema,
     target_observations,
-    validate_cn_contract,
+    validate_co_contract,
 )
 from world_signals.live_intelligence import public_live_intelligence_projection, validate_live_intelligence
 
 
-PLAN_PATH = ROOT / "data/live_intelligence/BRAZIL_FUEL_POLICY_LIVE_CN_PLAN_v0.1.json"
-PAYLOAD_PATH = ROOT / "data/live_intelligence/BRAZIL_FUEL_POLICY_LIVE_CN_PAYLOAD_v0.1.json"
+PLAN_PATH = ROOT / "data/live_intelligence/CANADA_US_COUNTER_TARIFF_LIVE_CO_PLAN_v0.1.json"
+PAYLOAD_PATH = ROOT / "data/live_intelligence/CANADA_US_COUNTER_TARIFF_LIVE_CO_PAYLOAD_v0.1.json"
 SCHEMA_PATH = ROOT / "data/live_intelligence/schema.json"
 OBSERVATIONS_PATH = ROOT / "data/live_intelligence/observations.json"
 EVIDENCE_PATH = ROOT / "data/live_intelligence/evidence_registry.json"
@@ -38,7 +38,7 @@ def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
+class CanadaUSCounterTariffLiveCOTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.plan = load(PLAN_PATH)
@@ -55,90 +55,87 @@ class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
             target_evidence(self.evidence, self.payload, self.plan),
         )
 
-    def test_plan_freezes_exact_post_cm_base_and_bounded_target(self):
-        self.assertEqual(self.plan["exact_base_main_sha"], "9386114de527b117987058cb1b9cd98066dab8e4")
-        self.assertEqual(self.plan["pre_state"]["live_schema_version"], "0.9")
-        self.assertEqual(self.plan["pre_state"]["live_observation_count"], 8)
-        self.assertEqual(self.plan["pre_state"]["live_evidence_count"], 11)
+    def test_plan_freezes_exact_post_cn_base_and_bounded_target(self):
+        self.assertEqual(self.plan["exact_base_main_sha"], "b2b9e85933dd1c5924af1228f47427d6b38bf967")
+        self.assertEqual(self.plan["pre_state"]["live_schema_version"], "0.10")
+        self.assertEqual(self.plan["pre_state"]["live_observation_count"], 9)
+        self.assertEqual(self.plan["pre_state"]["live_evidence_count"], 12)
         self.assertEqual(self.plan["target_state"]["live_schema_version"], TARGET_VERSION)
-        self.assertEqual(self.plan["target_state"]["live_observation_count"], 9)
-        self.assertEqual(self.plan["target_state"]["live_evidence_count"], 12)
+        self.assertEqual(self.plan["target_state"]["live_observation_count"], 10)
+        self.assertEqual(self.plan["target_state"]["live_evidence_count"], 14)
         self.assertEqual(self.plan["target_state"]["canonical_linked_live_observation_count"], 3)
-        self.assertTrue(self.plan["gates"]["tenth_live_observation_requires_new_pressure_audit"])
+        self.assertTrue(self.plan["gates"]["eleventh_live_observation_requires_new_pressure_audit"])
+        self.assertFalse(self.plan["gates"]["us_response_collapsed_into_canada_observation"])
 
-    def test_payload_is_one_primary_official_unscheduled_policy_observation(self):
-        self.assertEqual(len(self.payload["live_evidence"]), 1)
+    def test_payload_is_one_canadian_policy_implementation_with_two_primary_sources(self):
+        self.assertEqual(len(self.payload["live_evidence"]), 2)
         row = self.payload["live_observation"]
-        evidence = self.payload["live_evidence"][0]
         self.assertEqual(row["observation_id"], OBSERVATION_ID)
         self.assertEqual(row["observation_type"], "POLICY_DEVELOPMENT")
         self.assertEqual(row["verification_state"], "PRIMARY_CONFIRMED")
         self.assertEqual(row["canonical_links"], [])
         self.assertIsNone(row["revision_of_observation_id"])
-        self.assertEqual(row["jurisdictions"], ["Brazil"])
-        self.assertEqual(row["regions"], ["Latin America"])
-        self.assertEqual(row["domain_tags"], ["ECONOMICS", "COMMODITIES", "GEOPOLITICS"])
-        self.assertEqual(evidence["evidence_id"], EVIDENCE_ID)
-        self.assertEqual(evidence["evidence_class"], "PRIMARY_OFFICIAL")
-        self.assertEqual(evidence["canonical_provenance_effect"], "NONE")
+        self.assertEqual(row["jurisdictions"], ["Canada"])
+        self.assertEqual(row["regions"], ["North America"])
+        self.assertEqual(row["domain_tags"], ["TRADE", "ECONOMICS", "GEOPOLITICS"])
+        self.assertEqual(tuple(item["evidence_id"] for item in self.payload["live_evidence"]), EVIDENCE_IDS)
+        self.assertEqual({item["provider"] for item in self.payload["live_evidence"]}, {"Canada — Department of Finance", "Canada Border Services Agency"})
+        for item in self.payload["live_evidence"]:
+            self.assertEqual(item["evidence_class"], "PRIMARY_OFFICIAL")
+            self.assertEqual(item["canonical_provenance_effect"], "NONE")
 
-    def test_event_and_publication_time_remain_civil_dates(self):
+    def test_event_time_stays_civil_date_and_source_dates_remain_distinct(self):
         row = self.payload["live_observation"]
-        evidence = self.payload["live_evidence"][0]
-        self.assertEqual(row["event_time"], {"precision": "CIVIL_DATE", "event_date": "2026-09-09"})
-        self.assertEqual(evidence["publication_time"], {"precision": "CIVIL_DATE", "published_date": "2026-09-09"})
+        evidence = {item["evidence_id"]: item for item in self.payload["live_evidence"]}
+        self.assertEqual(row["event_time"], {"precision": "CIVIL_DATE", "event_date": "2026-09-08"})
         self.assertNotIn("event_at_utc", row["event_time"])
         self.assertNotIn("event_local", row["event_time"])
-        self.assertNotIn("published_at_utc", evidence["publication_time"])
+        self.assertEqual(evidence[EVIDENCE_IDS[0]]["publication_time"], {"precision": "CIVIL_DATE", "published_date": "2026-08-25"})
+        self.assertEqual(evidence[EVIDENCE_IDS[1]]["publication_time"], {"precision": "CIVIL_DATE", "published_date": "2026-09-07"})
+        for item in evidence.values():
+            self.assertNotIn("published_at_utc", item["publication_time"])
 
-    def test_payload_does_not_upgrade_legal_status(self):
+    def test_payload_does_not_promote_timezone_unspecified_effective_clock(self):
         summary = self.payload["live_observation"]["summary"].lower()
-        self.assertIn("does not assert", summary)
-        self.assertIn("diário oficial", summary)
-        self.assertIn("entered into force", summary)
-        self.assertIn("does not assign", summary)
-        self.assertIn("does not claim", summary)
-        self.assertNotIn("mp 1.389", summary)
+        self.assertIn("timezone-unspecified 12:01 a.m.", summary)
+        self.assertIn("does not promote", summary)
         exclusions = " ".join(self.payload["scope_exclusions"]).lower()
-        self.assertIn("contextual", exclusions)
-        self.assertIn("not treated as the newly announced substantive policy pair", exclusions)
+        self.assertIn("12:01 a.m.", exclusions)
+        self.assertIn("not converted to utc", exclusions)
 
-    def test_geopolitical_context_is_attributed_not_promoted_to_analysis(self):
+    def test_canadian_action_is_not_collapsed_with_us_response_or_story_identity(self):
+        row = self.payload["live_observation"]
+        summary = row["summary"].lower()
+        self.assertNotIn("story_id", row)
+        self.assertIn("does not fold", summary)
+        self.assertIn("separate u.s. 8 september proclamations", summary)
+        exclusions = " ".join(self.payload["scope_exclusions"]).lower()
+        self.assertIn("separate u.s. presidential actions", exclusions)
+        self.assertIn("no manual story identity", exclusions)
+
+    def test_trade_scope_and_effects_are_not_overclaimed(self):
         summary = self.payload["live_observation"]["summary"].lower()
-        self.assertIn("associated by the government", summary)
+        self.assertIn("15%, 25% or 50%", summary)
+        self.assertIn("$27.6 billion", summary)
+        self.assertIn("does not imply", summary)
+        self.assertIn("does not independently adjudicate", summary)
+        self.assertIn("does not claim", summary)
+        self.assertNotIn("c$27.6", summary)
         forbidden = {
             "what_was_expected", "what_surprised", "what_moved", "what_appears_connected",
             "what_may_be_noise", "alternative_explanations", "second_order_effects",
             "falsifiers", "causal_status", "confidence", "analytical_conclusion",
         }
-        self.assertFalse(forbidden & set(self.payload["live_observation"]))
+        self.assertFalse(forbidden & set(row := self.payload["live_observation"]))
 
     def test_simulated_target_validates(self):
         schema, observations, evidence = self.simulate()
-        if str(schema.get("version")) == TARGET_VERSION:
-            cn_errors = validate_cn_contract(schema, observations, evidence, self.plan)
-            self.assertEqual(cn_errors, [])
-        else:
-            checkpoint = schema.get("cn_checkpoint") or {}
-            self.assertEqual(checkpoint.get("schema_version"), TARGET_VERSION)
-            self.assertEqual(checkpoint.get("observation_count"), 9)
-            self.assertEqual(checkpoint.get("evidence_count"), 12)
-            self.assertEqual(checkpoint.get("canonical_linked_observation_count"), 3)
-            current_row = next(
-                row for row in observations["observations"]
-                if row["observation_id"] == OBSERVATION_ID
-            )
-            current_evidence = next(
-                row for row in evidence["evidence"]
-                if row["evidence_id"] == EVIDENCE_ID
-            )
-            self.assertEqual(current_row, self.payload["live_observation"])
-            self.assertEqual(current_evidence, self.payload["live_evidence"][0])
-            self.assertEqual(current_row["canonical_links"], [])
+        co_errors = validate_co_contract(schema, observations, evidence, self.plan)
+        self.assertEqual(co_errors, [])
         report = validate_live_intelligence(schema, evidence, observations, self.canonical)
         self.assertTrue(report.ok, report.errors)
 
-    def test_cn_preserves_cm_correction_conflict_contract_exactly(self):
+    def test_co_preserves_cm_correction_conflict_contract_exactly(self):
         schema, _, _ = self.simulate()
         self.assertEqual(schema["correction_conflict_policy"], self.schema["correction_conflict_policy"])
         self.assertEqual(schema["correction_conflict_policy"]["minimum_unique_conflict_evidence_refs"], 2)
@@ -157,7 +154,7 @@ class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
         schema, observations, evidence = self.simulate()
         overflow = copy.deepcopy(observations)
         extra = copy.deepcopy(self.payload["live_observation"])
-        extra["observation_id"] = "WSLI-TEST-CN-OVERFLOW"
+        extra["observation_id"] = "WSLI-TEST-CO-OVERFLOW"
         overflow["observations"].append(extra)
         report = validate_live_intelligence(schema, evidence, overflow, self.canonical)
         self.assertFalse(report.ok)
@@ -186,19 +183,15 @@ class BrazilFuelPolicyLiveCNTests(unittest.TestCase):
         self.assertEqual(target_observations(observations, self.payload, self.plan), observations)
         self.assertEqual(target_evidence(evidence, self.payload, self.plan), evidence)
 
-    def test_cn_checkpoint_records_zero_canonical_growth(self):
+    def test_co_checkpoint_records_zero_canonical_growth(self):
         schema, observations, evidence = self.simulate()
-        checkpoint = schema["cn_checkpoint"]
-        self.assertEqual(checkpoint["schema_version"], TARGET_VERSION)
-        self.assertEqual(checkpoint["observation_count"], 9)
-        self.assertEqual(checkpoint["evidence_count"], 12)
+        checkpoint = schema["co_checkpoint"]
+        self.assertEqual(checkpoint["observation_count"], 10)
+        self.assertEqual(checkpoint["evidence_count"], 14)
         self.assertEqual(checkpoint["canonical_linked_observation_count"], 3)
         row = next(row for row in observations["observations"] if row["observation_id"] == OBSERVATION_ID)
-        evidence_row = next(row for row in evidence["evidence"] if row["evidence_id"] == EVIDENCE_ID)
-        self.assertEqual(row, self.payload["live_observation"])
-        self.assertEqual(evidence_row, self.payload["live_evidence"][0])
         self.assertEqual(row["canonical_links"], [])
-        self.assertGreaterEqual(len(evidence["evidence"]), checkpoint["evidence_count"])
+        self.assertEqual(len(evidence["evidence"]), 14)
 
 
 if __name__ == "__main__":

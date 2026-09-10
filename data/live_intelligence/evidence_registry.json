@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.10",
+  "version": "0.11",
   "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through CN. CN adds one primary-official Brazil Ministry of Finance announcement row at civil-date publication precision; it supplies no Canonical provenance, unattended-monitoring authority or Analysis conclusion.",
+  "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through CO. CO adds two primary-official Canadian rows: Department of Finance tariff scope/effective-date evidence and CBSA operative border-application evidence. Neither supplies Canonical provenance, unattended-monitoring authority or Analysis conclusions.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -210,6 +210,40 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "Primary official Finance Ministry announcement. The page displays 09/09/2026 18h47 but the reviewed page does not itself establish an IANA timezone for that clock time, so CN preserves publication precision only as a civil date. The article says the Federal Government adopted/signed a temporary gasoline/ethanol tax measure and diesel-subsidy measure on 9 September. Fresh post-CM Planalto index review had not yet surfaced the new substantive legal-instrument pair, so this evidence row does not assert Diário Oficial publication, legal instrument numbers or entry into force."
+    },
+    {
+      "evidence_id": "WSEV-LI-CAN-FIN-USTARIFFS-20260825",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Canada — Department of Finance",
+      "title": "List of products from the United States subject to counter-tariffs effective September 8, 2026",
+      "url": "https://www.canada.ca/en/department-finance/news/2026/08/list-of-products-from-the-united-states-subject-to-counter-tariffs-effective-september-8-2026.html",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-25"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official Department of Finance backgrounder. Canada's archived-news index dates the page to 25 August 2026; the product list states it was updated as of 26 August. The source states that Canada will apply 15%, 25% and 50% counter-tariffs to listed U.S.-origin goods effective 8 September 2026, covering $27.6 billion in imports from the United States, and displays an effective clock time of 12:01 a.m. without establishing an IANA timezone. CO therefore preserves the event at civil-date precision rather than manufacturing UTC."
+    },
+    {
+      "evidence_id": "WSEV-LI-CAN-CBSA-SURTAX-20260907",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Canada Border Services Agency",
+      "title": "Customs Notice 26-23: United States Surtax Order (2026)",
+      "url": "https://www.cbsa.gc.ca/publications/cn-ad/cn26-23-eng.html",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-07"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official CBSA administrative notice dated Ottawa, 7 September 2026. It states that, effective 8 September 2026, certain U.S.-origin goods imported into Canada are subject under the United States Surtax Order (2026) to surtaxes of 15%, 25% or 50% of value for duty, as applicable. The notice establishes operative border application for the bounded CO claim; it does not grant unattended-monitoring or Canonical provenance authority."
     }
   ]
 }

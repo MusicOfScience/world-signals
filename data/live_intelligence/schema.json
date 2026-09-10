@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.10",
+  "version": "0.11",
   "reference_date": "2026-09-10",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
@@ -265,7 +265,15 @@
     "CN retains the government's geopolitical-conflict framing as attributed source context and does not convert it into independent WORLD SIGNALS causal analysis or observed inflation, pump-price, supply or market effects.",
     "CN creates no Canonical occurrence, Source Registry authority, Monitor route or Analysis review; automatic ingestion, automatic Canonical commit, Google Calendar writes and public Live projection remain prohibited.",
     "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CN v0.10.",
-    "A tenth Live observation, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
+    "CN v0.10 remains the frozen nine-observation/twelve-evidence checkpoint; CO is the separately pressure-audited tenth observation.",
+    "CO v0.11 adds one PRIMARY_CONFIRMED Canada POLICY_DEVELOPMENT recording implementation of the United States Surtax Order (2026) from 8 September 2026, with zero Canonical links and two primary-official Canadian evidence rows.",
+    "CO preserves the implementation event at CIVIL_DATE precision because the Department of Finance source's displayed 12:01 a.m. effective clock time is not accompanied by an established IANA timezone.",
+    "CO records source-reported rates of 15%, 25% and 50% and a $27.6 billion covered import scope without implying that all covered imports face one rate or independently inferring the source currency.",
+    "The separate U.S. presidential actions of 8 September 2026 are not collapsed into the Canadian sovereign observation; CO creates no bilateral story identity or conflict state merely because governments characterize the dispute differently.",
+    "CO makes no independent legality/fairness judgment and no observed price, inflation, trade-flow, currency, equity or other market-effect claim.",
+    "CO creates no Canonical occurrence, Source Registry authority, Monitor route or Analysis review; automatic ingestion, automatic Canonical commit, Google Calendar writes and public Live projection remain prohibited.",
+    "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CO v0.11.",
+    "An eleventh Live observation, U.S. response specimen, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -278,15 +286,15 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_UNSCHEDULED_LATIN_AMERICA_POLICY_SPECIMEN",
+    "mode": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 9,
-    "maximum_evidence_count": 12,
+    "maximum_observation_count": 10,
+    "maximum_evidence_count": 14,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CN adds exactly one pressure-audited unscheduled Brazilian fuel-policy development using bounded primary-official evidence; legal publication/effect, Canonical creation, Monitor routing and Analysis remain outside the specimen."
+    "reason": "CO adds exactly one pressure-audited Canadian counter-tariff implementation observation using two bounded primary-official evidence rows; U.S. response actions, Canonical creation, Monitor routing and Analysis remain outside the specimen."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",
@@ -368,5 +376,16 @@
     "canonical_linked_observation_count": 3,
     "base_main_sha": "9386114de527b117987058cb1b9cd98066dab8e4",
     "historical_contract": "CN adds one bounded unscheduled Brazilian policy-adoption observation while preserving the CM correction/conflict contract and all upstream/downstream write boundaries."
+  },
+  "co_checkpoint": {
+    "schema_version": "0.11",
+    "observations_version": "0.11",
+    "evidence_version": "0.11",
+    "population_state": "CONTROLLED_NORTH_AMERICA_TRADE_POLICY_IMPLEMENTATION_SPECIMEN",
+    "observation_count": 10,
+    "evidence_count": 14,
+    "canonical_linked_observation_count": 3,
+    "base_main_sha": "b2b9e85933dd1c5924af1228f47427d6b38bf967",
+    "historical_contract": "CO adds one bounded Canadian trade-policy implementation observation while keeping the distinct U.S. response outside the row and preserving all upstream/downstream write boundaries."
   }
 }

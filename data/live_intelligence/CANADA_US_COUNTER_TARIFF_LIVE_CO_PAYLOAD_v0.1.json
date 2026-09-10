@@ -1,0 +1,82 @@
+{
+  "project": "WORLD SIGNALS",
+  "tranche": "CO",
+  "target_version": "0.11",
+  "live_evidence": [
+    {
+      "evidence_id": "WSEV-LI-CAN-FIN-USTARIFFS-20260825",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Canada — Department of Finance",
+      "title": "List of products from the United States subject to counter-tariffs effective September 8, 2026",
+      "url": "https://www.canada.ca/en/department-finance/news/2026/08/list-of-products-from-the-united-states-subject-to-counter-tariffs-effective-september-8-2026.html",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-08-25"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official Department of Finance backgrounder. Canada's archived-news index dates the page to 25 August 2026; the product list states it was updated as of 26 August. The source states that Canada will apply 15%, 25% and 50% counter-tariffs to listed U.S.-origin goods effective 8 September 2026, covering $27.6 billion in imports from the United States, and displays an effective clock time of 12:01 a.m. without establishing an IANA timezone. CO therefore preserves the event at civil-date precision rather than manufacturing UTC."
+    },
+    {
+      "evidence_id": "WSEV-LI-CAN-CBSA-SURTAX-20260907",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Canada Border Services Agency",
+      "title": "Customs Notice 26-23: United States Surtax Order (2026)",
+      "url": "https://www.cbsa.gc.ca/publications/cn-ad/cn26-23-eng.html",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "CIVIL_DATE",
+        "published_date": "2026-09-07"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Primary official CBSA administrative notice dated Ottawa, 7 September 2026. It states that, effective 8 September 2026, certain U.S.-origin goods imported into Canada are subject under the United States Surtax Order (2026) to surtaxes of 15%, 25% or 50% of value for duty, as applicable. The notice establishes operative border application for the bounded CO claim; it does not grant unattended-monitoring or Canonical provenance authority."
+    }
+  ],
+  "live_observation": {
+    "observation_id": "WSLI-TRD-CAN-US-SURTAX-20260908-001",
+    "observed_at_utc": "2026-09-10T10:22:39Z",
+    "observation_type": "POLICY_DEVELOPMENT",
+    "verification_state": "PRIMARY_CONFIRMED",
+    "headline": "Canada applies 15–50% counter-tariffs to listed U.S.-origin goods from 8 September",
+    "summary": "Canada's Department of Finance and Canada Border Services Agency state that, from 8 September 2026, certain goods originating in the United States and imported into Canada are subject to surtaxes of 15%, 25% or 50% under the United States Surtax Order (2026), as applicable. The Department of Finance describes the countermeasures as covering $27.6 billion in imports from the United States and drawing on products targeted by U.S. Section 338 and Section 232 tariffs, with sectors including steel, dairy, appliances, agricultural equipment, pulp and paper, and electronics. This Live observation records the Canadian implementation only. It does not promote the Finance page's timezone-unspecified 12:01 a.m. clock to an exact timestamp, does not imply that the whole reported import scope faces one tariff rate, does not fold the separate U.S. 8 September proclamations into the Canadian act, does not independently adjudicate either government's claims about discrimination, retaliation, fairness or legality, and does not claim observed price, inflation, trade-flow, currency, equity or other market effects.",
+    "domain_tags": [
+      "TRADE",
+      "ECONOMICS",
+      "GEOPOLITICS"
+    ],
+    "jurisdictions": [
+      "Canada"
+    ],
+    "regions": [
+      "North America"
+    ],
+    "evidence_refs": [
+      "WSEV-LI-CAN-FIN-USTARIFFS-20260825",
+      "WSEV-LI-CAN-CBSA-SURTAX-20260907"
+    ],
+    "canonical_links": [],
+    "revision_of_observation_id": null,
+    "event_time": {
+      "precision": "CIVIL_DATE",
+      "event_date": "2026-09-08"
+    },
+    "automatic_canonical_commit": false,
+    "google_calendar_write": false
+  },
+  "scope_exclusions": [
+    "No Canonical occurrence is created for the Canadian counter-tariff implementation.",
+    "The Department of Finance page's displayed 12:01 a.m. effective clock time is not converted to UTC because the reviewed page does not establish an IANA timezone for that clock.",
+    "The source-reported $27.6 billion import scope is not treated as if every covered product faces a single 50% rate; applicable rates vary among 15%, 25% and 50%.",
+    "The separate U.S. presidential actions of 8 September 2026 are not folded into this Canadian sovereign observation and remain separately reviewable.",
+    "No manual story identity is created merely to group the Canadian and U.S. actions.",
+    "No independent judgment is made about either government's characterization of discrimination, retaliation, fairness or legality.",
+    "No observed consumer-price, inflation, trade-flow, currency, equity or other market response is asserted.",
+    "No Monitor route, Source Registry authority, Analysis review, automatic ingestion or public Live projection is created."
+  ]
+}
