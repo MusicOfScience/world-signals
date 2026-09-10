@@ -15,10 +15,10 @@ concurrency:
 
 jobs:
   validate:
-    # Defaults to GitHub-hosted compute. Setting the repository variable
-    # WORLD_SIGNALS_VALIDATION_RUNNER to a self-hosted runner label redirects
-    # only this validation job; scheduled monitoring and Pages remain hosted.
-    runs-on: ${{ vars.WORLD_SIGNALS_VALIDATION_RUNNER || 'ubuntu-latest' }}
+    # Defaults to GitHub-hosted compute. A configured self-hosted label is used
+    # only for trusted same-repository PRs, pushes and manual runs. Fork PRs
+    # always fall back to ubuntu-latest rather than executing on a local host.
+    runs-on: ${{ ((github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.WORLD_SIGNALS_VALIDATION_RUNNER) || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
@@ -31,6 +31,15 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+
+      - name: Fetch merge second parent for post-merge proof
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          read -r -a parents <<< "$(git show -s --format=%P "$GITHUB_SHA")"
+          if [[ "${#parents[@]}" -eq 2 ]]; then
+            git fetch --no-tags --depth=1 origin "${parents[1]}"
+          fi
 
       - uses: actions/setup-python@v6
         with:
