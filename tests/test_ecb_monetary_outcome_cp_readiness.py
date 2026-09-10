@@ -103,6 +103,21 @@ class EcbMonetaryOutcomeCPReadinessTests(unittest.TestCase):
             "PRIMARY_SOURCE_RETRIEVAL_OR_INDEXING_GAP_NOT_EVIDENCE_OF_NO_DECISION",
         )
 
+    def test_latest_primary_recheck_freezes_new_routes_without_opening_authority(self):
+        latest = self.plan["latest_primary_recheck"]
+        self.assertEqual(latest["as_of_utc"], "2026-09-10T14:28:00Z")
+        self.assertEqual(latest["official_decision_index_latest_visible_decision_date"], "2026-07-23")
+        self.assertTrue(latest["official_press_conference_surface_still_rendered_pre_release_state"])
+        self.assertTrue(latest["official_weekly_schedule_still_records_2026_09_10_decision_and_press_conference"])
+        self.assertTrue(latest["official_tv_downlink_surface_records_2026_09_10_press_conference_transmission_schedule"])
+        self.assertEqual(latest["official_press_rss_route_discovered"], "https://www.ecb.europa.eu/rss/press.html")
+        self.assertFalse(latest["official_press_rss_payload_retrievable_in_current_research_toolchain"])
+        self.assertFalse(latest["eurosystem_member_surfaces_exposed_current_decision_outcome"])
+        self.assertFalse(latest["official_ecb_outcome_retrievable_on_reviewed_primary_surfaces"])
+        self.assertFalse(latest["secondary_reporting_admitted_as_substitute"])
+        self.assertFalse(latest["governed_write_authorised"])
+        self.assertEqual(latest["repeat_search_without_new_primary_surface_value"], "LOW")
+
     def test_readiness_does_not_pre_assume_production_payload(self):
         design = self.plan["transaction_design_state"]
         self.assertFalse(design["final_transaction_shape_frozen"])
