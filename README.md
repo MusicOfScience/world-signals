@@ -72,6 +72,12 @@ Analysis is post-event and anchored to existing completed Canonical occurrences.
 
 Revision lineage is immutable: a later analytical judgement is a new Analysis snapshot linked to its parent, not an in-place rewrite. Automatic latest-head selection and public revision-head collapse remain prohibited.
 
+## Cross-domain risk overlay
+
+The dashboard includes a derived, read-only risk lens over existing Canonical records. It keeps intrinsic importance, expected market sensitivity, geopolitical sensitivity and transmission channels as separate dimensions, and maps signals non-exclusively across geopolitics, trade, energy, macro/monetary, financial/sovereign, health/biosecurity, climate/physical, technology/infrastructure and food/agriculture domains.
+
+Calendar-week convergence windows show signal density only. They are not probability estimates, severity rankings, causal claims or authority to create or modify events. The overlay does not consume private Live Intelligence or infer Analysis conclusions. Existing Canonical OPEC records may appear mechanically like any other governed event, but the quarantined OPEC provenance transaction remains dormant and unchanged.
+
 ## Time and uncertainty
 
 Canonical event time preserves source-native IANA timezone and UTC time when those exist. Australia/Melbourne is a home/reference display context, never canonical storage time. Civil dates, native month windows, recurring rules, provisional timing and unresolved timing remain at their supported precision rather than being promoted to synthetic timestamps.
@@ -110,7 +116,7 @@ To serve the freshly built dashboard on loopback after the run completes:
 /opt/homebrew/bin/python3.13 scripts/run_local_operations.py --serve
 ```
 
-Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.world-signals-runtime/`; disposable build inputs remain under ignored `artifacts/` and `review_candidates/`. The runner requires a clean tracked worktree and hash-protects Canonical, Sources, Change Ledger, Monitor contracts, Live Intelligence, Analysis and the OPEC quarantine. It never commits, changes Canonical, writes Google Calendar or promotes Monitor evidence automatically.
+Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.world-signals-runtime/`; disposable build inputs remain under ignored `artifacts/` and `review_candidates/`. The runner requires a clean tracked worktree and hash-protects Canonical, Sources, Change Ledger, Monitor contracts, Live Intelligence, Analysis, analytical/coverage overlays and the OPEC quarantine. It never commits, changes Canonical, writes Google Calendar or promotes Monitor evidence automatically.
 
 To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 

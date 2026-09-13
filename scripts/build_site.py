@@ -10,6 +10,7 @@ from world_signals.projection import public_projection
 from world_signals.operations import operations_projection
 from world_signals.runtime_projection import unavailable_runtime_projection
 from world_signals.biosecurity_projection import public_biosecurity_projection
+from world_signals.risk_projection import public_risk_projection
 from world_signals.live_intelligence import public_live_intelligence_projection, validate_live_intelligence
 from world_signals.analysis import validate_analysis
 from world_signals.analysis_revision import validate_analysis_revisions
@@ -48,7 +49,7 @@ if not bridge_report.ok:
 
 docs=ROOT/"docs"
 docs.mkdir(exist_ok=True)
-for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css"):
+for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 
 # Keep source modules separate in the repository while shipping the existing
@@ -62,6 +63,8 @@ with (docs/"operations.js").open("a",encoding="utf-8") as bundled:
 with (docs/"app.js").open("a",encoding="utf-8") as bundled:
     bundled.write("\n\n/* bundled source: web/analysis.js */\n")
     bundled.write((ROOT/"web/analysis.js").read_text(encoding="utf-8"))
+    bundled.write("\n\n/* bundled source: web/risk.js */\n")
+    bundled.write((ROOT/"web/risk.js").read_text(encoding="utf-8"))
 
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
@@ -111,6 +114,9 @@ analysis_projection=public_analysis_projection_with_revision_contract(
 )
 dump_json(docs/"data/analysis.json",analysis_projection)
 
+risk_projection=public_risk_projection(reg)
+dump_json(docs/"data/risk_overlay.json",risk_projection)
+
 runtime_path=ROOT/"artifacts/latest-monitor-public.json"
 if runtime_path.exists():
     runtime_projection=load_json(runtime_path)
@@ -158,6 +164,9 @@ dump_json(docs/"data/source_summary.json", {
     "live_intelligence_internal_observation_count":live_projection["metadata"]["internal_observation_count"],
     "live_intelligence_public_observation_count":live_projection["metadata"]["public_observation_count"],
     "analysis_review_count":analysis_projection["metadata"]["review_count"],
+    "risk_overlay_event_count":risk_projection["metadata"]["projected_event_count"],
+    "risk_overlay_domain_count":risk_projection["metadata"]["risk_domain_count"],
+    "risk_overlay_convergence_window_count":risk_projection["metadata"]["convergence_window_count"],
     "monitoring_tiers":ops_projection["source_governance_summary"]["monitoring_readiness_status"],
     "runtime_snapshot_availability":runtime_projection.get("availability"),
     "retained_review_state_availability":review_projection.get("availability"),
@@ -175,6 +184,9 @@ print(
     f"({live_projection['metadata']['population_state']}; "
     f"{live_projection['metadata']['public_observation_count']} public observations), "
     f"{analysis_projection['metadata']['review_count']} analytical review(s), reviewed change history, "
+    f"risk_overlay={risk_projection['metadata']['projected_event_count']}events/"
+    f"{risk_projection['metadata']['risk_domain_count']}domains/"
+    f"{risk_projection['metadata']['convergence_window_count']}density-windows, "
     f"biosecurity_overlay={biosecurity_projection['metadata']['mapped_canonical_series_count']}series/"
     f"{biosecurity_projection['metadata']['candidate_node_count']}candidates, "
     f"runtime={runtime_projection.get('availability')} and "

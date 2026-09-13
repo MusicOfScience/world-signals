@@ -21,6 +21,7 @@ PROTECTED_PATHS = (
     "data/monitor",
     "data/live_intelligence",
     "data/analysis",
+    "data/coverage",
 )
 
 
