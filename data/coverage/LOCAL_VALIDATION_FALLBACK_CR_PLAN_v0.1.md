@@ -1,8 +1,11 @@
 # WORLD SIGNALS — local exact-head validation fallback CR plan v0.1
 
-**Status:** GOVERNANCE TRANSITION PROPOSAL / NO SELF-AUTHORISATION / NO MERGE OR GOVERNED POPULATION AUTHORITY  
-**Reference date:** 2026-09-13 Australia/Melbourne  
-**Exact base:** `166bd14341ca6689dbc9b75d16500f3e176346cd`  
+**Status:** GOVERNANCE TRANSITION PROPOSAL / NO SELF-AUTHORISATION / NO MERGE OR GOVERNED POPULATION AUTHORITY
+
+**Reference date:** 2026-09-13 Australia/Melbourne
+
+**Exact base:** `166bd14341ca6689dbc9b75d16500f3e176346cd`
+
 **Trigger:** GitHub-hosted Actions allowance exhaustion and repeated zero-step runner-admission failures
 
 ## Problem
