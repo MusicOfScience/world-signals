@@ -43,7 +43,7 @@ The snapshot and prose documents are not permitted to override the governed file
 - **MERGE NOW — PR #N**; or
 - **DO NOT MERGE — PR #N**.
 
-A PR URL or clickable link must **not** be supplied while the state is `DO NOT MERGE`. Earlier green runs never authorise merging after a later commit; required checks must pass on the actual final head. The user performs merges. The assistant does not.
+A PR URL or clickable link must **not** be supplied while the state is `DO NOT MERGE`. Earlier green runs never authorise merging after a later commit; required checks must pass on the actual final head. Hosted CI remains the normal mode. The tightly bounded local exact-head fallback in `HANDOFF_PROTOCOL.md` is available only after explicit project-owner activation for a known hosted-CI outage or allowance limit, with full command parity, evidence and residue controls. The user performs merges. The assistant does not.
 
 Every next-chat or recovery handover must repeat this rule explicitly so ambiguity at the final human control point cannot defeat otherwise guarded repository work.
 
