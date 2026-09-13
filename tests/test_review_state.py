@@ -67,6 +67,9 @@ class ReviewStateTests(unittest.TestCase):
         self.assertEqual(item["first_run_number"],48)
         self.assertEqual(item["last_run_number"],49)
         self.assertEqual(item["state"],"PENDING_REVIEW")
+        self.assertEqual(item["recurrence_state"],"REOBSERVED")
+        self.assertEqual(item["operator_attention_class"],"REPEATED_DECISION_REQUIRED")
+        self.assertEqual(item["operator_next_action"],"VERIFY_AUTHORITATIVE_EVIDENCE_AND_RECORD_REVIEW_DECISION")
         self.assertFalse(item["automatic_commit_allowed"])
 
     def test_materially_different_proposition_becomes_sibling(self):
@@ -105,6 +108,8 @@ class ReviewStateTests(unittest.TestCase):
         self.assertEqual(item["state"],"REJECTED")
         self.assertEqual(item["last_decision_state"],"REJECTED")
         self.assertTrue(item["reobserved_after_decision"])
+        self.assertEqual(item["operator_attention_class"],"REOBSERVED_AFTER_DECISION")
+        self.assertEqual(item["operator_next_action"],"REVIEW_PRIOR_DECISION_BEFORE_ANY_REOPEN")
 
     def test_canonical_alignment_without_review_ledger_link_requires_reconciliation(self):
         canonical=[dict(self.canonical[0],start_local="2026-09-11")]
@@ -114,6 +119,8 @@ class ReviewStateTests(unittest.TestCase):
         item=state["items"][0]
         self.assertEqual(item["state"],"CANONICAL_ALIGNMENT_REQUIRES_RECONCILIATION")
         self.assertEqual(item["canonical_alignment_state"],"ALIGNED_WITH_CANONICAL_NO_REVIEW_LEDGER_LINK")
+        self.assertEqual(item["operator_attention_class"],"RECONCILIATION_REQUIRED")
+        self.assertEqual(item["operator_next_action"],"RECONCILE_CANONICAL_ALIGNMENT_AND_REVIEW_LEDGER")
 
     def test_review_ledger_link_marks_item_committed(self):
         review_item_id=proposition_identity(self.candidate)["review_item_id"]
@@ -129,6 +136,22 @@ class ReviewStateTests(unittest.TestCase):
         item=state["items"][0]
         self.assertEqual(item["state"],"COMMITTED")
         self.assertEqual(item["canonical_alignment_state"],"COMMITTED_WITH_REVIEW_LEDGER_LINK")
+        self.assertEqual(item["operator_attention_class"],"NO_ACTIVE_ACTION")
+        self.assertEqual(item["operator_next_action"],"PRESERVE_REVIEW_RECORD")
+
+    def test_approved_item_requires_separate_transaction_handoff(self):
+        review_item_id=proposition_identity(self.candidate)["review_item_id"]
+        decisions={"decisions":[{
+            "review_item_id":review_item_id,
+            "decision_state":"APPROVED_FOR_CANONICAL_COMMIT",
+            "decided_at":"2026-09-04T04:00:00+00:00",
+        }]}
+        item=self.reduce([
+            {"run_number":48,"run_id":"48","run_at":"2026-09-04T01:00:00+00:00","candidates":[self.candidate]},
+        ],decisions=decisions)["items"][0]
+        self.assertEqual(item["operator_attention_class"],"COMMIT_HANDOFF_REQUIRED")
+        self.assertEqual(item["operator_next_action"],"PREPARE_SEPARATELY_REVIEWED_CANONICAL_TRANSACTION")
+        self.assertFalse(item["automatic_commit_allowed"])
 
     def test_opaque_legal_candidate_hashes_rule_state_without_public_payload(self):
         legal={
@@ -160,6 +183,18 @@ class ReviewStateTests(unittest.TestCase):
         bad=dict(self.candidate,automatic_commit_allowed=True)
         with self.assertRaises(ValueError):
             proposition_identity(bad)
+
+    def test_operator_fields_are_public_but_raw_evidence_remains_prohibited(self):
+        state=self.reduce([
+            {"run_number":48,"run_id":"48","run_at":"2026-09-04T01:00:00+00:00","candidates":[self.candidate]},
+        ])
+        item=state["items"][0]
+        self.assertEqual(CONTRACT["version"],"0.2")
+        self.assertEqual(item["recurrence_state"],"FIRST_OBSERVATION")
+        self.assertEqual(item["operator_attention_class"],"DECISION_REQUIRED")
+        serialized=json.dumps(item)
+        for prohibited in CONTRACT["prohibited_public_fields"]:
+            self.assertNotIn(f'"{prohibited}"',serialized)
 
     def test_pre_contract_run_is_excluded(self):
         state=self.reduce([

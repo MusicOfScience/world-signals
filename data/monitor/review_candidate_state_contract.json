@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "REVIEW_CANDIDATE_STATE_CONTRACT",
-  "version": "0.1",
+  "version": "0.2",
   "reference_date": "2026-09-04",
   "scope": "RETAINED_ACTIONS_ARTEFACT_HORIZON_PLUS_MANUAL_REVIEW_DECISIONS",
   "activation": {
@@ -30,6 +30,8 @@
     "EVERY_CANDIDATE_MUST_EXPLICITLY_PROHIBIT_AUTOMATIC_COMMIT",
     "PUBLIC_REVIEW_PROJECTION_MUST_NOT_INCLUDE_RAW_OLD_NEW_SOURCE_ASSERTION_RULE_TOPOLOGY_OR_SNAPSHOT_PAYLOADS",
     "BROWSER_REVIEW_VIEW_IS_READ_ONLY",
+    "OPERATOR_ATTENTION_CLASS_IS_ROUTING_METADATA_NOT_EVENT_IMPORTANCE_OR_COMMIT_AUTHORITY",
+    "OPERATOR_NEXT_ACTION_IS_A_CONTROLLED_REVIEW_INSTRUCTION_NOT_AN_EXECUTABLE_BROWSER_ACTION",
     "GOOGLE_CALENDAR_WRITES_REMAIN_OFF"
   ],
   "derived_states": [
@@ -81,6 +83,9 @@
     "decided_at",
     "canonical_alignment_state",
     "reobserved_after_decision",
+    "recurrence_state",
+    "operator_attention_class",
+    "operator_next_action",
     "automatic_commit_allowed"
   ],
   "prohibited_public_fields": [

@@ -59,12 +59,19 @@
 .ops-health-degraded{font-weight:800}
 .ops-review-section{border-top:1px solid var(--line,#d8d8d8);padding-top:1.25rem}
 .ops-review-summary{margin:.8rem 0}
+.ops-review-routing-note{border-left:4px solid currentColor;padding:.75rem 1rem;margin:.8rem 0;background:rgba(127,127,127,.08);font-size:.86rem}
+.ops-review-routing-note strong{display:block;margin-bottom:.2rem}
+.ops-review-controls{display:grid;grid-template-columns:minmax(230px,1.35fr) repeat(3,minmax(150px,.65fr));gap:.65rem;margin:1rem 0}
+.ops-review-controls input,.ops-review-controls select{width:100%}
 .ops-review-state-summary{display:flex;flex-wrap:wrap;gap:.55rem;margin:1rem 0}
 .ops-review-state-summary span{display:flex;align-items:baseline;gap:.35rem;border:1px solid var(--line,#d8d8d8);border-radius:999px;padding:.4rem .65rem;font-size:.76rem}
 .ops-review-state-summary b{font-size:1rem}
 .ops-review-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:.8rem}
 .ops-review-item h4{margin:.1rem 0}
+.ops-review-routing{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:.55rem;margin:.8rem 0}
+.ops-review-routing span{display:grid;gap:.2rem;padding:.65rem;border-radius:10px;background:rgba(127,127,127,.08);font-size:.82rem}
+.ops-review-routing b{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;opacity:.68}
 .ops-review-pending_review,.ops-review-canonical_alignment_requires_reconciliation,.ops-review-approved_for_canonical_commit{font-weight:800}
 .ops-review-committed,.ops-review-rejected,.ops-review-superseded,.ops-review-deferred{opacity:.82}
 @media(max-width:1000px){.ops-runtime-health{grid-template-columns:repeat(2,minmax(0,1fr))}.ops-runtime-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:850px){.ops-intro,.ops-summary-grid,.ops-routes,.ops-gate,.ops-source-card,.ops-runtime-candidates,.ops-review-items{grid-template-columns:1fr}.ops-source-controls{grid-template-columns:1fr}.ops-source-foot{grid-column:auto}.ops-card-head{display:grid}.ops-static-badge,.ops-runtime-status,.ops-review-state{justify-self:start}.ops-runtime-health{grid-template-columns:1fr}}
+@media(max-width:850px){.ops-intro,.ops-summary-grid,.ops-routes,.ops-gate,.ops-source-card,.ops-runtime-candidates,.ops-review-items,.ops-review-controls,.ops-review-routing{grid-template-columns:1fr}.ops-source-controls{grid-template-columns:1fr}.ops-source-foot{grid-column:auto}.ops-card-head{display:grid}.ops-static-badge,.ops-runtime-status,.ops-review-state{justify-self:start}.ops-runtime-health{grid-template-columns:1fr}}
