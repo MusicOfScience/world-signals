@@ -118,6 +118,8 @@ To serve the freshly built dashboard on loopback after the run completes:
 
 Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.world-signals-runtime/`; disposable build inputs remain under ignored `artifacts/` and `review_candidates/`. The runner requires a clean tracked worktree and hash-protects Canonical, Sources, Change Ledger, Monitor contracts, Live Intelligence, Analysis, analytical/coverage overlays and the OPEC quarantine. It never commits, changes Canonical, writes Google Calendar or promotes Monitor evidence automatically.
 
+The Operations view reduces repeated candidates into stable `WSRV-*` review propositions and provides read-only operator routing: attention class, controlled next step, recurrence, evidence-object IDs, filters and deterministic ordering. Those labels organise human review only. Decisions remain reviewed repository records, and any approved Canonical change still requires a separate transaction plus explicit change-ledger linkage.
+
 To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 
 ```bash

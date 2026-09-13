@@ -154,6 +154,22 @@ def _ledger_links(change_ledger: dict) -> dict[str,list[dict]]:
     return links
 
 
+def _operator_guidance(item: dict) -> tuple[str,str,str]:
+    """Derive review routing metadata without granting action authority."""
+    recurrence="REOBSERVED" if int(item.get("observation_count") or 0)>1 else "FIRST_OBSERVATION"
+    state=item.get("state")
+    if state=="CANONICAL_ALIGNMENT_REQUIRES_RECONCILIATION":
+        return recurrence,"RECONCILIATION_REQUIRED","RECONCILE_CANONICAL_ALIGNMENT_AND_REVIEW_LEDGER"
+    if state=="APPROVED_FOR_CANONICAL_COMMIT":
+        return recurrence,"COMMIT_HANDOFF_REQUIRED","PREPARE_SEPARATELY_REVIEWED_CANONICAL_TRANSACTION"
+    if item.get("reobserved_after_decision"):
+        return recurrence,"REOBSERVED_AFTER_DECISION","REVIEW_PRIOR_DECISION_BEFORE_ANY_REOPEN"
+    if state=="PENDING_REVIEW":
+        attention="REPEATED_DECISION_REQUIRED" if recurrence=="REOBSERVED" else "DECISION_REQUIRED"
+        return recurrence,attention,"VERIFY_AUTHORITATIVE_EVIDENCE_AND_RECORD_REVIEW_DECISION"
+    return recurrence,"NO_ACTIVE_ACTION","PRESERVE_REVIEW_RECORD"
+
+
 def reduce_review_state(
     runs: Iterable[dict],
     *,
@@ -257,6 +273,11 @@ def reduce_review_state(
             item["canonical_alignment_state"]="ALIGNED_WITH_CANONICAL_NO_REVIEW_LEDGER_LINK"
         else:
             item["canonical_alignment_state"]=alignment
+
+        recurrence,attention,next_action=_operator_guidance(item)
+        item["recurrence_state"]=recurrence
+        item["operator_attention_class"]=attention
+        item["operator_next_action"]=next_action
 
         item["candidate_types"]=sorted(item["candidate_types"])
         item["source_ids"]=sorted(item["source_ids"])

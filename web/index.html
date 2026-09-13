@@ -182,6 +182,13 @@
         <div class="section-heading"><div><p class="eyebrow">RETAINED REVIEW STATE</p><h3>Propositions surviving across retained monitor evidence</h3></div><span id="opsReviewCount" class="meta"></span></div>
         <p class="meta">Identical propositions across post-contract monitor runs collapse into one stable <code>WSRV-*</code> review item. Absence from a later run does not resolve an item. This view is bounded by retained execution evidence and is not yet a permanent pending-review database.</p>
         <div id="opsReviewSummary" class="ops-review-summary"><p class="empty">Loading retained review state…</p></div>
+        <div class="ops-review-routing-note"><strong>Operator routing only.</strong> Attention classes and next actions organise human review. They are not event-importance ratings, approvals or executable browser actions.</div>
+        <div class="ops-review-controls" aria-label="Retained review filters">
+          <input id="opsReviewSearch" type="search" placeholder="Search review, candidate, source or occurrence…" aria-label="Search retained review items">
+          <select id="opsReviewStateFilter" aria-label="Review state"><option value="">All review states</option></select>
+          <select id="opsReviewAttentionFilter" aria-label="Operator attention"><option value="">All attention classes</option></select>
+          <select id="opsReviewSort" aria-label="Review order"><option value="attention">Attention order</option><option value="latest">Latest observed</option><option value="recurrence">Most reobserved</option></select>
+        </div>
         <div id="opsReviewItems" class="ops-review-items"></div>
       </section>
 
