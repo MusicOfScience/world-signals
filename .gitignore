@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 /docs/
+/artifacts/
+/review_candidates/
+/.world-signals-runtime/

@@ -73,7 +73,7 @@ monitor_projection={
         "projection_type":"CONFIGURED_ROUTES_NOT_RUNTIME_STATUS",
         "automatic_canonical_commit":False,
         "google_calendar_write":False,
-        "runtime_status_location":"GitHub Actions artefacts",
+        "runtime_status_location":"sanitized local or GitHub execution projection",
     },
     "routes":[],
 }

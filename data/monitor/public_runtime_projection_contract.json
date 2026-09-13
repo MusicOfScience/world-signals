@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "PUBLIC_RUNTIME_PROJECTION_CONTRACT",
-  "version": "0.1",
-  "reference_date": "2026-09-04",
+  "version": "0.2",
+  "reference_date": "2026-09-13",
   "purpose": "Define the only monitor-runtime fields that may be projected into the public read-only web UX.",
   "projection_type": "DATED_RECORDED_MONITOR_RUN_NOT_CURRENT_HEALTH",
   "rules": [
@@ -22,6 +22,9 @@
     "projection_type",
     "run_at",
     "status",
+    "execution_mode",
+    "run_id",
+    "head_sha",
     "github_run_id",
     "github_sha",
     "report_schema_version",

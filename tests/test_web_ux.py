@@ -56,7 +56,7 @@ class WebUXTests(unittest.TestCase):
         pages=(ROOT/".github/workflows/pages.yml").read_text(encoding="utf-8")
         self.assertIn('id="opsReviewSummary"', html)
         self.assertIn('id="opsReviewItems"', html)
-        self.assertIn('bounded by retained Actions evidence', html)
+        self.assertIn('bounded by retained execution evidence', html)
         self.assertIn('stable <code>WSRV-*</code> review item', html)
         self.assertIn("fetch('data/review_state.json')", js)
         self.assertIn('AVAILABLE_RETAINED_HORIZON', js)

@@ -104,8 +104,11 @@
     const alignment=runtime.configuration_alignment||{};
     const fields=Object.entries(alignment.fields||{});
     const mismatches=fields.filter(([,value])=>!value.matches);
+    const executionMode=runtime.execution_mode||'UNSPECIFIED';
+    const runLabel=executionMode==='GITHUB_ACTIONS'?'GitHub run':'Local run';
+    const runIdentity=runtime.run_id||runtime.github_run_id||'not recorded';
     summary.innerHTML=`<article class="ops-runtime-run">
-      <div class="ops-card-head"><div><p class="eyebrow">${esc(human(runtime.status||'unknown'))}</p><h3>${esc(recordedTime(runtime.run_at))}</h3><p class="meta">GitHub run <code>${esc(runtime.github_run_id||'not recorded')}</code> · report schema ${esc(runtime.report_schema_version||'?')}</p></div><span class="ops-runtime-status">${esc(human(alignment.state||'alignment unknown'))}</span></div>
+      <div class="ops-card-head"><div><p class="eyebrow">${esc(human(runtime.status||'unknown'))}</p><h3>${esc(recordedTime(runtime.run_at))}</h3><p class="meta">${esc(runLabel)} <code>${esc(runIdentity)}</code> · ${esc(human(executionMode))} · report schema ${esc(runtime.report_schema_version||'?')}</p></div><span class="ops-runtime-status">${esc(human(alignment.state||'alignment unknown'))}</span></div>
       <div class="ops-runtime-metrics"><span><b>${esc(runtime.healthy_adapter_count)}</b>healthy adapters</span><span><b>${esc(runtime.degraded_adapter_count)}</b>degraded adapters</span><span><b>${esc(runtime.candidate_count)}</b>review candidates</span><span><b>${runtime.canonical_unchanged?'YES':'NO'}</b>canonical unchanged</span></div>
       ${mismatches.length?`<div class="ops-alignment-warning"><strong>This retained run used an older configuration than the current site.</strong>${mismatches.map(([key,value])=>`<span>${esc(human(key))}: run ${esc(value.run)} · current ${esc(value.current)}</span>`).join('')}</div>`:'<p class="ops-alignment-ok">Run configuration matches the current canonical/source/monitor contract versions.</p>'}
       <p class="meta">This is a dated observation snapshot. It is not a claim that the sources remain in these states now.</p>
@@ -142,7 +145,8 @@
     const summary=document.querySelector('#opsReviewSummary');
     const items=document.querySelector('#opsReviewItems');
     const count=document.querySelector('#opsReviewCount');
-    if(!review||review.availability!=='AVAILABLE_RETAINED_HORIZON'){
+    const localHorizon=review?.availability==='AVAILABLE_LOCAL_HORIZON';
+    if(!review||(review.availability!=='AVAILABLE_RETAINED_HORIZON'&&!localHorizon)){
       count.textContent='review horizon unavailable';
       summary.innerHTML=`<article class="ops-runtime-unavailable"><p class="eyebrow">RETAINED REVIEW STATE UNAVAILABLE</p><h3>No complete retained-horizon projection in this build</h3><p>${esc(human(review?.availability||'review state unavailable'))}.</p><p class="meta">This is not interpreted as an empty review queue.</p></article>`;
       items.innerHTML='';
@@ -150,11 +154,14 @@
     }
     const stateEntries=Object.entries(review.state_counts||{});
     count.textContent=`${review.item_count||0} review item${review.item_count===1?'':'s'}`;
+    const horizonTitle=localHorizon
+      ? `${esc(review.run_count_considered||0)} locally retained run${review.run_count_considered===1?'':'s'}`
+      : `${esc(review.retention_days||'?')} retained days · activated after monitor run ${esc(review.activation_after_run_number||'?')}`;
     summary.innerHTML=`<article class="ops-review-horizon">
-      <div class="ops-card-head"><div><p class="eyebrow">EVIDENCE HORIZON</p><h3>${esc(review.retention_days||'?')} retained days · activated after monitor run ${esc(review.activation_after_run_number||'?')}</h3></div><span class="ops-static-badge">NOT PERMANENT</span></div>
+      <div class="ops-card-head"><div><p class="eyebrow">EVIDENCE HORIZON</p><h3>${horizonTitle}</h3></div><span class="ops-static-badge">${localHorizon?'LOCAL':'NOT PERMANENT'}</span></div>
       <div class="ops-runtime-metrics"><span><b>${esc(review.run_count_considered||0)}</b>successful runs reduced</span><span><b>${esc(review.item_count||0)}</b>review items</span><span><b>${esc(review.unsuccessful_run_count||0)}</b>unsuccessful runs</span><span><b>${review.evidence_horizon_complete?'YES':'NO'}</b>horizon complete</span></div>
       ${stateEntries.length?`<div class="ops-review-state-summary">${stateEntries.map(([state,n])=>`<span><b>${esc(n)}</b>${esc(human(state))}</span>`).join('')}</div>`:'<p class="ops-alignment-ok">No post-contract review proposition has been observed in the retained evidence horizon.</p>'}
-      <p class="meta">A later run with no matching candidate does not resolve an earlier item. Manual decisions are repository-reviewed records; monitor and browser writes remain prohibited.</p>
+      <p class="meta">A later run with no matching candidate does not resolve an earlier item. ${localHorizon?'Pre-migration Actions evidence is not silently inferred or imported. ':''}Manual decisions are repository-reviewed records; monitor and browser writes remain prohibited.</p>
     </article>`;
     const rows=review.items||[];
     items.innerHTML=rows.length?rows.map(renderReviewItem).join(''):'<p class="empty">No post-contract review items are currently present inside the retained evidence horizon.</p>';
