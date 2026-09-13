@@ -200,6 +200,11 @@ def fetch_nz_election_rss(*, timeout: int = 30) -> tuple[list[NZElectionRSSItem]
         raise AdapterError(f"NZ election RSS resolved away from exact endpoint: {snapshot.resolved_url!r}")
     ctype = snapshot.content_type.lower()
     if not any(token in ctype for token in ("application/rss+xml", "application/xml", "text/xml")):
+        response_head = body[:3000].decode("utf-8", errors="replace").lower()
+        if "incapsula" in response_head or "request unsuccessful" in response_head:
+            raise AdapterError(
+                "NZ election RSS access blocked by perimeter security; non-feed response has no event semantics"
+            )
         raise AdapterError(f"NZ election RSS content-type drift: {snapshot.content_type!r}")
     if snapshot.body_bytes < 1000 or snapshot.body_bytes > 100000:
         raise AdapterError(f"NZ election RSS body-size drift: {snapshot.body_bytes} bytes")

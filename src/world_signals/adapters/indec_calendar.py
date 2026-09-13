@@ -131,7 +131,12 @@ def _calendar_release_from_href(href: str, *, month_slug: str, normalized_html: 
     )
 
 
-def parse_indec_cpi_month(body: bytes | str, *, month_slug: str) -> INDECCPIRelease:
+def _parse_indec_cpi_month(
+    body: bytes | str,
+    *,
+    month_slug: str,
+    allow_absent: bool,
+) -> INDECCPIRelease | None:
     raw = body.decode("utf-8", errors="replace") if isinstance(body, bytes) else body
     normalized = html.unescape(raw)
     matches: list[INDECCPIRelease] = []
@@ -139,11 +144,19 @@ def parse_indec_cpi_month(body: bytes | str, *, month_slug: str) -> INDECCPIRele
         item = _calendar_release_from_href(href, month_slug=month_slug, normalized_html=normalized)
         if item is not None:
             matches.append(item)
+    if not matches and allow_absent:
+        return None
     if len(matches) != 1:
         raise AdapterError(
             f"INDEC month route {month_slug} must contain exactly one national CPI calendar identity; found {len(matches)}"
         )
     return matches[0]
+
+
+def parse_indec_cpi_month(body: bytes | str, *, month_slug: str) -> INDECCPIRelease:
+    item = _parse_indec_cpi_month(body, month_slug=month_slug, allow_absent=False)
+    assert item is not None
+    return item
 
 
 def indec_routes_allowed(robots_body: bytes | str, month_slugs: list[str]) -> bool:
@@ -171,8 +184,9 @@ def fetch_indec_robots_policy(month_slugs: list[str], *, timeout: int = 30) -> t
 def fetch_indec_cpi_month(
     month_slug: str,
     *,
+    allow_absent: bool = False,
     timeout: int = 30,
-) -> tuple[INDECCPIRelease, FetchSnapshot]:
+) -> tuple[INDECCPIRelease | None, FetchSnapshot]:
     url = month_route_url(month_slug)
     body, snapshot = fetch_bytes(
         url,
@@ -188,20 +202,33 @@ def fetch_indec_cpi_month(
     parsed = urlparse(snapshot.resolved_url)
     if parsed.scheme != "https" or parsed.hostname not in INDEC_OFFICIAL_HOSTS:
         raise AdapterError(f"INDEC month route resolved outside official HTTPS host: {snapshot.resolved_url!r}")
-    return parse_indec_cpi_month(body, month_slug=month_slug), snapshot
+    return _parse_indec_cpi_month(
+        body,
+        month_slug=month_slug,
+        allow_absent=allow_absent,
+    ), snapshot
 
 
 def fetch_indec_cpi_months(
     month_slugs: list[str],
     *,
+    allow_absent_month_slugs: set[str] | None = None,
     timeout: int = 30,
 ) -> tuple[list[INDECCPIRelease], list[FetchSnapshot]]:
     if not month_slugs or len(month_slugs) != len(set(month_slugs)):
         raise AdapterError("INDEC month route list must be non-empty and unique")
+    allowed_absences = set(allow_absent_month_slugs or set())
+    if not allowed_absences.issubset(set(month_slugs)):
+        raise AdapterError("INDEC allowed-absence month routes must be within the requested route set")
     releases: list[INDECCPIRelease] = []
     snapshots: list[FetchSnapshot] = []
     for month_slug in month_slugs:
-        item, snapshot = fetch_indec_cpi_month(month_slug, timeout=timeout)
-        releases.append(item)
+        item, snapshot = fetch_indec_cpi_month(
+            month_slug,
+            allow_absent=month_slug in allowed_absences,
+            timeout=timeout,
+        )
+        if item is not None:
+            releases.append(item)
         snapshots.append(snapshot)
     return releases, snapshots

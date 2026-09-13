@@ -172,8 +172,14 @@ def indec_cpi_calendar_review_candidates(
     records: list[dict],
     releases: list[INDECCPIRelease],
     config: dict,
+    *,
+    retired_month_slugs: set[str] | None = None,
 ) -> tuple[list[dict], list[dict]]:
     by_id, identity = _configured_scope(records, config)
+    retired = set(retired_month_slugs or set())
+    configured_month_slugs = {value["month_slug"] for value in identity.values()}
+    if not retired.issubset(configured_month_slugs):
+        raise ValueError("INDEC retired month routes must be within configured scope")
     by_reference: dict[str, INDECCPIRelease] = {}
     for item in releases:
         key = item.reference_period
@@ -202,6 +208,19 @@ def indec_cpi_calendar_review_candidates(
         item = by_reference.get(expected["reference_period_es"])
 
         if item is None:
+            if expected["month_slug"] in retired:
+                observations.append({
+                    "type": "INDEC_CPI_PAST_RELEASE_REMOVED_FROM_ROLLING_CALENDAR",
+                    "occurrence_id": occurrence_id,
+                    "reference_period_es": expected["reference_period_es"],
+                    "month_slug": expected["month_slug"],
+                    "canonical_release_date": expected["canonical_release_date"],
+                    "absence_is_expected_after_release_date": True,
+                    "absence_is_not_completion_evidence": True,
+                    "event_state_inference": "NONE",
+                    "automatic_commit_allowed": False,
+                })
+                continue
             observations.append({
                 "type": "INDEC_CPI_EXPECTED_REPORT_ABSENT_FROM_CONFIGURED_MONTH_ROUTE",
                 "occurrence_id": occurrence_id,

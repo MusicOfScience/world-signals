@@ -4,14 +4,16 @@ import copy
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from world_signals.adapters.base import AdapterError
+from world_signals.adapters.base import AdapterError, FetchSnapshot
 from world_signals.adapters.nz_election_rss import (
     NZ_ELECTION_TIMETABLE_URL,
     NZElectionRSSItem,
+    fetch_nz_election_rss,
     nz_election_rss_access_policy,
     parse_nz_election_rss,
 )
@@ -175,6 +177,23 @@ class NZElectionRSSAdapterTests(unittest.TestCase):
     def test_robots_non_policy_body_fails_closed(self):
         with self.assertRaises(AdapterError):
             nz_election_rss_access_policy("<html>Request rejected</html>")
+
+    @patch("world_signals.adapters.nz_election_rss.fetch_bytes")
+    def test_perimeter_block_is_classified_as_access_failure(self, mock_fetch):
+        body = b"<html><iframe>Request unsuccessful. Incapsula incident ID: fixture</iframe></html>"
+        mock_fetch.return_value = (
+            body,
+            FetchSnapshot(
+                url="https://elections.nz/media-and-news/rss",
+                resolved_url="https://elections.nz/media-and-news/rss",
+                status=200,
+                content_type="text/html",
+                body_sha256="fixture",
+                body_bytes=len(body),
+            ),
+        )
+        with self.assertRaisesRegex(AdapterError, "blocked by perimeter security"):
+            fetch_nz_election_rss()
 
 
 class NZElectionRSSComparatorTests(unittest.TestCase):
