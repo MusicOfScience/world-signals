@@ -96,6 +96,22 @@ python scripts/build_site.py
 
 `python scripts/build_site.py` generates derived site output locally. Generated site material is not Canonical state. `python scripts/run_cross_layer_coverage_audit.py` generates read-only diagnostic artifacts under `artifacts/coverage/`; those artifacts do not authorise population or writes.
 
+### Local operating loop
+
+GitHub Actions is an execution shell, not an architectural dependency. To validate the governed state, run all configured read-only monitors, retain private local evidence, produce sanitized Operations projections and rebuild the dashboard in one command:
+
+```bash
+/opt/homebrew/bin/python3.13 scripts/run_local_operations.py
+```
+
+To serve the freshly built dashboard on loopback after the run completes:
+
+```bash
+/opt/homebrew/bin/python3.13 scripts/run_local_operations.py --serve
+```
+
+Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.world-signals-runtime/`; disposable build inputs remain under ignored `artifacts/` and `review_candidates/`. The runner requires a clean tracked worktree and hash-protects Canonical, Sources, Change Ledger, Monitor contracts, Live Intelligence, Analysis and the OPEC quarantine. It never commits, changes Canonical, writes Google Calendar or promotes Monitor evidence automatically.
+
 To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 
 ```bash

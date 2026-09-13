@@ -111,8 +111,16 @@ def config_by_id(expectations: dict) -> dict[str,dict]:
 
 
 def workflow_context() -> dict:
+    github_run_id=os.getenv("GITHUB_RUN_ID")
+    execution_mode=os.getenv("WORLD_SIGNALS_EXECUTION_MODE") or (
+        "GITHUB_ACTIONS" if github_run_id else "LOCAL_UNMANAGED"
+    )
     return {
-        "github_run_id":os.getenv("GITHUB_RUN_ID"),
+        "execution_mode":execution_mode,
+        "run_id":os.getenv("WORLD_SIGNALS_RUN_ID") or github_run_id,
+        "run_number":os.getenv("WORLD_SIGNALS_RUN_NUMBER") or os.getenv("GITHUB_RUN_NUMBER"),
+        "head_sha":os.getenv("WORLD_SIGNALS_GIT_SHA") or os.getenv("GITHUB_SHA"),
+        "github_run_id":github_run_id,
         "github_run_number":os.getenv("GITHUB_RUN_NUMBER"),
         "github_sha":os.getenv("GITHUB_SHA"),
         "github_event_name":os.getenv("GITHUB_EVENT_NAME"),
@@ -1320,7 +1328,19 @@ def main() -> int:
         else "NO_CHANGE"
     )
     OUT.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    print(json.dumps(report,indent=2,ensure_ascii=False))
+    if os.getenv("WORLD_SIGNALS_MONITOR_OUTPUT")=="SUMMARY":
+        print(json.dumps({
+            "status":report["status"],
+            "run_at":report["run_at"],
+            "execution_mode":report["workflow_context"].get("execution_mode"),
+            "run_id":report["workflow_context"].get("run_id"),
+            "healthy_adapter_count":report["source_health_summary"]["healthy"],
+            "degraded_adapter_count":report["source_health_summary"]["degraded"],
+            "candidate_count":report["candidate_count"],
+            "canonical_unchanged":report["canonical_unchanged"],
+        },indent=2))
+    else:
+        print(json.dumps(report,indent=2,ensure_ascii=False))
     return 0
 
 

@@ -134,11 +134,17 @@ def public_runtime_projection(report: dict,manifest: dict,candidates: list[dict]
 
     health_summary=report.get("source_health_summary") or {}
     context=report.get("workflow_context") or {}
+    execution_mode=context.get("execution_mode") or (
+        "GITHUB_ACTIONS" if context.get("github_run_id") else "UNSPECIFIED"
+    )
     return {
         "availability":"AVAILABLE",
         "projection_type":"DATED_RECORDED_MONITOR_RUN_NOT_CURRENT_HEALTH",
         "run_at":report.get("run_at"),
         "status":status,
+        "execution_mode":execution_mode,
+        "run_id":context.get("run_id") or context.get("github_run_id"),
+        "head_sha":context.get("head_sha") or context.get("github_sha"),
         "github_run_id":context.get("github_run_id"),
         "github_sha":context.get("github_sha"),
         "report_schema_version":report.get("report_schema_version"),
