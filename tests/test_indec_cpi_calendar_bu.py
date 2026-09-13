@@ -5,15 +5,17 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 from urllib.parse import quote_plus
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from world_signals.adapters.base import AdapterError
+from world_signals.adapters.base import AdapterError, FetchSnapshot
 from world_signals.adapters.indec_calendar import (
     INDEC_TIMEZONE,
+    fetch_indec_cpi_months,
     indec_routes_allowed,
     parse_indec_cpi_month,
 )
@@ -146,6 +148,44 @@ class INDECCalendarAdapterTests(unittest.TestCase):
         robots="User-agent: *\nDisallow: /Calendario/\n"
         self.assertFalse(indec_routes_allowed(robots, [x[3] for x in IDENTITIES]))
 
+    @patch("world_signals.adapters.indec_calendar.fetch_bytes")
+    def test_past_month_may_be_absent_from_rolling_calendar(self, mock_fetch):
+        body = b'<div class="future-calendar-row">another future release</div>'
+        mock_fetch.return_value = (
+            body,
+            FetchSnapshot(
+                url="https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Septiembre-2026/0",
+                resolved_url="https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Septiembre-2026/0",
+                status=200,
+                content_type="text/html; charset=utf-8",
+                body_sha256="fixture",
+                body_bytes=len(body),
+            ),
+        )
+        releases_found, snapshots = fetch_indec_cpi_months(
+            ["Septiembre-2026"],
+            allow_absent_month_slugs={"Septiembre-2026"},
+        )
+        self.assertEqual(releases_found, [])
+        self.assertEqual(len(snapshots), 1)
+
+    @patch("world_signals.adapters.indec_calendar.fetch_bytes")
+    def test_future_month_absence_still_fails_closed(self, mock_fetch):
+        body = b'<div class="future-calendar-row">another future release</div>'
+        mock_fetch.return_value = (
+            body,
+            FetchSnapshot(
+                url="https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Octubre-2026/0",
+                resolved_url="https://www.indec.gob.ar/Calendario/FiltrosCalendario/mes/Octubre-2026/0",
+                status=200,
+                content_type="text/html; charset=utf-8",
+                body_sha256="fixture",
+                body_bytes=len(body),
+            ),
+        )
+        with self.assertRaises(AdapterError):
+            fetch_indec_cpi_months(["Octubre-2026"])
+
 
 class INDECCalendarComparatorTests(unittest.TestCase):
     def test_date_only_canonical_rows_generate_clock_enrichment_review_only(self):
@@ -172,6 +212,31 @@ class INDECCalendarComparatorTests(unittest.TestCase):
         self.assertEqual(target["candidate_type"], "INDEC_CPI_EXPECTED_REPORT_ABSENT_SOURCE_MATCH_REVIEW")
         self.assertTrue(target["absence_is_not_cancellation_delay_completion_or_certainty_change"])
         self.assertTrue(any(o["type"] == "INDEC_CPI_EXPECTED_REPORT_ABSENT_FROM_CONFIGURED_MONTH_ROUTE" for o in observations))
+
+    def test_missing_past_release_in_rolling_calendar_is_observation_only(self):
+        items = releases()[1:]
+        candidates, observations = indec_cpi_calendar_review_candidates(
+            canonical_records(),
+            items,
+            config(),
+            retired_month_slugs={"Septiembre-2026"},
+        )
+        self.assertFalse(any(c["occurrence_ids"] == ["WSO-REG-B-0008"] for c in candidates))
+        retired = next(
+            o for o in observations
+            if o["type"] == "INDEC_CPI_PAST_RELEASE_REMOVED_FROM_ROLLING_CALENDAR"
+        )
+        self.assertTrue(retired["absence_is_not_completion_evidence"])
+        self.assertEqual(retired["event_state_inference"], "NONE")
+
+    def test_retired_month_must_be_within_configured_scope(self):
+        with self.assertRaises(ValueError):
+            indec_cpi_calendar_review_candidates(
+                canonical_records(),
+                releases(),
+                config(),
+                retired_month_slugs={"Enero-2027"},
+            )
 
     def test_completed_occurrence_does_not_create_schedule_or_clock_action(self):
         rows = canonical_records()

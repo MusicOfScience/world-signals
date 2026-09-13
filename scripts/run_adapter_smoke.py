@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sys
 import time
+from zoneinfo import ZoneInfo
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
@@ -52,6 +53,7 @@ from world_signals.adapters import (
     parse_cellar_identifier_notice,
     parse_cellar_legal_relation_diagnostics,
 )
+from world_signals.adapters.indec_calendar import INDEC_TIMEZONE
 
 from world_signals.adapters.hmt_t1_content_api import fetch_hmt_t1_content_api
 from world_signals.cbn_mpc_monitor import fetch_cbn_robots_policy
@@ -453,10 +455,24 @@ def main() -> int:
 
     try:
         indec_slugs=["Septiembre-2026","Octubre-2026","Noviembre-2026","Diciembre-2026"]
+        indec_release_dates={
+            "Septiembre-2026":"2026-09-10",
+            "Octubre-2026":"2026-10-13",
+            "Noviembre-2026":"2026-11-12",
+            "Diciembre-2026":"2026-12-15",
+        }
+        indec_today=datetime.now(ZoneInfo(INDEC_TIMEZONE)).date()
+        indec_retired_slugs={
+            slug for slug,value in indec_release_dates.items()
+            if datetime.fromisoformat(value).date() < indec_today
+        }
         indec_allowed,indec_robots_snap=fetch_indec_robots_policy(indec_slugs)
         if not indec_allowed:
             raise AdapterError("INDEC robots policy disallows a configured CPI month route")
-        indec_items,indec_snaps=fetch_indec_cpi_months(indec_slugs)
+        indec_items,indec_snaps=fetch_indec_cpi_months(
+            indec_slugs,
+            allow_absent_month_slugs=indec_retired_slugs,
+        )
         report["results"].append({
             "adapter":"INDEC_CPI_CALENDAR",
             "status":"PASS",
@@ -464,6 +480,8 @@ def main() -> int:
             "robots_snapshot":indec_robots_snap.as_dict(),
             "month_route_snapshots":[snap.as_dict() for snap in indec_snaps],
             "item_count":len(indec_items),
+            "retired_month_slugs":sorted(indec_retired_slugs),
+            "past_release_absence_is_not_event_state":True,
             "request_budget_per_run":5,
             "robots_request_count":1,
             "month_route_request_count":len(indec_snaps),
