@@ -140,6 +140,7 @@ class LocalOperationsCSTests(unittest.TestCase):
         self.assertIn("data/monitor/expectations.json", fingerprints)
         self.assertIn("data/live_intelligence/observations.json", fingerprints)
         self.assertIn("data/analysis/event_reviews.json", fingerprints)
+        self.assertIn("data/coverage/biosecurity_overlay.json", fingerprints)
 
     def test_repository_local_state_is_confined_to_ignored_runtime_root(self):
         local_runner.validate_state_root(ROOT / ".world-signals-runtime" / "custom")

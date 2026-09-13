@@ -108,4 +108,17 @@ class WebUXTests(unittest.TestCase):
         self.assertNotIn('seasonSortDate(e).toISOString', js)
         self.assertNotIn('seasonSortDate(e).toLocaleDateString', js)
 
+    def test_cross_domain_risk_overlay_is_a_separate_read_only_view(self):
+        js=(ROOT/"web/risk.js").read_text(encoding="utf-8")
+        build=(ROOT/"scripts/build_site.py").read_text(encoding="utf-8")
+        self.assertIn('id="riskTab"', js)
+        self.assertIn('id="riskView"', js)
+        self.assertIn('Single danger score: absent', js)
+        self.assertIn('Private Live Intelligence: not consumed', js)
+        self.assertIn("fetch('data/risk_overlay.json')", js)
+        self.assertIn('risk_overlay.json', build)
+        self.assertNotIn('data/canonical/registry.json', js)
+        self.assertNotIn("method:'POST'", js)
+        self.assertNotIn('method:"POST"', js)
+
 if __name__=="__main__": unittest.main()
