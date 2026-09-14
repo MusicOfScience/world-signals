@@ -41,6 +41,13 @@ def assert_clean_tracked_worktree() -> None:
         raise RuntimeError("local operations require a clean tracked worktree")
 
 
+def assert_reviewed_main_upstream() -> None:
+    if git_value("branch", "--show-current") != "main":
+        raise RuntimeError("scheduled local operations require the reviewed main branch")
+    if git_value("rev-parse", "HEAD") != git_value("rev-parse", "@{upstream}"):
+        raise RuntimeError("scheduled local operations require local main to equal its tracked upstream head")
+
+
 def next_sequence(state_root: Path) -> int:
     state_path = state_root / "sequence.json"
     if not state_path.exists():
@@ -101,6 +108,7 @@ def main() -> int:
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--serve", action="store_true")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--require-main-upstream", action="store_true")
     args = parser.parse_args()
 
     state_root = args.state_dir.resolve()
@@ -114,6 +122,8 @@ def main() -> int:
             raise SystemExit("another WORLD SIGNALS local operations run is active") from exc
 
         assert_clean_tracked_worktree()
+        if args.require_main_upstream:
+            assert_reviewed_main_upstream()
         protected_before = path_fingerprints(ROOT)
         validate(args.python)
 

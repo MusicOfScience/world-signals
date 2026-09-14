@@ -120,6 +120,22 @@ Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.w
 
 The Operations view reduces repeated candidates into stable `WSRV-*` review propositions and provides read-only operator routing: attention class, controlled next step, recurrence, evidence-object IDs, filters and deterministic ordering. Those labels organise human review only. Decisions remain reviewed repository records, and any approved Canonical change still requires a separate transaction plus explicit change-ledger linkage.
 
+### Guarded macOS local service
+
+The local stack can be packaged as two user-level LaunchAgents: a daily governed refresh and a persistent dashboard bound only to `127.0.0.1:8765`. Review the exact generated manifests without changing machine settings:
+
+```bash
+/opt/homebrew/bin/python3.13 scripts/manage_local_service.py render
+```
+
+Installation is deliberately separate from code review and requires a clean reviewed `main` plus `WORLD_SIGNALS_INSTALL_LOCAL_SERVICE=YES`. Every scheduled refresh also fails closed unless the checkout is still clean `main` and exactly matches its tracked upstream head; feature work is never published as a production run. Uninstallation has its own `WORLD_SIGNALS_UNINSTALL_LOCAL_SERVICE=YES` gate. The service manager never grants Canonical, Calendar, Live/Analysis promotion, Git commit or merge authority.
+
+```bash
+WORLD_SIGNALS_INSTALL_LOCAL_SERVICE=YES /opt/homebrew/bin/python3.13 scripts/manage_local_service.py install
+/opt/homebrew/bin/python3.13 scripts/manage_local_service.py status
+WORLD_SIGNALS_UNINSTALL_LOCAL_SERVICE=YES /opt/homebrew/bin/python3.13 scripts/manage_local_service.py uninstall
+```
+
 To deliberately refresh the derived status snapshot and the three marked documentation blocks after a reviewed governed change:
 
 ```bash
