@@ -18,6 +18,7 @@ class LocalServiceConfig:
     root: Path
     python: Path
     state_root: Path
+    service_working_directory: Path
     port: int = 8765
     interval_seconds: int = DAILY_INTERVAL_SECONDS
 
@@ -25,7 +26,8 @@ class LocalServiceConfig:
         root = self.root.resolve()
         python = self.python.expanduser()
         state_root = self.state_root.resolve()
-        if not root.is_absolute() or not python.is_absolute() or not state_root.is_absolute():
+        working_directory = self.service_working_directory.expanduser().resolve()
+        if not all(path.is_absolute() for path in (root, python, state_root, working_directory)):
             raise ValueError("local service paths must be absolute")
         if not python.is_file():
             raise ValueError("configured Python executable is missing")
@@ -41,11 +43,20 @@ class LocalServiceConfig:
             raise ValueError("local service state must stay inside the repository runtime root") from exc
         if not relative.parts or relative.parts[0] != ".world-signals-runtime":
             raise ValueError("local service state must stay under .world-signals-runtime/")
+        if working_directory == root or root in working_directory.parents:
+            raise ValueError("local service working directory must remain outside the repository")
         if self.interval_seconds != DAILY_INTERVAL_SECONDS:
             raise ValueError("local service cadence must match the governed daily monitor baseline")
         if not 1024 <= self.port <= 65535:
             raise ValueError("local dashboard port must be between 1024 and 65535")
-        return LocalServiceConfig(root, python, state_root, self.port, self.interval_seconds)
+        return LocalServiceConfig(
+            root,
+            python,
+            state_root,
+            working_directory,
+            self.port,
+            self.interval_seconds,
+        )
 
 
 def launchd_manifests(config: LocalServiceConfig) -> dict[str, dict[str, Any]]:
@@ -61,8 +72,10 @@ def launchd_manifests(config: LocalServiceConfig) -> dict[str, dict[str, Any]]:
             "--python",
             str(cfg.python),
             "--require-main-upstream",
+            "--execution-cwd",
+            str(cfg.service_working_directory),
         ],
-        "WorkingDirectory": str(cfg.root),
+        "WorkingDirectory": str(cfg.service_working_directory),
         "RunAtLoad": True,
         "StartInterval": cfg.interval_seconds,
         "ProcessType": "Background",
@@ -82,7 +95,7 @@ def launchd_manifests(config: LocalServiceConfig) -> dict[str, dict[str, Any]]:
             "--directory",
             str(cfg.root / "docs"),
         ],
-        "WorkingDirectory": str(cfg.root),
+        "WorkingDirectory": str(cfg.service_working_directory),
         "RunAtLoad": True,
         "KeepAlive": {"SuccessfulExit": False},
         "ThrottleInterval": 10,
@@ -112,6 +125,7 @@ def service_metadata(config: LocalServiceConfig) -> dict[str, Any]:
         "refresh_interval_seconds": cfg.interval_seconds,
         "dashboard_url": f"http://127.0.0.1:{cfg.port}/",
         "state_root": str(cfg.state_root),
+        "service_working_directory": str(cfg.service_working_directory),
         "automatic_canonical_commit": False,
         "google_calendar_write": False,
         "automatic_live_or_analysis_promotion": False,

@@ -20,6 +20,7 @@ from src.world_signals.local_service import (
 ROOT = Path(__file__).resolve().parents[1]
 STABLE_PYTHON = Path("/opt/homebrew/bin/python3.13")
 TEST_PYTHON = STABLE_PYTHON if STABLE_PYTHON.is_file() else Path(sys.executable)
+TEST_SERVICE_WORKING_DIRECTORY = Path("/private/tmp/world-signals-service-tests")
 
 
 class LocalServiceCWTests(unittest.TestCase):
@@ -28,6 +29,7 @@ class LocalServiceCWTests(unittest.TestCase):
             "root": ROOT,
             "python": TEST_PYTHON,
             "state_root": ROOT / ".world-signals-runtime",
+            "service_working_directory": TEST_SERVICE_WORKING_DIRECTORY,
             "port": 8765,
             "interval_seconds": DAILY_INTERVAL_SECONDS,
         }
@@ -42,6 +44,9 @@ class LocalServiceCWTests(unittest.TestCase):
         self.assertTrue(refresh["RunAtLoad"])
         self.assertIn(str(ROOT / "scripts/run_local_operations.py"), refresh["ProgramArguments"])
         self.assertIn("--require-main-upstream", refresh["ProgramArguments"])
+        self.assertIn("--execution-cwd", refresh["ProgramArguments"])
+        self.assertEqual(refresh["WorkingDirectory"], str(TEST_SERVICE_WORKING_DIRECTORY))
+        self.assertEqual(dashboard["WorkingDirectory"], str(TEST_SERVICE_WORKING_DIRECTORY))
         self.assertNotIn("git", " ".join(refresh["ProgramArguments"]).lower())
         self.assertEqual(dashboard["ProgramArguments"][-4:-2], ["--bind", "127.0.0.1"])
         self.assertEqual(dashboard["ProgramArguments"][-2], "--directory")
@@ -63,6 +68,8 @@ class LocalServiceCWTests(unittest.TestCase):
             self.config(state_root=Path("/tmp/world-signals-runtime")).validated()
         with self.assertRaises(ValueError):
             self.config(port=80).validated()
+        with self.assertRaises(ValueError):
+            self.config(service_working_directory=ROOT / "unsafe-service-cwd").validated()
 
     def test_render_emits_parseable_reviewable_plists_without_installing(self):
         self.assertEqual(Path(manager.parser().parse_args(["render"]).python), TEST_PYTHON)

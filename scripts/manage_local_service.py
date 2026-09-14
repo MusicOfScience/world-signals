@@ -26,6 +26,7 @@ from world_signals.local_service import (
 
 INSTALL_GATE = "WORLD_SIGNALS_INSTALL_LOCAL_SERVICE"
 UNINSTALL_GATE = "WORLD_SIGNALS_UNINSTALL_LOCAL_SERVICE"
+DEFAULT_SERVICE_WORKING_DIRECTORY = Path.home() / "Library/Application Support/WORLD SIGNALS"
 
 
 def config_from_args(args: argparse.Namespace) -> LocalServiceConfig:
@@ -33,6 +34,7 @@ def config_from_args(args: argparse.Namespace) -> LocalServiceConfig:
         root=ROOT,
         python=Path(args.python),
         state_root=Path(args.state_dir),
+        service_working_directory=Path(args.service_working_directory),
         port=args.port,
     ).validated()
 
@@ -94,6 +96,7 @@ def install(config: LocalServiceConfig, launch_agents: Path) -> None:
     if os.environ.get(INSTALL_GATE) != "YES":
         raise RuntimeError(f"installation blocked: set {INSTALL_GATE}=YES after reviewed merge approval")
     require_clean_main()
+    config.service_working_directory.mkdir(parents=True, exist_ok=True)
     config.state_root.joinpath("logs").mkdir(parents=True, exist_ok=True)
     manifests = launchd_manifests(config)
     paths = {label: launch_agents / manifest_filename(label) for label in manifests}
@@ -171,6 +174,10 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--python", default=str(stable_python if stable_python.is_file() else Path(sys.executable)))
     result.add_argument("--state-dir", default=str(ROOT / ".world-signals-runtime"))
     result.add_argument("--port", type=int, default=8765)
+    result.add_argument(
+        "--service-working-directory",
+        default=str(DEFAULT_SERVICE_WORKING_DIRECTORY),
+    )
     result.add_argument("--output-dir", type=Path, default=ROOT / ".world-signals-runtime/service-preview")
     result.add_argument("--launch-agents", type=Path, default=Path.home() / "Library/LaunchAgents")
     return result
