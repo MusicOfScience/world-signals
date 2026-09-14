@@ -26,13 +26,18 @@ from world_signals.local_operations import (
 )
 
 
-def command(args: list[str], *, env: dict[str, str] | None = None) -> None:
+def command(
+    args: list[str],
+    *,
+    env: dict[str, str] | None = None,
+    cwd: Path = ROOT,
+) -> None:
     print("+ " + " ".join(args), flush=True)
-    subprocess.run(args, cwd=ROOT, env=env, check=True)
+    subprocess.run(args, cwd=cwd, env=env, check=True)
 
 
 def git_value(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+    return subprocess.check_output(["git", "-C", str(ROOT), *args], text=True).strip()
 
 
 def assert_clean_tracked_worktree() -> None:
@@ -65,14 +70,14 @@ def validate_state_root(state_root: Path) -> None:
         raise ValueError("state directory inside the repository must remain under .world-signals-runtime/")
 
 
-def validate(python: str) -> None:
+def validate(python: str, *, cwd: Path = ROOT, env: dict[str, str] | None = None) -> None:
     for script in (
         "scripts/validate_registry.py",
         "scripts/validate_live_intelligence.py",
         "scripts/validate_analysis.py",
     ):
-        command([python, script])
-    command([python, "scripts/project_state_snapshot.py", "--check"])
+        command([python, str(ROOT / script)], cwd=cwd, env=env)
+    command([python, str(ROOT / "scripts/project_state_snapshot.py"), "--check"], cwd=cwd, env=env)
     command(
         [
             python,
@@ -83,7 +88,9 @@ def validate(python: str) -> None:
             "tests.test_legal_monitor",
             "tests.test_monitor_operations_policy",
             "-v",
-        ]
+        ],
+        cwd=cwd,
+        env=env,
     )
 
 
@@ -109,10 +116,19 @@ def main() -> int:
     parser.add_argument("--serve", action="store_true")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--require-main-upstream", action="store_true")
+    parser.add_argument("--execution-cwd", type=Path, default=ROOT)
     args = parser.parse_args()
 
     state_root = args.state_dir.resolve()
+    execution_cwd = args.execution_cwd.resolve()
     validate_state_root(state_root)
+    if not execution_cwd.is_dir():
+        raise ValueError("local operations execution working directory does not exist")
+    base_environment = os.environ.copy()
+    python_paths = [str(ROOT), str(ROOT / "src")]
+    if base_environment.get("PYTHONPATH"):
+        python_paths.append(base_environment["PYTHONPATH"])
+    base_environment["PYTHONPATH"] = os.pathsep.join(python_paths)
     state_root.mkdir(parents=True, exist_ok=True)
     lock_path = state_root / "operations.lock"
     with lock_path.open("w", encoding="utf-8") as lock:
@@ -125,7 +141,7 @@ def main() -> int:
         if args.require_main_upstream:
             assert_reviewed_main_upstream()
         protected_before = path_fingerprints(ROOT)
-        validate(args.python)
+        validate(args.python, cwd=execution_cwd, env=base_environment)
 
         sequence = next_sequence(state_root)
         run_number = LOCAL_RUN_NUMBER_OFFSET + sequence
@@ -135,7 +151,7 @@ def main() -> int:
 
         shutil.rmtree(ROOT / "artifacts", ignore_errors=True)
         shutil.rmtree(ROOT / "review_candidates", ignore_errors=True)
-        environment = os.environ.copy()
+        environment = base_environment.copy()
         environment.update(
             {
                 "WORLD_SIGNALS_EXECUTION_MODE": "LOCAL",
@@ -145,7 +161,7 @@ def main() -> int:
                 "WORLD_SIGNALS_MONITOR_OUTPUT": "SUMMARY",
             }
         )
-        command([args.python, "scripts/run_live_monitor.py"], env=environment)
+        command([args.python, str(ROOT / "scripts/run_live_monitor.py")], env=environment, cwd=execution_cwd)
 
         report, manifest, candidates = read_monitor_outputs(ROOT)
         if report.get("canonical_unchanged") is not True:
@@ -168,7 +184,7 @@ def main() -> int:
                 manifest=manifest,
                 candidates=candidates,
             )
-            command([args.python, "scripts/build_site.py"])
+            command([args.python, str(ROOT / "scripts/build_site.py")], env=base_environment, cwd=execution_cwd)
 
             protected_after = path_fingerprints(ROOT)
             if protected_after != protected_before:

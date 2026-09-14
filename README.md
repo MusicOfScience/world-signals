@@ -122,7 +122,7 @@ The Operations view reduces repeated candidates into stable `WSRV-*` review prop
 
 ### Guarded macOS local service
 
-The local stack can be packaged as two user-level LaunchAgents: a daily governed refresh and a persistent dashboard bound only to `127.0.0.1:8765`. Review the exact generated manifests without changing machine settings:
+The local stack can be packaged as two user-level LaunchAgents: a daily governed refresh and a persistent dashboard bound only to `127.0.0.1:8765`. Both services start from a neutral working directory under `~/Library/Application Support/WORLD SIGNALS` so macOS does not stall interpreter startup inside the protected `Documents` folder; repository scripts and dashboard files remain exact absolute inputs. Review the generated manifests without changing machine settings:
 
 ```bash
 /opt/homebrew/bin/python3.13 scripts/manage_local_service.py render

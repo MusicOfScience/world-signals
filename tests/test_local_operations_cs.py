@@ -183,6 +183,19 @@ class LocalOperationsCSTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "tracked upstream"):
                 local_runner.assert_reviewed_main_upstream()
 
+    def test_service_execution_uses_absolute_scripts_and_neutral_child_cwd(self):
+        with TemporaryDirectory() as temporary:
+            execution_cwd = Path(temporary)
+            environment = {"PYTHONPATH": f"{ROOT}:{ROOT / 'src'}"}
+            with patch.object(local_runner, "command") as command:
+                local_runner.validate("python3", cwd=execution_cwd, env=environment)
+            self.assertEqual(command.call_count, 5)
+            for call in command.call_args_list:
+                self.assertEqual(call.kwargs["cwd"], execution_cwd)
+                self.assertEqual(call.kwargs["env"], environment)
+            for call in command.call_args_list[:4]:
+                self.assertTrue(Path(call.args[0][1]).is_absolute())
+
 
 if __name__ == "__main__":
     unittest.main()
