@@ -173,6 +173,16 @@ class LocalOperationsCSTests(unittest.TestCase):
         self.assertIn("Local run", browser)
         self.assertIn("AVAILABLE_LOCAL_HORIZON", browser)
 
+    def test_scheduled_runner_requires_clean_reviewed_main_upstream(self):
+        with patch.object(local_runner, "git_value", side_effect=["main", "abc123", "abc123"]):
+            local_runner.assert_reviewed_main_upstream()
+        with patch.object(local_runner, "git_value", return_value="feature/test"):
+            with self.assertRaisesRegex(RuntimeError, "reviewed main"):
+                local_runner.assert_reviewed_main_upstream()
+        with patch.object(local_runner, "git_value", side_effect=["main", "abc123", "def456"]):
+            with self.assertRaisesRegex(RuntimeError, "tracked upstream"):
+                local_runner.assert_reviewed_main_upstream()
+
 
 if __name__ == "__main__":
     unittest.main()
