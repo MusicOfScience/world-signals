@@ -93,51 +93,99 @@ CM changed capability rather than population. Live correction/retraction states 
 
 CN added one unscheduled Brazilian fuel-policy development using official Finance Ministry evidence, while refusing to overstate legal publication/effective status, exact UTC timing, inflation effects or market effects. Live advanced to v0.10 / 9 observations / 12 evidence / 3 Canonical-linked.
 
-## Current pressure interpretation — CO materialised, final handoff closeout in progress
+### PR #123 — CO: bounded Canada counter-tariff Live specimen — MERGED
 
-CO starts from exact merged post-CN `main` `b2b9e85933dd1c5924af1228f47427d6b38bf967` and materialises one Canadian counter-tariff implementation observation:
+CO added one Canadian counter-tariff implementation observation using Department of Finance Canada and CBSA evidence, keeping the separate U.S. sovereign response out of the Canadian row. Live advanced to v0.11 / 10 observations / 14 evidence / 3 Canonical-linked.
 
-- `WSLI-TRD-CAN-US-SURTAX-20260908-001`;
-- one sovereign Canadian policy action only;
-- two primary-official evidence rows: Department of Finance Canada and CBSA;
-- civil-date event precision `2026-09-08`;
-- no unsupported conversion of the Finance page's displayed `12:01 a.m.` to exact UTC;
-- no synthetic Canonical occurrence or story identity;
-- no collapse of the separate 8 September U.S. presidential response into the Canadian row;
-- no market-effect, causality, legality/fairness or Analysis claim.
+### PR #124 — CP: bounded ECB monetary-policy outcome — MERGED
 
-Live advances to **v0.11 / 10 observations / 14 evidence rows / 3 Canonical-linked observations**. Canonical, Sources, Change Ledger, Monitor and Analysis remain unchanged.
+CP preserved the existing ECB 10 September monetary-policy decision identity, completed its lifecycle from direct ECB evidence, and added one primary-confirmed Live outcome linked `OUTCOME_OF` that Canonical occurrence. Canonical advanced to v0.43 / 689 with one lifecycle-ledger entry; Live advanced to v0.12 / 11 observations / 15 evidence / 4 Canonical-linked.
 
-CO guarded transaction attempt 1 (`34466470104`) failed closed at the complete historical suite after the new specimen had passed simulation, focused tests and governed validators. It exposed two CN descendant assertions that froze the historical v0.10 / 9 / 12 checkpoint as a permanent ceiling. The repair changed only `tests/test_brazil_fuel_policy_live_cn.py`; CN's frozen checkpoint and exact target validator remain exact.
+### PR #125 — CQ: China–Africa CDEP architecture research — OPEN / SUPERSEDED / DO NOT MERGE
 
-Guarded attempt 2 (`34466775930`) succeeded with **1,301 tests / 68 historical-prestate skips**, all governed validators, derived-state consistency, Python compilation, seven JavaScript checks, static build, protected-layer nonmutation, exact preservation of all nine pre-CO Live observations and twelve evidence rows, exact +1 observation / +2 evidence rows, and bounded transaction diff. Materialisation commit: `51ba15ce2f651370af63abe4b7df1dd050aa7834`. One-shot workflow cleanup commit: `8d4f1b6f8b1c73e30a5efef44b7f09138cb9f9a6`. Permanent evidence: `data/live_intelligence/CANADA_US_COUNTER_TARIFF_LIVE_CO_TRANSACTION_AUDIT_v0.1.md`.
+CQ contains two read-only research files on the old post-CP base. It was blocked by hosted-runner admission before CR-CX advanced current main. CY rechecks its substantive thesis from current main and current primary evidence. The stale CQ branch is historical evidence only and is not a merge candidate.
 
-The cleaned CO PR-head `70fb4b3569467076ff010506988202d6ca3057da` subsequently passed ordinary PR validation run `34467313510` and read-only coverage run `34467313601`. Coverage artifact `10148053040` has digest `sha256:9d040c2cdca7cae94a1f9fa5db2cfc9f50449f71bb8a2e9473fa9ce7f6e567be`.
+### PR #126 — CR: bounded local exact-head validation fallback — MERGED
 
-Those green runs are now historical because later CO closeout commits add handoff and pressure-selection evidence. The eventual merge instruction must therefore remain **DO NOT MERGE** until required checks pass again on the actual final head.
+CR added the owner-authorised local exact-head validation fallback for known hosted-CI admission/allowance failures. Hosted CI remains normal; the fallback requires exact remote SHA parity, complete applicable command parity, clean-worktree/residue controls, explicit activation and an auditable exact-head record.
 
-## Post-CO pressure — CP selected conditionally for fresh post-merge preflight
+### PR #127 — CS: read-only local operations runtime — MERGED
 
-The post-CO cross-layer audit reports:
+CS added a guarded local operating path that validates governed inputs, polls configured source monitors, retains private local evidence and produces sanitized browser projections without automatic governed writes.
 
-- Canonical 689 occurrences / 203 series;
-- Monitor 26 adapters / 217 explicitly scoped occurrences / 48 series;
-- Live 10 observations / 3 Canonical-linked;
-- Analysis 22 reviews / 1 production Live input / 1 production revision;
-- completed linked observations with an existing unused Analysis target: **0**;
-- PIF remains one completed linked observation without an Analysis review;
-- BARMM remains linked to a non-completed 14 September occurrence;
-- Europe is the only Canonical region with no Live observation;
-- `CLIMATE_ENVIRONMENT` and `HEALTH_BIOSECURITY` remain Monitor prompts, not automation permission;
-- `CORPORATE_FINANCIAL_MARKET_STRUCTURE` remains an Analysis prompt, not a quota target.
+### PR #128 — CT: production cross-domain risk overlay — MERGED
 
-Fresh qualitative review selects **CP conditionally as the ECB 10 September 2026 monetary-policy decision Live outcome**, but only for fresh design after CO merges. The selection is not justified by Europe's zero alone. The ECB decision is independently systemically important, already belongs to an existing scheduled Canonical family, and would exercise a controlled scheduled monetary-policy `OUTCOME_OF` Live linkage.
+CT added a derived read-only risk/convergence browser layer over Canonical fields. It exposes domain/timing convergence without probability, forecast, composite score, causal attribution or governed mutation.
 
-At the time of selection the ECB outcome had not yet been published. CP therefore has a hard preflight: verify the official monetary-policy decision exists; resolve the exact existing 10 September Canonical occurrence without creating a duplicate; preserve source-native timing; keep expectation/surprise/market movement/causal interpretation out of Live; and abort/defer/reselect if the outcome is not yet available or identity/source semantics are not clean.
+### PR #129 — CU: rolling-calendar monitor-health repair — MERGED
 
-European Commission Oil Coordination Group evidence from 8 September remains a valid deferred Europe/energy/geopolitics candidate. PIF Analysis, a second Live→Analysis link, and corporate/market-structure Analysis remain deferred where their only justification would be graph completion or histogram filling.
+CU repaired INDEC rolling-calendar semantics and explicitly classified the Elections NZ perimeter block as source-health degradation rather than event-state evidence.
 
-Permanent CP selection evidence: `data/coverage/POST_CO_PRESSURE_AUDIT_CP_v0.1.md`.
+### PR #130 — CV: operator review workspace — MERGED
+
+CV added the retained-review operator workspace and routing metadata while preserving the boundary between review attention, approval and any later governed transaction.
+
+### PR #131 — CW: guarded local operations service — MERGED
+
+CW packaged the guarded local runner and loopback dashboard as reviewable macOS user LaunchAgents. Merge added capability only; installation remained a separate explicit owner action.
+
+### PR #132 — CX: macOS local-service startup-directory repair — MERGED
+
+CX repaired the launchd working-directory failure by moving service execution to a neutral Application Support directory while preserving exact reviewed repository paths, loopback binding, clean-main enforcement and all write prohibitions.
+
+## Current pressure interpretation — CY current-main recovery / CDEP pressure reconciliation
+
+Current main is `5740b5baa33a992e291abc66ce67f0f6172d53a2` after PR #132. The mechanically derived block above is current; the stale portion was the human narrative, which still described CO as the active handoff despite CP and CR-CX already being merged.
+
+CY is a **read-only recovery and pressure tranche**. It mutates no governed population or source/monitor contract.
+
+Current governed state remains:
+
+- Canonical v0.43 / 689 occurrences / 203 series;
+- Sources v2.04 / 258;
+- Change Ledger v0.29 / 64;
+- Monitor v0.28 / 26 adapters / 217 explicitly scoped occurrences;
+- Live v0.12 / 11 observations / 15 evidence / 4 Canonical-linked;
+- Analysis v0.18 / 22 reviews / 97 evidence / 1 production Live input / 1 production revision.
+
+### CQ recovery decision
+
+Open PR #125 is based on stale post-CP main and must **not** be merged. Its two research files remain historical evidence.
+
+CY independently rechecks that research against current main and current primary sources rather than rebasing/cherry-picking the old branch.
+
+### Fresh China–Africa CDEP finding
+
+Current MOFCOM evidence continues to establish the China–Africa Common Development Economic Partnership as a genuine multi-country programme family:
+
+- Cabo Verde signed a framework agreement on 9 September 2026 and MOFCOM describes it as the 40th African framework agreement;
+- the same Cabo Verde release separately records substantive conclusion of early-harvest negotiations, not an early-harvest signing/effectiveness state;
+- MOFCOM records a Seychelles Early Harvest Arrangement signed on 10 September 2026, demonstrating a later programme phase.
+
+CY therefore keeps the CQ architecture conclusion while making the implementation sequence stricter:
+
+`research / programme architecture → source governance → bounded sample only if still justified`.
+
+Do not create a 40-country Canonical backfill, a synthetic global CDEP Canonical series, or a Cabo Verde Canonical anchor merely to manufacture an `OUTCOME_OF` link.
+
+Existing `TRADE_SANCTIONS_INDUSTRIAL_POLICY / TRADE_POLICY_PROCESS` grammar remains sufficient at generic category/event-type level.
+
+### Next pressure selected conditionally — CZ
+
+CY selects **CZ — bounded MOFCOM trade-source governance** for fresh post-merge design.
+
+CZ should, at most, establish one appropriately scoped MOFCOM source identity after fresh then-current registry/rights/role review. It should create **no Live observation and no Canonical occurrence**. Unattended monitoring, bulk crawling and treaty mirroring remain closed unless separately justified.
+
+Only after provenance/source governance is stable should a later pressure review consider one Cabo Verde Live sample.
+
+Permanent CY evidence:
+
+- `data/coverage/POST_CX_RECOVERY_PRESSURE_CY_v0.1.md`;
+- `data/coverage/CHINA_AFRICA_CDEP_CY_RESEARCH_v0.1.md`.
+
+### Merge-control state
+
+Until CY has its own PR, final-head validation/coverage, structural diff and residue checks, the merge state is **DO NOT MERGE** for any future CY PR. No PR link should be supplied before a later explicit `MERGE NOW — PR #N` handoff.
 
 ## Write and authority boundaries
 
