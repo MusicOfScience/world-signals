@@ -255,25 +255,116 @@ The selection remains conditional on a fresh post-CM-merge legal-status check. A
 
 Permanent selection evidence is `data/coverage/POST_CM_PRESSURE_AUDIT_CN_v0.1.md`.
 
-### Stage 10H — CN Brazil fuel-policy Live broadening — NEXT AFTER CM MERGE
+### Stage 10H — CN Brazil fuel-policy Live broadening — DONE / GUARDED
 
-CN is selected for **fresh post-merge design**, not pre-written population.
+CN started from exact post-CM main and added one unscheduled Brazilian fuel-policy Live observation from official Finance Ministry evidence.
 
-Minimum CN pressure:
+It deliberately did **not** overstate legal publication/effectiveness, exact UTC timing, consumer-price/inflation effects or market effects. No synthetic Canonical occurrence, Monitor route or Analysis review was created.
 
-1. start from exact then-current post-CM `main`;
-2. freshly recheck Ministério da Fazenda, Presidency/Planalto and Diário Oficial sources for the 9 September fuel package, including corrections, legal numbers and effective status;
-3. revise or abandon the candidate if the post-merge evidence materially changes the package;
-4. if retained, keep the Live claim bounded to what competent first-party evidence supports — likely an unscheduled `POLICY_DEVELOPMENT` for Brazil rather than an invented Canonical occurrence;
-5. preserve event time no finer than the supported civil date unless a competent source establishes a source-native clock;
-6. do not promote the source page's displayed `18h47` to exact UTC without a competently established timezone;
-7. distinguish the government's stated geopolitical/oil-shock rationale from WORLD SIGNALS causal attribution;
-8. do not claim consumer prices fell, inflation changed, fuel supply improved or markets moved without separate evidence;
-9. create no Monitor route or automation permission from public accessibility;
-10. keep Analysis population and public projection closed;
-11. preserve the CM correction/conflict contract and OPEC CE quarantine.
+Result: Live advanced to **v0.10 / 9 observations / 12 evidence / 3 Canonical-linked**.
 
-Canada–U.S. tariff escalation and EU oil-security context remain valid future Live candidates. They are deferred, not discarded, and should be reconsidered by later pressure rather than appended automatically.
+### Stage 10I — CO Canada counter-tariff Live broadening — DONE / GUARDED
+
+CO added one Canadian counter-tariff implementation observation using Department of Finance Canada and CBSA evidence.
+
+The Canadian sovereign action remained distinct from the separate U.S. response. Event precision remained civil-date where the authoritative material did not establish a source-native timezone for the displayed clock.
+
+Result: Live advanced to **v0.11 / 10 observations / 14 evidence / 3 Canonical-linked**.
+
+### Stage 10J — CP ECB scheduled monetary-policy outcome — DONE / GUARDED
+
+CP reused the existing stable ECB decision occurrence rather than creating a duplicate.
+
+Direct first-party ECB evidence completed the 10 September Canonical occurrence and supported one `PRIMARY_CONFIRMED` Live outcome linked `OUTCOME_OF` it. Source-native timing remained unchanged.
+
+Result:
+
+- Canonical **v0.43 / 689**;
+- Change Ledger **v0.29 / 64**;
+- Live **v0.12 / 11 observations / 15 evidence / 4 Canonical-linked**;
+- Sources, Monitor and Analysis populations unchanged.
+
+CP did not add a Monitor route, Analysis review, market-reaction attribution or surprise classification.
+
+### Stage 10K — CQ China–Africa CDEP architecture research — SUPERSEDED / UNMERGED
+
+CQ researched the 9 September China–Cabo Verde Common Development Economic Partnership framework and concluded that CDEP is a real multi-country programme family, but that WORLD SIGNALS should not convert programme counts into a treaty catalogue.
+
+The branch remained open on the old post-CP base because hosted Actions jobs were not admitted. CR-CX then advanced current main substantially.
+
+CQ therefore remains historical research only. It must not be merged or rebased into current main. CY independently rechecks its thesis from the exact current main and current primary evidence.
+
+### Stage 10L — CY current-main recovery + CDEP pressure reconciliation — ACTIVE / READ-ONLY
+
+CY starts from exact post-CX main `5740b5baa33a992e291abc66ce67f0f6172d53a2`.
+
+Its purpose is to repair human recovery drift and re-evaluate the China–Africa CDEP pressure without governed population.
+
+Fresh MOFCOM research confirms:
+
+- Cabo Verde as the 40th African framework agreement on 9 September 2026;
+- substantive conclusion of Cabo Verde early-harvest negotiations as a distinct state;
+- a Seychelles Early Harvest Arrangement signed on 10 September 2026, demonstrating later programme progression.
+
+CY preserves the architecture boundary:
+
+- no 40-country Canonical backfill;
+- no synthetic global CDEP series;
+- no Canonical anchor merely to manufacture an `OUTCOME_OF` link;
+- no new top-level category or generic event type while existing `TRADE_POLICY_PROCESS` grammar is sufficient;
+- provenance/source governance before any sample population.
+
+Current CY evidence:
+
+- `data/coverage/POST_CX_RECOVERY_PRESSURE_CY_v0.1.md`;
+- `data/coverage/CHINA_AFRICA_CDEP_CY_RESEARCH_v0.1.md`.
+
+### Stage 10M — CZ bounded MOFCOM source governance — CANDIDATE AFTER CY MERGE
+
+CZ is selected conditionally for fresh post-merge design.
+
+A valid CZ should:
+
+1. start from exact then-current main;
+2. inspect then-current Source Registry and identity-allocation rules;
+3. distinguish MOFCOM treaty/FTA, News Office/WTO Department and partner-government roles;
+4. register at most one narrowly scoped MOFCOM trade source identity if justified;
+5. default to curated/manual provenance use unless unattended retrieval is separately cleared;
+6. create no Canonical occurrence;
+7. create no Live observation;
+8. create no Analysis review;
+9. activate no Monitor route;
+10. leave OPEC CE quarantine untouched.
+
+Only after source governance is stable should a later pressure review consider one bounded partner-level Live sample.
+
+## Operational track — CR–CX local validation, operations and review capability — DONE / GUARDED
+
+CR-CX added operational capability without changing the governed Canonical/Source/Monitor/Live/Analysis populations after CP.
+
+### CR — local exact-head validation fallback
+
+Hosted CI remains normal. A local fallback may be used only after explicit owner activation for a known hosted runner-admission/allowance failure, with exact remote-head parity, complete applicable command parity, residue controls and audit evidence.
+
+### CS — read-only local operations runtime
+
+Adds guarded local validation, source polling, private retained evidence, sanitized projections and static-dashboard rebuilding without automatic governed writes.
+
+### CT — cross-domain risk overlay
+
+Adds a derived read-only risk/convergence view over Canonical fields. It exposes domain and timing density without forecast, probability, composite severity score or causal claim.
+
+### CU — rolling-calendar source-health repair
+
+Repairs INDEC rolling-calendar semantics and classifies the Elections NZ access-control block as source-health degradation rather than event-state evidence.
+
+### CV — operator review workspace
+
+Adds retained-review recurrence/attention routing and a read-only browser workspace. Routing is not importance, approval or execution authority.
+
+### CW / CX — guarded macOS service + startup repair
+
+Packages the local runner/dashboard as gated user LaunchAgents and repairs the protected-working-directory startup issue by using a neutral Application Support working directory. Service installation remains a separate explicit owner action. All automatic governed-write prohibitions remain intact.
 
 ## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
 
