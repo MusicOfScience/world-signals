@@ -109,6 +109,16 @@ authority over Canonical, Live Intelligence, Signals, Relationships, Risks,
 Scenarios or Forecasts. The four prospective Forecasts remain outside the OSINT
 engine and their information cutoffs cannot be revised by retrieval.
 
+The v0.2 runtime contract makes `BOOTSTRAP` versus `INCREMENTAL` explicit.
+Bootstrap inventory is labelled historical runtime material and cannot create
+current persistence or Signal Candidates. Incremental checkpoints retain route
+retrieval state, source-native identities and per-record hashes, so feed replay
+and parser-version changes do not replay an entire history as current novelty.
+Same-identity content changes become revision/correction candidates with their
+own first-seen time and prior-candidate link. A 27 September 2026 check of the
+retained post-bootstrap checkpoint returned seven unchanged routes and one
+source-specific BSP 403, with zero new candidates and zero promotions.
+
 ## Live Intelligence controlled population
 
 AV introduced the executable Live Intelligence contract at `data/live_intelligence/`; AW v0.2 admitted the first reviewed internal specimen, and AX v0.3 adds a bounded evolving-state story test without opening broad ingestion.
@@ -134,7 +144,7 @@ The frozen AV v0.1 and AW v0.2 checkpoints remain recorded inside the v0.3 schem
 
 Live Intelligence is not a synonym for the Source/Change Monitor. The monitor asks whether governed authoritative inputs changed; Live Intelligence records consequential factual developments in the world. A monitor parser failure is not a Live Intelligence fact.
 
-Live Intelligence is also not Analysis. It may record a factual market observation, shock, announcement or revision, but it may not claim what was expected, what surprised, what caused a move or which interpretation is preferred. The first OSINT-originated production row is a Federal Reserve policy-decision fact; its promotion retains the originating candidate and successful RSS retrieval metadata while leaving Signals at zero.
+Live Intelligence is also not Analysis. It may record a factual market observation, shock, announcement or revision, but it may not claim what was expected, what surprised, what caused a move or which interpretation is preferred. The first OSINT-originated production row is a Federal Reserve policy-decision fact; its promotion retains the originating candidate and successful RSS retrieval metadata. A separate reviewed Signal specimen exists only through its explicit admission transaction and does not cause downstream analytical promotion.
 
 Unscheduled physical shocks, health emergencies and geopolitical developments can therefore exist without inventing scheduled Canonical occurrences. If a Live observation references Canonical, the occurrence ID must resolve.
 

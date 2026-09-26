@@ -431,9 +431,11 @@ The local OSINT engine provides a bounded, rights-gated retrieval and
 normalisation pass over eight first-party machine routes. It retains local raw
 retrieval metadata and payload hashes, creates non-governed Observation
 Candidates, operational story clusters, conservative Signal Candidates and a
-deterministic review queue. It does not populate governed Live Intelligence or
-Signals, alter Canonical, publish candidate material, or modify the four
-prospective Forecasts.
+deterministic review queue. The first reviewed OSINT promotion and the later
+single reviewed Signal admission are separate governed transactions; the
+candidate engine itself does not populate Live Intelligence or Signals, alter
+Canonical, publish candidate material, or modify the four prospective
+Forecasts.
 
 The engine is intentionally distinct from Monitor: Monitor asks whether a
 governed source/schedule changed, while OSINT asks what factual development may
@@ -449,6 +451,21 @@ corporate filings, cyber/security advisories, defence/security notices,
 reputable newswire and climate/hazard observations. Paid or licensed feeds,
 arbitrary social media and Reuters/AP/AFP-style scraping are not substitutes;
 each future connector needs its own rights, route and lineage review.
+
+## Stage 22 — incremental OSINT / second reviewed tranche — IMPLEMENTED / NO NEW PROMOTIONS
+
+The runtime now distinguishes bootstrap history discovery from incremental
+current-change detection. Route checkpoints retain source-native identities,
+record hashes, last successful retrieval and parser/adapter provenance, so
+replayed feeds and parser changes do not create false novelty. A changed record
+with the same native identity is retained as a revision/correction candidate.
+
+The first post-bootstrap check used the retained checkpoint: seven routes were
+unchanged and BSP remained a source-specific HTTP 403. No new Observation
+Candidate or Signal Candidate passed the incremental boundary, so no new Live
+Observation or Signal was admitted. The first Signal remains the sole governed
+Signal, Relationships/Risks/Scenarios remain empty, and the next tranche should
+be driven by genuine new evidence rather than a quota.
 
 ## Permanent quarantine
 
