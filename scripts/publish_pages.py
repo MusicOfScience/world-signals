@@ -47,7 +47,7 @@ def build_and_validate() -> None:
 
 
 def publication_worktree(branch: str, source_head: str) -> Path:
-    temp = Path(tempfile.mkdtemp(prefix="world-signals-pages-", dir="/private/tmp"))
+    temp = Path(tempfile.mkdtemp(prefix="world-signals-pages-", dir=tempfile.gettempdir()))
     remote_exists = subprocess.run(
         ["git", "ls-remote", "--exit-code", "--heads", "origin", branch], cwd=ROOT, capture_output=True
     ).returncode == 0

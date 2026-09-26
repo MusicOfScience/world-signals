@@ -1,5 +1,5 @@
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, gettempdir
 import plistlib
 import sys
 import unittest
@@ -20,7 +20,7 @@ from src.world_signals.local_service import (
 ROOT = Path(__file__).resolve().parents[1]
 STABLE_PYTHON = Path("/opt/homebrew/bin/python3.13")
 TEST_PYTHON = STABLE_PYTHON if STABLE_PYTHON.is_file() else Path(sys.executable)
-TEST_SERVICE_WORKING_DIRECTORY = Path("/private/tmp/world-signals-service-tests")
+TEST_SERVICE_WORKING_DIRECTORY = Path(gettempdir()).resolve() / "world-signals-service-tests"
 
 
 class LocalServiceCWTests(unittest.TestCase):
