@@ -400,8 +400,9 @@ Learning must wait until the pilot produces a defensible resolved sample.
 The pilot freezes its information cutoff, primary resolution source and
 first-release/vintage semantics and records pre/post semantic hashes. Upstream
 analytical populations remain zero; Outcomes remain empty and Evaluation
-remains `NO_SAMPLE`. The next operating work is to monitor these issuances
-without mutation and resolve them only through the governed Outcome contract.
+remains `NO_SAMPLE`. The read-only operational watch and runbook now monitor
+these issuances without mutation. The next governed transaction is to resolve
+the first due target through the Outcome contract.
 
 ## Stage 20 — evaluate narrow auto-commit classes — GATE CLOSED
 

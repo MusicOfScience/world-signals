@@ -1,0 +1,12 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "FORECAST_OPERATIONS_POLICY",
+  "version": "0.1",
+  "review_lead_time_days": 7,
+  "purpose": "Read-only operational projection for the bounded prospective Forecast pilot.",
+  "writes_allowed": false,
+  "automatic_forecast_update_allowed": false,
+  "automatic_outcome_creation_allowed": false,
+  "automatic_resolution_allowed": false,
+  "public_projection_allowed": false
+}
