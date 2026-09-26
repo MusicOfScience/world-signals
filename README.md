@@ -37,7 +37,10 @@ SOURCE / CHANGE MONITOR
 LIVE INTELLIGENCE
       |
       v
-ANALYSIS
+SIGNALS (reviewed contract; production population closed)
+      |
+      v
+ANALYSIS / future downstream layers
 ```
 
 The layers remain deliberately distinct:
@@ -46,7 +49,16 @@ The layers remain deliberately distinct:
 2. **Calendar** — rebuildable human-facing projection from Canonical.
 3. **Source / Change Monitor** — source health, authoritative change detection and review candidates; no automatic Canonical mutation.
 4. **Live Intelligence** — evidence-backed factual observations around scheduled and unscheduled developments; no causal interpretation.
-5. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
+5. **Signals** — reviewed analytical patterns over immutable observations, with explicit uncertainty, corroboration and transmission hypotheses.
+6. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
+
+The reviewed Signal contract is the first analytical layer over Live
+Intelligence. It is deliberately separate from factual observations and from
+the existing Analysis packets: it may record a reviewed pattern or change, but
+it may not rewrite observations, assert a causal chain, become a forecast or
+populate itself automatically. The current Signal dataset is an executable
+zero-population contract with focused synthetic tests only; its public
+projection is closed.
 
 The static build also publishes a read-only subscription projection,
 `world-signals.ics`, from the governed Canonical/calendar state. It is not a
@@ -104,6 +116,7 @@ Intrinsic importance, expected market sensitivity and observed market response r
 ```bash
 python scripts/validate_registry.py
 python scripts/validate_live_intelligence.py
+python scripts/validate_signals.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
