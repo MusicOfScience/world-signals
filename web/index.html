@@ -57,7 +57,7 @@
         <article class="brief-card"><span class="brief-label">NEXT 24 HOURS</span><strong id="next24Count">—</strong><p>known occurrences in the local horizon</p></article>
         <article class="brief-card"><span class="brief-label">NEXT 7 DAYS</span><strong id="next7Count">—</strong><p>upcoming occurrences worth checking</p></article>
         <article class="brief-card"><span class="brief-label">NEXT 30 DAYS</span><strong id="next30Count">—</strong><p>decision-relevant calendar depth</p></article>
-        <article class="brief-card"><span class="brief-label">SUBSCRIBE</span><strong class="brief-word">ICS</strong><p><a href="world-signals.ics">world-signals.ics</a> · calendar only</p></article>
+        <article class="brief-card"><span class="brief-label">PUBLIC CALENDAR</span><strong class="brief-word">SUBSCRIBE</strong><p><a href="#calendarSubscribe">Add the calendar</a> · governed events only</p></article>
       </div>
     </section>
 
@@ -155,6 +155,26 @@
     </section>
 
     <section id="calendarView" class="view-panel">
+      <section id="calendarSubscribe" class="calendar-subscribe" aria-labelledby="calendarSubscribeTitle">
+        <div class="calendar-subscribe-copy">
+          <p class="eyebrow">PUBLIC CALENDAR</p>
+          <h2 id="calendarSubscribeTitle">Subscribe to the public calendar</h2>
+          <p>Keep governed event dates and timing updates in your calendar app. Provisional states and date windows remain visible as such; private analysis, Signals and Forecasts are not included.</p>
+        </div>
+        <div class="calendar-subscribe-actions">
+          <a class="subscribe-primary" href="world-signals.ics">Subscribe to calendar</a>
+          <button id="copyCalendarUrl" type="button" class="subscribe-secondary">Copy calendar URL</button>
+          <span id="calendarCopyStatus" class="meta" aria-live="polite"></span>
+        </div>
+        <details class="subscribe-guidance">
+          <summary>How to subscribe</summary>
+          <div class="platform-guidance">
+            <div><strong>Apple Calendar</strong><p>Copy the URL, then choose File → New Calendar Subscription on Mac, or add a subscribed calendar in Calendar settings on iPhone or iPad.</p></div>
+            <div><strong>Google Calendar</strong><p>On the web, choose Add other calendars → From URL and paste the URL. This subscribes by URL; importing an .ics file once does not keep it updated.</p></div>
+            <div><strong>Outlook</strong><p>On the web, choose Add calendar → Subscribe from web, paste the URL and save. Use a subscription rather than a one-time file import for updates.</p></div>
+          </div>
+        </details>
+      </section>
       <div class="calendar-toolbar">
         <div class="month-nav" aria-label="Calendar month navigation">
           <button id="prevMonth" aria-label="Previous month">←</button>

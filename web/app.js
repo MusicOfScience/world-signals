@@ -246,13 +246,77 @@ function detailTiming(e){
   else body=`<div class="detail-time-primary detail-time-single"><span>${esc(timingLabel(timing.kind))}${timing.sourceZone?` · ${esc(timing.sourceZone)}`:''}</span><strong>${esc(timing.source)}</strong>${timing.nativeCalendar?`<small>${esc(timing.nativeCalendar)}</small>`:''}</div>${timing.note?`<p class="detail-timing-note">${esc(timing.note)}</p>`:''}`;
   return `<section class="detail-section detail-timing" aria-labelledby="detailTimingTitle"><div class="detail-section-heading"><h3 id="detailTimingTitle">Timing</h3>${status}</div>${body}</section>`;
 }
+function copyText(text,status,success='Copied',failure='Copy unavailable in this browser'){
+  const task=navigator.clipboard?.writeText(text);
+  if(task?.then){
+    task.then(()=>{status.textContent=success;}).catch(()=>{status.textContent=failure;});
+    return;
+  }
+  const fallback=document.createElement('textarea');
+  fallback.value=text;
+  fallback.setAttribute('readonly','');
+  fallback.style.position='fixed';
+  fallback.style.opacity='0';
+  document.body.appendChild(fallback);
+  fallback.select();
+  try{status.textContent=document.execCommand('copy')?success:failure;}
+  catch(error){status.textContent=failure;}
+  finally{fallback.remove();}
+}
+function publicCalendarUrl(){
+  const url=new URL('world-signals.ics',window.location.href);
+  url.hash='';
+  return url.toString();
+}
+function eventShareUrl(e){
+  const url=new URL(window.location.href);
+  url.hash=detailHash(e.occurrence_id);
+  return url.toString();
+}
+function eventSummaryText(e,{includeLink=true}={}){
+  const state=stateSummary(e);
+  const timing=timingDisplay(e);
+  const lines=[e.canonical_name||e.title];
+  if(timing.kind==='exact'){
+    lines.push(`Source-local: ${timing.source} (${timing.sourceZone})`);
+    lines.push(`Melbourne reference: ${timing.reference}`);
+  }else{
+    lines.push(`${timingLabel(timing.kind)}: ${timing.source}`);
+    if(timing.nativeCalendar) lines.push(timing.nativeCalendar);
+  }
+  lines.push(`Status: ${state.certainty}${state.lifecycle?` · ${state.lifecycle}`:''}`);
+  const source=e.institution||e.source_name||'';
+  if(source) lines.push(`Source: ${source}`);
+  if(includeLink) lines.push(`Public link: ${eventShareUrl(e)}`);
+  return lines.join('\n');
+}
 function copyDetailLink(){
   const status=$('#detailCopyStatus');
-  const url=new URL(window.location.href);
-  url.hash=`event=${encodeURIComponent($('#detail').dataset.eventId||'')}`;
-  const task=navigator.clipboard?.writeText(url.toString());
-  if(task?.then) task.then(()=>{status.textContent='Public link copied';}).catch(()=>{status.textContent='Copy unavailable in this browser';});
-  else status.textContent='Copy unavailable in this browser';
+  const e=DATA?.events.find(x=>x.occurrence_id===$('#detail').dataset.eventId);
+  if(e) copyText(eventShareUrl(e),status,'Public link copied');
+}
+function copyEventSummary(){
+  const status=$('#detailCopyStatus');
+  const e=DATA?.events.find(x=>x.occurrence_id===$('#detail').dataset.eventId);
+  if(e) copyText(eventSummaryText(e),status,'Event summary copied');
+}
+async function shareEvent(){
+  const status=$('#detailCopyStatus');
+  const e=DATA?.events.find(x=>x.occurrence_id===$('#detail').dataset.eventId);
+  if(!e) return;
+  if(typeof navigator.share!=='function'){
+    status.textContent='Native sharing is not available here; use Copy event summary.';
+    return;
+  }
+  try{
+    await navigator.share({title:e.canonical_name||e.title,text:eventSummaryText(e,{includeLink:false}),url:eventShareUrl(e)});
+    status.textContent='Share sheet opened';
+  }catch(error){
+    if(error?.name!=='AbortError') status.textContent='Sharing is unavailable here';
+  }
+}
+function copyCalendarUrl(){
+  copyText(publicCalendarUrl(),$('#calendarCopyStatus'),'Calendar URL copied');
 }
 function detailHash(id){return `#event=${encodeURIComponent(id)}`;}
 function finishDetailClose(){
@@ -301,8 +365,11 @@ function showDetail(id,{fromHash=false}={}){
   const state=stateSummary(e);
   const changes=detailHistory(e);
   $('#detailUpdated').textContent=changes.length?`Last reviewed change ${changeDate(changes[changes.length-1])}`:'';
-  $('#detailBody').innerHTML=`<p class="eyebrow">${esc(displayToken(e.category))} · ${esc(jurisdictionLabel(e))}</p><h2 id="detailTitle">${esc(e.canonical_name||e.title)}</h2><p id="detailSummary" class="detail-summary">${esc(e.institution||'Institution not recorded')} · ${esc(jurisdictionLabel(e))} · ${esc(state.certainty)}</p><div class="detail-actions"><button id="copyDetailLink" type="button" class="detail-copy">Copy public link</button><span id="detailCopyStatus" class="meta" aria-live="polite"></span></div>${detailTiming(e)}${publicContext(e)}${e.notes?`<section class="detail-section" aria-labelledby="detailNotesTitle"><h3 id="detailNotesTitle">Public context</h3><p>${esc(e.notes)}</p></section>`:''}${detailSource(e)}${detailHistorySection(e)}${detailProvenance(e)}${detailTechnical(e)}`;
+  $('#detailBody').innerHTML=`<p class="eyebrow">${esc(displayToken(e.category))} · ${esc(jurisdictionLabel(e))}</p><h2 id="detailTitle">${esc(e.canonical_name||e.title)}</h2><p id="detailSummary" class="detail-summary">${esc(e.institution||'Institution not recorded')} · ${esc(jurisdictionLabel(e))} · ${esc(state.certainty)}</p><div class="detail-actions"><button id="copyDetailLink" type="button" class="detail-copy">Copy public link</button><button id="copyEventSummary" type="button" class="detail-copy">Copy event summary</button><button id="shareEvent" type="button" class="detail-copy" hidden>Share</button><span id="detailCopyStatus" class="meta" aria-live="polite"></span></div><p class="detail-calendar-note">This public event is included in the <a href="world-signals.ics">calendar subscription</a>.</p>${detailTiming(e)}${publicContext(e)}${e.notes?`<section class="detail-section" aria-labelledby="detailNotesTitle"><h3 id="detailNotesTitle">Public context</h3><p>${esc(e.notes)}</p></section>`:''}${detailSource(e)}${detailHistorySection(e)}${detailProvenance(e)}${detailTechnical(e)}`;
   $('#copyDetailLink').addEventListener('click',copyDetailLink);
+  $('#copyEventSummary').addEventListener('click',copyEventSummary);
+  if(typeof navigator.share==='function') $('#shareEvent').hidden=false;
+  $('#shareEvent').addEventListener('click',shareEvent);
   dialog.showModal();
   $('#closeDetail').focus({preventScroll:true});
 }
@@ -508,6 +575,7 @@ async function main(){
   $('#prevMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);selectedDay=null;renderCalendar();});
   $('#nextMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);selectedDay=null;renderCalendar();});
   $('#todayMonth').addEventListener('click',()=>{const n=new Date();calendarCursor=new Date(n.getFullYear(),n.getMonth(),1);selectedDay=localDateKey(n);renderCalendar();});
+  $('#copyCalendarUrl').addEventListener('click',copyCalendarUrl);
   $('#closeDetail').addEventListener('click',closeDetail);
   $('#detail').addEventListener('cancel',event=>{event.preventDefault();closeDetail();});
   window.addEventListener('popstate',()=>{
