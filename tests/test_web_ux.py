@@ -4,6 +4,34 @@ import unittest
 ROOT=Path(__file__).resolve().parents[1]
 
 class WebUXTests(unittest.TestCase):
+    def test_public_surface_tokens_reduce_luminance_without_removing_contrast(self):
+        css=(ROOT/"web/styles.css").read_text(encoding="utf-8")
+        for token in (
+            "--paper:#efede7",
+            "--panel:#f4f1eb",
+            "--panel-raised:#f1eee8",
+            "--line:#cfc8bd",
+            "--accent:#6b3437",
+            "--focus:#8a5c14",
+        ):
+            self.assertIn(token,css)
+        self.assertIn("prefers-reduced-motion:reduce",css)
+
+    def test_public_first_view_uses_plain_language_without_opening_closed_layers(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        self.assertIn("A PUBLIC INTELLIGENCE BRIEF",html)
+        self.assertIn("What is happening now. What is next. What remains closed.",html)
+        self.assertIn("Known calendar: published",html)
+        self.assertIn("Private candidates and forecast values: closed",html)
+        self.assertIn('id="horizonDomain"><option value="">All domains</option>',html)
+
+    def test_public_mobile_structure_has_viewport_and_non_wrapping_navigation(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        css=(ROOT/"web/styles.css").read_text(encoding="utf-8")
+        self.assertIn('name="viewport"',html)
+        self.assertIn("overflow:auto",css)
+        self.assertIn("@media(max-width:620px)",css)
+
     def test_calendar_is_primary_view(self):
         html=(ROOT/"web/index.html").read_text(encoding="utf-8")
         self.assertIn('data-view="calendar" aria-pressed="true"', html)

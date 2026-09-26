@@ -134,7 +134,7 @@ function renderProductBrief(){
   const live=PUBLIC_STATUS.live_intelligence||{};
   const forecast=PUBLIC_STATUS.forecasts||{};
   $('#publicStatus').innerHTML=`
-    <div class="status-row"><span class="status-dot neutral"></span><div><strong>Calendar projection available</strong><small>${esc(PUBLIC_STATUS.canonical?.count||DATA.events.length)} Canonical occurrences · read-only</small></div></div>
+    <div class="status-row"><span class="status-dot neutral"></span><div><strong>Public calendar available</strong><small>${esc(PUBLIC_STATUS.canonical?.count||DATA.events.length)} known events · read-only</small></div></div>
     <div class="status-row"><span class="status-dot closed"></span><div><strong>NOW intelligence is selective</strong><small>${esc(live.internal_count||0)} reviewed observations internal · ${esc(live.public_count||0)} public</small></div></div>
     <div class="status-row"><span class="status-dot closed"></span><div><strong>Forecast values remain closed</strong><small>${esc(forecast.count||0)} pilot forecasts · publication gate closed</small></div></div>`;
   $('#forecastStatusCopy').textContent=`${forecast.count||0} pilot forecasts are maintained under review. Their values and claims remain closed on the public site until publication governance permits them.`;

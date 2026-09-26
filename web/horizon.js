@@ -198,7 +198,7 @@
   }
 
   function metricLabel(value){
-    if(!value) return 'not rated';
+    if(!value || /unrated|pending calibration/i.test(String(value))) return 'not rated';
     return human(value);
   }
 
@@ -336,7 +336,7 @@
     const summary=document.querySelector('#horizonSummary');
     const clock=document.querySelector('#horizonClock');
     clock.textContent=new Date().toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});
-    summary.textContent='Loading canonical horizon…';
+    summary.textContent='Loading public event horizon…';
     try {
       const [eventsResponse,changesResponse]=await Promise.all([
         fetch('data/events.json'),
@@ -351,13 +351,13 @@
       state.changeByOccurrence=latestChanges(state.changes);
       summary.dataset.registryVersion=eventProjection.metadata?.registry_version||'?';
 
-      optionise('#horizonDomain',state.events.map(domainFor),'All signal families');
+      optionise('#horizonDomain',state.events.map(domainFor),'All domains');
       optionise('#horizonRegion',state.events.map(event=>event.region),'All regions');
       optionise('#horizonJurisdiction',state.events.flatMap(jurisdictions),'All jurisdictions');
       bindFilters();
       render();
     } catch (error) {
-      summary.innerHTML=`<span class="horizon-error">Horizon could not be loaded: ${esc(error.message)}</span>`;
+      summary.innerHTML=`<span class="horizon-error">The public event horizon could not be loaded: ${esc(error.message)}</span>`;
     }
   }
 
