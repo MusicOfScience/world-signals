@@ -133,10 +133,23 @@ def _validate_signal_history(
     version = schema.get("version")
     if signals_dataset.get("version") != version:
         errors.append("Signal dataset version must match schema version")
-    if signals_dataset.get("population_state") != "CLOSED_NO_PRODUCTION_SIGNALS":
-        errors.append("Signal dataset must remain in the closed population state")
+    if signals_dataset.get("population_state") not in {
+        "CLOSED_NO_PRODUCTION_SIGNALS",
+        "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+    }:
+        errors.append("Signal dataset must use a controlled population state")
     population = schema.get("population_policy") or {}
-    for field in ("production_population_allowed", "automatic_ingestion_allowed", "candidate_signal_storage_allowed", "public_signal_projection_allowed", "synthetic_production_population_allowed"):
+    if population.get("mode") == "CONTROLLED_REVIEWED_SIGNAL_ADMISSION_ONLY":
+        if population.get("production_population_allowed") is not True:
+            errors.append("controlled Signal admission requires production_population_allowed=true")
+        if population.get("admission_transaction_required") is not True:
+            errors.append("controlled Signal admission requires an admission transaction")
+        if population.get("maximum_production_signal_count") != 1:
+            errors.append("controlled Signal admission maximum must be one")
+    else:
+        if population.get("production_population_allowed") is not False:
+            errors.append("closed Signal population must keep production_population_allowed=false")
+    for field in ("automatic_ingestion_allowed", "candidate_signal_storage_allowed", "public_signal_projection_allowed", "synthetic_production_population_allowed"):
         if population.get(field) is not False:
             errors.append(f"Signal population policy must keep {field}=false")
     public_policy = schema.get("public_projection_policy") or {}
@@ -676,13 +689,23 @@ def validate_signal_history(schema, revisions, observations_dataset, evidence_re
     return SignalValidationReport(tuple(errors))
 
 
-def validate_signals(schema, signals_dataset, observations_dataset, evidence_registry):
-    """Production admission: no fixture switch or alternate population mode."""
+def validate_signals(schema, signals_dataset, observations_dataset, evidence_registry, admission_transaction=None):
+    """Validate production state; populated state requires explicit admission metadata."""
     errors = _preflight(schema, signals_dataset, observations_dataset, evidence_registry)
     if errors:
         return SignalValidationReport(tuple(errors))
     if signals_dataset["signals"]:
-        errors.append("closed production population gate prohibits every Signal revision")
+        if signals_dataset.get("population_state") != "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN":
+            errors.append("populated Signal state must use the controlled admission population state")
+        if not isinstance(admission_transaction, dict):
+            errors.append("populated Signal state requires a reviewed admission transaction")
+        else:
+            if admission_transaction.get("transaction_type") != "REVIEWED_SIGNAL_ADMISSION":
+                errors.append("populated Signal state requires REVIEWED_SIGNAL_ADMISSION")
+            if admission_transaction.get("decision") != "ACCEPTED":
+                errors.append("populated Signal state requires an accepted admission decision")
+    elif signals_dataset.get("population_state") == "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN":
+        errors.append("controlled Signal population state cannot be empty")
     errors.extend(_validate_signal_history(schema, signals_dataset, observations_dataset, evidence_registry).errors)
     return SignalValidationReport(tuple(errors))
 

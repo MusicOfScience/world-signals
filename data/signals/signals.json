@@ -2,8 +2,124 @@
   "project": "WORLD SIGNALS",
   "dataset": "SIGNALS",
   "version": "0.1",
-  "reference_date": "2026-09-26",
-  "population_state": "CLOSED_NO_PRODUCTION_SIGNALS",
-  "signals": [],
-  "scope_note": "Executable Signal contract only. No candidate or production Signal has been populated; future admission requires an explicit reviewed transaction over immutable Live Intelligence observations."
+  "reference_date": "2026-09-27",
+  "population_state": "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+  "signals": [
+    {
+      "signal_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+      "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1",
+      "revision_number": 1,
+      "previous_revision_id": null,
+      "title": "Reported Bundibugyo outbreak burden increased across successive WHO reporting dates",
+      "signal_type": "PERSISTENT_CHANGE",
+      "observation_ids": [
+        "WSLI-HEALTH-COD-BVD-20260826-001",
+        "WSLI-HEALTH-COD-BVD-20260830-001"
+      ],
+      "evidence_refs": [
+        "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+        "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+      ],
+      "entities": [
+        "Bundibugyo virus disease outbreak",
+        "World Health Organization"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "regions": [
+        "Central Africa"
+      ],
+      "domains": [
+        "HEALTH_BIOSECURITY",
+        "INSTITUTIONS"
+      ],
+      "direction": "UPWARD",
+      "magnitude": "MODERATE",
+      "novelty": "NEW",
+      "persistence": "PERSISTENT",
+      "trend_state": "NOT_ASSESSED",
+      "corroboration": {
+        "state": "PARTIAL",
+        "independent_observation_count": 1,
+        "distinct_provider_count": 2,
+        "rationale": "Two time-separated WHO reports support an observed increase; their shared WHO institutional origin is one corroboration component, not independent confirmation."
+      },
+      "confidence": "LOW",
+      "transmission_relevance": [
+        {
+          "channel": "health-system and humanitarian response pressure",
+          "affected_domains": [
+            "HEALTH_BIOSECURITY",
+            "INSTITUTIONS"
+          ],
+          "relationship_status": "HYPOTHESISED_TRANSMISSION",
+          "rationale": "A sustained reported burden may place pressure on response capacity; this is a hypothesis for later Relationship review, not an asserted mechanism."
+        }
+      ],
+      "first_detected_at_utc": "2026-09-06T07:41:00Z",
+      "latest_supporting_observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+      "review_state": "ACCEPTED",
+      "lifecycle_state": "ACTIVE",
+      "expiry": {
+        "mode": "STALE_AFTER",
+        "stale_after_days": 30,
+        "condition": "Review if no new governed supporting observation is available within 30 days of the latest supporting observation, or sooner if either source is corrected or retracted."
+      },
+      "supporting_rationale": "The governed observations record 5,794 confirmed cases as of 26 August and 6,100 as of 30 August, an increase across two dated WHO snapshots of the same outbreak. This Signal describes an observed change in reported burden; it does not infer incidence, cause, severity beyond the reported figures, future outcomes or a Forecast.",
+      "contradictory_evidence_refs": [],
+      "falsification_conditions": [
+        "Either linked WHO source corrects or retracts the supporting case-count snapshot.",
+        "Later governed evidence shows that the apparent increase was a reporting, case-definition or reclassification artefact.",
+        "The supporting state becomes stale without further evidence or is materially contradicted by reviewed evidence."
+      ],
+      "review_provenance": {
+        "created_by": "project-owner-authorised-review",
+        "created_at_utc": "2026-09-27T01:00:00Z",
+        "reviewed_by": "project-owner-authorised-review",
+        "reviewed_at_utc": "2026-09-27T01:00:00Z",
+        "decision_basis": "Approved one low-confidence persistent-change Signal after reviewing the complete governed Observation population. The baseline and time-separated support are explicit; shared WHO origin prevents independent corroboration; alternatives and coverage limitations remain recorded."
+      },
+      "baseline": {
+        "description": "The earlier WHO report records 5,794 confirmed cases as of 26 August; the later WHO African Region report records 6,100 confirmed cases as of 30 August. These two dated snapshots define the comparison basis.",
+        "observation_ids": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ]
+      },
+      "assessment_basis": {
+        "materiality": "The reported increase is sufficient to merit continued health-system and humanitarian response-capacity monitoring, but no incidence rate or severity conclusion is inferred.",
+        "novelty": "The comparative change pattern is newly admitted to the Signal layer; the underlying outbreak was already present in governed observations.",
+        "persistence": "Two primary-confirmed observations are four days apart and show the reported burden increasing across reporting dates; this is temporal persistence of an evolving reported state, not publication-burst volume.",
+        "trend": "Direction is assessed upward; acceleration is not assessed from two snapshots.",
+        "confidence": "Confidence is low because both supporting reports share the WHO institutional family and no independent provider is counted.",
+        "source_quality": "Both supporting records are primary official WHO or WHO African Region reports with explicit dated factual content.",
+        "coverage_bias": "The record covers confirmed reported cases only and may be affected by reporting delay, access limitations, testing changes, case definitions or unreported cases.",
+        "alternatives": "Reporting cadence, case-definition or reclassification changes, and later source correction could explain part or all of the increase; subsequent review must test these alternatives."
+      },
+      "evidence_lineage": [
+        {
+          "evidence_ref": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+          "origin_ids": [
+            "World Health Organization"
+          ],
+          "basis": "Primary WHO report of the 26 August outbreak state; the institutional origin is shared with the later WHO African Region report."
+        },
+        {
+          "evidence_ref": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+          "origin_ids": [
+            "World Health Organization"
+          ],
+          "basis": "Primary WHO African Region report of the 30 August outbreak state; the institutional origin is shared with the earlier WHO report."
+        }
+      ],
+      "observation_hashes": {
+        "WSLI-HEALTH-COD-BVD-20260826-001": "0bc5c46773cc8cf6be1ecff7a5f0d308be6d17d2923e898fd577ed0b65dd6b8f",
+        "WSLI-HEALTH-COD-BVD-20260830-001": "ee9b30d013ed05d3b81582373b729d572f0a27938693398ca83e483fa82f2a4d"
+      },
+      "correction_review_observation_ids": [],
+      "revision_reason": "Initial reviewed admission after explicit baseline, persistence, materiality, lineage, alternatives and falsification assessment."
+    }
+  ],
+  "scope_note": "One controlled reviewed Signal specimen is admitted through signal_admission_transaction_v1.json. Population remains closed by default, public projection remains closed, and all downstream analytical populations remain empty."
 }

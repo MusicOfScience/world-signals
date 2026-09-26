@@ -231,7 +231,10 @@ class EvaluationContractTests(unittest.TestCase):
             ("data/evaluation/evaluation.json", "evaluations"),
         ):
             data = json.loads((ROOT / path).read_text())
-            if key == "forecasts":
+            if key == "signals":
+                self.assertEqual(len(data[key]), 1)
+                self.assertEqual(data["population_state"], "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN")
+            elif key == "forecasts":
                 self.assertEqual(len(data[key]), 4)
                 self.assertEqual(data["population_state"], "PILOT_PRODUCTION_FORECASTS_REVIEWED")
             else:

@@ -189,7 +189,7 @@ class LocalOperationsCSTests(unittest.TestCase):
             environment = {"PYTHONPATH": f"{ROOT}:{ROOT / 'src'}"}
             with patch.object(local_runner, "command") as command:
                 local_runner.validate("python3", cwd=execution_cwd, env=environment)
-            self.assertEqual(command.call_count, 6)
+            self.assertEqual(command.call_count, 8)
             for call in command.call_args_list:
                 self.assertEqual(call.kwargs["cwd"], execution_cwd)
                 self.assertEqual(call.kwargs["env"], environment)

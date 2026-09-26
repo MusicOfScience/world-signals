@@ -44,6 +44,8 @@ def build_snapshot() -> dict[str, Any]:
     analysis_schema = load(ROOT / "data/analysis/schema.json")
     analysis_reviews = load(ROOT / "data/analysis/event_reviews.json")
     analysis_evidence = load(ROOT / "data/analysis/evidence_registry.json")
+    signal_schema = load(ROOT / "data/signals/schema.json")
+    signal_dataset = load(ROOT / "data/signals/signals.json")
 
     canonical_records = require_list(canonical.get("records"), "canonical.records")
     source_rows = require_list(sources.get("sources"), "sources.sources")
@@ -53,6 +55,7 @@ def build_snapshot() -> dict[str, Any]:
     live_evidence_rows = require_list(live_evidence.get("evidence"), "live.evidence")
     review_rows = require_list(analysis_reviews.get("reviews"), "analysis.reviews")
     analysis_evidence_rows = require_list(analysis_evidence.get("evidence"), "analysis.evidence")
+    signal_rows = require_list(signal_dataset.get("signals"), "signals.signals")
 
     monitor_sources = {
         row.get("source_id") for row in adapters if isinstance(row, dict) and row.get("source_id")
@@ -110,6 +113,7 @@ def build_snapshot() -> dict[str, Any]:
             monitor.get("reference_date"),
             live_observations.get("reference_date"),
             analysis_reviews.get("reference_date"),
+            signal_dataset.get("reference_date"),
         )
         if isinstance(value, str) and value
     ]
@@ -194,6 +198,15 @@ def build_snapshot() -> dict[str, Any]:
             "public_revision_metadata_projection_allowed": revision_policy.get("public_revision_metadata_projection_allowed"),
             "automatic_latest_analysis_selection_allowed": revision_policy.get("automatic_latest_analysis_selection_allowed"),
         },
+        "signals": {
+            "schema_version": signal_schema.get("version"),
+            "revision_count": len(signal_rows),
+            "population_state": signal_dataset.get("population_state"),
+            "production_population_allowed": (signal_schema.get("population_policy") or {}).get("production_population_allowed"),
+            "admission_transaction_required": (signal_schema.get("population_policy") or {}).get("admission_transaction_required"),
+            "maximum_production_signal_count": (signal_schema.get("population_policy") or {}).get("maximum_production_signal_count"),
+            "public_signal_projection_allowed": (signal_schema.get("public_projection_policy") or {}).get("signal_projection_allowed"),
+        },
         "write_gates": {
             "automatic_canonical_commit": monitor.get("automatic_canonical_commit"),
             "google_calendar_write": monitor.get("google_calendar_write"),
@@ -214,6 +227,7 @@ def render_current_state_block(snapshot: dict[str, Any]) -> str:
     monitor = snapshot["monitor"]
     live = snapshot["live_intelligence"]
     analysis = snapshot["analysis"]
+    signals = snapshot["signals"]
     nhc = monitor["nhc_atlantic_pilot"]
     return "\n".join(
         [
@@ -229,6 +243,7 @@ def render_current_state_block(snapshot: dict[str, Any]) -> str:
             f"- Monitor expectations: **v{monitor['expectations_version']} / {monitor['configured_adapter_count']} configured adapters / {monitor['unique_monitor_source_count']} unique monitor sources / {monitor['explicit_scoped_occurrence_count']} explicitly scoped Canonical occurrences**.",
             f"- Live Intelligence: **v{live['schema_version']} / {live['observation_count']} observations / {live['evidence_count']} evidence rows / {live['canonical_linked_observation_count']} Canonical-linked observations**; automatic ingestion and public observation projection remain closed.",
             f"- Analysis: schema **v{analysis['schema_version']}**; reviews **v{analysis['reviews_version']} / {analysis['review_count']}**; evidence **v{analysis['evidence_version']} / {analysis['evidence_count']}**; production Live inputs **{analysis['production_live_input_count']}**; production revisions **{analysis['production_revision_count']}**.",
+            f"- Signals: schema **v{signals['schema_version']} / {signals['revision_count']} admitted revision(s)**; population **{signals['population_state']}**; admission transaction required; maximum production population **{signals['maximum_production_signal_count']}**; public projection **closed**.",
             f"- NHC Atlantic pilot: **{nhc['readiness_verdict']}**; registered in scheduled Monitor expectations: **{str(nhc['registered_in_expectations']).lower()}**.",
             "- Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.",
             "- OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.",

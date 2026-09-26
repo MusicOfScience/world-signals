@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "DERIVED_PROJECT_STATE_SNAPSHOT",
   "version": "0.1",
-  "reference_date": "2026-09-26",
+  "reference_date": "2026-09-27",
   "status": "DERIVED_NONCANONICAL_RECOVERY_SURFACE",
   "derivation_policy": {
     "governed_registries_and_contracts_remain_authoritative": true,
@@ -74,6 +74,15 @@
     "public_live_input_projection_allowed": false,
     "public_revision_metadata_projection_allowed": false,
     "automatic_latest_analysis_selection_allowed": false
+  },
+  "signals": {
+    "schema_version": "0.1",
+    "revision_count": 1,
+    "population_state": "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+    "production_population_allowed": true,
+    "admission_transaction_required": true,
+    "maximum_production_signal_count": 1,
+    "public_signal_projection_allowed": false
   },
   "write_gates": {
     "automatic_canonical_commit": false,
