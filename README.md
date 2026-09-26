@@ -56,6 +56,8 @@ The layers remain deliberately distinct:
 2. **Calendar** — rebuildable human-facing projection from Canonical.
 3. **Source / Change Monitor** — source health, authoritative change detection and review candidates; no automatic Canonical mutation.
 4. **Live Intelligence** — evidence-backed factual observations around scheduled and unscheduled developments; no causal interpretation.
+   The local OSINT v1 engine sits upstream as a candidate-only retrieval and
+   normalisation layer; it does not write this governed store.
 5. **Signals** — reviewed analytical patterns over immutable observations, with explicit uncertainty, corroboration and transmission hypotheses.
 6. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
 7. **Relationships** — reviewed analytical connections between Signal revisions,
@@ -117,6 +119,31 @@ zones used by included timed events. Expected windows use
 claiming the whole interval as subscriber free/busy time.
 
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
+
+## Local OSINT candidate engine
+
+`data/osint/source_cohort.json` defines a deliberately small eight-route cohort
+of first-party machine interfaces whose retrieval and ingestion permissions are
+explicitly cleared in the Source Registry. `python scripts/run_osint_engine.py
+--once` performs one local read-only pass and writes retrieval metadata,
+Observation Candidates, story clusters, Signal Candidates and a review queue to
+the ignored `.world-signals-runtime/osint/` directory. The runner has no daemon
+mode and can be invoked by a local scheduler at source-appropriate cadences.
+
+This is intentionally not a second Live Intelligence database:
+
+```text
+MONITOR (governed surface changed?)
+    != OSINT CANDIDATE ENGINE (what factual development may deserve review?)
+    != LIVE INTELLIGENCE (reviewed immutable Observation)
+    != SIGNAL (reviewed analytical inference)
+```
+
+Fetch failure, parser failure, empty feeds and permission holds produce source
+health evidence only. Candidate queues are private and non-governed; automatic
+Canonical, Observation, Signal, Relationship, Risk, Scenario and Forecast
+promotion is closed. See `OSINT_RUNBOOK.md` for the source cohort, lineage and
+review boundary.
 
 ## Source and monitoring governance
 

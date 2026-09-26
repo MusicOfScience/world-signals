@@ -1,0 +1,33 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "OSINT_CANDIDATE_RUNTIME_CONTRACT",
+  "version": "0.1",
+  "governance": {
+    "status": "NON_GOVERNED_RUNTIME_ONLY",
+    "promotion_requires_reviewed_transaction": true,
+    "canonical_mutation_allowed": false,
+    "governed_observation_write_allowed": false,
+    "governed_signal_write_allowed": false,
+    "public_projection_allowed": false,
+    "forecast_mutation_allowed": false
+  },
+  "runtime_objects": [
+    "raw_retrieval",
+    "observation_candidate",
+    "story_cluster",
+    "signal_candidate",
+    "review_queue",
+    "source_health"
+  ],
+  "time_contract": [
+    "occurrence/effective time is distinct from publication time",
+    "publication time is distinct from retrieval time",
+    "unknown times remain unknown rather than receiving synthetic precision",
+    "timestamps are normalised to UTC while source-native values remain in lineage"
+  ],
+  "lineage_contract": [
+    "immediate provider and ultimate originating institution are separate",
+    "syndicated, translated and mirrored documents share an origin component when evidence supports it",
+    "source count never substitutes for independent corroboration"
+  ]
+}
