@@ -149,6 +149,13 @@ Canonical, Observation, Signal, Relationship, Risk, Scenario and Forecast
 promotion is closed. See `OSINT_RUNBOOK.md` for the source cohort, lineage and
 review boundary.
 
+The runtime distinguishes a first `BOOTSTRAP` history inventory from later
+`INCREMENTAL` checks. Retained source-native identities and record hashes keep
+feed replay, parser-version changes and historical discovery from masquerading
+as current novelty. On 27 September 2026 the retained checkpoint produced
+seven unchanged routes, one source-specific BSP 403 and no new candidates;
+governed populations were unchanged.
+
 ## Source and monitoring governance
 
 Source competence and automation permission are independent questions. A source may be authoritative for Canonical provenance while remaining unsuitable or unauthorised for unattended monitoring. Machine-only monitor identities may therefore be separate from Canonical provenance identities.

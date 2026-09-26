@@ -28,6 +28,7 @@ def main() -> int:
     failures = len(run.retrievals) - successes - unchanged
     print(json.dumps({
         "run_id": run.run_id,
+        "run_mode": run.run_mode,
         "routes_attempted": len(run.routes_attempted),
         "successful_routes": successes,
         "unchanged_routes": unchanged,
@@ -36,6 +37,13 @@ def main() -> int:
         "duplicates": run.duplicate_count,
         "story_clusters": len(run.story_clusters),
         "signal_candidates": len(run.signal_candidates),
+        "metrics": run.metrics,
+        "route_states": [{"route_id": item.route_id, "state": item.result_state,
+                           "checkpoint_state": item.checkpoint_state,
+                           "record_count": item.record_count,
+                           "new_record_count": item.new_record_count,
+                           "duplicate_record_count": item.duplicate_record_count}
+                          for item in run.retrievals],
         "runtime_output": str(args.runtime_dir / "latest.json"),
         "promotion": "CLOSED",
     }, indent=2))

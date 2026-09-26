@@ -201,6 +201,65 @@ class OSINTEngineTests(unittest.TestCase):
             second = run_once(registry, cohort, opener=lambda *a, **k: next(responses), runtime_dir=Path(directory), now=NOW)
         self.assertEqual(len(first.observation_candidates), 1)
         self.assertEqual([item.source_native_id for item in second.observation_candidates], ["doc-2"])
+        self.assertEqual(second.run_mode, "INCREMENTAL")
+        self.assertEqual(second.observation_candidates[0].freshness_state, "INCREMENTAL_CURRENT")
+        self.assertEqual(second.observation_candidates[0].novelty_state, "NEW_TO_CHECKPOINT")
+
+    def test_first_run_is_explicit_bootstrap_and_does_not_generate_current_signal(self):
+        registry = {"sources": [source()]}
+        cohort = {"routes": [route()]}
+        with tempfile.TemporaryDirectory() as directory:
+            run = run_once(registry, cohort, opener=lambda *a, **k: Response(), runtime_dir=Path(directory), now=NOW)
+        self.assertEqual(run.run_mode, "BOOTSTRAP")
+        self.assertEqual(run.observation_candidates[0].freshness_state, "BOOTSTRAP_HISTORY")
+        self.assertEqual(run.observation_candidates[0].novelty_state, "BOOTSTRAP_INVENTORY")
+        self.assertEqual(run.signal_candidates, [])
+        self.assertEqual(run.metrics["bootstrap_records"], 1)
+
+    def test_historical_item_discovered_after_checkpoint_is_not_current_novelty(self):
+        records = parse_payload(RSS, "RSS_XML")
+        values, _ = normalise_records(records, source(), route(), "old", "2026-09-27T00:00:00Z",
+                                       run_mode="INCREMENTAL", checkpoint_retrieved_at="2026-09-26T00:00:00Z")
+        self.assertEqual(values[0].freshness_state, "INCREMENTAL_CURRENT")
+        values, _ = normalise_records(records, source(), route(), "old", "2026-09-27T00:00:00Z",
+                                       run_mode="INCREMENTAL", checkpoint_retrieved_at="2026-09-28T00:00:00Z")
+        self.assertEqual(values[0].freshness_state, "INCREMENTAL_HISTORICAL_DISCOVERY")
+        self.assertEqual(build_signal_candidates(values), [])
+
+    def test_changed_source_native_record_is_a_revision_not_a_new_question(self):
+        records = parse_payload(RSS, "RSS_XML")
+        first, _ = normalise_records(records, source(), route(), "payload-a", "2026-09-27T00:00:00Z",
+                                      run_mode="BOOTSTRAP")
+        states = {first[0].document_key: {"candidate_id": first[0].candidate_id, "payload_sha256": first[0].payload_sha256,
+                                          "record_sha256": first[0].record_sha256}}
+        revised_records = [{**records[0], "factual_text": "Correction: official statement revised."}]
+        revised, duplicates = normalise_records(revised_records, source(), route(), "payload-b", "2026-09-28T00:00:00Z",
+                                                existing_document_keys={first[0].document_key},
+                                                existing_document_states=states,
+                                                run_mode="INCREMENTAL",
+                                                checkpoint_retrieved_at="2026-09-27T00:00:00Z")
+        self.assertEqual(duplicates, 0)
+        self.assertEqual(len(revised), 1)
+        self.assertEqual(revised[0].change_kind, "CORRECTION")
+        self.assertEqual(revised[0].freshness_state, "INCREMENTAL_REVISION")
+        self.assertEqual(revised[0].novelty_state, "REVISION_TO_CHECKPOINT")
+        self.assertEqual(revised[0].revision_of_candidate_id, first[0].candidate_id)
+        self.assertNotEqual(revised[0].candidate_id, first[0].candidate_id)
+
+    def test_parser_version_change_does_not_replay_seen_identity(self):
+        records = parse_payload(RSS, "RSS_XML")
+        first, _ = normalise_records(records, source(), route(), "payload-a", "2026-09-27T00:00:00Z",
+                                      run_mode="BOOTSTRAP")
+        second, duplicates = normalise_records(records, source(), {**route(), "parser": "rss_atom_metadata_v2"},
+                                               "payload-a", "2026-09-28T00:00:00Z",
+                                               existing_document_keys={first[0].document_key},
+                                               existing_document_states={first[0].document_key: {
+                                                   "candidate_id": first[0].candidate_id,
+                                                   "payload_sha256": first[0].payload_sha256,
+                                                   "record_sha256": first[0].record_sha256}},
+                                               run_mode="INCREMENTAL")
+        self.assertEqual(second, [])
+        self.assertEqual(duplicates, 1)
 
     def test_no_public_candidate_projection_and_no_forecast_or_governed_write(self):
         policy = production_promotion_policy()

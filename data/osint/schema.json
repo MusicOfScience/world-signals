@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "OSINT_CANDIDATE_RUNTIME_CONTRACT",
-  "version": "0.1",
+  "version": "0.2",
   "governance": {
     "status": "NON_GOVERNED_RUNTIME_ONLY",
     "promotion_requires_reviewed_transaction": true,
@@ -17,13 +17,16 @@
     "story_cluster",
     "signal_candidate",
     "review_queue",
-    "source_health"
+    "source_health",
+    "checkpoint"
   ],
   "time_contract": [
     "occurrence/effective time is distinct from publication time",
     "publication time is distinct from retrieval time",
     "unknown times remain unknown rather than receiving synthetic precision",
-    "timestamps are normalised to UTC while source-native values remain in lineage"
+    "timestamps are normalised to UTC while source-native values remain in lineage",
+    "bootstrap discovery is distinct from incremental current-change detection",
+    "source-native identity and record hashes survive payload and parser-version changes"
   ],
   "lineage_contract": [
     "immediate provider and ultimate originating institution are separate",

@@ -22,7 +22,7 @@ import xml.etree.ElementTree as ET
 
 
 UTC = timezone.utc
-ENGINE_VERSION = "osint-engine-0.1"
+ENGINE_VERSION = "osint-engine-0.2-incremental"
 ALLOWED_RESULT_STATES = {
     "SUCCESS",
     "NO_NEW_INFORMATION",
@@ -95,6 +95,15 @@ def sha256_json(payload: Any) -> str:
     return sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
 
 
+def document_identity_key(provider: str, native_id: str | None, canonical: str | None,
+                          payload_hash: str) -> str:
+    """Return an identity stable across URL/parser changes when native ID exists."""
+    identity_payload = ({"provider": provider, "native": native_id}
+                        if native_id else {"provider": provider, "url": canonical}
+                        if canonical else {"provider": provider, "payload": payload_hash})
+    return sha256_json(identity_payload)[:24]
+
+
 @dataclass(frozen=True)
 class RawRetrieval:
     source_id: str
@@ -110,6 +119,10 @@ class RawRetrieval:
     parser_version: str
     adapter_version: str
     error: str | None = None
+    record_count: int = 0
+    new_record_count: int = 0
+    duplicate_record_count: int = 0
+    checkpoint_state: str = "UNAVAILABLE"
 
     def __post_init__(self) -> None:
         if self.result_state not in ALLOWED_RESULT_STATES:
@@ -141,15 +154,18 @@ class ObservationCandidate:
     change_kind: str = "NEW"
     generation_rule: str = ENGINE_VERSION
     rationale: str = ""
+    record_sha256: str = ""
+    freshness_state: str = "UNKNOWN"
+    novelty_state: str = "UNCLASSIFIED"
+    first_seen_at: str | None = None
+    revision_of_candidate_id: str | None = None
 
     @property
     def document_key(self) -> str:
-        if self.source_native_id or self.canonical_url:
-            return sha256_json({
-                "provider": self.ultimate_provider,
-                "native": self.source_native_id,
-                "url": self.canonical_url,
-            })[:24]
+        if self.source_native_id:
+            return sha256_json({"provider": self.ultimate_provider, "native": self.source_native_id})[:24]
+        if self.canonical_url:
+            return sha256_json({"provider": self.ultimate_provider, "url": self.canonical_url})[:24]
         return sha256_json({"provider": self.ultimate_provider, "payload": self.payload_sha256})[:24]
 
 
@@ -198,6 +214,9 @@ class RuntimeRun:
     signal_candidates: list[SignalCandidate]
     conflicts: list[str]
     source_health: list[dict[str, Any]]
+    run_mode: str = "UNKNOWN"
+    checkpoint: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -345,8 +364,12 @@ def normalise_records(
     payload_hash: str,
     retrieved_at: str,
     existing_document_keys: set[str] | None = None,
+    existing_document_states: dict[str, dict[str, Any]] | None = None,
+    run_mode: str = "INCREMENTAL",
+    checkpoint_retrieved_at: str | None = None,
 ) -> tuple[list[ObservationCandidate], int]:
     existing_document_keys = existing_document_keys or set()
+    existing_document_states = existing_document_states or {}
     provider = _provider(source)
     candidates: list[ObservationCandidate] = []
     duplicates = 0
@@ -355,24 +378,56 @@ def normalise_records(
         text = clean_text(raw.get("factual_text"))
         native = clean_text(raw.get("source_native_id")) or None
         url = canonical_url(raw.get("canonical_url"))
-        identity_hash = sha256_json({"provider": provider, "native": native, "url": url}) if (native or url) else sha256_json({"provider": provider, "payload": payload_hash})
-        if identity_hash[:24] in existing_document_keys:
+        document_key = document_identity_key(provider, native, url, payload_hash)
+        record_sha256 = sha256_json(raw)
+        prior_state = existing_document_states.get(document_key)
+        prior_record_sha256 = prior_state.get("record_sha256") if prior_state else None
+        record_changed = bool(prior_state and prior_record_sha256 and prior_record_sha256 != record_sha256)
+        if document_key in existing_document_keys and not record_changed:
             duplicates += 1
             continue
+        change_kind = classify_change(title, text)
+        revision_of = None
+        if record_changed:
+            if change_kind == "NEW":
+                change_kind = "POSSIBLE_UPDATE"
+            revision_of = prior_state.get("candidate_id")
+        if run_mode == "BOOTSTRAP":
+            freshness = "BOOTSTRAP_HISTORY"
+        elif change_kind in {"CORRECTION", "POSSIBLE_UPDATE"}:
+            freshness = "INCREMENTAL_REVISION"
+        elif checkpoint_retrieved_at and parse_time(raw.get("publication_time")) and parse_time(raw.get("publication_time")) < parse_time(checkpoint_retrieved_at):
+            freshness = "INCREMENTAL_HISTORICAL_DISCOVERY"
+        elif raw.get("publication_time"):
+            freshness = "INCREMENTAL_CURRENT"
+        else:
+            freshness = "INCREMENTAL_UNKNOWN_TIME"
+        candidate_id = "WSC-OBS-" + document_key[:20]
+        if revision_of:
+            candidate_id += "-REV-" + payload_hash[:8]
         candidate = ObservationCandidate(
-            candidate_id="WSC-OBS-" + identity_hash[:20],
+            candidate_id=candidate_id,
             source_id=source["source_id"], route_ids=[route["route_id"]],
             immediate_provider=provider, ultimate_provider=provider,
             source_native_id=native, canonical_url=url, payload_sha256=payload_hash,
+            record_sha256=record_sha256,
             publication_time=raw.get("publication_time"), effective_time=raw.get("effective_time"),
             retrieval_time=retrieved_at, title=title, factual_text=text,
             entities=[{"label": provider, "entity_id": str(source["source_id"]), "resolution_state": "SOURCE_REGISTRY_ID"}],
             domains=[str(source.get("domain"))] if source.get("domain") else [],
             lineage={"source_ids": [source["source_id"]], "ultimate_provider_ids": [provider],
-                     "shared_origin_key": identity_hash[:24], "independence_status": "UNREVIEWED"},
-            change_kind=classify_change(title, text),
-            candidate_state="POSSIBLE_CORRECTION" if classify_change(title, text) == "CORRECTION" else "NEW",
+                     "shared_origin_key": document_key, "independence_status": "UNREVIEWED"},
+            change_kind=change_kind,
+            candidate_state=("POSSIBLE_CORRECTION" if change_kind == "CORRECTION"
+                             else "POSSIBLE_UPDATE" if change_kind == "POSSIBLE_UPDATE"
+                             else "NEW"),
             rationale="First-party route produced factual publication metadata; analytical importance remains for review.",
+            freshness_state=freshness,
+            novelty_state=("BOOTSTRAP_INVENTORY" if run_mode == "BOOTSTRAP"
+                           else "REVISION_TO_CHECKPOINT" if revision_of
+                           else "NEW_TO_CHECKPOINT"),
+            first_seen_at=retrieved_at,
+            revision_of_candidate_id=revision_of,
         )
         candidates.append(candidate)
     return candidates, duplicates
@@ -450,7 +505,7 @@ def build_story_clusters(candidates: Iterable[ObservationCandidate], window_hour
 
 
 def build_signal_candidates(candidates: Iterable[ObservationCandidate]) -> list[SignalCandidate]:
-    values = list(candidates)
+    values = [item for item in candidates if item.freshness_state == "INCREMENTAL_CURRENT"]
     by_domain: dict[str, list[ObservationCandidate]] = {}
     for item in values:
         for domain in item.domains or ["unclassified"]:
@@ -523,6 +578,9 @@ def run_once(
     run_id = "OSINT-" + started.strftime("%Y%m%dT%H%M%SZ") + "-" + sha256_json(cohort)[:8]
     prior_retrievals: dict[tuple[str, str], dict[str, Any]] = {}
     prior_document_keys: set[str] = set()
+    prior_document_states: dict[str, dict[str, Any]] = {}
+    prior_checkpoint: dict[str, Any] = {}
+    run_mode = "BOOTSTRAP"
     if runtime_dir and (runtime_dir / "latest.json").exists():
         try:
             prior = json.loads((runtime_dir / "latest.json").read_text(encoding="utf-8"))
@@ -530,10 +588,22 @@ def run_once(
                 (item.get("source_id"), item.get("route_id")): item
                 for item in prior.get("retrievals", [])
             }
+            prior_checkpoint = prior.get("checkpoint", {}) if isinstance(prior.get("checkpoint", {}), dict) else {}
+            run_mode = "INCREMENTAL" if prior_retrievals else "BOOTSTRAP"
+            prior_document_keys.update(str(key) for key in prior_checkpoint.get("seen_document_keys", []))
+            for key, state in (prior_checkpoint.get("document_states", {}) or {}).items():
+                if isinstance(state, dict):
+                    prior_document_states[str(key)] = state
             for item in prior.get("observation_candidates", []):
                 candidate = ObservationCandidate(**{key: value for key, value in item.items()
                                                     if key in ObservationCandidate.__dataclass_fields__})
                 prior_document_keys.add(candidate.document_key)
+                prior_document_states.setdefault(candidate.document_key, {
+                    "candidate_id": candidate.candidate_id,
+                    "payload_sha256": candidate.payload_sha256,
+                    "record_sha256": candidate.record_sha256,
+                    "source_native_id": candidate.source_native_id,
+                })
         except (OSError, TypeError, ValueError, json.JSONDecodeError):
             # A corrupt runtime cache cannot become governed truth; start a fresh
             # candidate pass and leave the source-health issue visible in logs.
@@ -542,27 +612,102 @@ def run_once(
     retrievals: list[RawRetrieval] = []
     candidates: list[ObservationCandidate] = []
     duplicate_count = 0
+    route_checkpoints: dict[str, Any] = {}
+    raw_records_seen = 0
     for route in cohort.get("routes", []):
         retrieval, payload, _ = retrieve_route(route, sources[route["source_id"]], opener=opener, now=started)
         retrievals.append(retrieval)
-        if payload is None:
-            continue
         prior = prior_retrievals.get((retrieval.source_id, retrieval.route_id))
+        checkpoint_time = (prior.get("retrieved_at") if prior else None)
+        checkpoint_state = "INCREMENTAL" if prior else "BOOTSTRAP"
+        if payload is None:
+            retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "checkpoint_state": checkpoint_state})
+            route_checkpoints[route["route_id"]] = {
+                "source_id": route["source_id"], "last_successful_retrieval_at": prior.get("retrieved_at") if prior else None,
+                "payload_sha256": prior.get("payload_sha256") if prior else None,
+                "parser_version": route["parser"], "adapter_version": ENGINE_VERSION,
+                "last_processed_source_native_id": (prior.get("source_native_ids") or [None])[-1] if prior else None,
+                "processed_source_native_id_count": len(prior.get("source_native_ids", [])) if prior else 0,
+                "checkpoint_state": checkpoint_state,
+            }
+            continue
         if retrieval.result_state == "SUCCESS" and prior and prior.get("payload_sha256") == retrieval.payload_sha256:
+            raw_records_seen += len(prior.get("source_native_ids", []))
+            try:
+                # Parse an unchanged payload only to hydrate legacy checkpoints
+                # with per-record hashes. No candidates or signal support are
+                # created on this path.
+                for raw in parse_payload(payload, route["transport"]):
+                    native = clean_text(raw.get("source_native_id")) or None
+                    canonical = canonical_url(raw.get("canonical_url"))
+                    key = document_identity_key(_provider(sources[route["source_id"]]), native, canonical,
+                                                retrieval.payload_sha256 or "")
+                    state = prior_document_states.get(key)
+                    if state is not None and not state.get("record_sha256"):
+                        state["record_sha256"] = sha256_json(raw)
+            except Exception as exc:
+                retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "result_state": "PARSER_ERROR",
+                                                 "error": type(exc).__name__ + ": " + str(exc)[:240],
+                                                 "checkpoint_state": checkpoint_state})
+                continue
             retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "result_state": "NO_NEW_INFORMATION",
                                              "source_native_ids": tuple(prior.get("source_native_ids", [])),
-                                             "source_publication_time": prior.get("source_publication_time")})
+                                             "source_publication_time": prior.get("source_publication_time"),
+                                             "record_count": len(prior.get("source_native_ids", [])),
+                                             "checkpoint_state": checkpoint_state})
+            route_checkpoints[route["route_id"]] = {
+                "source_id": route["source_id"], "last_successful_retrieval_at": retrieval.retrieved_at,
+                "payload_sha256": retrieval.payload_sha256, "parser_version": route["parser"],
+                "adapter_version": ENGINE_VERSION, "last_processed_source_native_id": (prior.get("source_native_ids") or [None])[-1],
+                "processed_source_native_id_count": len(prior.get("source_native_ids", [])),
+                "checkpoint_state": checkpoint_state,
+            }
             continue
         try:
             records = parse_payload(payload, route["transport"])
             native_ids = tuple(str(x.get("source_native_id")) for x in records if x.get("source_native_id"))
+            raw_records_seen += len(records)
+            provider = _provider(sources[route["source_id"]])
+            observed_document_states: dict[str, dict[str, Any]] = {}
+            for raw in records:
+                native = clean_text(raw.get("source_native_id")) or None
+                canonical = canonical_url(raw.get("canonical_url"))
+                key = document_identity_key(provider, native, canonical, retrieval.payload_sha256 or "")
+                observed_document_states[key] = {
+                    "candidate_id": None,
+                    "payload_sha256": retrieval.payload_sha256,
+                    "record_sha256": sha256_json(raw),
+                    "source_native_id": native,
+                }
             retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "source_native_ids": native_ids,
                                              "source_publication_time": next((x.get("publication_time") for x in records if x.get("publication_time")), None)})
             new, dups = normalise_records(records, sources[route["source_id"]], route, retrieval.payload_sha256 or "", retrieval.retrieved_at,
-                                           existing_document_keys=prior_document_keys)
+                                           existing_document_keys=prior_document_keys,
+                                           existing_document_states=prior_document_states,
+                                           run_mode=run_mode,
+                                           checkpoint_retrieved_at=checkpoint_time)
             candidates.extend(new)
             duplicate_count += dups
-            prior_document_keys.update(candidate.document_key for candidate in new)
+            for candidate in new:
+                prior_document_keys.add(candidate.document_key)
+                prior_document_states[candidate.document_key] = {
+                    "candidate_id": candidate.candidate_id,
+                    "payload_sha256": candidate.payload_sha256,
+                    "record_sha256": candidate.record_sha256,
+                    "source_native_id": candidate.source_native_id,
+                }
+            for key, state in observed_document_states.items():
+                if key not in prior_document_states or not prior_document_states[key].get("record_sha256"):
+                    prior_document_states[key] = state
+            retrievals[-1] = RawRetrieval(**{**asdict(retrievals[-1]),
+                                             "record_count": len(records), "new_record_count": len(new),
+                                             "duplicate_record_count": dups, "checkpoint_state": checkpoint_state})
+            route_checkpoints[route["route_id"]] = {
+                "source_id": route["source_id"], "last_successful_retrieval_at": retrieval.retrieved_at,
+                "payload_sha256": retrieval.payload_sha256, "parser_version": route["parser"],
+                "adapter_version": ENGINE_VERSION, "last_processed_source_native_id": native_ids[-1] if native_ids else None,
+                "processed_source_native_id_count": len(native_ids), "checkpoint_state": checkpoint_state,
+            }
         except Exception as exc:
             retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "result_state": "PARSER_ERROR", "error": type(exc).__name__ + ": " + str(exc)[:240]})
     candidates, deduped = deduplicate_candidates(candidates)
@@ -570,9 +715,27 @@ def run_once(
     clusters = build_story_clusters(candidates)
     signals = build_signal_candidates(candidates)
     completed = utc_now()
+    metrics = {
+        "raw_records_seen": raw_records_seen,
+        "bootstrap_records": sum(item.freshness_state == "BOOTSTRAP_HISTORY" for item in candidates),
+        "genuinely_new_records": sum(item.novelty_state == "NEW_TO_CHECKPOINT" for item in candidates),
+        "current_incremental_records": sum(item.freshness_state == "INCREMENTAL_CURRENT" for item in candidates),
+        "historical_discovery_records": sum(item.freshness_state == "INCREMENTAL_HISTORICAL_DISCOVERY" for item in candidates),
+        "revision_candidates": sum(item.freshness_state == "INCREMENTAL_REVISION" for item in candidates),
+        "duplicate_or_shared_origin_records": duplicate_count,
+        "observation_candidates_requiring_review": len(candidates),
+        "signal_candidates": len(signals),
+        "promoted_observations": 0,
+        "promoted_signals": 0,
+    }
     run = RuntimeRun(run_id, iso_utc(started) or "", iso_utc(completed), [r["route_id"] for r in cohort.get("routes", [])],
                      retrievals, candidates, duplicate_count, clusters, signals,
-                     [], [{"source_id": r.source_id, "state": r.result_state, "route_id": r.route_id} for r in retrievals])
+                     [], [{"source_id": r.source_id, "state": r.result_state, "route_id": r.route_id} for r in retrievals],
+                     run_mode=run_mode,
+                     checkpoint={"run_mode": run_mode, "routes": route_checkpoints,
+                                 "seen_document_keys": sorted(prior_document_keys),
+                                 "document_states": prior_document_states},
+                     metrics=metrics)
     if runtime_dir:
         runtime_dir.mkdir(parents=True, exist_ok=True)
         (runtime_dir / "runs").mkdir(exist_ok=True)

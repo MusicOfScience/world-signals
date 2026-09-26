@@ -96,6 +96,35 @@ a new cutoff and create a distinct reviewed issuance only when new evidence
 materially changes the estimate. Do not attach post-cutoff OSINT to the four
 26 September 2026 Forecast issuances.
 
+## Bootstrap versus incremental operation
+
+The first pass against a new runtime directory is explicitly `BOOTSTRAP`. It
+may inventory feed history, including records with old or unknown publication
+times, but those records are marked `BOOTSTRAP_HISTORY` and cannot establish
+current persistence or generate current Signal Candidates. Later passes using
+the retained runtime checkpoint are `INCREMENTAL`.
+
+Incremental checkpoints retain, per route, the last successful retrieval,
+payload hash, parser/adapter versions, source-native identity count and last
+processed native identity. They also retain source-native document identity
+and record hashes so a parser-version change or a feed replay does not make
+the whole history new again. A changed record with the same source-native ID
+becomes an explicit revision/correction candidate rather than a new question.
+
+Candidate freshness distinguishes `INCREMENTAL_CURRENT`,
+`INCREMENTAL_HISTORICAL_DISCOVERY`, `INCREMENTAL_REVISION` and unknown-time
+records. Publication/event time remains separate from first-seen and retrieval
+time. Historical discoveries and bootstrap inventory remain review material;
+they do not inflate current persistence, corroboration or Signal Candidates.
+
+The second post-bootstrap check on 27 September 2026 used the retained
+checkpoint: seven routes returned `NO_NEW_INFORMATION`, BSP remained a
+source-specific HTTP 403, and no new candidates or Signal Candidates were
+generated. Its operational metrics recorded 701 replayed source records,
+zero genuinely new records, zero revisions and zero promotions. This is a
+successful incremental no-change result, not evidence that the sources are
+empty or unavailable.
+
 ## First reviewed Signal disposition
 
 The first OSINT bootstrap run produced 701 Observation Candidates, 605 story
