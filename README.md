@@ -41,7 +41,9 @@ LIVE INTELLIGENCE
                |
                +--> RELATIONSHIPS (contract only; production population closed)
                         |
-                        +--> future Risks / Scenarios / Forecasts
+                        +--> RISKS / REGIMES (contract only; production population closed)
+                                 |
+                                 +--> future Scenarios / Forecasts
 ```
 
 The layers remain deliberately distinct:
@@ -57,6 +59,10 @@ The layers remain deliberately distinct:
    mechanism and causal-evidence gates. The executable contract is currently
    zero-population; it does not promote plausible transmission into causation,
    and its public projection is closed.
+8. **Risks / Regimes** — reviewed qualitative state and transition history over
+   Signals and Relationships. Convergence is lineage-derived and explicit;
+   numeric danger scores, forecasts, scenarios and public projection remain
+   prohibited. The production state population is currently zero.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -113,6 +119,12 @@ The dashboard includes a derived, read-only risk lens over existing Canonical re
 
 Calendar-week convergence windows show signal density only. They are not probability estimates, severity rankings, causal claims or authority to create or modify events. The overlay does not consume private Live Intelligence or infer Analysis conclusions. Existing Canonical OPEC records may appear mechanically like any other governed event, but the quarantined OPEC provenance transaction remains dormant and unchanged.
 
+This existing `risk_projection` output is a read-only Canonical-derived
+presentation lens, not governed Risk/Regime truth. The separate reviewed
+Risk/Regime contract in `data/risks/` records current and historical states over
+reviewed Signals and Relationships, remains zero-population, and does not feed
+the overlay or publish a risk state yet.
+
 ## Time and uncertainty
 
 Canonical event time preserves source-native IANA timezone and UTC time when those exist. Australia/Melbourne is a home/reference display context, never canonical storage time. Civil dates, native month windows, recurring rules, provisional timing and unresolved timing remain at their supported precision rather than being promoted to synthetic timestamps.
@@ -130,6 +142,7 @@ python scripts/validate_registry.py
 python scripts/validate_live_intelligence.py
 python scripts/validate_signals.py
 python scripts/validate_relationships.py
+python scripts/validate_risks.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
@@ -167,8 +180,12 @@ use `STATUS:TENTATIVE`; `COMPLETED` is not forced into an unrelated RFC status.
 
 The reviewed Relationship contract is also defined and pressure-tested with
 production population and public projection closed. It preserves alternatives
-and disconfirming evidence and does not infer transitive or causal edges. The
-next substantive milestone is a governed Risks/regime-state history layer.
+and disconfirming evidence and does not infer transitive or causal edges.
+The reviewed Risk/Regime-State contract is now also defined and pressure-tested
+with production population and public projection closed. It preserves state
+history, contradiction, qualitative convergence and explicit expiry without
+becoming a danger score, scenario or forecast. The next substantive milestone
+is the governed Scenarios layer.
 
 ### Local operating loop
 
