@@ -187,7 +187,12 @@ registry changes do not revise another event. `DTSTAMP` uses the earliest
 known governed timestamp and `LAST-MODIFIED` the latest governed revision
 timestamp; rebuild execution time is never used. Expected date windows remain
 date ranges and are marked `TRANSP:TRANSPARENT` so they are visible without
-blocking subscriber free/busy time.
+blocking subscriber free/busy time. A governed `CANCELLED` event remains
+auditable under its stable UID with `STATUS:CANCELLED` and transparent
+availability. `POSTPONED` uses RFC-valid `STATUS:TENTATIVE`, an explicit
+date-not-confirmed summary and transparent availability; an old date is never
+presented as a confirmed appointment. Dated `PROVISIONAL`/`TBC` events are
+also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 
 ### Smallest sensible migration sequence
 

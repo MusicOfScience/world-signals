@@ -132,6 +132,13 @@ using build count or wall-clock state. `DTSTAMP` is the earliest known governed
 event timestamp and `LAST-MODIFIED` is the latest known governed revision
 timestamp; neither is set from feed-build execution time.
 
+Lifecycle semantics are conservative: a governed `CANCELLED` occurrence keeps
+its stable UID and original date for auditability, emits `STATUS:CANCELLED`,
+and is transparent. `POSTPONED` emits RFC-valid `STATUS:TENTATIVE` with an
+explicit date-not-confirmed summary and is also transparent, so an old date is
+not presented as a confirmed appointment. Dated `PROVISIONAL`/`TBC` records
+use `STATUS:TENTATIVE`; `COMPLETED` is not forced into an unrelated RFC status.
+
 ### Local operating loop
 
 GitHub Actions is an execution shell, not an architectural dependency. To validate the governed state, run all configured read-only monitors, retain private local evidence, produce sanitized Operations projections and rebuild the dashboard in one command:

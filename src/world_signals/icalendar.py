@@ -232,6 +232,11 @@ def _sequence(record: dict, change_ledger: dict | None = None) -> int:
 
 
 def _certainty_marker(record: dict) -> str:
+    lifecycle = record.get("lifecycle_status")
+    if lifecycle == "CANCELLED":
+        return " [CANCELLED]"
+    if lifecycle == "POSTPONED":
+        return " [POSTPONED — DATE NOT CONFIRMED]"
     certainty = record.get("certainty_status")
     timing_type = record.get("timing_type")
     if timing_type in WINDOW_TYPES:
@@ -241,6 +246,25 @@ def _certainty_marker(record: dict) -> str:
     if record.get("round_activation_status") or record.get("condition_state") not in (None, "NOT_REQUIRED"):
         return " [CONDITIONAL]"
     return ""
+
+
+def _event_status(record: dict) -> str | None:
+    """Map Canonical uncertainty/lifecycle to RFC 5545 VEVENT STATUS."""
+
+    if record.get("lifecycle_status") == "CANCELLED":
+        return "CANCELLED"
+    if record.get("lifecycle_status") == "POSTPONED":
+        return "TENTATIVE"
+    if record.get("certainty_status") in {"PROVISIONAL", "TBC"}:
+        return "TENTATIVE"
+    return None
+
+
+def _is_transparent(record: dict) -> bool:
+    return record.get("timing_type") in WINDOW_TYPES or record.get("lifecycle_status") in {
+        "CANCELLED",
+        "POSTPONED",
+    }
 
 
 def _description(record: dict, source: dict, *, timing_note: str | None = None) -> str:
@@ -297,6 +321,8 @@ def _event_lines(
         f"SEQUENCE:{sequence}",
         f"SUMMARY:{_escape_text((record.get('short_calendar_title') or record.get('canonical_name')) + _certainty_marker(record))}",
     ]
+    if status := _event_status(record):
+        common.append(f"STATUS:{status}")
 
     if timing_type in TIMED_TYPES:
         start_local = record.get("start_local")
@@ -348,12 +374,13 @@ def _event_lines(
         common.append(f"DTSTART;VALUE=DATE:{_date_value(start_date)}")
         common.append(f"DTEND;VALUE=DATE:{_date_value(end_date + timedelta(days=1))}")
         timing_note = f"expected date window {start} to {end}; exact appointment date is not asserted"
-        # An uncertainty window remains visible but does not claim the whole
-        # range as busy time in subscriber free/busy views.
-        common.append("TRANSP:TRANSPARENT")
     else:
         return None
 
+    # Uncertainty windows and superseded lifecycle dates remain visible for
+    # auditability without claiming subscriber free/busy time.
+    if _is_transparent(record):
+        common.append("TRANSP:TRANSPARENT")
     common.append(f"DESCRIPTION:{_escape_text(_description(record, source, timing_note=timing_note))}")
     if record.get("location"):
         common.append(f"LOCATION:{_escape_text(record['location'])}")

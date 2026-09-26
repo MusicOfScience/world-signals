@@ -84,6 +84,86 @@ class ICalendarProjectionTests(unittest.TestCase):
         self.assertFalse(any("20270515" in line for line in event))
         self.assertIn("TRANSP:TRANSPARENT", event)
 
+    def test_cancelled_occurrence_keeps_uid_advances_revision_and_is_not_busy(self):
+        record = {
+            "occurrence_id": "cancelled-occurrence",
+            "canonical_name": "Cancelled governed meeting",
+            "render_policy": "INCLUDE",
+            "timing_type": "TIMED_EVENT",
+            "source_timezone": "America/Toronto",
+            "start_local": "2026-10-15T09:00:00",
+            "end_local": "2026-10-15T10:00:00",
+            "start_utc": "2026-10-15T13:00:00Z",
+            "end_utc": "2026-10-15T14:00:00Z",
+            "certainty_status": "CONFIRMED",
+            "lifecycle_status": "PLANNED",
+            "first_discovered_at": "2026-09-01",
+            "last_verified_at": "2026-09-01",
+        }
+        base = build_icalendar(self._minimal_timed_registry(record), {"sources": []}).text
+        changed = deepcopy(record)
+        changed["lifecycle_status"] = "CANCELLED"
+        changes = {
+            "changes": [
+                {
+                    "occurrence_id": record["occurrence_id"],
+                    "review_state": "APPROVED_FOR_CANONICAL_COMMIT",
+                    "reviewed_at": "2026-09-20T12:00:00+10:00",
+                }
+            ]
+        }
+        event = self._event_from_text(
+            build_icalendar(self._minimal_timed_registry(changed), {"sources": []}, changes).text,
+            record["occurrence_id"],
+        )
+        original = self._event_from_text(base, record["occurrence_id"])
+        self.assertEqual(self._property(original, "UID"), self._property(event, "UID"))
+        self.assertGreater(int(self._property(event, "SEQUENCE").split(":", 1)[1]), int(self._property(original, "SEQUENCE").split(":", 1)[1]))
+        self.assertIn("STATUS:CANCELLED", event)
+        self.assertIn("SUMMARY:Cancelled governed meeting [CANCELLED]", event)
+        self.assertIn("TRANSP:TRANSPARENT", event)
+        self.assertIn("DTSTART;TZID=America/Toronto:20261015T090000", event)
+
+    def test_postponed_old_date_is_tentative_explicit_and_transparent(self):
+        record = {
+            "occurrence_id": "postponed-occurrence",
+            "canonical_name": "Postponed governed meeting",
+            "render_policy": "INCLUDE",
+            "timing_type": "TIMED_EVENT",
+            "source_timezone": "America/Toronto",
+            "start_local": "2026-10-15T09:00:00",
+            "end_local": "2026-10-15T10:00:00",
+            "start_utc": "2026-10-15T13:00:00Z",
+            "end_utc": "2026-10-15T14:00:00Z",
+            "certainty_status": "CONFIRMED",
+            "lifecycle_status": "POSTPONED",
+            "first_discovered_at": "2026-09-01",
+            "last_verified_at": "2026-09-01",
+        }
+        event = self._event_from_text(
+            build_icalendar(self._minimal_timed_registry(record), {"sources": []}).text,
+            record["occurrence_id"],
+        )
+        self.assertIn("STATUS:TENTATIVE", event)
+        self.assertIn("SUMMARY:Postponed governed meeting [POSTPONED — DATE NOT CONFIRMED]", event)
+        self.assertIn("TRANSP:TRANSPARENT", event)
+        self.assertIn("DTSTART;TZID=America/Toronto:20261015T090000", event)
+
+    def test_provisional_dated_event_maps_to_tentative(self):
+        record = next(
+            row
+            for row in self.registry["records"]
+            if row.get("certainty_status") == "PROVISIONAL"
+            and row.get("timing_type") in {"LOCAL_DATETIME", "LOCAL_DATETIME_RANGE", "TIMED_EVENT", "CIVIL_DATE"}
+            and row.get("render_policy") in {
+                "BACKGROUND_LINKED", "INCLUDE", "INCLUDE_ANALYST", "INCLUDE_TIER1",
+                "INCLUDE_WITH_CONDITIONAL_MARKER", "INCLUDE_WITH_PROVISIONAL_MARKER",
+                "INCLUDE_WITH_TBC_MARKER", "THEMATIC_ONLY",
+            }
+        )
+        event = self._event(record["occurrence_id"])
+        self.assertIn("STATUS:TENTATIVE", event)
+
     def test_every_tzid_reference_has_only_the_required_vtimezone(self):
         referenced = {
             match.group(1)
