@@ -1,0 +1,105 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "DERIVED_FORECAST_EVALUATION",
+  "version": "0.1",
+  "architecture_position": "FORECAST_EVALUATION",
+  "upstream_layers": ["FORECASTS", "OUTCOMES_RESOLUTION"],
+  "downstream_layers": ["MODEL_LEARNING"],
+  "purpose": "A deterministic, issuance-level application of pre-declared scoring rules to immutable Forecast issuances and governed Outcomes.",
+  "layer_boundary": {
+    "forecast_mutation_allowed": false,
+    "outcome_mutation_allowed": false,
+    "canonical_mutation_allowed": false,
+    "automatic_forecast_generation_allowed": false,
+    "model_learning_allowed": false,
+    "public_evaluation_projection_allowed": false,
+    "leaderboard_allowed": false,
+    "ranking_allowed": false
+  },
+  "required_evaluation_fields": [
+    "evaluation_id",
+    "issuance_id",
+    "forecast_id",
+    "outcome_id",
+    "forecast_type",
+    "eligibility_state",
+    "exclusion_reason",
+    "issue_time_utc",
+    "information_cutoff_at_utc",
+    "resolution_time_utc",
+    "lead_time_seconds",
+    "outcome_revision_id",
+    "target_identifier",
+    "unit",
+    "forecast_value_snapshot",
+    "metrics",
+    "evaluation_as_of_utc",
+    "methodology_version"
+  ],
+  "controlled_vocabularies": {
+    "eligibility_state": [
+      "SCORED",
+      "PENDING",
+      "OVERDUE",
+      "VOID",
+      "UNRESOLVABLE",
+      "DISPUTED",
+      "INELIGIBLE",
+      "INVALID"
+    ],
+    "metric_status": ["FINITE", "INFINITE"],
+    "sample_state": ["NO_SAMPLE", "INSUFFICIENT_SAMPLE", "DESCRIPTIVE_ONLY", "EVALUABLE"]
+  },
+  "metric_policy": {
+    "compatibility": {
+      "BINARY_EVENT": ["BRIER", "LOG_LOSS"],
+      "CATEGORICAL": ["MULTICLASS_BRIER", "MULTICLASS_LOG_LOSS"],
+      "NUMERIC_POINT": ["SIGNED_ERROR", "ABSOLUTE_ERROR", "SQUARED_ERROR"]
+    },
+    "lower_score_is_better": [
+      "BRIER",
+      "LOG_LOSS",
+      "MULTICLASS_BRIER",
+      "MULTICLASS_LOG_LOSS",
+      "ABSOLUTE_ERROR",
+      "SQUARED_ERROR"
+    ],
+    "signed_error_convention": "forecast_minus_observed; positive means overprediction",
+    "log_loss_extreme_probability_policy": "P=0 or P=1 is retained exactly; a wrong certain forecast has infinite log loss and is represented with metric_status=INFINITE and metric_value=null.",
+    "numeric_aggregation_requires_matching_unit": true,
+    "no_universal_cross_type_score": true
+  },
+  "calibration_policy": {
+    "method": "fixed_probability_bins",
+    "bin_edges": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "minimum_scored_issuances": 10,
+    "minimum_distinct_series": 5,
+    "insufficient_sample_is_not_a_calibration_claim": true,
+    "configuration_is_versioned": true
+  },
+  "population_policy": {
+    "production_population_allowed": false,
+    "automatic_scoring_allowed": false,
+    "synthetic_production_population_allowed": false,
+    "public_evaluation_projection_allowed": false,
+    "current_state": "NO_SAMPLE",
+    "reason": "Evaluation mechanics must be established before a separately authorised prospective Forecast pilot creates a defensible resolved sample."
+  },
+  "public_projection_policy": {
+    "evaluation_projection_allowed": false,
+    "internal_evaluation_count_must_be_zero": true,
+    "performance_claims_allowed": false,
+    "leaderboard_allowed": false,
+    "runtime_or_review_material_allowed": false
+  },
+  "prohibited_fields": [
+    "accuracy",
+    "skill_score",
+    "calibration_claim",
+    "leaderboard",
+    "ranking",
+    "model_learning",
+    "parameter_optimisation",
+    "synthetic_production_fixture"
+  ]
+}
