@@ -74,6 +74,28 @@ lineage and review decisions in a separate governed transaction. Retrieval
 failure, parser failure, an empty feed or a permission hold is source health,
 not evidence that an event was cancelled or that nothing happened.
 
+## First reviewed promotion tranche
+
+OSINT v0.13 completed the first bounded end-to-end path. One Federal Reserve
+FOMC decision candidate was retrieved successfully from the authorised
+`osint-fed-monetary-rss` route, checked against the exact first-party statement,
+and admitted as `WSLI-OSINT-FED-FOMC-20260916-001`. The promotion is recorded in
+`data/live_intelligence/osint_promotion_transaction_v1.json` with the candidate
+ID, RSS payload hash, route, parser/adapter versions, reviewer decision and
+pre/post Live-state fingerprints.
+
+The tranche limit is four new observations; only one passed review. The Japan
+MOF meeting candidate was not admitted because the authorised route supplied
+publication metadata while the page content needed for a fuller factual
+observation was outside that route's cleared automated-ingestion scope. No
+source permission was broadened. Automatic promotion, Signal promotion and
+public observation projection remain closed.
+
+For a later prospective update, retain the existing Forecast issuance, freeze
+a new cutoff and create a distinct reviewed issuance only when new evidence
+materially changes the estimate. Do not attach post-cutoff OSINT to the four
+26 September 2026 Forecast issuances.
+
 ## Current coverage gaps
 
 V1 does not provide real-time market prices/yield curves/OIS, credit stress,

@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -177,6 +178,29 @@ class OSINTEngineTests(unittest.TestCase):
         queue = build_review_queue(run.retrievals, run.observation_candidates, run.signal_candidates)
         self.assertEqual(queue["public_projection"], "CLOSED")
         self.assertEqual(production_promotion_policy()["canonical_mutation"], "FORBIDDEN")
+
+    def test_runtime_state_prevents_reprocessing_unchanged_feed(self):
+        registry = {"sources": [source()]}
+        cohort = {"routes": [route()]}
+        with tempfile.TemporaryDirectory() as directory:
+            first = run_once(registry, cohort, opener=lambda *a, **k: Response(), runtime_dir=Path(directory), now=NOW)
+            second = run_once(registry, cohort, opener=lambda *a, **k: Response(), runtime_dir=Path(directory), now=NOW)
+        self.assertEqual(len(first.observation_candidates), 1)
+        self.assertEqual(second.observation_candidates, [])
+        self.assertEqual(second.retrievals[0].result_state, "NO_NEW_INFORMATION")
+        queue = build_review_queue(second.retrievals, second.observation_candidates, second.signal_candidates)
+        self.assertEqual(queue["items"], [])
+
+    def test_runtime_state_accepts_new_item_without_recreating_old_item(self):
+        registry = {"sources": [source()]}
+        cohort = {"routes": [route()]}
+        changed = RSS.replace(b"</channel>", b"<item><guid>doc-2</guid><title>Second release</title><description>New fact.</description><link>https://example.test/doc-2</link><pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate></item></channel>")
+        responses = iter([Response(RSS), Response(changed)])
+        with tempfile.TemporaryDirectory() as directory:
+            first = run_once(registry, cohort, opener=lambda *a, **k: next(responses), runtime_dir=Path(directory), now=NOW)
+            second = run_once(registry, cohort, opener=lambda *a, **k: next(responses), runtime_dir=Path(directory), now=NOW)
+        self.assertEqual(len(first.observation_candidates), 1)
+        self.assertEqual([item.source_native_id for item in second.observation_candidates], ["doc-2"])
 
     def test_no_public_candidate_projection_and_no_forecast_or_governed_write(self):
         policy = production_promotion_policy()

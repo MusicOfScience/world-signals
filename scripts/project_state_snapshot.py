@@ -220,7 +220,7 @@ def render_current_state_block(snapshot: dict[str, Any]) -> str:
             BEGIN_MARKER,
             "## Mechanically derived current state",
             "",
-            f"**Reference date:** {snapshot['reference_date']}  ",
+            f"**Reference date:** {snapshot['reference_date']}",
             "**Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.",
             "",
             f"- Canonical Registry: **v{canonical['registry_version']} / {canonical['occurrence_count']} occurrences**; schema **v{canonical['schema_version']}**.",

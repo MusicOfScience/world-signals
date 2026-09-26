@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_OBSERVATIONS",
-  "version": "0.12",
-  "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
+  "version": "0.13",
+  "reference_date": "2026-09-26",
+  "population_state": "CONTROLLED_OSINT_REVIEWED_OBSERVATION_SPECIMEN",
   "observations": [
     {
       "observation_id": "WSLI-RISK-NPL-FLOOD-20260826-001",
@@ -337,7 +337,36 @@
       "revision_of_observation_id": null,
       "automatic_canonical_commit": false,
       "google_calendar_write": false
+    },
+    {
+      "observation_id": "WSLI-OSINT-FED-FOMC-20260916-001",
+      "observed_at_utc": "2026-09-26T18:20:57Z",
+      "observation_type": "POLICY_DEVELOPMENT",
+      "verification_state": "PRIMARY_CONFIRMED",
+      "headline": "Federal Reserve raises target range for federal funds rate to 3.75–4.00%",
+      "summary": "On 16 September 2026, the Federal Open Market Committee approved and the Federal Reserve published a statement saying that it raised the target range for the federal funds rate by one-quarter percentage point to 3.75–4.00%. The statement records the official policy decision and its stated policy context only; this observation does not encode expectations, surprise, market reaction, causality, regime interpretation or a Forecast update.",
+      "domain_tags": [
+        "ECONOMICS",
+        "MARKETS"
+      ],
+      "jurisdictions": [
+        "United States"
+      ],
+      "regions": [
+        "North America"
+      ],
+      "evidence_refs": [
+        "WSEV-OSINT-FED-FOMC-20260916"
+      ],
+      "canonical_links": [],
+      "revision_of_observation_id": null,
+      "event_time": {
+        "precision": "CIVIL_DATE",
+        "event_date": "2026-09-16"
+      },
+      "automatic_canonical_commit": false,
+      "google_calendar_write": false
     }
   ],
-  "scope_note": "Bounded reviewed internal Live Intelligence store through CP: eleven observations. CP adds one primary-confirmed ECB rate-decision outcome linked to the completed scheduled Canonical decision occurrence. Projections, expectations, surprise, market attribution and Analysis remain outside the observation; public projection and automatic ingestion remain closed."
+  "scope_note": "Bounded reviewed internal Live Intelligence store through OSINT v0.13: twelve observations. OSINT v0.13 adds one primary-confirmed Federal Reserve policy-decision observation through the authorised candidate pipeline. Projections, expectations, surprise, market attribution and Analysis remain outside the observation; public projection and automatic ingestion remain closed."
 }

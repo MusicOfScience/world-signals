@@ -24,11 +24,14 @@ def main() -> int:
     run = run_once(load_json(ROOT / "data/sources/registry.json"), load_json(ROOT / "data/osint/source_cohort.json"),
                    runtime_dir=args.runtime_dir)
     successes = sum(item.result_state == "SUCCESS" for item in run.retrievals)
+    unchanged = sum(item.result_state == "NO_NEW_INFORMATION" for item in run.retrievals)
+    failures = len(run.retrievals) - successes - unchanged
     print(json.dumps({
         "run_id": run.run_id,
         "routes_attempted": len(run.routes_attempted),
         "successful_routes": successes,
-        "retrieval_failures": len(run.retrievals) - successes,
+        "unchanged_routes": unchanged,
+        "retrieval_failures": failures,
         "observation_candidates": len(run.observation_candidates),
         "duplicates": run.duplicate_count,
         "story_clusters": len(run.story_clusters),

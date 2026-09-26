@@ -500,7 +500,7 @@ def build_review_queue(retrievals: Iterable[RawRetrieval], observations: Iterabl
         "generated_by": ENGINE_VERSION,
         "public_projection": "CLOSED",
         "items": ([{"kind": "SOURCE_HEALTH", "priority": "HIGH", "source_id": r.source_id, "state": r.result_state,
-                     "reason": r.error or "retrieval completed"} for r in retrievals if r.result_state != "SUCCESS"]
+                     "reason": r.error or "retrieval completed"} for r in retrievals if r.result_state not in {"SUCCESS", "NO_NEW_INFORMATION"}]
                    + [{"kind": "OBSERVATION_CANDIDATE", "priority": "NORMAL", "candidate_id": o.candidate_id,
                       "state": o.candidate_state, "reason": o.rationale} for o in observations]
                    + [{"kind": "SIGNAL_CANDIDATE", "priority": s.review_priority, "candidate_id": s.candidate_id,
@@ -521,6 +521,24 @@ def run_once(
     sources = {row["source_id"]: row for row in registry.get("sources", [])}
     started = now or utc_now()
     run_id = "OSINT-" + started.strftime("%Y%m%dT%H%M%SZ") + "-" + sha256_json(cohort)[:8]
+    prior_retrievals: dict[tuple[str, str], dict[str, Any]] = {}
+    prior_document_keys: set[str] = set()
+    if runtime_dir and (runtime_dir / "latest.json").exists():
+        try:
+            prior = json.loads((runtime_dir / "latest.json").read_text(encoding="utf-8"))
+            prior_retrievals = {
+                (item.get("source_id"), item.get("route_id")): item
+                for item in prior.get("retrievals", [])
+            }
+            for item in prior.get("observation_candidates", []):
+                candidate = ObservationCandidate(**{key: value for key, value in item.items()
+                                                    if key in ObservationCandidate.__dataclass_fields__})
+                prior_document_keys.add(candidate.document_key)
+        except (OSError, TypeError, ValueError, json.JSONDecodeError):
+            # A corrupt runtime cache cannot become governed truth; start a fresh
+            # candidate pass and leave the source-health issue visible in logs.
+            prior_retrievals = {}
+            prior_document_keys = set()
     retrievals: list[RawRetrieval] = []
     candidates: list[ObservationCandidate] = []
     duplicate_count = 0
@@ -529,14 +547,22 @@ def run_once(
         retrievals.append(retrieval)
         if payload is None:
             continue
+        prior = prior_retrievals.get((retrieval.source_id, retrieval.route_id))
+        if retrieval.result_state == "SUCCESS" and prior and prior.get("payload_sha256") == retrieval.payload_sha256:
+            retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "result_state": "NO_NEW_INFORMATION",
+                                             "source_native_ids": tuple(prior.get("source_native_ids", [])),
+                                             "source_publication_time": prior.get("source_publication_time")})
+            continue
         try:
             records = parse_payload(payload, route["transport"])
             native_ids = tuple(str(x.get("source_native_id")) for x in records if x.get("source_native_id"))
             retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "source_native_ids": native_ids,
                                              "source_publication_time": next((x.get("publication_time") for x in records if x.get("publication_time")), None)})
-            new, dups = normalise_records(records, sources[route["source_id"]], route, retrieval.payload_sha256 or "", retrieval.retrieved_at)
+            new, dups = normalise_records(records, sources[route["source_id"]], route, retrieval.payload_sha256 or "", retrieval.retrieved_at,
+                                           existing_document_keys=prior_document_keys)
             candidates.extend(new)
             duplicate_count += dups
+            prior_document_keys.update(candidate.document_key for candidate in new)
         except Exception as exc:
             retrievals[-1] = RawRetrieval(**{**asdict(retrieval), "result_state": "PARSER_ERROR", "error": type(exc).__name__ + ": " + str(exc)[:240]})
     candidates, deduped = deduplicate_candidates(candidates)

@@ -100,7 +100,11 @@ candidate heuristics nominate review work rather than establish materiality,
 confidence, causation or a governed Signal.
 
 Runtime output is local and ignored under `.world-signals-runtime/osint/`.
-There is no public candidate projection, no automatic promotion and no write
+OSINT v0.13 has now exercised one genuine reviewed promotion from an authorised
+retrieval into the governed Live store. The promotion is append-only and
+audited in `data/live_intelligence/osint_promotion_transaction_v1.json` with
+candidate/source lineage and pre/post fingerprints. There is no public
+candidate projection, no automatic promotion and no write
 authority over Canonical, Live Intelligence, Signals, Relationships, Risks,
 Scenarios or Forecasts. The four prospective Forecasts remain outside the OSINT
 engine and their information cutoffs cannot be revised by retrieval.
@@ -130,7 +134,7 @@ The frozen AV v0.1 and AW v0.2 checkpoints remain recorded inside the v0.3 schem
 
 Live Intelligence is not a synonym for the Source/Change Monitor. The monitor asks whether governed authoritative inputs changed; Live Intelligence records consequential factual developments in the world. A monitor parser failure is not a Live Intelligence fact.
 
-Live Intelligence is also not Analysis. It may record a factual market observation, shock, announcement or revision, but it may not claim what was expected, what surprised, what caused a move or which interpretation is preferred.
+Live Intelligence is also not Analysis. It may record a factual market observation, shock, announcement or revision, but it may not claim what was expected, what surprised, what caused a move or which interpretation is preferred. The first OSINT-originated production row is a Federal Reserve policy-decision fact; its promotion retains the originating candidate and successful RSS retrieval metadata while leaving Signals at zero.
 
 Unscheduled physical shocks, health emergencies and geopolitical developments can therefore exist without inventing scheduled Canonical occurrences. If a Live observation references Canonical, the occurrence ID must resolve.
 
