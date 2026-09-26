@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORLD SIGNALS · Operator cockpit</title>
+  <link rel="stylesheet" href="operator.css">
+</head>
+<body>
+  <header class="operator-header"><p class="eyebrow">WORLD SIGNALS · LOCAL ONLY</p><h1>Operator cockpit</h1><p>Read-only visibility into runtime evidence, review work and governed state. This surface is not part of the public Pages build.</p><div class="boundary">No browser writes · no automatic promotion · no calendar mutation</div></header>
+  <main>
+    <section aria-labelledby="systemTitle"><div class="section-head"><div><p class="eyebrow">SYSTEM STATUS</p><h2 id="systemTitle">What the local machinery last recorded</h2></div><span id="systemState" class="badge">Loading…</span></div><div id="systemGrid" class="card-grid"></div></section>
+    <section aria-labelledby="reviewTitle"><div class="section-head"><div><p class="eyebrow">NEW / REVIEW</p><h2 id="reviewTitle">Candidate and review attention</h2></div></div><div id="reviewGrid" class="card-grid"></div></section>
+    <section aria-labelledby="governedTitle"><div class="section-head"><div><p class="eyebrow">GOVERNED STATE</p><h2 id="governedTitle">Layer populations and gates</h2></div></div><div id="governedGrid" class="layer-grid"></div></section>
+    <section aria-labelledby="forecastTitle"><div class="section-head"><div><p class="eyebrow">FORECAST WATCH</p><h2 id="forecastTitle">Prospective claims awaiting resolution</h2></div><span class="badge">READ ONLY</span></div><div id="forecastGrid" class="forecast-grid"></div></section>
+  </main>
+  <script src="operator.js"></script>
+</body>
+</html>

@@ -31,16 +31,11 @@ jobs:
       - run: node --check web/history.js
       - run: node --check web/operations.js
       - run: node --check web/biosecurity.js
-      - name: Build browser-safe latest monitor snapshot
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: python scripts/fetch_latest_monitor_snapshot.py
-      - name: Build retained review-candidate state
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: python scripts/fetch_retained_review_state.py
+      # Public Pages builds must not fetch or embed private runtime/review
+      # artefacts. The local operator build is the only surface allowed to
+      # include those projections. In particular, this workflow deliberately
+      # does not invoke fetch_latest_monitor_snapshot.py or
+      # fetch_retained_review_state.py.
       - run: python scripts/build_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
