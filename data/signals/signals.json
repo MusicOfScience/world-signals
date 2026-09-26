@@ -1,0 +1,9 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SIGNALS",
+  "version": "0.1",
+  "reference_date": "2026-09-26",
+  "population_state": "CLOSED_NO_PRODUCTION_SIGNALS",
+  "signals": [],
+  "scope_note": "Executable Signal contract only. No candidate or production Signal has been populated; future admission requires an explicit reviewed transaction over immutable Live Intelligence observations."
+}

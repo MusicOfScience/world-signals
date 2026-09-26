@@ -95,6 +95,75 @@ Live Intelligence is also not Analysis. It may record a factual market observati
 
 Unscheduled physical shocks, health emergencies and geopolitical developments can therefore exist without inventing scheduled Canonical occurrences. If a Live observation references Canonical, the occurrence ID must resolve.
 
+## Reviewed Signal contract — population closed
+
+The first Signal milestone is now an executable contract at
+`data/signals/schema.json`, `data/signals/signals.json` and
+`src/world_signals/signals.py`. It reuses immutable Live Intelligence
+`observation_id` and evidence lineage rather than creating a second observation
+store. A Signal is a reviewed analytical inference: it records direction,
+materiality, novelty, persistence, trend state, corroboration, confidence,
+transmission relevance, falsification conditions and explicit lifecycle/review
+state without asserting a causal relationship or encoding a forecast.
+
+Production admission (`validate_signals`) rejects **every populated dataset**;
+no test flag or population label opens it. `validate_signal_history` is a
+separate read-only proposal validator, used by synthetic tests and granting no
+storage, promotion or publication authority. The public projection validates
+the production gate and returns zero Signals. No dashboard or risk-overlay
+consumer was added.
+
+Each full revision snapshot contains an explicit evidence-backed baseline and
+qualitative justifications for materiality, novelty, persistence, trend,
+confidence, source quality, coverage bias and alternatives. Supporting and
+contradictory evidence must be classified explicitly. Lineage names ultimate
+collection/reporting origins with a review basis; same-provider, same-document
+or shared-origin evidence collapses into a connected component. Independent
+corroboration is bounded by a matching between supporting observations and
+those components. Contradictions never add support. Counts do not set confidence
+or materiality, and a single observation cannot establish persistence.
+
+The Live evidence model has provider labels but no generic syndicated-source
+lineage; the Signal's reviewed lineage assessment supplies that missing
+information without changing upstream facts. This validator checks consistency,
+not the factual truth of analyst-supplied origins, prose, review identities or
+claims of independence. A reviewer must check syndication, common institutional
+origins, media density, language/geographic bias, alternative explanations and
+whether repeated observations represent a persistent change. Model-generated
+text and context-only evidence cannot provide independent supporting evidence.
+Uncertainty is not converted into a numerical score. The existing post-event
+Analysis bridge remains separate and does not depend on Signals.
+
+Revision numbers are contiguous, predecessor links resolve, creation time
+advances past the prior decision, and decision timestamps/reasons are required
+for acceptance and rejection. Terminal states require reopening review before
+reactivation. SHA256 pins check complete immutable observation snapshots.
+`validate_signal_history(..., previous_revisions=retained_prestate)` rejects
+removed or rewritten prior revisions. An isolated snapshot cannot prove its own
+history: supplying a trusted retained prestate is mandatory for any future
+admission transaction. No production transaction is authorized here.
+
+Assessments cannot use observations or known source publications from after
+their creation time. `signal_state_as_of` takes an explicit UTC timestamp and
+selects the revision effective at that time (decision time for reviewed rows,
+creation time for unresolved rows). It reports stale/review-required states
+without rewriting a stored assessment or automatically accepting a new one.
+`STALE_AFTER` expires from the latest supporting observation; `EXPLICIT_DATE`
+and `REVIEW_REQUIRED` use explicit UTC deadlines. Revision activity or contrary
+evidence cannot refresh the supporting-evidence clock. Conditional withdrawal
+triggers remain for human review rather than arbitrary executable expressions.
+
+CM corrections/retractions are new observations pointing to the unchanged
+ancestor via `revision_of_observation_id`. Reverse dependency lookup preserves
+historical references. A later correction makes an active dependent Signal
+require review while the earlier as-of assessment remains intact; an active
+replacement must acknowledge the correction and drop invalid ancestor support.
+Transmission entries may describe hypotheses or observed association only;
+reviewed causal mechanisms belong to the later Relationship contract. Structured
+forecast/scenario fields and unknown fields are rejected, while disguised
+forecasts in free prose still require human review. The production Signal count
+remains zero; synthetic fixtures are confined to tests.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -135,7 +204,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | ICS subscription output | `src/world_signals/icalendar.py`, `scripts/build_ics.py` and `docs/world-signals.ics` output | Implemented and hardened. It uses governed Canonical records plus the approved change ledger, stable occurrence-based UIDs, source-local timed values, deterministic `VTIMEZONE` components derived from Python's IANA database, governed `SEQUENCE`/`DTSTAMP`/`LAST-MODIFIED`, transparent expected windows, date-only windows and explicit omission of non-dated material. |
 | Source registry / health | `data/sources/registry.json`, monitor expectations/adapters, runtime source-health summaries and review candidates | Already implemented and sound, but source health remains runtime evidence rather than event truth. |
 | Observations | `data/live_intelligence/` and `src/world_signals/live_intelligence.py` provide reviewed factual observations, evidence, timing separation and correction/revision controls | Implemented but needing extension. This is a bounded Live Intelligence layer, not yet a general observation store or public feed. |
-| Signals | Canonical metadata includes `signal_object_class`; the risk overlay and monitor diagnostics provide prompts and density views | Partially implemented. There is no standalone governed signal object with novelty, acceleration, persistence, corroboration and transmission relevance. |
+| Signals | `data/signals/` and `src/world_signals/signals.py` define a reviewed Signal over immutable Live observations, with revision, corroboration, contradiction, lifecycle and public-projection guards | Contract implemented and pressure-tested; production population remains closed. |
 | Relationships / causal layer | Analysis records and the noncanonical biosecurity overlay contain reviewed connections and relationship vocabularies | Partially implemented. A generic cross-domain relationship graph with explicit causal/mechanistic/contextual status, alternatives and falsifiers is missing. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` and `data/coverage/biosecurity_overlay.json` provide a read-only, non-exclusive risk lens and convergence windows | Partially implemented. Regime-transition state, history and alert semantics are not yet a separate governed layer. |
 | Scenarios | No governed scenario registry or competing-scenario contract | Missing. Do not infer scenarios from risk-overlay windows. |
@@ -198,10 +267,11 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 
 1. Complete and validate the governed ICS projection (this tranche), including
    static publication and omission tests.
-2. Define a minimal reviewed `signal` contract that references one or more
-   immutable observations and records direction, novelty, persistence,
-   corroboration, confidence and transmission relevance. Keep population closed
-   until the contract is pressure-tested.
+2. Define and pressure-test a minimal reviewed `signal` contract that references
+   one or more immutable observations and records direction, novelty,
+   persistence, corroboration, confidence and transmission relevance. The
+   executable contract now exists, but population remains closed until a
+   separate reviewed admission transaction is justified.
 3. Define a generic relationship contract with explicit relationship type,
    alternatives, disconfirming evidence and review history, reusing existing
    Analysis and overlay semantics without making the overlay canonical.

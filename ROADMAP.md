@@ -299,11 +299,27 @@ GitHub monitor is manual-dispatch only; CI, static Pages deployment and manual
 smoke/audit workflows remain available. Google Calendar writes remain off until
 explicitly authorised by a later reviewed architecture.
 
-The next milestone is not a larger calendar. It is a minimal reviewed Signal
-contract that references immutable Live observations and makes novelty,
-persistence, corroboration, confidence and transmission relevance explicit.
+The next milestone is not a larger calendar. The reviewed Signal contract is
+now defined and pressure-tested over immutable Live observations, while its
+production population remains closed. It makes novelty, persistence,
+corroboration, confidence, contradiction and transmission relevance explicit
+without leaking forecasts or causal claims downstream.
 
-## Stage 12 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 12 — reviewed Signal contract — IMPLEMENTED / POPULATION CLOSED
+
+The executable contract lives in `data/signals/` and
+`src/world_signals/signals.py`. It validates immutable observation/evidence
+lineage, review-governed lifecycle and revision history, contradiction and
+anti-noise safeguards, explicit transmission hypotheses and forecast-field
+exclusion. No candidate or production Signal has been populated, no synthetic
+fixture is stored in production data, and public Signal projection remains
+closed.
+
+The next substantive milestone is a generic reviewed Relationship contract
+that can consume Signals without converting plausible transmission into an
+asserted causal fact.
+
+## Stage 13 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 

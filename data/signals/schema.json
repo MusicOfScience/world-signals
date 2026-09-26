@@ -1,0 +1,235 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SIGNAL_LAYER_SCHEMA",
+  "version": "0.1",
+  "reference_date": "2026-09-26",
+  "architecture_position": "SIGNALS",
+  "upstream_layers": [
+    "LIVE_INTELLIGENCE"
+  ],
+  "downstream_layers": [
+    "RELATIONSHIPS",
+    "RISKS",
+    "SCENARIOS",
+    "FORECASTS"
+  ],
+  "purpose": "A minimal reviewed analytical inference over immutable evidence-backed observations. It is not a news item, observation, forecast, scenario or unexplained risk score.",
+  "layer_boundary": {
+    "canonical_mutation_allowed": false,
+    "observation_mutation_allowed": false,
+    "source_monitor_mutation_allowed": false,
+    "review_candidate_promotion_allowed": false,
+    "automatic_signal_promotion_allowed": false,
+    "relationship_assertion_allowed": false,
+    "forecast_fields_allowed": false,
+    "public_signal_projection_allowed": false
+  },
+  "required_signal_fields": [
+    "signal_id",
+    "revision_id",
+    "revision_number",
+    "previous_revision_id",
+    "title",
+    "signal_type",
+    "observation_ids",
+    "evidence_refs",
+    "entities",
+    "jurisdictions",
+    "regions",
+    "domains",
+    "direction",
+    "magnitude",
+    "novelty",
+    "persistence",
+    "trend_state",
+    "corroboration",
+    "confidence",
+    "transmission_relevance",
+    "first_detected_at_utc",
+    "latest_supporting_observation_id",
+    "review_state",
+    "lifecycle_state",
+    "expiry",
+    "supporting_rationale",
+    "contradictory_evidence_refs",
+    "falsification_conditions",
+    "review_provenance",
+    "baseline",
+    "assessment_basis",
+    "evidence_lineage",
+    "observation_hashes",
+    "correction_review_observation_ids",
+    "revision_reason"
+  ],
+  "controlled_vocabularies": {
+    "signal_type": [
+      "EMERGING_CHANGE",
+      "PERSISTENT_CHANGE",
+      "ACCELERATION",
+      "DECELERATION",
+      "REVERSAL",
+      "DISRUPTION",
+      "CROSS_DOMAIN_PRESSURE"
+    ],
+    "direction": [
+      "UPWARD",
+      "DOWNWARD",
+      "MIXED",
+      "REVERSING",
+      "UNKNOWN"
+    ],
+    "magnitude": [
+      "LOW",
+      "MODERATE",
+      "HIGH",
+      "NOT_ASSESSED"
+    ],
+    "novelty": [
+      "NEW",
+      "REINFORCING",
+      "ESTABLISHED",
+      "NOT_ASSESSED"
+    ],
+    "persistence": [
+      "SINGLE_OBSERVATION",
+      "EMERGING",
+      "PERSISTENT",
+      "WEAKENING",
+      "NOT_ASSESSED"
+    ],
+    "trend_state": [
+      "ACCELERATING",
+      "DECELERATING",
+      "STABLE",
+      "REVERSING",
+      "NOT_ASSESSED"
+    ],
+    "corroboration_state": [
+      "NONE",
+      "PARTIAL",
+      "INDEPENDENT",
+      "CONFLICTED",
+      "NOT_ASSESSED"
+    ],
+    "confidence": [
+      "LOW",
+      "MEDIUM",
+      "HIGH",
+      "NOT_ASSESSED"
+    ],
+    "relationship_status": [
+      "HYPOTHESISED_TRANSMISSION",
+      "OBSERVED_ASSOCIATION"
+    ],
+    "review_state": [
+      "CANDIDATE",
+      "UNDER_REVIEW",
+      "ACCEPTED",
+      "REJECTED"
+    ],
+    "lifecycle_state": [
+      "UNRESOLVED",
+      "ACTIVE",
+      "WEAKENING",
+      "EXPIRED",
+      "SUPERSEDED",
+      "WITHDRAWN"
+    ],
+    "expiry_mode": [
+      "STALE_AFTER",
+      "EXPLICIT_DATE",
+      "REVIEW_REQUIRED"
+    ],
+    "signal_domain": [
+      "ECONOMICS",
+      "POLITICS",
+      "GEOPOLITICS",
+      "MARKETS",
+      "TRADE",
+      "COMMODITIES",
+      "ENERGY",
+      "SHIPPING_LOGISTICS",
+      "CLIMATE_PHYSICAL_RISK",
+      "HEALTH_BIOSECURITY",
+      "INSTITUTIONS",
+      "TECHNOLOGY_INFRASTRUCTURE",
+      "FOOD_AGRICULTURE",
+      "SOVEREIGN_FINANCE",
+      "MONETARY_POLICY",
+      "OTHER_REVIEWED"
+    ]
+  },
+  "time_policy": {
+    "assessment_knowledge_time_field": "review_provenance.created_at_utc",
+    "decision_effective_time_field": "review_provenance.reviewed_at_utc",
+    "as_of_requires_explicit_utc_input": true,
+    "first_detected_at_utc_requires_exact_utc": true,
+    "observation_time_remains_distinct_from_event_time": true,
+    "no_melbourne_canonicalisation": true,
+    "signal_expiry_is_not_a_forecast_horizon": true
+  },
+  "revision_policy": {
+    "append_validation_requires_previous_snapshot": true,
+    "observation_content_pinned_by_sha256": true,
+    "signal_id_is_stable_across_revisions": true,
+    "each_revision_is_immutable": true,
+    "previous_revision_must_remain_present": true,
+    "revision_numbers_are_contiguous": true,
+    "observation_corrections_require_explicit_signal_review": true,
+    "silent_history_rewrite_prohibited": true
+  },
+  "field_contract": {
+    "baseline": "Description and linked observation_ids identifying the comparison basis; qualitative baselines are allowed.",
+    "assessment_basis": "Required prose for materiality, novelty, persistence, trend, confidence, source_quality, coverage_bias and alternatives. Counts never determine confidence or materiality automatically.",
+    "evidence_lineage": "Exactly one evidence_ref/origin_ids/basis entry per supporting or contradictory evidence record. origin_ids name ultimate collection/reporting origins, not intermediate outlets or evidence IDs. Review shared provenance explicitly; origin truth is a human assessment.",
+    "observation_hashes": "Map of every linked immutable observation ID to SHA256 of the complete sorted compact UTF-8 JSON snapshot, ensure_ascii=false; checked on every validation.",
+    "correction_review_observation_ids": "Explicit linked CM correction/retraction snapshots assessed in this revision. Corrected/retracted ancestors cannot remain active support.",
+    "revision_reason": "Reason for initial assessment or later revision, including reopening, weakening, expiry, withdrawal or supersession.",
+    "expiry": "Bounded STALE_AFTER (stale_after_days from latest supporting observation), EXPLICIT_DATE (expires_at_utc), or REVIEW_REQUIRED (review_due_at_utc). All require a condition. No indefinite mode.",
+    "history": "Retain all snapshots. validate_signal_history accepts previous_revisions for append-only comparison; a future population transaction must supply the retained prestate. Git review remains the authority for provenance/decision authenticity."
+  },
+  "review_policy": {
+    "candidate_or_under_review_signals_are_not_analytical_truth": true,
+    "accepted_signal_requires_reviewer_and_decision_basis": true,
+    "rejected_or_nonactive_signal_may_not_project_as_active": true,
+    "withdrawal_or_expiry_preserves_prior_revisions": true
+  },
+  "anti_noise_policy": {
+    "independence_requires_reviewed_ultimate_origin_lineage": true,
+    "provider_url_or_shared_origin_collapses_corroboration": true,
+    "contradictions_never_count_as_support": true,
+    "duplicate_observation_ids_do_not_increase_corroboration": true,
+    "repeated_reporting_from_one_provider_is_not_independent_corroboration": true,
+    "independent_corroboration_requires_distinct_providers": true,
+    "model_generated_text_is_not_evidence": true,
+    "correlation_is_not_causation": true,
+    "contradictory_evidence_must_remain_visible": true,
+    "downstream_outcomes_must_not_retroactively_inflate_signal_confidence": true
+  },
+  "prohibited_fields": [
+    "probability",
+    "probability_percent",
+    "forecast_statement",
+    "scenario_id",
+    "resolution_date",
+    "resolution_criteria",
+    "target",
+    "prediction",
+    "brier_score",
+    "log_loss",
+    "expected_outcome"
+  ],
+  "population_policy": {
+    "mode": "CLOSED_SIGNAL_CONTRACT_NO_PRODUCTION_POPULATION",
+    "production_population_allowed": false,
+    "automatic_ingestion_allowed": false,
+    "candidate_signal_storage_allowed": false,
+    "public_signal_projection_allowed": false,
+    "synthetic_production_population_allowed": false,
+    "reason": "Define and pressure-test the contract over the reviewed Live Intelligence observation substrate before any governed Signal admission transaction."
+  },
+  "public_projection_policy": {
+    "signal_projection_allowed": false,
+    "reason": "No Signal is publishable while the production population gate is closed."
+  }
+}
