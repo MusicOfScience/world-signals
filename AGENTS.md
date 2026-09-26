@@ -57,3 +57,15 @@ authoritative specifications for their subjects.
 - Completion reports must include the exact branch and head SHA, validation,
   cleanliness state, governed-data impact, genuine limitations, and for every
   pull request its number, title and full clickable GitHub URL.
+- The operator's current reporting convention supersedes the older handoff
+  protocol's link restriction and merge-label wording. Always provide the PR
+  link, including when fixes remain. End with exactly one recommendation:
+  `READY TO MERGE — my review found no remaining blockers. You may merge this PR.`
+  or `DO NOT MERGE YET — the following issues remain: …` with concrete issues.
+- State `I have not merged or closed the PR, as instructed.` separately. This
+  describes execution authority; it is not a technical merge blocker.
+- Unavailable hosted CI is not automatically a merge prohibition. Verify any
+  applicable required-check rule; distinguish test failures, repository rules,
+  runner admission failures and account/billing issues using direct evidence.
+  Report local validation with its exact head, runtimes, commands, results and
+  skips. Never claim an unavailable hosted check passed.

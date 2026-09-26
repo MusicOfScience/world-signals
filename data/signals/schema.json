@@ -53,7 +53,13 @@
     "supporting_rationale",
     "contradictory_evidence_refs",
     "falsification_conditions",
-    "review_provenance"
+    "review_provenance",
+    "baseline",
+    "assessment_basis",
+    "evidence_lineage",
+    "observation_hashes",
+    "correction_review_observation_ids",
+    "revision_reason"
   ],
   "controlled_vocabularies": {
     "signal_type": [
@@ -113,8 +119,7 @@
     ],
     "relationship_status": [
       "HYPOTHESISED_TRANSMISSION",
-      "OBSERVED_ASSOCIATION",
-      "REVIEWED_MECHANISM"
+      "OBSERVED_ASSOCIATION"
     ],
     "review_state": [
       "CANDIDATE",
@@ -131,7 +136,6 @@
       "WITHDRAWN"
     ],
     "expiry_mode": [
-      "NONE",
       "STALE_AFTER",
       "EXPLICIT_DATE",
       "REVIEW_REQUIRED"
@@ -156,18 +160,33 @@
     ]
   },
   "time_policy": {
+    "assessment_knowledge_time_field": "review_provenance.created_at_utc",
+    "decision_effective_time_field": "review_provenance.reviewed_at_utc",
+    "as_of_requires_explicit_utc_input": true,
     "first_detected_at_utc_requires_exact_utc": true,
     "observation_time_remains_distinct_from_event_time": true,
     "no_melbourne_canonicalisation": true,
     "signal_expiry_is_not_a_forecast_horizon": true
   },
   "revision_policy": {
+    "append_validation_requires_previous_snapshot": true,
+    "observation_content_pinned_by_sha256": true,
     "signal_id_is_stable_across_revisions": true,
     "each_revision_is_immutable": true,
     "previous_revision_must_remain_present": true,
     "revision_numbers_are_contiguous": true,
     "observation_corrections_require_explicit_signal_review": true,
     "silent_history_rewrite_prohibited": true
+  },
+  "field_contract": {
+    "baseline": "Description and linked observation_ids identifying the comparison basis; qualitative baselines are allowed.",
+    "assessment_basis": "Required prose for materiality, novelty, persistence, trend, confidence, source_quality, coverage_bias and alternatives. Counts never determine confidence or materiality automatically.",
+    "evidence_lineage": "Exactly one evidence_ref/origin_ids/basis entry per supporting or contradictory evidence record. origin_ids name ultimate collection/reporting origins, not intermediate outlets or evidence IDs. Review shared provenance explicitly; origin truth is a human assessment.",
+    "observation_hashes": "Map of every linked immutable observation ID to SHA256 of the complete sorted compact UTF-8 JSON snapshot, ensure_ascii=false; checked on every validation.",
+    "correction_review_observation_ids": "Explicit linked CM correction/retraction snapshots assessed in this revision. Corrected/retracted ancestors cannot remain active support.",
+    "revision_reason": "Reason for initial assessment or later revision, including reopening, weakening, expiry, withdrawal or supersession.",
+    "expiry": "Bounded STALE_AFTER (stale_after_days from latest supporting observation), EXPLICIT_DATE (expires_at_utc), or REVIEW_REQUIRED (review_due_at_utc). All require a condition. No indefinite mode.",
+    "history": "Retain all snapshots. validate_signal_history accepts previous_revisions for append-only comparison; a future population transaction must supply the retained prestate. Git review remains the authority for provenance/decision authenticity."
   },
   "review_policy": {
     "candidate_or_under_review_signals_are_not_analytical_truth": true,
@@ -176,6 +195,9 @@
     "withdrawal_or_expiry_preserves_prior_revisions": true
   },
   "anti_noise_policy": {
+    "independence_requires_reviewed_ultimate_origin_lineage": true,
+    "provider_url_or_shared_origin_collapses_corroboration": true,
+    "contradictions_never_count_as_support": true,
     "duplicate_observation_ids_do_not_increase_corroboration": true,
     "repeated_reporting_from_one_provider_is_not_independent_corroboration": true,
     "independent_corroboration_requires_distinct_providers": true,

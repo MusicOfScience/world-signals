@@ -35,12 +35,11 @@ SOURCE / CHANGE MONITOR
       |
       v
 LIVE INTELLIGENCE
+      +--> existing reviewed Analysis bridge
       |
-      v
-SIGNALS (reviewed contract; production population closed)
-      |
-      v
-ANALYSIS / future downstream layers
+      +--> SIGNALS (contract only; production population closed)
+               |
+               +--> future Relationships / Risks / Scenarios / Forecasts
 ```
 
 The layers remain deliberately distinct:
@@ -52,13 +51,19 @@ The layers remain deliberately distinct:
 5. **Signals** — reviewed analytical patterns over immutable observations, with explicit uncertainty, corroboration and transmission hypotheses.
 6. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
 
-The reviewed Signal contract is the first analytical layer over Live
+The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
 the existing Analysis packets: it may record a reviewed pattern or change, but
 it may not rewrite observations, assert a causal chain, become a forecast or
 populate itself automatically. The current Signal dataset is an executable
 zero-population contract with focused synthetic tests only; its public
 projection is closed.
+
+The production validator rejects every populated Signal dataset. Proposed
+record histories are tested separately with `validate_signal_history`; that
+read-only function grants no storage or publication permission. See the
+Signal contract section in `ARCHITECTURE.md` for evidence lineage, review,
+history and expiry semantics and their limits.
 
 The static build also publishes a read-only subscription projection,
 `world-signals.ics`, from the governed Canonical/calendar state. It is not a

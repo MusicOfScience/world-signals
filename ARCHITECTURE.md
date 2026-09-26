@@ -106,15 +106,63 @@ materiality, novelty, persistence, trend state, corroboration, confidence,
 transmission relevance, falsification conditions and explicit lifecycle/review
 state without asserting a causal relationship or encoding a forecast.
 
-Signal revisions are immutable and contiguous. Contradictory evidence remains
-visible; repeated reporting by one provider does not become independent
-corroboration; corrected or retracted observations require explicit Signal
-review; and prohibited forecast/scenario fields are rejected. Candidate,
-rejected, expired and withdrawn states cannot project as active. The production
-population gate is deliberately closed: the current dataset contains zero
-Signals, no automatic ingestion or promotion is allowed, and the public Signal
-projection is disabled. Synthetic fixtures exist only in focused contract
-tests.
+Production admission (`validate_signals`) rejects **every populated dataset**;
+no test flag or population label opens it. `validate_signal_history` is a
+separate read-only proposal validator, used by synthetic tests and granting no
+storage, promotion or publication authority. The public projection validates
+the production gate and returns zero Signals. No dashboard or risk-overlay
+consumer was added.
+
+Each full revision snapshot contains an explicit evidence-backed baseline and
+qualitative justifications for materiality, novelty, persistence, trend,
+confidence, source quality, coverage bias and alternatives. Supporting and
+contradictory evidence must be classified explicitly. Lineage names ultimate
+collection/reporting origins with a review basis; same-provider, same-document
+or shared-origin evidence collapses into a connected component. Independent
+corroboration is bounded by a matching between supporting observations and
+those components. Contradictions never add support. Counts do not set confidence
+or materiality, and a single observation cannot establish persistence.
+
+The Live evidence model has provider labels but no generic syndicated-source
+lineage; the Signal's reviewed lineage assessment supplies that missing
+information without changing upstream facts. This validator checks consistency,
+not the factual truth of analyst-supplied origins, prose, review identities or
+claims of independence. A reviewer must check syndication, common institutional
+origins, media density, language/geographic bias, alternative explanations and
+whether repeated observations represent a persistent change. Model-generated
+text and context-only evidence cannot provide independent supporting evidence.
+Uncertainty is not converted into a numerical score. The existing post-event
+Analysis bridge remains separate and does not depend on Signals.
+
+Revision numbers are contiguous, predecessor links resolve, creation time
+advances past the prior decision, and decision timestamps/reasons are required
+for acceptance and rejection. Terminal states require reopening review before
+reactivation. SHA256 pins check complete immutable observation snapshots.
+`validate_signal_history(..., previous_revisions=retained_prestate)` rejects
+removed or rewritten prior revisions. An isolated snapshot cannot prove its own
+history: supplying a trusted retained prestate is mandatory for any future
+admission transaction. No production transaction is authorized here.
+
+Assessments cannot use observations or known source publications from after
+their creation time. `signal_state_as_of` takes an explicit UTC timestamp and
+selects the revision effective at that time (decision time for reviewed rows,
+creation time for unresolved rows). It reports stale/review-required states
+without rewriting a stored assessment or automatically accepting a new one.
+`STALE_AFTER` expires from the latest supporting observation; `EXPLICIT_DATE`
+and `REVIEW_REQUIRED` use explicit UTC deadlines. Revision activity or contrary
+evidence cannot refresh the supporting-evidence clock. Conditional withdrawal
+triggers remain for human review rather than arbitrary executable expressions.
+
+CM corrections/retractions are new observations pointing to the unchanged
+ancestor via `revision_of_observation_id`. Reverse dependency lookup preserves
+historical references. A later correction makes an active dependent Signal
+require review while the earlier as-of assessment remains intact; an active
+replacement must acknowledge the correction and drop invalid ancestor support.
+Transmission entries may describe hypotheses or observed association only;
+reviewed causal mechanisms belong to the later Relationship contract. Structured
+forecast/scenario fields and unknown fields are rejected, while disguised
+forecasts in free prose still require human review. The production Signal count
+remains zero; synthetic fixtures are confined to tests.
 
 ## Analysis contract
 

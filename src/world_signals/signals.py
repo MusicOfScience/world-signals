@@ -9,7 +9,9 @@ pressure-tested rules needed for a future reviewed admission transaction.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+import hashlib
+import json
 from typing import Any
 
 
@@ -105,7 +107,7 @@ def _validate_expiry(signal: dict[str, Any], allowed_modes: set[str], errors: li
             errors.append(f"{signal_id}: REVIEW_REQUIRED requires condition")
 
 
-def validate_signals(
+def _validate_signal_history(
     schema: dict[str, Any],
     signals_dataset: dict[str, Any],
     observations_dataset: dict[str, Any],
@@ -280,7 +282,7 @@ def validate_signals(
             errors.append(f"{signal_id}: invalid corroboration state")
         linked_providers = {
             _normalise_provider(evidence_by_id[ref].get("provider"))
-            for ref in linked_evidence_refs
+            for ref in evidence_refs
             if ref in evidence_by_id and _normalise_provider(evidence_by_id[ref].get("provider"))
         }
         distinct_providers = corroboration.get("distinct_provider_count")
@@ -352,17 +354,371 @@ def validate_signals(
             elif row.get("previous_revision_id") != ordered[index - 1].get("revision_id"):
                 errors.append(f"{signal_id}: revision history does not preserve its immediate predecessor")
 
-        latest = ordered[-1]
-        latest_observations = [
-            observation_by_id.get(ref, {})
-            for ref in latest.get("observation_ids") or []
-            if isinstance(ref, str)
-        ]
-        corrected = [row.get("observation_id") for row in latest_observations if row.get("verification_state") in {"CORRECTED", "RETRACTED"}]
-        if corrected and latest.get("lifecycle_state") in {"ACTIVE", "WEAKENING"}:
-            errors.append(f"{signal_id}: corrected/retracted observations require explicit Signal review before active use")
-
     return SignalValidationReport(tuple(errors))
+
+
+def observation_digest(row: dict) -> str:
+    """Pin the full immutable upstream snapshot, independent of JSON formatting."""
+    value = json.dumps(row, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(value.encode()).hexdigest()
+
+
+def _text(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _strings(value):
+    return isinstance(value, list) and all(_text(x) for x in value)
+
+
+def _preflight(schema, dataset, observations, evidence):
+    """Type-check untrusted JSON before indexing, sorting, hashing or arithmetic."""
+    errors = []
+    if not all(isinstance(x, dict) for x in (schema, dataset, observations, evidence)):
+        return ["schema and datasets must be objects"]
+    try:
+        json.dumps([schema, dataset, observations, evidence], allow_nan=False)
+    except (TypeError, ValueError):
+        return ["inputs must be finite JSON values"]
+    if schema.get("version") != "0.1":
+        errors.append("unsupported Signal schema version")
+    for key in ("layer_boundary", "population_policy", "public_projection_policy", "controlled_vocabularies"):
+        if not isinstance(schema.get(key), dict):
+            errors.append(f"{key} must be an object")
+    for key in ("required_signal_fields", "prohibited_fields"):
+        if not _strings(schema.get(key)) or not schema[key]:
+            errors.append(f"{key} must be a non-empty string list")
+    for data, key, id_key in ((observations, "observations", "observation_id"), (evidence, "evidence", "evidence_id")):
+        if not isinstance(data.get(key), list):
+            errors.append(f"{key} must be a list")
+            continue
+        for row in data[key]:
+            if not isinstance(row, dict) or not _text(row.get(id_key)):
+                errors.append(f"{id_key} must be non-empty text")
+                continue
+            if key == "observations":
+                if (not _strings(row.get("evidence_refs")) or not _parse_exact_utc(row.get("observed_at_utc"))
+                        or not _text(row.get("verification_state"))
+                        or (row.get("revision_of_observation_id") is not None and not _text(row["revision_of_observation_id"]))):
+                    errors.append("invalid upstream observation evidence/time/state/revision")
+            elif not _text(row.get("provider")) or not _text(row.get("evidence_class")):
+                errors.append("invalid upstream evidence provider/class")
+    if errors:
+        return errors
+    vocab = schema["controlled_vocabularies"]
+    for key in ("signal_type", "direction", "magnitude", "novelty", "persistence", "trend_state", "confidence",
+                "review_state", "lifecycle_state", "signal_domain", "relationship_status", "expiry_mode", "corroboration_state"):
+        if not _strings(vocab.get(key)) or not vocab[key]:
+            errors.append(f"invalid vocabulary {key}")
+    if not isinstance(dataset.get("signals"), list):
+        return errors + ["signals must be a list"]
+    for row in dataset["signals"]:
+        if not isinstance(row, dict):
+            errors.append("Signal must be an object")
+            continue
+        if set(row) != set(schema["required_signal_fields"]):
+            errors.append("missing/unknown Signal fields; forecast/scenario fields are prohibited")
+            continue
+        for key in ("signal_id", "revision_id", "title", "signal_type", "direction", "magnitude", "novelty",
+                    "persistence", "trend_state", "confidence", "review_state", "lifecycle_state",
+                    "supporting_rationale", "revision_reason", "latest_supporting_observation_id"):
+            if not _text(row.get(key)):
+                errors.append(f"{key} must be non-empty text")
+        if type(row.get("revision_number")) is not int or row["revision_number"] < 1:
+            errors.append("revision_number must be a positive integer")
+        if row.get("previous_revision_id") is not None and not _text(row["previous_revision_id"]):
+            errors.append("invalid previous_revision_id")
+        for key in ("observation_ids", "evidence_refs", "contradictory_evidence_refs", "entities", "jurisdictions",
+                    "regions", "domains", "falsification_conditions", "correction_review_observation_ids"):
+            if not _strings(row.get(key)):
+                errors.append(f"{key} must be a list of strings")
+        if row.get("review_state") not in ("CANDIDATE", "UNDER_REVIEW", "ACCEPTED", "REJECTED"):
+            errors.append("invalid review state")
+        if row.get("lifecycle_state") not in ("UNRESOLVED", "ACTIVE", "WEAKENING", "EXPIRED", "WITHDRAWN", "SUPERSEDED"):
+            errors.append("invalid lifecycle state")
+        objects = {"baseline": {"description", "observation_ids"},
+                   "assessment_basis": {"materiality", "novelty", "persistence", "trend", "confidence", "source_quality", "coverage_bias", "alternatives"},
+                   "corroboration": {"state", "independent_observation_count", "distinct_provider_count", "rationale"},
+                   "review_provenance": {"created_by", "created_at_utc", "reviewed_by", "reviewed_at_utc", "decision_basis"}}
+        valid = True
+        for key, fields in objects.items():
+            if not isinstance(row.get(key), dict) or set(row[key]) != fields:
+                errors.append(f"{key} must be an object with exactly {sorted(fields)}")
+                valid = False
+        if not valid:
+            continue
+        corr = row["corroboration"]
+        if not _text(corr["state"]) or not _text(corr["rationale"]):
+            errors.append("invalid corroboration state/rationale")
+        for key in ("independent_observation_count", "distinct_provider_count"):
+            if type(corr[key]) is not int or corr[key] < 0:
+                errors.append(f"{key} must be a non-negative integer")
+        if not _text(row["baseline"]["description"]) or not _strings(row["baseline"]["observation_ids"]) or not row["baseline"]["observation_ids"]:
+            errors.append("baseline requires description and observation_ids")
+        if any(not _text(x) for x in row["assessment_basis"].values()):
+            errors.append("assessment_basis requires qualitative justifications")
+        if not isinstance(row.get("observation_hashes"), dict) or any(not _text(x) for x in row["observation_hashes"].values()):
+            errors.append("observation_hashes must be a digest map")
+        for key in ("first_detected_at_utc",):
+            if not _parse_exact_utc(row.get(key)):
+                errors.append(f"invalid {key}")
+        review = row["review_provenance"]
+        if not _text(review["created_by"]) or not _parse_exact_utc(review["created_at_utc"]):
+            errors.append("invalid assessment author/time")
+        if review["reviewed_at_utc"] is not None and not _parse_exact_utc(review["reviewed_at_utc"]):
+            errors.append("invalid review decision timestamp")
+        expiry = row.get("expiry")
+        if not isinstance(expiry, dict) or not _text(expiry.get("mode")) or not _text(expiry.get("condition")):
+            errors.append("expiry requires mode and condition")
+        elif expiry["mode"] == "STALE_AFTER":
+            if set(expiry) != {"mode", "condition", "stale_after_days"} or type(expiry.get("stale_after_days")) is not int or not 0 < expiry["stale_after_days"] <= 36500:
+                errors.append("invalid bounded stale_after_days")
+        elif expiry["mode"] in ("EXPLICIT_DATE", "REVIEW_REQUIRED"):
+            key = "expires_at_utc" if expiry["mode"] == "EXPLICIT_DATE" else "review_due_at_utc"
+            if set(expiry) != {"mode", "condition", key} or not _parse_exact_utc(expiry.get(key)):
+                errors.append("expiry requires a deterministic UTC deadline")
+        else:
+            errors.append("unbounded expiry is prohibited")
+        for key, fields in (("transmission_relevance", {"channel", "affected_domains", "relationship_status", "rationale"}),
+                            ("evidence_lineage", {"evidence_ref", "origin_ids", "basis"})):
+            if not isinstance(row.get(key), list):
+                errors.append(f"{key} must be a list")
+                continue
+            for item in row[key]:
+                if not isinstance(item, dict) or set(item) != fields:
+                    errors.append(f"invalid {key} fields")
+                    continue
+                list_key = "affected_domains" if key == "transmission_relevance" else "origin_ids"
+                if not _strings(item[list_key]) or not item[list_key] or any(not _text(item[k]) for k in fields - {list_key}):
+                    errors.append(f"invalid {key} values")
+                if key == "transmission_relevance" and item.get("relationship_status") not in ("HYPOTHESISED_TRANSMISSION", "OBSERVED_ASSOCIATION"):
+                    errors.append("reviewed causal mechanisms require the later Relationship contract")
+    return errors
+
+
+def _corrections(ids, observations, at):
+    """CM corrections are NEW snapshots pointing to the unchanged ancestor."""
+    found, affected = set(), set(ids)
+    while True:
+        added = {oid for oid, row in observations.items()
+                 if row.get("revision_of_observation_id") in affected
+                 and row["verification_state"] in {"CORRECTED", "RETRACTED"}
+                 and _parse_exact_utc(row["observed_at_utc"]) <= at} - found
+        if not added:
+            return found
+        found |= added
+        affected |= added
+
+
+def _deadline(row, observations):
+    expiry = row["expiry"]
+    if expiry["mode"] == "STALE_AFTER":
+        at = _parse_exact_utc(observations[row["latest_supporting_observation_id"]]["observed_at_utc"])
+        try:
+            return at + timedelta(days=expiry["stale_after_days"])
+        except OverflowError:
+            return datetime.max.replace(tzinfo=timezone.utc)
+    key = "expires_at_utc" if expiry["mode"] == "EXPLICIT_DATE" else "review_due_at_utc"
+    return _parse_exact_utc(expiry[key])
+
+
+def _independence(row, observations, evidence, errors):
+    lineage = {}
+    for item in row["evidence_lineage"]:
+        ref = item["evidence_ref"]
+        roots = {_normalise_provider(x) for x in item["origin_ids"]}
+        if ref in lineage or len(roots) != len(item["origin_ids"]):
+            errors.append("duplicate evidence lineage/root")
+        if roots & {_normalise_provider(x) for x in evidence}:
+            errors.append("circular lineage: origins must be ultimate sources, not evidence references")
+        lineage[ref] = roots
+    if set(lineage) != set(row["evidence_refs"] + row["contradictory_evidence_refs"]):
+        errors.append("lineage must cover exactly supporting and contradictory evidence")
+        return
+    # Connected components collapse same-provider, syndicated/shared-origin and
+    # identical-document reports, including transitive overlap.
+    groups = []
+    for ref in row["evidence_refs"]:
+        item = evidence[ref]
+        tokens = {("provider", _normalise_provider(item["provider"]))}
+        tokens |= {("origin", x) for x in lineage[ref]}
+        if _text(item.get("url")):
+            tokens.add(("url", item["url"].strip().split("#")[0].rstrip("/")))
+        groups.append((tokens, {ref}))
+    changed = True
+    while changed:
+        changed = False
+        for i in range(len(groups)):
+            for j in range(i+1, len(groups)):
+                if groups[i][0] & groups[j][0]:
+                    groups[i] = (groups[i][0] | groups[j][0], groups[i][1] | groups[j][1])
+                    groups.pop(j)
+                    changed = True
+                    break
+            if changed:
+                break
+    # Maximum matching: one observation cannot count multiple times even when
+    # it cites several independent collection origins.
+    assigned = {}
+    def match(index, seen):
+        for oid in sorted(row["observation_ids"]):
+            if oid in seen or not set(observations[oid]["evidence_refs"]) & groups[index][1]:
+                continue
+            seen.add(oid)
+            if oid not in assigned or match(assigned[oid], seen):
+                assigned[oid] = index
+                return True
+        return False
+    count = sum(match(i, set()) for i in range(len(groups)))
+    if row["corroboration"]["independent_observation_count"] != count:
+        errors.append("independent_observation_count disagrees with supporting origin components")
+
+
+def validate_signal_history(schema, revisions, observations_dataset, evidence_registry, *, previous_revisions=None):
+    """Pressure-test proposed records, without storage or publication permission.
+
+    A retained prior snapshot is required by any future admission transaction to
+    detect historical edits; an isolated JSON snapshot cannot prove immutability.
+    Existing Live validators remain responsible for the full upstream contract.
+    """
+    dataset = {"version": "0.1", "population_state": "CLOSED_NO_PRODUCTION_SIGNALS", "signals": revisions}
+    errors = _preflight(schema, dataset, observations_dataset, evidence_registry)
+    if errors:
+        return SignalValidationReport(tuple(errors))
+    report = _validate_signal_history(schema, dataset, observations_dataset, evidence_registry)
+    if not report.ok:
+        return report
+    observations = {x["observation_id"]: x for x in observations_dataset["observations"]}
+    evidence = {x["evidence_id"]: x for x in evidence_registry["evidence"]}
+    by_revision = {r["revision_id"]: r for r in revisions}
+    if previous_revisions is not None:
+        if not isinstance(previous_revisions, list):
+            errors.append("previous_revisions must be retained snapshots")
+        else:
+            for old in previous_revisions:
+                if not isinstance(old, dict) or not _text(old.get("revision_id")) or by_revision.get(old["revision_id"]) != old:
+                    errors.append("retained revision was removed or rewritten")
+    for row in revisions:
+        ids = set(row["observation_ids"])
+        support = set(row["evidence_refs"])
+        linked = {ref for oid in ids for ref in observations[oid]["evidence_refs"]}
+        if linked != support | set(row["contradictory_evidence_refs"]):
+            errors.append("every linked evidence item must be explicitly supporting or contradictory")
+        if any(observations[oid]["verification_state"] == "CONFLICTING_REPORTS" for oid in ids) and not row["contradictory_evidence_refs"]:
+            errors.append("conflicting upstream observations require explicit contrary evidence")
+        if not set(row["baseline"]["observation_ids"]) <= ids:
+            errors.append("baseline observation_ids must be linked")
+        if set(row["observation_hashes"]) != ids or any(row["observation_hashes"].get(oid) != observation_digest(observations[oid]) for oid in ids):
+            errors.append("immutable observation snapshot hash mismatch")
+        review = row["review_provenance"]
+        created = _parse_exact_utc(review["created_at_utc"])
+        reviewed = _parse_exact_utc(review["reviewed_at_utc"])
+        times = [_parse_exact_utc(observations[oid]["observed_at_utc"]) for oid in ids]
+        first = _parse_exact_utc(row["first_detected_at_utc"])
+        if first > created or any(t > created for t in times):
+            errors.append("future evidence cannot inform an earlier assessment")
+        supporting_ids = {oid for oid in ids if set(observations[oid]["evidence_refs"]) & support}
+        latest = row["latest_supporting_observation_id"]
+        if latest not in supporting_ids or _parse_exact_utc(observations[latest]["observed_at_utc"]) != max(_parse_exact_utc(observations[oid]["observed_at_utc"]) for oid in supporting_ids):
+            errors.append("latest_supporting_observation_id must be the latest support")
+            continue
+        if row["persistence"] == "PERSISTENT" and (len(support) < 2 or len({_parse_exact_utc(observations[oid]["observed_at_utc"]) for oid in supporting_ids}) < 2):
+            errors.append("PERSISTENT requires support at multiple observation times")
+        for ref in support | set(row["contradictory_evidence_refs"]):
+            if evidence[ref]["evidence_class"] not in {"PRIMARY_OFFICIAL", "REPUTABLE_NEWSWIRE", "REPUTABLE_MEDIA", "MARKET_DATA_PROVIDER", "ACADEMIC_OR_INSTITUTIONAL"}:
+                errors.append("unsupported evidence class; model-generated text is not evidence")
+            roles = evidence[ref].get("roles")
+            factual_roles = {"FACTUAL_OBSERVATION", "SOURCE_CONFIRMATION", "MARKET_OBSERVATION", "CORRECTION_OR_REVISION"}
+            if ref in support and (not _strings(roles) or not set(roles) & factual_roles):
+                errors.append("support requires factual evidence roles; context-only text cannot corroborate")
+            publication = evidence[ref].get("publication_time")
+            if isinstance(publication, dict):
+                published = _parse_exact_utc(publication.get("published_at_utc"))
+                civil = publication.get("published_date")
+                if (published and published > created) or (isinstance(civil, str) and civil > created.date().isoformat()):
+                    errors.append("future publication cannot inform an earlier assessment")
+        _independence(row, observations, evidence, errors)
+        if row["review_state"] in {"ACCEPTED", "REJECTED"}:
+            if not _text(review["reviewed_by"]) or not _text(review["decision_basis"]) or reviewed is None or reviewed < created:
+                errors.append("decision requires reviewer, non-backdated UTC timestamp and reason")
+        elif any(review[k] is not None for k in ("reviewed_by", "reviewed_at_utc", "decision_basis")):
+            errors.append("unresolved review must not claim a completed decision")
+        if row["review_state"] == "ACCEPTED" and row["lifecycle_state"] == "UNRESOLVED":
+            errors.append("accepted Signal requires a resolved lifecycle")
+        acknowledged = set(row["correction_review_observation_ids"])
+        if len(acknowledged) != len(row["correction_review_observation_ids"]) or not acknowledged <= ids or any(observations[oid]["verification_state"] not in {"CORRECTED", "RETRACTED"} for oid in acknowledged & ids):
+            errors.append("correction review must reference linked CM correction/retraction snapshots")
+        previous = by_revision.get(row["previous_revision_id"])
+        if previous:
+            old = previous["review_provenance"]
+            if created <= _parse_exact_utc(old["reviewed_at_utc"] or old["created_at_utc"]):
+                errors.append("revision time must strictly advance beyond prior decision")
+            if row["first_detected_at_utc"] != previous["first_detected_at_utc"]:
+                errors.append("first detection must remain stable")
+            transitions = {"CANDIDATE": {"CANDIDATE", "UNDER_REVIEW"}, "UNDER_REVIEW": {"UNDER_REVIEW", "ACCEPTED", "REJECTED"},
+                           "ACCEPTED": {"ACCEPTED", "UNDER_REVIEW"}, "REJECTED": {"UNDER_REVIEW"}}
+            if row["review_state"] not in transitions[previous["review_state"]]:
+                errors.append("invalid review transition")
+            if previous["lifecycle_state"] in {"EXPIRED", "WITHDRAWN", "SUPERSEDED"} and row["lifecycle_state"] != "UNRESOLVED":
+                errors.append("terminal lifecycle requires reopening review before reactivation")
+        elif first < min(times):
+            errors.append("initial first detection cannot predate all linked observations")
+        if row["lifecycle_state"] in {"ACTIVE", "WEAKENING"} and reviewed:
+            if _deadline(row, observations) <= reviewed:
+                errors.append("active decision is stale/expired at review time")
+            dependencies = ids | (set(previous["observation_ids"]) if previous else set())
+            corrections = _corrections(dependencies, observations, reviewed)
+            if corrections - acknowledged:
+                errors.append("known observation corrections require explicit Signal review")
+            ancestors = {observations[oid].get("revision_of_observation_id") for oid in corrections}
+            if supporting_ids & ancestors or any(observations[oid]["verification_state"] == "RETRACTED" for oid in supporting_ids):
+                errors.append("corrected/retracted ancestor must not remain active support")
+    return SignalValidationReport(tuple(errors))
+
+
+def validate_signals(schema, signals_dataset, observations_dataset, evidence_registry):
+    """Production admission: no fixture switch or alternate population mode."""
+    errors = _preflight(schema, signals_dataset, observations_dataset, evidence_registry)
+    if errors:
+        return SignalValidationReport(tuple(errors))
+    if signals_dataset["signals"]:
+        errors.append("closed production population gate prohibits every Signal revision")
+    errors.extend(_validate_signal_history(schema, signals_dataset, observations_dataset, evidence_registry).errors)
+    return SignalValidationReport(tuple(errors))
+
+
+def signal_state_as_of(schema, revisions, observations_dataset, evidence_registry, at_utc):
+    """Internal deterministic state inspection. Never changes stored history."""
+    report = validate_signal_history(schema, revisions, observations_dataset, evidence_registry)
+    at = _parse_exact_utc(at_utc)
+    if not report.ok or at is None:
+        raise ValueError("invalid Signal history/as-of timestamp: " + "; ".join(report.errors))
+    observations = {r["observation_id"]: r for r in observations_dataset["observations"]}
+    heads = {}
+    for row in sorted(revisions, key=lambda r: (r["signal_id"], r["revision_number"])):
+        review = row["review_provenance"]
+        if _parse_exact_utc(review["reviewed_at_utc"] or review["created_at_utc"]) <= at:
+            heads[row["signal_id"]] = row
+    result = {}
+    for sid, row in heads.items():
+        state = row["lifecycle_state"]
+        corrections = sorted(_corrections(set(row["observation_ids"]), observations, at) - set(row["correction_review_observation_ids"]))
+        if state in {"ACTIVE", "WEAKENING"}:
+            if corrections:
+                state = "REVIEW_REQUIRED"
+            elif _deadline(row, observations) <= at:
+                state = "REVIEW_REQUIRED" if row["expiry"]["mode"] == "REVIEW_REQUIRED" else "STALE"
+        result[sid] = {"revision_id": row["revision_id"], "effective_state": state, "correction_observation_ids": corrections}
+    return result
+
+
+def observation_signal_dependencies(revisions):
+    """Reverse index of validated immutable history, including retired dependencies."""
+    result = {}
+    for row in revisions:
+        for oid in row["observation_ids"]:
+            result.setdefault(oid, set()).add(row["signal_id"])
+    return {oid: sorted(ids) for oid, ids in sorted(result.items())}
 
 
 def public_signal_projection(
@@ -374,25 +730,17 @@ def public_signal_projection(
     report = validate_signals(schema, signals_dataset, observations_dataset, evidence_registry)
     if not report.ok:
         raise ValueError("invalid Signal state: " + "; ".join(report.errors))
-    allowed = (schema.get("public_projection_policy") or {}).get("signal_projection_allowed") is True
-    signals = signals_dataset.get("signals") or []
-    public = [
-        row
-        for row in signals
-        if row.get("review_state") == "ACCEPTED"
-        and row.get("lifecycle_state") in {"ACTIVE", "WEAKENING"}
-    ] if allowed else []
     return {
         "metadata": {
             "projection_type": "SIGNAL_CONTRACT_CLOSED_PROJECTION",
             "schema_version": schema.get("version"),
             "population_state": signals_dataset.get("population_state"),
-            "internal_signal_count": len(signals),
-            "public_signal_count": len(public),
+            "internal_signal_count": 0,
+            "public_signal_count": 0,
             "observation_dataset_version": observations_dataset.get("version"),
             "evidence_dataset_version": evidence_registry.get("version"),
             "automatic_signal_promotion": False,
-            "public_signal_projection_allowed": allowed,
+            "public_signal_projection_allowed": False,
         },
-        "signals": public,
+        "signals": [],
     }
