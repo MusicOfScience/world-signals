@@ -315,11 +315,28 @@ exclusion. No candidate or production Signal has been populated, no synthetic
 fixture is stored in production data, and public Signal projection remains
 closed.
 
-The next substantive milestone is a generic reviewed Relationship contract
-that can consume Signals without converting plausible transmission into an
-asserted causal fact.
+The generic reviewed Relationship contract is implemented in Stage 13 below.
 
-## Stage 13 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 13 — reviewed Relationship contract — IMPLEMENTED / POPULATION CLOSED
+
+The executable contract lives in `data/relationships/`,
+`src/world_signals/relationships.py` and `scripts/validate_relationships.py`.
+It consumes reviewed Signal revisions as analytical nodes and keeps
+co-occurrence, association, dependency, common-driver context, hypothesised
+transmission, mechanistic support, causal evidence and feedback loops distinct.
+It requires explicit directionality, alternatives, contradictory evidence,
+review provenance and causal basis for stronger claims; revisions preserve
+prior assessments and as-of history; graph traversal cannot create transitive
+Relationships. No production Relationship is populated and public projection
+remains closed.
+
+## Stage 14 — regime-state/risk history contract — NOT STARTED
+
+The next substantive milestone is a governed risk/regime-state history layer
+that can consume reviewed Signals and Relationships without rewriting the
+existing read-only risk overlay or opening production population prematurely.
+
+## Stage 15 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 

@@ -164,6 +164,32 @@ forecast/scenario fields and unknown fields are rejected, while disguised
 forecasts in free prose still require human review. The production Signal count
 remains zero; synthetic fixtures are confined to tests.
 
+## Reviewed Relationship contract — population closed
+
+The generic Relationship layer is now defined as a separate, executable,
+zero-population contract in `data/relationships/` and
+`src/world_signals/relationships.py`. It consumes reviewed Signal revisions as
+its primary nodes, while allowing immutable Live observations/evidence and
+Canonical occurrences to provide traceable support or context. Raw monitor
+candidates, unreviewed Signals and private runtime records are not eligible
+nodes, and no Relationship is stored in production by this tranche.
+
+Relationship classes distinguish co-occurrence, association, dependency,
+common-driver context, hypothesised transmission, mechanistic support, causal
+evidence and reviewed feedback loops. Directionality is explicit. Stronger
+classes require an explicit reviewed evidentiary basis; plausible transmission
+does not silently become mechanism or causation. Alternatives, confounders,
+common drivers and contradictory evidence remain first-class fields rather than
+being overwritten by a selected pathway.
+
+Relationship revisions retain predecessor snapshots, review decisions,
+timestamps, reasons and as-of state. Later observations or evidence cannot be
+used to inflate an earlier assessment. Direction changes require a reviewed
+revision, terminal states cannot silently reactivate, and graph helpers emit
+only exact reviewed edges: visual proximity and transitive traversal never
+author a new Relationship. Forecast and scenario fields are outside this
+contract, and public Relationship projection remains closed.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -205,7 +231,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Source registry / health | `data/sources/registry.json`, monitor expectations/adapters, runtime source-health summaries and review candidates | Already implemented and sound, but source health remains runtime evidence rather than event truth. |
 | Observations | `data/live_intelligence/` and `src/world_signals/live_intelligence.py` provide reviewed factual observations, evidence, timing separation and correction/revision controls | Implemented but needing extension. This is a bounded Live Intelligence layer, not yet a general observation store or public feed. |
 | Signals | `data/signals/` and `src/world_signals/signals.py` define a reviewed Signal over immutable Live observations, with revision, corroboration, contradiction, lifecycle and public-projection guards | Contract implemented and pressure-tested; production population remains closed. |
-| Relationships / causal layer | Analysis records and the noncanonical biosecurity overlay contain reviewed connections and relationship vocabularies | Partially implemented. A generic cross-domain relationship graph with explicit causal/mechanistic/contextual status, alternatives and falsifiers is missing. |
+| Relationships / causal layer | `data/relationships/`, `src/world_signals/relationships.py` and `scripts/validate_relationships.py` define a reviewed, zero-population contract using Signal revisions plus explicit evidence and causal gates | Contract implemented and pressure-tested; production population and public projection remain closed. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` and `data/coverage/biosecurity_overlay.json` provide a read-only, non-exclusive risk lens and convergence windows | Partially implemented. Regime-transition state, history and alert semantics are not yet a separate governed layer. |
 | Scenarios | No governed scenario registry or competing-scenario contract | Missing. Do not infer scenarios from risk-overlay windows. |
 | Forecasts | Analysis records preserve expectations and comparisons in bounded post-event packets, but there is no immutable resolvable forecast store | Missing. A future contract must record target, horizon, probability/interval, assumptions, evidence, resolution criteria and version lineage. |
@@ -265,18 +291,22 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 
 ### Smallest sensible migration sequence
 
-1. Complete and validate the governed ICS projection (this tranche), including
+1. Complete and validate the governed ICS projection (completed), including
    static publication and omission tests.
-2. Define and pressure-test a minimal reviewed `signal` contract that references
+2. Define and pressure-test a minimal reviewed `signal` contract (completed)
+   that references
    one or more immutable observations and records direction, novelty,
    persistence, corroboration, confidence and transmission relevance. The
    executable contract now exists, but population remains closed until a
    separate reviewed admission transaction is justified.
-3. Define a generic relationship contract with explicit relationship type,
-   alternatives, disconfirming evidence and review history, reusing existing
-   Analysis and overlay semantics without making the overlay canonical.
+3. Define and pressure-test a generic reviewed Relationship contract (completed)
+   with explicit relationship class, directionality, alternatives,
+   disconfirming evidence and revision history, reusing existing Analysis and
+   overlay semantics without making either overlay canonical. Production
+   population remains closed.
 4. Add a small regime-state/risk history interface that consumes reviewed
-   signals while preserving the current risk overlay as a projection.
+   Signals and Relationships while preserving the current risk overlay as a
+   projection.
 5. Add competing scenario records, then immutable forecast records with
    resolution criteria. Only after resolved forecasts exist should evaluation
    metrics and model-learning surfaces be implemented.
@@ -302,7 +332,10 @@ Research / taxonomy / source governance                    [ONGOING]
   -> evolving-state / manual story semantics                  [DONE: AX — DRC Bundibugyo]
   -> test prospective Live Intelligence -> Analysis linkage  [NEXT AUDIT CANDIDATE]
   -> broader Live Intelligence population                    [ONLY AFTER AUDIT]
-  -> optional calendar export                                [LATER]
+  -> governed subscription calendar export                    [DONE]
+  -> reviewed Signal contract / zero-population gate          [DONE]
+  -> reviewed Relationship contract / zero-population gate     [DONE]
+  -> regime-state / risk history contract                     [NEXT]
   -> narrow auto-commit classes                              [ONLY IF EMPIRICAL GATE OPENS]
 ```
 
