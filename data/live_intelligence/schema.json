@@ -1,8 +1,8 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_SCHEMA",
-  "version": "0.12",
-  "reference_date": "2026-09-10",
+  "version": "0.13",
+  "reference_date": "2026-09-26",
   "architecture_position": "LIVE_INTELLIGENCE",
   "upstream_layers": [
     "CANONICAL_REGISTRY",
@@ -279,7 +279,10 @@
     "CP uses the ECB decision publication and exact ECB RSS publication timestamp as primary evidence; Live evidence has no authority to rewrite Canonical timing or source provenance.",
     "CP creates no new ECB source identity or Monitor route and opens no automatic ingestion, Canonical, Calendar, Analysis or public-projection gate.",
     "CM correction/retraction/conflicting-report semantics remain unchanged and fully applicable in CP v0.12.",
-    "A twelfth Live observation, production correction/conflict specimen, second production Live-to-Analysis link, further Analysis revision or additional Monitor activation requires another pressure audit."
+    "OSINT v0.13 adds one PRIMARY_CONFIRMED Federal Reserve policy-decision observation through a separately auditable successful authorised RSS retrieval and human-reviewed promotion.",
+    "OSINT promotion preserves the candidate ID, RSS payload hash, source-native statement URL, parser/adapter versions and pre/post governed-state fingerprints; it does not open automatic ingestion, Signal promotion, Canonical, Analysis or public-projection gates.",
+    "The Japan MOF meeting candidate was rejected for this tranche because the authorised route supplied publication metadata while its factual page content was outside the route's cleared automated ingestion scope; no source permission was broadened.",
+    "OSINT v0.13 remains a single-observation pressure-audited tranche; a further production observation, correction/conflict specimen, Live-to-Analysis link or Monitor activation requires another explicit review."
   ],
   "foundation_checkpoint": {
     "schema_version": "0.1",
@@ -292,15 +295,28 @@
     "historical_contract": "AV v0.1 established the executable zero-population foundation and closed production/public population pending a real pressure-audited specimen."
   },
   "population_policy": {
-    "mode": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
+    "mode": "CONTROLLED_OSINT_REVIEWED_OBSERVATION_SPECIMEN",
     "production_population_allowed": true,
     "evidence_population_allowed": true,
-    "maximum_observation_count": 11,
-    "maximum_evidence_count": 15,
+    "maximum_observation_count": 12,
+    "maximum_evidence_count": 16,
     "automatic_ingestion_allowed": false,
     "existing_analysis_evidence_migration_allowed": false,
     "public_observation_projection_allowed": false,
-    "reason": "CP adds exactly one reviewed ECB rate-decision outcome linked OUTCOME_OF the separately completed scheduled Canonical occurrence, supported by one primary-official ECB evidence row."
+    "reason": "OSINT v0.13 adds exactly one reviewed Federal Reserve policy-decision observation through the authorised candidate pipeline, supported by one primary-official evidence row; automatic ingestion, downstream promotion and public projection remain closed."
+  },
+  "osint_checkpoint": {
+    "schema_version": "0.13",
+    "observations_version": "0.13",
+    "evidence_version": "0.13",
+    "population_state": "CONTROLLED_OSINT_REVIEWED_OBSERVATION_SPECIMEN",
+    "observation_count": 12,
+    "evidence_count": 16,
+    "base_main_sha": "16e89c95105b5d5372fdf84f3ec46124e709ae68",
+    "transaction_id": "OSINT-PROMOTION-20260926-FED-FOMC-001",
+    "candidate_id": "WSC-OBS-4d950e67f49f397c63ae",
+    "observation_id": "WSLI-OSINT-FED-FOMC-20260916-001",
+    "historical_contract": "OSINT v0.13 promotes one genuinely retrieved and human-reviewed first-party Federal Reserve policy-decision candidate; candidate/source lineage is retained, public projection and automatic promotion remain closed."
   },
   "aw_checkpoint": {
     "schema_version": "0.2",

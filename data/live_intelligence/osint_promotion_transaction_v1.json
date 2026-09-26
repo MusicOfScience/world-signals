@@ -1,0 +1,65 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "LIVE_INTELLIGENCE_OSINT_PROMOTION_TRANSACTION",
+  "version": "0.1",
+  "transaction_id": "OSINT-PROMOTION-20260926-FED-FOMC-001",
+  "transaction_type": "REVIEWED_OSINT_OBSERVATION_PROMOTION",
+  "decision": "ACCEPTED",
+  "decided_at_utc": "2026-09-26T18:20:57Z",
+  "reviewer": {
+    "reviewer_id": "project-owner-authorised-review",
+    "reviewed_at_utc": "2026-09-26T18:20:57Z",
+    "decision_basis": "The authorised Federal Reserve RSS retrieval succeeded, the exact first-party statement was reviewed, the policy decision is a clearly factual proposition, the candidate is not duplicated in governed Live Intelligence, and no analytical or causal claim is admitted."
+  },
+  "candidate_audit": [
+    {
+      "candidate_id": "WSC-OBS-4d950e67f49f397c63ae",
+      "observation_id": "WSLI-OSINT-FED-FOMC-20260916-001",
+      "source_id": "WSSRC-CB-015",
+      "route_id": "osint-fed-monetary-rss",
+      "retrieval_state": "SUCCESS",
+      "payload_sha256": "6ef9f8ee2019c031b583ee3a64eec38170840e2ff4229ec92e43f49702857855",
+      "parser_version": "rss_atom_metadata_v1",
+      "adapter_version": "osint-engine-0.1",
+      "candidate_state": "NEW",
+      "decision": "PROMOTE",
+      "rationale": "First-party source route and exact statement URL are authorised and traceable; the official rate decision is factual and can be recorded without expectations, market attribution, causality or Forecast mutation."
+    }
+  ],
+  "evidence_ids": [
+    "WSEV-OSINT-FED-FOMC-20260916"
+  ],
+  "observation_ids": [
+    "WSLI-OSINT-FED-FOMC-20260916-001"
+  ],
+  "pre_state": {
+    "schema_version": "0.12",
+    "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
+    "observation_count": 11,
+    "evidence_count": 15,
+    "sha256": "4c3e3187fcb479fbaf899ce6edd0fa5be42e381850f1bc498360574bcbc5fe0f"
+  },
+  "post_state": {
+    "schema_version": "0.13",
+    "population_state": "CONTROLLED_OSINT_REVIEWED_OBSERVATION_SPECIMEN",
+    "observation_count": 12,
+    "evidence_count": 16,
+    "sha256": "8ecb67faae774ebeb7132a43dff67ea8ca2624ee257f0bdf25bc0a8d22e713dc"
+  },
+  "validation": {
+    "status": "PASS",
+    "validator_version": "osint-promotion-0.1",
+    "validated_at_utc": "2026-09-26T18:20:57Z"
+  },
+  "promotion_limit": {
+    "maximum_new_observations": 4,
+    "promoted_count": 1
+  },
+  "boundary": {
+    "automatic_promotion": false,
+    "automatic_signal_promotion": false,
+    "automatic_canonical_commit": false,
+    "public_observation_projection": "CLOSED"
+  },
+  "denominator_note": "This reviewed Observation remains in governed history and cannot be silently deleted or excluded. It is not a Signal, Forecast, Outcome or Evaluation record."
+}

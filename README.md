@@ -9,14 +9,14 @@ WORLD SIGNALS is a platform-independent global political-economic intelligence s
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-10  
+**Reference date:** 2026-09-26
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
 - Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
 - Source Registry: **v2.04 / 258 sources**.
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
-- Live Intelligence: **v0.12 / 11 observations / 15 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
+- Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -155,7 +155,7 @@ The NOAA/NHC Atlantic-season route was validated as a bounded pilot in CF and ac
 
 ## Live Intelligence
 
-The controlled internal Live layer currently exercises several distinct contracts rather than a general news feed: unscheduled physical shock, evolving health state, scheduled economic outcome, geopolitical development, institutional development and reviewed pre-event Canonical context.
+The controlled internal Live layer currently exercises several distinct contracts rather than a general news feed: unscheduled physical shock, evolving health state, scheduled economic outcome, geopolitical development, institutional development, reviewed pre-event Canonical context and one OSINT-originated Federal Reserve policy-decision observation. The OSINT promotion is bounded by an explicit reviewed transaction and preserves candidate/source hashes; it does not open automatic ingestion or downstream Signal promotion.
 
 Canonical linking is optional. Unscheduled real-world developments do not acquire invented Canonical identities merely to make the graph denser. Event time, source publication time, state-as-of time and WORLD SIGNALS observation time remain separate concepts.
 

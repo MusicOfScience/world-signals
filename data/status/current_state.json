@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "DERIVED_PROJECT_STATE_SNAPSHOT",
   "version": "0.1",
-  "reference_date": "2026-09-10",
+  "reference_date": "2026-09-26",
   "status": "DERIVED_NONCANONICAL_RECOVERY_SURFACE",
   "derivation_policy": {
     "governed_registries_and_contracts_remain_authoritative": true,
@@ -50,11 +50,11 @@
     }
   },
   "live_intelligence": {
-    "schema_version": "0.12",
-    "observations_version": "0.12",
-    "observation_count": 11,
-    "evidence_version": "0.12",
-    "evidence_count": 15,
+    "schema_version": "0.13",
+    "observations_version": "0.13",
+    "observation_count": 12,
+    "evidence_version": "0.13",
+    "evidence_count": 16,
     "canonical_linked_observation_count": 4,
     "canonical_linked_occurrence_count": 4,
     "automatic_ingestion_allowed": false,

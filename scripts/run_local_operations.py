@@ -74,6 +74,7 @@ def validate(python: str, *, cwd: Path = ROOT, env: dict[str, str] | None = None
     for script in (
         "scripts/validate_registry.py",
         "scripts/validate_live_intelligence.py",
+        "scripts/validate_osint_promotion.py",
         "scripts/validate_analysis.py",
     ):
         command([python, str(ROOT / script)], cwd=cwd, env=env)

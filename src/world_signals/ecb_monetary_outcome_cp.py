@@ -301,9 +301,16 @@ def validate_cp_contract(registry: dict[str, Any], sources: dict[str, Any], ledg
         errors.append("CP Change Ledger target state mismatch")
     if str(overlay.get("version")) != TARGET_OVERLAY_VERSION or (overlay.get("canonical_checkpoint") or {}).get("registry_version") != TARGET_CANONICAL_VERSION:
         errors.append("CP overlay checkpoint mismatch")
-    if str(schema.get("version")) != TARGET_LIVE_VERSION or str(observations.get("version")) != TARGET_LIVE_VERSION or str(evidence.get("version")) != TARGET_LIVE_VERSION:
+    live_descendant = (
+        version_at_least(schema.get("version"), TARGET_LIVE_VERSION)
+        and version_at_least(observations.get("version"), TARGET_LIVE_VERSION)
+        and version_at_least(evidence.get("version"), TARGET_LIVE_VERSION)
+        and (schema.get("cp_checkpoint") or {}).get("observation_count") == 11
+        and (schema.get("cp_checkpoint") or {}).get("evidence_count") == 15
+    )
+    if not live_descendant:
         errors.append("CP Live version mismatch")
-    if len(observations.get("observations") or []) != 11 or len(evidence.get("evidence") or []) != 15:
+    if len(observations.get("observations") or []) < 11 or len(evidence.get("evidence") or []) < 15:
         errors.append("CP Live population count mismatch")
     if target is None or target.get("lifecycle_status") != "COMPLETED" or target.get("last_successful_assertion_id") != ASSERTION_ID:
         errors.append("CP Canonical lifecycle completion missing")

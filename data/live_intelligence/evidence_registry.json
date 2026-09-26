@@ -1,10 +1,10 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "LIVE_INTELLIGENCE_EVIDENCE_REGISTRY",
-  "version": "0.12",
-  "reference_date": "2026-09-10",
-  "population_state": "CONTROLLED_EUROPE_ECB_MONETARY_POLICY_OUTCOME_SPECIMEN",
-  "scope_note": "Evidence supports the bounded reviewed Live store through CP. CP adds one primary-official ECB decision row; the exact publication timestamp comes from the ECB's own press RSS item for the exact decision URL. It grants no automated Monitor authority or Analytical conclusion.",
+  "version": "0.13",
+  "reference_date": "2026-09-26",
+  "population_state": "CONTROLLED_OSINT_REVIEWED_OBSERVATION_SPECIMEN",
+  "scope_note": "Evidence supports the bounded reviewed Live store through OSINT v0.13. The tranche adds one primary-official Federal Reserve decision row; its exact publication timestamp comes from the authorised Federal Reserve RSS payload and its factual content from the exact first-party statement URL. It grants no automated ingestion authority, Canonical authority or Analytical conclusion.",
   "evidence": [
     {
       "evidence_id": "WSEV-LI-NPL-FLOOD-MOHA-20260827",
@@ -261,6 +261,23 @@
       },
       "canonical_provenance_effect": "NONE",
       "notes": "ECB first-party decision page states that all three key interest rates were raised by 25 basis points, to 2.50% for the deposit facility, 2.65% for main refinancing operations and 2.90% for the marginal lending facility, effective 16 September 2026. Exact publication time is supplied by the ECB's own press RSS item for this exact decision URL. Live evidence does not alter Canonical timing or provenance."
+    },
+    {
+      "evidence_id": "WSEV-OSINT-FED-FOMC-20260916",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Board of Governors of the Federal Reserve System",
+      "title": "Federal Reserve issues FOMC statement — 16 September 2026",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+      "roles": [
+        "FACTUAL_OBSERVATION",
+        "SOURCE_CONFIRMATION"
+      ],
+      "publication_time": {
+        "precision": "EXACT_TIMESTAMP",
+        "published_at_utc": "2026-09-16T18:00:00Z"
+      },
+      "canonical_provenance_effect": "NONE",
+      "notes": "Promotion source evidence for candidate WSC-OBS-4d950e67f49f397c63ae. The authorised osint-fed-monetary-rss retrieval succeeded at 2026-09-26T18:13:51Z with payload SHA-256 6ef9f8ee2019c031b583ee3a64eec38170840e2ff4229ec92e43f49702857855; source-native ID is this exact statement URL; parser rss_atom_metadata_v1 and adapter osint-engine-0.1. First-party page review confirms the statement says the FOMC raised the target range by one-quarter percentage point to 3.75–4.00%. This evidence does not alter Canonical timing, Forecasts or Analysis."
     }
   ]
 }
