@@ -53,7 +53,11 @@ The static build also publishes a read-only subscription projection,
 second event database: stable occurrence identities become stable iCalendar
 UIDs, source-local timed events retain their IANA timezone, explicit date
 windows remain windows, and unresolved TBC/native-calendar/runtime/review
-material is not exported.
+material is not exported. The feed includes deterministic `VTIMEZONE`
+definitions generated from Python's system IANA timezone database only for
+zones used by included timed events. Expected windows use
+`TRANSP:TRANSPARENT`: they remain visible as uncertainty windows without
+claiming the whole interval as subscriber free/busy time.
 
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
 
@@ -120,6 +124,13 @@ alongside the dashboard at `http://127.0.0.1:8765/world-signals.ics` after
 building the site. The intended static subscription URL is
 `https://musicofscience.github.io/world-signals/world-signals.ics`, subject to
 the existing Pages deployment succeeding.
+
+Each VEVENT keeps a stable occurrence-based `UID`. `SEQUENCE` is derived from
+that occurrence's governed status history and approved change-ledger entries,
+so timing and lifecycle revisions advance the subscription revision without
+using build count or wall-clock state. `DTSTAMP` is the earliest known governed
+event timestamp and `LAST-MODIFIED` is the latest known governed revision
+timestamp; neither is set from feed-build execution time.
 
 ### Local operating loop
 

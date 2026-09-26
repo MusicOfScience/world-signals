@@ -70,7 +70,7 @@ with (docs/"app.js").open("a",encoding="utf-8") as bundled:
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
 dump_json(docs/"data/changes.json", changes)
-ical_build = write_icalendar(docs / "world-signals.ics", reg, src)
+ical_build = write_icalendar(docs / "world-signals.ics", reg, src, changes)
 
 source_map={s.get("source_id"):s for s in src.get("sources",[])}
 monitor_projection={

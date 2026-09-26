@@ -285,6 +285,13 @@ semantics; civil dates and explicit expected windows remain date-only; unresolve
 TBC, source-native-calendar and monitor-only objects are omitted with an
 auditable build count rather than given synthetic appointments.
 
+The feed also emits deterministic RFC 5545 `VTIMEZONE` components for each
+referenced source-local TZID, derived from Python's IANA `zoneinfo` data over
+the included event horizon. Governed timing or lifecycle revisions advance
+`SEQUENCE` and update `LAST-MODIFIED` while preserving UID; `DTSTAMP` remains
+the earliest known governed event timestamp. Expected windows are retained and
+marked transparent for subscriber free/busy semantics.
+
 GitHub Pages can publish the feed at the intended path:
 `https://musicofscience.github.io/world-signals/world-signals.ics`.
 Monitoring remains local through the guarded daily runner. The former scheduled
