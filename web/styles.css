@@ -15,3 +15,37 @@ main{max-width:var(--max);margin:0 auto;padding:0 1.25rem 4rem}main>section{scro
 @media(max-width:900px){.hero-grid,.now-grid,.public-state-section{grid-template-columns:1fr}.theme-list{grid-template-columns:repeat(2,1fr)}.method-notes{grid-template-columns:1fr 1fr}.source-row{grid-template-columns:1fr 1fr}.source-row a{grid-column:1/-1}}
 @media(max-width:620px){.hero{padding-top:.8rem;padding-bottom:2.2rem}.topline-note{width:100%;order:3}.reference-clock{margin-left:0}.primary-nav{gap:.9rem}.hero-grid{padding-top:2.2rem}.hero h1{font-size:2.45rem}.lede{font-size:1rem}.brief-grid{grid-template-columns:repeat(2,1fr)}.brief-card:nth-child(2){border-right:0}.brief-card:nth-child(-n+2){border-bottom:1px solid var(--line)}.now-grid{gap:1.25rem}.theme-list,.method-notes,.source-row{grid-template-columns:1fr}.section-kicker,.section-heading{align-items:flex-start;flex-direction:column}.method-chain{align-items:flex-start}.method-chain i{display:none}.method-chain span{display:block}.source-row a{grid-column:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* UX refinement: warm, quiet surfaces keep the page spacious without bright card glare. */
+:root{
+  --ink:#1d211f;
+  --muted:#59605c;
+  --paper:#efede7;
+  --panel:#f4f1eb;
+  --panel-raised:#f1eee8;
+  --line:#cfc8bd;
+  --accent:#6b3437;
+  --accent-soft:#eadfda;
+  --closed:#715523;
+  --closed-soft:#eee5d4;
+  --focus:#8a5c14;
+}
+body{background:var(--paper);color:var(--ink)}
+.hero{background:var(--paper)}
+.hero h1{font-size:clamp(2.1rem,4.5vw,4.1rem)}
+.primary-nav a{color:var(--muted)}
+.primary-nav a:hover,.primary-nav a:focus-visible{color:var(--ink)}
+.safety{border-left-color:var(--accent)}
+.closed-state{border-left-color:var(--closed)}
+.state-chip{color:var(--closed);background:var(--closed-soft);border-color:#d5c19d}
+.method-chain{background:var(--panel)}
+.method-chain span{background:var(--panel-raised)}
+.viewtabs button,.controls input,.controls select,.calendar-day,.day-agenda,.window-lane,
+.day-agenda-event,.window-event,.event,.monitor-safety,.monitor-route,.close,.empty{background:var(--panel)}
+.calendar-day.outside{background:var(--panel-raised)}
+.calendar-day:hover,.calendar-day:focus,.day-agenda-event:hover,.window-event:hover,.event:hover{background:#e9e4db}
+.viewtabs button{border-radius:4px}
+.viewtabs button:focus-visible,.primary-nav a:focus-visible,.text-link:focus-visible,
+.theme-row:focus-visible,.source-row a:focus-visible{outline-color:var(--focus)}
+.horizon-shell{background:var(--panel)}
+dialog{background:var(--panel);color:var(--ink)}
