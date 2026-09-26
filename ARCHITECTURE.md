@@ -66,6 +66,45 @@ The scheduled GitHub monitor runs with `contents: read` permission. It protects 
 
 Configuration does not mean every governed source is automation-cleared. Source rights, endpoint health, parser validation and route authority remain distinct gates.
 
+## OSINT Observation & Signal Engine v1 — candidate-only
+
+The first OSINT engine is a local operational layer above selected Source
+Registry routes and beside, rather than inside, the governed Monitor:
+
+```text
+selected first-party route
+  -> raw retrieval metadata / payload hash
+  -> normalised Observation Candidate
+  -> lineage-aware deduplication
+  -> operational story cluster
+  -> Signal Candidate / review queue
+  -> [human reviewed transaction required]
+  -> governed Live Intelligence / Signal
+```
+
+The v1 cohort is explicit in `data/osint/source_cohort.json` and contains eight
+first-party RSS/JSON routes. A route is eligible only when its registry record
+has explicit cleared automated monitoring use and non-held retrieval and
+ingestion permissions. Registry `ACTIVE`, institutional authority or machine
+readability alone never grants OSINT retrieval permission. Calendar-only routes,
+held/uncleared routes, paid/licensed market and newswire feeds, and the
+quarantined OPEC material remain outside the cohort.
+
+Raw retrievals retain route identity, retrieval time, HTTP state, content type,
+payload hash, source publication time, native identifiers and parser versions.
+Normalisation preserves publication/effective/retrieval time distinctions.
+Immediate provider and ultimate origin are separate lineage fields; syndicated,
+translated or mirrored copies do not count as independent corroboration.
+Clustering is an operational aid, not factual identity, and conservative
+candidate heuristics nominate review work rather than establish materiality,
+confidence, causation or a governed Signal.
+
+Runtime output is local and ignored under `.world-signals-runtime/osint/`.
+There is no public candidate projection, no automatic promotion and no write
+authority over Canonical, Live Intelligence, Signals, Relationships, Risks,
+Scenarios or Forecasts. The four prospective Forecasts remain outside the OSINT
+engine and their information cutoffs cannot be revised by retrieval.
+
 ## Live Intelligence controlled population
 
 AV introduced the executable Live Intelligence contract at `data/live_intelligence/`; AW v0.2 admitted the first reviewed internal specimen, and AX v0.3 adds a bounded evolving-state story test without opening broad ingestion.

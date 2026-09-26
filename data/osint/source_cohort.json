@@ -1,0 +1,105 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "OSINT_V1_SOURCE_COHORT",
+  "version": "0.1",
+  "purpose": "A small, explicitly authorised first-party machine-interface cohort for local candidate generation. This is not a source registry and does not activate sources outside these routes.",
+  "retrieval_policy": {
+    "local_only": true,
+    "read_only": true,
+    "automatic_canonical_mutation": false,
+    "automatic_observation_promotion": false,
+    "automatic_signal_promotion": false,
+    "automatic_relationship_promotion": false,
+    "public_candidate_projection": false,
+    "raw_payload_publication": false,
+    "source_failure_is_world_state": false
+  },
+  "selection_criteria": [
+    "first-party machine interface explicitly recorded in the Source Registry",
+    "automated monitoring use is cleared or explicitly bounded",
+    "ingestion is limited to factual metadata or a bounded official data response",
+    "bounded low-rate route with a documented source role",
+    "substantive publication/decision evidence preferred over calendar-only coverage"
+  ],
+  "routes": [
+    {
+      "source_id": "WSSRC-CB-015",
+      "route_id": "osint-fed-monetary-rss",
+      "endpoint": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "transport": "RSS_2_0_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "substantive monetary-policy publication metadata; not FOMC schedule authority"
+    },
+    {
+      "source_id": "WSSRC-FIS-029",
+      "route_id": "osint-japan-mof-rss",
+      "endpoint": "https://www.mof.go.jp/english/news.rss",
+      "transport": "RSS_2_0_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official fiscal/sovereign publication metadata; not auction schedule authority"
+    },
+    {
+      "source_id": "WSSRC-REGJ-006",
+      "route_id": "osint-bsp-rss",
+      "endpoint": "https://www.bsp.gov.ph/_layouts/15/listfeed.aspx?List=9b0a2117-49d8-4e96-80ba-8651a0e3e17a&View=8c968884-887d-4d63-8c00-ba05ea3c2d93",
+      "transport": "RSS_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official monetary-policy publication metadata; not forward schedule authority"
+    },
+    {
+      "source_id": "WSSRC-REGJ-007",
+      "route_id": "osint-cbsl-rss",
+      "endpoint": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+      "transport": "RSS_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official monetary-policy publication metadata; internal candidate use only"
+    },
+    {
+      "source_id": "WSSRC-MAC-031",
+      "route_id": "osint-china-nbs-rss",
+      "endpoint": "https://www.stats.gov.cn/sj/zxfb/rss.xml",
+      "transport": "RSS_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official macroeconomic release metadata; no article-body republication"
+    },
+    {
+      "source_id": "WSSRC-INT-035",
+      "route_id": "osint-european-council-rss",
+      "endpoint": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=euco",
+      "transport": "RSS_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official institutional meeting/publication metadata; minimal factual metadata"
+    },
+    {
+      "source_id": "WSSRC-REG-013",
+      "route_id": "osint-sarb-rss",
+      "endpoint": "https://www.resbank.co.za/bin/sarb/solr/publications/rss",
+      "transport": "RSS_XML",
+      "parser": "rss_atom_metadata_v1",
+      "cadence": "daily",
+      "role": "official monetary-policy publication metadata; internal candidate use only"
+    },
+    {
+      "source_id": "WSSRC-MKT-014",
+      "route_id": "osint-uk-treasury-json",
+      "endpoint": "https://www.gov.uk/api/content/government/publications/accelerated-settlement-t1/policy-note-mandating-t1-settlement-in-the-uk",
+      "transport": "JSON",
+      "parser": "govuk_content_metadata_v1",
+      "cadence": "weekly",
+      "role": "bounded first-party policy publication metadata and minimal semantic state"
+    }
+  ],
+  "excluded_families": {
+    "calendar_only": "Excluded from v1 unless a route exposes substantive publication metadata; calendar monitoring remains the Monitor layer.",
+    "rights_or_endpoint_hold": "Excluded even where the institution is authoritative. ACTIVE in the registry is not retrieval permission.",
+    "licensed_or_paid": "No paid, licensed, commercial market, AIS, newswire or terminal route is activated.",
+    "security_and_hazard": "No additional security or hazard route is activated in v1 because the currently governed candidates are manual, schedule-only or held; gaps are documented separately.",
+    "opec": "OPEC remains quarantined and is not used as a base, cohort route or promotion source."
+  }
+}

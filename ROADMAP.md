@@ -408,6 +408,31 @@ the first due target through the Outcome contract.
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 
+## Stage 21 — OSINT Observation & Signal Engine v1 — IMPLEMENTED / CANDIDATE-ONLY
+
+The local OSINT engine provides a bounded, rights-gated retrieval and
+normalisation pass over eight first-party machine routes. It retains local raw
+retrieval metadata and payload hashes, creates non-governed Observation
+Candidates, operational story clusters, conservative Signal Candidates and a
+deterministic review queue. It does not populate governed Live Intelligence or
+Signals, alter Canonical, publish candidate material, or modify the four
+prospective Forecasts.
+
+The engine is intentionally distinct from Monitor: Monitor asks whether a
+governed source/schedule changed, while OSINT asks what factual development may
+deserve review. Source failures and parser failures remain source-health states.
+Lineage-aware deduplication, time-separated persistence and provider-aware
+corroboration are candidate heuristics only. A later milestone must perform the
+first reviewed OSINT promotion tranche before any broader production population
+is considered.
+
+Current gaps include real-time market prices/yield curves/OIS, credit stress,
+freight/shipping/AIS, maritime security, oil/LNG physical flows, sanctions,
+corporate filings, cyber/security advisories, defence/security notices,
+reputable newswire and climate/hazard observations. Paid or licensed feeds,
+arbitrary social media and Reuters/AP/AFP-style scraping are not substitutes;
+each future connector needs its own rights, route and lineage review.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
