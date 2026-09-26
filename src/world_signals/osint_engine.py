@@ -366,6 +366,7 @@ def normalise_records(
             source_native_id=native, canonical_url=url, payload_sha256=payload_hash,
             publication_time=raw.get("publication_time"), effective_time=raw.get("effective_time"),
             retrieval_time=retrieved_at, title=title, factual_text=text,
+            entities=[{"label": provider, "entity_id": str(source["source_id"]), "resolution_state": "SOURCE_REGISTRY_ID"}],
             domains=[str(source.get("domain"))] if source.get("domain") else [],
             lineage={"source_ids": [source["source_id"]], "ultimate_provider_ids": [provider],
                      "shared_origin_key": identity_hash[:24], "independence_status": "UNREVIEWED"},
@@ -472,6 +473,24 @@ def build_signal_candidates(candidates: Iterable[ObservationCandidate]) -> list[
             contradictions=[], domains=[domain], entities=[],
             rationale="Candidate-level nomination only; materiality, direction, contradiction and confidence require human review.",
             review_priority=priority,
+        ))
+    distinct_domains = sorted(by_domain)
+    distinct_providers = sorted({item.ultimate_provider for item in values})
+    if len(distinct_domains) >= 2 and len(distinct_providers) >= 2:
+        corroboration = candidate_corroboration(values)
+        signals.append(SignalCandidate(
+            candidate_id="WSC-SIG-" + sha256_json({"domains": distinct_domains, "candidates": sorted(x.candidate_id for x in values)})[:20],
+            supporting_candidate_ids=sorted(x.candidate_id for x in values),
+            signal_class="CROSS_DOMAIN_CONVERGENCE_CANDIDATE",
+            direction=None, suggested_materiality=None, novelty=None,
+            persistence=persistence_state(values), acceleration=None,
+            corroboration_summary=corroboration,
+            source_lineage_summary={"domains": distinct_domains, "ultimate_provider_count": len(distinct_providers),
+                                    "causal_claim": "PROHIBITED", "review_required": True},
+            contradictions=[], domains=distinct_domains,
+            entities=[json.loads(entity) for entity in sorted({json.dumps(entity, sort_keys=True) for item in values for entity in item.entities})],
+            rationale="Cross-domain combination is a review prompt only; it does not establish a Relationship, Risk/Regime state or causation.",
+            review_priority="HIGH",
         ))
     return signals
 

@@ -128,7 +128,8 @@ class OSINTEngineTests(unittest.TestCase):
     def test_unknown_entity_cannot_become_authoritative_identity(self):
         values, _ = normalise_records([{"source_native_id": "e1", "title": "Unknown institution", "factual_text": "fact",
                                         "canonical_url": "https://example.test/e1"}], source(), route(), "hash-e", "2026-09-27T00:00:00Z")
-        self.assertEqual(values[0].entities, [])
+        self.assertEqual(values[0].entities[0]["entity_id"], "S1")
+        self.assertEqual(values[0].entities[0]["resolution_state"], "SOURCE_REGISTRY_ID")
         self.assertIn("UNREVIEWED", values[0].lineage["independence_status"])
 
     def test_story_clustering_does_not_merge_distinct_domains_or_unrelated_words(self):
@@ -156,6 +157,16 @@ class OSINTEngineTests(unittest.TestCase):
         self.assertEqual(len(signals), 1)
         self.assertIn("review", signals[0].rationale.lower())
         self.assertEqual(production_promotion_policy()["signal_candidate_to_governed_signal"], "REVIEWED_TRANSACTION_REQUIRED")
+
+    def test_cross_domain_convergence_is_a_candidate_prompt_not_causation(self):
+        records = parse_payload(RSS, "RSS_XML")
+        a, _ = normalise_records(records, source("S1", "Provider A"), route(), "ha", "2026-09-27T00:00:00Z")
+        b, _ = normalise_records([{**records[0], "source_native_id": "doc-2", "title": "Shipping disruption"}],
+                                 {**source("S2", "Provider B"), "domain": "logistics_supply_chains"}, route("S2", "r2"), "hb", "2026-09-28T00:00:00Z")
+        signals = build_signal_candidates(a + b)
+        convergence = next(item for item in signals if item.signal_class == "CROSS_DOMAIN_CONVERGENCE_CANDIDATE")
+        self.assertEqual(convergence.domains, ["logistics_supply_chains", "monetary_policy"])
+        self.assertEqual(convergence.source_lineage_summary["causal_claim"], "PROHIBITED")
 
     def test_run_is_read_only_and_runtime_only(self):
         registry = {"sources": [source()]}
