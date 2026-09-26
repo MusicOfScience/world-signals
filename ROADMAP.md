@@ -330,13 +330,24 @@ prior assessments and as-of history; graph traversal cannot create transitive
 Relationships. No production Relationship is populated and public projection
 remains closed.
 
-## Stage 14 — regime-state/risk history contract — NOT STARTED
+## Stage 14 — reviewed Risk / Regime-State history contract — IMPLEMENTED / POPULATION CLOSED
 
-The next substantive milestone is a governed risk/regime-state history layer
-that can consume reviewed Signals and Relationships without rewriting the
-existing read-only risk overlay or opening production population prematurely.
+The executable contract lives in `data/risks/`, `src/world_signals/risks.py` and
+`scripts/validate_risks.py`. It distinguishes qualitative Risk and Regime state,
+records immutable reviewed transitions and as-of history, derives convergence
+from distinct upstream lineage without treating shared providers or duplicate
+evidence as independent, and requires threshold provenance. The existing
+Canonical-derived `risk_projection` remains a separate non-authoritative lens;
+no production Risk/Regime state is populated and public projection remains
+closed.
 
-## Stage 15 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 15 — competing Scenarios contract — NOT STARTED
+
+The next substantive milestone is a governed Scenarios layer that consumes
+reviewed Risk/Regime state without introducing forecast probabilities or
+resolution claims prematurely.
+
+## Stage 16 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 

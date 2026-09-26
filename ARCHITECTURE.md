@@ -190,6 +190,35 @@ only exact reviewed edges: visual proximity and transitive traversal never
 author a new Relationship. Forecast and scenario fields are outside this
 contract, and public Relationship projection remains closed.
 
+## Reviewed Risk / Regime-State contract — population closed
+
+The Risk/Regime layer is now defined as a separate executable history contract
+in `data/risks/`, `src/world_signals/risks.py` and
+`scripts/validate_risks.py`. It uses reviewed Signal and Relationship revisions
+as primary analytical inputs, with immutable observations and evidence as
+supporting lineage. It does not promote the existing Canonical-derived risk
+overlay, mutate upstream records or populate a public risk feed.
+
+One versioned state object distinguishes `RISK_STATE` from `REGIME_STATE` and
+records its current state, prior state, transition type/direction, persistence,
+trend, materiality, confidence, contradiction, alternative interpretation,
+expiry and review provenance. Risk states use qualitative states such as
+`EMERGING`, `ELEVATED`, `INTENSIFYING`, `PERSISTENT`, `EASING` and `BASELINE`;
+regime states use `BASELINE`, `TRANSITIONING`, `ESTABLISHED` and `EXITING`.
+Transitions are reviewed and append-only, so return to baseline, weakening,
+expiry and uncertainty remain historical assessments rather than deletion or
+in-place status changes.
+
+Convergence is qualitative and lineage-derived, not a universal score. Duplicate
+upstream revisions are rejected; distinct observations, providers, domains and
+relationship mechanisms are counted from traceable support; shared providers do
+not become independent corroboration; contradictory inputs remain outside the
+support counts. Thresholds are qualitative unless they carry explicit type,
+description and provenance, and numeric risk scores are prohibited. As-of
+queries use explicit UTC assessment times and cannot use later evidence to
+rewrite earlier states. Forecast, scenario and probability fields are outside
+the contract, and public Risk/Regime projection remains closed.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -232,7 +261,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Observations | `data/live_intelligence/` and `src/world_signals/live_intelligence.py` provide reviewed factual observations, evidence, timing separation and correction/revision controls | Implemented but needing extension. This is a bounded Live Intelligence layer, not yet a general observation store or public feed. |
 | Signals | `data/signals/` and `src/world_signals/signals.py` define a reviewed Signal over immutable Live observations, with revision, corroboration, contradiction, lifecycle and public-projection guards | Contract implemented and pressure-tested; production population remains closed. |
 | Relationships / causal layer | `data/relationships/`, `src/world_signals/relationships.py` and `scripts/validate_relationships.py` define a reviewed, zero-population contract using Signal revisions plus explicit evidence and causal gates | Contract implemented and pressure-tested; production population and public projection remain closed. |
-| Risks / regime detection | `src/world_signals/risk_projection.py` and `data/coverage/biosecurity_overlay.json` provide a read-only, non-exclusive risk lens and convergence windows | Partially implemented. Regime-transition state, history and alert semantics are not yet a separate governed layer. |
+| Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
 | Scenarios | No governed scenario registry or competing-scenario contract | Missing. Do not infer scenarios from risk-overlay windows. |
 | Forecasts | Analysis records preserve expectations and comparisons in bounded post-event packets, but there is no immutable resolvable forecast store | Missing. A future contract must record target, horizon, probability/interval, assumptions, evidence, resolution criteria and version lineage. |
 | Forecast evaluation / model learning | No forecast-resolution/evaluation population or scoring pipeline | Missing. This follows the forecast contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
@@ -304,9 +333,9 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
    disconfirming evidence and revision history, reusing existing Analysis and
    overlay semantics without making either overlay canonical. Production
    population remains closed.
-4. Add a small regime-state/risk history interface that consumes reviewed
-   Signals and Relationships while preserving the current risk overlay as a
-   projection.
+4. Define and pressure-test a governed Risk/Regime-State history contract
+   (completed) that consumes reviewed Signals and Relationships while
+   preserving the current risk overlay as a non-authoritative projection.
 5. Add competing scenario records, then immutable forecast records with
    resolution criteria. Only after resolved forecasts exist should evaluation
    metrics and model-learning surfaces be implemented.

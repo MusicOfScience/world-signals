@@ -1,0 +1,139 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "REVIEWED_RISK_REGIME_STATES",
+  "version": "0.1",
+  "architecture_position": "RISKS_REGIMES",
+  "upstream_layers": [
+    "SIGNALS",
+    "RELATIONSHIPS",
+    "LIVE_INTELLIGENCE",
+    "CANONICAL_REGISTRY"
+  ],
+  "downstream_layers": ["SCENARIOS"],
+  "purpose": "A reviewed, immutable history of current risk and regime-state assessments; it is not a forecast, scenario or scalar risk score.",
+  "layer_boundary": {
+    "canonical_mutation_allowed": false,
+    "observation_mutation_allowed": false,
+    "signal_mutation_allowed": false,
+    "relationship_mutation_allowed": false,
+    "risk_overlay_mutation_allowed": false,
+    "automatic_state_promotion_allowed": false,
+    "forecast_fields_allowed": false,
+    "scenario_fields_allowed": false,
+    "public_risk_projection_allowed": false
+  },
+  "required_state_fields": [
+    "state_id",
+    "revision_id",
+    "revision_number",
+    "previous_revision_id",
+    "title",
+    "state_class",
+    "system_domain",
+    "jurisdictions",
+    "current_state",
+    "previous_state",
+    "transition_type",
+    "transition_direction",
+    "supporting_signal_revisions",
+    "supporting_relationship_revisions",
+    "contradictory_signal_revisions",
+    "contradictory_relationship_revisions",
+    "supporting_observation_ids",
+    "contributing_domains",
+    "convergence",
+    "persistence",
+    "trend_state",
+    "materiality",
+    "confidence",
+    "first_detected_at_utc",
+    "state_effective_at_utc",
+    "review_state",
+    "lifecycle_state",
+    "expiry",
+    "rationale",
+    "alternative_interpretation",
+    "falsification_conditions",
+    "threshold_basis",
+    "review_provenance",
+    "revision_reason"
+  ],
+  "controlled_vocabularies": {
+    "state_class": ["RISK_STATE", "REGIME_STATE"],
+    "risk_state": ["BASELINE", "LATENT", "EMERGING", "ELEVATED", "INTENSIFYING", "PERSISTENT", "EASING", "RESOLVED", "UNCERTAIN"],
+    "regime_state": ["BASELINE", "TRANSITIONING", "ESTABLISHED", "EXITING", "UNCERTAIN"],
+    "transition_type": ["INITIAL_ASSERTION", "ESCALATION", "PERSISTENCE", "EASING", "RETURN_TO_BASELINE", "REGIME_ENTRY", "REGIME_EXIT", "REVERSAL", "CONFLICT", "REASSESSMENT", "EXPIRY", "WITHDRAWAL"],
+    "transition_direction": ["UPWARD", "DOWNWARD", "SIDEWAYS", "UNCERTAIN", "REVERSAL"],
+    "convergence_state": ["NONE", "LIMITED", "MULTI_DOMAIN", "BROAD_CONVERGENCE", "CONFLICTED"],
+    "persistence": ["SINGLE_ASSESSMENT", "EMERGING", "PERSISTENT", "WEAKENING", "NOT_ASSESSED"],
+    "trend_state": ["ACCELERATING", "DECELERATING", "STABLE", "REVERSING", "NOT_ASSESSED"],
+    "materiality": ["LOW", "MODERATE", "HIGH", "NOT_ASSESSED"],
+    "confidence": ["LOW", "MEDIUM", "HIGH", "NOT_ASSESSED"],
+    "review_state": ["CANDIDATE", "UNDER_REVIEW", "ACCEPTED", "REJECTED"],
+    "lifecycle_state": ["UNRESOLVED", "ACTIVE", "WEAKENING", "EXPIRED", "WITHDRAWN", "SUPERSEDED"],
+    "expiry_mode": ["STALE_AFTER", "EXPLICIT_DATE", "REVIEW_REQUIRED"],
+    "threshold_type": ["NONE", "EXTERNAL", "EMPIRICAL_CALIBRATION", "POLICY_INSTITUTIONAL", "ANALYST_HEURISTIC"]
+  },
+  "state_transition_policy": {
+    "risk_state_transitions_are_reviewed": true,
+    "regime_state_transitions_are_reviewed": true,
+    "same_state_reassessment_is_allowed": true,
+    "return_to_baseline_preserves_history": true,
+    "ordinary_daily_movement_is_not_a_regime_transition": true,
+    "invalid_transitions_are_rejected": true
+  },
+  "convergence_policy": {
+    "qualitative_state_not_universal_score": true,
+    "duplicate_upstream_ids_do_not_increase_counts": true,
+    "shared_provider_or_origin_collapses_independence": true,
+    "contradictory_inputs_remain_separate": true,
+    "media_volume_is_not_independence": true,
+    "distinct_domains_are_descriptive_not_probability": true,
+    "counts_must_equal_derived_lineage": true
+  },
+  "threshold_policy": {
+    "numeric_threshold_values_are_not_supported": true,
+    "threshold_type_requires_description_and_provenance": true,
+    "unsupported_numeric_scores_are_rejected": true,
+    "analyst_heuristics_require_explicit_review": true
+  },
+  "revision_policy": {
+    "state_id_is_stable_across_revisions": true,
+    "each_revision_is_immutable": true,
+    "previous_revision_must_remain_present": true,
+    "revision_numbers_are_contiguous": true,
+    "revision_time_must_strictly_advance": true,
+    "first_detected_time_remains_stable": true,
+    "later_evidence_may_not_inflate_prior_assessment": true,
+    "as_of_requires_explicit_utc_input": true
+  },
+  "upstream_policy": {
+    "reviewed_signals_and_relationships_are_primary": true,
+    "observations_and_evidence_are_supporting_lineage": true,
+    "canonical_occurrences_are_context_only": true,
+    "raw_monitor_candidates_are_not_evidence": true,
+    "rejected_or_withdrawn_upstream_cannot_support_active_state": true,
+    "historical_superseded_inputs_require_as_of_context": true
+  },
+  "forecast_boundary": {
+    "probability_prohibited": true,
+    "forecast_horizon_prohibited": true,
+    "scenario_probability_prohibited": true,
+    "target_date_prohibited": true,
+    "predicted_value_prohibited": true,
+    "prediction_interval_prohibited": true
+  },
+  "population_policy": {
+    "production_population_allowed": false,
+    "automatic_ingestion_allowed": false,
+    "candidate_state_storage_allowed": false,
+    "synthetic_production_population_allowed": false,
+    "public_risk_projection_allowed": false,
+    "reason": "Define and pressure-test the state/history contract before any governed Risk or Regime admission transaction."
+  },
+  "public_projection_policy": {
+    "risk_projection_allowed": false,
+    "internal_state_count_must_be_zero": true,
+    "runtime_or_review_material_allowed": false
+  }
+}
