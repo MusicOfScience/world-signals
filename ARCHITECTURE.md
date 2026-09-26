@@ -279,6 +279,31 @@ without resolving or scoring it. Evaluation metrics, public Outcome
 projection, automatic resolution and model learning remain outside this
 layer. Production Outcomes remain zero.
 
+## Reviewed Forecast Evaluation contract — population closed
+
+Forecast Evaluation is a deterministic derived layer in `data/evaluation/`,
+`src/world_signals/evaluation.py` and `scripts/validate_evaluation.py`. It
+scores each independently scoreable Forecast issuance against the Outcome
+revision available at an explicit evaluation timestamp. It never mutates
+Forecasts or Outcomes and does not replace issuance-level results with only a
+final update.
+
+The versioned configuration supports binary Brier and log loss, multiclass
+Brier and log loss, and numeric signed, absolute and squared error. A wrong
+certain probability retains its exact `0` or `1` input and reports infinite
+log loss rather than silently clipping the Forecast. Numeric aggregates keep
+target and unit boundaries explicit. Issuances from one question series are
+scored separately but are never presented as independent target questions.
+
+Evaluation records are regenerated derived artefacts rather than editable
+score truth. Explicit denominator accounting retains pending, overdue, void,
+unresolvable, disputed and ineligible issuances. Lead time is derived from
+resolution-window end minus issue time. Calibration remains `NO_SAMPLE` or
+`INSUFFICIENT_SAMPLE` until fixed, versioned thresholds are met; no baseline,
+ranking or performance claim is produced. Production Forecasts, Outcomes and
+Evaluation remain zero/closed, so the next population milestone is a
+separately authorised prospective Forecast pilot, not Model Learning.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -309,7 +334,7 @@ baseline for the incremental transition to:
 
 ```text
 EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
-        -> SCENARIOS -> FORECASTS -> OUTCOMES -> MODEL LEARNING
+        -> SCENARIOS -> FORECASTS -> OUTCOMES -> EVALUATION -> MODEL LEARNING
 ```
 
 | Target layer | Current repository state | Assessment |
@@ -325,7 +350,8 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
 | Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; production population, outcome resolution, scoring and public projection remain closed. |
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
-| Forecast evaluation / model learning | No forecast evaluation population or scoring pipeline | Missing. This follows the Outcome contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
+| Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with zero production sample; public projection, baselines, rankings, calibration claims and Model Learning remain closed. |
+| Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A controlled prospective Forecast admission/pilot must precede any learning claim. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
@@ -403,9 +429,10 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 6. Define and pressure-test immutable Forecast records with explicit
    resolution criteria (completed); keep analytical updates scoreable without
    replacing earlier issuances.
-7. Add Outcomes/Resolution and evaluation only after prospective Forecasts
-   exist (Outcomes/Resolution completed); add scoring/evaluation only after a
-   defensible resolved sample, then model-learning surfaces later.
+7. Add Outcomes/Resolution and Evaluation contracts (completed) without
+   populating production. Authorise a narrow prospective Forecast pilot only
+   after review; do not begin Model Learning until a defensible resolved sample
+   and evaluation denominator exist.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.

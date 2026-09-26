@@ -376,11 +376,23 @@ void, unresolvable and disputed states are explicit; Outcome revisions are
 append-only and do not mutate Forecasts. No production Outcome is populated
 and public projection remains closed.
 
-## Stage 18 — Forecast Evaluation — NOT STARTED
+## Stage 18 — Forecast Evaluation — IMPLEMENTED / NO SAMPLE
 
-The next substantive milestone is governed evaluation of resolved Forecasts,
-including denominator integrity and appropriate scoring metrics. It must not
-begin until prospective resolved data exists.
+The executable contract lives in `data/evaluation/`,
+`src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and the
+versioned evaluation configuration. It scores synthetic Forecast issuances
+against governed synthetic Outcomes using compatible binary, categorical and
+numeric metrics, preserves infinite log loss for wrong certain forecasts,
+reports issuance/series/resolution denominators, derives lead time
+deterministically and keeps calibration in explicit no-sample or insufficient-
+sample states. Evaluation is derived rather than editable score truth and does
+not mutate Forecasts or Outcomes. Production Forecasts, Outcomes and
+Evaluation remain empty; no performance, baseline, ranking or Model Learning
+claim is made.
+
+The next population milestone is a separately authorised narrow prospective
+Forecast pilot. Model Learning must wait until that pilot produces a
+defensible resolved sample.
 
 ## Stage 19 — evaluate narrow auto-commit classes — GATE CLOSED
 

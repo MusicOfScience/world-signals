@@ -83,6 +83,13 @@ The layers remain deliberately distinct:
     duplicating reality. Resolution follows the Forecast's original rule,
     source, fallback and vintage semantics. Scoring, evaluation and public
     projection remain deferred, and production Outcome population is closed.
+12. **Forecast Evaluation** — deterministic derived scoring of each Forecast
+    issuance against the governed Outcome, with explicit metric compatibility,
+    lead time, resolution coverage and denominator states. Brier/log loss,
+    categorical proper scores and numeric errors are supported for synthetic
+    fixtures only; calibration claims, baselines, rankings, Model Learning and
+    public performance projection remain closed while production populations
+    are empty.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -210,9 +217,12 @@ assumptions, divergence points, signposts, disconfirming indicators and
 immutable as-of history. Its production population and public projection remain
 closed. The reviewed Forecast contract is now also defined and pressure-tested
 with production population and public projection closed. Outcomes/Resolution
-is now also defined with production population and public projection closed.
-The next substantive milestone is Forecast Evaluation after a defensible
-resolved Forecast sample exists.
+and the deterministic Forecast Evaluation contract are now also defined with
+production populations and public projections closed. Evaluation deliberately
+reports `NO_SAMPLE`/`INSUFFICIENT_SAMPLE` rather than making performance claims.
+The next substantive milestone is a separately authorised, narrow prospective
+Forecast pilot that can create a defensible resolved sample; Model Learning
+must wait until after that sample exists.
 
 ### Local operating loop
 

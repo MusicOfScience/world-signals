@@ -1,0 +1,24 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "FORECAST_EVALUATION_CONFIGURATION",
+  "version": "0.1",
+  "metric_compatibility": {
+    "BINARY_EVENT": ["BRIER", "LOG_LOSS"],
+    "CATEGORICAL": ["MULTICLASS_BRIER", "MULTICLASS_LOG_LOSS"],
+    "NUMERIC_POINT": ["SIGNED_ERROR", "ABSOLUTE_ERROR", "SQUARED_ERROR"]
+  },
+  "calibration": {
+    "bin_edges": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "minimum_scored_issuances": 10,
+    "minimum_distinct_series": 5
+  },
+  "methodology": {
+    "version": "0.1",
+    "log_loss_extreme_probability_policy": "retain_exact_extremes_and_report_infinite_wrong_certain_forecasts",
+    "signed_error_convention": "forecast_minus_observed",
+    "lead_time_basis": "resolution_window_end_minus_issue_time",
+    "series_updates_are_not_independent_targets": true,
+    "no_universal_cross_type_score": true,
+    "no_baseline_or_skill_claims": true
+  }
+}
