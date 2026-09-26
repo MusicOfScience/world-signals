@@ -114,12 +114,17 @@
     "scenario_probability_is_never_inferred": true
   },
   "population_policy": {
-    "production_population_allowed": false,
+    "production_population_allowed": true,
     "automatic_ingestion_allowed": false,
     "candidate_forecast_storage_allowed": false,
     "synthetic_production_population_allowed": false,
     "public_forecast_projection_allowed": false,
-    "reason": "Define immutable, resolvable and scoring-ready forecast issuances before any governed Forecast admission transaction."
+    "admission_mode": "REVIEWED_PROSPECTIVE_PILOT_ONLY",
+    "pilot_max_forecast_issuances": 5,
+    "pilot_requires_explicit_transaction": true,
+    "pilot_prohibits_backfill": true,
+    "pilot_requires_human_review": true,
+    "reason": "Only the bounded, explicit prospective pilot admission transaction may populate production; automatic, synthetic, public and candidate ingestion remain closed."
   },
   "public_projection_policy": {
     "forecast_projection_allowed": false,

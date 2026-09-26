@@ -1,0 +1,106 @@
+{
+  "transaction_id": "WS-FP-ADMISSION-20260926-001",
+  "transaction_type": "INITIAL_PROSPECTIVE_FORECAST_PILOT",
+  "decision": "ACCEPTED",
+  "admitted_at_utc": "2026-09-26T17:00:12Z",
+  "reviewer": {
+    "reviewer_id": "project-owner",
+    "reviewed_at_utc": "2026-09-26T17:00:05Z",
+    "decision_basis": "Explicit owner-authorised first prospective pilot; four low-ambiguity institutional decisions remain unresolved and have fixed primary sources, dates and rules."
+  },
+  "information_cutoff_at_utc": "2026-09-26T17:00:00Z",
+  "forecast_revision_ids": [
+    "WS-FP-BOC-20261028-I1-R1",
+    "WS-FP-ECB-20261029-I1-R1",
+    "WS-FP-FED-20261028-I1-R1",
+    "WS-FP-RBA-20261103-I1-R1"
+  ],
+  "issuance_ids": [
+    "WS-FP-BOC-20261028-I1",
+    "WS-FP-ECB-20261029-I1",
+    "WS-FP-FED-20261028-I1",
+    "WS-FP-RBA-20261103-I1"
+  ],
+  "forecast_ids": [
+    "WS-FP-BOC-20261028",
+    "WS-FP-ECB-20261029",
+    "WS-FP-FED-20261028",
+    "WS-FP-RBA-20261103"
+  ],
+  "pre_state": {
+    "version": "0.1",
+    "population_state": "CLOSED_NO_PRODUCTION_FORECASTS",
+    "forecast_count": 0,
+    "issuance_count": 0,
+    "forecast_ids": [],
+    "issuance_ids": [],
+    "revision_ids": [],
+    "sha256": "6b16f2104feada039b047f9569293d9d8ce66e4593fd293b07e05c3a2f0b4493"
+  },
+  "post_state": {
+    "version": "0.1",
+    "population_state": "PILOT_PRODUCTION_FORECASTS_REVIEWED",
+    "forecast_count": 4,
+    "issuance_count": 4,
+    "forecast_ids": [
+      "WS-FP-BOC-20261028",
+      "WS-FP-ECB-20261029",
+      "WS-FP-FED-20261028",
+      "WS-FP-RBA-20261103"
+    ],
+    "issuance_ids": [
+      "WS-FP-BOC-20261028-I1",
+      "WS-FP-ECB-20261029-I1",
+      "WS-FP-FED-20261028-I1",
+      "WS-FP-RBA-20261103-I1"
+    ],
+    "revision_ids": [
+      "WS-FP-BOC-20261028-I1-R1",
+      "WS-FP-ECB-20261029-I1-R1",
+      "WS-FP-FED-20261028-I1-R1",
+      "WS-FP-RBA-20261103-I1-R1"
+    ],
+    "sha256_dataset": "f964d5976b3608e77d5bf4b774bfeeb5e32289ec8680516565e7be3df744a149",
+    "sha256": "4539e2738790d9b785f4f154eb4ffc122509c01ba5e2a02ba2a7cebcc9aef376"
+  },
+  "validation": {
+    "status": "PASS",
+    "validator_version": "forecast-admission-0.1",
+    "validated_at_utc": "2026-09-26T17:00:05Z"
+  },
+  "denominator_obligation": "Every admitted issuance remains in the future evaluation denominator. It may not be deleted or replaced because it performs poorly; only governed VOID or UNRESOLVABLE semantics can exclude it from proper scoring, and those states remain visible.",
+  "candidate_audit": [
+    {
+      "forecast_id": "WS-FP-BOC-20261028",
+      "candidate": "Bank of Canada 28 October 2026 overnight-rate target",
+      "suitability": "ADMITTED",
+      "reason": "Official fixed announcement date, single numeric target, first-release resolution and materially unexpired horizon.",
+      "authoritative_schedule_url": "https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/",
+      "checked_at_utc": "2026-09-26T17:00:00Z"
+    },
+    {
+      "forecast_id": "WS-FP-ECB-20261029",
+      "candidate": "ECB 29 October 2026 three-key-rate direction",
+      "suitability": "ADMITTED",
+      "reason": "Official calendar and decision publication define a future categorical target with explicit mixed-direction category.",
+      "authoritative_schedule_url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+      "checked_at_utc": "2026-09-26T17:00:00Z"
+    },
+    {
+      "forecast_id": "WS-FP-FED-20261028",
+      "candidate": "FOMC 28 October 2026 federal-funds target-range direction",
+      "suitability": "ADMITTED",
+      "reason": "Official FOMC calendar and statement define a single future categorical policy decision.",
+      "authoritative_schedule_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "checked_at_utc": "2026-09-26T17:00:00Z"
+    },
+    {
+      "forecast_id": "WS-FP-RBA-20261103",
+      "candidate": "RBA 3 November 2026 cash-rate target",
+      "suitability": "ADMITTED",
+      "reason": "Official RBA board schedule and decision publication define a future single numeric target with first-release resolution.",
+      "authoritative_schedule_url": "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html",
+      "checked_at_utc": "2026-09-26T17:00:00Z"
+    }
+  ]
+}

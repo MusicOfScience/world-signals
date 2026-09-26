@@ -1,10 +1,12 @@
-"""Validation and closed projection for the reviewed Forecast contract.
+"""Validation and closed public projection for the reviewed Forecast contract.
 
 Forecasts are prospective, explicitly resolvable claims.  A stable
 ``forecast_id`` identifies a question series, while each analytical update has
 its own ``issuance_id`` and remains independently scoreable.  Administrative
 corrections revise one issuance without changing its substantive content.
-Outcome resolution and scoring are deliberately outside this module.
+Outcome resolution and scoring are deliberately outside this module. Production
+population is limited to the explicit reviewed prospective pilot transaction;
+automatic ingestion and public Forecast projection remain closed.
 """
 
 from __future__ import annotations
@@ -721,17 +723,26 @@ def validate_forecasts(
     evidence: dict[str, Any],
     canonical: dict[str, Any],
     sources: dict[str, Any],
+    admission_transaction: dict[str, Any] | None = None,
 ) -> ForecastValidationReport:
-    """Validate the intentionally empty production Forecast dataset."""
+    """Validate the production Forecast dataset and its admission boundary."""
     errors: list[str] = []
     if not isinstance(dataset, dict):
         return ForecastValidationReport(("Forecast dataset must be an object",))
-    if dataset.get("population_state") != "CLOSED_NO_PRODUCTION_FORECASTS":
-        errors.append("Forecast dataset must remain in its closed population state")
+    rows = dataset.get("forecasts") if isinstance(dataset.get("forecasts"), list) else []
+    allowed_population_states = {"CLOSED_NO_PRODUCTION_FORECASTS", "PILOT_PRODUCTION_FORECASTS_REVIEWED"}
+    if dataset.get("population_state") not in allowed_population_states:
+        errors.append("Forecast dataset has an invalid population state")
     policy = schema.get("population_policy") if isinstance(schema, dict) else {}
-    for key in ("production_population_allowed", "automatic_ingestion_allowed", "candidate_forecast_storage_allowed", "synthetic_production_population_allowed", "public_forecast_projection_allowed"):
+    for key in ("automatic_ingestion_allowed", "candidate_forecast_storage_allowed", "synthetic_production_population_allowed", "public_forecast_projection_allowed"):
         if not isinstance(policy, dict) or policy.get(key) is not False:
             errors.append(f"Forecast population policy must keep {key}=false")
+    if not isinstance(policy, dict) or policy.get("production_population_allowed") is not True:
+        errors.append("Forecast population policy must explicitly allow only the reviewed pilot path")
+    if rows and dataset.get("population_state") != "PILOT_PRODUCTION_FORECASTS_REVIEWED":
+        errors.append("populated Forecast dataset must declare the reviewed pilot population state")
+    if not rows and dataset.get("population_state") != "CLOSED_NO_PRODUCTION_FORECASTS":
+        errors.append("empty Forecast dataset must retain the closed population state")
     boundary = schema.get("layer_boundary") if isinstance(schema, dict) else {}
     for key in ("canonical_mutation_allowed", "observation_mutation_allowed", "signal_mutation_allowed", "relationship_mutation_allowed", "risk_state_mutation_allowed", "scenario_mutation_allowed", "automatic_forecast_generation_allowed", "outcome_resolution_allowed", "forecast_scoring_allowed", "model_learning_allowed", "public_forecast_projection_allowed"):
         if not isinstance(boundary, dict) or boundary.get(key) is not False:
@@ -739,10 +750,12 @@ def validate_forecasts(
     public_policy = schema.get("public_projection_policy") if isinstance(schema, dict) else {}
     if not isinstance(public_policy, dict) or public_policy.get("forecast_projection_allowed") is not False:
         errors.append("Forecast public projection must remain closed")
-    rows = dataset.get("forecasts") if isinstance(dataset.get("forecasts"), list) else []
-    if rows:
-        errors.append("closed production population gate prohibits every Forecast")
     history = validate_forecast_history(schema, rows, scenarios, risks, signals, relationships, observations, evidence, canonical, sources)
+    if rows:
+        from .forecast_admission import validate_admission_transaction
+        errors.extend(validate_admission_transaction(schema, dataset, admission_transaction))
+    elif admission_transaction is not None:
+        errors.append("an admission transaction cannot accompany an empty Forecast dataset")
     return ForecastValidationReport(tuple(errors) + history.errors)
 
 
@@ -796,8 +809,9 @@ def public_forecast_projection(
     evidence: dict[str, Any],
     canonical: dict[str, Any],
     sources: dict[str, Any],
+    admission_transaction: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    report = validate_forecasts(schema, dataset, scenarios, risks, signals, relationships, observations, evidence, canonical, sources)
+    report = validate_forecasts(schema, dataset, scenarios, risks, signals, relationships, observations, evidence, canonical, sources, admission_transaction)
     if not report.ok:
         raise ValueError("invalid Forecast dataset: " + "; ".join(report.errors))
     return {

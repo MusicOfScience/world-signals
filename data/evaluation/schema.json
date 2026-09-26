@@ -83,7 +83,7 @@
     "synthetic_production_population_allowed": false,
     "public_evaluation_projection_allowed": false,
     "current_state": "NO_SAMPLE",
-    "reason": "Evaluation mechanics must be established before a separately authorised prospective Forecast pilot creates a defensible resolved sample."
+    "reason": "Evaluation remains derived and empty while a separately authorised prospective Forecast pilot creates a defensible resolved sample; the pilot does not itself create scores."
   },
   "public_projection_policy": {
     "evaluation_projection_allowed": false,

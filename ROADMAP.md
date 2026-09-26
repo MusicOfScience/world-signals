@@ -362,8 +362,9 @@ question-series identity, independently scoreable analytical updates,
 administrative correction revisions, explicit information cutoffs, resolution
 sources, fallback and vintage policies, and governed void semantics. Outcome
 resolution, scoring, calibration, automatic generation, model learning and
-public projection remain outside this layer. No production Forecast is
-populated.
+public projection remain outside this layer. The contract was initially closed
+to production population; the separately governed four-series pilot is
+documented in Stage 19.
 
 ## Stage 17 — Outcomes / Resolution — IMPLEMENTED / POPULATION CLOSED
 
@@ -386,15 +387,23 @@ numeric metrics, preserves infinite log loss for wrong certain forecasts,
 reports issuance/series/resolution denominators, derives lead time
 deterministically and keeps calibration in explicit no-sample or insufficient-
 sample states. Evaluation is derived rather than editable score truth and does
-not mutate Forecasts or Outcomes. Production Forecasts, Outcomes and
-Evaluation remain empty; no performance, baseline, ranking or Model Learning
-claim is made.
+not mutate Forecasts or Outcomes. Production Outcomes and Evaluation remain
+empty; no performance, baseline, ranking or Model Learning claim is made.
 
-The next population milestone is a separately authorised narrow prospective
-Forecast pilot. Model Learning must wait until that pilot produces a
-defensible resolved sample.
+The first separately authorised narrow prospective Forecast pilot is now
+admitted through `data/forecasts/admission_transaction.json`. It contains four
+future institutional decision issuances, with no historical backfill. Model
+Learning must wait until the pilot produces a defensible resolved sample.
 
-## Stage 19 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 19 — prospective Forecast pilot — IMPLEMENTED / AWAITING OUTCOMES
+
+The pilot freezes its information cutoff, primary resolution source and
+first-release/vintage semantics and records pre/post semantic hashes. Upstream
+analytical populations remain zero; Outcomes remain empty and Evaluation
+remains `NO_SAMPLE`. The next operating work is to monitor these issuances
+without mutation and resolve them only through the governed Outcome contract.
+
+## Stage 20 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 

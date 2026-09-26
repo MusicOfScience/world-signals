@@ -421,7 +421,12 @@ class OutcomeContractTests(unittest.TestCase):
             ("data/forecasts/forecasts.json", "forecasts"),
             ("data/outcomes/outcomes.json", "outcomes"),
         ):
-            self.assertEqual(json.loads((ROOT / path).read_text())[key], [])
+            data = json.loads((ROOT / path).read_text())
+            if key == "forecasts":
+                self.assertEqual(len(data[key]), 4)
+                self.assertEqual(data["population_state"], "PILOT_PRODUCTION_FORECASTS_REVIEWED")
+            else:
+                self.assertEqual(data[key], [])
         self.assertTrue((ROOT / "docs/world-signals.ics").exists())
         self.assertTrue((ROOT / "docs/data/risk_overlay.json").exists())
 
