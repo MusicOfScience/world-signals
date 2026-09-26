@@ -43,7 +43,9 @@ LIVE INTELLIGENCE
                         |
                         +--> RISKS / REGIMES (contract only; production population closed)
                                  |
-                                 +--> future Scenarios / Forecasts
+                                 +--> SCENARIOS (contract only; production population closed)
+                                          |
+                                          +--> future Forecasts
 ```
 
 The layers remain deliberately distinct:
@@ -63,6 +65,11 @@ The layers remain deliberately distinct:
    Signals and Relationships. Convergence is lineage-derived and explicit;
    numeric danger scores, forecasts, scenarios and public projection remain
    prohibited. The production state population is currently zero.
+9. **Scenarios** — reviewed conditional pathways grouped into competing
+   Scenario Sets. Shared assumptions, divergence points, signposts and
+   disconfirming indicators remain explicit; probability, ranking and forecast
+   fields are prohibited. The production Scenario population and public
+   projection are currently closed.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -184,8 +191,11 @@ and disconfirming evidence and does not infer transitive or causal edges.
 The reviewed Risk/Regime-State contract is now also defined and pressure-tested
 with production population and public projection closed. It preserves state
 history, contradiction, qualitative convergence and explicit expiry without
-becoming a danger score, scenario or forecast. The next substantive milestone
-is the governed Scenarios layer.
+becoming a danger score, scenario or forecast. The reviewed Scenario contract
+is now also defined and pressure-tested with explicit Scenario Sets, conditional
+assumptions, divergence points, signposts, disconfirming indicators and
+immutable as-of history. Its production population and public projection remain
+closed. The next substantive milestone is the governed Forecast layer.
 
 ### Local operating loop
 
