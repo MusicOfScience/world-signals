@@ -226,6 +226,10 @@ must wait until after that sample exists. A first bounded prospective pilot of
 four institutional decisions is admitted through
 `data/forecasts/admission_transaction.json`; Outcomes remain empty and every
 issuance is a permanent future evaluation-denominator obligation.
+The read-only operational watch is available through
+`python scripts/forecast_operations.py`; its runbook is
+`FORECAST_OPERATIONS_RUNBOOK.md`. It derives review and resolution states
+without changing Forecasts or creating Outcomes.
 
 ### Local operating loop
 
