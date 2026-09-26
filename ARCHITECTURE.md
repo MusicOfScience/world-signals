@@ -219,6 +219,27 @@ queries use explicit UTC assessment times and cannot use later evidence to
 rewrite earlier states. Forecast, scenario and probability fields are outside
 the contract, and public Risk/Regime projection remains closed.
 
+## Reviewed Scenario contract — population closed
+
+The Scenario layer is now defined as a separate executable contract in
+`data/scenarios/`, `src/world_signals/scenarios.py` and
+`scripts/validate_scenarios.py`. It introduces explicit Scenario Sets rather
+than a single favoured pathway. A Set retains shared starting conditions,
+assumptions and divergence points; member Scenarios retain their own
+conditional assumptions, enabling/inhibiting conditions, transmission
+pathways, signposts, disconfirming signposts and retirement/falsification
+criteria.
+
+Scenario assumptions are structured objects and remain distinct from observed
+facts. Signposts describe future observable evidence classes but are not scored
+automatically. Transmission pathways preserve contextual, hypothesised and
+reviewed-mechanism status without creating a forecast or silently upgrading a
+Relationship. Probability, likelihood, target, expected-value, ranking and
+forecast fields are prohibited. Scenario Sets and Scenarios are review-governed
+and append-only; revisions, falsified pathways and retired pathways remain
+recoverable through explicit as-of queries. Production population and public
+projection remain closed, and no upstream layer is mutated.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -262,7 +283,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Signals | `data/signals/` and `src/world_signals/signals.py` define a reviewed Signal over immutable Live observations, with revision, corroboration, contradiction, lifecycle and public-projection guards | Contract implemented and pressure-tested; production population remains closed. |
 | Relationships / causal layer | `data/relationships/`, `src/world_signals/relationships.py` and `scripts/validate_relationships.py` define a reviewed, zero-population contract using Signal revisions plus explicit evidence and causal gates | Contract implemented and pressure-tested; production population and public projection remain closed. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
-| Scenarios | No governed scenario registry or competing-scenario contract | Missing. Do not infer scenarios from risk-overlay windows. |
+| Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
 | Forecasts | Analysis records preserve expectations and comparisons in bounded post-event packets, but there is no immutable resolvable forecast store | Missing. A future contract must record target, horizon, probability/interval, assumptions, evidence, resolution criteria and version lineage. |
 | Forecast evaluation / model learning | No forecast-resolution/evaluation population or scoring pipeline | Missing. This follows the forecast contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
@@ -336,9 +357,12 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 4. Define and pressure-test a governed Risk/Regime-State history contract
    (completed) that consumes reviewed Signals and Relationships while
    preserving the current risk overlay as a non-authoritative projection.
-5. Add competing scenario records, then immutable forecast records with
-   resolution criteria. Only after resolved forecasts exist should evaluation
-   metrics and model-learning surfaces be implemented.
+5. Define and pressure-test explicit Scenario Sets and competing conditional
+   pathways (completed), keeping assumptions, divergence points, signposts and
+   falsification separate from forecasts.
+6. Add immutable forecast records with resolution criteria. Only after
+   resolved forecasts exist should evaluation metrics and model-learning
+   surfaces be implemented.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.

@@ -341,13 +341,24 @@ Canonical-derived `risk_projection` remains a separate non-authoritative lens;
 no production Risk/Regime state is populated and public projection remains
 closed.
 
-## Stage 15 — competing Scenarios contract — NOT STARTED
+## Stage 15 — competing Scenarios contract — IMPLEMENTED / POPULATION CLOSED
 
-The next substantive milestone is a governed Scenarios layer that consumes
-reviewed Risk/Regime state without introducing forecast probabilities or
-resolution claims prematurely.
+The executable contract lives in `data/scenarios/`,
+`src/world_signals/scenarios.py` and `scripts/validate_scenarios.py`. Explicit
+Scenario Sets preserve common starting conditions, shared assumptions and
+divergence points, while member Scenarios preserve conditional assumptions,
+transmission epistemics, signposts, disconfirming indicators, competing
+members and falsification/retirement history. Probability, ranking, target and
+forecast fields are prohibited. Scenario history is append-only and supports
+explicit as-of queries without later evidence rewriting earlier pathways. No
+production Scenario is populated and public projection remains closed.
 
-## Stage 16 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 16 — governed Forecast contract — NOT STARTED
+
+The next substantive milestone is an immutable, resolvable Forecast contract
+that can reference a Scenario without turning Scenario prose into a prediction.
+
+## Stage 17 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 
