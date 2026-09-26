@@ -45,7 +45,7 @@ LIVE INTELLIGENCE
                                  |
                                  +--> SCENARIOS (contract only; production population closed)
                                           |
-                                          +--> future Forecasts
+                                          +--> FORECASTS (contract only; production population closed)
 ```
 
 The layers remain deliberately distinct:
@@ -70,6 +70,12 @@ The layers remain deliberately distinct:
    disconfirming indicators remain explicit; probability, ranking and forecast
    fields are prohibited. The production Scenario population and public
    projection are currently closed.
+10. **Forecasts** — immutable, review-governed and resolvable claims with
+    explicit question, horizon, information cutoff, resolution rule and
+    probability/estimate semantics. Analytical updates are separate issuances;
+    administrative corrections cannot rewrite substantive content. Outcome
+    resolution, scoring and public projection are deferred, and production
+    Forecast population is currently closed.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -195,7 +201,10 @@ becoming a danger score, scenario or forecast. The reviewed Scenario contract
 is now also defined and pressure-tested with explicit Scenario Sets, conditional
 assumptions, divergence points, signposts, disconfirming indicators and
 immutable as-of history. Its production population and public projection remain
-closed. The next substantive milestone is the governed Forecast layer.
+closed. The reviewed Forecast contract is now also defined and pressure-tested
+with production population and public projection closed. The next substantive
+milestone is Outcomes/Resolution, followed by evaluation after a defensible
+resolved Forecast sample exists.
 
 ### Local operating loop
 

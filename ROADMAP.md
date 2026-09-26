@@ -353,12 +353,26 @@ forecast fields are prohibited. Scenario history is append-only and supports
 explicit as-of queries without later evidence rewriting earlier pathways. No
 production Scenario is populated and public projection remains closed.
 
-## Stage 16 — governed Forecast contract — NOT STARTED
+## Stage 16 — governed Forecast contract — IMPLEMENTED / POPULATION CLOSED
 
-The next substantive milestone is an immutable, resolvable Forecast contract
-that can reference a Scenario without turning Scenario prose into a prediction.
+The executable contract lives in `data/forecasts/`,
+`src/world_signals/forecasts.py` and `scripts/validate_forecasts.py`. It
+supports binary, categorical and numeric point Forecast issuances with stable
+question-series identity, independently scoreable analytical updates,
+administrative correction revisions, explicit information cutoffs, resolution
+sources, fallback and vintage policies, and governed void semantics. Outcome
+resolution, scoring, calibration, automatic generation, model learning and
+public projection remain outside this layer. No production Forecast is
+populated.
 
-## Stage 17 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 17 — Outcomes / Resolution — NOT STARTED
+
+The next substantive milestone is a governed Outcome layer that resolves
+Forecasts against predeclared authoritative sources while preserving resolved,
+void and unresolved states. Evaluation metrics follow only after a defensible
+prospective sample exists.
+
+## Stage 18 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 

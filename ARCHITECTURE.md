@@ -240,6 +240,25 @@ and append-only; revisions, falsified pathways and retired pathways remain
 recoverable through explicit as-of queries. Production population and public
 projection remain closed, and no upstream layer is mutated.
 
+## Reviewed Forecast contract — population closed
+
+The Forecast layer is now defined as a separate executable contract in
+`data/forecasts/`, `src/world_signals/forecasts.py` and
+`scripts/validate_forecasts.py`. It supports binary event, mutually exclusive
+categorical and numeric point forecasts. A stable Forecast ID identifies the
+question series; each analytical update is a distinct issuance that remains
+independently scoreable, while administrative corrections preserve the
+issuance's substantive content and revision history.
+
+Every issuance fixes its question, target, horizon, resolution rule,
+authoritative resolution sources, fallback policy and information cutoff at
+creation. Numeric forecasts require units and an explicit data-vintage policy.
+Late-published evidence cannot be attached to an earlier issuance. Void
+semantics are explicit and governed. Outcome resolution, scoring, calibration,
+automatic generation, model learning and public Forecast projection are
+outside this layer. Production Forecast population remains zero and synthetic
+fixtures are test-only.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -284,7 +303,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Relationships / causal layer | `data/relationships/`, `src/world_signals/relationships.py` and `scripts/validate_relationships.py` define a reviewed, zero-population contract using Signal revisions plus explicit evidence and causal gates | Contract implemented and pressure-tested; production population and public projection remain closed. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
 | Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
-| Forecasts | Analysis records preserve expectations and comparisons in bounded post-event packets, but there is no immutable resolvable forecast store | Missing. A future contract must record target, horizon, probability/interval, assumptions, evidence, resolution criteria and version lineage. |
+| Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; production population, outcome resolution, scoring and public projection remain closed. |
 | Forecast evaluation / model learning | No forecast-resolution/evaluation population or scoring pipeline | Missing. This follows the forecast contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
@@ -360,9 +379,11 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
 5. Define and pressure-test explicit Scenario Sets and competing conditional
    pathways (completed), keeping assumptions, divergence points, signposts and
    falsification separate from forecasts.
-6. Add immutable forecast records with resolution criteria. Only after
-   resolved forecasts exist should evaluation metrics and model-learning
-   surfaces be implemented.
+6. Define and pressure-test immutable Forecast records with explicit
+   resolution criteria (completed); keep analytical updates scoreable without
+   replacing earlier issuances.
+7. Add Outcomes/Resolution and evaluation only after prospective Forecasts
+   exist; add model-learning surfaces only after a defensible resolved sample.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.
