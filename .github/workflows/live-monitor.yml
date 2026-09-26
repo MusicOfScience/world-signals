@@ -1,23 +1,11 @@
 name: Monitor WORLD SIGNALS live sources
 
 on:
-  schedule:
-    - cron: '23 5 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'src/world_signals/live_monitor.py'
-      - 'src/world_signals/legal_monitor.py'
-      - 'src/world_signals/adapters/**'
-      - 'scripts/run_live_monitor.py'
-      - 'data/monitor/expectations.json'
-      - 'data/monitor/operations_policy.json'
-      - 'data/sources/registry.json'
-      - 'tests/test_live_monitor.py'
-      - 'tests/test_legal_monitor.py'
-      - 'tests/test_monitor_operations_policy.py'
-      - '.github/workflows/live-monitor.yml'
+
+# Routine monitoring runs on the guarded local scheduler. This workflow remains
+# available for deliberate, read-only hosted checks and retained evidence, but
+# is not a recurring intelligence runtime.
 
 permissions:
   contents: read

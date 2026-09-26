@@ -16,6 +16,7 @@ from world_signals.analysis import validate_analysis
 from world_signals.analysis_revision import validate_analysis_revisions
 from world_signals.analysis_revision_projection import public_analysis_projection_with_revision_contract
 from world_signals.live_analysis_bridge import validate_live_analysis_bridge
+from world_signals.icalendar import write_icalendar
 
 reg=load_json(ROOT/"data/canonical/registry.json")
 src=load_json(ROOT/"data/sources/registry.json")
@@ -69,6 +70,7 @@ with (docs/"app.js").open("a",encoding="utf-8") as bundled:
 projection=public_projection(reg,src)
 dump_json(docs/"data/events.json", projection)
 dump_json(docs/"data/changes.json", changes)
+ical_build = write_icalendar(docs / "world-signals.ics", reg, src, changes)
 
 source_map={s.get("source_id"):s for s in src.get("sources",[])}
 monitor_projection={
@@ -187,6 +189,8 @@ print(
     f"risk_overlay={risk_projection['metadata']['projected_event_count']}events/"
     f"{risk_projection['metadata']['risk_domain_count']}domains/"
     f"{risk_projection['metadata']['convergence_window_count']}density-windows, "
+    f"ics={len(ical_build.included_occurrence_ids)}events/"
+    f"{len(ical_build.omitted)}omitted, "
     f"biosecurity_overlay={biosecurity_projection['metadata']['mapped_canonical_series_count']}series/"
     f"{biosecurity_projection['metadata']['candidate_node_count']}candidates, "
     f"runtime={runtime_projection.get('availability')} and "

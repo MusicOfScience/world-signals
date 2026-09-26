@@ -275,11 +275,33 @@ Minimum CN pressure:
 
 Canada–U.S. tariff escalation and EU oil-security context remain valid future Live candidates. They are deferred, not discarded, and should be reconsidered by later pressure rather than appended automatically.
 
-## Stage 11 — Calendar export / external write interfaces — LATER / WRITE GATE CLOSED
+## Stage 11 — Calendar export / external write interfaces — ICS IMPLEMENTED / WRITES CLOSED
 
-ICS or other calendar outputs must be generated from Canonical. External calendar state remains disposable and rebuildable. User travel changes display-local rendering, not canonical event time.
+The first subscription-capable external projection is now implemented. The
+existing static build generates `docs/world-signals.ics` from governed
+Canonical records and the governed Source Registry. Stable occurrence-based
+UIDs survive date changes; timed events retain source-local IANA timezone
+semantics; civil dates and explicit expected windows remain date-only; unresolved
+TBC, source-native-calendar and monitor-only objects are omitted with an
+auditable build count rather than given synthetic appointments.
 
-Google Calendar writes remain off until explicitly authorised by a later reviewed architecture.
+The feed also emits deterministic RFC 5545 `VTIMEZONE` components for each
+referenced source-local TZID, derived from Python's IANA `zoneinfo` data over
+the included event horizon. Governed timing or lifecycle revisions advance
+`SEQUENCE` and update `LAST-MODIFIED` while preserving UID; `DTSTAMP` remains
+the earliest known governed event timestamp. Expected windows are retained and
+marked transparent for subscriber free/busy semantics.
+
+GitHub Pages can publish the feed at the intended path:
+`https://musicofscience.github.io/world-signals/world-signals.ics`.
+Monitoring remains local through the guarded daily runner. The former scheduled
+GitHub monitor is manual-dispatch only; CI, static Pages deployment and manual
+smoke/audit workflows remain available. Google Calendar writes remain off until
+explicitly authorised by a later reviewed architecture.
+
+The next milestone is not a larger calendar. It is a minimal reviewed Signal
+contract that references immutable Live observations and makes novelty,
+persistence, corroboration, confidence and transmission relevance explicit.
 
 ## Stage 12 — evaluate narrow auto-commit classes — GATE CLOSED
 

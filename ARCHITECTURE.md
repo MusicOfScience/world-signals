@@ -117,6 +117,103 @@ GitHub Pages cannot honestly claim current monitor health merely because a build
 
 Likewise, AX emits `docs/data/live_intelligence.json` only as **curated-store metadata**. It reports three internal observations and four internal evidence rows while exposing zero public observations and explicitly stating that it is not a runtime feed. A browser Live Intelligence feed is not authorised by this tranche.
 
+## 2026-09-26 architecture baseline and migration gap assessment
+
+This assessment is based on the governed registries, executable modules, tests,
+local-operation scripts, static build and workflows in this repository. It is a
+baseline for the incremental transition to:
+
+```text
+EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
+        -> SCENARIOS -> FORECASTS -> OUTCOMES -> MODEL LEARNING
+```
+
+| Target layer | Current repository state | Assessment |
+| --- | --- | --- |
+| Canonical events | `data/canonical/registry.json`, schema `0.52`, stable `series_id`/`occurrence_id`, lifecycle and timing history | Already implemented and sound. Automated monitor and local runtime guards protect it. |
+| Calendar projection | `src/world_signals/projection.py`, browser horizon/native-date views and `scripts/build_site.py` | Already implemented and sound as a read-only projection. It intentionally carries more registry context than a subscription feed. |
+| ICS subscription output | `src/world_signals/icalendar.py`, `scripts/build_ics.py` and `docs/world-signals.ics` output | Implemented and hardened. It uses governed Canonical records plus the approved change ledger, stable occurrence-based UIDs, source-local timed values, deterministic `VTIMEZONE` components derived from Python's IANA database, governed `SEQUENCE`/`DTSTAMP`/`LAST-MODIFIED`, transparent expected windows, date-only windows and explicit omission of non-dated material. |
+| Source registry / health | `data/sources/registry.json`, monitor expectations/adapters, runtime source-health summaries and review candidates | Already implemented and sound, but source health remains runtime evidence rather than event truth. |
+| Observations | `data/live_intelligence/` and `src/world_signals/live_intelligence.py` provide reviewed factual observations, evidence, timing separation and correction/revision controls | Implemented but needing extension. This is a bounded Live Intelligence layer, not yet a general observation store or public feed. |
+| Signals | Canonical metadata includes `signal_object_class`; the risk overlay and monitor diagnostics provide prompts and density views | Partially implemented. There is no standalone governed signal object with novelty, acceleration, persistence, corroboration and transmission relevance. |
+| Relationships / causal layer | Analysis records and the noncanonical biosecurity overlay contain reviewed connections and relationship vocabularies | Partially implemented. A generic cross-domain relationship graph with explicit causal/mechanistic/contextual status, alternatives and falsifiers is missing. |
+| Risks / regime detection | `src/world_signals/risk_projection.py` and `data/coverage/biosecurity_overlay.json` provide a read-only, non-exclusive risk lens and convergence windows | Partially implemented. Regime-transition state, history and alert semantics are not yet a separate governed layer. |
+| Scenarios | No governed scenario registry or competing-scenario contract | Missing. Do not infer scenarios from risk-overlay windows. |
+| Forecasts | Analysis records preserve expectations and comparisons in bounded post-event packets, but there is no immutable resolvable forecast store | Missing. A future contract must record target, horizon, probability/interval, assumptions, evidence, resolution criteria and version lineage. |
+| Forecast evaluation / model learning | No forecast-resolution/evaluation population or scoring pipeline | Missing. This follows the forecast contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
+| Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
+| Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
+
+### Implemented but needing extension
+
+The strongest reusable foundations are the stable Canonical identity/timing
+contract, the source-health versus event-truth separation, the reviewed Live
+observation/evidence grammar, immutable Analysis snapshots and the protected
+local-operation loop. The next layers should extend those contracts rather than
+introducing a second event database. Live observations can become the upstream
+observation substrate; the existing Analysis interaction fields can inform a
+future relationship contract; and the risk overlay can remain a read-only
+consumer while a separate regime-state contract is designed.
+
+### Legacy, obsolete or potentially conflicting surfaces
+
+- The old architecture text described calendar export as “optional” or
+  “later”; the governed ICS projection is now the first completed external
+  read interface, while Google Calendar writes remain prohibited.
+- `scripts/run_local_operations.py` and the guarded macOS LaunchAgents are the
+  recurring intelligence runtime. The scheduled GitHub monitor cron was
+  redundant with that local operating model and is now manual-dispatch only;
+  CI, Pages deployment, adapter smoke tests and coverage audits remain intact.
+- GitHub Pages may publish a static `.ics` file, but it must not become the
+  monitoring runtime or a source of canonical truth. The feed is rebuilt from
+  the governed registry during the existing site build.
+- The browser Operations/runtime and retained-review projections remain dated
+  evidence surfaces. They are not inputs to the ICS builder and are never
+  promoted into public calendar events.
+
+### Subscription-feed interoperability contract
+
+The iCalendar projection is generated by the local site build from governed
+Canonical records and the approved occurrence change ledger. A timed event
+with `source_timezone` emits that IANA TZID and the feed emits a matching
+`VTIMEZONE`; definitions are limited to the zones and event-year range needed
+by the included events, with offsets/transitions read from Python `zoneinfo`.
+This preserves source-local semantics without hand-maintained DST rules.
+
+`UID` is the stable occurrence identity. `SEQUENCE` is the sum of governed
+status-history revisions and occurrence-specific approved ledger transactions,
+so timing-only changes do not depend on `status_history` length and unrelated
+registry changes do not revise another event. `DTSTAMP` uses the earliest
+known governed timestamp and `LAST-MODIFIED` the latest governed revision
+timestamp; rebuild execution time is never used. Expected date windows remain
+date ranges and are marked `TRANSP:TRANSPARENT` so they are visible without
+blocking subscriber free/busy time. A governed `CANCELLED` event remains
+auditable under its stable UID with `STATUS:CANCELLED` and transparent
+availability. `POSTPONED` uses RFC-valid `STATUS:TENTATIVE`, an explicit
+date-not-confirmed summary and transparent availability; an old date is never
+presented as a confirmed appointment. Dated `PROVISIONAL`/`TBC` events are
+also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
+
+### Smallest sensible migration sequence
+
+1. Complete and validate the governed ICS projection (this tranche), including
+   static publication and omission tests.
+2. Define a minimal reviewed `signal` contract that references one or more
+   immutable observations and records direction, novelty, persistence,
+   corroboration, confidence and transmission relevance. Keep population closed
+   until the contract is pressure-tested.
+3. Define a generic relationship contract with explicit relationship type,
+   alternatives, disconfirming evidence and review history, reusing existing
+   Analysis and overlay semantics without making the overlay canonical.
+4. Add a small regime-state/risk history interface that consumes reviewed
+   signals while preserving the current risk overlay as a projection.
+5. Add competing scenario records, then immutable forecast records with
+   resolution criteria. Only after resolved forecasts exist should evaluation
+   metrics and model-learning surfaces be implemented.
+
+No synthetic observations, signals, scenarios or forecasts are added by this
+baseline tranche.
+
 ## GitHub is an execution shell, not the architecture
 
 GitHub Actions runs validation and monitors, GitHub Pages hosts read-only projections, and pull requests/commits provide review and audit history. The Python/JSON contracts remain portable to another CI/host. GitHub Actions artefacts are evidence surfaces, not canonical storage.
