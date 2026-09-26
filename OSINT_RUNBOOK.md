@@ -96,6 +96,39 @@ a new cutoff and create a distinct reviewed issuance only when new evidence
 materially changes the estimate. Do not attach post-cutoff OSINT to the four
 26 September 2026 Forecast issuances.
 
+## First reviewed Signal disposition
+
+The first OSINT bootstrap run produced 701 Observation Candidates, 605 story
+clusters and five Signal Candidates. This was primarily feed-history/bootstrap
+discovery: 510 candidates had no publication timestamp and 55 were older than
+90 days at audit time. The candidates were therefore treated as review aids,
+not as evidence of current-world change.
+
+The route split was China NBS 500, Japan MOF 100, European Council 50, SARB
+25, Federal Reserve 15, CBSL 10 and GOV.UK 1; BSP returned source-specific
+HTTP 403. Publication-age buckets were 16 within 7 days, 71 within 8–30 days,
+49 within 31–90 days, 55 older than 90 days and 510 unknown. Story clustering
+left 571 singleton clusters, with only a small tail of multi-item clusters.
+The run therefore behaved as bootstrap/history discovery mixed with recent
+material, not as a clean current-change detector. The audit did not rewrite
+runtime history or treat the BSP 403 as evidence of a world-state change.
+
+None of the five machine Signal Candidates was admitted. The Japan MOF and
+European Council proposals were retained for later review as one-provider
+history/archive material; the China NBS proposal lacked governed support and
+time-qualified persistence; the mixed monetary-policy proposal lacked one
+bounded proposition and baseline; and the broad cross-domain proposal was
+analysis rather than a Signal. These dispositions are retained in
+`data/signals/signal_admission_transaction_v1.json`.
+
+One independently reviewed Signal was admitted from the governed Live store,
+not from raw candidates: `WSSIG-HEALTH-COD-BVD-BURDEN-202609-001`. It compares
+two dated WHO snapshots of the DRC Bundibugyo outbreak. The records share WHO
+ultimate origin, so corroboration is explicitly `PARTIAL`, confidence is
+`LOW`, and no causal, risk, scenario or forecast claim is made. Signal
+population remains closed by default, the public projection remains closed,
+and downstream analytical populations remain empty.
+
 ## Current coverage gaps
 
 V1 does not provide real-time market prices/yield curves/OIS, credit stress,

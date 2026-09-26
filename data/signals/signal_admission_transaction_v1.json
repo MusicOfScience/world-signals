@@ -1,0 +1,85 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "SIGNAL_ADMISSION_TRANSACTION",
+  "version": "0.1",
+  "transaction_id": "SIG-ADMISSION-20260927-COD-BVD-001",
+  "transaction_type": "REVIEWED_SIGNAL_ADMISSION",
+  "decision": "ACCEPTED",
+  "decided_at_utc": "2026-09-27T01:00:00Z",
+  "reviewer": {
+    "reviewer_id": "project-owner-authorised-review",
+    "reviewed_at_utc": "2026-09-27T01:00:00Z",
+    "decision_basis": "One governed persistent-change Signal is admitted after review of all twelve Live Observations. The selected case has two time-separated primary observations, an explicit comparison baseline, shared-origin limits, materiality rationale, alternatives and falsification conditions. The five machine Signal Candidates are not treated as admission evidence."
+  },
+  "review_scope": {
+    "source_of_proposed_signal": "complete governed Live Observation review",
+    "governed_observation_ids": [
+      "WSLI-HEALTH-COD-BVD-20260826-001",
+      "WSLI-HEALTH-COD-BVD-20260830-001"
+    ],
+    "raw_observation_candidates_are_support": false,
+    "machine_signal_candidates_are_admission_entitlement": false
+  },
+  "candidate_dispositions": [
+    {
+      "candidate_id": "WSC-SIG-7cbde7259e503bbf93b9",
+      "disposition": "RETAIN_FOR_LATER_REVIEW",
+      "rationale": "Japan MOF feed history is dominated by one-provider archive and schedule material; it has no governed Observation support for a defined current Signal."
+    },
+    {
+      "candidate_id": "WSC-SIG-9b4769efa51ce7f72eae",
+      "disposition": "RETAIN_FOR_LATER_REVIEW",
+      "rationale": "European Council feed history is a one-provider institutional meeting archive, including historical and future schedule metadata rather than a reviewed current change proposition."
+    },
+    {
+      "candidate_id": "WSC-SIG-1245032319ae9fc6dc74",
+      "disposition": "INSUFFICIENT_GOVERNED_SUPPORT",
+      "rationale": "The China NBS batch is primarily bootstrap/history material with missing publication times and no established persistence or governed Observation support."
+    },
+    {
+      "candidate_id": "WSC-SIG-640f0bd0e1dfa37703a2",
+      "disposition": "INSUFFICIENT_GOVERNED_SUPPORT",
+      "rationale": "The multi-provider monetary-policy proposal combines unrelated historical publications without one defined baseline, a common proposition or governed supporting Observation set; provider count alone is not corroboration."
+    },
+    {
+      "candidate_id": "WSC-SIG-341fdb51e7416d6447fc",
+      "disposition": "ANALYSIS_NOT_SIGNAL",
+      "rationale": "The cross-domain convergence proposal aggregates the bootstrap cohort without a bounded proposition, time-separated support or reviewed causal/transmission basis; it remains a review aid, not a governed Signal."
+    }
+  ],
+  "signal_ids": [
+    "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001"
+  ],
+  "revision_ids": [
+    "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+  ],
+  "pre_state": {
+    "schema_version": "0.1",
+    "population_state": "CLOSED_NO_PRODUCTION_SIGNALS",
+    "signal_count": 0,
+    "sha256": "dd8e0d0b9d9fc8d02623afd4a920f32a43e6c2fe930b637859380552c8f99fe9"
+  },
+  "post_state": {
+    "schema_version": "0.1",
+    "population_state": "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+    "signal_count": 1,
+    "sha256": "bbea5ecb25cbc326493cb64b5aa722e73d362ee05aa24bf7ddda00b7af52a962"
+  },
+  "validation": {
+    "status": "PASS",
+    "validator_version": "signal-admission-0.1",
+    "validated_at_utc": "2026-09-27T01:00:00Z"
+  },
+  "admission_limit": {
+    "maximum_new_signals": 1,
+    "admitted_count": 1
+  },
+  "boundary": {
+    "automatic_signal_promotion": false,
+    "public_signal_projection": "CLOSED",
+    "automatic_relationship_promotion": false,
+    "automatic_risk_promotion": false,
+    "automatic_scenario_promotion": false
+  },
+  "denominator_note": "This Signal is a permanent prospective analytical record and remains in the future Signal history unless a governed withdrawal, supersession or expiry decision is recorded. No downstream population or forecast performance claim is created by this admission."
+}

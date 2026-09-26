@@ -5,7 +5,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-26
+**Reference date:** 2026-09-27
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
 - Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
@@ -14,6 +14,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- Signals: schema **v0.1 / 1 admitted revision(s)**; population **CONTROLLED_REVIEWED_SIGNAL_SPECIMEN**; admission transaction required; maximum production population **1**; public projection **closed**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
 - OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.

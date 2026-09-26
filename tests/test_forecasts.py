@@ -454,7 +454,11 @@ class ForecastContractTests(unittest.TestCase):
         ):
             data = json.loads(path.read_text())
             key = "signals" if "signals" in data else "relationships" if "relationships" in data else "states" if "states" in data else "scenarios"
-            self.assertEqual(data[key], [])
+            if key == "signals":
+                self.assertEqual(len(data[key]), 1)
+                self.assertEqual(data["population_state"], "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN")
+            else:
+                self.assertEqual(data[key], [])
 
 
 if __name__ == "__main__":

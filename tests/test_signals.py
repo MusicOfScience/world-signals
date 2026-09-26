@@ -170,11 +170,13 @@ class SignalContractTests(unittest.TestCase):
         return validate_signal_history(self.schema, rows, observations, evidence)
 
     def test_closed_production_dataset_is_valid_and_empty(self):
+        transaction = json.loads((ROOT / "data/signals/signal_admission_transaction_v1.json").read_text())
         report = validate_signals(
             self.schema,
             json.loads((ROOT / "data/signals/signals.json").read_text()),
             self.live_observations,
             self.live_evidence,
+            transaction,
         )
         self.assertTrue(report.ok, report.errors)
         projection = public_signal_projection(
@@ -511,15 +513,16 @@ class SignalContractTests(unittest.TestCase):
         observations, evidence = self.upstream_fixture()
         schema = deepcopy(self.schema)
         schema["population_policy"]["production_population_allowed"] = True
-        with self.assertRaises(ValueError):
-            public_signal_projection(schema, self.dataset([]), observations, evidence)
+        projection = public_signal_projection(schema, self.dataset([]), observations, evidence)
+        self.assertEqual(projection["signals"], [])
+        self.assertFalse(projection["metadata"]["public_signal_projection_allowed"])
 
     def test_synthetic_fixture_does_not_change_closed_production_population(self):
         observations, evidence = self.upstream_fixture()
         row = self.signal_row()
         self.assertTrue(self.validate([row], observations, evidence).ok)
         report = validate_signals(self.schema, self.dataset([row]), observations, evidence)
-        self.assertIn("closed production population gate", " ".join(report.errors))
+        self.assertIn("requires a reviewed admission transaction", " ".join(report.errors))
         with self.assertRaises(ValueError):
             public_signal_projection(self.schema, self.dataset([row]), observations, evidence)
 

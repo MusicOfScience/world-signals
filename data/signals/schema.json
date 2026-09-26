@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "SIGNAL_LAYER_SCHEMA",
   "version": "0.1",
-  "reference_date": "2026-09-26",
+  "reference_date": "2026-09-27",
   "architecture_position": "SIGNALS",
   "upstream_layers": [
     "LIVE_INTELLIGENCE"
@@ -220,13 +220,16 @@
     "expected_outcome"
   ],
   "population_policy": {
-    "mode": "CLOSED_SIGNAL_CONTRACT_NO_PRODUCTION_POPULATION",
-    "production_population_allowed": false,
+    "mode": "CONTROLLED_REVIEWED_SIGNAL_ADMISSION_ONLY",
+    "production_population_allowed": true,
     "automatic_ingestion_allowed": false,
     "candidate_signal_storage_allowed": false,
     "public_signal_projection_allowed": false,
     "synthetic_production_population_allowed": false,
-    "reason": "Define and pressure-test the contract over the reviewed Live Intelligence observation substrate before any governed Signal admission transaction."
+    "admission_transaction_required": true,
+    "maximum_production_signal_count": 1,
+    "admitted_population_state": "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+    "reason": "Production remains closed by default; only an explicit reviewed admission transaction may admit the single first Signal specimen."
   },
   "public_projection_policy": {
     "signal_projection_allowed": false,

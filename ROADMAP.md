@@ -5,7 +5,7 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-26
+**Reference date:** 2026-09-27
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
 - Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
@@ -14,6 +14,7 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
 - Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- Signals: schema **v0.1 / 1 admitted revision(s)**; population **CONTROLLED_REVIEWED_SIGNAL_SPECIMEN**; admission transaction required; maximum production population **1**; public projection **closed**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
 - OPEC CE remains quarantined; `OPEC_QUARANTINE.md` is present and PR #113 is not a selectable unfinished transaction.
@@ -301,20 +302,35 @@ smoke/audit workflows remain available. Google Calendar writes remain off until
 explicitly authorised by a later reviewed architecture.
 
 The next milestone is not a larger calendar. The reviewed Signal contract is
-now defined and pressure-tested over immutable Live observations, while its
-production population remains closed. It makes novelty, persistence,
+now defined and pressure-tested over immutable Live observations, with one
+controlled first specimen admitted through a reviewed transaction while the
+general population remains closed by default. It makes novelty, persistence,
 corroboration, confidence, contradiction and transmission relevance explicit
 without leaking forecasts or causal claims downstream.
 
-## Stage 12 — reviewed Signal contract — IMPLEMENTED / POPULATION CLOSED
+## Stage 12 — reviewed Signal contract — IMPLEMENTED / ONE SPECIMEN / POPULATION CLOSED BY DEFAULT
 
-The executable contract lives in `data/signals/` and
-`src/world_signals/signals.py`. It validates immutable observation/evidence
-lineage, review-governed lifecycle and revision history, contradiction and
-anti-noise safeguards, explicit transmission hypotheses and forecast-field
-exclusion. No candidate or production Signal has been populated, no synthetic
-fixture is stored in production data, and public Signal projection remains
-closed.
+The executable contract lives in `data/signals/`,
+`src/world_signals/signals.py` and `src/world_signals/signal_admission.py`. It
+validates immutable observation/evidence lineage, review-governed lifecycle and
+revision history, contradiction and anti-noise safeguards, explicit
+transmission hypotheses and forecast-field exclusion. The first tranche admits
+exactly one real reviewed Signal over two governed WHO observations through an
+explicit transaction with retained pre/post hashes. General population remains
+closed, synthetic fixtures remain test-only and public Signal projection
+remains closed.
+
+The five Signal Candidates from the first OSINT bootstrap run were not treated
+as production evidence: archive/history-heavy single-provider proposals were
+retained for later review, the mixed monetary-policy proposal lacked one
+bounded proposition and governed support, and the broad cross-domain proposal
+was analysis rather than a Signal. Candidate volume was primarily bootstrap
+history discovery (701 candidates / 605 clusters), not a current-change count.
+
+The admitted specimen is deliberately low confidence: its two WHO records are
+time-separated but share ultimate institutional origin, so provider count is
+not presented as independent corroboration. Relationships, Risks/Regimes and
+Scenarios remain empty; the Signal does not automatically feed them.
 
 The generic reviewed Relationship contract is implemented in Stage 13 below.
 
