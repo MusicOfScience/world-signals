@@ -8,7 +8,6 @@ from world_signals.io import load_json, dump_json
 from world_signals.validation import validate_registry
 from world_signals.projection import public_projection
 from world_signals.operations import operations_projection
-from world_signals.runtime_projection import unavailable_runtime_projection
 from world_signals.biosecurity_projection import public_biosecurity_projection
 from world_signals.risk_projection import public_risk_projection
 from world_signals.live_intelligence import public_live_intelligence_projection, validate_live_intelligence
@@ -23,7 +22,6 @@ src=load_json(ROOT/"data/sources/registry.json")
 changes=load_json(ROOT/"data/changes/ledger.json")
 expectations=load_json(ROOT/"data/monitor/expectations.json")
 operations_policy=load_json(ROOT/"data/monitor/operations_policy.json")
-review_contract=load_json(ROOT/"data/monitor/review_candidate_state_contract.json")
 biosecurity_overlay=load_json(ROOT/"data/coverage/biosecurity_overlay.json")
 live_schema=load_json(ROOT/"data/live_intelligence/schema.json")
 live_evidence=load_json(ROOT/"data/live_intelligence/evidence_registry.json")
@@ -49,6 +47,10 @@ if not bridge_report.ok:
     raise SystemExit("Live → Analysis bridge validation failed: "+"; ".join(bridge_report.errors))
 
 docs=ROOT/"docs"
+# `docs/` is disposable generated output. Clearing this exact directory prevents
+# a stale runtime/review artefact from surviving into a later public build.
+if docs.exists():
+    shutil.rmtree(docs)
 docs.mkdir(exist_ok=True)
 for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
@@ -105,6 +107,32 @@ dump_json(docs/"data/monitor_routes.json",monitor_projection)
 ops_projection=operations_projection(reg,src,expectations,operations_policy,changes)
 dump_json(docs/"data/operations.json",ops_projection)
 
+# Public source metadata is intentionally narrower than the local operations
+# projection. In particular, it does not publish monitor endpoints, rights
+# evidence, runtime state or review-candidate material.
+# Deliberately excluded public paths: data/runtime.json and
+# data/review_state.json. Those names belong only to the local operator build.
+dump_json(docs/"data/sources.json", {
+    "metadata": {
+        "source_count": len(src.get("sources", [])),
+        "configured_live_monitor_routes": len(monitor_projection["routes"]),
+        "distinction": "governed source records are not the same as actively monitored routes",
+    },
+    "sources": [
+        {
+            "source_id": source.get("source_id"),
+            "institution": source.get("institution"),
+            "jurisdiction": source.get("jurisdiction"),
+            "domain": source.get("domain"),
+            "source_type": source.get("source_type"),
+            "authoritative_url": source.get("authoritative_url"),
+            "source_role": source.get("endpoint_role") or source.get("information_supplied"),
+            "publication_status": source.get("activation_status"),
+        }
+        for source in src.get("sources", [])
+    ],
+})
+
 biosecurity_projection=public_biosecurity_projection(reg,biosecurity_overlay)
 dump_json(docs/"data/biosecurity.json",biosecurity_projection)
 
@@ -119,43 +147,55 @@ dump_json(docs/"data/analysis.json",analysis_projection)
 risk_projection=public_risk_projection(reg)
 dump_json(docs/"data/risk_overlay.json",risk_projection)
 
-runtime_path=ROOT/"artifacts/latest-monitor-public.json"
-if runtime_path.exists():
-    runtime_projection=load_json(runtime_path)
-else:
-    runtime_projection=unavailable_runtime_projection(
-        "NO_RUNTIME_ARTIFACT_FETCH_PERFORMED_FOR_THIS_BUILD",
-        {
-            "canonical_registry_version":reg.get("version"),
-            "source_registry_version":src.get("version"),
-            "monitor_expectations_version":expectations.get("version"),
-            "monitor_operations_policy_version":operations_policy.get("version"),
-        },
+def layer_status(path, collection_key, state_key="population_state"):
+    payload=load_json(ROOT / path)
+    policy=payload.get("public_projection_policy") or {}
+    public_projection=next(
+        (policy[key] for key in (
+            "signal_projection_allowed",
+            "forecast_projection_allowed",
+            "relationship_projection_allowed",
+            "risk_projection_allowed",
+            "scenario_projection_allowed",
+            "observation_projection_allowed",
+        ) if key in policy),
+        False,
     )
-dump_json(docs/"data/runtime.json",runtime_projection)
-
-review_path=ROOT/"artifacts/retained-review-public.json"
-if review_path.exists():
-    review_projection=load_json(review_path)
-else:
-    review_projection={
-        "project":"WORLD SIGNALS",
-        "dataset":"RETAINED_REVIEW_CANDIDATE_STATE",
-        "version":review_contract.get("version"),
-        "availability":"UNAVAILABLE_NO_RETAINED_REVIEW_FETCH",
-        "scope":"RETAINED_ACTIONS_ARTEFACT_HORIZON_NOT_PERMANENT_QUEUE",
-        "activation_after_run_number":(review_contract.get("activation") or {}).get("activation_after_run_number"),
-        "retention_days":(review_contract.get("retention_limit") or {}).get("current_monitor_artefact_retention_days"),
-        "run_count_considered":0,
-        "item_count":0,
-        "state_counts":{},
-        "items":[],
-        "evidence_horizon_complete":False,
-        "evidence_gaps":["NO_RETAINED_REVIEW_FETCH_PERFORMED_FOR_THIS_BUILD"],
-        "automatic_canonical_commit":False,
-        "google_calendar_write":False,
+    return {
+        "version": payload.get("version"),
+        "count": len(payload.get(collection_key, [])),
+        "state": payload.get(state_key),
+        "public_projection": public_projection,
     }
-dump_json(docs/"data/review_state.json",review_projection)
+
+# Counts and publication gates are safe public metadata; the underlying closed
+# Signal, Forecast, Observation and downstream records are never copied.
+dump_json(docs/"data/public_status.json", {
+    "project": "WORLD SIGNALS",
+    "reference_timezone": "Australia/Melbourne",
+    "canonical": {"version": reg.get("version"), "count": len(reg.get("records", []))},
+    "sources": {"version": src.get("version"), "count": len(src.get("sources", []))},
+    "monitor_routes": {"version": expectations.get("version"), "count": len(monitor_projection["routes"])},
+    "live_intelligence": {
+        "version": live_schema.get("version"),
+        "internal_count": len(live_observations.get("observations", [])),
+        "public_count": live_projection["metadata"]["public_observation_count"],
+        "state": live_projection["metadata"]["population_state"],
+        "public_projection": live_schema.get("public_projection_policy", {}).get("observation_projection_allowed", False),
+    },
+    "signals": layer_status("data/signals/signals.json", "signals"),
+    "relationships": layer_status("data/relationships/relationships.json", "relationships"),
+    "risks": layer_status("data/risks/states.json", "states"),
+    "scenarios": layer_status("data/scenarios/scenarios.json", "scenarios"),
+    "forecasts": layer_status("data/forecasts/forecasts.json", "forecasts"),
+    "outcomes": layer_status("data/outcomes/outcomes.json", "outcomes"),
+    "evaluation": {
+        "version": load_json(ROOT / "data/evaluation/evaluation.json").get("version"),
+        "count": len(load_json(ROOT / "data/evaluation/evaluation.json").get("evaluations", [])),
+        "state": load_json(ROOT / "data/evaluation/evaluation.json").get("evaluation_state"),
+        "public_projection": False,
+    },
+})
 
 dump_json(docs/"data/source_summary.json", {
     "source_count": len(src.get("sources",[])),
@@ -170,9 +210,10 @@ dump_json(docs/"data/source_summary.json", {
     "risk_overlay_domain_count":risk_projection["metadata"]["risk_domain_count"],
     "risk_overlay_convergence_window_count":risk_projection["metadata"]["convergence_window_count"],
     "monitoring_tiers":ops_projection["source_governance_summary"]["monitoring_readiness_status"],
-    "runtime_snapshot_availability":runtime_projection.get("availability"),
-    "retained_review_state_availability":review_projection.get("availability"),
-    "retained_review_item_count":review_projection.get("item_count",0),
+    # Runtime and retained review state are intentionally absent from public
+    # Pages. The local operator build is the only surface that may include them.
+    "public_runtime_projection": "CLOSED",
+    "public_review_candidate_projection": "CLOSED",
     "biosecurity_mapped_series_count":biosecurity_projection["metadata"]["mapped_canonical_series_count"],
     "biosecurity_candidate_node_count":biosecurity_projection["metadata"]["candidate_node_count"],
 })
@@ -193,6 +234,6 @@ print(
     f"{len(ical_build.omitted)}omitted, "
     f"biosecurity_overlay={biosecurity_projection['metadata']['mapped_canonical_series_count']}series/"
     f"{biosecurity_projection['metadata']['candidate_node_count']}candidates, "
-    f"runtime={runtime_projection.get('availability')} and "
-    f"retained_review={review_projection.get('availability')}({review_projection.get('item_count',0)}) -> {docs}"
+    "runtime=CLOSED and review_candidates=CLOSED -> "
+    f"{docs}"
 )

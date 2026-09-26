@@ -202,6 +202,49 @@ Intrinsic importance, expected market sensitivity and observed market response r
 
 ## Run locally
 
+### Public site and local operator cockpit
+
+The public site is built from deliberately publishable projections only:
+
+```bash
+python scripts/build_site.py
+python scripts/validate_public_site.py
+```
+
+The build writes disposable output to `docs/`. It includes the Canonical
+calendar projection, `world-signals.ics`, source metadata and public layer
+status. It does not include `.world-signals-runtime`, monitor checkpoints,
+Observation Candidates, Signal Candidates, retained review state or Forecast
+values.
+
+The private read-only operator cockpit is a separate local artefact:
+
+```bash
+python scripts/build_operator_site.py
+python -m http.server 8765 --directory operator
+```
+
+Open `http://127.0.0.1:8765/operator.html`. This surface may include local
+runtime/review evidence and internal Forecast detail, but it is ignored by Git
+and is never copied into `docs/`.
+
+### Explicit Pages publication
+
+Hosted Actions are not required for publication. After the source PR has been
+merged, synchronize local `main` with `origin/main` and run:
+
+```bash
+python scripts/publish_pages.py --source-branch main --publication-branch gh-pages
+```
+
+The command requires a clean checkout whose `HEAD` equals `origin/main`, runs
+the deterministic build and public-boundary validation, then commits only
+generated `docs/` output to `gh-pages` without mutating `main`. Use
+`--check-only` to validate without pushing. The repository Pages setting must
+be changed once, outside this repository, to **Deploy from a branch** →
+`gh-pages` → `/ (root)`. Until that setting is changed, the existing
+Actions-based Pages configuration remains the external publication blocker.
+
 ```bash
 python scripts/validate_registry.py
 python scripts/validate_live_intelligence.py

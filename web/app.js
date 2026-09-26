@@ -1,5 +1,7 @@
 let DATA;
 let MONITORS={metadata:{},routes:[]};
+let PUBLIC_STATUS={};
+let SOURCES={metadata:{},sources:[]};
 let futureOnly = true;
 let activeView = 'calendar';
 let calendarCursor = new Date();
@@ -108,6 +110,47 @@ function options(id,values){
 function renderStats(){
   const m=DATA.metadata;
   $('#stats').innerHTML=`<div class="stat"><b>${m.record_count}</b><span>canonical occurrences</span></div><div class="stat"><b>${Object.keys(m.region_counts).length}</b><span>regions</span></div><div class="stat"><b>${Object.keys(m.category_counts).length}</b><span>categories</span></div><div class="stat"><b>${MONITORS.routes.length}</b><span>configured live monitor routes</span></div>`;
+}
+function melbourneClock(){
+  return new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Melbourne',dateStyle:'medium',timeStyle:'short'}).format(new Date());
+}
+function publicHorizonCounts(){
+  const now=Date.now();
+  const ends=[24*60*60*1000,7*24*60*60*1000,30*24*60*60*1000].map(offset=>now+offset);
+  return ends.map(end=>DATA.events.filter(event=>{
+    if(event.lifecycle==='CANCELLED') return false;
+    const date=eventSortDate(event);
+    return date && date.getTime()>=now && date.getTime()<end;
+  }).length);
+}
+function renderProductBrief(){
+  const [next24,next7,next30]=publicHorizonCounts();
+  $('#next24Count').textContent=next24;
+  $('#next7Count').textContent=next7;
+  $('#next30Count').textContent=next30;
+  $('#referenceClock').textContent=`Melbourne · ${melbourneClock()}`;
+  $('#horizonClock').textContent=`Melbourne · ${melbourneClock()}`;
+  $('#asOfLabel').textContent=`As of ${melbourneClock()} · display context only`;
+  const live=PUBLIC_STATUS.live_intelligence||{};
+  const forecast=PUBLIC_STATUS.forecasts||{};
+  $('#publicStatus').innerHTML=`
+    <div class="status-row"><span class="status-dot neutral"></span><div><strong>Calendar projection available</strong><small>${esc(PUBLIC_STATUS.canonical?.count||DATA.events.length)} Canonical occurrences · read-only</small></div></div>
+    <div class="status-row"><span class="status-dot closed"></span><div><strong>NOW intelligence is selective</strong><small>${esc(live.internal_count||0)} reviewed observations internal · ${esc(live.public_count||0)} public</small></div></div>
+    <div class="status-row"><span class="status-dot closed"></span><div><strong>Forecast values remain closed</strong><small>${esc(forecast.count||0)} pilot forecasts · publication gate closed</small></div></div>`;
+  $('#forecastStatusCopy').textContent=`${forecast.count||0} pilot forecasts are maintained under review. Their values and claims remain closed on the public site until publication governance permits them.`;
+}
+function renderThemes(){
+  const counts=new Map();
+  DATA.events.forEach(event=>counts.set(event.category,(counts.get(event.category)||0)+1));
+  const rows=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
+  $('#themeList').innerHTML=rows.map(([name,count])=>`<a class="theme-row" href="#horizon"><span>${esc(humanToken(name))}</span><strong>${count}</strong><small>calendar occurrences</small></a>`).join('');
+}
+function renderSources(){
+  const rows=(SOURCES.sources||[]).slice(0,12);
+  const total=SOURCES.metadata?.source_count||rows.length;
+  const routes=SOURCES.metadata?.configured_live_monitor_routes||MONITORS.routes.length;
+  $('#sourceSummary').textContent=`${total} governed sources · ${routes} actively configured routes`;
+  $('#sourceList').innerHTML=rows.map(source=>`<article class="source-row"><div><strong>${esc(source.institution||source.source_id)}</strong><span>${esc(source.jurisdiction||'Jurisdiction not recorded')} · ${esc(humanToken(source.domain||'domain not recorded'))}</span></div><div><span class="source-role">${esc(humanToken(source.source_type||'governed source'))}</span><small>${esc(source.publication_status||'status not recorded')}</small></div>${source.authoritative_url?`<a href="${esc(source.authoritative_url)}" target="_blank" rel="noopener">Authoritative source ↗</a>`:''}</article>`).join('')+`<p class="source-more">Showing a representative public registry view. The full source registry is governed separately; monitored routes are not the same as all governed sources.</p>`;
 }
 function baseFiltered(){
   const q=$('#search').value.toLowerCase().trim();
@@ -240,13 +283,20 @@ function render(){
   else renderMonitors();
 }
 async function main(){
-  const [eventResponse,monitorResponse]=await Promise.all([
+  const [eventResponse,monitorResponse,statusResponse,sourcesResponse]=await Promise.all([
     fetch('data/events.json'),
-    fetch('data/monitor_routes.json')
+    fetch('data/monitor_routes.json'),
+    fetch('data/public_status.json'),
+    fetch('data/sources.json')
   ]);
   if(!eventResponse.ok) throw new Error(`events.json ${eventResponse.status}`);
   DATA=await eventResponse.json();
   if(monitorResponse.ok) MONITORS=await monitorResponse.json();
+  if(statusResponse.ok) PUBLIC_STATUS=await statusResponse.json();
+  if(sourcesResponse.ok) SOURCES=await sourcesResponse.json();
+  renderProductBrief();
+  renderThemes();
+  renderSources();
   renderStats();
   options('#region',DATA.events.map(x=>x.region));
   options('#category',DATA.events.map(x=>x.category));
