@@ -2,8 +2,9 @@
 
 Evaluation is a derived analytical layer.  Forecasts and Outcomes remain the
 only sources of prospective and resolution truth; this module never writes or
-mutates either source.  Production evaluation is deliberately closed while
-the repository has no governed Forecast or Outcome population.
+mutates either source.  Production evaluation remains a derived, no-sample
+layer while the repository has no governed Outcome population; the bounded
+Forecast pilot is not itself an evaluation sample.
 """
 
 from __future__ import annotations
@@ -271,8 +272,10 @@ def validate_evaluation(
         errors.append("Evaluation production population must remain closed")
     if schema.get("public_projection_policy", {}).get("evaluation_projection_allowed") is not False:
         errors.append("Evaluation public projection must remain closed")
-    if not isinstance(forecasts, dict) or forecasts.get("forecasts") != []:
-        errors.append("production Forecast population must remain empty for Evaluation")
+    if not isinstance(forecasts, dict) or not isinstance(forecasts.get("forecasts"), list):
+        errors.append("production Forecast dataset must contain a forecasts list")
+    elif forecasts.get("population_state") is not None and forecasts.get("population_state") not in {"CLOSED_NO_PRODUCTION_FORECASTS", "PILOT_PRODUCTION_FORECASTS_REVIEWED"}:
+        errors.append("production Forecast dataset has an invalid population state for Evaluation")
     if not isinstance(outcomes, dict) or outcomes.get("outcomes") != []:
         errors.append("production Outcome population must remain empty for Evaluation")
     try:

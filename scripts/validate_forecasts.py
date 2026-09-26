@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the closed production Forecast contract."""
+"""Validate the governed Forecast contract and prospective pilot admission."""
 
 from pathlib import Path
 import sys
@@ -13,6 +13,8 @@ from world_signals.forecasts import validate_forecasts
 
 schema = load_json(ROOT / "data/forecasts/schema.json")
 forecasts = load_json(ROOT / "data/forecasts/forecasts.json")
+admission_path = ROOT / "data/forecasts/admission_transaction.json"
+admission = load_json(admission_path) if admission_path.exists() else None
 scenarios = load_json(ROOT / "data/scenarios/scenarios.json")
 risks = load_json(ROOT / "data/risks/states.json")
 signals = load_json(ROOT / "data/signals/signals.json")
@@ -33,6 +35,7 @@ report = validate_forecasts(
     evidence,
     canonical,
     sources,
+    admission,
 )
 if not report.ok:
     for error in report.errors:
@@ -43,5 +46,6 @@ print(
     "Forecast validation PASS: "
     f"schema={schema.get('version')} "
     f"forecasts={len(forecasts.get('forecasts', []))} "
-    f"population={forecasts.get('population_state')}"
+    f"population={forecasts.get('population_state')} "
+    f"admission={'present' if admission else 'none'}"
 )

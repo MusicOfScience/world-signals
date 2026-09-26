@@ -231,7 +231,11 @@ class EvaluationContractTests(unittest.TestCase):
             ("data/evaluation/evaluation.json", "evaluations"),
         ):
             data = json.loads((ROOT / path).read_text())
-            self.assertEqual(data[key], [])
+            if key == "forecasts":
+                self.assertEqual(len(data[key]), 4)
+                self.assertEqual(data["population_state"], "PILOT_PRODUCTION_FORECASTS_REVIEWED")
+            else:
+                self.assertEqual(data[key], [])
         self.assertTrue((ROOT / "docs/world-signals.ics").exists())
         self.assertTrue((ROOT / "docs/data/risk_overlay.json").exists())
 

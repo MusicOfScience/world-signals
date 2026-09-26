@@ -2,6 +2,318 @@
   "project": "WORLD SIGNALS",
   "dataset": "REVIEWED_FORECASTS",
   "version": "0.1",
-  "population_state": "CLOSED_NO_PRODUCTION_FORECASTS",
-  "forecasts": []
+  "population_state": "PILOT_PRODUCTION_FORECASTS_REVIEWED",
+  "forecasts": [
+    {
+      "forecast_id": "WS-FP-RBA-20261103",
+      "issuance_id": "WS-FP-RBA-20261103-I1",
+      "issuance_number": 1,
+      "previous_issuance_id": null,
+      "issuance_kind": "INITIAL",
+      "revision_id": "WS-FP-RBA-20261103-I1-R1",
+      "revision_number": 1,
+      "previous_revision_id": null,
+      "revision_kind": "ORIGINAL",
+      "forecast_type": "NUMERIC_POINT",
+      "question": "What cash rate target, in percent, will the Reserve Bank of Australia announce on 3 November 2026?",
+      "target": {
+        "target_kind": "MEASURE",
+        "target_identifier": "rba_cash_rate_target_percent_2026-11-03",
+        "definition": "The cash rate target in percent stated in the official RBA Monetary Policy Decision media release for 3 November 2026."
+      },
+      "forecast_value": {"estimate": 4.35, "unit": "percent cash rate target"},
+      "issued_at_utc": "2026-09-26T17:00:00Z",
+      "information_cutoff_at_utc": "2026-09-26T17:00:00Z",
+      "revision_created_at_utc": "2026-09-26T17:00:00Z",
+      "horizon": {
+        "horizon_type": "FIXED_DATE",
+        "end_at_utc": "2026-11-03T03:30:00Z",
+        "description": "From the 26 September 2026 UTC information cutoff to the scheduled RBA decision publication."
+      },
+      "resolution": {
+        "window_start_at_utc": "2026-11-03T03:30:00Z",
+        "window_end_at_utc": "2026-11-03T03:30:00Z",
+        "resolution_rule": "Use the numeric cash rate target in the first official RBA media release for the 3 November 2026 Monetary Policy Decision; do not use later commentary or infer a target from market pricing.",
+        "resolution_source_ids": ["WSSRC-CB-002"],
+        "fallback_source_ids": [],
+        "resolution_source_basis": "The RBA Monetary Policy Board calendar and decision publication are the pre-declared authoritative source; no fallback with equivalent authority is permitted.",
+        "missing_data_policy": "DEFER_UNTIL_SOURCE_AVAILABLE",
+        "cancellation_policy": "VOID_IF_TARGET_CANCELLED",
+        "vintage_policy": "FIRST_OFFICIAL_RELEASE",
+        "vintage_definition": "The first official RBA release that states the 3 November 2026 cash rate target.",
+        "measurement_time_basis": "The target announced for the decision date, not a later effective-date revision."
+      },
+      "scenario_references": [],
+      "risk_state_references": [],
+      "signal_references": [],
+      "relationship_references": [],
+      "supporting_observation_ids": [],
+      "supporting_evidence_refs": [],
+      "assumptions": [{
+        "assumption_id": "WS-FP-RBA-20261103-A1",
+        "statement": "The RBA publishes a decision release that states a single cash rate target in percent.",
+        "rationale": "The target and source are defined by the official decision-release contract.",
+        "provenance": "Pilot analyst review; no upstream production analytical object was manufactured.",
+        "basis_observation_ids": [],
+        "basis_evidence_refs": []
+      }],
+      "rationale": "Transparent baseline estimate equal to the latest official cash rate target reported in the RBA's 11 August 2026 decision. The official RBA schedule confirms the 2–3 November meeting and 3 November decision publication. No market consensus is copied into this estimate.",
+      "forecast_provenance": {
+        "issuer_type": "HYBRID_PROCESS",
+        "issuer_id": "world-signals-pilot-20260926",
+        "method_family": "official-baseline-plus-transparent-analyst-adjustment",
+        "human_reviewed": true
+      },
+      "review_state": "ACCEPTED",
+      "lifecycle_state": "OPEN",
+      "void_reason": null,
+      "voided_at_utc": null,
+      "review_provenance": {
+        "created_by": "world-signals-pilot-20260926",
+        "created_at_utc": "2026-09-26T17:00:00Z",
+        "reviewed_by": "project-owner",
+        "reviewed_at_utc": "2026-09-26T17:00:05Z",
+        "decision_basis": "Owner-authorised prospective pilot admission; target remains unresolved, source and first-release vintage are explicit, and no political or conflict forecast is involved."
+      },
+      "revision_reason": "Initial prospective pilot issuance; substantive content is frozen after admission."
+    },
+    {
+      "forecast_id": "WS-FP-BOC-20261028",
+      "issuance_id": "WS-FP-BOC-20261028-I1",
+      "issuance_number": 1,
+      "previous_issuance_id": null,
+      "issuance_kind": "INITIAL",
+      "revision_id": "WS-FP-BOC-20261028-I1-R1",
+      "revision_number": 1,
+      "previous_revision_id": null,
+      "revision_kind": "ORIGINAL",
+      "forecast_type": "NUMERIC_POINT",
+      "question": "What Bank of Canada target for the overnight rate, in percent, will be announced on 28 October 2026?",
+      "target": {
+        "target_kind": "MEASURE",
+        "target_identifier": "bank_of_canada_overnight_rate_target_percent_2026-10-28",
+        "definition": "The target for the overnight rate in the Bank of Canada's first official 28 October 2026 interest-rate announcement."
+      },
+      "forecast_value": {"estimate": 2.25, "unit": "percent overnight rate target"},
+      "issued_at_utc": "2026-09-26T17:00:00Z",
+      "information_cutoff_at_utc": "2026-09-26T17:00:00Z",
+      "revision_created_at_utc": "2026-09-26T17:00:00Z",
+      "horizon": {
+        "horizon_type": "FIXED_DATE",
+        "end_at_utc": "2026-10-28T13:45:00Z",
+        "description": "From the 26 September 2026 UTC information cutoff to the scheduled Bank of Canada announcement."
+      },
+      "resolution": {
+        "window_start_at_utc": "2026-10-28T13:45:00Z",
+        "window_end_at_utc": "2026-10-28T13:45:00Z",
+        "resolution_rule": "Use the target for the overnight rate in the first official Bank of Canada interest-rate announcement dated 28 October 2026; do not use later revisions or market-implied rates.",
+        "resolution_source_ids": ["WSSRC-CB-008"],
+        "fallback_source_ids": [],
+        "resolution_source_basis": "The Bank of Canada's fixed announcement schedule and policy-interest-rate page are the pre-declared authoritative source; no fallback with equivalent authority is permitted.",
+        "missing_data_policy": "DEFER_UNTIL_SOURCE_AVAILABLE",
+        "cancellation_policy": "VOID_IF_TARGET_CANCELLED",
+        "vintage_policy": "FIRST_OFFICIAL_RELEASE",
+        "vintage_definition": "The first official Bank of Canada release that states the 28 October 2026 target.",
+        "measurement_time_basis": "The announced target on the scheduled decision date."
+      },
+      "scenario_references": [],
+      "risk_state_references": [],
+      "signal_references": [],
+      "relationship_references": [],
+      "supporting_observation_ids": [],
+      "supporting_evidence_refs": [],
+      "assumptions": [{
+        "assumption_id": "WS-FP-BOC-20261028-A1",
+        "statement": "The Bank of Canada publishes a single target for the overnight rate in its scheduled announcement.",
+        "rationale": "The official policy-rate page defines the target and fixed announcement schedule.",
+        "provenance": "Pilot analyst review; no upstream production analytical object was manufactured.",
+        "basis_observation_ids": [],
+        "basis_evidence_refs": []
+      }],
+      "rationale": "Transparent persistence baseline equal to the latest official target shown by the Bank of Canada as at the cutoff. The official schedule identifies 28 October 2026 as an interest-rate announcement and Monetary Policy Report date. No external consensus is treated as independent WORLD SIGNALS evidence.",
+      "forecast_provenance": {
+        "issuer_type": "HYBRID_PROCESS",
+        "issuer_id": "world-signals-pilot-20260926",
+        "method_family": "official-baseline-plus-transparent-analyst-adjustment",
+        "human_reviewed": true
+      },
+      "review_state": "ACCEPTED",
+      "lifecycle_state": "OPEN",
+      "void_reason": null,
+      "voided_at_utc": null,
+      "review_provenance": {
+        "created_by": "world-signals-pilot-20260926",
+        "created_at_utc": "2026-09-26T17:00:00Z",
+        "reviewed_by": "project-owner",
+        "reviewed_at_utc": "2026-09-26T17:00:05Z",
+        "decision_basis": "Owner-authorised prospective pilot admission; target remains unresolved, source and first-release vintage are explicit, and no political or conflict forecast is involved."
+      },
+      "revision_reason": "Initial prospective pilot issuance; substantive content is frozen after admission."
+    },
+    {
+      "forecast_id": "WS-FP-ECB-20261029",
+      "issuance_id": "WS-FP-ECB-20261029-I1",
+      "issuance_number": 1,
+      "previous_issuance_id": null,
+      "issuance_kind": "INITIAL",
+      "revision_id": "WS-FP-ECB-20261029-I1-R1",
+      "revision_number": 1,
+      "previous_revision_id": null,
+      "revision_kind": "ORIGINAL",
+      "forecast_type": "CATEGORICAL",
+      "question": "What direction will the ECB's three key policy rates move at the 29 October 2026 monetary-policy decision relative to their 10 September 2026 levels?",
+      "target": {
+        "target_kind": "STATE",
+        "target_identifier": "ecb_three_key_rates_direction_2026-10-29",
+        "definition": "Joint direction of the deposit facility, main refinancing operations and marginal lending facility rates in the first official ECB decision release for 29 October 2026."
+      },
+      "forecast_value": {
+        "outcomes": [
+          {"outcome_id": "INCREASE", "label": "Increase", "definition": "All three key ECB rates are higher than their 10 September 2026 levels.", "probability": 0.20},
+          {"outcome_id": "UNCHANGED", "label": "Unchanged", "definition": "All three key ECB rates are unchanged from their 10 September 2026 levels.", "probability": 0.55},
+          {"outcome_id": "DECREASE", "label": "Decrease", "definition": "All three key ECB rates are lower than their 10 September 2026 levels.", "probability": 0.10},
+          {"outcome_id": "MIXED_DIRECTION", "label": "Mixed direction", "definition": "The three key ECB rates do not all move in the same direction.", "probability": 0.15}
+        ],
+        "mutually_exclusive": true,
+        "collectively_exhaustive": true,
+        "coverage_basis": "The categories partition the joint direction of all three named official rates; a missing or cancelled decision follows the pre-declared void/unresolvable policy rather than inventing a category."
+      },
+      "issued_at_utc": "2026-09-26T17:00:00Z",
+      "information_cutoff_at_utc": "2026-09-26T17:00:00Z",
+      "revision_created_at_utc": "2026-09-26T17:00:00Z",
+      "horizon": {
+        "horizon_type": "FIXED_DATE",
+        "end_at_utc": "2026-10-29T13:15:00Z",
+        "description": "From the 26 September 2026 UTC information cutoff to the scheduled ECB decision release."
+      },
+      "resolution": {
+        "window_start_at_utc": "2026-10-29T13:15:00Z",
+        "window_end_at_utc": "2026-10-29T13:15:00Z",
+        "resolution_rule": "Compare the three named key ECB rates in the first official 29 October 2026 decision release with the 10 September 2026 official levels; resolve the matching joint-direction category, or mark unresolvable if the release is unavailable or cancelled.",
+        "resolution_source_ids": ["WSSRC-CB-003"],
+        "fallback_source_ids": [],
+        "resolution_source_basis": "The ECB Governing Council calendar and monetary-policy decision publication are the pre-declared authoritative source; no fallback with equivalent authority is permitted.",
+        "missing_data_policy": "DEFER_UNTIL_SOURCE_AVAILABLE",
+        "cancellation_policy": "VOID_IF_TARGET_CANCELLED",
+        "vintage_policy": "NOT_APPLICABLE",
+        "vintage_definition": "Not applicable to a categorical policy-direction decision.",
+        "measurement_time_basis": "The three policy rates stated in the official decision release."
+      },
+      "scenario_references": [],
+      "risk_state_references": [],
+      "signal_references": [],
+      "relationship_references": [],
+      "supporting_observation_ids": [],
+      "supporting_evidence_refs": [],
+      "assumptions": [{
+        "assumption_id": "WS-FP-ECB-20261029-A1",
+        "statement": "The ECB decision release reports the three named policy rates in a comparable form.",
+        "rationale": "The ECB publishes all three key rates together in its monetary-policy decision releases.",
+        "provenance": "Pilot analyst review; no upstream production analytical object was manufactured.",
+        "basis_observation_ids": [],
+        "basis_evidence_refs": []
+      }],
+      "rationale": "Categorical estimate uses an explicit persistence baseline after the 10 September 2026 official 25-basis-point increase, while retaining non-zero mass for further increase, decrease and mixed movement. The official ECB calendar confirms the 29 October monetary-policy meeting and decision publication.",
+      "forecast_provenance": {
+        "issuer_type": "HYBRID_PROCESS",
+        "issuer_id": "world-signals-pilot-20260926",
+        "method_family": "official-baseline-plus-transparent-analyst-adjustment",
+        "human_reviewed": true
+      },
+      "review_state": "ACCEPTED",
+      "lifecycle_state": "OPEN",
+      "void_reason": null,
+      "voided_at_utc": null,
+      "review_provenance": {
+        "created_by": "world-signals-pilot-20260926",
+        "created_at_utc": "2026-09-26T17:00:00Z",
+        "reviewed_by": "project-owner",
+        "reviewed_at_utc": "2026-09-26T17:00:05Z",
+        "decision_basis": "Owner-authorised prospective pilot admission; target remains unresolved, category definitions are exhaustive, and no political or conflict forecast is involved."
+      },
+      "revision_reason": "Initial prospective pilot issuance; substantive content is frozen after admission."
+    },
+    {
+      "forecast_id": "WS-FP-FED-20261028",
+      "issuance_id": "WS-FP-FED-20261028-I1",
+      "issuance_number": 1,
+      "previous_issuance_id": null,
+      "issuance_kind": "INITIAL",
+      "revision_id": "WS-FP-FED-20261028-I1-R1",
+      "revision_number": 1,
+      "previous_revision_id": null,
+      "revision_kind": "ORIGINAL",
+      "forecast_type": "CATEGORICAL",
+      "question": "What direction will the Federal Reserve's federal funds target range move at the 28 October 2026 FOMC decision relative to the 16 September 2026 range?",
+      "target": {
+        "target_kind": "STATE",
+        "target_identifier": "fed_federal_funds_target_range_direction_2026-10-28",
+        "definition": "Direction of the official federal funds target range in the first FOMC statement for the 28 October 2026 decision relative to the 16 September 2026 range."
+      },
+      "forecast_value": {
+        "outcomes": [
+          {"outcome_id": "INCREASE", "label": "Increase", "definition": "The official target range is higher than the 16 September 2026 range.", "probability": 0.15},
+          {"outcome_id": "UNCHANGED", "label": "Unchanged", "definition": "The official target range is unchanged from the 16 September 2026 range.", "probability": 0.65},
+          {"outcome_id": "DECREASE", "label": "Decrease", "definition": "The official target range is lower than the 16 September 2026 range.", "probability": 0.20}
+        ],
+        "mutually_exclusive": true,
+        "collectively_exhaustive": true,
+        "coverage_basis": "The categories partition the direction of the single official federal funds target range; a cancelled or unavailable decision follows the pre-declared void/unresolvable policy."
+      },
+      "issued_at_utc": "2026-09-26T17:00:00Z",
+      "information_cutoff_at_utc": "2026-09-26T17:00:00Z",
+      "revision_created_at_utc": "2026-09-26T17:00:00Z",
+      "horizon": {
+        "horizon_type": "FIXED_DATE",
+        "end_at_utc": "2026-10-28T18:00:00Z",
+        "description": "From the 26 September 2026 UTC information cutoff to the scheduled FOMC decision statement."
+      },
+      "resolution": {
+        "window_start_at_utc": "2026-10-28T18:00:00Z",
+        "window_end_at_utc": "2026-10-28T18:00:00Z",
+        "resolution_rule": "Compare the federal funds target range in the first official FOMC statement for 28 October 2026 with the 16 September 2026 official range and resolve increase, unchanged or decrease; do not infer a result from market pricing.",
+        "resolution_source_ids": ["WSSRC-CB-001"],
+        "fallback_source_ids": [],
+        "resolution_source_basis": "The Federal Reserve FOMC calendar and official FOMC statement are the pre-declared authoritative source; no fallback with equivalent authority is permitted.",
+        "missing_data_policy": "DEFER_UNTIL_SOURCE_AVAILABLE",
+        "cancellation_policy": "VOID_IF_TARGET_CANCELLED",
+        "vintage_policy": "NOT_APPLICABLE",
+        "vintage_definition": "Not applicable to a categorical policy-direction decision.",
+        "measurement_time_basis": "The target range stated in the official FOMC statement."
+      },
+      "scenario_references": [],
+      "risk_state_references": [],
+      "signal_references": [],
+      "relationship_references": [],
+      "supporting_observation_ids": [],
+      "supporting_evidence_refs": [],
+      "assumptions": [{
+        "assumption_id": "WS-FP-FED-20261028-A1",
+        "statement": "The FOMC publishes one official target range in its decision statement.",
+        "rationale": "The FOMC statement is the pre-declared primary resolution record.",
+        "provenance": "Pilot analyst review; no upstream production analytical object was manufactured.",
+        "basis_observation_ids": [],
+        "basis_evidence_refs": []
+      }],
+      "rationale": "Categorical estimate uses an explicit persistence baseline after the 16 September 2026 official increase, retaining non-zero mass for another increase or a decrease. The official Federal Reserve calendar confirms the 27–28 October meeting and the official FOMC statement is the resolution record.",
+      "forecast_provenance": {
+        "issuer_type": "HYBRID_PROCESS",
+        "issuer_id": "world-signals-pilot-20260926",
+        "method_family": "official-baseline-plus-transparent-analyst-adjustment",
+        "human_reviewed": true
+      },
+      "review_state": "ACCEPTED",
+      "lifecycle_state": "OPEN",
+      "void_reason": null,
+      "voided_at_utc": null,
+      "review_provenance": {
+        "created_by": "world-signals-pilot-20260926",
+        "created_at_utc": "2026-09-26T17:00:00Z",
+        "reviewed_by": "project-owner",
+        "reviewed_at_utc": "2026-09-26T17:00:05Z",
+        "decision_basis": "Owner-authorised prospective pilot admission; target remains unresolved, category definitions are exhaustive, and no political or conflict forecast is involved."
+      },
+      "revision_reason": "Initial prospective pilot issuance; substantive content is frozen after admission."
+    }
+  ]
 }

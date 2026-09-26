@@ -220,9 +220,12 @@ with production population and public projection closed. Outcomes/Resolution
 and the deterministic Forecast Evaluation contract are now also defined with
 production populations and public projections closed. Evaluation deliberately
 reports `NO_SAMPLE`/`INSUFFICIENT_SAMPLE` rather than making performance claims.
-The next substantive milestone is a separately authorised, narrow prospective
+The current operating milestone is a separately authorised, narrow prospective
 Forecast pilot that can create a defensible resolved sample; Model Learning
-must wait until after that sample exists.
+must wait until after that sample exists. A first bounded prospective pilot of
+four institutional decisions is admitted through
+`data/forecasts/admission_transaction.json`; Outcomes remain empty and every
+issuance is a permanent future evaluation-denominator obligation.
 
 ### Local operating loop
 

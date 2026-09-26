@@ -180,13 +180,16 @@ class ForecastContractTests(unittest.TestCase):
         self.assertTrue(any(text in error for error in report.errors), report.errors)
 
     def test_zero_production_forecasts_validate_and_projection_is_closed(self):
+        dataset = copy.deepcopy(self.dataset)
+        dataset["population_state"] = "CLOSED_NO_PRODUCTION_FORECASTS"
+        dataset["forecasts"] = []
         report = validate_forecasts(
-            self.schema, self.dataset, self.scenarios, self.risks, self.signals,
+            self.schema, dataset, self.scenarios, self.risks, self.signals,
             self.relationships, self.observations, self.evidence, self.canonical, self.sources,
         )
         self.assertTrue(report.ok, report.errors)
         projection = public_forecast_projection(
-            self.schema, self.dataset, self.scenarios, self.risks, self.signals,
+            self.schema, dataset, self.scenarios, self.risks, self.signals,
             self.relationships, self.observations, self.evidence, self.canonical, self.sources,
         )
         self.assertFalse(projection["metadata"]["public_forecast_projection_allowed"])
@@ -200,7 +203,7 @@ class ForecastContractTests(unittest.TestCase):
             self.relationships, self.observations, self.evidence, self.canonical, self.sources,
         )
         self.assertFalse(report.ok)
-        self.assertTrue(any("closed production population" in error for error in report.errors))
+        self.assertTrue(any("admission transaction" in error for error in report.errors))
 
     def test_valid_context_references_are_accepted(self):
         self.assert_valid([self.base_row()])
