@@ -47,7 +47,10 @@ class LocalServiceCWTests(unittest.TestCase):
         self.assertIn("--execution-cwd", refresh["ProgramArguments"])
         self.assertEqual(refresh["WorkingDirectory"], str(TEST_SERVICE_WORKING_DIRECTORY))
         self.assertEqual(dashboard["WorkingDirectory"], str(TEST_SERVICE_WORKING_DIRECTORY))
-        self.assertNotIn("git", " ".join(refresh["ProgramArguments"]).lower())
+        self.assertFalse(
+            any(argument.lower() == "git" for argument in refresh["ProgramArguments"]),
+            "the service manifest must not invoke git as a command",
+        )
         self.assertEqual(dashboard["ProgramArguments"][-4:-2], ["--bind", "127.0.0.1"])
         self.assertEqual(dashboard["ProgramArguments"][-2], "--directory")
         self.assertTrue(dashboard["KeepAlive"])

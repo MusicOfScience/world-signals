@@ -48,6 +48,13 @@ The layers remain deliberately distinct:
 4. **Live Intelligence** — evidence-backed factual observations around scheduled and unscheduled developments; no causal interpretation.
 5. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
 
+The static build also publishes a read-only subscription projection,
+`world-signals.ics`, from the governed Canonical/calendar state. It is not a
+second event database: stable occurrence identities become stable iCalendar
+UIDs, source-local timed events retain their IANA timezone, explicit date
+windows remain windows, and unresolved TBC/native-calendar/runtime/review
+material is not exported.
+
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
 
 ## Source and monitoring governance
@@ -102,6 +109,18 @@ python scripts/build_site.py
 
 `python scripts/build_site.py` generates derived site output locally. Generated site material is not Canonical state. `python scripts/run_cross_layer_coverage_audit.py` generates read-only diagnostic artifacts under `artifacts/coverage/`; those artifacts do not authorise population or writes.
 
+To build only the governed subscription feed after a registry/source change:
+
+```bash
+/opt/homebrew/bin/python3.13 scripts/build_ics.py
+```
+
+The feed is written to `docs/world-signals.ics` and can be checked locally
+alongside the dashboard at `http://127.0.0.1:8765/world-signals.ics` after
+building the site. The intended static subscription URL is
+`https://musicofscience.github.io/world-signals/world-signals.ics`, subject to
+the existing Pages deployment succeeding.
+
 ### Local operating loop
 
 GitHub Actions is an execution shell, not an architectural dependency. To validate the governed state, run all configured read-only monitors, retain private local evidence, produce sanitized Operations projections and rebuild the dashboard in one command:
@@ -119,6 +138,10 @@ To serve the freshly built dashboard on loopback after the run completes:
 Open `http://127.0.0.1:8765/`. Local runtime history is stored under ignored `.world-signals-runtime/`; disposable build inputs remain under ignored `artifacts/` and `review_candidates/`. The runner requires a clean tracked worktree and hash-protects Canonical, Sources, Change Ledger, Monitor contracts, Live Intelligence, Analysis, analytical/coverage overlays and the OPEC quarantine. It never commits, changes Canonical, writes Google Calendar or promotes Monitor evidence automatically.
 
 The Operations view reduces repeated candidates into stable `WSRV-*` review propositions and provides read-only operator routing: attention class, controlled next step, recurrence, evidence-object IDs, filters and deterministic ordering. Those labels organise human review only. Decisions remain reviewed repository records, and any approved Canonical change still requires a separate transaction plus explicit change-ledger linkage.
+
+The recurring monitor runtime is local. The GitHub live-monitor workflow is
+manual-dispatch only; CI, adapter smoke, coverage audits and the Pages static
+deployment remain useful validation/publication workflows.
 
 ### Guarded macOS local service
 
