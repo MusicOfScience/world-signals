@@ -103,6 +103,23 @@ dialog{background:var(--panel);color:var(--ink)}
 .detail-nested code,.detail-disclosure code{overflow-wrap:anywhere;font-size:.74rem;background:var(--panel-raised);padding:.12rem .25rem}
 .close{float:none;margin:0;border:1px solid var(--line);border-radius:4px;background:var(--panel-raised);color:var(--ink);padding:.55rem .7rem;font:inherit;cursor:pointer}
 .detail-copy:focus-visible,.close:focus-visible,.detail-nested summary:focus-visible,.detail-disclosure summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.calendar-subscribe{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr);gap:1rem 2rem;margin:1.25rem clamp(1rem,3vw,3rem);padding:1.25rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.calendar-subscribe-copy h2{margin:.2rem 0 .45rem;font-size:clamp(1.25rem,2.5vw,1.75rem)}
+.calendar-subscribe-copy>p:last-child{max-width:64ch;margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+.calendar-subscribe-actions{display:flex;align-items:center;align-content:flex-start;justify-content:flex-end;gap:.5rem;flex-wrap:wrap}
+.subscribe-primary,.subscribe-secondary{border:1px solid var(--line);border-radius:4px;padding:.58rem .75rem;font:inherit;font-size:.8rem;cursor:pointer;text-decoration:none}
+.subscribe-primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.subscribe-secondary{background:var(--panel-raised);color:var(--ink)}
+.subscribe-primary:focus-visible,.subscribe-secondary:focus-visible,.detail-copy:focus-visible,.detail-calendar-note a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.calendar-subscribe-actions .meta{flex-basis:100%;text-align:right;min-height:1.2em}
+.subscribe-guidance{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.8rem}
+.subscribe-guidance summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:.84rem}
+.platform-guidance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:.85rem}
+.platform-guidance div{padding-top:.7rem;border-top:2px solid var(--panel-raised)}
+.platform-guidance strong{font-size:.8rem}
+.platform-guidance p{margin:.35rem 0 0;color:var(--muted);font-size:.78rem;line-height:1.45}
+.detail-calendar-note{margin:.8rem 0 0;color:var(--muted);font-size:.78rem}
+.detail-calendar-note a{color:var(--accent);font-weight:650}
 @media(max-width:620px){
   #detail{width:calc(100vw - 1rem);max-height:92vh}
   .detail-head{padding:.75rem 1rem}
@@ -114,4 +131,8 @@ dialog{background:var(--panel);color:var(--ink)}
   .detail-grid-compact dd{margin-bottom:.5rem}
   .detail-disclosure>summary{align-items:flex-start;flex-direction:column;gap:.25rem}
   .detail-disclosure>summary small{text-align:left}
+  .calendar-subscribe{grid-template-columns:1fr;margin-left:.75rem;margin-right:.75rem}
+  .calendar-subscribe-actions{justify-content:flex-start}
+  .calendar-subscribe-actions .meta{text-align:left}
+  .platform-guidance{grid-template-columns:1fr;gap:.7rem}
 }
