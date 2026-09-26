@@ -2,6 +2,7 @@ let DATA;
 let MONITORS={metadata:{},routes:[]};
 let PUBLIC_STATUS={};
 let SOURCES={metadata:{},sources:[]};
+let CHANGES={changes:[]};
 let futureOnly = true;
 let activeView = 'calendar';
 let calendarCursor = new Date();
@@ -11,6 +12,11 @@ let selectedDay = null;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 const SEASON_TIMING_TYPES = new Set(['MONTH_BOUNDED_SEASON_WINDOW','MULTI_PHASE_SEASON_WINDOW']);
+const REFERENCE_TIMEZONE = 'Australia/Melbourne';
+let detailOpener = null;
+let detailHistoryPushed = false;
+let detailReturnHash = '';
+let detailReturnScrollY = 0;
 const today = new Date();
 today.setHours(0,0,0,0);
 
@@ -103,6 +109,203 @@ function seasonIsCurrentOrFuture(e){
   return !!last && last>=localMonthKey(today);
 }
 function humanToken(value){return String(value??'').replaceAll('_',' ').toLowerCase();}
+function displayToken(value){
+  const text=humanToken(value).replace(/\s+/g,' ').trim();
+  return text ? text.charAt(0).toUpperCase()+text.slice(1) : 'Not recorded';
+}
+function jurisdictionLabel(e){
+  return Array.isArray(e.jurisdiction) ? e.jurisdiction.join(', ') : (e.jurisdiction||e.region||'Jurisdiction not recorded');
+}
+function isUnrated(value){return !value || /unrated|pending calibration/i.test(String(value));}
+function formatInstant(raw,timeZone){
+  if(!raw || !timeZone) return null;
+  const date=new Date(raw);
+  if(Number.isNaN(date.getTime())) return null;
+  try{
+    return new Intl.DateTimeFormat('en-AU',{
+      timeZone,
+      weekday:'short',day:'numeric',month:'short',year:'numeric',
+      hour:'numeric',minute:'2-digit',timeZoneName:'short'
+    }).format(date);
+  }catch(_){return null;}
+}
+function formatCivil(raw,includeTime=false){
+  const match=String(raw??'').match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
+  if(!match) return raw ? String(raw).replace('T',' ') : null;
+  const date=new Date(Date.UTC(Number(match[1]),Number(match[2])-1,Number(match[3])));
+  const day=new Intl.DateTimeFormat('en-AU',{timeZone:'UTC',weekday:'short',day:'numeric',month:'short',year:'numeric'}).format(date);
+  if(!includeTime || !match[4]) return day;
+  const hour=Number(match[4]), minute=match[5];
+  const clock=new Intl.DateTimeFormat('en-AU',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'UTC'}).format(new Date(Date.UTC(1970,0,1,hour,Number(minute))));
+  return `${day} · ${clock}`;
+}
+function formatCivilRange(start,end,includeTime=false){
+  const first=formatCivil(start,includeTime);
+  const last=end && end!==start ? formatCivil(end,includeTime) : null;
+  return last ? `${first} → ${last}` : first;
+}
+function sourceLocalTime(e){
+  if(e.start_utc && e.source_timezone) return formatInstant(e.start_utc,e.source_timezone);
+  if(e.start_utc) return formatInstant(e.start_utc,'UTC');
+  if(e.start_local) return formatCivilRange(e.start_local,e.end_local,/[T]/.test(e.start_local));
+  if(e.date_earliest || e.date_latest) return formatCivilRange(e.date_earliest||e.date_latest,e.date_latest||e.date_earliest);
+  if(isSeasonWindow(e)) return seasonWindowLabel(e);
+  if(e.source_native_date_label) return e.source_native_date_label;
+  return 'No schedulable date asserted';
+}
+function timingDisplay(e){
+  if(e.start_utc){
+    const source=sourceLocalTime(e);
+    const reference=formatInstant(e.start_utc,REFERENCE_TIMEZONE);
+    const utc=formatInstant(e.start_utc,'UTC');
+    return {kind:'exact',source,reference,utc,sourceZone:e.source_timezone||'UTC'};
+  }
+  if(isSeasonWindow(e)) return {kind:'window',source:seasonWindowLabel(e)||'Source-native seasonal window',note:'Month precision only; no day boundary is asserted.'};
+  if(e.source_native_date_label) return {kind:'native',source:e.source_native_date_label,nativeCalendar:displayToken(e.native_calendar_system),note:'Exact in the source calendar; no authoritative Gregorian conversion is projected.'};
+  if(e.start_local){
+    const hasTime=/[T]/.test(e.start_local);
+    const isRange=Boolean(e.end_local&&e.end_local!==e.start_local);
+    return {kind:isRange?'window':(hasTime?'local':'date'),source:sourceLocalTime(e),sourceZone:e.source_timezone||'source timezone not recorded',note:hasTime&&!e.start_utc?'A canonical UTC instant is not projected, so no reference-time conversion is asserted.':isRange?'This is a source-local date window; no exact instant is asserted.':''};
+  }
+  if(e.date_earliest||e.date_latest) return {kind:'window',source:sourceLocalTime(e),note:displayToken(e.timing_type)};
+  return {kind:'tbc',source:'TBC',note:'The authoritative source has not supplied a schedulable date.'};
+}
+function timingLabel(kind){
+  return ({exact:'Exact time',local:'Source-local time',date:'Civil date',window:'Date window',native:'Source-native date',tbc:'Timing'}[kind]||'Timing');
+}
+function stateSummary(e){
+  const lifecycle={PLANNED:'Upcoming',ACTIVE:'Active',COMPLETED:'Completed',POSTPONED:'Postponed',CANCELLED:'Cancelled'}[e.lifecycle]||displayToken(e.lifecycle);
+  const certainty={CONFIRMED:'Confirmed',PROVISIONAL:'Provisional',TBC:'Time or date TBC',EXPECTED_WINDOW:'Expected window'}[e.certainty]||displayToken(e.certainty);
+  return {lifecycle,certainty};
+}
+function detailHistory(e){
+  return (CHANGES.changes||[]).filter(change=>change.occurrence_id===e.occurrence_id)
+    .sort((a,b)=>String(a.reviewed_at||a.committed_at||'').localeCompare(String(b.reviewed_at||b.committed_at||'')));
+}
+function changeDate(change){
+  const raw=change.reviewed_at||change.committed_at;
+  if(!raw) return 'Date not recorded';
+  const date=new Date(raw);
+  return Number.isNaN(date.getTime())?String(raw):date.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+}
+function changeTransition(change){
+  const oldValues=change.old_values||{}, newValues=change.new_values||{};
+  const parts=[];
+  for(const key of ['certainty_status','lifecycle_status','start_local','start_utc','date_earliest','date_latest']){
+    if(oldValues[key]!==undefined || newValues[key]!==undefined){
+      const oldValue=oldValues[key]===undefined?'not recorded':oldValues[key];
+      const newValue=newValues[key]===undefined?'not recorded':newValues[key];
+      parts.push(`${displayToken(key)}: ${displayToken(oldValue)} → ${displayToken(newValue)}`);
+    }
+  }
+  return parts;
+}
+function publicContext(e){
+  const rows=[];
+  if(!isUnrated(e.intrinsic_importance)) rows.push(`<dt>Importance</dt><dd>${esc(displayToken(e.intrinsic_importance))}</dd>`);
+  if(!isUnrated(e.expected_market_sensitivity)) rows.push(`<dt>Expected market sensitivity</dt><dd>${esc(displayToken(e.expected_market_sensitivity))}</dd>`);
+  if(!rows.length) return '';
+  return `<section class="detail-section" aria-labelledby="detailContextTitle"><h3 id="detailContextTitle">Why it may matter</h3><p class="detail-section-intro">Public governed context only. These dimensions are not a forecast and do not assert that the event will move markets.</p><dl class="detail-grid detail-grid-compact">${rows.join('')}</dl></section>`;
+}
+function detailSource(e){
+  const sourceName=e.source_institution||e.institution||e.source_id||'Authoritative source not recorded';
+  return `<section class="detail-section" aria-labelledby="detailSourceTitle"><h3 id="detailSourceTitle">Source</h3><p class="detail-source-name"><strong>${esc(sourceName)}</strong><span>${esc(jurisdictionLabel(e))}</span></p>${e.source_url?`<a class="detail-source-link" href="${esc(e.source_url)}" target="_blank" rel="noopener">Open authoritative source ↗</a>`:'<p class="meta">No public source link is projected for this occurrence.</p>'}</section>`;
+}
+function detailHistorySection(e){
+  const changes=detailHistory(e);
+  const entries=changes.length?changes.slice().reverse().map(change=>{
+    const transition=changeTransition(change);
+    return `<article class="detail-history-entry"><div><strong>${esc(displayToken(change.change_type||'Reviewed change'))}</strong><span>${esc(changeDate(change))}</span></div>${transition.length?`<ul>${transition.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:''}${(change.review_basis||[]).length?`<details class="detail-nested"><summary>Review basis</summary><ul>${change.review_basis.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details>`:''}<p class="meta">Change ${esc(change.change_id||'not recorded')}${change.registry_version_before||change.registry_version_after?` · registry ${esc(change.registry_version_before||'?')} → ${esc(change.registry_version_after||'?')}`:''}</p></article>`;
+  }).join(''):'<p class="meta">No reviewed changes are currently projected for this occurrence.</p>';
+  return `<details class="detail-section detail-disclosure"><summary><span>History</span><small>${changes.length?`${changes.length} reviewed change${changes.length===1?'':'s'}`:'No reviewed changes projected'}</small></summary><div class="detail-disclosure-body"><p class="detail-section-intro">The current state above remains primary. This history records how WORLD SIGNALS changed its understanding of the occurrence.</p>${entries}</div></details>`;
+}
+function detailProvenance(e){
+  const rows=[];
+  if(e.time_basis) rows.push(`<dt>Timing basis</dt><dd>${esc(displayToken(e.time_basis))}</dd>`);
+  if(e.time_precision) rows.push(`<dt>Supported precision</dt><dd>${esc(displayToken(e.time_precision))}</dd>`);
+  if(e.time_status) rows.push(`<dt>Time status</dt><dd>${esc(displayToken(e.time_status))}</dd>`);
+  if(e.reference_period) rows.push(`<dt>Reference period</dt><dd>${esc(e.reference_period)}</dd>`);
+  if(e.publication_datetime) rows.push(`<dt>Source publication time</dt><dd>${esc(formatCivil(e.publication_datetime,true))}${e.source_timezone?` · ${esc(e.source_timezone)}`:''}</dd>`);
+  if(e.last_verified_at) rows.push(`<dt>Last verified</dt><dd>${esc(e.last_verified_at)}</dd>`);
+  return `<details class="detail-section detail-disclosure"><summary><span>Method / provenance</span><small>How the public record is supported</small></summary><div class="detail-disclosure-body"><p class="detail-section-intro">This is a read-only public projection. It preserves source-native timing and does not expose private review or runtime material.</p><dl class="detail-grid detail-grid-compact">${rows.join('')||'<dt>Provenance</dt><dd>Public source and timing fields are available above.</dd>'}</dl></div></details>`;
+}
+function detailTechnical(e){
+  const rows=[
+    ['Occurrence ID',e.occurrence_id],['Series ID',e.series_id],['Event type',e.event_type],
+    ['Source ID',e.source_id],['Source timezone',e.source_timezone],['Registry version',DATA.metadata?.registry_version]
+  ].filter(([,value])=>value);
+  if(e.start_utc) rows.push(['UTC instant',e.start_utc]);
+  return `<details class="detail-section detail-disclosure"><summary><span>Technical details</span><small>Stable identifiers and machine-readable timing</small></summary><div class="detail-disclosure-body"><dl class="detail-grid detail-grid-compact">${rows.map(([label,value])=>`<dt>${esc(label)}</dt><dd><code>${esc(value)}</code></dd>`).join('')}</dl></div></details>`;
+}
+function detailTiming(e){
+  const timing=timingDisplay(e);
+  const state=stateSummary(e);
+  const status=`<div class="detail-state-line"><span class="detail-state detail-state-${esc(String(e.certainty||'').toLowerCase())}">${esc(state.certainty)}</span><span>${esc(state.lifecycle)}</span></div>`;
+  let body='';
+  if(timing.kind==='exact') body=`<div class="detail-time-grid"><div class="detail-time-primary"><span>Source-local time · ${esc(timing.sourceZone)}</span><strong>${esc(timing.source)}</strong></div><div class="detail-time-secondary"><span>Melbourne reference · ${REFERENCE_TIMEZONE}</span><strong>${esc(timing.reference)}</strong></div></div><details class="detail-nested detail-utc"><summary>Show UTC</summary><p><strong>${esc(timing.utc)}</strong><span>Canonical UTC instant used for conversion.</span></p></details>`;
+  else body=`<div class="detail-time-primary detail-time-single"><span>${esc(timingLabel(timing.kind))}${timing.sourceZone?` · ${esc(timing.sourceZone)}`:''}</span><strong>${esc(timing.source)}</strong>${timing.nativeCalendar?`<small>${esc(timing.nativeCalendar)}</small>`:''}</div>${timing.note?`<p class="detail-timing-note">${esc(timing.note)}</p>`:''}`;
+  return `<section class="detail-section detail-timing" aria-labelledby="detailTimingTitle"><div class="detail-section-heading"><h3 id="detailTimingTitle">Timing</h3>${status}</div>${body}</section>`;
+}
+function copyDetailLink(){
+  const status=$('#detailCopyStatus');
+  const url=new URL(window.location.href);
+  url.hash=`event=${encodeURIComponent($('#detail').dataset.eventId||'')}`;
+  const task=navigator.clipboard?.writeText(url.toString());
+  if(task?.then) task.then(()=>{status.textContent='Public link copied';}).catch(()=>{status.textContent='Copy unavailable in this browser';});
+  else status.textContent='Copy unavailable in this browser';
+}
+function detailHash(id){return `#event=${encodeURIComponent(id)}`;}
+function finishDetailClose(){
+  const dialog=$('#detail');
+  if(dialog.open) dialog.close();
+  const opener=detailOpener;
+  const scrollY=detailReturnScrollY;
+  detailOpener=null;
+  detailHistoryPushed=false;
+  if(opener && typeof opener.focus==='function') opener.focus({preventScroll:true});
+  if(Number.isFinite(scrollY)) window.requestAnimationFrame(()=>window.scrollTo(0,scrollY));
+}
+function closeDetail(){
+  const dialog=$('#detail');
+  if(!dialog.open) return;
+  if(detailHistoryPushed && window.location.hash===detailHash(dialog.dataset.eventId)){
+    window.history.back();
+    return;
+  }
+  if(window.location.hash.startsWith('#event=')){
+    const base=window.location.pathname+window.location.search+(detailReturnHash||'');
+    window.history.replaceState({},'',base);
+  }
+  finishDetailClose();
+}
+function openDetailFromLocation(){
+  if(!window.location.hash.startsWith('#event=') || !DATA) return;
+  const id=decodeURIComponent(window.location.hash.slice('#event='.length));
+  showDetail(id,{fromHash:true});
+}
+function showDetail(id,{fromHash=false}={}){
+  const e=DATA?.events.find(x=>x.occurrence_id===id);
+  if(!e){if($('#detail').open) finishDetailClose();return;}
+  const dialog=$('#detail');
+  if(!fromHash && window.location.hash!==detailHash(id)){
+    detailOpener=document.activeElement;
+    detailReturnHash=window.location.hash;
+    detailReturnScrollY=window.scrollY;
+    window.history.pushState({worldSignalsEvent:id,returnHash:detailReturnHash,returnScrollY:detailReturnScrollY},'',detailHash(id));
+    detailHistoryPushed=true;
+  }else if(fromHash){
+    detailReturnHash='';
+    detailReturnScrollY=window.scrollY;
+  }
+  dialog.dataset.eventId=id;
+  const state=stateSummary(e);
+  const changes=detailHistory(e);
+  $('#detailUpdated').textContent=changes.length?`Last reviewed change ${changeDate(changes[changes.length-1])}`:'';
+  $('#detailBody').innerHTML=`<p class="eyebrow">${esc(displayToken(e.category))} · ${esc(jurisdictionLabel(e))}</p><h2 id="detailTitle">${esc(e.canonical_name||e.title)}</h2><p id="detailSummary" class="detail-summary">${esc(e.institution||'Institution not recorded')} · ${esc(jurisdictionLabel(e))} · ${esc(state.certainty)}</p><div class="detail-actions"><button id="copyDetailLink" type="button" class="detail-copy">Copy public link</button><span id="detailCopyStatus" class="meta" aria-live="polite"></span></div>${detailTiming(e)}${publicContext(e)}${e.notes?`<section class="detail-section" aria-labelledby="detailNotesTitle"><h3 id="detailNotesTitle">Public context</h3><p>${esc(e.notes)}</p></section>`:''}${detailSource(e)}${detailHistorySection(e)}${detailProvenance(e)}${detailTechnical(e)}`;
+  $('#copyDetailLink').addEventListener('click',copyDetailLink);
+  dialog.showModal();
+  $('#closeDetail').focus({preventScroll:true});
+}
 function options(id,values){
   const el=$(id);
   [...new Set(values.filter(Boolean))].sort().forEach(v=>el.insertAdjacentHTML('beforeend',`<option>${esc(v)}</option>`));
@@ -171,7 +374,7 @@ function indexFiltered(){
   }).sort((a,b)=>(eventSortDate(a)?.getTime()??Infinity)-(eventSortDate(b)?.getTime()??Infinity));
 }
 function eventCard(e){
-  return `<article class="event" data-id="${esc(e.occurrence_id)}"><div class="when">${formatWhen(e)}</div><div><h2>${esc(e.title)}</h2><div class="meta">${esc(e.institution)} · ${esc(e.jurisdiction)}</div><div class="tags"><span class="tag certainty-${esc(e.certainty)}">${esc(e.certainty)}</span><span class="tag">${esc(e.category)}</span><span class="tag">${esc(e.visibility_tier)}</span></div></div><div class="source"><b>${esc(e.region)}</b><br>${esc(e.source_id)}<br><span class="meta">${esc(e.monitoring_readiness||'route not classified')}</span></div></article>`;
+  return `<article class="event" data-id="${esc(e.occurrence_id)}"><div class="when">${formatWhen(e)}</div><div><h2>${esc(e.title)}</h2><div class="meta">${esc(e.institution)} · ${esc(jurisdictionLabel(e))}</div><div class="tags"><span class="tag certainty-${esc(e.certainty)}">${esc(displayToken(e.certainty))}</span><span class="tag">${esc(displayToken(e.category))}</span></div></div><div class="source"><b>${esc(e.region)}</b><br>${esc(e.source_institution||e.source_id||'Source not recorded')}</div></article>`;
 }
 function attachEventClicks(root=document){
   root.querySelectorAll('[data-event-id]').forEach(el=>el.addEventListener('click',ev=>{ev.stopPropagation();showDetail(el.dataset.eventId);}));
@@ -271,11 +474,6 @@ function setView(view){
   $('.controls').hidden=view==='monitors';
   render();
 }
-function showDetail(id){
-  const e=DATA.events.find(x=>x.occurrence_id===id); if(!e)return;
-  $('#detailBody').innerHTML=`<p class="eyebrow">${esc(e.category)} · ${esc(e.region)}</p><h2>${esc(e.canonical_name)}</h2><dl class="detail-grid"><dt>Occurrence ID</dt><dd>${esc(e.occurrence_id)}</dd><dt>Series ID</dt><dd>${esc(e.series_id)}</dd><dt>Timing</dt><dd>${formatWhen(e)}</dd><dt>Certainty</dt><dd>${esc(e.certainty)}</dd><dt>Lifecycle</dt><dd>${esc(e.lifecycle)}</dd><dt>Institution</dt><dd>${esc(e.institution)}</dd><dt>Jurisdiction</dt><dd>${esc(e.jurisdiction)}</dd><dt>Importance</dt><dd>${esc(e.intrinsic_importance)}</dd><dt>Expected sensitivity</dt><dd>${esc(e.expected_market_sensitivity)}</dd><dt>Source</dt><dd>${e.source_url?`<a href="${esc(e.source_url)}" target="_blank" rel="noopener">${esc(e.source_institution||e.source_id)}</a>`:esc(e.source_id)}</dd><dt>Monitor route</dt><dd>${esc(e.monitoring_readiness)} / ${esc(e.automated_monitoring_use)}</dd><dt>Notes</dt><dd>${esc(e.notes)}</dd></dl>`;
-  $('#detail').showModal();
-}
 function render(){
   if(!DATA)return;
   if(activeView==='calendar') renderCalendar();
@@ -283,17 +481,19 @@ function render(){
   else renderMonitors();
 }
 async function main(){
-  const [eventResponse,monitorResponse,statusResponse,sourcesResponse]=await Promise.all([
+  const [eventResponse,monitorResponse,statusResponse,sourcesResponse,changesResponse]=await Promise.all([
     fetch('data/events.json'),
     fetch('data/monitor_routes.json'),
     fetch('data/public_status.json'),
-    fetch('data/sources.json')
+    fetch('data/sources.json'),
+    fetch('data/changes.json')
   ]);
   if(!eventResponse.ok) throw new Error(`events.json ${eventResponse.status}`);
   DATA=await eventResponse.json();
   if(monitorResponse.ok) MONITORS=await monitorResponse.json();
   if(statusResponse.ok) PUBLIC_STATUS=await statusResponse.json();
   if(sourcesResponse.ok) SOURCES=await sourcesResponse.json();
+  if(changesResponse.ok) CHANGES=await changesResponse.json();
   renderProductBrief();
   renderThemes();
   renderSources();
@@ -308,8 +508,18 @@ async function main(){
   $('#prevMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);selectedDay=null;renderCalendar();});
   $('#nextMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);selectedDay=null;renderCalendar();});
   $('#todayMonth').addEventListener('click',()=>{const n=new Date();calendarCursor=new Date(n.getFullYear(),n.getMonth(),1);selectedDay=localDateKey(n);renderCalendar();});
-  $('#closeDetail').addEventListener('click',()=>$('#detail').close());
+  $('#closeDetail').addEventListener('click',closeDetail);
+  $('#detail').addEventListener('cancel',event=>{event.preventDefault();closeDetail();});
+  window.addEventListener('popstate',()=>{
+    if(window.location.hash.startsWith('#event=')) openDetailFromLocation();
+    else if($('#detail').open) finishDetailClose();
+  });
+  window.addEventListener('hashchange',()=>{
+    if(window.location.hash.startsWith('#event=')) openDetailFromLocation();
+    else if($('#detail').open) finishDetailClose();
+  });
   setView('calendar');
+  openDetailFromLocation();
 }
 main().catch(err=>{
   console.error(err);

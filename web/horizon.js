@@ -222,8 +222,6 @@
         <p class="meta">${esc(event.institution)} · ${esc(jurisdictions(event).join(', ') || event.region)}</p>
         <div class="horizon-tags">
           <span>${esc(event.certainty||'TBC')}</span>
-          <span>importance ${esc(metricLabel(event.intrinsic_importance))}</span>
-          <span>market sensitivity ${esc(metricLabel(event.expected_market_sensitivity))}</span>
         </div>
         ${change}
       </div>
@@ -242,7 +240,7 @@
         <p class="meta">${esc(event.institution)} · ${esc(jurisdictions(event).join(', ') || event.region)}</p></div>
       <div class="horizon-window-time"><strong>${esc(label)}</strong>
         <span>${isSeasonWindow(event)?'source-native month precision · no synthetic day':esc(human(event.timing_type))}</span></div>
-      <div class="horizon-tags"><span>${esc(event.certainty||'TBC')}</span><span>importance ${esc(metricLabel(event.intrinsic_importance))}</span></div>
+      <div class="horizon-tags"><span>${esc(event.certainty||'TBC')}</span></div>
       <div class="horizon-source">${sourceLink(event)}</div>
     </article>`;
   }

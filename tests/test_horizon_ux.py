@@ -51,16 +51,16 @@ class HorizonUXTests(unittest.TestCase):
         ):
             self.assertIn(label,js)
 
-    def test_horizon_exposes_local_native_certainty_importance_source_and_change(self):
+    def test_horizon_exposes_local_native_certainty_source_and_change_without_row_metadata_dump(self):
         js=(ROOT/"web/horizon.js").read_text(encoding="utf-8")
         self.assertIn("source_timezone",js)
         self.assertIn("toLocaleString",js)
         self.assertIn("event.certainty",js)
-        self.assertIn("intrinsic_importance",js)
-        self.assertIn("expected_market_sensitivity",js)
         self.assertIn("authoritative source",js)
         self.assertIn("Changed recently",js)
         self.assertIn("change_type",js)
+        self.assertNotIn("importance ${",js)
+        self.assertNotIn("market sensitivity ${",js)
 
     def test_horizon_filter_controls_cover_region_and_jurisdiction(self):
         html=(ROOT/"web/index.html").read_text(encoding="utf-8")

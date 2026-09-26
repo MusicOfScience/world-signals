@@ -299,7 +299,13 @@
     </section>
   </main>
 
-  <dialog id="detail"><button id="closeDetail" class="close">Close</button><div id="detailBody"></div></dialog>
+  <dialog id="detail" aria-labelledby="detailTitle" aria-describedby="detailSummary">
+    <div class="detail-head">
+      <div class="detail-head-kicker"><span>PUBLIC EVENT DETAIL</span><span id="detailUpdated" class="meta"></span></div>
+      <button id="closeDetail" class="close" type="button">Close</button>
+    </div>
+    <div id="detailBody"></div>
+  </dialog>
   <script src="app.js"></script>
   <script src="horizon.js"></script>
   <script src="native-calendar.js"></script>
