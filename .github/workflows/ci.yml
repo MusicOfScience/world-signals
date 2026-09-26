@@ -23,10 +23,11 @@ jobs:
       - run: python scripts/validate_risks.py
       - run: python scripts/validate_scenarios.py
       - run: python scripts/validate_forecasts.py
+      - run: python scripts/validate_outcomes.py
       - run: python scripts/validate_analysis.py
       - run: python scripts/project_state_snapshot.py --check
       - run: python -m unittest discover -s tests -v
-      - run: python -m py_compile scripts/build_ics.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_signals.py scripts/validate_relationships.py scripts/validate_risks.py scripts/validate_scenarios.py scripts/validate_forecasts.py scripts/validate_analysis.py scripts/project_state_snapshot.py scripts/run_cross_layer_coverage_audit.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/icalendar.py src/world_signals/live_intelligence.py src/world_signals/signals.py src/world_signals/relationships.py src/world_signals/risks.py src/world_signals/scenarios.py src/world_signals/forecasts.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py src/world_signals/cross_layer_coverage.py
+      - run: python -m py_compile scripts/build_ics.py scripts/fetch_latest_monitor_snapshot.py scripts/fetch_retained_review_state.py scripts/validate_live_intelligence.py scripts/validate_signals.py scripts/validate_relationships.py scripts/validate_risks.py scripts/validate_scenarios.py scripts/validate_forecasts.py scripts/validate_outcomes.py scripts/validate_analysis.py scripts/project_state_snapshot.py scripts/run_cross_layer_coverage_audit.py scripts/apply_analysis_revision_contract_ba.py src/world_signals/icalendar.py src/world_signals/live_intelligence.py src/world_signals/signals.py src/world_signals/relationships.py src/world_signals/risks.py src/world_signals/scenarios.py src/world_signals/forecasts.py src/world_signals/outcomes.py src/world_signals/analysis.py src/world_signals/analysis_revision.py src/world_signals/analysis_revision_projection.py src/world_signals/live_analysis_bridge.py src/world_signals/cross_layer_coverage.py
       - run: node --check web/app.js
       - run: node --check web/horizon.js
       - run: node --check web/native-calendar.js

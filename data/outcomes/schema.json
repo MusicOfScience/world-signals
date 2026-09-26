@@ -1,0 +1,107 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "REVIEWED_OUTCOMES",
+  "version": "0.1",
+  "architecture_position": "OUTCOMES_RESOLUTION",
+  "upstream_layers": ["FORECASTS", "LIVE_INTELLIGENCE", "SOURCE_REGISTRY"],
+  "downstream_layers": ["EVALUATION"],
+  "purpose": "A governed record of what occurred under a Forecast's pre-declared resolution semantics; it is not a Forecast revision or a score.",
+  "layer_boundary": {
+    "forecast_mutation_allowed": false,
+    "resolution_rule_mutation_allowed": false,
+    "observation_mutation_allowed": false,
+    "canonical_mutation_allowed": false,
+    "automatic_outcome_generation_allowed": false,
+    "forecast_scoring_allowed": false,
+    "evaluation_allowed": false,
+    "model_learning_allowed": false,
+    "public_outcome_projection_allowed": false
+  },
+  "required_outcome_fields": [
+    "outcome_id",
+    "forecast_id",
+    "forecast_type",
+    "revision_id",
+    "revision_number",
+    "previous_revision_id",
+    "revision_kind",
+    "resolution_status",
+    "observed_outcome",
+    "resolution_rule_reference",
+    "eligible_issuance_ids",
+    "resolution_source_id",
+    "fallback_source_used",
+    "fallback_reason",
+    "resolution_at_utc",
+    "event_at_utc",
+    "evidence_publication_at_utc",
+    "world_signals_reviewed_at_utc",
+    "evidence_refs",
+    "source_locator",
+    "resolution_rationale",
+    "void_reason",
+    "dispute_notes",
+    "review_provenance",
+    "provenance",
+    "revision_reason"
+  ],
+  "controlled_vocabularies": {
+    "forecast_type": ["BINARY_EVENT", "CATEGORICAL", "NUMERIC_POINT"],
+    "revision_kind": ["ORIGINAL", "RESOLUTION_UPDATE", "OUTCOME_CORRECTION", "ADMINISTRATIVE_CORRECTION"],
+    "resolution_status": ["PENDING", "RESOLVED", "VOID", "UNRESOLVABLE", "DISPUTED"]
+  },
+  "resolution_policy": {
+    "one_outcome_per_forecast_series": true,
+    "one_outcome_may_resolve_many_issuances": true,
+    "forecast_question_and_target_are_immutable": true,
+    "resolution_rule_is_pinned_at_outcome_creation": true,
+    "primary_source_must_be_predeclared": true,
+    "fallback_must_be_predeclared_and_recorded": true,
+    "event_and_publication_time_remain_distinct": true,
+    "outcome_correction_preserves_prior_revision": true,
+    "outcome_layer_does_not_calculate_scores": true
+  },
+  "eligibility_policy": {
+    "eligible_issuance_must_match_forecast_series": true,
+    "eligible_issuance_must_match_forecast_type": true,
+    "eligible_issuance_must_precede_resolution_window": true,
+    "void_or_withdrawn_issuance_is_not_eligible": true,
+    "superseded_issuance_remains_historically_scoreable": true,
+    "duplicate_issuance_ids_are_rejected": true
+  },
+  "status_policy": {
+    "pending_is_not_resolved": true,
+    "void_requires_predeclared_or_governed_reason": true,
+    "poor_forecast_performance_is_not_a_void_reason": true,
+    "disputed_requires_explicit_notes": true,
+    "unresolvable_requires_explicit_reason": true
+  },
+  "population_policy": {
+    "production_population_allowed": false,
+    "automatic_ingestion_allowed": false,
+    "synthetic_production_population_allowed": false,
+    "public_outcome_projection_allowed": false,
+    "reason": "Define one-reality-to-many-issuances resolution before admitting production outcomes or evaluation."
+  },
+  "public_projection_policy": {
+    "outcome_projection_allowed": false,
+    "internal_outcome_count_must_be_zero": true,
+    "runtime_or_review_material_allowed": false
+  },
+  "prohibited_fields": [
+    "score",
+    "brier_score",
+    "log_loss",
+    "accuracy",
+    "mae",
+    "rmse",
+    "calibration",
+    "skill_score",
+    "leaderboard",
+    "ranking",
+    "performance_trend",
+    "model_learning",
+    "forecast_probability",
+    "resolution_rule_revision"
+  ]
+}

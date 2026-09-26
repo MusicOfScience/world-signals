@@ -259,6 +259,26 @@ automatic generation, model learning and public Forecast projection are
 outside this layer. Production Forecast population remains zero and synthetic
 fixtures are test-only.
 
+## Reviewed Outcome / Resolution contract — population closed
+
+The Outcome layer is now defined as a separate executable contract in
+`data/outcomes/`, `src/world_signals/outcomes.py` and
+`scripts/validate_outcomes.py`. One stable Outcome identity belongs to one
+Forecast question series, so a single governed real-world result can resolve
+many independently scoreable Forecast issuances. Administrative corrections
+and genuine source/result corrections append Outcome revisions; they do not
+duplicate reality or mutate the original Forecast.
+
+Resolution uses the Forecast's pinned target, timing window, source policy,
+fallback policy, cancellation semantics and numeric vintage rule. Binary,
+categorical and numeric results are checked against those original semantics.
+Event time, evidence publication time and WORLD SIGNALS review time remain
+distinct. Pending, resolved, void, unresolvable and disputed states are
+explicit, and deterministic due-state helpers expose overdue resolution work
+without resolving or scoring it. Evaluation metrics, public Outcome
+projection, automatic resolution and model learning remain outside this
+layer. Production Outcomes remain zero.
+
 ## Analysis contract
 
 Analysis remains downstream interpretation. `data/analysis/schema.json` explicitly treats `LIVE_INTELLIGENCE` as upstream and preserves the Charter's separation between:
@@ -304,7 +324,8 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
 | Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
 | Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; production population, outcome resolution, scoring and public projection remain closed. |
-| Forecast evaluation / model learning | No forecast-resolution/evaluation population or scoring pipeline | Missing. This follows the forecast contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
+| Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
+| Forecast evaluation / model learning | No forecast evaluation population or scoring pipeline | Missing. This follows the Outcome contract and a defensible resolved sample; it is not a prerequisite for the ICS feed. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
@@ -383,7 +404,8 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
    resolution criteria (completed); keep analytical updates scoreable without
    replacing earlier issuances.
 7. Add Outcomes/Resolution and evaluation only after prospective Forecasts
-   exist; add model-learning surfaces only after a defensible resolved sample.
+   exist (Outcomes/Resolution completed); add scoring/evaluation only after a
+   defensible resolved sample, then model-learning surfaces later.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.
