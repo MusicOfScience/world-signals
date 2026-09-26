@@ -39,7 +39,9 @@ LIVE INTELLIGENCE
       |
       +--> SIGNALS (contract only; production population closed)
                |
-               +--> future Relationships / Risks / Scenarios / Forecasts
+               +--> RELATIONSHIPS (contract only; production population closed)
+                        |
+                        +--> future Risks / Scenarios / Forecasts
 ```
 
 The layers remain deliberately distinct:
@@ -50,6 +52,11 @@ The layers remain deliberately distinct:
 4. **Live Intelligence** — evidence-backed factual observations around scheduled and unscheduled developments; no causal interpretation.
 5. **Signals** — reviewed analytical patterns over immutable observations, with explicit uncertainty, corroboration and transmission hypotheses.
 6. **Analysis** — expectations, surprise, market response, relationships, alternatives, uncertainty and second-order effects.
+7. **Relationships** — reviewed analytical connections between Signal revisions,
+   with explicit epistemic class, directionality, alternatives, contradiction,
+   mechanism and causal-evidence gates. The executable contract is currently
+   zero-population; it does not promote plausible transmission into causation,
+   and its public projection is closed.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -122,6 +129,7 @@ Intrinsic importance, expected market sensitivity and observed market response r
 python scripts/validate_registry.py
 python scripts/validate_live_intelligence.py
 python scripts/validate_signals.py
+python scripts/validate_relationships.py
 python scripts/validate_analysis.py
 python scripts/project_state_snapshot.py --check
 python -m unittest discover -s tests -v
@@ -156,6 +164,11 @@ and is transparent. `POSTPONED` emits RFC-valid `STATUS:TENTATIVE` with an
 explicit date-not-confirmed summary and is also transparent, so an old date is
 not presented as a confirmed appointment. Dated `PROVISIONAL`/`TBC` records
 use `STATUS:TENTATIVE`; `COMPLETED` is not forced into an unrelated RFC status.
+
+The reviewed Relationship contract is also defined and pressure-tested with
+production population and public projection closed. It preserves alternatives
+and disconfirming evidence and does not infer transitive or causal edges. The
+next substantive milestone is a governed Risks/regime-state history layer.
 
 ### Local operating loop
 
