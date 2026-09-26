@@ -46,6 +46,8 @@ LIVE INTELLIGENCE
                                  +--> SCENARIOS (contract only; production population closed)
                                           |
                                           +--> FORECASTS (contract only; production population closed)
+                                                   |
+                                                   +--> OUTCOMES / RESOLUTION (contract only; production population closed)
 ```
 
 The layers remain deliberately distinct:
@@ -74,8 +76,13 @@ The layers remain deliberately distinct:
     explicit question, horizon, information cutoff, resolution rule and
     probability/estimate semantics. Analytical updates are separate issuances;
     administrative corrections cannot rewrite substantive content. Outcome
-    resolution, scoring and public projection are deferred, and production
-    Forecast population is currently closed.
+   resolution, scoring and public projection are deferred, and production
+   Forecast population is currently closed.
+11. **Outcomes / Resolution** — one governed real-world result per immutable
+    Forecast question series, linked to every eligible issuance without
+    duplicating reality. Resolution follows the Forecast's original rule,
+    source, fallback and vintage semantics. Scoring, evaluation and public
+    projection remain deferred, and production Outcome population is closed.
 
 The reviewed Signal contract adds an analytical interface over Live
 Intelligence. It is deliberately separate from factual observations and from
@@ -202,8 +209,9 @@ is now also defined and pressure-tested with explicit Scenario Sets, conditional
 assumptions, divergence points, signposts, disconfirming indicators and
 immutable as-of history. Its production population and public projection remain
 closed. The reviewed Forecast contract is now also defined and pressure-tested
-with production population and public projection closed. The next substantive
-milestone is Outcomes/Resolution, followed by evaluation after a defensible
+with production population and public projection closed. Outcomes/Resolution
+is now also defined with production population and public projection closed.
+The next substantive milestone is Forecast Evaluation after a defensible
 resolved Forecast sample exists.
 
 ### Local operating loop

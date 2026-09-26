@@ -365,14 +365,24 @@ resolution, scoring, calibration, automatic generation, model learning and
 public projection remain outside this layer. No production Forecast is
 populated.
 
-## Stage 17 — Outcomes / Resolution — NOT STARTED
+## Stage 17 — Outcomes / Resolution — IMPLEMENTED / POPULATION CLOSED
 
-The next substantive milestone is a governed Outcome layer that resolves
-Forecasts against predeclared authoritative sources while preserving resolved,
-void and unresolved states. Evaluation metrics follow only after a defensible
-prospective sample exists.
+The executable contract lives in `data/outcomes/`,
+`src/world_signals/outcomes.py` and `scripts/validate_outcomes.py`. One stable
+Outcome resolves a Forecast question series and can map to many eligible,
+independently scoreable issuances. Resolution follows the Forecast's pinned
+rule, source/fallback policy and numeric vintage semantics. Pending, resolved,
+void, unresolvable and disputed states are explicit; Outcome revisions are
+append-only and do not mutate Forecasts. No production Outcome is populated
+and public projection remains closed.
 
-## Stage 18 — evaluate narrow auto-commit classes — GATE CLOSED
+## Stage 18 — Forecast Evaluation — NOT STARTED
+
+The next substantive milestone is governed evaluation of resolved Forecasts,
+including denominator integrity and appropriate scoring metrics. It must not
+begin until prospective resolved data exists.
+
+## Stage 19 — evaluate narrow auto-commit classes — GATE CLOSED
 
 Only reconsider after prospective evidence demonstrates narrow, reliable classes such as a same-identity reschedule against prior Canonical state and an explicit authoritative cancellation. Even then, any first auto-commit class requires separate authorisation and must not generalise across heterogeneous source contracts.
 
