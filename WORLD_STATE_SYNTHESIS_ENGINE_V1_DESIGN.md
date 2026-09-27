@@ -541,11 +541,16 @@ The fixture is valid only as a contract test. It must not be copied into
    semantic fingerprint and mutation proof. Relationships, Risks/Regimes,
    Scenarios and Outcomes remain empty, and Forecast Evaluation remains
    `NO_SAMPLE`.
-5. **Conduct a human review transaction.** Review authority interpretation,
-   implementation-state classification, contradictions, negative-evidence
-   scope, market rights, graph classes and forecast-cutoff integrity. The
-   transaction must have no write targets. This remains the next unperformed
-   milestone; Step 4 did not accept or admit the retained proposal.
+5. **Conduct a human review transaction.** Completed for the retained proposal
+   at `2026-09-27T04:39:04Z`. The separate transaction and decision record
+   review authority interpretation, implementation-state classification,
+   contradictions, negative-evidence scope, market rights, graph classes,
+   forecast-cutoff integrity, empty-layer integrity, the Canonical historical
+   limitation and mutation protection. The explicit decision is `ACCEPTED` only
+   for `READ_BOUNDARY_CONSISTENCY_ONLY`; it has no write targets, does not
+   admit production World State and does not permit public projection. The
+   original `REVIEW_PENDING` proposal remains unchanged as non-governed audit
+   evidence.
 6. **Only after a separate approval, define a production World State history
    contract.** That future milestone must decide actor identity governance,
    revision/admission semantics, public projection and retention before any

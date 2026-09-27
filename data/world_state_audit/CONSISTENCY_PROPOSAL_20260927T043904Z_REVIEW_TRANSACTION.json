@@ -1,0 +1,83 @@
+{
+  "created_at_utc": "2026-09-27T06:39:19Z",
+  "criterion_results": {
+    "authority_interpretation": {
+      "basis": "actors=[]; no Actor Registry or authority claim was created.",
+      "disposition": "NO_CLAIMS_TO_REVIEW",
+      "status": "PASS"
+    },
+    "canonical_limitation": {
+      "basis": "CANONICAL_HISTORICAL_AS_OF_UNSUPPORTED remains explicit; current context is not historical truth.",
+      "disposition": "LIMITATION_RETAINED",
+      "status": "PASS"
+    },
+    "contradictions": {
+      "basis": "No proposal-level analytical claim suppresses contradiction-bearing upstream references; evidence counts are not confidence.",
+      "disposition": "UPSTREAM_CONTRACTS_PRESERVED",
+      "status": "PASS"
+    },
+    "empty_layer_integrity": {
+      "basis": "{\"actors\": 0, \"dimension_assessments\": 0, \"hypotheses\": 0, \"implementation_claims\": 0, \"negative_evidence\": 0, \"outcomes\": 0, \"relationships\": 0, \"risks_regimes\": 0, \"scenarios\": 0, \"transmission_edges\": 0}",
+      "disposition": "GOVERNED_EMPTY_RESULTS_ACCEPTED",
+      "status": "PASS"
+    },
+    "evaluation": {
+      "basis": "Outcomes=0 and Evaluation remains NO_SAMPLE; no calibration denominator was manufactured.",
+      "disposition": "NO_SAMPLE_ACCEPTED",
+      "status": "PASS"
+    },
+    "forecast_cutoff_integrity": {
+      "basis": "All four Forecast identities, revisions, cutoffs, resolution rules and empty Outcome references are retained.",
+      "disposition": "FOUR_ISSUANCES_PRESERVED",
+      "status": "PASS"
+    },
+    "graph_classes": {
+      "basis": "relationships=0 and transmission_edges=0; no proximity or transitive edge was generated.",
+      "disposition": "EMPTY_RESULT_CORRECT",
+      "status": "PASS"
+    },
+    "implementation_state": {
+      "basis": "All SAID/DECIDED/AUTHORISED/IMPLEMENTED/OBSERVED claim populations are empty.",
+      "disposition": "NO_IMPLEMENTATION_CLAIMS",
+      "status": "PASS"
+    },
+    "manifest_integrity": {
+      "basis": "Proposal, source manifest and retained hash-only manifest match the approved review target.",
+      "disposition": "EXACT_FINGERPRINTS_MATCH",
+      "status": "PASS"
+    },
+    "market_rights": {
+      "basis": "No market feed or causal claim was introduced; existing Analysis rights remain upstream.",
+      "disposition": "NO_NEW_MARKET_CLAIM",
+      "status": "PASS"
+    },
+    "mutation_protection": {
+      "basis": "The retained governed-input before/after hashes are identical.",
+      "disposition": "BEFORE_EQUALS_AFTER",
+      "status": "PASS"
+    },
+    "negative_evidence": {
+      "basis": "negative_evidence=[]; absence, unqueried sources and source failure were not promoted.",
+      "disposition": "EMPTY_RESULT_CORRECT",
+      "status": "PASS"
+    }
+  },
+  "decision": "ACCEPTED",
+  "decision_basis": "Accepted as an accurate, reproducible and appropriately bounded representation of governed evidence available to the v1 reader at the stated cutoff. This does not assert a substantive World State assessment or admit production World State.",
+  "decision_scope": "READ_BOUNDARY_CONSISTENCY_ONLY",
+  "input_manifest_sha256": "10f7657331e1eee930a82dfb0ecf01c66e6e55420c87f95d8cf1c65bd9f54b8a",
+  "production_world_state_admitted": false,
+  "proposal_reference": "data/world_state_audit/CONSISTENCY_PROPOSAL_20260927T043904Z_REVIEW_PENDING.json",
+  "proposal_semantic_fingerprint": "8d5161ca7e3fccdaf3a8d765a0c27bccb6340b465f61d6f8931f01488170bea2",
+  "proposal_sha256": "8d5161ca7e3fccdaf3a8d765a0c27bccb6340b465f61d6f8931f01488170bea2",
+  "proposal_status_after_review": "ACCEPTED_READ_BOUNDARY_CONSISTENCY_ONLY",
+  "public_projection_permitted": false,
+  "retained_manifest_sha256": "3524b2eb8d8d843434ac83b2ce8b70b1ccc3f1f35828e1cca38ce0035f68e3bd",
+  "reviewed_at_utc": "2026-09-27T06:39:19Z",
+  "reviewed_proposal_remains_non_governed": true,
+  "reviewer_role": "OPERATOR_HUMAN_REVIEW",
+  "transaction_id": "WSREVIEW-20260927T043904Z-READ-BOUNDARY-001",
+  "transaction_type": "WORLD_STATE_SYNTHESIS_REVIEW",
+  "transaction_version": "0.1",
+  "write_targets": []
+}
