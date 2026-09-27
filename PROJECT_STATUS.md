@@ -157,7 +157,7 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
-## Next milestone — World State Synthesis Engine v1 — read adapter implemented / synthesis engine not implemented
+## Next milestone — World State Synthesis Engine v1 — production history contract designed / synthesis engine not implemented
 
 The newly agreed direction is a derived World State synthesis over existing
 governed layers. The design must model actors and authority, capabilities and
@@ -177,8 +177,11 @@ separate explicit human review transaction at the cutoff
 non-governed; its review is `ACCEPTED` only for
 `READ_BOUNDARY_CONSISTENCY_ONLY`, with no write targets and no public
 projection. It does not create actors, dimensions, hypotheses, transmission
-edges or other analytical judgments. Migration Step 6 remains the separate
-production World State history-contract design decision.
+edges or other analytical judgments. Migration Step 6 now defines the adopted
+production history contract in
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`; no production population
+is admitted. Migration Step 7 is the unpopulated contract implementation and
+pressure-test tranche.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

@@ -1,7 +1,9 @@
 # World State Synthesis Engine v1 — design decision record
 
-**Status:** proposed design; design-only milestone; no World State engine or
-production World State dataset is implemented by this record.
+**Status:** read/proposal design plus adopted production-history contract;
+design-only milestones; no World State engine or production World State dataset
+is implemented by this record. The adopted history contract is specified in
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`.
 
 **Decision date:** 2026-09-27
 
@@ -551,41 +553,38 @@ The fixture is valid only as a contract test. It must not be copied into
    admit production World State and does not permit public projection. The
    original `REVIEW_PENDING` proposal remains unchanged as non-governed audit
    evidence.
-6. **Only after a separate approval, define a production World State history
-   contract.** That future milestone must decide actor identity governance,
-   revision/admission semantics, public projection and retention before any
-   governed population is admitted.
+6. **Define the production World State history contract.** Completed as a
+   design-only tranche in `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`.
+   It adopts componentized immutable history, a reviewed Actor Registry,
+   explicit three-time as-of semantics, component-level partial admission,
+   separate production admission, retention and private/public projection
+   gates. No production population is admitted.
+7. **Implement and pressure-test the unpopulated production history contract.**
+   This is the next tranche: schemas, validators, synthetic fixtures and a
+   temporary-copy admission simulator only. The first production component
+   remains a separate later admission decision.
 
-## Open questions
+## Deferred implementation questions
 
-1. **Actor identity governance:** should actor IDs eventually live in a
-   dedicated reviewed registry, or be scoped to each synthesis proposal until
-   identity equivalence is pressure-tested?
-2. **Canonical historical reads:** how should mixed-precision `status_history`
-   become an executable as-of contract without manufacturing UTC precision?
-3. **Authority resolution:** what primary evidence is sufficient for each
-   institution's `DECIDED` and `AUTHORISED` state, especially in coalitions,
-   courts, legislatures and military command structures?
-4. **Negative evidence coverage:** what minimum completeness and recovery rules
-   are required before a bounded search may support `NO_EVIDENCE_IN_SCOPED_SOURCES`?
-5. **Market rights:** which instrument/venue feeds can support internal sensing,
-   and what separate evidence is required before any public projection?
-6. **Threshold semantics:** which thresholds are measured, legal,
-   institutional or analyst-defined, and how are units, lags and state
-   dependence represented without universal scoring?
-7. **Model registry:** where are model identity, version, methodology,
-   disagreement and reproducibility recorded while keeping model output out of
-   factual evidence counts?
-8. **Transmission ownership:** when does a reviewed proposal edge become a
-   Relationship revision, and how are duplicate graph concepts avoided?
-9. **Scenario/Forecast boundary:** how should a signpost reference a Forecast
-   question without becoming a probability or forecast assertion?
-10. **Production admission:** what evidence and retention policy would justify a
-    first World State revision, and what remains private even if a projection
-    later becomes public?
-11. **Briefing projection:** which reviewed fields are safe for each of World
-    State, Outlook, Calendar, Map and Research, and how are citations rendered
-    without collapsing uncertainty?
+Migration Step 6 resolves the architectural questions above. The remaining
+questions are bounded implementation experiments, not permission to populate
+production state:
+
+1. **Canonical historical selector:** a separate contract must define how
+   mixed-precision Canonical `status_history` becomes an executable as-of read
+   without manufacturing UTC precision. No World State implementation may
+   infer this.
+2. **Relationship extension:** a bounded experiment must determine whether
+   `FLOW`, `CHOKEPOINT` and `EXPOSURE` fit the existing Relationship schema;
+   otherwise the proposal remains non-production transmission only.
+3. **Public field allowlist:** Step 7 must pressure-test field-level privacy,
+   source-rights and citation rules against a synthetic private/public fixture.
+4. **Model metadata availability:** Step 7 must define the minimum reproducible
+   model record when a model version or prompt cannot be retained; missing
+   provenance blocks model-derived admission rather than being guessed.
+5. **First pilot evidence:** the DRC health/biosecurity pilot remains a Step 8
+   admission decision and requires a fresh review of current upstream hashes,
+   contradiction and uncertainty, not a quota or automatic promotion.
 
 ## Consequences and limitations
 
