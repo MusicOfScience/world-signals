@@ -547,6 +547,12 @@ schemas under `data/world_state/`, native validators in
 simulator are contract machinery only. No production World State or Actor
 Registry population was admitted, and no public projection was generated.
 
+**Step 8A status:** One narrow `HEALTH_BIOSECURITY` Dimension Assessment
+candidate has since been constructed from the governed DRC Bundibugyo
+observation/Signal specimen. It is retained under `data/world_state_audit/` as
+`REVIEW_PENDING`; its admission is simulated only in temporary copies. Step 8B
+must perform the separate human review and production-admission decision.
+
 Step 7 should implement, in a fresh bounded tranche:
 
 - unpopulated machine-readable schemas and native validators for the Actor
