@@ -427,7 +427,7 @@ function forecastValueMarkup(row){
   if(row.forecast_type==='NUMERIC_POINT'){
     return `<div class="forecast-numeric"><strong>${esc(value.estimate)}</strong><span>${esc(value.unit)}</span></div>`;
   }
-  const outcomes=value.outcomes||[];
+  const outcomes=[...(value.outcomes||[])].sort((a,b)=>Number(b.probability)-Number(a.probability));
   return `<div class="probability-strip" role="list" aria-label="Forecast probabilities">${outcomes.map(outcome=>{
     const pct=Math.round(Number(outcome.probability)*100);
     return `<div class="probability-row" role="listitem"><div class="probability-label"><span>${esc(outcome.label)}</span><strong>${pct}%</strong></div><div class="probability-track" aria-hidden="true"><span style="width:${pct}%"></span></div></div>`;
@@ -435,31 +435,42 @@ function forecastValueMarkup(row){
 }
 function renderOutlook(){
   const rows=OUTLOOK.forecasts||[];
-  const first=rows[0];
-  if(first) $('#outlookAsOf').textContent=`${utcLabel(first.information_cutoff_at_utc)} UTC`;
+  const state=OUTLOOK.metadata?.information_cutoff_state;
+  $('#outlookAsOf').textContent=state==='SHARED'
+    ? `${utcLabel(OUTLOOK.metadata.shared_information_cutoff_at_utc)} UTC`
+    : 'Varies by Forecast';
   $('#outlookList').innerHTML=rows.length?rows.map(row=>{
     const resolution=row.resolution||{};
+    const anchor=`forecast-${row.forecast_id}`;
+    const calendar=row.calendar_event;
     return `<article class="forecast-card">
-      <header class="forecast-card-head"><div><p class="eyebrow">${esc(row.institution)}</p><h3>${esc(utcDateLabel(resolution.window_start_at_utc))}</h3></div><span class="forecast-state">UNRESOLVED</span></header>
-      <p class="forecast-target">${esc(row.question)}</p>
+      <header class="forecast-card-head" id="${esc(anchor)}"><div><p class="eyebrow">${esc(row.institution)}</p><h3>${esc(utcDateLabel(resolution.window_start_at_utc))}</h3></div><span class="forecast-state">UNRESOLVED</span></header>
+      <p class="forecast-target">${esc(row.target_label)}</p>
       ${forecastValueMarkup(row)}
-      <div class="forecast-when"><span>WE WILL KNOW FROM</span><strong>${esc(resolution.source_label)}</strong><small>${esc(utcLabel(resolution.window_start_at_utc))} UTC</small></div>
-      <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd></dl></details>
+      <div class="forecast-lifecycle" aria-label="Forecast lifecycle"><span>ISSUED<br><strong>${esc(utcDateLabel(row.issued_at_utc))}</strong></span><i aria-hidden="true">━●━━━━━━━━○</i><span>RESOLVES<br><strong>${esc(utcDateLabel(resolution.window_start_at_utc))}</strong></span></div>
+      <div class="forecast-when"><span>WHAT SETTLES THIS?</span><strong>${esc(resolution.source_label)}</strong><small>Outcome pending · Evaluation remains NO_SAMPLE</small>${calendar?`<a href="#event=${encodeURIComponent(calendar.occurrence_id)}">Open calendar event →</a>`:''}</div>
+      <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Question</dt><dd>${esc(row.question)}</dd><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd></dl></details>
     </article>`;
   }).join(''):'<p class="empty">No public Forecasts passed the allowlist.</p>';
 }
 function renderNextClock(){
   const rows=[...(OUTLOOK.forecasts||[])].sort((a,b)=>String(a.resolution?.window_start_at_utc).localeCompare(String(b.resolution?.window_start_at_utc)));
-  $('#clockList').innerHTML=rows.length?rows.map(row=>`<a class="clock-item" href="#outlook"><time datetime="${esc(row.resolution.window_start_at_utc)}">${esc(utcDateLabel(row.resolution.window_start_at_utc))}</time><div><strong>${esc(row.institution)}</strong><span>${esc(row.forecast_type==='NUMERIC_POINT'?'Rate decision':'Policy-direction decision')} · Forecast open</span></div><em>Official resolution source ↗</em></a>`).join(''):'<p class="empty">No open public Forecast resolution events.</p>';
+  $('#forecastChronology').innerHTML=rows.length?`<div class="chronology-line" aria-hidden="true"></div><ol>${rows.map(row=>`<li><time datetime="${esc(row.information_cutoff_at_utc)}">${esc(utcDateLabel(row.information_cutoff_at_utc))}</time><span>cut-off</span></li><li><time datetime="${esc(row.resolution.window_start_at_utc)}">${esc(utcDateLabel(row.resolution.window_start_at_utc))}</time><span>${esc(row.institution)}</span></li>`).join('')}</ol>`:'';
+  $('#clockList').innerHTML=rows.length?rows.map(row=>{
+    const calendar=row.calendar_event;
+    return `<article class="clock-item"><a class="clock-main" href="#forecast-${esc(row.forecast_id)}"><time datetime="${esc(row.resolution.window_start_at_utc)}">${esc(utcDateLabel(row.resolution.window_start_at_utc))}</time><div><strong>${esc(row.institution)}</strong><span>${esc(row.forecast_type==='NUMERIC_POINT'?'Rate decision':'Policy-direction decision')} · Forecast open</span></div></a>${calendar?`<a class="clock-calendar-link" href="#event=${encodeURIComponent(calendar.occurrence_id)}">Calendar event →</a>`:''}</article>`;
+  }).join(''):'<p class="empty">No open public Forecast resolution events.</p>';
 }
 function renderAnalysisPreview(){
-  const rows=(ANALYSIS.reviews||[]).filter(row=>row.review_state==='REVIEWED_SAMPLE').slice(0,3);
+  const rows=(ANALYSIS.reviews||[]).filter(row=>row.review_state==='REVIEWED_SAMPLE').sort((a,b)=>{
+    const time=String(b.analysis_as_of_utc||'').localeCompare(String(a.analysis_as_of_utc||''));
+    return time||String(a.analysis_id||'').localeCompare(String(b.analysis_id||''));
+  }).slice(0,3);
   $('#analysisPreview').innerHTML=rows.length?rows.map(row=>{
     const happened=row.what_happened?.summary||'No public summary recorded.';
     const surprised=row.what_surprised?.summary||'No surprise recorded.';
-    const connected=row.what_appears_connected?.summary||'No connection established.';
-    const noise=row.what_may_be_noise?.[0]?.summary||'No alternative noise note recorded.';
-    return `<article class="analysis-preview-card"><p class="eyebrow">${esc(row.canonical_institution||row.analysis_id)}</p><h3>${esc(row.scope||'Reviewed event analysis')}</h3><dl><dt>What happened</dt><dd>${esc(happened)}</dd><dt>What surprised</dt><dd>${esc(surprised)}</dd><dt>What appears connected</dt><dd>${esc(connected)}</dd><dt>What may be noise</dt><dd>${esc(noise)}</dd></dl></article>`;
+    const connected=row.what_appears_connected?.summary||'No reviewed connection established.';
+    return `<article class="analysis-preview-card"><p class="eyebrow">${esc(row.canonical_institution||row.analysis_id)}</p><h3>${esc(row.scope||'Reviewed event analysis')}</h3><dl><dt>What happened</dt><dd>${esc(happened)}</dd><dt>Surprise</dt><dd>${esc(surprised)}</dd><dt>Causal status</dt><dd>${esc(connected)}</dd></dl><details><summary>Read the caution</summary><p>${esc(row.what_may_be_noise?.[0]?.summary||'No alternative noise note recorded.')}</p></details></article>`;
   }).join(''):'<p class="empty">No reviewed Analysis is available in this build.</p>';
 }
 function renderThemes(){

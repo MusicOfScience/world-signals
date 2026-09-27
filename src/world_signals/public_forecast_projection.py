@@ -24,6 +24,32 @@ PUBLIC_FORECAST_ALLOWLIST = frozenset(
     }
 )
 
+# These are reviewed, exact links into the public Canonical event projection.
+# They are validated against the registry during the site build; browser code
+# never guesses an event from a title or date.
+PUBLIC_FORECAST_CALENDAR_LINKS = {
+    "WS-FP-RBA-20261103": {
+        "occurrence_id": "WSO-7177a9874ef955d4",
+        "source_id": "WSSRC-CB-002",
+        "start_utc": "2026-11-03T03:30:00Z",
+    },
+    "WS-FP-BOC-20261028": {
+        "occurrence_id": "WSO-2cdc822808f15774",
+        "source_id": "WSSRC-CB-008",
+        "start_utc": "2026-10-28T13:45:00Z",
+    },
+    "WS-FP-ECB-20261029": {
+        "occurrence_id": "WSO-ca251212e2125559",
+        "source_id": "WSSRC-CB-003",
+        "start_utc": "2026-10-29T13:15:00Z",
+    },
+    "WS-FP-FED-20261028": {
+        "occurrence_id": "WSO-4e25032b0df35d00",
+        "source_id": "WSSRC-CB-001",
+        "start_utc": "2026-10-28T18:00:00Z",
+    },
+}
+
 _SOURCE_LABELS = {
     "WS-FP-RBA-20261103": "Official RBA decision release",
     "WS-FP-BOC-20261028": "Official Bank of Canada decision release",
@@ -167,7 +193,22 @@ def _validate_public_candidate(row: dict[str, Any]) -> None:
         )
 
 
-def _public_row(row: dict[str, Any]) -> dict[str, Any]:
+def _validate_calendar_links(canonical_registry: dict[str, Any]) -> None:
+    records = canonical_registry.get("records") if isinstance(canonical_registry, dict) else None
+    by_id = {record.get("occurrence_id"): record for record in records or [] if isinstance(record, dict)}
+    for forecast_id, link in PUBLIC_FORECAST_CALENDAR_LINKS.items():
+        record = by_id.get(link["occurrence_id"])
+        if not record:
+            raise PublicForecastProjectionError(
+                f"Calendar link for {forecast_id} does not resolve to a Canonical occurrence"
+            )
+        if record.get("source_id") != link["source_id"] or record.get("start_utc") != link["start_utc"]:
+            raise PublicForecastProjectionError(
+                f"Calendar link for {forecast_id} does not match its reviewed Canonical occurrence"
+            )
+
+
+def _public_row(row: dict[str, Any], calendar_registry: dict[str, Any] | None = None) -> dict[str, Any]:
     forecast_id = row["forecast_id"]
     resolution = row["resolution"]
     value = (
@@ -175,7 +216,7 @@ def _public_row(row: dict[str, Any]) -> dict[str, Any]:
         if row["forecast_type"] == "NUMERIC_POINT"
         else _categorical_value(row)
     )
-    return {
+    public = {
         "forecast_id": forecast_id,
         "issuance_id": row["issuance_id"],
         "revision_id": row["revision_id"],
@@ -197,10 +238,26 @@ def _public_row(row: dict[str, Any]) -> dict[str, Any]:
         "resolution_status": "UNRESOLVED",
         "public_rationale": _required(row, "rationale"),
     }
+    if calendar_registry is not None:
+        link = PUBLIC_FORECAST_CALENDAR_LINKS[forecast_id]
+        record = next(
+            record for record in calendar_registry["records"]
+            if record.get("occurrence_id") == link["occurrence_id"]
+        )
+        public["calendar_event"] = {
+            "occurrence_id": link["occurrence_id"],
+            "title": record.get("short_calendar_title") or record.get("canonical_name"),
+            "start_utc": record.get("start_utc"),
+        }
+    return public
 
 
-def build_public_forecast_projection(dataset: dict[str, Any]) -> dict[str, Any]:
+def build_public_forecast_projection(
+    dataset: dict[str, Any], canonical_registry: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """Build the deterministic public Outlook projection from governed rows."""
+    if canonical_registry is not None:
+        _validate_calendar_links(canonical_registry)
     rows = dataset.get("forecasts") if isinstance(dataset, dict) else None
     if not isinstance(rows, list):
         raise PublicForecastProjectionError("Forecast dataset must contain a forecasts list")
@@ -219,8 +276,9 @@ def build_public_forecast_projection(dataset: dict[str, Any]) -> dict[str, Any]:
     for forecast_id in sorted(PUBLIC_FORECAST_ALLOWLIST):
         row = by_id[forecast_id]
         _validate_public_candidate(row)
-        projected.append(_public_row(row))
+        projected.append(_public_row(row, canonical_registry))
     projected.sort(key=lambda row: (row["resolution"]["window_start_at_utc"], row["forecast_id"]))
+    cutoffs = sorted({row["information_cutoff_at_utc"] for row in projected})
     return {
         "metadata": {
             "projection_type": "PUBLIC_FORECAST_PILOT_ALLOWLIST",
@@ -232,6 +290,9 @@ def build_public_forecast_projection(dataset: dict[str, Any]) -> dict[str, Any]:
             "evaluation_state": "NO_SAMPLE",
             "outcome_projection": "NONE_AVAILABLE",
             "political_electoral_forecasts": "FAIL_CLOSED_UNAUTHORISED",
+            "information_cutoff_state": "SHARED" if len(cutoffs) == 1 else "VARIES",
+            "shared_information_cutoff_at_utc": cutoffs[0] if len(cutoffs) == 1 else None,
+            "calendar_linkage": "EXPLICIT_REVIEWED_OCCURRENCE_IDS" if canonical_registry is not None else "NOT_ATTACHED",
         },
         "forecasts": projected,
     }

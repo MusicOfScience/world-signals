@@ -141,6 +141,12 @@ claiming the whole interval as subscriber free/busy time.
 
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
 
+The public brief follows the reader sequence `OUTLOOK → RESOLUTION CLOCK →
+REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`. Calendar counts remain available
+with the Calendar, while World State coverage remains an internal Research
+boundary. The Outlook projection keeps each Forecast's own information cutoff
+and uses only exact reviewed Calendar occurrence links.
+
 ### World State direction
 
 The next product boundary is a derived **World State**, not a larger event

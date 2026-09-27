@@ -149,7 +149,7 @@ dump_json(docs/"data/analysis.json",analysis_projection)
 # Forecast publication is a separate, narrow allowlist contract. The governed
 # Forecast dataset remains private and its own publication policy remains
 # closed; only the reviewed monetary-policy pilot is copied into Outlook.
-outlook_projection=build_public_forecast_projection(forecasts)
+outlook_projection=build_public_forecast_projection(forecasts, reg)
 dump_json(docs/"data/outlook.json",outlook_projection)
 
 risk_projection=public_risk_projection(reg)

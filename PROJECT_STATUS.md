@@ -220,6 +220,15 @@ Forecasts. Forecast values remain unresolved and Evaluation remains
 not projected. World State remains internal: no second component, public World
 State projection or public briefing narrative was created.
 
+Migration Step 10B now tightens this into one public intelligence spine:
+`OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.
+Calendar counts and concentration context live with the Calendar rather than
+interrupting the brief; World State coverage is a compact Research boundary.
+Forecast cards retain their own information cutoffs, lifecycle and pending
+Outcome state, while the Resolution Clock links only to exact reviewed
+Canonical occurrences. No Forecast, Outcome, Analysis or World State data was
+changed, and no public World State projection was opened.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.

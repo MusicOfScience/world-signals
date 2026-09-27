@@ -87,6 +87,12 @@ open public World State or Map projection, expose governed Forecast storage
 directly, publish private review metadata, or imply Forecast evaluation before
 Outcomes resolve.
 
+The public brief presents that pilot through a reader sequence of Outlook,
+Resolution Clock, reviewed Analysis, Calendar and Research. Calendar metadata
+and internal World State coverage are supporting context rather than the main
+intelligence narrative. Forecast-to-Calendar navigation is permitted only
+through an exact reviewed Canonical occurrence mapping.
+
 The World State implementation-state ladder is explicit:
 
 `SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`

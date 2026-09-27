@@ -22,10 +22,10 @@ Current reconciled `main` state (27 September 2026):
 4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
 5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
 6. **World State Synthesis** — future derived, continuously updated, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche. It is a synthesis hub for scenarios and forecasts, not a terminal stage after model learning.
-7. **Briefing projections** — human-facing views: `OUTLOOK | CALENDAR |
-   RESEARCH` currently have bounded public projections; `WORLD STATE | MAP`
-   remain internal/future public surfaces. These views are projections, not
-   additional governed stores.
+7. **Briefing projections** — the public reader sequence is `OUTLOOK →
+   RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
+   `WORLD STATE | MAP` remain internal/future public surfaces. These views are
+   projections, not additional governed stores.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
@@ -513,12 +513,24 @@ transmission classification, competing-hypothesis selection, scenario
 signposts, production admission and any promotion into a public projection.
 The final briefing is a projection assembled from reviewed state and
 provenance; it is not canonical truth. The current public product leads with
-the bounded Outlook pilot, then Calendar, reviewed Analysis and Research. The
+the bounded Outlook pilot, its Resolution Clock, reviewed Analysis, Calendar
+and Research. The
 intended full product surface is:
 
 ```text
 WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
 ```
+
+Migration Step 10B keeps the public Forecast allowlist deliberately narrow,
+retains each Forecast's own information cutoff, and links a Forecast to a
+Calendar occurrence only through an exact reviewed occurrence mapping. The
+homepage no longer uses Calendar counts, concentration themes or the internal
+World State boundary as intelligence headlines; those remain supporting
+Calendar/Research material. A feature-branch Pages deployment may be rejected
+solely by the repository's GitHub Pages environment protection even when the
+static build succeeds. That known branch-policy condition is distinct from a
+build, privacy or content-validation failure; post-merge Pages deployment on
+`main` remains required.
 
 ## Static UX and runtime truth
 

@@ -24,9 +24,54 @@ class WebUXTests(unittest.TestCase):
         self.assertIn('href="#outlook">OUTLOOK</a>',html)
         self.assertIn('id="outlook"',html)
         self.assertIn('id="worldStateCoverage"',html)
-        self.assertIn("Public projection remains closed.",html)
+        self.assertIn("Public World State synthesis is not yet open.",html)
         self.assertNotIn("VALUES NOT PUBLISHED",html)
         self.assertIn('id="horizonDomain"><option value="">All domains</option>',html)
+
+    def test_public_intelligence_spine_demotes_registry_dashboard_material(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        self.assertLess(html.index('id="outlook"'), html.index('id="nextClock"'))
+        self.assertLess(html.index('id="nextClock"'), html.index('id="analysisSection"'))
+        self.assertLess(html.index('id="analysisSection"'), html.index('id="horizon"'))
+        self.assertLess(html.index('id="horizon"'), html.index('id="methods"'))
+        self.assertNotIn('id="now"', html)
+        self.assertNotIn('id="themes"', html)
+        self.assertNotIn('id="changeView"', html)
+        self.assertIn('id="calendar-brief-meta"', html)
+        self.assertIn('class="theme-section calendar-context"', html)
+        self.assertIn('id="themeList"', html)
+
+    def test_hero_uses_quiet_public_boundary(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        self.assertIn('class="safety hero-boundary"', html)
+        self.assertIn("PUBLIC NOW", html)
+        self.assertIn("Boundaries and method", html)
+        self.assertNotIn("Publication boundary", html)
+
+    def test_forecast_lifecycle_and_object_specific_resolution_are_rendered(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        js=(ROOT/"web/app.js").read_text(encoding="utf-8")
+        self.assertIn('id="forecastChronology"', html)
+        self.assertIn("forecast-lifecycle", js)
+        self.assertIn("WHAT SETTLES THIS?", js)
+        self.assertIn("Outcome pending", js)
+        self.assertIn("forecast_id", js)
+
+    def test_no_fake_resolution_link_affordance_and_explicit_calendar_mapping(self):
+        js=(ROOT/"web/app.js").read_text(encoding="utf-8")
+        projection=(ROOT/"src/world_signals/public_forecast_projection.py").read_text(encoding="utf-8")
+        self.assertNotIn("Official resolution source ↗", js)
+        self.assertIn("calendar_event", js)
+        self.assertIn("PUBLIC_FORECAST_CALENDAR_LINKS", projection)
+        self.assertIn("EXPLICIT_REVIEWED_OCCURRENCE_IDS", projection)
+
+    def test_analysis_preview_is_time_ordered_and_world_state_is_research_boundary(self):
+        js=(ROOT/"web/app.js").read_text(encoding="utf-8")
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        self.assertIn("analysis_as_of_utc", js)
+        self.assertIn("REVIEWED ANALYSIS", html)
+        self.assertLess(html.index('id="analysisSection"'), html.index('id="horizon"'))
+        self.assertLess(html.index('id="methods"'), html.index('id="worldStateCoverage"'))
 
     def test_outlook_projection_is_built_separately_from_governed_forecasts(self):
         build=(ROOT/"scripts/build_site.py").read_text(encoding="utf-8")

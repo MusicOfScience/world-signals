@@ -29,13 +29,12 @@
       <div>
         <p class="eyebrow">A PUBLIC INTELLIGENCE BRIEF</p>
         <h1>What we expect next. What we are watching. What would change the view.</h1>
-        <p class="lede">A restrained public brief built from governed forecasts, reviewed analysis and a source-native calendar — with uncertainty and limits left visible.</p>
+        <p class="lede">A public brief built from governed forecasts, reviewed analysis and a source-native calendar — with uncertainty left visible.</p>
       </div>
-      <div class="safety">
-        <strong>Publication boundary</strong>
-        <span>Forecast pilot: public</span>
-        <span>Calendar and reviewed analysis: public</span>
-        <span>World State: internal only</span>
+      <div class="safety hero-boundary">
+        <span class="hero-boundary-label">PUBLIC NOW</span>
+        <strong>Outlook · Calendar · reviewed Analysis</strong>
+        <a class="text-link" href="#methods">Boundaries and method →</a>
       </div>
     </div>
   </header>
@@ -48,14 +47,15 @@
           <h2 id="outlookTitle">What do we expect next?</h2>
           <p>Four reviewed monetary-policy forecasts, frozen prospectively. Each card shows the claim, the resolution date and the information cutoff that cannot be changed later.</p>
         </div>
-        <div class="outlook-asof"><span>FORECAST CUTOFF</span><strong id="outlookAsOf">Loading…</strong><small>Unresolved forecasts are not scored.</small></div>
+        <div class="outlook-asof"><span>INFORMATION CUT-OFFS</span><strong id="outlookAsOf">Loading…</strong><small>Each Forecast retains its own frozen cutoff.</small></div>
       </div>
       <div id="outlookList" class="outlook-grid" aria-live="polite"><p class="loading">Loading Outlook…</p></div>
       <p id="outlookNote" class="outlook-note">Forecast values are public only through this reviewed pilot projection. No political or electoral forecast is included.</p>
     </section>
 
     <section id="nextClock" class="clock-section" aria-labelledby="nextClockTitle">
-      <div class="section-heading"><div><p class="eyebrow">NEXT ON THE CLOCK</p><h2 id="nextClockTitle">When will we know?</h2></div><p class="meta">Open Forecast resolution events first; full governed calendar below.</p></div>
+      <div class="section-heading"><div><p class="eyebrow">RESOLUTION CLOCK</p><h2 id="nextClockTitle">When will reality answer?</h2></div><p class="meta">The next decision dates that settle the open Forecasts.</p></div>
+      <div id="forecastChronology" class="forecast-chronology" aria-label="Forecast lifecycle chronology"></div>
       <div id="clockList" class="clock-list"><p class="loading">Loading the next decision points…</p></div>
       <a class="text-link" href="#horizon">See the full calendar →</a>
     </section>
@@ -66,38 +66,6 @@
       <a class="text-link" href="#analysisView">Open the full Analysis view →</a>
     </section>
 
-    <section id="worldStateCoverage" class="world-state-note" aria-labelledby="worldStateTitle">
-      <div><p class="eyebrow">WORLD STATE</p><h2 id="worldStateTitle">Internal synthesis has begun</h2></div>
-      <div><strong>Public projection remains closed.</strong><p>One narrow internal assessment exists; broader multidomain coverage is not yet sufficient for public synthesis. No internal World State evidence is displayed here.</p><a class="text-link" href="#methods">Read the method boundary →</a></div>
-    </section>
-
-    <section id="now" class="now-brief" aria-labelledby="nowTitle">
-      <div class="section-kicker"><span class="eyebrow">NOW</span><span id="asOfLabel">As of Melbourne time</span></div>
-      <div class="now-grid">
-        <div class="now-lead">
-          <h2 id="nowTitle">Calendar depth, without pretending to be live</h2>
-          <p>Counts are supporting metadata. Use the Outlook for what WORLD SIGNALS expects and the Calendar for what is scheduled.</p>
-          <a class="text-link" href="#horizon">Open the next 30 days →</a>
-        </div>
-        <div class="status-stack" id="publicStatus" aria-live="polite"><p class="loading">Loading publication status…</p></div>
-      </div>
-      <div class="brief-grid" aria-label="Immediate intelligence summary">
-        <article class="brief-card"><span class="brief-label">NEXT 24 HOURS</span><strong id="next24Count">—</strong><p>known occurrences in the local horizon</p></article>
-        <article class="brief-card"><span class="brief-label">NEXT 7 DAYS</span><strong id="next7Count">—</strong><p>upcoming occurrences worth checking</p></article>
-        <article class="brief-card"><span class="brief-label">NEXT 30 DAYS</span><strong id="next30Count">—</strong><p>decision-relevant calendar depth</p></article>
-        <article class="brief-card"><span class="brief-label">PUBLIC CALENDAR</span><strong class="brief-word">SUBSCRIBE</strong><p><a href="#calendarSubscribe">Add the calendar</a> · governed events only</p></article>
-      </div>
-    </section>
-
-    <section id="changeView" class="public-state-section" aria-labelledby="changeViewTitle">
-      <div><p class="eyebrow">WHAT WOULD CHANGE THE VIEW?</p><h2 id="changeViewTitle">Resolution is the next test</h2></div>
-      <div class="closed-state"><p>Each public Forecast names the official release that will resolve it. Later Scenario signposts and state deltas belong here only when they have their own reviewed public contract.</p><p class="meta">Evaluation remains <strong>NO_SAMPLE</strong> until an Outcome resolves a claim.</p></div>
-    </section>
-
-    <section id="themes" class="theme-section" aria-labelledby="themesTitle">
-      <div class="section-heading"><div><p class="eyebrow">CALENDAR CONTEXT</p><h2 id="themesTitle">Where the calendar is concentrated</h2></div><p class="meta">A context lens, not a risk score or causal forecast.</p></div>
-      <div id="themeList" class="theme-list"><p class="loading">Loading theme context…</p></div>
-    </section>
     <section id="horizon" class="horizon-shell" aria-labelledby="horizonTitle">
       <div class="horizon-heading">
         <div>
@@ -109,6 +77,17 @@
           <strong id="horizonClock">Loading local time…</strong>
           <span>Displayed in your device timezone; source timezone remains visible.</span>
         </div>
+      </div>
+
+      <div id="calendar-brief-meta" class="calendar-brief-meta">
+        <div class="calendar-metric-intro"><p class="eyebrow">THE FULL HORIZON</p><p>Beyond the decisions above: everything currently on the governed calendar.</p><span id="asOfLabel" class="meta">As of Melbourne time</span></div>
+        <div class="brief-grid" aria-label="Calendar horizon metrics">
+          <article class="brief-card"><span class="brief-label">NEXT 24 HOURS</span><strong id="next24Count">—</strong><p>known occurrences</p></article>
+          <article class="brief-card"><span class="brief-label">NEXT 7 DAYS</span><strong id="next7Count">—</strong><p>upcoming occurrences</p></article>
+          <article class="brief-card"><span class="brief-label">NEXT 30 DAYS</span><strong id="next30Count">—</strong><p>calendar depth</p></article>
+          <article class="brief-card"><span class="brief-label">PUBLIC CALENDAR</span><strong class="brief-word">SUBSCRIBE</strong><p><a href="#calendarSubscribe">Add the calendar</a></p></article>
+        </div>
+        <div class="status-stack" id="publicStatus" aria-live="polite"><p class="loading">Loading publication status…</p></div>
       </div>
 
       <div class="horizon-controls" aria-label="Horizon filters">
@@ -141,6 +120,11 @@
           <p>Expected ranges and month-bounded risk windows overlapping the next 30 days.</p>
         </div>
         <div id="horizonWindows" class="horizon-windows"></div>
+      </section>
+
+      <section class="theme-section calendar-context" aria-labelledby="themesTitle">
+        <div class="section-heading"><div><p class="eyebrow">CALENDAR CONTEXT</p><h3 id="themesTitle">Where the horizon is concentrated</h3></div><p class="meta">A context lens, not a risk score or causal forecast.</p></div>
+        <div id="themeList" class="theme-list"><p class="loading">Loading calendar context…</p></div>
       </section>
 
       <section class="native-date-shell" aria-labelledby="nativeCalendarTitle">
@@ -329,6 +313,7 @@
         <span>authoritative sources</span><i>→</i><span>observations</span><i>→</i><span>signals</span><i>→</i><span>relationships</span><i>→</i><span>risks</span><i>→</i><span>scenarios</span><i>→</i><span>forecasts</span><i>→</i><span>outcomes</span>
       </div>
       <div class="method-notes">
+        <p id="worldStateCoverage"><strong>World State coverage.</strong> Public World State synthesis is not yet open. One narrow internal governed assessment exists; broader multidomain coverage remains unassessed.</p>
         <p><strong>What we preserve.</strong> Source-native time, uncertainty, provenance, contradictory evidence and change history remain visible.</p>
         <p><strong>What we do not do.</strong> Monitoring can propose review work, but it cannot silently rewrite Canonical truth, promote candidates or publish private material.</p>
         <p><strong>What forecasts mean.</strong> Forecasts are frozen prospectively and evaluated only when authoritative outcomes resolve them. An unresolved claim is not a correct claim.</p>
