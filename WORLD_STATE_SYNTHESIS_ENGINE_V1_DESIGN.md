@@ -525,10 +525,12 @@ The fixture is valid only as a contract test. It must not be copied into
    as-of exclusion, baseline/anomaly, negative evidence, uncertainty,
    competing hypotheses, market sensing, transmission and Forecast cutoff
    integrity without reading or writing production state.
-3. **Implement a read adapter only.** Add a future
-   `src/world_signals/world_state_read.py` and a read-only validator script
-   that orchestrate existing validators/as-of helpers and produce the proposal
-   envelope. Do not add `data/world_state/state.json`.
+3. **Implement a read adapter only.** Completed in this tranche by
+   `src/world_signals/world_state_read.py` and
+   `scripts/validate_world_state_read.py`. They orchestrate existing
+   validators/as-of helpers and produce an ephemeral, hash-pinned proposal
+   envelope. No `data/world_state/state.json`, production write, or public
+   projection is created.
 4. **Run a current-repository consistency proposal.** Use the actual governed
    inputs at an explicit as-of time, retain the manifest and show that empty
    Relationship/Risk/Scenario/Outcome populations remain empty and Forecast

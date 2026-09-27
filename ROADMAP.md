@@ -467,7 +467,7 @@ Observation or Signal was admitted. The first Signal remains the sole governed
 Signal, Relationships/Risks/Scenarios remain empty, and the next tranche should
 be driven by genuine new evidence rather than a quota.
 
-## Stage 23 — World State Synthesis Engine v1 — DESIGN TARGET / NOT IMPLEMENTED
+## Stage 23 — World State Synthesis Engine v1 — READ ADAPTER IMPLEMENTED / SYNTHESIS ENGINE NOT IMPLEMENTED
 
 World State is the next synthesis boundary: a derived, as-of, uncertainty-aware
 view over governed evidence rather than a new event/news database. The design
@@ -497,12 +497,14 @@ feed evidence back into future as-of assessments.
 - a final briefing projection across `WORLD STATE | OUTLOOK | CALENDAR | MAP |
   RESEARCH`.
 
-The first implementation tranche is deliberately narrow: define read contracts,
-produce a minimal consistency fixture and validate a read-only synthesis
-proposal under human review. It must not populate synthetic production state,
+Migration Steps 1–3 now define and exercise the read boundary: the synthetic
+fixture is under `tests/fixtures/world_state_v1/`, and
+`src/world_signals/world_state_read.py` plus its explicit validator produce an
+ephemeral, hash-pinned proposal from governed as-of inputs. This remains only
+an orchestration boundary. It does not populate synthetic production state,
 open public projection, silently write Canonical or revise prospective
-Forecasts. No engine implementation is part of Stage 23 until the fixture,
-schema boundary, provenance model and review transaction are approved.
+Forecasts. The synthesis/reasoning engine remains unimplemented; substantive
+World State judgments require a later reviewed milestone.
 
 ## Permanent quarantine
 
