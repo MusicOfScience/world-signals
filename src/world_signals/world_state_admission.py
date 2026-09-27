@@ -340,15 +340,20 @@ def build_first_admission(root: Path, reviewed_at_utc: str, admitted_at_utc: str
     }
 
 
-def validate_production_state(root: Path) -> list[str]:
-    """Validate the materialised first history and its exact references."""
+def validate_production_state(root: Path, *, enforce_first_population: bool = True) -> list[str]:
+    """Validate materialised history and exact references.
+
+    The default keeps the Step 8B first-admission gate strict.  Read-only
+    history consumers may validate an append-only descendant without imposing
+    that initial population ceiling.
+    """
     state = load_production_state(root)
     errors = validate_component_history(state["components"])
     component_index = {(row["component_type"], row["revision_id"]): row for row in state["components"]}
     errors.extend(validate_snapshot_history(state["snapshots"], component_index=component_index))
     errors.extend(validate_admission_transaction(row) for row in state["admissions"])
     flattened = [error for group in errors for error in (group if isinstance(group, list) else [group])]
-    if len(state["components"]) != 1 or len(state["snapshots"]) != 1 or len(state["admissions"]) != 1 or state["actors"]:
+    if enforce_first_population and (len(state["components"]) != 1 or len(state["snapshots"]) != 1 or len(state["admissions"]) != 1 or state["actors"]):
         flattened.append("production population does not match the first-admission boundary")
     return flattened
 

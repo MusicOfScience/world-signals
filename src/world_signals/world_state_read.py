@@ -2,8 +2,9 @@
 
 This module is an orchestrator, not a synthesis engine.  It validates the
 existing governed layers, delegates history selection to their as-of helpers,
-and returns an ephemeral proposal envelope.  It has no production write path,
-no public projection, and no World State storage location.
+and returns an ephemeral proposal envelope.  When an explicit production
+history query is supplied, it also attaches the separate read-only admitted
+World State view.  It has no production write path and no public projection.
 """
 
 from __future__ import annotations
@@ -467,7 +468,12 @@ def validate_proposal_manifest(proposal: dict[str, Any]) -> list[str]:
     return errors
 
 
-def read_world_state(request: dict[str, Any], *, generated_at_utc: str | None = None) -> dict[str, Any]:
+def read_world_state(
+    request: dict[str, Any],
+    *,
+    generated_at_utc: str | None = None,
+    production_query: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Build one deterministic, ephemeral World State proposal.
 
     The function reads governed inputs but never writes them.  ``generated_at_utc``
@@ -635,6 +641,21 @@ def read_world_state(request: dict[str, Any], *, generated_at_utc: str | None = 
             "after": _input_file_hashes(),
         },
     }
+    if production_query is not None:
+        from .world_state_production import read_production_world_state
+
+        production_world_state = read_production_world_state(production_query)
+        proposal["production_world_state"] = production_world_state
+        if production_world_state["status"] == "ADMITTED_ASSESSMENT_AVAILABLE":
+            proposal["limitations"] = [
+                row for row in proposal["limitations"]
+                if row.get("code") != "WORLD_STATE_ASSESSMENT_NOT_SYNTHESISED"
+            ]
+        else:
+            proposal["limitations"].append({
+                "code": "NO_ADMITTED_ASSESSMENT",
+                "detail": "The explicit production-history query selected no admitted World State assessment.",
+            })
     if proposal["mutation_check"]["status"] != "PASS":
         raise WorldStateReadError("governed input file hashes changed during read")
     proposal["semantic_fingerprint"] = semantic_fingerprint(proposal)

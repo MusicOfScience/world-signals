@@ -568,7 +568,11 @@ The fixture is valid only as a contract test. It must not be copied into
    admitted production snapshot and records unavailable model provenance
    explicitly. Step 8B then admitted the first narrow internal component and
    compositional snapshot through separate human review and production-
-   admission transactions; broader population remains deferred.
+   admission transactions; broader population remains deferred. Migration
+   Step 9A now provides explicit knowledge/effective production-history reads,
+   derived freshness, deterministic deltas, successor-review preflight and a
+   structured internal briefing-read view. No second component, successor
+   revision, production write or public projection was created.
 
 ## Deferred implementation questions
 
