@@ -495,8 +495,10 @@ rewrite them.
 
 ### Review and projection boundary
 
-The first implementation milestone is a minimal consistency fixture and
-read-only synthesis proposal, not broad population or UI completion. Human
+The first implementation milestones are now the test-only consistency fixture
+and a private read-only adapter that emits a hash-pinned ephemeral proposal,
+not broad population or UI completion. The adapter orchestrates existing
+validators and as-of helpers but does not infer substantive World State. Human
 review is required for state transitions, actor authority interpretation,
 transmission classification, competing-hypothesis selection, scenario
 signposts and any promotion into a public projection. The final briefing is a
@@ -548,7 +550,7 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
 | Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with four unresolved pilot issuances and zero Outcomes; state remains `NO_SAMPLE`, with public projection, baselines, rankings, calibration claims and Model Learning closed. |
 | Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A resolved sample from the controlled prospective Forecast pilot must precede any learning claim. |
-| World State synthesis | No executable World State store or engine yet; current Signal/Relationship/Risk/Scenario/Forecast contracts are reusable inputs | Newly agreed target. Design must precede implementation; first tranche is a read-only, human-reviewed consistency fixture with no silent canonical writes. |
+| World State synthesis | No executable World State store or reasoning engine; `src/world_signals/world_state_read.py` now provides a private read-only proposal boundary over reusable governed contracts | Migration Steps 1–3 are complete: fixture, validators/as-of orchestration, hash-pinned ephemeral proposal and explicit validator. No production population, public projection or synthesis judgment exists. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
@@ -664,7 +666,7 @@ Research / taxonomy / source governance                    [ONGOING]
   -> reviewed Signal contract / zero-population gate          [DONE]
   -> reviewed Relationship contract / zero-population gate     [DONE]
   -> regime-state / risk history contract                     [DONE: zero-population]
-  -> World State Synthesis Engine v1 design / fixture         [NEXT]
+  -> World State Synthesis Engine v1 read adapter / proposal   [DONE: private, read-only]
   -> narrow auto-commit classes                              [ONLY IF EMPIRICAL GATE OPENS]
 ```
 
