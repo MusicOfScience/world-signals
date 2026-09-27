@@ -528,6 +528,12 @@ UPDATE/CORRECTION/SUPERSESSION candidates and preserves multiple scoped
 assessments in the internal briefing read. The retained current packet reports
 `NO_SUCCESSOR_NEEDED` at `2026-09-27T16:04:50Z`; no second component,
 successor revision or public projection was created.
+Migration Step 9C now defines a read-only `WORLD_STATE_COMPOSITION_VIEW` for
+multiple independent snapshot series, with explicit
+`INDEPENDENT_ADMISSIONS` atomicity, exact per-series provenance,
+deterministic component union and fail-closed component head conflicts. The
+real repository remains one series/one component; no second component,
+successor revision, materialised composition or public projection was created.
 
 ## Permanent quarantine
 

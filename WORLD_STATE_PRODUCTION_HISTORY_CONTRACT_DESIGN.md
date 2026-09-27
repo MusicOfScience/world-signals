@@ -627,6 +627,39 @@ assessments without implying dimension-wide coverage. Independent snapshot
 series composition remains fail-closed. No R2, second production component,
 Actor Registry identity or public projection was created by Step 9B.
 
+## Migration Step 9C — explicit multi-series composition boundary
+
+Step 9C introduces `WORLD_STATE_COMPOSITION_VIEW` in
+`src/world_signals/world_state_composition.py`. A composition view is a
+query-relative, read-only union of independently selected admitted snapshot
+series. It is not a `WorldStateSnapshotRevision`, has no admission transaction
+of its own, cannot become evidence or a synthesis component, and is never
+materialised under `data/world_state/`.
+
+Each series is selected independently under the same explicit knowledge or
+effective query. The view retains the exact snapshot revision/object hash,
+admission transaction, review transaction, knowledge cutoff, scope and
+component references for every selected series. Its atomicity marker is
+`INDEPENDENT_ADMISSIONS`; different admission times or review transactions
+remain visible and are not presented as jointly reviewed state.
+
+Identical component ID/revision/hash references may be deduplicated in the
+component union while retaining every source series. Different revisions of
+the same stable component ID fail closed with
+`COMPONENT_HEAD_CONFLICT_ACROSS_SERIES`; revision-number sorting is not a
+conflict resolver. Different scoped components in one dimension coexist and
+remain `MULTIPLE_SCOPED_ASSESSMENTS`, never a dimension-wide or global claim.
+Freshness remains per component, and composition deltas distinguish series or
+component admission changes from effective-state and freshness-only changes.
+
+The current repository still has one production snapshot series, one component
+and one admission. Step 9C establishes readiness for a future second component
+without authorising that admission, broadening synthesis, or opening public
+projection. Independent snapshot-series composition remains a read contract;
+the composed view reports `MULTI_SERIES_READ_CONTRACT_READY` only after exact
+selection, provenance, conflict and mutation checks pass. General synthesis
+is still unimplemented.
+
 ## Required Step 7 test matrix
 
 The implementation tranche must prove at least:
