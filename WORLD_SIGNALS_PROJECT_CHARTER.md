@@ -11,6 +11,14 @@ analysis connecting politics, economics, geopolitics, financial markets, trade, 
 The objective is NOT to make the largest possible calendar.
 The objective is to build a reliable, maintainable global political-economic context and early-warning system.
 
+The long-term product is a **World State**: a time-indexed, uncertainty-aware
+account of the world's consequential conditions, tensions, transitions and
+possible paths. World State is a derived synthesis over governed evidence; it
+does not replace the Canonical Registry, Live Intelligence, Analysis or their
+review boundaries. The first World State Synthesis Engine is a future,
+review-governed implementation milestone, not an authority to populate
+synthetic intelligence.
+
 ### Research standard
 Use current online research whenever facts may have changed.
 For future dates, institutional arrangements, political office-holders, memberships, schedules, election dates, release calendars, regulatory procedures and similar matters, do not rely solely on model training knowledge when authoritative current verification is available.
@@ -53,6 +61,26 @@ Checks authoritative sources for newly announced, changed, cancelled or complete
 Monitors relevant news, policy announcements, economic data and market behaviour.
 **5. Analytical Layer**
 Evaluates causation, expectations, surprises, transmission mechanisms, second-order effects and uncertainty.
+
+**6. World State Synthesis**
+Maintains reviewed, as-of views of major world-state dimensions from the
+governed layers. It must preserve actor identity and authority, capability and
+constraint, implementation state, flows and dependencies, market sensing,
+transmission, competing hypotheses and model disagreement. It is a derived
+state and cannot silently write upstream truth.
+
+**7. Briefing and product projections**
+Projects the reviewed synthesis into **WORLD STATE | OUTLOOK | CALENDAR | MAP |
+RESEARCH**. The briefing is the final human-facing projection, not a database
+and not a substitute for source provenance or immutable history.
+
+The World State implementation-state ladder is explicit:
+
+`SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`
+
+An actor's statement records what was said. It does not by itself establish a
+state decision, institutional authorisation, implementation or observed effect.
+Those statuses may diverge, coexist, or remain disputed.
 Do not blur these layers.
 
 ### Time handling
@@ -132,6 +160,27 @@ WHAT HAPPENED WHAT WAS EXPECTED WHAT SURPRISED WHAT MOVED WHAT APPEARS C
 State uncertainty.
 Avoid post-hoc narratives that merely fit market movements to nearby headlines.
 
+For World State synthesis, model at least these dimensions as first-class
+objects rather than leaving them as prose: conflict and military activity;
+strategic/geopolitical tension; political and institutional stability;
+macroeconomic and financial conditions; trade, capital, energy, food and other
+flows; dependencies and chokepoints; climate/physical risk; health/biosecurity;
+technology and critical infrastructure. Dimensions are state descriptions,
+not automatic severity scores.
+
+Represent uncertainty by type, including source/provenance uncertainty,
+measurement uncertainty, temporal uncertainty, interpretation uncertainty,
+model uncertainty and unresolved actor or institutional disagreement. Preserve
+negative evidence and absence-of-expected-action separately from a claim that
+nothing happened. Maintain competing hypotheses and model disagreement rather
+than collapsing them into one narrative.
+
+Markets may act as high-frequency sensors for expectations, stress and
+positioning. Market observations require instrument, venue, timestamp,
+baseline, measurement method and plausible alternatives; co-movement is not
+causation. Explicitly model lags, thresholds, feedback loops and reflexivity,
+including cases where expectations change behaviour before implementation.
+
 ### Geographic scope
 Build genuinely international coverage.
 Pay particular attention to:
@@ -178,3 +227,11 @@ next recommended stage.
 Avoid unnecessary clarification questions when available evidence permits a defensible best-effort decision.
 The project must remain useful even if access to any supplementary external AI service disappears.
 Gemini or any other AI system may be used as an optional independent research/checking resource but must never become an architectural dependency.
+
+For the World State milestone, use:
+actor/evidence inventory → implementation-state mapping → dimension state
+model → baseline/anomaly and negative-evidence design → transmission graph →
+competing hypotheses and model-disagreement review → scenarios/signposts →
+forecast/outcome/calibration boundary → briefing projections → tests.
+Do not implement the synthesis engine until these contracts are explicit and
+the first bounded, human-reviewed consistency fixture is defined.

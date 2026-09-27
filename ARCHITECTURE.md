@@ -4,15 +4,15 @@
 
 `WORLD_SIGNALS_PROJECT_CHARTER.md` is authoritative. The executable repository implements its layers as separate governed contracts rather than one blended event/news database.
 
-Current post-#78 / AX evolving-state Live Intelligence state:
+Current reconciled `main` state (27 September 2026):
 
-- Canonical `v0.38 / 688`;
-- Source Registry `v1.80 / 243`;
-- Source/Change Monitor expectations `v0.10 / 8 adapters`;
-- Live Intelligence `v0.3 / 3 internal observations / 4 evidence`, controlled multi-snapshot gate; public observations `0`;
-- Analysis `v0.16 / 20 reviews / 91 evidence` on schema `v0.4`;
-- automatic canonical commit OFF;
-- Google Calendar writes OFF.
+- Canonical `v0.43 / 689 occurrences`, schema `v0.52`;
+- Source Registry `v2.04 / 258 sources`;
+- Source/Change Monitor `v0.28 / 26 configured adapters / 25 unique monitor sources`;
+- Live Intelligence `v0.13 / 12 observations / 16 evidence`, with automatic ingestion and public observation projection closed;
+- Analysis `v0.18 / 22 reviews / 97 evidence` on schema `v0.8`;
+- Signals schema `v0.1`, one admitted reviewed revision, population and public projection closed by default;
+- automatic Canonical commit OFF; Google Calendar writes OFF.
 
 ## Runtime layers
 
@@ -21,6 +21,8 @@ Current post-#78 / AX evolving-state Live Intelligence state:
 3. **Source / Change Monitor** — read-only adapters inspect authoritative sources, source health and candidate changes.
 4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
 5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
+6. **World State Synthesis** — future derived, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche.
+7. **Briefing projections** — future human-facing views: `WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH`.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
@@ -382,6 +384,94 @@ Analysis remains downstream interpretation. `data/analysis/schema.json` explicit
 
 Analysis evidence is not retrospectively migrated to Live Intelligence. Historical analytical packets remain frozen in their governed layer.
 
+## World State Synthesis direction — design target, engine not implemented
+
+World State is the project's next synthesis boundary. It is not a second
+observation store, a replacement for Analysis, or a general-purpose narrative
+field. A v1 engine must consume governed Canonical, Live Intelligence, Signal,
+Relationship, Risk/Regime, Scenario, market-observation and Forecast/Outcome
+inputs through explicit read contracts, then emit a review candidate or a
+versioned synthesis proposal. It must not silently mutate those inputs or
+publish a canonical state.
+
+### Actor model
+
+Every material proposition should identify the relevant actor or institution,
+including role, jurisdiction, authority, capabilities, constraints,
+commitments, incentives, internal/coalition relationships and communication or
+action channel. The model must distinguish a leader, ministry, agency,
+legislature, court, military command, party, market participant and state as
+different actors where their authority or incentives differ.
+
+Actor evidence is resolved through an implementation-state ladder:
+
+```text
+SAID -> DECIDED -> AUTHORISED -> IMPLEMENTED -> OBSERVED
+```
+
+The ladder is not assumed to be monotonic. A statement can be contradicted,
+sidelined, narrowed or reversed; a decision can lack authorisation; an
+authorised act can fail in implementation; and an observed result can diverge
+from intent. Each state needs its own provenance, time, uncertainty and
+contradiction record.
+
+### World-state dimensions and sensing
+
+The first-class dimensions are conflict/military activity,
+strategic/geopolitical tension, political/institutional stability,
+macroeconomic/financial conditions, trade/capital/energy/food flows,
+dependencies/chokepoints, markets as sensors, climate/physical risk,
+health/biosecurity, and technology/critical infrastructure. The exact v1
+schema must retain extensibility without turning dimensions into an
+unexplained universal score.
+
+Markets are sensors of expectations, positioning, stress and transmission, not
+automatic causal verdicts. A market observation requires instrument, venue,
+timestamp, baseline or counterfactual, measurement method, relevant horizon,
+liquidity/coverage caveats and alternative explanations. Conflict and military
+activity are a first-class domain with actor, capability, action, geography,
+intensity, constraint and escalation/de-escalation evidence rather than a
+news-label overlay.
+
+### Memory, inference and transmission
+
+World State must be queryable as-of a time and must retain prior state,
+transition, evidence and reviewer history. Anomaly detection compares current
+conditions with an explicit baseline and preserves negative evidence: no
+observed implementation, no expected institutional follow-through, no market
+confirmation and no evidence of escalation are distinct findings, not proof of
+absence.
+
+Uncertainty is typed at minimum as provenance/source, measurement, temporal,
+interpretive, model, actor-intent and institutional-authority uncertainty.
+Competing hypotheses, model disagreement, contradictory observations and
+unknowns remain explicit. The transmission graph distinguishes dependency,
+flow, chokepoint, exposure, hypothesised transmission, mechanistic support,
+causal evidence and feedback/reflexive effects. It must represent lags,
+thresholds and state-dependent pathways; graph proximity never creates a
+relationship.
+
+Scenarios and signposts remain conditional pathways, separate from forecasts.
+Forecasts retain prospective information cutoffs and immutable issuances;
+Outcomes resolve them under their predeclared rules; Evaluation and
+calibration must use resolved denominators and must never backfill hindsight
+into a prior forecast. World State may reference these products but cannot
+rewrite them.
+
+### Review and projection boundary
+
+The first implementation milestone is a minimal consistency fixture and
+read-only synthesis proposal, not broad population or UI completion. Human
+review is required for state transitions, actor authority interpretation,
+transmission classification, competing-hypothesis selection, scenario
+signposts and any promotion into a public projection. The final briefing is a
+projection assembled from reviewed state and provenance; it is not canonical
+truth. The intended product surface is:
+
+```text
+WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+```
+
 ## Static UX and runtime truth
 
 GitHub Pages cannot honestly claim current monitor health merely because a build was green. The Monitor view exposes configured routes, while runtime source health and review candidates remain timestamped evidence.
@@ -397,6 +487,7 @@ baseline for the incremental transition to:
 ```text
 EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
         -> SCENARIOS -> FORECASTS -> OUTCOMES -> EVALUATION -> MODEL LEARNING
+        -> WORLD STATE SYNTHESIS -> BRIEFING PROJECTIONS
 ```
 
 | Target layer | Current repository state | Assessment |
@@ -414,6 +505,7 @@ EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
 | Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with four unresolved pilot issuances and zero Outcomes; state remains `NO_SAMPLE`, with public projection, baselines, rankings, calibration claims and Model Learning closed. |
 | Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A resolved sample from the controlled prospective Forecast pilot must precede any learning claim. |
+| World State synthesis | No executable World State store or engine yet; current Signal/Relationship/Risk/Scenario/Forecast contracts are reusable inputs | Newly agreed target. Design must precede implementation; first tranche is a read-only, human-reviewed consistency fixture with no silent canonical writes. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
@@ -495,6 +587,12 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
    populating production. Authorise a narrow prospective Forecast pilot only
    after review; do not begin Model Learning until a defensible resolved sample
    and evaluation denominator exist.
+8. Define the World State Synthesis Engine v1 read contracts and minimal
+   consistency fixture: actor model, implementation-state ladder, dimensions,
+   baselines/anomalies, negative evidence, typed uncertainty, competing
+   hypotheses, model disagreement, transmission graph, scenarios/signposts and
+   forecast/outcome/calibration references. Keep the engine unimplemented until
+   the fixture and review boundary are approved.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.
@@ -520,7 +618,8 @@ Research / taxonomy / source governance                    [ONGOING]
   -> governed subscription calendar export                    [DONE]
   -> reviewed Signal contract / zero-population gate          [DONE]
   -> reviewed Relationship contract / zero-population gate     [DONE]
-  -> regime-state / risk history contract                     [NEXT]
+  -> regime-state / risk history contract                     [DONE: zero-population]
+  -> World State Synthesis Engine v1 design / fixture         [NEXT]
   -> narrow auto-commit classes                              [ONLY IF EMPIRICAL GATE OPENS]
 ```
 

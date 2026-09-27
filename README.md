@@ -49,6 +49,10 @@ LIVE INTELLIGENCE
                                           +--> FORECASTS (contract only; production population closed)
                                                    |
                                                    +--> OUTCOMES / RESOLUTION (contract only; production population closed)
+                                                            |
+                                                            +--> WORLD STATE SYNTHESIS (design target; not implemented)
+                                                                     |
+                                                                     +--> WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
 ```
 
 The layers remain deliberately distinct:
@@ -123,6 +127,42 @@ zones used by included timed events. Expected windows use
 claiming the whole interval as subscriber free/busy time.
 
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
+
+### World State direction
+
+The next product boundary is a derived **World State**, not a larger event
+calendar or an ungoverned news graph. World State will assemble reviewed
+evidence into as-of views of actor behaviour, implementation status,
+capabilities and constraints, conflict/military activity,
+strategic/geopolitical tension, political/institutional stability, flows,
+dependencies, chokepoints and market-sensed conditions. Its design must also
+retain baselines and anomalies, negative evidence, typed uncertainty,
+competing hypotheses, model disagreement, lags, thresholds, feedback loops and
+reflexivity.
+
+Actor statements must not be promoted directly into state policy. The required
+ladder is:
+
+`SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`
+
+Each step requires appropriate evidence and can remain disputed or diverge
+from the others. Conflict and military activity are first-class domains;
+markets are sensors with explicit timing, baseline and alternative-explanation
+metadata; transmission edges are typed rather than inferred from proximity.
+
+The future World State Synthesis Engine v1 is not implemented by the current
+repository state. Its first milestone is a read-only, human-reviewed
+consistency fixture that consumes existing governed contracts without silently
+writing Canonical or other upstream stores. Scenarios/signposts remain
+conditional, Forecasts remain prospective and immutable, Outcomes and
+calibration remain governed by their own contracts, and the briefing remains a
+projection rather than a new database.
+
+The intended human product surface is:
+
+```text
+WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+```
 
 ## Local OSINT candidate engine
 

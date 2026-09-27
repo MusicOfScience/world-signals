@@ -467,6 +467,37 @@ Observation or Signal was admitted. The first Signal remains the sole governed
 Signal, Relationships/Risks/Scenarios remain empty, and the next tranche should
 be driven by genuine new evidence rather than a quota.
 
+## Stage 23 — World State Synthesis Engine v1 — DESIGN TARGET / NOT IMPLEMENTED
+
+World State is the next synthesis boundary: a derived, as-of, uncertainty-aware
+view over governed evidence rather than a new event/news database. The design
+must unify the existing contracts without flattening their authority:
+
+- explicit actor identity, role, authority, capabilities, constraints,
+  commitments, incentives and institutional relationships;
+- the implementation ladder `SAID → DECIDED → AUTHORISED → IMPLEMENTED →
+  OBSERVED`, with separate provenance and time for every step;
+- conflict/military activity, strategic/geopolitical tension and
+  political/institutional stability as first-class dimensions;
+- flows, dependencies and chokepoints, plus markets as carefully measured
+  sensors rather than automatic causal proof;
+- state memory, as-of queries, explicit baselines, anomaly detection and
+  negative evidence;
+- typed uncertainty, competing hypotheses, model disagreement, contradictory
+  evidence, lags, thresholds, feedback loops and reflexivity;
+- a typed transmission graph, conditional scenarios/signposts and explicit
+  links to prospective Forecasts, Outcomes and calibration without hindsight
+  contamination; and
+- a final briefing projection across `WORLD STATE | OUTLOOK | CALENDAR | MAP |
+  RESEARCH`.
+
+The first implementation tranche is deliberately narrow: define read contracts,
+produce a minimal consistency fixture and validate a read-only synthesis
+proposal under human review. It must not populate synthetic production state,
+open public projection, silently write Canonical or revise prospective
+Forecasts. No engine implementation is part of Stage 23 until the fixture,
+schema boundary, provenance model and review transaction are approved.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
