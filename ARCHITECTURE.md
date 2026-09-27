@@ -495,10 +495,13 @@ rewrite them.
 
 ### Review and projection boundary
 
-The first implementation milestones are now the test-only consistency fixture
-and a private read-only adapter that emits a hash-pinned ephemeral proposal,
-not broad population or UI completion. The adapter orchestrates existing
-validators and as-of helpers but does not infer substantive World State. Human
+The first implementation milestones are now the test-only consistency fixture,
+the private read-only adapter and one retained non-governed consistency
+proposal under `data/world_state_audit/`, not broad population or UI
+completion. The retained proposal is pinned to
+`2026-09-27T04:39:04Z`, remains `REVIEW_PENDING` and has no write targets. The
+adapter orchestrates existing validators and as-of helpers but does not infer
+substantive World State. Human
 review is required for state transitions, actor authority interpretation,
 transmission classification, competing-hypothesis selection, scenario
 signposts and any promotion into a public projection. The final briefing is a
@@ -550,7 +553,7 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
 | Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with four unresolved pilot issuances and zero Outcomes; state remains `NO_SAMPLE`, with public projection, baselines, rankings, calibration claims and Model Learning closed. |
 | Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A resolved sample from the controlled prospective Forecast pilot must precede any learning claim. |
-| World State synthesis | No executable World State store or reasoning engine; `src/world_signals/world_state_read.py` now provides a private read-only proposal boundary over reusable governed contracts | Migration Steps 1–3 are complete: fixture, validators/as-of orchestration, hash-pinned ephemeral proposal and explicit validator. No production population, public projection or synthesis judgment exists. |
+| World State synthesis | No executable World State store or reasoning engine; `src/world_signals/world_state_read.py` and `data/world_state_audit/` provide a private read-only proposal boundary and retained consistency evidence over reusable governed contracts | Migration Steps 1–4 are complete: fixture, validators/as-of orchestration, explicit cutoff `2026-09-27T04:39:04Z`, retained hash-pinned proposal and review summary. The package is non-governed and `REVIEW_PENDING`; no production population, public projection or synthesis judgment exists. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 

@@ -170,12 +170,13 @@ thresholds, feedback loops, scenarios/signposts and forecast/outcome
 calibration boundaries.
 
 The synthesis engine is **not implemented** and no new governed World State
-population is authorised. Migration Step 3 now provides only a private,
-read-only adapter and explicit validator that orchestrate existing as-of
-contracts into an ephemeral proposal. It does not create actors, dimensions,
-hypotheses, transmission edges or other analytical judgments, and preserves
-the fixture, provenance, public/private boundaries, prospective forecast
-cutoffs and no-silent-canonical-write rules.
+population is authorised. Migration Steps 3–4 now provide only a private,
+read-only adapter and a retained, non-governed consistency proposal at the
+explicit cutoff `2026-09-27T04:39:04Z` under
+`data/world_state_audit/`. The package is `REVIEW_PENDING`, has no write
+targets, and does not create actors, dimensions, hypotheses, transmission
+edges or other analytical judgments. Migration Step 5 remains the separate
+human review transaction.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

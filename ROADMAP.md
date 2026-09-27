@@ -497,14 +497,15 @@ feed evidence back into future as-of assessments.
 - a final briefing projection across `WORLD STATE | OUTLOOK | CALENDAR | MAP |
   RESEARCH`.
 
-Migration Steps 1–3 now define and exercise the read boundary: the synthetic
-fixture is under `tests/fixtures/world_state_v1/`, and
-`src/world_signals/world_state_read.py` plus its explicit validator produce an
-ephemeral, hash-pinned proposal from governed as-of inputs. This remains only
-an orchestration boundary. It does not populate synthetic production state,
-open public projection, silently write Canonical or revise prospective
-Forecasts. The synthesis/reasoning engine remains unimplemented; substantive
-World State judgments require a later reviewed milestone.
+Migration Steps 1–4 now define, exercise and retain the read boundary: the
+synthetic fixture is under `tests/fixtures/world_state_v1/`, the adapter and
+validator produce an ephemeral proposal, and the explicit current-repository
+proposal is retained under `data/world_state_audit/` at
+`2026-09-27T04:39:04Z`. It remains `REVIEW_PENDING`, non-governed, has no write
+targets, and does not populate synthetic production state, open public
+projection, silently write Canonical or revise prospective Forecasts. The
+synthesis/reasoning engine remains unimplemented. Migration Step 5 is the next
+separate human review transaction.
 
 ## Permanent quarantine
 
