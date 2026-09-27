@@ -571,8 +571,12 @@ The fixture is valid only as a contract test. It must not be copied into
    admission transactions; broader population remains deferred. Migration
    Step 9A now provides explicit knowledge/effective production-history reads,
    derived freshness, deterministic deltas, successor-review preflight and a
-   structured internal briefing-read view. No second component, successor
-   revision, production write or public projection was created.
+   structured internal briefing-read view. Migration Step 9B now adds a
+   lineage-aware successor review packet, synthetic-only UPDATE/CORRECTION/
+   SUPERSESSION candidate construction and multi-scope briefing-read
+   preservation. The retained current packet is non-governed audit evidence
+   with `NO_SUCCESSOR_NEEDED` at `2026-09-27T16:04:50Z`; no second component,
+   successor revision, production write or public projection was created.
 
 ## Deferred implementation questions
 

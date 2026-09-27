@@ -521,7 +521,12 @@ one internal reported-burden component and one compositional snapshot; broader
 population and synthesis remain deferred. Migration Step 9A is complete for
 the internal read-only production-history path: explicit knowledge/effective
 selection, derived freshness, deterministic deltas, successor-review
-preflight and a structured briefing-read contract. No second component,
+preflight and a structured briefing-read contract. Migration Step 9B now
+replaces caller-asserted successor triggers with lineage-aware review packets,
+keeps review-due time separate from successor evidence, exercises synthetic
+UPDATE/CORRECTION/SUPERSESSION candidates and preserves multiple scoped
+assessments in the internal briefing read. The retained current packet reports
+`NO_SUCCESSOR_NEEDED` at `2026-09-27T16:04:50Z`; no second component,
 successor revision or public projection was created.
 
 ## Permanent quarantine
