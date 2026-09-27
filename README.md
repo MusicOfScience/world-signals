@@ -27,35 +27,46 @@ WORLD SIGNALS is a platform-independent global political-economic intelligence s
 ## Layer contract
 
 ```text
-CANONICAL REGISTRY
-      |
-      +--> Calendar / Pages projections
+ACTORS + EVENTS
       |
       v
-SOURCE / CHANGE MONITOR
+OBSERVATIONS
       |
       v
-LIVE INTELLIGENCE
-      +--> existing reviewed Analysis bridge
+SIGNALS + ANOMALIES
       |
-      +--> SIGNALS (one reviewed production specimen; population closed by default)
-               |
-               +--> RELATIONSHIPS (contract only; production population closed)
-                        |
-                        +--> RISKS / REGIMES (contract only; production population closed)
-                                 |
-                                 +--> SCENARIOS (contract only; production population closed)
-                                          |
-                                          +--> FORECASTS (contract only; production population closed)
-                                                   |
-                                                   +--> OUTCOMES / RESOLUTION (contract only; production population closed)
-                                                            |
-                                                            +--> WORLD STATE SYNTHESIS (design target; not implemented)
-                                                                     |
-                                                                     +--> WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+      v
+RELATIONSHIPS + FLOWS + DEPENDENCIES
+      |
+      v
+WORLD STATE (continuously updated, as-of, derived)
+      |
+      +--> COMPETING HYPOTHESES / REGIMES / TRANSMISSION
+      |          |
+      |          v
+      |     SCENARIOS + SIGNPOSTS
+      |          |
+      |          v
+      |     FORECASTS
+      |          |
+      |          v
+      |     OUTCOMES
+      |          |
+      |          v
+      |     EVALUATION / CALIBRATION / MODEL LEARNING
+      |          |
+      |          +------ feeds future WORLD STATE assessments
+      |
+      +--> WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+                           |
+                           v
+                        BRIEFING
 ```
 
-The layers remain deliberately distinct:
+Canonical Registry, Source / Change Monitor and the existing reviewed Analysis
+bridge remain governed inputs or parallel projections around this lifecycle;
+they do not turn World State into a terminal downstream layer. The contract
+inventory below is deliberately distinct from runtime dependency order:
 
 1. **Canonical Registry** — what the event is: stable identities, lifecycle, certainty, timing and provenance.
 2. **Calendar** — rebuildable human-facing projection from Canonical.
@@ -149,6 +160,13 @@ Each step requires appropriate evidence and can remain disputed or diverge
 from the others. Conflict and military activity are first-class domains;
 markets are sensors with explicit timing, baseline and alternative-explanation
 metadata; transmission edges are typed rather than inferred from proximity.
+
+World State is the continuously updated synthesis hub, not a terminal stage
+after Forecast Evaluation or Model Learning. A system with observations,
+Signals, Relationships and state dimensions can still produce an as-of World
+State assessment when no Forecast or Outcome exists. Later Outcomes,
+Evaluation, calibration and Model Learning provide time-indexed feedback for
+subsequent World State assessments.
 
 The future World State Synthesis Engine v1 is not implemented by the current
 repository state. Its first milestone is a read-only, human-reviewed

@@ -69,6 +69,13 @@ constraint, implementation state, flows and dependencies, market sensing,
 transmission, competing hypotheses and model disagreement. It is a derived
 state and cannot silently write upstream truth.
 
+World State is a continuously updated synthesis hub rather than a terminal
+stage after Forecasts, Outcomes, Evaluation or Model Learning. It can provide
+an as-of assessment from available observations, Signals, Relationships and
+state dimensions even when no Forecast or Outcome exists. Later Outcomes,
+Evaluation, calibration and Model Learning feed evidence back into subsequent
+World State assessments.
+
 **7. Briefing and product projections**
 Projects the reviewed synthesis into **WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH**. The briefing is the final human-facing projection, not a database

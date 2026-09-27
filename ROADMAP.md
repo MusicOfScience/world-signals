@@ -473,6 +473,12 @@ World State is the next synthesis boundary: a derived, as-of, uncertainty-aware
 view over governed evidence rather than a new event/news database. The design
 must unify the existing contracts without flattening their authority:
 
+World State is a continuously updated synthesis hub, not a terminal stage after
+Forecast Evaluation or Model Learning. It can be assessed from available
+Observations, Signals, Relationships and state dimensions before any Forecast
+or Outcome exists; later Outcomes, Evaluation, calibration and Model Learning
+feed evidence back into future as-of assessments.
+
 - explicit actor identity, role, authority, capabilities, constraints,
   commitments, incentives and institutional relationships;
 - the implementation ladder `SAID → DECIDED → AUTHORISED → IMPLEMENTED →

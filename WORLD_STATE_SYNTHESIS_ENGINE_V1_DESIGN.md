@@ -32,6 +32,14 @@ The proposal is not itself Canonical truth. A future reviewed World State
 population, if authorised, must be a separate milestone with its own immutable
 history, admission transaction and public/private policy.
 
+World State is the continuously updated synthesis hub in the wider architecture,
+not a terminal product generated only after Forecasts, Outcomes, Evaluation or
+Model Learning. An unresolved system with governed observations, Signals,
+Relationships and state dimensions can still yield a valid as-of proposal.
+Forecast and Outcome state may be read where analytically relevant; later
+Outcomes, Evaluation, calibration and Model Learning feed evidence into future
+proposals without rewriting an earlier as-of assessment.
+
 ## Evidence from the current repository
 
 The decision is constrained by the repository's existing contracts rather than
@@ -416,7 +424,9 @@ revision ID and resolution status only when an Outcome exists at the World
 State as-of time. Evaluation is a separate derived read; the current empty
 Outcome set means no calibration claim. World State must never use a later
 Outcome or Evaluation result to rewrite a prior Forecast or to make a
-retrospective state claim at an earlier cutoff.
+retrospective state claim at an earlier cutoff. This preserves the direction of
+the feedback loop: Forecasts and Outcomes can inform later World State reads,
+but their existence is not required for an as-of World State assessment.
 
 ## Review transaction boundary
 

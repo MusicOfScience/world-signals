@@ -9,9 +9,14 @@ authoritative specifications for their subjects.
 - WORLD SIGNALS is a local-first global intelligence, early-warning, calendar
   and forecasting platform. The calendar is one projection, not the whole
   project.
-- Preserve the layer chain and its boundaries:
-  `EVENTS → OBSERVATIONS → SIGNALS → RELATIONSHIPS → RISKS → SCENARIOS →
-  FORECASTS → OUTCOMES → MODEL LEARNING`.
+- Preserve the layer boundaries and distinguish the governed contract inventory
+  from the synthesis lifecycle. The lifecycle is a feedback architecture:
+  `ACTORS + EVENTS → OBSERVATIONS → SIGNALS + ANOMALIES → RELATIONSHIPS +
+  FLOWS + DEPENDENCIES → WORLD STATE → COMPETING HYPOTHESES / REGIMES /
+  TRANSMISSION → SCENARIOS + SIGNPOSTS → FORECASTS → OUTCOMES → EVALUATION /
+  CALIBRATION / MODEL LEARNING`, with later evaluation and learning feeding
+  future World State assessments. Forecasts and Outcomes are not prerequisites
+  for an as-of World State assessment.
 - Keep Canonical data, local runtime state, review candidates, analytical
   outputs and public projections separate. Public outputs must contain only
   deliberately publishable information.

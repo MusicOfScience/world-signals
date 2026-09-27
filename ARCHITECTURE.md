@@ -21,7 +21,7 @@ Current reconciled `main` state (27 September 2026):
 3. **Source / Change Monitor** — read-only adapters inspect authoritative sources, source health and candidate changes.
 4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
 5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
-6. **World State Synthesis** — future derived, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche.
+6. **World State Synthesis** — future derived, continuously updated, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche. It is a synthesis hub for scenarios and forecasts, not a terminal stage after model learning.
 7. **Briefing projections** — future human-facing views: `WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH`.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
@@ -394,6 +394,41 @@ inputs through explicit read contracts, then emit a review candidate or a
 versioned synthesis proposal. It must not silently mutate those inputs or
 publish a canonical state.
 
+The runtime relationship is a feedback loop, not a terminal linear chain:
+
+```text
+ACTORS + EVENTS
+      ↓
+OBSERVATIONS
+      ↓
+SIGNALS + ANOMALIES
+      ↓
+RELATIONSHIPS + FLOWS + DEPENDENCIES
+      ↓
+WORLD STATE
+      ↓
+COMPETING HYPOTHESES / REGIMES / TRANSMISSION
+      ↓
+SCENARIOS + SIGNPOSTS
+      ↓
+FORECASTS
+      ↓
+OUTCOMES
+      ↓
+EVALUATION / CALIBRATION / MODEL LEARNING
+      ↺ feeds future WORLD STATE
+
+WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+      ↓
+BRIEFING
+```
+
+Forecasts and Outcomes may be read where analytically relevant, but they are
+not prerequisites for a World State assessment. An unresolved system with
+governed observations, Signals, Relationships and state dimensions remains a
+valid as-of synthesis input. Later Outcomes, Evaluation and Model Learning
+provide feedback for subsequent assessments without rewriting earlier state.
+
 ### Actor model
 
 Every material proposition should identify the relevant actor or institution,
@@ -485,10 +520,18 @@ local-operation scripts, static build and workflows in this repository. It is a
 baseline for the incremental transition to:
 
 ```text
-EVENTS -> OBSERVATIONS -> SIGNALS -> RELATIONSHIPS -> RISKS
-        -> SCENARIOS -> FORECASTS -> OUTCOMES -> EVALUATION -> MODEL LEARNING
-        -> WORLD STATE SYNTHESIS -> BRIEFING PROJECTIONS
+ACTORS + EVENTS -> OBSERVATIONS -> SIGNALS + ANOMALIES
+        -> RELATIONSHIPS + FLOWS + DEPENDENCIES -> WORLD STATE
+        -> COMPETING HYPOTHESES / REGIMES / TRANSMISSION
+        -> SCENARIOS + SIGNPOSTS -> FORECASTS -> OUTCOMES
+        -> EVALUATION / CALIBRATION / MODEL LEARNING
+        ↺ feeds future WORLD STATE
+WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH -> BRIEFING
 ```
+
+This is the conceptual runtime relationship. The migration sequence below is
+an implementation order for governed contracts, not a claim that Forecasts,
+Outcomes or Model Learning must exist before World State can be assessed.
 
 | Target layer | Current repository state | Assessment |
 | --- | --- | --- |
@@ -592,7 +635,9 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
    baselines/anomalies, negative evidence, typed uncertainty, competing
    hypotheses, model disagreement, transmission graph, scenarios/signposts and
    forecast/outcome/calibration references. Keep the engine unimplemented until
-   the fixture and review boundary are approved.
+   the fixture and review boundary are approved. This implementation step does
+   not make Forecasts, Outcomes or Model Learning prerequisites for a World
+   State assessment; their later evidence feeds the synthesis loop.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.
