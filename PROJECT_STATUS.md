@@ -186,9 +186,11 @@ synthetic fixture, temporary-copy admission simulation, citation/allowlist
 checks and Canonical historical dependency checks are present. No production
 World State, Actor Registry or public projection was created. Migration Step
 8A has now constructed one narrow real-evidence `HEALTH_BIOSECURITY` candidate
-from the governed DRC Bundibugyo specimen; it remains `REVIEW_PENDING` and was
-only exercised through temporary-copy simulation. Migration Step 8B remains
-the separate human-reviewed first-component admission decision.
+from the governed DRC Bundibugyo specimen. Its corrected successor remains
+`REVIEW_PENDING`; it uses a distinct unadmitted snapshot-candidate contract,
+retains fail-honest unavailable model provenance, and is only exercised through
+temporary-copy simulation. Migration Step 8B remains the separate
+human-reviewed first-component admission decision.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

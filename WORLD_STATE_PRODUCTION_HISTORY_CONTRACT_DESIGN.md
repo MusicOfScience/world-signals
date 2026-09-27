@@ -550,8 +550,11 @@ Registry population was admitted, and no public projection was generated.
 **Step 8A status:** One narrow `HEALTH_BIOSECURITY` Dimension Assessment
 candidate has since been constructed from the governed DRC Bundibugyo
 observation/Signal specimen. It is retained under `data/world_state_audit/` as
-`REVIEW_PENDING`; its admission is simulated only in temporary copies. Step 8B
-must perform the separate human review and production-admission decision.
+`REVIEW_PENDING`; its admission is simulated only in temporary copies. The
+corrected successor uses a separate unadmitted snapshot-candidate validator,
+so no review-pending object carries production admission metadata, and it
+records unavailable model provenance explicitly. Step 8B must perform the
+separate human review and production-admission decision.
 
 Step 7 should implement, in a fresh bounded tranche:
 

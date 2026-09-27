@@ -562,8 +562,10 @@ The fixture is valid only as a contract test. It must not be copied into
 7. **Implement and pressure-test the unpopulated production history contract.**
    Completed as schemas, validators, synthetic fixtures and a temporary-copy
    admission simulator only. Step 8A now constructs and preflights one narrow
-   real-evidence health candidate without production admission. Step 8B remains
-   the separate later human admission decision.
+   real-evidence health candidate without production admission. Its corrected
+   successor keeps a review-pending snapshot candidate distinct from an
+   admitted production snapshot and records unavailable model provenance
+   explicitly. Step 8B remains the separate later human admission decision.
 
 ## Deferred implementation questions
 
@@ -585,8 +587,9 @@ production state:
    provenance blocks model-derived admission rather than being guessed.
 5. **First pilot evidence:** the DRC health/biosecurity pilot is now a Step 8A
    review-pending candidate and requires Step 8B human admission review with
-   fresh upstream hashes, contradiction and uncertainty checks; this is not a
-   quota or automatic promotion.
+   fresh upstream hashes, contradiction and uncertainty checks. Step 8A's
+   corrected successor uses no fake admission metadata and does not guess
+   unavailable model provenance; this is not a quota or automatic promotion.
 
 ## Consequences and limitations
 

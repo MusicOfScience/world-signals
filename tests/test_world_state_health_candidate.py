@@ -28,10 +28,13 @@ from world_signals.world_state_history import (  # noqa: E402
     select_component_revisions,
     simulate_production_admission,
     state_hashes,
+    validate_snapshot,
+    validate_snapshot_candidate,
 )
 
 
-PACKAGE_PATH = ROOT / "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING.json"
+PACKAGE_PATH = ROOT / "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING_CORRECTED.json"
+ORIGINAL_PACKAGE_PATH = ROOT / "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING.json"
 CONSTRUCTED_AT = "2026-09-27T12:20:58Z"
 
 
@@ -62,6 +65,13 @@ class WorldStateHealthCandidateTests(unittest.TestCase):
         self.assertEqual(self.package["production_admission"]["status"], "NOT_PERFORMED")
         self.assertEqual(self.package["production_admission"]["write_targets"], [])
 
+    def test_corrected_package_preserves_original_artifact_lineage(self):
+        lineage = self.package["correction_lineage"]
+        self.assertEqual(lineage["corrects_package"], "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING.json")
+        original = json.loads(ORIGINAL_PACKAGE_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(original["candidate_semantic_fingerprint"], "e74cf6c3809405ab5bcdb736714a96247c097fcd7c930aa08b352684596dba81")
+        self.assertEqual(original["proposed_snapshot"]["snapshot"]["admission_transaction_id"], "WS-STEP8A-CANDIDATE-NO-ADMISSION")
+
     def test_real_candidate_validates_against_native_contract(self):
         self.assertEqual(validate_health_candidate_package(self.package), [])
 
@@ -69,6 +79,9 @@ class WorldStateHealthCandidateTests(unittest.TestCase):
         first = build_health_candidate(ROOT, CONSTRUCTED_AT)
         second = build_health_candidate(ROOT, CONSTRUCTED_AT)
         self.assertEqual(first, second)
+
+    def test_retained_corrected_package_matches_deterministic_builder(self):
+        self.assertEqual(self.package, build_health_candidate(ROOT, CONSTRUCTED_AT))
 
     def test_all_ten_admission_gates_are_explicit(self):
         gates = self.package["production_admission_gates"]
@@ -179,6 +192,10 @@ class WorldStateHealthCandidateTests(unittest.TestCase):
     def test_model_provenance_is_not_factual_evidence(self):
         provenance = self.candidate["model_provenance"]
         self.assertEqual(provenance["factual_evidence_status"], "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION")
+        self.assertEqual(provenance["provenance_status"], "RUNTIME_METADATA_UNAVAILABLE")
+        self.assertEqual(provenance["model_version"], "UNAVAILABLE")
+        self.assertEqual(provenance["reasoning_configuration"], "UNAVAILABLE")
+        self.assertNotEqual(provenance.get("version"), "GPT-5")
         self.assertNotIn("FACTUAL_SOURCE", json.dumps(provenance))
 
     def test_candidate_visibility_and_review_state_are_closed(self):
@@ -190,10 +207,21 @@ class WorldStateHealthCandidateTests(unittest.TestCase):
     def test_proposed_snapshot_references_pending_candidate_exact_hash(self):
         proposed = self.package["proposed_snapshot"]
         self.assertTrue(proposed["references_candidate_revision"])
+        self.assertEqual(proposed["status"], "REVIEW_PENDING_CANDIDATE_ONLY")
+        self.assertIsNone(proposed["snapshot"]["review_transaction_id"])
+        self.assertIsNone(proposed["snapshot"]["admission_transaction_id"])
+        self.assertIsNone(proposed["snapshot"]["admitted_at_utc"])
+        self.assertEqual(validate_snapshot_candidate(proposed["snapshot"]), [])
+        self.assertTrue(validate_snapshot(proposed["snapshot"]))
         ref = proposed["snapshot"]["component_refs"][0]
         self.assertEqual(ref["component_id"], self.candidate["component_id"])
         self.assertEqual(ref["revision_id"], self.candidate["revision_id"])
         self.assertEqual(ref["object_sha256"], self.candidate["object_sha256"])
+
+    def test_known_at_uses_admitted_signal_review_boundary(self):
+        self.assertEqual(self.candidate["known_at_basis"], "ADMITTED_SIGNAL_REVIEW_BOUNDARY")
+        self.assertEqual(self.candidate["known_at_utc"], "2026-09-27T01:00:00Z")
+        self.assertLess(self.candidate["known_at_utc"], self.package["constructed_at_utc"])
 
     def test_no_unrelated_dimensions_are_assessed(self):
         self.assertEqual(self.package["dimension_assessments"], [CANDIDATE_COMPONENT_ID])
@@ -240,6 +268,14 @@ class WorldStateHealthCandidateTests(unittest.TestCase):
     def test_candidate_package_contains_no_public_or_real_actor_registry_write(self):
         self.assertFalse(self.package["public_projection_permitted"])
         self.assertFalse((ROOT / "data/world_state/actor_registry.json").exists())
+
+    def test_corrected_candidate_has_no_production_admission(self):
+        snapshot = self.package["proposed_snapshot"]["snapshot"]
+        self.assertEqual(snapshot["review_state"], "CANDIDATE")
+        self.assertEqual(snapshot["lifecycle_state"], "UNRESOLVED")
+        self.assertIsNone(snapshot["admission_transaction_id"])
+        self.assertIsNone(snapshot["admitted_at_utc"])
+        self.assertEqual(self.package["production_admission"]["status"], "NOT_PERFORMED")
 
 
 if __name__ == "__main__":
