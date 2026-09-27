@@ -81,6 +81,12 @@ Projects the reviewed synthesis into **WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH**. The briefing is the final human-facing projection, not a database
 and not a substitute for source provenance or immutable history.
 
+The current public product leads with a separate, allowlisted Outlook
+projection of the four reviewed monetary-policy pilot Forecasts. It does not
+open public World State or Map projection, expose governed Forecast storage
+directly, publish private review metadata, or imply Forecast evaluation before
+Outcomes resolve.
+
 The World State implementation-state ladder is explicit:
 
 `SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`

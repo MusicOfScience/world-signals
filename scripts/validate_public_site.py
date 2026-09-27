@@ -21,22 +21,32 @@ PROHIBITED_JSON_KEYS = {
 }
 
 
-def _json_key_hits(value, path="$", hits=None):
-    hits = hits or []
+def _json_key_hits(value, path="$", hits=None, allow_public_forecast_value=False):
+    if hits is None:
+        hits = []
     if isinstance(value, dict):
         for key, child in value.items():
-            if key in PROHIBITED_JSON_KEYS:
+            if key in PROHIBITED_JSON_KEYS and not (
+                key == "forecast_value" and allow_public_forecast_value
+            ):
                 hits.append(f"{path}.{key}")
-            _json_key_hits(child, f"{path}.{key}", hits)
+            _json_key_hits(child, f"{path}.{key}", hits, allow_public_forecast_value)
     elif isinstance(value, list):
         for index, child in enumerate(value):
-            _json_key_hits(child, f"{path}[{index}]", hits)
+            _json_key_hits(child, f"{path}[{index}]", hits, allow_public_forecast_value)
     return hits
 
 
 def validate_public_site(site_dir: Path) -> list[str]:
     errors = []
-    required = ("index.html", ".nojekyll", "world-signals.ics", "data/events.json", "data/public_status.json")
+    required = (
+        "index.html",
+        ".nojekyll",
+        "world-signals.ics",
+        "data/events.json",
+        "data/public_status.json",
+        "data/outlook.json",
+    )
     for relative in required:
         path = site_dir / relative
         if not path.exists():
@@ -53,7 +63,11 @@ def validate_public_site(site_dir: Path) -> list[str]:
             except json.JSONDecodeError as exc:
                 errors.append(f"invalid JSON {path.relative_to(site_dir)}: {exc}")
                 continue
-            for hit in _json_key_hits(payload):
+            relative = path.relative_to(site_dir).as_posix()
+            for hit in _json_key_hits(
+                payload,
+                allow_public_forecast_value=relative == "data/outlook.json",
+            ):
                 errors.append(f"prohibited private JSON field in {path.relative_to(site_dir)}: {hit}")
 
     index = site_dir / "index.html"

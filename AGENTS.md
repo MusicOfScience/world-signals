@@ -35,7 +35,9 @@ authoritative specifications for their subjects.
   observations and Forecast/Outcome evidence. It is not a replacement for
   Canonical, Live Intelligence or Analysis. One narrow internal production
   component and compositional snapshot now exist; the general synthesis
-  engine, broad population and public projection remain unimplemented.
+  engine, broad population and public World State projection remain
+  unimplemented. The current public brief may expose only the separately
+  allowlisted four-series Outlook Forecast pilot.
 - Model actors explicitly: identity, role, jurisdiction, authority,
   capabilities, constraints, incentives, commitments, channels and internal
   institutional relationships. A public utterance is evidence of what an

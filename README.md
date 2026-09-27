@@ -94,8 +94,10 @@ inventory below is deliberately distinct from runtime dependency order:
     explicit question, horizon, information cutoff, resolution rule and
     probability/estimate semantics. Analytical updates are separate issuances;
     administrative corrections cannot rewrite substantive content. Outcome
-   resolution, scoring and public projection are deferred, and production
-   Forecast population is currently closed.
+   resolution, scoring and broad public projection remain deferred. A separate
+   allowlisted public Outlook projection now exposes the four reviewed,
+   unresolved monetary-policy pilot issuances; the governed Forecast dataset
+   remains private and its broader population remains closed.
 11. **Outcomes / Resolution** — one governed real-world result per immutable
     Forecast question series, linked to every eligible issuance without
     duplicating reality. Resolution follows the Forecast's original rule,
@@ -275,10 +277,13 @@ python scripts/validate_public_site.py
 ```
 
 The build writes disposable output to `docs/`. It includes the Canonical
-calendar projection, `world-signals.ics`, source metadata and public layer
-status. It does not include `.world-signals-runtime`, monitor checkpoints,
-Observation Candidates, Signal Candidates, retained review state or Forecast
-values.
+calendar projection, `world-signals.ics`, a dedicated allowlisted Outlook
+projection, source metadata and public layer status. The
+`docs/data/outlook.json` contract contains only the four reviewed
+monetary-policy pilot Forecasts and public-safe fields; the build does not
+include `.world-signals-runtime`, monitor checkpoints, Observation Candidates,
+Signal Candidates, retained review state, private Forecast metadata or the
+governed Forecast file.
 
 The private read-only operator cockpit is a separate local artefact:
 
