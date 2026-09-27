@@ -467,7 +467,7 @@ Observation or Signal was admitted. The first Signal remains the sole governed
 Signal, Relationships/Risks/Scenarios remain empty, and the next tranche should
 be driven by genuine new evidence rather than a quota.
 
-## Stage 23 — World State Synthesis Engine v1 — READ ADAPTER IMPLEMENTED / SYNTHESIS ENGINE NOT IMPLEMENTED
+## Stage 23 — World State Synthesis Engine v1 — READ BOUNDARY + HISTORY DESIGN COMPLETE / SYNTHESIS ENGINE NOT IMPLEMENTED
 
 World State is the next synthesis boundary: a derived, as-of, uncertainty-aware
 view over governed evidence rather than a new event/news database. The design
@@ -506,8 +506,14 @@ proposal is retained under `data/world_state_audit/` at
 write targets; its separate human review transaction is `ACCEPTED` only for
 `READ_BOUNDARY_CONSISTENCY_ONLY`. It does not populate production state, open
 public projection, silently write Canonical or revise prospective Forecasts.
-The synthesis/reasoning engine remains unimplemented. Migration Step 6 is the
-next separate production World State history-contract design decision.
+The synthesis/reasoning engine remains unimplemented. Migration Step 6 now
+adopts the componentized immutable production history contract in
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`: reviewed Actor Registry
+identity, immutable component revisions, snapshot references, explicit
+effective/known/reviewed/admitted times, component-level partial admission,
+append-only corrections, and private/public projection gates. No production
+World State population or Actor Registry has been created. Migration Step 7 is
+the unpopulated schema/validator/temporary admission-simulator tranche.
 
 ## Permanent quarantine
 

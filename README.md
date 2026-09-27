@@ -168,13 +168,18 @@ State assessment when no Forecast or Outcome exists. Later Outcomes,
 Evaluation, calibration and Model Learning provide time-indexed feedback for
 subsequent World State assessments.
 
-The future World State Synthesis Engine v1 is not implemented by the current
-repository state. Its first milestone is a read-only, human-reviewed
-consistency fixture that consumes existing governed contracts without silently
-writing Canonical or other upstream stores. Scenarios/signposts remain
-conditional, Forecasts remain prospective and immutable, Outcomes and
-calibration remain governed by their own contracts, and the briefing remains a
-projection rather than a new database.
+The World State Synthesis Engine v1 is not implemented by the current
+repository state. Its completed read-boundary milestones include a test-only
+fixture, a read-only adapter, a retained consistency proposal and a human
+review limited to `READ_BOUNDARY_CONSISTENCY_ONLY`. Migration Step 6 now defines
+the production history contract in
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`: componentized immutable
+revisions, reviewed Actor Registry identity, explicit three-time semantics,
+component-level admission and private/public gates. No production World State
+population or Actor Registry exists. The next implementation tranche is
+contract validation and temporary admission simulation; Scenarios/signposts,
+Forecasts, Outcomes and calibration remain governed by their own contracts,
+and the briefing remains a projection rather than a new database.
 
 The intended human product surface is:
 

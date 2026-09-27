@@ -496,17 +496,18 @@ rewrite them.
 ### Review and projection boundary
 
 The first implementation milestones are now the test-only consistency fixture,
-the private read-only adapter and one retained non-governed consistency
-proposal under `data/world_state_audit/`, not broad population or UI
-completion. The retained proposal is pinned to
-`2026-09-27T04:39:04Z`, remains `REVIEW_PENDING` and has no write targets. The
-adapter orchestrates existing validators and as-of helpers but does not infer
-substantive World State. Human
-review is required for state transitions, actor authority interpretation,
+the private read-only adapter, the retained non-governed consistency proposal,
+the Step 5 read-boundary review and the Step 6 production-history design under
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`, not broad population or
+UI completion. The retained proposal is pinned to
+`2026-09-27T04:39:04Z`; its review is accepted only for
+`READ_BOUNDARY_CONSISTENCY_ONLY` and has no write targets. The adapter and
+history design do not infer or admit substantive World State. Human review
+remains required for state transitions, actor authority interpretation,
 transmission classification, competing-hypothesis selection, scenario
-signposts and any promotion into a public projection. The final briefing is a
-projection assembled from reviewed state and provenance; it is not canonical
-truth. The intended product surface is:
+signposts, production admission and any promotion into a public projection.
+The final briefing is a projection assembled from reviewed state and
+provenance; it is not canonical truth. The intended product surface is:
 
 ```text
 WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
@@ -553,7 +554,7 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
 | Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with four unresolved pilot issuances and zero Outcomes; state remains `NO_SAMPLE`, with public projection, baselines, rankings, calibration claims and Model Learning closed. |
 | Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A resolved sample from the controlled prospective Forecast pilot must precede any learning claim. |
-| World State synthesis | No executable World State store or reasoning engine; `src/world_signals/world_state_read.py` and `data/world_state_audit/` provide a private read-only proposal boundary and retained consistency evidence over reusable governed contracts | Migration Steps 1–5 are complete: fixture, validators/as-of orchestration, explicit cutoff `2026-09-27T04:39:04Z`, retained hash-pinned proposal, review summary and separate human review transaction. The proposal remains non-governed; the review is accepted only for `READ_BOUNDARY_CONSISTENCY_ONLY`, with no production population, public projection or synthesis judgment. Migration Step 6 is the separate production history-contract decision. |
+| World State synthesis | No executable World State store or reasoning engine; `src/world_signals/world_state_read.py`, `data/world_state_audit/` and `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md` provide the private read/proposal boundary, retained consistency evidence and adopted production-history design | Migration Steps 1–6 are complete as design/read-boundary work: fixture, validators/as-of orchestration, retained hash-pinned proposal, explicit Step 5 read-boundary review and Step 6 componentized immutable history/admission design. No production World State population, Actor Registry, public projection or synthesis judgment exists. Migration Step 7 is the unpopulated contract implementation and pressure-test tranche. |
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
@@ -643,6 +644,13 @@ also tentative, while `COMPLETED` is not mapped to an unrelated RFC status.
    the fixture and review boundary are approved. This implementation step does
    not make Forecasts, Outcomes or Model Learning prerequisites for a World
    State assessment; their later evidence feeds the synthesis loop.
+9. Define the production World State history contract as a separate,
+   componentized immutable design with Actor Registry identity, snapshot
+   references, explicit three-time semantics, partial admission, retention and
+   private/public gates (completed in Migration Step 6; no population).
+10. Implement and pressure-test the unpopulated production history contract
+    and temporary-copy admission simulator; defer the first actual component
+    admission to a later human-reviewed tranche.
 
 No synthetic observations, signals, scenarios or forecasts are added by this
 baseline tranche.
