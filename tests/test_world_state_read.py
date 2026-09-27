@@ -244,7 +244,10 @@ class WorldStateReadAdapterTests(unittest.TestCase):
         fixture = ROOT / "tests/fixtures/world_state_v1/fixture.json"
         self.assertTrue(fixture.exists())
         self.assertEqual(fixture.parts[-4:-1], ("tests", "fixtures", "world_state_v1"))
-        self.assertFalse((ROOT / "data/world_state").exists())
+        world_state_dir = ROOT / "data/world_state"
+        if world_state_dir.exists():
+            self.assertFalse((world_state_dir / "state.json").exists())
+            self.assertTrue(all(path.name.endswith("_schema.json") or path.name == "README.md" for path in world_state_dir.iterdir()))
 
 
 if __name__ == "__main__":

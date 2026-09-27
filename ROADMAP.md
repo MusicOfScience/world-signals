@@ -513,7 +513,9 @@ identity, immutable component revisions, snapshot references, explicit
 effective/known/reviewed/admitted times, component-level partial admission,
 append-only corrections, and private/public projection gates. No production
 World State population or Actor Registry has been created. Migration Step 7 is
-the unpopulated schema/validator/temporary admission-simulator tranche.
+complete as the unpopulated schema/validator/temporary admission-simulator
+tranche. It adds no production population or public projection. Migration Step
+8 is the separate human-reviewed first-component admission decision.
 
 ## Permanent quarantine
 

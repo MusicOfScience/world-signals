@@ -1,0 +1,42 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "WORLD_STATE_PRODUCTION_ADMISSION_SCHEMA",
+  "version": "0.1",
+  "population_state": "UNPOPULATED_CONTRACT_ONLY",
+  "transaction_type": "WORLD_STATE_PRODUCTION_ADMISSION",
+  "required_fields": [
+    "transaction_id",
+    "contract_version",
+    "transaction_type",
+    "decision",
+    "proposal_id",
+    "proposal_semantic_fingerprint",
+    "source_manifest_sha256",
+    "component_fingerprints",
+    "reviewer",
+    "decided_at_utc",
+    "component_dispositions",
+    "snapshot_revision_identity",
+    "write_targets",
+    "pre_state_hashes",
+    "post_state_hashes",
+    "visibility_decision",
+    "admitted_at_utc",
+    "validator_version",
+    "transaction_fingerprint"
+  ],
+  "decisions": ["ACCEPTED", "REJECTED", "RETURNED_FOR_REVIEW"],
+  "component_dispositions": ["ADMITTED", "REJECTED", "DEFERRED"],
+  "visibility_states": ["INTERNAL_ONLY", "PUBLIC_ELIGIBLE", "PUBLIC_PROJECTED"],
+  "atomicity_policy": {
+    "pre_state_hash_required": true,
+    "post_state_hash_required": true,
+    "failure_writes_nothing": true,
+    "public_projection_transaction_required": true
+  },
+  "population_policy": {
+    "production_population_allowed": false,
+    "automatic_admission_allowed": false,
+    "synthetic_production_population_allowed": false
+  }
+}

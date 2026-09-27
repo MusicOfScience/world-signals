@@ -1,0 +1,148 @@
+{
+  "fixture_id": "WORLD_STATE_PRODUCTION_V1_SYNTHETIC",
+  "contract_version": "0.1",
+  "status": "TEST_ONLY_UNPOPULATED_PRODUCTION_CONTRACT",
+  "actors": [
+    {
+      "actor_id": "actor.person.aurora",
+      "identity_revision_id": "actor.person.aurora.r1",
+      "identity_revision_number": 1,
+      "canonical_label": "Aurora Vale",
+      "actor_type": "PERSON",
+      "aliases": ["A. Vale"],
+      "jurisdiction": "JURISDICTION_X",
+      "effective_from": "2026-01-01T00:00:00Z",
+      "effective_to": null,
+      "identity_provenance": [{"layer": "SYNTHETIC", "object_id": "fixture.actor.aurora"}],
+      "review_state": "ACCEPTED",
+      "parent_actor_ids": []
+    },
+    {
+      "actor_id": "actor.office.coordinator",
+      "identity_revision_id": "actor.office.coordinator.r1",
+      "identity_revision_number": 1,
+      "canonical_label": "Coordination Office",
+      "actor_type": "OFFICE",
+      "aliases": ["Coordination Office"],
+      "jurisdiction": "JURISDICTION_X",
+      "effective_from": "2026-01-01T00:00:00Z",
+      "effective_to": null,
+      "identity_provenance": [{"layer": "SYNTHETIC", "object_id": "fixture.actor.office"}],
+      "review_state": "ACCEPTED",
+      "parent_actor_ids": ["actor.institution.ministry"]
+    },
+    {
+      "actor_id": "actor.institution.ministry",
+      "identity_revision_id": "actor.institution.ministry.r1",
+      "identity_revision_number": 1,
+      "canonical_label": "Ministry of Routes",
+      "actor_type": "MINISTRY",
+      "aliases": ["Routes Ministry"],
+      "jurisdiction": "JURISDICTION_X",
+      "effective_from": "2026-01-01T00:00:00Z",
+      "effective_to": null,
+      "identity_provenance": [{"layer": "SYNTHETIC", "object_id": "fixture.actor.ministry"}],
+      "review_state": "ACCEPTED",
+      "parent_actor_ids": []
+    }
+  ],
+  "actor_relationships": [
+    {
+      "relationship_id": "fixture.occupies.1",
+      "relationship_type": "OCCUPIES",
+      "subject_actor_id": "actor.person.aurora",
+      "object_actor_id": "actor.office.coordinator",
+      "effective_from": "2026-02-01T00:00:00Z",
+      "effective_to": "2026-12-31T23:59:59Z"
+    },
+    {
+      "relationship_id": "fixture.authority.1",
+      "relationship_type": "JURISDICTION_AUTHORITY",
+      "subject_actor_id": "actor.institution.ministry",
+      "object_actor_id": "actor.office.coordinator",
+      "effective_from": "2026-01-01T00:00:00Z",
+      "effective_to": null
+    }
+  ],
+  "component_templates": [
+    {
+      "component_type": "DIMENSION_ASSESSMENT",
+      "component_id": "dimension.routes.flow",
+      "dimension": "TRADE_CAPITAL_ENERGY_FOOD_FLOWS",
+      "scope": {"jurisdictions": ["JURISDICTION_X"]},
+      "state_label": "UNRESOLVED",
+      "direction": "UNKNOWN",
+      "persistence": null,
+      "breadth": null
+    },
+    {
+      "component_type": "ACTOR_STATE_ASSERTION",
+      "component_id": "assertion.aurora.capability",
+      "actor_id": "actor.person.aurora",
+      "claim_type": "CAPABILITY",
+      "claim_value": "UNKNOWN"
+    },
+    {
+      "component_type": "IMPLEMENTATION_CLAIM",
+      "component_id": "claim.routes.proposition",
+      "actor_id": "actor.institution.ministry",
+      "proposition": "A synthetic route measure will be reviewed",
+      "state": "SAID"
+    },
+    {
+      "component_type": "BASELINE",
+      "component_id": "baseline.routes.window",
+      "basis": "OBSERVATION_WINDOW",
+      "scope": {"measure": "synthetic_route_index"},
+      "reference_window": {"start": "2025-12-01T00:00:00Z", "end": "2025-12-31T23:59:59Z"},
+      "measurement_definition": "Synthetic route index, unitless",
+      "baseline_value_or_label": "12",
+      "limitations": ["fictional measurement"]
+    },
+    {
+      "component_type": "NEGATIVE_EVIDENCE",
+      "component_id": "negative.routes.notice",
+      "negative_type": "MISSING_EXPECTED_INDICATOR",
+      "expected_indicator": "published_route_notice",
+      "search_scope": ["synthetic bulletin archive"],
+      "time_window": {"start": "2026-03-01T00:00:00Z", "end": "2026-03-07T23:59:59Z"},
+      "source_health": "HEALTHY",
+      "coverage_assessment": "bounded archive coverage",
+      "absence_informative_because": "the notice is expected in this archive if issued",
+      "limitations": ["does not prove the notice does not exist elsewhere"]
+    },
+    {
+      "component_type": "COMPETING_HYPOTHESIS",
+      "component_id": "hypothesis.routes.cause",
+      "subject_ref": "dimension.routes.flow",
+      "proposition": "The synthetic route change has competing explanations",
+      "alternatives": ["administrative delay", "capacity constraint"],
+      "disposition": "UNRESOLVED",
+      "assumptions": ["the observation window is representative"],
+      "falsifiers": ["verified contradictory operational record"]
+    },
+    {
+      "component_type": "MODEL_DISAGREEMENT",
+      "component_id": "disagreement.routes.lenses",
+      "subject_ref": "dimension.routes.flow",
+      "disagreement": "Two synthetic lenses assign different explanations",
+      "model_outputs": [
+        {"model_id": "macro-lens", "epistemic_class": "HYPOTHESIS", "output": "delay"},
+        {"model_id": "security-lens", "epistemic_class": "HYPOTHESIS", "output": "constraint"}
+      ]
+    }
+  ],
+  "empty_domain_examples": [
+    {"domain": "RELATIONSHIPS", "state": "QUERIED_EMPTY"},
+    {"domain": "RISKS_REGIMES", "state": "QUERIED_EMPTY"},
+    {"domain": "SCENARIOS", "state": "QUERIED_EMPTY"},
+    {"domain": "OUTCOMES", "state": "QUERIED_EMPTY"},
+    {"domain": "ACTOR_ASSERTIONS", "state": "UNQUERIED"},
+    {"domain": "CANONICAL_HISTORY", "state": "UNSUPPORTED"}
+  ],
+  "prohibited_targets": [
+    "data/world_state/state.json",
+    "data/actors/registry.json",
+    "public/world_state.json"
+  ]
+}

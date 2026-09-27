@@ -560,9 +560,9 @@ The fixture is valid only as a contract test. It must not be copied into
    separate production admission, retention and private/public projection
    gates. No production population is admitted.
 7. **Implement and pressure-test the unpopulated production history contract.**
-   This is the next tranche: schemas, validators, synthetic fixtures and a
-   temporary-copy admission simulator only. The first production component
-   remains a separate later admission decision.
+   Completed as schemas, validators, synthetic fixtures and a temporary-copy
+   admission simulator only. The first production component remains a
+   separate later admission decision.
 
 ## Deferred implementation questions
 

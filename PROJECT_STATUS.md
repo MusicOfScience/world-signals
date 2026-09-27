@@ -180,8 +180,12 @@ projection. It does not create actors, dimensions, hypotheses, transmission
 edges or other analytical judgments. Migration Step 6 now defines the adopted
 production history contract in
 `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`; no production population
-is admitted. Migration Step 7 is the unpopulated contract implementation and
-pressure-test tranche.
+is admitted. Migration Step 7 is complete as the unpopulated contract
+implementation and pressure-test tranche: schemas, native validators,
+synthetic fixture, temporary-copy admission simulation, citation/allowlist
+checks and Canonical historical dependency checks are present. No production
+World State, Actor Registry or public projection was created. Migration Step 8
+is the separate human-reviewed first-component admission decision.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 
