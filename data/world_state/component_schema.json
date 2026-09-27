@@ -2,7 +2,8 @@
   "project": "WORLD SIGNALS",
   "dataset": "WORLD_STATE_COMPONENT_HISTORY_SCHEMA",
   "version": "0.1",
-  "population_state": "UNPOPULATED_CONTRACT_ONLY",
+  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "public_projection_permitted": false,
   "component_types": [
     "DIMENSION_ASSESSMENT",
     "ACTOR_STATE_ASSERTION",

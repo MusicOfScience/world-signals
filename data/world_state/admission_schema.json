@@ -2,7 +2,8 @@
   "project": "WORLD SIGNALS",
   "dataset": "WORLD_STATE_PRODUCTION_ADMISSION_SCHEMA",
   "version": "0.1",
-  "population_state": "UNPOPULATED_CONTRACT_ONLY",
+  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "public_projection_permitted": false,
   "transaction_type": "WORLD_STATE_PRODUCTION_ADMISSION",
   "required_fields": [
     "transaction_id",

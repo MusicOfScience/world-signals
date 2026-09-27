@@ -1,0 +1,96 @@
+{
+  "dataset": "WORLD_STATE_SNAPSHOT_HISTORY",
+  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "project": "WORLD SIGNALS",
+  "public_projection_permitted": false,
+  "snapshots": [
+    {
+      "admission_transaction_id": "WS-ADMISSION-HEALTH-COD-BVD-20260927-001",
+      "admitted_at_utc": "2026-09-27T15:13:58Z",
+      "component_refs": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "388af09e61e3d77a0f6f0ccc39dee545a17740c877872406f5b497b80d487790",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "effective_as_of_utc": null,
+      "empty_queried_domains": [
+        {
+          "domain": "WORLD_STATE_DIMENSIONS_OTHER_THAN_HEALTH_BIOSECURITY",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "ACTOR_ASSERTIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "IMPLEMENTATION_CLAIMS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "RELATIONSHIPS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "RISKS_REGIMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "SCENARIOS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "OUTCOMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "CANONICAL_HISTORICAL_AS_OF",
+          "state": "UNSUPPORTED"
+        }
+      ],
+      "knowledge_cutoff_utc": "2026-09-27T12:20:58Z",
+      "lifecycle_state": "ACTIVE",
+      "limitations": [
+        "Step 8A candidate/simulation only",
+        "single health component; no all-dimensions assessment"
+      ],
+      "object_sha256": "07369fefdf81263e920198a442c9b830ad84f2803f5dd7358e47e0dea2747214",
+      "previous_snapshot_revision_id": null,
+      "proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+      "review_transaction_id": "WS-STEP8B-HEALTH-COD-BVD-REVIEW-20260927-001",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "human-review"
+      },
+      "revision_number": 1,
+      "scope": {
+        "boundaries": [
+          "governed confirmed-case snapshots only"
+        ],
+        "jurisdictions": [
+          "Democratic Republic of the Congo"
+        ],
+        "systems": [
+          "REPORTED_BUNDIBUGYO_OUTBREAK_BURDEN"
+        ]
+      },
+      "snapshot_kind": "COMPOSITIONAL_INDEX",
+      "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+      "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609",
+      "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "upstream_refs": [
+        {
+          "epistemic_class": "REVIEWED_SIGNAL",
+          "layer": "SIGNALS",
+          "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+          "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+          "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    }
+  ],
+  "version": "0.1"
+}
