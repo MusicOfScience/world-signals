@@ -282,33 +282,41 @@ def derive_freshness(component: dict[str, Any], at_utc: str) -> dict[str, Any]:
     }
 
 
-def _briefing_view(selected_components: list[dict[str, Any]], query: dict[str, Any], freshness: list[dict[str, Any]]) -> dict[str, Any]:
+def build_internal_briefing_read(selected_components: list[dict[str, Any]], query: dict[str, Any], freshness: list[dict[str, Any]]) -> dict[str, Any]:
+    """Build a non-narrative briefing view without collapsing scoped state."""
     queried = query["scope"]["dimensions"] or sorted(DIMENSIONS)
-    by_dimension = {row.get("dimension"): row for row in selected_components}
+    by_dimension: dict[str, list[dict[str, Any]]] = {}
+    for row in selected_components:
+        by_dimension.setdefault(row.get("dimension"), []).append(row)
     entries = []
     for dimension in queried:
-        row = by_dimension.get(dimension)
-        if row is None:
-            entries.append({"dimension": dimension, "coverage": "NOT_ASSESSED", "assessment": None})
+        rows = sorted(by_dimension.get(dimension, []), key=lambda row: (row.get("component_id", ""), row.get("revision_number", 0)))
+        if not rows:
+            entries.append({"dimension": dimension, "coverage": "NOT_ASSESSED", "coverage_detail": "NO_SCOPED_ASSESSMENT", "scoped_assessments": [], "assessment": None})
             continue
+        assessments = [{
+            "component_id": row["component_id"],
+            "revision_id": row["revision_id"],
+            "scope": deepcopy(row["scope"]),
+            "state_label": row.get("state_label"),
+            "direction": row.get("direction"),
+            "qualitative_confidence": row.get("qualitative_confidence"),
+            "effective_date": row.get("effective_date"),
+            "effective_time_precision": row.get("effective_time_precision"),
+            "known_at_utc": row.get("known_at_utc"),
+            "admitted_at_utc": row.get("admitted_at_utc"),
+            "freshness": next((item for item in freshness if item.get("component_id") == row.get("component_id")), None),
+            "visibility": row.get("visibility"),
+            "limitations": deepcopy(row.get("limitations", [])),
+        } for row in rows]
         entries.append({
             "dimension": dimension,
-            "coverage": "SCOPED_ASSESSMENT_AVAILABLE",
-            "assessment": {
-                "component_id": row["component_id"],
-                "revision_id": row["revision_id"],
-                "scope": deepcopy(row["scope"]),
-                "state_label": row.get("state_label"),
-                "direction": row.get("direction"),
-                "qualitative_confidence": row.get("qualitative_confidence"),
-                "effective_date": row.get("effective_date"),
-                "effective_time_precision": row.get("effective_time_precision"),
-                "known_at_utc": row.get("known_at_utc"),
-                "admitted_at_utc": row.get("admitted_at_utc"),
-                "freshness": next((item for item in freshness if item.get("component_id") == row.get("component_id")), None),
-                "visibility": row.get("visibility"),
-                "limitations": deepcopy(row.get("limitations", [])),
-            },
+            "coverage": "SCOPED_ASSESSMENT_AVAILABLE" if len(assessments) == 1 else "MULTIPLE_SCOPED_ASSESSMENTS",
+            "coverage_detail": "ONE_SCOPED_ASSESSMENT" if len(assessments) == 1 else "MULTIPLE_SCOPED_ASSESSMENTS",
+            "scoped_assessments": assessments,
+            # Compatibility for the original one-assessment read contract. It
+            # is deliberately null when multiple scoped assessments exist.
+            "assessment": assessments[0] if len(assessments) == 1 else None,
         })
     return {
         "surface": "INTERNAL_BRIEFING_READ",
@@ -317,6 +325,10 @@ def _briefing_view(selected_components: list[dict[str, Any]], query: dict[str, A
         "public_projection_permitted": False,
         "narrative_generated": False,
     }
+
+
+# Kept as a private compatibility alias for callers from the Step 9A tranche.
+_briefing_view = build_internal_briefing_read
 
 
 def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any]:
@@ -444,7 +456,11 @@ def compare_production_world_state(from_view: dict[str, Any], to_view: dict[str,
 
 
 def successor_preflight(view: dict[str, Any], *, new_governed_evidence: bool = False, correction_or_retraction: bool = False, contradiction: bool = False) -> dict[str, Any]:
-    """Report whether review/proposal work is indicated without creating R2."""
+    """Legacy test scaffolding; production review uses derived lineage packets.
+
+    The flags remain for Step 9A compatibility tests only. They are not a
+    production authority and cannot create a review packet or successor.
+    """
     components = view.get("selected_components", [])
     if not components:
         result = "NO_ADMITTED_COMPONENT"

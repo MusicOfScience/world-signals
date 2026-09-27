@@ -600,6 +600,33 @@ briefing-read view that marks the nine unassessed dimensions and the narrow
 DRC scope honestly. No second component, successor revision, admission or
 public projection is created by Step 9A.
 
+## Migration Step 9B — lineage-aware successor review boundary
+
+Step 9B is implemented as a read-only successor-review layer in
+`src/world_signals/world_state_successor.py`. A
+`WORLD_STATE_SUCCESSOR_REVIEW_PACKET` begins with the admitted component's
+exact Signal, observation and evidence references and compares those pinned
+objects with accepted governed heads at an explicit knowledge cutoff. It
+detects accepted Signal revision advance, explicit correction/retraction,
+linked contradiction and explicitly associated new evidence. Same-domain
+similarity, caller-supplied booleans and time passing alone are not authority.
+
+The controlled dispositions distinguish `NO_SUCCESSOR_NEEDED`,
+`REVIEW_DUE_NO_NEW_EVIDENCE`, upstream Signal advance, associated new
+evidence, correction/retraction, linked contradiction, unresolved lineage and
+no admitted component. Review due changes read-time freshness only; it never
+creates R2 or mutates R1. The retained current Step 9B packet under
+`data/world_state_audit/` reports `NO_SUCCESSOR_NEEDED` for R1 at
+`2026-09-27T16:04:50Z`. Candidate machinery can construct only an unadmitted
+synthetic UPDATE, CORRECTION or SUPERSESSION successor and a distinct pending
+snapshot candidate; human review and production admission remain separate.
+
+The internal briefing-read contract now retains all scoped assessments for a
+dimension, distinguishing one scoped assessment from multiple scoped
+assessments without implying dimension-wide coverage. Independent snapshot
+series composition remains fail-closed. No R2, second production component,
+Actor Registry identity or public projection was created by Step 9B.
+
 ## Required Step 7 test matrix
 
 The implementation tranche must prove at least:

@@ -157,7 +157,7 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
-## Next milestone — World State Synthesis Engine v1 — Step 9A production read / synthesis engine not implemented
+## Next milestone — World State Synthesis Engine v1 — Step 9B successor review complete / synthesis engine not implemented
 
 The newly agreed direction is a derived World State synthesis over existing
 governed layers. The design must model actors and authority, capabilities and
@@ -196,6 +196,13 @@ closed. Migration Step 9A now provides explicit read-only production-history
 selection, query-relative freshness, deterministic deltas, successor-review
 preflight and a structured internal briefing-read view. The general synthesis
 engine, successor admission and public projection remain unimplemented.
+Migration Step 9B now derives successor review from the admitted component's
+exact governed lineage, keeps caller booleans as compatibility-only
+scaffolding, distinguishes review-due time from new evidence, and preserves
+multiple scoped assessments in the structured internal briefing-read view.
+The retained current review packet is non-governed audit evidence at
+`2026-09-27T16:04:50Z` and reports `NO_SUCCESSOR_NEEDED`; no R2 was
+constructed or admitted.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 
