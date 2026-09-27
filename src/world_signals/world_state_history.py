@@ -574,6 +574,85 @@ def validate_snapshot(snapshot: Any, *, component_index: dict[tuple[str, str], d
     return errors
 
 
+def validate_snapshot_candidate(snapshot: Any, *, component_index: dict[tuple[str, str], dict[str, Any]] | None = None) -> list[str]:
+    """Validate an unadmitted snapshot candidate without admission metadata.
+
+    This is intentionally separate from ``validate_snapshot``.  The latter is
+    the production contract and requires a genuine admission transaction and
+    admitted-at timestamp.  A candidate may carry the same immutable
+    component/upstream references, but it must not masquerade as an admitted
+    production snapshot.
+    """
+    if not isinstance(snapshot, dict):
+        return ["snapshot candidate must be an object"]
+    errors: list[str] = []
+    required = (
+        "snapshot_series_id", "snapshot_revision_id", "revision_number",
+        "previous_snapshot_revision_id", "snapshot_kind", "scope",
+        "knowledge_cutoff_utc", "effective_as_of_utc", "component_refs",
+        "upstream_refs", "source_manifest_sha256", "proposal_id",
+        "candidate_review_id", "review_state", "review_transaction_id",
+        "admission_transaction_id", "limitations", "empty_queried_domains",
+        "lifecycle_state", "visibility", "reviewer", "admitted_at_utc",
+        "object_sha256",
+    )
+    for field in required:
+        if field not in snapshot:
+            errors.append(f"snapshot candidate missing {field}")
+    for field in ("snapshot_series_id", "snapshot_revision_id", "snapshot_kind", "proposal_id", "candidate_review_id"):
+        if not _text(snapshot.get(field)):
+            errors.append(f"snapshot candidate {field} is required")
+    if type(snapshot.get("revision_number")) is not int or snapshot["revision_number"] < 1:
+        errors.append("snapshot candidate revision_number must be positive")
+    _utc(snapshot.get("knowledge_cutoff_utc"), "snapshot candidate.knowledge_cutoff_utc", errors, required=True)
+    _utc(snapshot.get("effective_as_of_utc"), "snapshot candidate.effective_as_of_utc", errors)
+    if snapshot.get("review_state") not in {"CANDIDATE", "UNDER_REVIEW"}:
+        errors.append("snapshot candidate review_state must be CANDIDATE or UNDER_REVIEW")
+    if snapshot.get("review_transaction_id") is not None:
+        errors.append("snapshot candidate cannot contain a production review transaction")
+    if snapshot.get("admission_transaction_id") is not None:
+        errors.append("snapshot candidate cannot contain an admission transaction")
+    if snapshot.get("admitted_at_utc") is not None:
+        errors.append("snapshot candidate cannot contain admitted_at_utc")
+    if snapshot.get("lifecycle_state") != "UNRESOLVED":
+        errors.append("snapshot candidate lifecycle_state must be UNRESOLVED")
+    if snapshot.get("visibility") != "INTERNAL_ONLY":
+        errors.append("snapshot candidate visibility must be INTERNAL_ONLY")
+    if not _hash(snapshot.get("source_manifest_sha256")):
+        errors.append("snapshot candidate source_manifest_sha256 must be a SHA-256 hash")
+    if not _list(snapshot.get("component_refs")) or not _list(snapshot.get("upstream_refs")):
+        errors.append("snapshot candidate component_refs and upstream_refs must be lists")
+    seen: set[tuple[str, str]] = set()
+    for index, ref in enumerate(snapshot.get("component_refs", [])):
+        if not isinstance(ref, dict) or set(ref) != {"component_type", "component_id", "revision_id", "object_sha256"}:
+            errors.append(f"snapshot candidate component_refs[{index}] must be an exact immutable reference")
+            continue
+        key = (ref["component_type"], ref["revision_id"])
+        if key in seen:
+            errors.append("snapshot candidate contains duplicate component reference")
+        seen.add(key)
+        if ref["component_type"] not in COMPONENT_TYPES:
+            errors.append("snapshot candidate cannot own a transmission component")
+        if not _hash(ref["object_sha256"]):
+            errors.append("snapshot candidate component reference hash is invalid")
+        if component_index is not None:
+            row = component_index.get(key)
+            if row is None:
+                errors.append(f"snapshot candidate component reference unavailable: {key}")
+            elif row.get("component_id") != ref.get("component_id") or row.get("object_sha256") != ref.get("object_sha256"):
+                errors.append(f"snapshot candidate component reference mismatch: {key}")
+    for index, ref in enumerate(snapshot.get("upstream_refs", [])):
+        errors.extend(validate_epistemic_citation(ref, label=f"snapshot candidate upstream_refs[{index}]"))
+        if isinstance(ref, dict) and "content" in ref:
+            errors.append("snapshot candidate upstream references cannot copy source content")
+    for index, domain in enumerate(snapshot.get("empty_queried_domains", [])):
+        if not isinstance(domain, dict) or domain.get("state") not in EMPTY_DOMAIN_STATES or not _text(domain.get("domain")):
+            errors.append(f"snapshot candidate empty_queried_domains[{index}] must distinguish governed empty states")
+    if not _hash(snapshot.get("object_sha256")) or snapshot.get("object_sha256") != fingerprint(snapshot, exclude={"object_sha256"}):
+        errors.append("snapshot candidate object_sha256 does not match snapshot content")
+    return errors
+
+
 def validate_snapshot_history(rows: Any, *, previous_revisions: list[dict[str, Any]] | None = None, component_index: dict[tuple[str, str], dict[str, Any]] | None = None) -> list[str]:
     """Validate an append-only snapshot series without selecting a latest head."""
     if not isinstance(rows, list):

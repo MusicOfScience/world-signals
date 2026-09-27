@@ -21,6 +21,7 @@ from .world_state_history import (
     state_hashes,
     validate_component_revision,
     validate_snapshot,
+    validate_snapshot_candidate,
     with_object_fingerprint,
 )
 
@@ -179,6 +180,7 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
         "effective_time_precision": latest_observation["state_as_of"]["precision"],
         "effective_time_basis": "Latest governed outbreak snapshot; no UTC instant is manufactured from a civil date.",
         "known_at_utc": signal["review_provenance"]["reviewed_at_utc"],
+        "known_at_basis": "ADMITTED_SIGNAL_REVIEW_BOUNDARY",
         "reviewed_at_utc": None,
         "admitted_at_utc": None,
         "source_proposal_id": f"WS-STEP8A-{CANDIDATE_COMPONENT_ID}",
@@ -221,8 +223,12 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
             "no contradiction was found in the complete eligible lineage, but no negative claim of absence is made",
         ],
         "model_provenance": {
-            "model_identity": "Codex",
-            "version": "GPT-5",
+            "execution_surface": "Codex",
+            "model_identity": "UNAVAILABLE",
+            "model_version": "UNAVAILABLE",
+            "version": "UNAVAILABLE",
+            "reasoning_configuration": "UNAVAILABLE",
+            "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
             "configuration": "Step 8A deterministic candidate-construction procedure",
             "analytical_lens": "narrow reported health/biosecurity burden assessment",
             "procedure_version": "world-state-step8a-health-candidate-v1",
@@ -239,7 +245,34 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
         raise WorldStateCandidateError("candidate validation failed: " + "; ".join(candidate_errors))
     candidate_fingerprint = fingerprint(candidate, exclude={"object_sha256"})
 
-    def make_snapshot(component_ref: dict[str, Any], review_id: str, admission_id: str) -> dict[str, Any]:
+    def make_candidate_snapshot(component_ref: dict[str, Any]) -> dict[str, Any]:
+        return with_object_fingerprint({
+            "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609",
+            "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+            "revision_number": 1,
+            "previous_snapshot_revision_id": None,
+            "snapshot_kind": "COMPOSITIONAL_INDEX",
+            "scope": candidate["scope"],
+            "knowledge_cutoff_utc": constructed_at_utc,
+            "effective_as_of_utc": None,
+            "component_refs": [component_ref],
+            "upstream_refs": [_citation(manifest_by_id[SIGNAL_ID], "REVIEWED_SIGNAL")],
+            "source_manifest_sha256": manifest_sha256,
+            "proposal_id": candidate["source_proposal_id"],
+            "candidate_review_id": "WS-STEP8A-CANDIDATE-REVIEW",
+            "review_state": "CANDIDATE",
+            "review_transaction_id": None,
+            "admission_transaction_id": None,
+            "limitations": ["Step 8A candidate/simulation only", "single health component; no all-dimensions assessment"],
+            "empty_queried_domains": _empty_domains(),
+            "lifecycle_state": "UNRESOLVED",
+            "visibility": "INTERNAL_ONLY",
+            "reviewer": {"reviewer_id": "STEP8A-CANDIDATE", "role": "review-pending"},
+            "admitted_at_utc": None,
+            "object_sha256": None,
+        })
+
+    def make_production_snapshot(component_ref: dict[str, Any], review_id: str, admission_id: str) -> dict[str, Any]:
         return with_object_fingerprint({
             "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609",
             "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
@@ -255,18 +288,18 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
             "proposal_id": candidate["source_proposal_id"],
             "review_transaction_id": review_id,
             "admission_transaction_id": admission_id,
-            "limitations": ["Step 8A candidate/simulation only", "single health component; no all-dimensions assessment"],
+            "limitations": ["Step 8A simulation only", "single health component; no all-dimensions assessment"],
             "empty_queried_domains": _empty_domains(),
             "lifecycle_state": "ACTIVE",
             "visibility": "INTERNAL_ONLY",
-            "reviewer": {"reviewer_id": "STEP8A-CANDIDATE", "role": "review-pending"},
+            "reviewer": {"reviewer_id": "STEP8A-SIMULATION", "role": "temporary-copy-only"},
             "admitted_at_utc": constructed_at_utc,
             "object_sha256": None,
         })
 
     candidate_component_ref = {"component_type": candidate["component_type"], "component_id": candidate["component_id"], "revision_id": candidate["revision_id"], "object_sha256": candidate["object_sha256"]}
-    proposed_snapshot = make_snapshot(candidate_component_ref, "WS-STEP8A-CANDIDATE-REVIEW", "WS-STEP8A-CANDIDATE-NO-ADMISSION")
-    proposed_snapshot_errors = validate_snapshot(proposed_snapshot, component_index={(candidate["component_type"], candidate["revision_id"]): candidate})
+    proposed_snapshot = make_candidate_snapshot(candidate_component_ref)
+    proposed_snapshot_errors = validate_snapshot_candidate(proposed_snapshot, component_index={(candidate["component_type"], candidate["revision_id"]): candidate})
     if proposed_snapshot_errors:
         raise WorldStateCandidateError("candidate snapshot validation failed: " + "; ".join(proposed_snapshot_errors))
 
@@ -282,7 +315,7 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
     simulated_component["object_sha256"] = None
     simulated_component = with_object_fingerprint(simulated_component)
     component_ref = {"component_type": simulated_component["component_type"], "component_id": simulated_component["component_id"], "revision_id": simulated_component["revision_id"], "object_sha256": simulated_component["object_sha256"]}
-    simulated_snapshot = make_snapshot(component_ref, "WS-STEP8A-SIMULATION-REVIEW", "WS-STEP8A-SIMULATION-ADMISSION")
+    simulated_snapshot = make_production_snapshot(component_ref, "WS-STEP8A-SIMULATION-REVIEW", "WS-STEP8A-SIMULATION-ADMISSION")
     snapshot_errors = validate_snapshot(simulated_snapshot, component_index={(simulated_component["component_type"], simulated_component["revision_id"]): simulated_component})
     if snapshot_errors:
         raise WorldStateCandidateError("simulation snapshot validation failed: " + "; ".join(snapshot_errors))
@@ -320,11 +353,11 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
     gates = {
         "scope_and_component_type": {"status": "PASS", "basis": "One HEALTH_BIOSECURITY Dimension Assessment scoped to reported Bundibugyo confirmed-case snapshots in DRC."},
         "governed_pinned_inputs": {"status": "PASS", "basis": "Live observations, evidence, accepted Signal revision and Signal admission transaction are hash-pinned."},
-        "temporal_non_backdating": {"status": "PASS", "basis": "Civil-date effective state is retained without a fabricated UTC instant; known_at is the Signal review time; admission remains unset."},
+        "temporal_non_backdating": {"status": "PASS", "basis": "Civil-date effective state is retained without a fabricated UTC instant; known_at is the admitted Signal review boundary; admission remains unset."},
         "support_contradiction_inspection": {"status": "PASS", "basis": "Supporting and contradictory refs are disjoint; complete eligible lineage contains no correction/retraction or contradiction."},
         "uncertainty_alternatives_limitations": {"status": "PASS", "basis": "Low confidence, shared WHO origin, measurement/temporal/interpretive limits and reporting alternatives are retained."},
         "native_validators_no_duplicate_relationship": {"status": "PASS", "basis": "Component and temporary snapshot validators pass; no Relationship or transmission component is created."},
-        "proposal_model_provenance": {"status": "PASS", "basis": "Candidate procedure, input manifest and model metadata are retained; model output is not factual evidence."},
+        "proposal_model_provenance": {"status": "PASS", "basis": "The deterministic candidate procedure, input manifest and fail-honest unavailable runtime provenance are retained; model output is not factual evidence."},
         "human_review_transaction": {"status": "DEFER", "basis": "Step 8B must explicitly review this candidate; Step 8A cannot approve its own analytical judgment."},
         "production_admission_transaction": {"status": "DEFER", "basis": "No WORLD_STATE_PRODUCTION_ADMISSION is accepted or written; the transaction below is temporary simulation only."},
         "atomic_write_simulation": {"status": "PASS" if simulation["status"] == "PASS" else "FAIL", "basis": "Temporary-copy simulator returned without governed writes and preserved pre-state hashes."},
@@ -332,6 +365,14 @@ def build_health_candidate(root: Path, constructed_at_utc: str) -> dict[str, Any
     package = {
         "package_type": "WORLD_STATE_STEP8A_CANDIDATE",
         "package_version": "0.1",
+        "correction_lineage": {
+            "correction_type": "PRE_ADMISSION_SNAPSHOT_SEMANTICS_AND_MODEL_PROVENANCE",
+            "corrects_package": "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING.json",
+            "prior_candidate_semantic_fingerprint": "e74cf6c3809405ab5bcdb736714a96247c097fcd7c930aa08b352684596dba81",
+            "prior_source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+            "prior_proposed_snapshot_fingerprint": "e60b43256c6b6a892d6411e3df048bb27417153d54478a34dbbe3e80955d5500",
+            "reason": "The original review-pending package reused the admitted production snapshot validator and therefore carried fake admission metadata; it also recorded an unverified model version.",
+        },
         "status": PRE_FLIGHT_STATUS,
         "preflight_classification": "READY_FOR_HUMAN_ADMISSION_REVIEW" if all(row["status"] in {"PASS", "DEFER"} for row in gates.values()) else "REJECT_CONTRACT_FAILURE",
         "constructed_at_utc": constructed_at_utc,
@@ -372,6 +413,9 @@ def validate_health_candidate_package(package: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if package.get("package_type") != "WORLD_STATE_STEP8A_CANDIDATE":
         errors.append("package type is invalid")
+    lineage = package.get("correction_lineage")
+    if not isinstance(lineage, dict) or lineage.get("correction_type") != "PRE_ADMISSION_SNAPSHOT_SEMANTICS_AND_MODEL_PROVENANCE":
+        errors.append("corrected Step 8A lineage is required")
     if package.get("status") != PRE_FLIGHT_STATUS:
         errors.append("candidate must remain REVIEW_PENDING")
     candidate = package.get("candidate")
@@ -380,12 +424,24 @@ def validate_health_candidate_package(package: dict[str, Any]) -> list[str]:
     errors.extend(validate_component_revision(candidate))
     if candidate.get("review_state") != "UNDER_REVIEW" or candidate.get("admitted_at_utc") is not None:
         errors.append("candidate must remain under review and unadmitted")
+    if candidate.get("known_at_basis") != "ADMITTED_SIGNAL_REVIEW_BOUNDARY":
+        errors.append("candidate known_at basis must remain the admitted Signal review boundary")
     if candidate.get("visibility") != "INTERNAL_ONLY":
         errors.append("candidate visibility must be INTERNAL_ONLY")
     if package.get("public_projection_permitted") is not False:
         errors.append("public projection must remain closed")
     if package.get("production_admission", {}).get("status") != "NOT_PERFORMED":
         errors.append("production admission must not be performed")
+    proposed = package.get("proposed_snapshot", {})
+    proposed_snapshot = proposed.get("snapshot")
+    if not isinstance(proposed_snapshot, dict):
+        errors.append("proposed snapshot candidate is required")
+    else:
+        errors.extend(validate_snapshot_candidate(proposed_snapshot))
+        if proposed.get("snapshot_semantic_fingerprint") != fingerprint(proposed_snapshot, exclude={"object_sha256"}):
+            errors.append("proposed snapshot candidate fingerprint mismatch")
+        if proposed_snapshot.get("admission_transaction_id") is not None or proposed_snapshot.get("admitted_at_utc") is not None:
+            errors.append("proposed snapshot candidate must not carry production admission metadata")
     if package.get("actor_assertions") != [] or package.get("implementation_claims") != [] or package.get("transmission_edges") != []:
         errors.append("Step 8A may not create actor, implementation or transmission objects")
     manifest = package.get("source_manifest")

@@ -515,8 +515,10 @@ append-only corrections, and private/public projection gates. No production
 World State population or Actor Registry has been created. Migration Step 7 is
 complete as the unpopulated schema/validator/temporary admission-simulator
 tranche. Step 8A has constructed and preflighted one narrow real-evidence
-health candidate without production admission or public projection. Step 8B is
-the separate human-reviewed first-component admission decision.
+health candidate without production admission or public projection. A retained
+successor corrected the pre-admission snapshot semantics and made unavailable
+runtime model provenance explicit; Step 8B is the separate human-reviewed
+first-component admission decision.
 
 ## Permanent quarantine
 

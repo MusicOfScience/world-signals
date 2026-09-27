@@ -1,0 +1,1036 @@
+{
+  "actor_assertions": [],
+  "admission_simulation": {
+    "production_admission_performed": false,
+    "result": {
+      "admitted_component_refs": [
+        [
+          "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        ]
+      ],
+      "errors": [],
+      "excluded_component_refs": [],
+      "governed_files_written": false,
+      "post_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "56ce8635f264ce62056fd77ac348c1211b4b70f70b193385ddd6c7e1e7bc558f",
+        "snapshots": "1150bb3e2d20130cfa180c44200e9b2e62470f13980f6cc3eda5b753e94a32de"
+      },
+      "pre_state_hashes_after": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "snapshots": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pre_state_hashes_before": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "snapshots": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "simulation_fingerprint": "e6653fd216a159776d1db262be409e4cd94e3cb707fd87f0f1820dcb537dda05",
+      "status": "PASS"
+    },
+    "status": "PASS",
+    "transaction": {
+      "admitted_at_utc": "2026-09-27T12:20:58Z",
+      "component_dispositions": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "disposition": "ADMITTED",
+          "reason": "Simulation only; Step 8B human admission remains pending.",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "component_fingerprints": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "009758493788168c1c2bbbb6de2a73911f9b0c6f92b2c05f707033bae7b89435",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "contract_version": "0.1",
+      "decided_at_utc": "2026-09-27T12:20:58Z",
+      "decision": "ACCEPTED",
+      "post_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "56ce8635f264ce62056fd77ac348c1211b4b70f70b193385ddd6c7e1e7bc558f",
+        "snapshots": "1150bb3e2d20130cfa180c44200e9b2e62470f13980f6cc3eda5b753e94a32de"
+      },
+      "pre_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "snapshots": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+      "proposal_semantic_fingerprint": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+      "reviewer": {
+        "reviewer_id": "STEP8A-SIMULATION",
+        "role": "temporary-copy-only"
+      },
+      "snapshot_revision_identity": {
+        "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+        "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609"
+      },
+      "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "transaction_fingerprint": "931702168c92994b9d51fe2ba4e1396f895ed589d377c0bca4b5e39bbd3fd5a6",
+      "transaction_id": "WS-STEP8A-SIMULATION-ADMISSION",
+      "transaction_type": "WORLD_STATE_PRODUCTION_ADMISSION",
+      "validator_version": "world-state-history-v1",
+      "visibility_decision": "INTERNAL_ONLY",
+      "write_targets": [
+        "TEMPORARY_COPY_ONLY:data/world_state/components/",
+        "TEMPORARY_COPY_ONLY:data/world_state/snapshots/"
+      ]
+    }
+  },
+  "anomaly_treatment": {
+    "reason": "The reviewed Signal already owns the two-snapshot comparison; a duplicate anomaly would add no information.",
+    "status": "NOT_CREATED"
+  },
+  "baseline_treatment": {
+    "observation_ids": [
+      "WSLI-HEALTH-COD-BVD-20260826-001",
+      "WSLI-HEALTH-COD-BVD-20260830-001"
+    ],
+    "reference": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001:WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1:baseline",
+    "separate_baseline_candidate_created": false,
+    "status": "REUSED_EXISTING_SIGNAL_BASELINE"
+  },
+  "candidate": {
+    "admission_transaction_id": null,
+    "admitted_at_utc": null,
+    "anomaly_refs": [],
+    "baseline_ref": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001:WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1:baseline",
+    "breadth": "NOT_ASSESSED",
+    "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "component_type": "DIMENSION_ASSESSMENT",
+    "contradictory_citations": [],
+    "dimension": "HEALTH_BIOSECURITY",
+    "direction": "UPWARD",
+    "effective_at": null,
+    "effective_date": "2026-08-30",
+    "effective_time_basis": "Latest governed outbreak snapshot; no UTC instant is manufactured from a civil date.",
+    "effective_time_precision": "CIVIL_DATE",
+    "known_at_basis": "ADMITTED_SIGNAL_REVIEW_BOUNDARY",
+    "known_at_utc": "2026-09-27T01:00:00Z",
+    "lifecycle_state": "UNRESOLVED",
+    "limitations": [
+      "reported confirmed-case snapshots are not incidence",
+      "reporting delay and access limitations may affect completeness",
+      "testing, case-definition and reclassification changes may affect comparability",
+      "unreported cases remain outside the governed observation",
+      "shared WHO institutional origin is not independent corroboration",
+      "the Signal's hypothesised response-pressure channel remains outside this component",
+      "no contradiction was found in the complete eligible lineage, but no negative claim of absence is made"
+    ],
+    "model_provenance": {
+      "analytical_lens": "narrow reported health/biosecurity burden assessment",
+      "configuration": "Step 8A deterministic candidate-construction procedure",
+      "execution_surface": "Codex",
+      "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+      "generated_at_utc": "2026-09-27T12:20:58Z",
+      "input_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "model_identity": "UNAVAILABLE",
+      "model_version": "UNAVAILABLE",
+      "output_fingerprint": "8e23608407827108d1894c65cefd375b21ddf5e1309673a4676de4d280b63962",
+      "procedure_version": "world-state-step8a-health-candidate-v1",
+      "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+      "reasoning_configuration": "UNAVAILABLE",
+      "version": "UNAVAILABLE"
+    },
+    "object_sha256": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+    "persistence": "PERSISTENT",
+    "previous_revision_id": null,
+    "prior_revision_ref": null,
+    "projection_transaction_id": null,
+    "qualitative_confidence": "LOW",
+    "review_state": "UNDER_REVIEW",
+    "review_transaction_id": null,
+    "reviewed_at_utc": null,
+    "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1",
+    "revision_kind": "INITIAL",
+    "revision_number": 1,
+    "revision_reason": "Step 8A candidate only; no production admission or public projection.",
+    "scope": {
+      "boundaries": [
+        "governed confirmed-case snapshots only"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "systems": [
+        "REPORTED_BUNDIBUGYO_OUTBREAK_BURDEN"
+      ]
+    },
+    "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+    "source_proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "state_label": "REPORTED_OUTBREAK_BURDEN_INCREASING",
+    "supporting_citations": [
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+        "object_sha256": "0bc5c46773cc8cf6be1ecff7a5f0d308be6d17d2923e898fd577ed0b65dd6b8f",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+        "object_sha256": "ee9b30d013ed05d3b81582373b729d572f0a27938693398ca83e483fa82f2a4d",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+        "object_sha256": "ddc5d291ee4f6b411cca76819a7b2289a1974b5de9e6a292d5715fede41363ed",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+        "object_sha256": "827b81e6b2baf048d84a49e65daa99299fa53cd6a8855ccc3d663bb81d6c3d75",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "REVIEWED_SIGNAL",
+        "layer": "SIGNALS",
+        "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+        "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+        "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+      }
+    ],
+    "transition_type": "INITIAL",
+    "uncertainties": [
+      {
+        "basis_refs": [
+          "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+          "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+        ],
+        "description": "Both primary supporting reports are from the WHO institutional family; the reviewed Signal records partial corroboration and one independent observation.",
+        "status": "BOUNDED",
+        "type": "PROVENANCE_SOURCE"
+      },
+      {
+        "basis_refs": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ],
+        "description": "The assessment describes reported confirmed cases, not incidence or true burden; reporting delay, access, testing, case definition and unreported cases remain limitations.",
+        "status": "BOUNDED",
+        "type": "MEASUREMENT"
+      },
+      {
+        "basis_refs": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ],
+        "description": "The latest outbreak state is a civil date (30 August 2026); effective UTC is intentionally unresolved while known time is the reviewed Signal time.",
+        "status": "BOUNDED",
+        "type": "TEMPORAL"
+      },
+      {
+        "basis_refs": [
+          "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        ],
+        "description": "The narrow reported-burden label does not assert severity, geography, causality, response pressure or future trajectory.",
+        "status": "BOUNDED",
+        "type": "INTERPRETIVE"
+      }
+    ],
+    "visibility": "INTERNAL_ONLY"
+  },
+  "candidate_semantic_fingerprint": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+  "constructed_at_utc": "2026-09-27T12:20:58Z",
+  "correction_lineage": {
+    "correction_type": "PRE_ADMISSION_SNAPSHOT_SEMANTICS_AND_MODEL_PROVENANCE",
+    "corrects_package": "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING.json",
+    "prior_candidate_semantic_fingerprint": "e74cf6c3809405ab5bcdb736714a96247c097fcd7c930aa08b352684596dba81",
+    "prior_proposed_snapshot_fingerprint": "e60b43256c6b6a892d6411e3df048bb27417153d54478a34dbbe3e80955d5500",
+    "prior_source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+    "reason": "The original review-pending package reused the admitted production snapshot validator and therefore carried fake admission metadata; it also recorded an unverified model version."
+  },
+  "dimension_assessments": [
+    "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001"
+  ],
+  "freshness": {
+    "constructed_at_utc": "2026-09-27T12:20:58Z",
+    "elapsed_days": 21.194421296296298,
+    "expiry_basis": "observed_at_utc per Signal validator; not the civil state_as_of date",
+    "latest_supported_state_as_of": {
+      "as_of_date": "2026-08-30",
+      "precision": "CIVIL_DATE"
+    },
+    "latest_supporting_observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+    "latest_supporting_observed_at_utc": "2026-09-06T07:41:00Z",
+    "stale_after_days": 30,
+    "stale_review_due_at_utc": "2026-10-06T07:41:00Z",
+    "status": "ACTIVE_NEARING_REVIEW"
+  },
+  "hypotheses": [],
+  "implementation_claims": [],
+  "knowledge_cutoff_utc": "2026-09-27T12:20:58Z",
+  "known_empty_or_unsupported_domains": [
+    {
+      "domain": "WORLD_STATE_DIMENSIONS_OTHER_THAN_HEALTH_BIOSECURITY",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "ACTOR_ASSERTIONS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "IMPLEMENTATION_CLAIMS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "RELATIONSHIPS",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "RISKS_REGIMES",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "SCENARIOS",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "OUTCOMES",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "CANONICAL_HISTORICAL_AS_OF",
+      "state": "UNSUPPORTED"
+    }
+  ],
+  "limitations": [
+    "Step 8A candidate only; not admitted production World State",
+    "effective UTC is unresolved because source state_as_of precision is CIVIL_DATE",
+    "candidate describes reported burden only, not incidence, severity, geography, response pressure, causality or forecast",
+    "shared WHO institutional origin prevents independent corroboration",
+    "Canonical historical as-of remains unsupported and is not used by this pilot"
+  ],
+  "package_type": "WORLD_STATE_STEP8A_CANDIDATE",
+  "package_version": "0.1",
+  "preflight_classification": "READY_FOR_HUMAN_ADMISSION_REVIEW",
+  "production_admission": {
+    "production_state_count_after": 0,
+    "production_state_count_before": 0,
+    "status": "NOT_PERFORMED",
+    "write_targets": []
+  },
+  "production_admission_gates": {
+    "atomic_write_simulation": {
+      "basis": "Temporary-copy simulator returned without governed writes and preserved pre-state hashes.",
+      "status": "PASS"
+    },
+    "governed_pinned_inputs": {
+      "basis": "Live observations, evidence, accepted Signal revision and Signal admission transaction are hash-pinned.",
+      "status": "PASS"
+    },
+    "human_review_transaction": {
+      "basis": "Step 8B must explicitly review this candidate; Step 8A cannot approve its own analytical judgment.",
+      "status": "DEFER"
+    },
+    "native_validators_no_duplicate_relationship": {
+      "basis": "Component and temporary snapshot validators pass; no Relationship or transmission component is created.",
+      "status": "PASS"
+    },
+    "production_admission_transaction": {
+      "basis": "No WORLD_STATE_PRODUCTION_ADMISSION is accepted or written; the transaction below is temporary simulation only.",
+      "status": "DEFER"
+    },
+    "proposal_model_provenance": {
+      "basis": "The deterministic candidate procedure, input manifest and fail-honest unavailable runtime provenance are retained; model output is not factual evidence.",
+      "status": "PASS"
+    },
+    "scope_and_component_type": {
+      "basis": "One HEALTH_BIOSECURITY Dimension Assessment scoped to reported Bundibugyo confirmed-case snapshots in DRC.",
+      "status": "PASS"
+    },
+    "support_contradiction_inspection": {
+      "basis": "Supporting and contradictory refs are disjoint; complete eligible lineage contains no correction/retraction or contradiction.",
+      "status": "PASS"
+    },
+    "temporal_non_backdating": {
+      "basis": "Civil-date effective state is retained without a fabricated UTC instant; known_at is the admitted Signal review boundary; admission remains unset.",
+      "status": "PASS"
+    },
+    "uncertainty_alternatives_limitations": {
+      "basis": "Low confidence, shared WHO origin, measurement/temporal/interpretive limits and reporting alternatives are retained.",
+      "status": "PASS"
+    }
+  },
+  "proposed_snapshot": {
+    "references_candidate_revision": true,
+    "references_simulated_admitted_revision": false,
+    "snapshot": {
+      "admission_transaction_id": null,
+      "admitted_at_utc": null,
+      "candidate_review_id": "WS-STEP8A-CANDIDATE-REVIEW",
+      "component_refs": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "effective_as_of_utc": null,
+      "empty_queried_domains": [
+        {
+          "domain": "WORLD_STATE_DIMENSIONS_OTHER_THAN_HEALTH_BIOSECURITY",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "ACTOR_ASSERTIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "IMPLEMENTATION_CLAIMS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "RELATIONSHIPS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "RISKS_REGIMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "SCENARIOS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "OUTCOMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "CANONICAL_HISTORICAL_AS_OF",
+          "state": "UNSUPPORTED"
+        }
+      ],
+      "knowledge_cutoff_utc": "2026-09-27T12:20:58Z",
+      "lifecycle_state": "UNRESOLVED",
+      "limitations": [
+        "Step 8A candidate/simulation only",
+        "single health component; no all-dimensions assessment"
+      ],
+      "object_sha256": "42fbe92c8093a2c25d67debc8a2655f3ff06b6ce14aad464a5c69cd9301742c7",
+      "previous_snapshot_revision_id": null,
+      "proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+      "review_state": "CANDIDATE",
+      "review_transaction_id": null,
+      "reviewer": {
+        "reviewer_id": "STEP8A-CANDIDATE",
+        "role": "review-pending"
+      },
+      "revision_number": 1,
+      "scope": {
+        "boundaries": [
+          "governed confirmed-case snapshots only"
+        ],
+        "jurisdictions": [
+          "Democratic Republic of the Congo"
+        ],
+        "systems": [
+          "REPORTED_BUNDIBUGYO_OUTBREAK_BURDEN"
+        ]
+      },
+      "snapshot_kind": "COMPOSITIONAL_INDEX",
+      "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+      "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609",
+      "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "upstream_refs": [
+        {
+          "epistemic_class": "REVIEWED_SIGNAL",
+          "layer": "SIGNALS",
+          "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+          "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+          "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+    "snapshot_semantic_fingerprint": "42fbe92c8093a2c25d67debc8a2655f3ff06b6ce14aad464a5c69cd9301742c7",
+    "status": "REVIEW_PENDING_CANDIDATE_ONLY"
+  },
+  "public_projection_permitted": false,
+  "simulated_component": {
+    "admission_transaction_id": "WS-STEP8A-SIMULATION-ADMISSION",
+    "admitted_at_utc": "2026-09-27T12:20:58Z",
+    "anomaly_refs": [],
+    "baseline_ref": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001:WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1:baseline",
+    "breadth": "NOT_ASSESSED",
+    "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "component_type": "DIMENSION_ASSESSMENT",
+    "contradictory_citations": [],
+    "dimension": "HEALTH_BIOSECURITY",
+    "direction": "UPWARD",
+    "effective_at": null,
+    "effective_date": "2026-08-30",
+    "effective_time_basis": "Latest governed outbreak snapshot; no UTC instant is manufactured from a civil date.",
+    "effective_time_precision": "CIVIL_DATE",
+    "known_at_basis": "ADMITTED_SIGNAL_REVIEW_BOUNDARY",
+    "known_at_utc": "2026-09-27T01:00:00Z",
+    "lifecycle_state": "ACTIVE",
+    "limitations": [
+      "reported confirmed-case snapshots are not incidence",
+      "reporting delay and access limitations may affect completeness",
+      "testing, case-definition and reclassification changes may affect comparability",
+      "unreported cases remain outside the governed observation",
+      "shared WHO institutional origin is not independent corroboration",
+      "the Signal's hypothesised response-pressure channel remains outside this component",
+      "no contradiction was found in the complete eligible lineage, but no negative claim of absence is made"
+    ],
+    "model_provenance": {
+      "analytical_lens": "narrow reported health/biosecurity burden assessment",
+      "configuration": "Step 8A deterministic candidate-construction procedure",
+      "execution_surface": "Codex",
+      "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+      "generated_at_utc": "2026-09-27T12:20:58Z",
+      "input_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "model_identity": "UNAVAILABLE",
+      "model_version": "UNAVAILABLE",
+      "output_fingerprint": "8e23608407827108d1894c65cefd375b21ddf5e1309673a4676de4d280b63962",
+      "procedure_version": "world-state-step8a-health-candidate-v1",
+      "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+      "reasoning_configuration": "UNAVAILABLE",
+      "version": "UNAVAILABLE"
+    },
+    "object_sha256": "009758493788168c1c2bbbb6de2a73911f9b0c6f92b2c05f707033bae7b89435",
+    "persistence": "PERSISTENT",
+    "previous_revision_id": null,
+    "prior_revision_ref": null,
+    "projection_transaction_id": null,
+    "qualitative_confidence": "LOW",
+    "review_state": "ACCEPTED",
+    "review_transaction_id": "WS-STEP8A-SIMULATION-REVIEW",
+    "reviewed_at_utc": "2026-09-27T12:20:58Z",
+    "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1",
+    "revision_kind": "INITIAL",
+    "revision_number": 1,
+    "revision_reason": "Step 8A candidate only; no production admission or public projection.",
+    "scope": {
+      "boundaries": [
+        "governed confirmed-case snapshots only"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "systems": [
+        "REPORTED_BUNDIBUGYO_OUTBREAK_BURDEN"
+      ]
+    },
+    "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+    "source_proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "state_label": "REPORTED_OUTBREAK_BURDEN_INCREASING",
+    "supporting_citations": [
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+        "object_sha256": "0bc5c46773cc8cf6be1ecff7a5f0d308be6d17d2923e898fd577ed0b65dd6b8f",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+        "object_sha256": "ee9b30d013ed05d3b81582373b729d572f0a27938693398ca83e483fa82f2a4d",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+        "object_sha256": "ddc5d291ee4f6b411cca76819a7b2289a1974b5de9e6a292d5715fede41363ed",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "FACTUAL_SOURCE",
+        "layer": "LIVE_INTELLIGENCE",
+        "object_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+        "object_sha256": "827b81e6b2baf048d84a49e65daa99299fa53cd6a8855ccc3d663bb81d6c3d75",
+        "revision_id": null
+      },
+      {
+        "epistemic_class": "REVIEWED_SIGNAL",
+        "layer": "SIGNALS",
+        "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+        "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+        "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+      }
+    ],
+    "transition_type": "INITIAL",
+    "uncertainties": [
+      {
+        "basis_refs": [
+          "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+          "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+        ],
+        "description": "Both primary supporting reports are from the WHO institutional family; the reviewed Signal records partial corroboration and one independent observation.",
+        "status": "BOUNDED",
+        "type": "PROVENANCE_SOURCE"
+      },
+      {
+        "basis_refs": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ],
+        "description": "The assessment describes reported confirmed cases, not incidence or true burden; reporting delay, access, testing, case definition and unreported cases remain limitations.",
+        "status": "BOUNDED",
+        "type": "MEASUREMENT"
+      },
+      {
+        "basis_refs": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ],
+        "description": "The latest outbreak state is a civil date (30 August 2026); effective UTC is intentionally unresolved while known time is the reviewed Signal time.",
+        "status": "BOUNDED",
+        "type": "TEMPORAL"
+      },
+      {
+        "basis_refs": [
+          "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        ],
+        "description": "The narrow reported-burden label does not assert severity, geography, causality, response pressure or future trajectory.",
+        "status": "BOUNDED",
+        "type": "INTERPRETIVE"
+      }
+    ],
+    "visibility": "INTERNAL_ONLY"
+  },
+  "simulated_snapshot": {
+    "admission_transaction_id": "WS-STEP8A-SIMULATION-ADMISSION",
+    "admitted_at_utc": "2026-09-27T12:20:58Z",
+    "component_refs": [
+      {
+        "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+        "component_type": "DIMENSION_ASSESSMENT",
+        "object_sha256": "009758493788168c1c2bbbb6de2a73911f9b0c6f92b2c05f707033bae7b89435",
+        "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+      }
+    ],
+    "effective_as_of_utc": null,
+    "empty_queried_domains": [
+      {
+        "domain": "WORLD_STATE_DIMENSIONS_OTHER_THAN_HEALTH_BIOSECURITY",
+        "state": "UNQUERIED"
+      },
+      {
+        "domain": "ACTOR_ASSERTIONS",
+        "state": "UNQUERIED"
+      },
+      {
+        "domain": "IMPLEMENTATION_CLAIMS",
+        "state": "UNQUERIED"
+      },
+      {
+        "domain": "RELATIONSHIPS",
+        "state": "QUERIED_EMPTY"
+      },
+      {
+        "domain": "RISKS_REGIMES",
+        "state": "QUERIED_EMPTY"
+      },
+      {
+        "domain": "SCENARIOS",
+        "state": "QUERIED_EMPTY"
+      },
+      {
+        "domain": "OUTCOMES",
+        "state": "QUERIED_EMPTY"
+      },
+      {
+        "domain": "CANONICAL_HISTORICAL_AS_OF",
+        "state": "UNSUPPORTED"
+      }
+    ],
+    "knowledge_cutoff_utc": "2026-09-27T12:20:58Z",
+    "lifecycle_state": "ACTIVE",
+    "limitations": [
+      "Step 8A simulation only",
+      "single health component; no all-dimensions assessment"
+    ],
+    "object_sha256": "fbb05d0c9ca57d96c269dfdb93b529f13110ad2a1e1dc5837f71d32cdf50794b",
+    "previous_snapshot_revision_id": null,
+    "proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "review_transaction_id": "WS-STEP8A-SIMULATION-REVIEW",
+    "reviewer": {
+      "reviewer_id": "STEP8A-SIMULATION",
+      "role": "temporary-copy-only"
+    },
+    "revision_number": 1,
+    "scope": {
+      "boundaries": [
+        "governed confirmed-case snapshots only"
+      ],
+      "jurisdictions": [
+        "Democratic Republic of the Congo"
+      ],
+      "systems": [
+        "REPORTED_BUNDIBUGYO_OUTBREAK_BURDEN"
+      ]
+    },
+    "snapshot_kind": "COMPOSITIONAL_INDEX",
+    "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+    "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609",
+    "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+    "upstream_refs": [
+      {
+        "epistemic_class": "REVIEWED_SIGNAL",
+        "layer": "SIGNALS",
+        "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+        "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+        "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+      }
+    ],
+    "visibility": "INTERNAL_ONLY"
+  },
+  "source_manifest": [
+    {
+      "layer": "LIVE_INTELLIGENCE",
+      "object": {
+        "canonical_provenance_effect": "NONE",
+        "evidence_class": "PRIMARY_OFFICIAL",
+        "evidence_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+        "notes": "Primary WHO African Region evidence for the later DRC outbreak state as of 30 August 2026: 6,100 confirmed cases, 2,950 confirmed deaths, CFR 48.4%, 60 health zones and six provinces.",
+        "provider": "World Health Organization — Regional Office for Africa",
+        "publication_time": {
+          "precision": "CIVIL_DATE",
+          "published_date": "2026-08-30"
+        },
+        "roles": [
+          "FACTUAL_OBSERVATION",
+          "SOURCE_CONFIRMATION"
+        ],
+        "title": "Ebola Bundibugyo Virus Disease Outbreak Democratic Republic of the Congo | Uganda Weekly External Situation Report 16, data as of 30 August 2026",
+        "url": "https://afro.who.int/countries/uganda/publication/ebola-bundibugyo-virus-disease-outbreak-democratic-republic-congo-uganda-weekly-external-situation"
+      },
+      "object_id": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+      "object_sha256": "827b81e6b2baf048d84a49e65daa99299fa53cd6a8855ccc3d663bb81d6c3d75",
+      "revision_id": null
+    },
+    {
+      "layer": "LIVE_INTELLIGENCE",
+      "object": {
+        "canonical_provenance_effect": "NONE",
+        "evidence_class": "PRIMARY_OFFICIAL",
+        "evidence_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+        "notes": "Primary WHO evidence for the DRC outbreak state as of 26 August 2026: 5,794 confirmed cases, 2,786 confirmed deaths, CFR 48.1%, 60 health zones and six provinces.",
+        "provider": "World Health Organization",
+        "publication_time": {
+          "precision": "CIVIL_DATE",
+          "published_date": "2026-08-28"
+        },
+        "roles": [
+          "FACTUAL_OBSERVATION",
+          "SOURCE_CONFIRMATION"
+        ],
+        "title": "Ebola disease caused by Bundibugyo virus - Democratic Republic of the Congo — Disease Outbreak News 616",
+        "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON616"
+      },
+      "object_id": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+      "object_sha256": "ddc5d291ee4f6b411cca76819a7b2289a1974b5de9e6a292d5715fede41363ed",
+      "revision_id": null
+    },
+    {
+      "layer": "LIVE_INTELLIGENCE",
+      "object": {
+        "automatic_canonical_commit": false,
+        "canonical_links": [],
+        "domain_tags": [
+          "HEALTH_BIOSECURITY",
+          "INSTITUTIONS"
+        ],
+        "evidence_refs": [
+          "WSEV-LI-COD-BVD-WHO-DON616-20260828"
+        ],
+        "google_calendar_write": false,
+        "headline": "DRC Bundibugyo outbreak reaches 5,794 confirmed cases as of 26 August",
+        "jurisdictions": [
+          "Democratic Republic of the Congo"
+        ],
+        "observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+        "observation_type": "HEALTH_EMERGENCY",
+        "observed_at_utc": "2026-09-06T07:40:00Z",
+        "regions": [
+          "Central Africa"
+        ],
+        "revision_of_observation_id": null,
+        "state_as_of": {
+          "as_of_date": "2026-08-26",
+          "precision": "CIVIL_DATE"
+        },
+        "state_update_of_observation_id": null,
+        "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+        "summary": "WHO reported that, as of 26 August 2026, the Democratic Republic of the Congo had recorded 5,794 confirmed Bundibugyo virus disease cases including 2,786 confirmed deaths, a crude case fatality ratio of 48.1%, across 60 health zones in six provinces. This row preserves that dated epidemiological state and does not infer causes of transmission or response effectiveness.",
+        "verification_state": "PRIMARY_CONFIRMED"
+      },
+      "object_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+      "object_sha256": "0bc5c46773cc8cf6be1ecff7a5f0d308be6d17d2923e898fd577ed0b65dd6b8f",
+      "revision_id": null
+    },
+    {
+      "layer": "LIVE_INTELLIGENCE",
+      "object": {
+        "automatic_canonical_commit": false,
+        "canonical_links": [],
+        "domain_tags": [
+          "HEALTH_BIOSECURITY",
+          "INSTITUTIONS"
+        ],
+        "evidence_refs": [
+          "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+        ],
+        "google_calendar_write": false,
+        "headline": "DRC Bundibugyo outbreak reaches 6,100 confirmed cases as of 30 August",
+        "jurisdictions": [
+          "Democratic Republic of the Congo"
+        ],
+        "observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+        "observation_type": "HEALTH_EMERGENCY",
+        "observed_at_utc": "2026-09-06T07:41:00Z",
+        "regions": [
+          "Central Africa"
+        ],
+        "revision_of_observation_id": null,
+        "state_as_of": {
+          "as_of_date": "2026-08-30",
+          "precision": "CIVIL_DATE"
+        },
+        "state_update_of_observation_id": "WSLI-HEALTH-COD-BVD-20260826-001",
+        "story_id": "WSSTORY-HEALTH-COD-BVD-2026",
+        "summary": "WHO African Region reported that, as of 30 August 2026, the Democratic Republic of the Congo had recorded 6,100 confirmed Bundibugyo virus disease cases including 2,950 confirmed deaths, a crude case fatality ratio of 48.4%, across 60 health zones in six provinces. This is a later state of the same developing outbreak, not a correction or retraction of the 26 August snapshot.",
+        "verification_state": "PRIMARY_CONFIRMED"
+      },
+      "object_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+      "object_sha256": "ee9b30d013ed05d3b81582373b729d572f0a27938693398ca83e483fa82f2a4d",
+      "revision_id": null
+    },
+    {
+      "layer": "SIGNALS",
+      "object": {
+        "assessment_basis": {
+          "alternatives": "Reporting cadence, case-definition or reclassification changes, and later source correction could explain part or all of the increase; subsequent review must test these alternatives.",
+          "confidence": "Confidence is low because both supporting reports share the WHO institutional family and no independent provider is counted.",
+          "coverage_bias": "The record covers confirmed reported cases only and may be affected by reporting delay, access limitations, testing changes, case definitions or unreported cases.",
+          "materiality": "The reported increase is sufficient to merit continued health-system and humanitarian response-capacity monitoring, but no incidence rate or severity conclusion is inferred.",
+          "novelty": "The comparative change pattern is newly admitted to the Signal layer; the underlying outbreak was already present in governed observations.",
+          "persistence": "Two primary-confirmed observations are four days apart and show the reported burden increasing across reporting dates; this is temporal persistence of an evolving reported state, not publication-burst volume.",
+          "source_quality": "Both supporting records are primary official WHO or WHO African Region reports with explicit dated factual content.",
+          "trend": "Direction is assessed upward; acceleration is not assessed from two snapshots."
+        },
+        "baseline": {
+          "description": "The earlier WHO report records 5,794 confirmed cases as of 26 August; the later WHO African Region report records 6,100 confirmed cases as of 30 August. These two dated snapshots define the comparison basis.",
+          "observation_ids": [
+            "WSLI-HEALTH-COD-BVD-20260826-001",
+            "WSLI-HEALTH-COD-BVD-20260830-001"
+          ]
+        },
+        "confidence": "LOW",
+        "contradictory_evidence_refs": [],
+        "correction_review_observation_ids": [],
+        "corroboration": {
+          "distinct_provider_count": 2,
+          "independent_observation_count": 1,
+          "rationale": "Two time-separated WHO reports support an observed increase; their shared WHO institutional origin is one corroboration component, not independent confirmation.",
+          "state": "PARTIAL"
+        },
+        "direction": "UPWARD",
+        "domains": [
+          "HEALTH_BIOSECURITY",
+          "INSTITUTIONS"
+        ],
+        "entities": [
+          "Bundibugyo virus disease outbreak",
+          "World Health Organization"
+        ],
+        "evidence_lineage": [
+          {
+            "basis": "Primary WHO report of the 26 August outbreak state; the institutional origin is shared with the later WHO African Region report.",
+            "evidence_ref": "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+            "origin_ids": [
+              "World Health Organization"
+            ]
+          },
+          {
+            "basis": "Primary WHO African Region report of the 30 August outbreak state; the institutional origin is shared with the earlier WHO report.",
+            "evidence_ref": "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830",
+            "origin_ids": [
+              "World Health Organization"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          "WSEV-LI-COD-BVD-WHO-DON616-20260828",
+          "WSEV-LI-COD-BVD-WHO-AFRO-SITREP16-20260830"
+        ],
+        "expiry": {
+          "condition": "Review if no new governed supporting observation is available within 30 days of the latest supporting observation, or sooner if either source is corrected or retracted.",
+          "mode": "STALE_AFTER",
+          "stale_after_days": 30
+        },
+        "falsification_conditions": [
+          "Either linked WHO source corrects or retracts the supporting case-count snapshot.",
+          "Later governed evidence shows that the apparent increase was a reporting, case-definition or reclassification artefact.",
+          "The supporting state becomes stale without further evidence or is materially contradicted by reviewed evidence."
+        ],
+        "first_detected_at_utc": "2026-09-06T07:41:00Z",
+        "jurisdictions": [
+          "Democratic Republic of the Congo"
+        ],
+        "latest_supporting_observation_id": "WSLI-HEALTH-COD-BVD-20260830-001",
+        "lifecycle_state": "ACTIVE",
+        "magnitude": "MODERATE",
+        "novelty": "NEW",
+        "observation_hashes": {
+          "WSLI-HEALTH-COD-BVD-20260826-001": "0bc5c46773cc8cf6be1ecff7a5f0d308be6d17d2923e898fd577ed0b65dd6b8f",
+          "WSLI-HEALTH-COD-BVD-20260830-001": "ee9b30d013ed05d3b81582373b729d572f0a27938693398ca83e483fa82f2a4d"
+        },
+        "observation_ids": [
+          "WSLI-HEALTH-COD-BVD-20260826-001",
+          "WSLI-HEALTH-COD-BVD-20260830-001"
+        ],
+        "persistence": "PERSISTENT",
+        "previous_revision_id": null,
+        "regions": [
+          "Central Africa"
+        ],
+        "review_provenance": {
+          "created_at_utc": "2026-09-27T01:00:00Z",
+          "created_by": "project-owner-authorised-review",
+          "decision_basis": "Approved one low-confidence persistent-change Signal after reviewing the complete governed Observation population. The baseline and time-separated support are explicit; shared WHO origin prevents independent corroboration; alternatives and coverage limitations remain recorded.",
+          "reviewed_at_utc": "2026-09-27T01:00:00Z",
+          "reviewed_by": "project-owner-authorised-review"
+        },
+        "review_state": "ACCEPTED",
+        "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1",
+        "revision_number": 1,
+        "revision_reason": "Initial reviewed admission after explicit baseline, persistence, materiality, lineage, alternatives and falsification assessment.",
+        "signal_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+        "signal_type": "PERSISTENT_CHANGE",
+        "supporting_rationale": "The governed observations record 5,794 confirmed cases as of 26 August and 6,100 as of 30 August, an increase across two dated WHO snapshots of the same outbreak. This Signal describes an observed change in reported burden; it does not infer incidence, cause, severity beyond the reported figures, future outcomes or a Forecast.",
+        "title": "Reported Bundibugyo outbreak burden increased across successive WHO reporting dates",
+        "transmission_relevance": [
+          {
+            "affected_domains": [
+              "HEALTH_BIOSECURITY",
+              "INSTITUTIONS"
+            ],
+            "channel": "health-system and humanitarian response pressure",
+            "rationale": "A sustained reported burden may place pressure on response capacity; this is a hypothesis for later Relationship review, not an asserted mechanism.",
+            "relationship_status": "HYPOTHESISED_TRANSMISSION"
+          }
+        ],
+        "trend_state": "NOT_ASSESSED"
+      },
+      "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
+      "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
+      "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+    },
+    {
+      "layer": "SIGNAL_ADMISSION",
+      "object": {
+        "admission_limit": {
+          "admitted_count": 1,
+          "maximum_new_signals": 1
+        },
+        "boundary": {
+          "automatic_relationship_promotion": false,
+          "automatic_risk_promotion": false,
+          "automatic_scenario_promotion": false,
+          "automatic_signal_promotion": false,
+          "public_signal_projection": "CLOSED"
+        },
+        "candidate_dispositions": [
+          {
+            "candidate_id": "WSC-SIG-7cbde7259e503bbf93b9",
+            "disposition": "RETAIN_FOR_LATER_REVIEW",
+            "rationale": "Japan MOF feed history is dominated by one-provider archive and schedule material; it has no governed Observation support for a defined current Signal."
+          },
+          {
+            "candidate_id": "WSC-SIG-9b4769efa51ce7f72eae",
+            "disposition": "RETAIN_FOR_LATER_REVIEW",
+            "rationale": "European Council feed history is a one-provider institutional meeting archive, including historical and future schedule metadata rather than a reviewed current change proposition."
+          },
+          {
+            "candidate_id": "WSC-SIG-1245032319ae9fc6dc74",
+            "disposition": "INSUFFICIENT_GOVERNED_SUPPORT",
+            "rationale": "The China NBS batch is primarily bootstrap/history material with missing publication times and no established persistence or governed Observation support."
+          },
+          {
+            "candidate_id": "WSC-SIG-640f0bd0e1dfa37703a2",
+            "disposition": "INSUFFICIENT_GOVERNED_SUPPORT",
+            "rationale": "The multi-provider monetary-policy proposal combines unrelated historical publications without one defined baseline, a common proposition or governed supporting Observation set; provider count alone is not corroboration."
+          },
+          {
+            "candidate_id": "WSC-SIG-341fdb51e7416d6447fc",
+            "disposition": "ANALYSIS_NOT_SIGNAL",
+            "rationale": "The cross-domain convergence proposal aggregates the bootstrap cohort without a bounded proposition, time-separated support or reviewed causal/transmission basis; it remains a review aid, not a governed Signal."
+          }
+        ],
+        "dataset": "SIGNAL_ADMISSION_TRANSACTION",
+        "decided_at_utc": "2026-09-27T01:00:00Z",
+        "decision": "ACCEPTED",
+        "denominator_note": "This Signal is a permanent prospective analytical record and remains in the future Signal history unless a governed withdrawal, supersession or expiry decision is recorded. No downstream population or forecast performance claim is created by this admission.",
+        "post_state": {
+          "population_state": "CONTROLLED_REVIEWED_SIGNAL_SPECIMEN",
+          "schema_version": "0.1",
+          "sha256": "bbea5ecb25cbc326493cb64b5aa722e73d362ee05aa24bf7ddda00b7af52a962",
+          "signal_count": 1
+        },
+        "pre_state": {
+          "population_state": "CLOSED_NO_PRODUCTION_SIGNALS",
+          "schema_version": "0.1",
+          "sha256": "dd8e0d0b9d9fc8d02623afd4a920f32a43e6c2fe930b637859380552c8f99fe9",
+          "signal_count": 0
+        },
+        "project": "WORLD SIGNALS",
+        "review_scope": {
+          "governed_observation_ids": [
+            "WSLI-HEALTH-COD-BVD-20260826-001",
+            "WSLI-HEALTH-COD-BVD-20260830-001"
+          ],
+          "machine_signal_candidates_are_admission_entitlement": false,
+          "raw_observation_candidates_are_support": false,
+          "source_of_proposed_signal": "complete governed Live Observation review"
+        },
+        "reviewer": {
+          "decision_basis": "One governed persistent-change Signal is admitted after review of all twelve Live Observations. The selected case has two time-separated primary observations, an explicit comparison baseline, shared-origin limits, materiality rationale, alternatives and falsification conditions. The five machine Signal Candidates are not treated as admission evidence.",
+          "reviewed_at_utc": "2026-09-27T01:00:00Z",
+          "reviewer_id": "project-owner-authorised-review"
+        },
+        "revision_ids": [
+          "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        ],
+        "signal_ids": [
+          "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001"
+        ],
+        "transaction_id": "SIG-ADMISSION-20260927-COD-BVD-001",
+        "transaction_type": "REVIEWED_SIGNAL_ADMISSION",
+        "validation": {
+          "status": "PASS",
+          "validated_at_utc": "2026-09-27T01:00:00Z",
+          "validator_version": "signal-admission-0.1"
+        },
+        "version": "0.1"
+      },
+      "object_id": "SIG-ADMISSION-20260927-COD-BVD-001",
+      "object_sha256": "9c4b188e02bc9c9202d46a4818a4a51c01e726f9f0b92080efe18eac79a7b9bc",
+      "revision_id": null
+    }
+  ],
+  "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+  "status": "REVIEW_PENDING",
+  "transmission_edges": [],
+  "visibility": "INTERNAL_ONLY"
+}

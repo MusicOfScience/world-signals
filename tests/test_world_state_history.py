@@ -30,6 +30,7 @@ from world_signals.world_state_history import (  # noqa: E402
     validate_history_query,
     validate_public_allowlist,
     validate_snapshot,
+    validate_snapshot_candidate,
     validate_snapshot_history,
     validate_upstream_reference_ownership,
     with_object_fingerprint,
@@ -339,6 +340,33 @@ class WorldStateHistoryContractTests(unittest.TestCase):
         snap = snapshot([row])
         self.assertEqual(validate_snapshot(snap, component_index={(row["component_type"], row["revision_id"]): row}), [])
         self.assertNotIn("state_label", snap["component_refs"][0])
+
+    def test_production_snapshot_requires_real_admission_metadata(self):
+        snap = snapshot([])
+        snap["admission_transaction_id"] = None
+        snap = with_object_fingerprint(snap)
+        self.assertTrue(validate_snapshot(snap))
+        snap["admission_transaction_id"] = "synthetic-admission-1"
+        snap["admitted_at_utc"] = None
+        snap = with_object_fingerprint(snap)
+        self.assertTrue(validate_snapshot(snap))
+
+    def test_candidate_snapshot_contract_is_distinct_and_unadmitted(self):
+        candidate = snapshot([])
+        candidate.update({
+            "candidate_review_id": "synthetic-candidate-review",
+            "review_state": "CANDIDATE",
+            "review_transaction_id": None,
+            "admission_transaction_id": None,
+            "admitted_at_utc": None,
+            "lifecycle_state": "UNRESOLVED",
+        })
+        candidate = with_object_fingerprint(candidate)
+        self.assertEqual(validate_snapshot_candidate(candidate), [])
+        self.assertTrue(validate_snapshot(candidate))
+        candidate["admission_transaction_id"] = "NO-ADMISSION"
+        candidate = with_object_fingerprint(candidate)
+        self.assertTrue(validate_snapshot_candidate(candidate))
 
     def test_snapshot_rejects_transmission_reference(self):
         row = snapshot([])
