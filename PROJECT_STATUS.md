@@ -157,7 +157,7 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
-## Next milestone — World State Synthesis Engine v1 — Step 9B successor review complete / synthesis engine not implemented
+## Next milestone — World State Synthesis Engine v1 — Step 9C multi-series composition complete / synthesis engine not implemented
 
 The newly agreed direction is a derived World State synthesis over existing
 governed layers. The design must model actors and authority, capabilities and
@@ -203,6 +203,14 @@ multiple scoped assessments in the structured internal briefing-read view.
 The retained current review packet is non-governed audit evidence at
 `2026-09-27T16:04:50Z` and reports `NO_SUCCESSOR_NEEDED`; no R2 was
 constructed or admitted.
+Migration Step 9C now provides an explicit read-time
+`WORLD_STATE_COMPOSITION_VIEW` for independently admitted snapshot series.
+The view preserves per-series admission provenance, uses
+`INDEPENDENT_ADMISSIONS` rather than implying joint atomicity, deduplicates
+only identical component references, fails closed on conflicting component
+heads, and keeps coverage/freshness scoped. The real repository remains one
+series, one component, one snapshot and one admission; no composition is
+materialised or public.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

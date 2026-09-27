@@ -24,6 +24,7 @@ from .world_state_history import (
     select_component_revisions,
     validate_history_query,
 )
+from .world_state_composition import build_composition_view
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -181,7 +182,7 @@ def _eligible_components(rows: list[dict[str, Any]], query: dict[str, Any]) -> l
     return [row for row in selected if _scope_matches(row, query["scope"])]
 
 
-def _resolve_snapshot(
+def _resolve_snapshot_series(
     snapshots: list[dict[str, Any]],
     components: list[dict[str, Any]],
     admissions: list[dict[str, Any]],
@@ -231,21 +232,32 @@ def _resolve_snapshot(
                 resolved.append(row)
         if not resolved:
             continue
-        if effective is not None and not any(_component_effective_matches(row, effective) for row in resolved):
-            continue
+        if effective is not None:
+            resolved = [row for row in resolved if _component_effective_matches(row, effective)]
+            if not resolved:
+                continue
         candidates.append((snapshot, resolved))
     if not candidates:
-        return None, []
+        return []
     # Selecting the greatest admitted revision within each declared series is
     # as-of selection, not an implicit latest query: the cutoff is mandatory.
     by_series: dict[str, tuple[dict[str, Any], list[dict[str, Any]]]] = {}
     for snapshot, resolved in sorted(candidates, key=lambda item: (item[0].get("snapshot_series_id", ""), item[0].get("revision_number", 0), item[0].get("admitted_at_utc", ""))):
         by_series[snapshot["snapshot_series_id"]] = (snapshot, resolved)
     selected = [by_series[key] for key in sorted(by_series)]
+    return selected
+
+
+def _resolve_snapshot(
+    snapshots: list[dict[str, Any]],
+    components: list[dict[str, Any]],
+    admissions: list[dict[str, Any]],
+    query: dict[str, Any],
+) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    """Retain the single-series helper for Step 9A callers."""
+    selected = _resolve_snapshot_series(snapshots, components, admissions, query)
     if len(selected) != 1:
-        # A single query may cover multiple independent snapshot series.  The
-        # contract exposes that explicitly rather than inventing one snapshot.
-        raise WorldStateProductionReadError("query selected multiple snapshot series; narrow the scope")
+        raise WorldStateProductionReadError("query selected multiple snapshot series; use the composition view")
     return selected[0]
 
 
@@ -339,7 +351,29 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
     if errors:
         raise WorldStateProductionReadError("production history validation failed: " + "; ".join(errors))
     state = load_production_state(root)
-    snapshot, selected_components = _resolve_snapshot(state["snapshots"], state["components"], state["admissions"], query)
+    selected_series = _resolve_snapshot_series(state["snapshots"], state["components"], state["admissions"], query)
+    composition_view = None
+    if len(selected_series) == 1:
+        snapshot, selected_components = selected_series[0]
+    elif selected_series:
+        selected_components_for_composition = [
+            (snapshot, rows) for snapshot, rows in selected_series
+        ]
+        composition_freshness = [
+            {"component_id": row["component_id"], **derive_freshness(row, query["knowledge_cutoff_utc"])}
+            for _, rows in selected_components_for_composition for row in rows
+        ]
+        composition_view = build_composition_view(
+            query,
+            selected_components_for_composition,
+            freshness=composition_freshness,
+            dimensions=sorted(DIMENSIONS),
+        )
+        snapshot = None
+        selected_components = composition_view["selected_components"]
+    else:
+        snapshot = None
+        selected_components = []
     freshness = [
         {"component_id": row["component_id"], **derive_freshness(row, query["knowledge_cutoff_utc"])}
         for row in selected_components
@@ -366,18 +400,24 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
         "dimensions_unassessed": unassessed_dimensions,
         "unqueried_dimensions": unqueried_dimensions,
         "scope": deepcopy(query_scope),
-        "empty_queried_domains": deepcopy(snapshot.get("empty_queried_domains", [])) if snapshot else [],
+        "empty_queried_domains": [json.loads(value) for value in sorted({
+            json.dumps(domain, sort_keys=True, separators=(",", ":"))
+            for selected_snapshot, _ in selected_series
+            for domain in selected_snapshot.get("empty_queried_domains", [])
+        })],
         "visibility": snapshot.get("visibility") if snapshot else "INTERNAL_ONLY",
         "public_projection_permitted": False,
         "admission_refs": [
             {
-                "transaction_id": row.get("admission_transaction_id"),
-                "snapshot_revision_id": row.get("snapshot_revision_id"),
-                "component_ids": [item.get("component_id") for item in selected_components],
+                "transaction_id": selected_snapshot.get("admission_transaction_id"),
+                "snapshot_revision_id": selected_snapshot.get("snapshot_revision_id"),
+                "snapshot_series_id": selected_snapshot.get("snapshot_series_id"),
+                "component_ids": [item.get("component_id") for item in rows],
             }
-            for row in [snapshot] if row is not None
+            for selected_snapshot, rows in selected_series
         ],
         "freshness": freshness,
+        "composition_view": deepcopy(composition_view),
         "limitations": [
             "freshness is derived at query time and does not mutate lifecycle or history",
             "a scoped assessment is not a dimension-wide or global assessment",
@@ -386,6 +426,8 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
         "briefing_read": _briefing_view(selected_components, query, freshness),
         "production_file_mutation_check": {"before": before, "after": _file_hashes(root)},
     }
+    if composition_view is not None:
+        production["limitations"].extend(composition_view["limitations"])
     after = production["production_file_mutation_check"]["after"]
     production["production_file_mutation_check"]["status"] = "PASS" if before == after else "FAIL"
     if before != after:
@@ -420,7 +462,27 @@ def compare_production_world_state(from_view: dict[str, Any], to_view: dict[str,
             freshness_transitions.append({"component_id": component_id, "from": old, "to": new})
     from_dims = set(from_view.get("dimensions_assessed", []))
     to_dims = set(to_view.get("dimensions_assessed", []))
-    content_change = bool(added or removed or revision_changed)
+    def series_state(view: dict[str, Any]) -> dict[str, str]:
+        composition = view.get("composition_view") or {}
+        if composition:
+            return {
+                row.get("snapshot_series_id"): row.get("snapshot_revision_id")
+                for row in composition.get("selected_series", [])
+            }
+        snapshot = view.get("selected_snapshot") or {}
+        if snapshot.get("snapshot_series_id"):
+            return {snapshot.get("snapshot_series_id"): snapshot.get("snapshot_revision_id")}
+        return {}
+
+    from_series = series_state(from_view)
+    to_series = series_state(to_view)
+    series_added = sorted(set(to_series) - set(from_series))
+    series_removed = sorted(set(from_series) - set(to_series))
+    series_revision_advanced = sorted(
+        series_id for series_id in set(from_series) & set(to_series)
+        if from_series[series_id] != to_series[series_id]
+    )
+    content_change = bool(added or removed or revision_changed or series_added or series_removed or series_revision_advanced)
     effective_view = from_view.get("query", {}).get("query_mode") == "EFFECTIVE_AS_OF" or to_view.get("query", {}).get("query_mode") == "EFFECTIVE_AS_OF"
     effective_change = effective_view and content_change
     knowledge_change = not effective_view and content_change
@@ -443,6 +505,9 @@ def compare_production_world_state(from_view: dict[str, Any], to_view: dict[str,
         "components_removed": removed,
         "components_revision_changed": revision_changed,
         "components_unchanged": unchanged,
+        "snapshot_series_added": series_added,
+        "snapshot_series_removed": series_removed,
+        "snapshot_series_revision_advanced": series_revision_advanced,
         "dimensions_newly_assessed": sorted(to_dims - from_dims),
         "dimensions_no_longer_current": sorted(from_dims - to_dims),
         "freshness_transitions": freshness_transitions,

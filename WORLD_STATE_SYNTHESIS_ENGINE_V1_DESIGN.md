@@ -577,6 +577,12 @@ The fixture is valid only as a contract test. It must not be copied into
    preservation. The retained current packet is non-governed audit evidence
    with `NO_SUCCESSOR_NEEDED` at `2026-09-27T16:04:50Z`; no second component,
    successor revision, production write or public projection was created.
+   Migration Step 9C now defines a read-only composition view for multiple
+   independent admitted snapshot series. It preserves per-series provenance,
+   marks `INDEPENDENT_ADMISSIONS`, deduplicates only identical component
+   references, fails closed on conflicting heads and does not materialise a
+   composition dataset. The real repository remains one component and one
+   snapshot series; no second admission or public projection was created.
 
 ## Deferred implementation questions
 
