@@ -212,7 +212,13 @@ heads, and keeps coverage/freshness scoped. The real repository remains one
 series, one component, one snapshot and one admission; no composition is
 materialised or public.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
-RESEARCH`; the briefing is a projection, not canonical truth.
+RESEARCH`; the briefing is a projection, not canonical truth. Migration Step
+10A now makes **OUTLOOK** the first substantive public brief surface through a
+dedicated allowlisted projection of the four reviewed monetary-policy pilot
+Forecasts. Forecast values remain unresolved and Evaluation remains
+`NO_SAMPLE`; political/electoral Forecasts, private metadata and Outcomes are
+not projected. World State remains internal: no second component, public World
+State projection or public briefing narrative was created.
 
 ## Recovery incident note — CH branch initialisation
 

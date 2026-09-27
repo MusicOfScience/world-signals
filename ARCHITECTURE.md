@@ -22,7 +22,10 @@ Current reconciled `main` state (27 September 2026):
 4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
 5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
 6. **World State Synthesis** — future derived, continuously updated, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche. It is a synthesis hub for scenarios and forecasts, not a terminal stage after model learning.
-7. **Briefing projections** — future human-facing views: `WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH`.
+7. **Briefing projections** — human-facing views: `OUTLOOK | CALENDAR |
+   RESEARCH` currently have bounded public projections; `WORLD STATE | MAP`
+   remain internal/future public surfaces. These views are projections, not
+   additional governed stores.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
@@ -319,9 +322,11 @@ authoritative resolution sources, fallback policy and information cutoff at
 creation. Numeric forecasts require units and an explicit data-vintage policy.
 Late-published evidence cannot be attached to an earlier issuance. Void
 semantics are explicit and governed. Outcome resolution, scoring, calibration,
-automatic generation, model learning and public Forecast projection are
-outside this layer. Production Forecast population remains zero and synthetic
-fixtures are test-only.
+automatic generation and model learning remain outside this layer. The
+separate Step 10A public Outlook contract exposes only the four accepted,
+open monetary-policy pilot issuances; the governed Forecast dataset, broader
+population, private review metadata and political/electoral Forecast
+projection remain closed.
 
 ## Reviewed Outcome / Resolution contract — population closed
 
@@ -507,7 +512,9 @@ remains required for state transitions, actor authority interpretation,
 transmission classification, competing-hypothesis selection, scenario
 signposts, production admission and any promotion into a public projection.
 The final briefing is a projection assembled from reviewed state and
-provenance; it is not canonical truth. The intended product surface is:
+provenance; it is not canonical truth. The current public product leads with
+the bounded Outlook pilot, then Calendar, reviewed Analysis and Research. The
+intended full product surface is:
 
 ```text
 WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
@@ -550,7 +557,7 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Relationships / causal layer | `data/relationships/`, `src/world_signals/relationships.py` and `scripts/validate_relationships.py` define a reviewed, zero-population contract using Signal revisions plus explicit evidence and causal gates | Contract implemented and pressure-tested; production population and public projection remain closed. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
 | Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
-| Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py`, `src/world_signals/forecast_admission.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; a bounded four-series prospective pilot is admitted only through an explicit transaction with pre/post hashes. `src/world_signals/forecast_operations.py` provides a read-only watch. Outcome resolution, scoring and public projection remain closed. |
+| Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py`, `src/world_signals/forecast_admission.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; a bounded four-series prospective pilot is admitted only through an explicit transaction with pre/post hashes. `src/world_signals/forecast_operations.py` provides a read-only watch, while `src/world_signals/public_forecast_projection.py` exposes a separate four-series public Outlook allowlist. Outcome resolution, scoring, broader population and private metadata projection remain closed. |
 | Outcomes / resolution | `data/outcomes/`, `src/world_signals/outcomes.py` and `scripts/validate_outcomes.py` record one governed result per Forecast series and map it to eligible issuances | Contract implemented and pressure-tested; production population, public projection and scoring remain closed. |
 | Forecast evaluation | `data/evaluation/`, `src/world_signals/evaluation.py`, `scripts/validate_evaluation.py` and versioned configuration define deterministic issuance-level scoring and denominator/coverage summaries | Contract implemented and pressure-tested with four unresolved pilot issuances and zero Outcomes; state remains `NO_SAMPLE`, with public projection, baselines, rankings, calibration claims and Model Learning closed. |
 | Model learning | No resolved production sample or learning pipeline | Missing and intentionally deferred. A resolved sample from the controlled prospective Forecast pilot must precede any learning claim. |

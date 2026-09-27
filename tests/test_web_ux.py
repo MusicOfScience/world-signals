@@ -17,13 +17,33 @@ class WebUXTests(unittest.TestCase):
             self.assertIn(token,css)
         self.assertIn("prefers-reduced-motion:reduce",css)
 
-    def test_public_first_view_uses_plain_language_without_opening_closed_layers(self):
+    def test_public_first_view_leads_with_outlook_and_keeps_world_state_closed(self):
         html=(ROOT/"web/index.html").read_text(encoding="utf-8")
         self.assertIn("A PUBLIC INTELLIGENCE BRIEF",html)
-        self.assertIn("What is happening now. What is next. What remains closed.",html)
-        self.assertIn("Known calendar: published",html)
-        self.assertIn("Private candidates and forecast values: closed",html)
+        self.assertIn("What we expect next. What we are watching. What would change the view.",html)
+        self.assertIn('href="#outlook">OUTLOOK</a>',html)
+        self.assertIn('id="outlook"',html)
+        self.assertIn('id="worldStateCoverage"',html)
+        self.assertIn("Public projection remains closed.",html)
+        self.assertNotIn("VALUES NOT PUBLISHED",html)
         self.assertIn('id="horizonDomain"><option value="">All domains</option>',html)
+
+    def test_outlook_projection_is_built_separately_from_governed_forecasts(self):
+        build=(ROOT/"scripts/build_site.py").read_text(encoding="utf-8")
+        app=(ROOT/"web/app.js").read_text(encoding="utf-8")
+        self.assertIn("public_forecast_projection", build)
+        self.assertIn('data/outlook.json', app)
+        self.assertNotIn('data/forecasts/forecasts.json', app)
+        self.assertIn('forecast_value', app)
+        self.assertIn('probability-track', app)
+
+    def test_primary_navigation_is_reader_oriented(self):
+        html=(ROOT/"web/index.html").read_text(encoding="utf-8")
+        self.assertIn('href="#outlook">OUTLOOK</a>',html)
+        self.assertIn('href="#horizon">CALENDAR</a>',html)
+        self.assertIn('href="#analysisSection">ANALYSIS</a>',html)
+        self.assertIn('href="#methods">RESEARCH</a>',html)
+        self.assertNotIn('href="#signals">SIGNALS</a>',html)
 
     def test_public_mobile_structure_has_viewport_and_non_wrapping_navigation(self):
         html=(ROOT/"web/index.html").read_text(encoding="utf-8")

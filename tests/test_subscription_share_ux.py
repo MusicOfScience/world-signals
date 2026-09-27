@@ -24,7 +24,7 @@ class SubscriptionShareUXTests(unittest.TestCase):
             "Apple Calendar",
             "Google Calendar",
             "Outlook",
-            "private analysis, Signals and Forecasts are not included",
+            "private analysis, Signals and Outlook Forecast values are not calendar items",
         ):
             self.assertIn(text, self.html)
 

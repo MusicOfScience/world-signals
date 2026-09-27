@@ -535,6 +535,25 @@ deterministic component union and fail-closed component head conflicts. The
 real repository remains one series/one component; no second component,
 successor revision, materialised composition or public projection was created.
 
+## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
+
+Migration Step 10A reshapes the public landing surface around reader
+questions: what WORLD SIGNALS expects next, what is scheduled, what has been
+reviewed and where the method can be audited. The homepage now leads with a
+restrained **OUTLOOK**, followed by forecast-linked calendar timing, a small
+reviewed Analysis preview, quiet World State coverage status and the existing
+Calendar, Research and operator/audit views.
+
+The public Forecast surface is a separate allowlisted projection under
+`src/world_signals/public_forecast_projection.py`, built to
+`docs/data/outlook.json`. Exactly four accepted, open monetary-policy pilot
+issuances are eligible. Values, information cutoffs, resolution rules and
+units are copied without mutation; private review/model metadata, drafts,
+political/electoral Forecasts, Outcomes and evaluation claims are excluded.
+Evaluation remains `NO_SAMPLE`. World State remains internal with one
+component, one snapshot and one admission, and no public World State or Map
+projection exists.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

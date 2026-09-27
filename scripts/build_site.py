@@ -16,6 +16,7 @@ from world_signals.analysis_revision import validate_analysis_revisions
 from world_signals.analysis_revision_projection import public_analysis_projection_with_revision_contract
 from world_signals.live_analysis_bridge import validate_live_analysis_bridge
 from world_signals.icalendar import write_icalendar
+from world_signals.public_forecast_projection import build_public_forecast_projection
 
 reg=load_json(ROOT/"data/canonical/registry.json")
 src=load_json(ROOT/"data/sources/registry.json")
@@ -29,6 +30,7 @@ live_observations=load_json(ROOT/"data/live_intelligence/observations.json")
 analysis_schema=load_json(ROOT/"data/analysis/schema.json")
 analysis_evidence=load_json(ROOT/"data/analysis/evidence_registry.json")
 analysis_reviews=load_json(ROOT/"data/analysis/event_reviews.json")
+forecasts=load_json(ROOT/"data/forecasts/forecasts.json")
 
 report=validate_registry(reg,src)
 if not report.ok:
@@ -52,7 +54,7 @@ docs=ROOT/"docs"
 if docs.exists():
     shutil.rmtree(docs)
 docs.mkdir(exist_ok=True)
-for name in ("index.html","app.js","styles.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
+for name in ("index.html","app.js","styles.css","outlook.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 
 # Keep source modules separate in the repository while shipping the existing
@@ -144,6 +146,12 @@ analysis_projection=public_analysis_projection_with_revision_contract(
 )
 dump_json(docs/"data/analysis.json",analysis_projection)
 
+# Forecast publication is a separate, narrow allowlist contract. The governed
+# Forecast dataset remains private and its own publication policy remains
+# closed; only the reviewed monetary-policy pilot is copied into Outlook.
+outlook_projection=build_public_forecast_projection(forecasts)
+dump_json(docs/"data/outlook.json",outlook_projection)
+
 risk_projection=public_risk_projection(reg)
 dump_json(docs/"data/risk_overlay.json",risk_projection)
 
@@ -187,7 +195,17 @@ dump_json(docs/"data/public_status.json", {
     "relationships": layer_status("data/relationships/relationships.json", "relationships"),
     "risks": layer_status("data/risks/states.json", "states"),
     "scenarios": layer_status("data/scenarios/scenarios.json", "scenarios"),
-    "forecasts": layer_status("data/forecasts/forecasts.json", "forecasts"),
+    "forecasts": {
+        "version": forecasts.get("version"),
+        "internal_count": len(forecasts.get("forecasts", [])),
+        "public_count": outlook_projection["metadata"]["public_forecast_count"],
+        # Keep the legacy count field as the public count so older consumers
+        # cannot mistake private Forecast population for published rows.
+        "count": outlook_projection["metadata"]["public_forecast_count"],
+        "state": "PILOT_PUBLIC_PROJECTION",
+        "public_projection": True,
+        "evaluation_state": outlook_projection["metadata"]["evaluation_state"],
+    },
     "outcomes": layer_status("data/outcomes/outcomes.json", "outcomes"),
     "evaluation": {
         "version": load_json(ROOT / "data/evaluation/evaluation.json").get("version"),

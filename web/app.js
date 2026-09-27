@@ -3,6 +3,8 @@ let MONITORS={metadata:{},routes:[]};
 let PUBLIC_STATUS={};
 let SOURCES={metadata:{},sources:[]};
 let CHANGES={changes:[]};
+let OUTLOOK={metadata:{},forecasts:[]};
+let ANALYSIS={metadata:{},reviews:[]};
 let futureOnly = true;
 let activeView = 'calendar';
 let calendarCursor = new Date();
@@ -406,8 +408,59 @@ function renderProductBrief(){
   $('#publicStatus').innerHTML=`
     <div class="status-row"><span class="status-dot neutral"></span><div><strong>Public calendar available</strong><small>${esc(PUBLIC_STATUS.canonical?.count||DATA.events.length)} known events · read-only</small></div></div>
     <div class="status-row"><span class="status-dot closed"></span><div><strong>NOW intelligence is selective</strong><small>${esc(live.internal_count||0)} reviewed observations internal · ${esc(live.public_count||0)} public</small></div></div>
-    <div class="status-row"><span class="status-dot closed"></span><div><strong>Forecast values remain closed</strong><small>${esc(forecast.count||0)} pilot forecasts · publication gate closed</small></div></div>`;
-  $('#forecastStatusCopy').textContent=`${forecast.count||0} pilot forecasts are maintained under review. Their values and claims remain closed on the public site until publication governance permits them.`;
+    <div class="status-row"><span class="status-dot neutral"></span><div><strong>Outlook pilot is public</strong><small>${esc(forecast.public_count??forecast.count??0)} reviewed monetary-policy forecasts · unresolved</small></div></div>`;
+}
+function utcLabel(value, timeZone='UTC'){
+  if(!value) return 'time not recorded';
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return 'time not recorded';
+  return date.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone});
+}
+function utcDateLabel(value){
+  if(!value) return 'date not recorded';
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return 'date not recorded';
+  return date.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).toUpperCase();
+}
+function forecastValueMarkup(row){
+  const value=row.forecast_value||{};
+  if(row.forecast_type==='NUMERIC_POINT'){
+    return `<div class="forecast-numeric"><strong>${esc(value.estimate)}</strong><span>${esc(value.unit)}</span></div>`;
+  }
+  const outcomes=value.outcomes||[];
+  return `<div class="probability-strip" role="list" aria-label="Forecast probabilities">${outcomes.map(outcome=>{
+    const pct=Math.round(Number(outcome.probability)*100);
+    return `<div class="probability-row" role="listitem"><div class="probability-label"><span>${esc(outcome.label)}</span><strong>${pct}%</strong></div><div class="probability-track" aria-hidden="true"><span style="width:${pct}%"></span></div></div>`;
+  }).join('')}</div>`;
+}
+function renderOutlook(){
+  const rows=OUTLOOK.forecasts||[];
+  const first=rows[0];
+  if(first) $('#outlookAsOf').textContent=`${utcLabel(first.information_cutoff_at_utc)} UTC`;
+  $('#outlookList').innerHTML=rows.length?rows.map(row=>{
+    const resolution=row.resolution||{};
+    return `<article class="forecast-card">
+      <header class="forecast-card-head"><div><p class="eyebrow">${esc(row.institution)}</p><h3>${esc(utcDateLabel(resolution.window_start_at_utc))}</h3></div><span class="forecast-state">UNRESOLVED</span></header>
+      <p class="forecast-target">${esc(row.question)}</p>
+      ${forecastValueMarkup(row)}
+      <div class="forecast-when"><span>WE WILL KNOW FROM</span><strong>${esc(resolution.source_label)}</strong><small>${esc(utcLabel(resolution.window_start_at_utc))} UTC</small></div>
+      <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd></dl></details>
+    </article>`;
+  }).join(''):'<p class="empty">No public Forecasts passed the allowlist.</p>';
+}
+function renderNextClock(){
+  const rows=[...(OUTLOOK.forecasts||[])].sort((a,b)=>String(a.resolution?.window_start_at_utc).localeCompare(String(b.resolution?.window_start_at_utc)));
+  $('#clockList').innerHTML=rows.length?rows.map(row=>`<a class="clock-item" href="#outlook"><time datetime="${esc(row.resolution.window_start_at_utc)}">${esc(utcDateLabel(row.resolution.window_start_at_utc))}</time><div><strong>${esc(row.institution)}</strong><span>${esc(row.forecast_type==='NUMERIC_POINT'?'Rate decision':'Policy-direction decision')} · Forecast open</span></div><em>Official resolution source ↗</em></a>`).join(''):'<p class="empty">No open public Forecast resolution events.</p>';
+}
+function renderAnalysisPreview(){
+  const rows=(ANALYSIS.reviews||[]).filter(row=>row.review_state==='REVIEWED_SAMPLE').slice(0,3);
+  $('#analysisPreview').innerHTML=rows.length?rows.map(row=>{
+    const happened=row.what_happened?.summary||'No public summary recorded.';
+    const surprised=row.what_surprised?.summary||'No surprise recorded.';
+    const connected=row.what_appears_connected?.summary||'No connection established.';
+    const noise=row.what_may_be_noise?.[0]?.summary||'No alternative noise note recorded.';
+    return `<article class="analysis-preview-card"><p class="eyebrow">${esc(row.canonical_institution||row.analysis_id)}</p><h3>${esc(row.scope||'Reviewed event analysis')}</h3><dl><dt>What happened</dt><dd>${esc(happened)}</dd><dt>What surprised</dt><dd>${esc(surprised)}</dd><dt>What appears connected</dt><dd>${esc(connected)}</dd><dt>What may be noise</dt><dd>${esc(noise)}</dd></dl></article>`;
+  }).join(''):'<p class="empty">No reviewed Analysis is available in this build.</p>';
 }
 function renderThemes(){
   const counts=new Map();
@@ -548,12 +601,14 @@ function render(){
   else renderMonitors();
 }
 async function main(){
-  const [eventResponse,monitorResponse,statusResponse,sourcesResponse,changesResponse]=await Promise.all([
+  const [eventResponse,monitorResponse,statusResponse,sourcesResponse,changesResponse,outlookResponse,analysisResponse]=await Promise.all([
     fetch('data/events.json'),
     fetch('data/monitor_routes.json'),
     fetch('data/public_status.json'),
     fetch('data/sources.json'),
-    fetch('data/changes.json')
+    fetch('data/changes.json'),
+    fetch('data/outlook.json'),
+    fetch('data/analysis.json')
   ]);
   if(!eventResponse.ok) throw new Error(`events.json ${eventResponse.status}`);
   DATA=await eventResponse.json();
@@ -561,7 +616,12 @@ async function main(){
   if(statusResponse.ok) PUBLIC_STATUS=await statusResponse.json();
   if(sourcesResponse.ok) SOURCES=await sourcesResponse.json();
   if(changesResponse.ok) CHANGES=await changesResponse.json();
+  if(outlookResponse.ok) OUTLOOK=await outlookResponse.json();
+  if(analysisResponse.ok) ANALYSIS=await analysisResponse.json();
   renderProductBrief();
+  renderOutlook();
+  renderNextClock();
+  renderAnalysisPreview();
   renderThemes();
   renderSources();
   renderStats();
