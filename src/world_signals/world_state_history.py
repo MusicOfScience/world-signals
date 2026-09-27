@@ -507,10 +507,18 @@ def select_component_revisions(rows: list[dict[str, Any]], query: dict[str, Any]
         if row.get("lifecycle_state") in {"WITHDRAWN", "EXPIRED"} and not query["include_withdrawn_history"]:
             continue
         if effective is not None:
-            if not row.get("effective_at"):
-                continue
-            row_effective = datetime.fromisoformat(row["effective_at"][:-1] + "+00:00")
-            if row_effective > effective:
+            if row.get("effective_at"):
+                row_effective = datetime.fromisoformat(row["effective_at"][:-1] + "+00:00")
+                if row_effective > effective:
+                    continue
+            elif row.get("effective_time_precision") == "CIVIL_DATE" and isinstance(row.get("effective_date"), str):
+                try:
+                    row_effective_date = datetime.fromisoformat(row["effective_date"]).date()
+                except ValueError:
+                    continue
+                if row_effective_date > effective.date():
+                    continue
+            else:
                 continue
         eligible.append(row)
     selected: dict[str, dict[str, Any]] = {}

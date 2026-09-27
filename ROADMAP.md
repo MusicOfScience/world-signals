@@ -467,7 +467,7 @@ Observation or Signal was admitted. The first Signal remains the sole governed
 Signal, Relationships/Risks/Scenarios remain empty, and the next tranche should
 be driven by genuine new evidence rather than a quota.
 
-## Stage 23 — World State Synthesis Engine v1 — READ BOUNDARY + HISTORY DESIGN COMPLETE / SYNTHESIS ENGINE NOT IMPLEMENTED
+## Stage 23 — World State Synthesis Engine v1 — FIRST COMPONENT ADMITTED / SYNTHESIS ENGINE NOT IMPLEMENTED
 
 World State is the next synthesis boundary: a derived, as-of, uncertainty-aware
 view over governed evidence rather than a new event/news database. The design
@@ -511,14 +511,14 @@ adopts the componentized immutable production history contract in
 `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`: reviewed Actor Registry
 identity, immutable component revisions, snapshot references, explicit
 effective/known/reviewed/admitted times, component-level partial admission,
-append-only corrections, and private/public projection gates. No production
-World State population or Actor Registry has been created. Migration Step 7 is
-complete as the unpopulated schema/validator/temporary admission-simulator
-tranche. Step 8A has constructed and preflighted one narrow real-evidence
-health candidate without production admission or public projection. A retained
-successor corrected the pre-admission snapshot semantics and made unavailable
-runtime model provenance explicit; Step 8B is the separate human-reviewed
-first-component admission decision.
+append-only corrections, and private/public projection gates. No Actor Registry
+population or public projection has been created. Migration Step 7 is complete
+as the schema/validator/temporary admission-simulator tranche. Step 8A
+constructed and preflighted one narrow real-evidence health candidate, with a
+retained successor correcting pre-admission snapshot semantics and making
+unavailable runtime model provenance explicit. Step 8B is complete for exactly
+one internal reported-burden component and one compositional snapshot; broader
+population and synthesis remain deferred.
 
 ## Permanent quarantine
 

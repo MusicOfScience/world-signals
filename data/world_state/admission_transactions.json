@@ -1,0 +1,64 @@
+{
+  "dataset": "WORLD_STATE_PRODUCTION_ADMISSION_HISTORY",
+  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "project": "WORLD SIGNALS",
+  "public_projection_permitted": false,
+  "transactions": [
+    {
+      "admitted_at_utc": "2026-09-27T15:13:58Z",
+      "component_dispositions": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "disposition": "ADMITTED",
+          "reason": "Explicit Step 8B human decision for the narrow reported-burden component.",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "component_fingerprints": [
+        {
+          "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "388af09e61e3d77a0f6f0ccc39dee545a17740c877872406f5b497b80d487790",
+          "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+        }
+      ],
+      "contract_version": "0.1",
+      "decided_at_utc": "2026-09-27T15:13:57Z",
+      "decision": "ACCEPTED",
+      "post_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "9618ce822a6212b89e1cb06f260078300977be45ee2ed12a15a86e7ab34fed91",
+        "snapshots": "10c1bc7c5e4a6aff89d4ebfa62029625e5537da262f34651781a048375d6d930"
+      },
+      "pre_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "snapshots": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "proposal_id": "WS-STEP8A-WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+      "proposal_semantic_fingerprint": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+      "public_projection_permitted": false,
+      "review_transaction_id": "WS-STEP8B-HEALTH-COD-BVD-REVIEW-20260927-001",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "human-review"
+      },
+      "snapshot_revision_identity": {
+        "snapshot_revision_id": "WSSNAP-HEALTH-COD-BVD-202609-R1",
+        "snapshot_series_id": "WSSNAP-HEALTH-COD-BVD-202609"
+      },
+      "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+      "transaction_fingerprint": "38e7dcee83498886240ca5e2f1bd60e6da8b7c03133325d5ea45a36eb3445075",
+      "transaction_id": "WS-ADMISSION-HEALTH-COD-BVD-20260927-001",
+      "transaction_type": "WORLD_STATE_PRODUCTION_ADMISSION",
+      "validator_version": "world-state-history-v1",
+      "visibility_decision": "INTERNAL_ONLY",
+      "write_targets": [
+        "data/world_state/components.json",
+        "data/world_state/snapshots.json",
+        "data/world_state/admission_transactions.json"
+      ]
+    }
+  ],
+  "version": "0.1"
+}

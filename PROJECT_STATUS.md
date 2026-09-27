@@ -157,7 +157,7 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
-## Next milestone — World State Synthesis Engine v1 — production history contract designed / synthesis engine not implemented
+## Next milestone — World State Synthesis Engine v1 — first production component admitted / synthesis engine not implemented
 
 The newly agreed direction is a derived World State synthesis over existing
 governed layers. The design must model actors and authority, capabilities and
@@ -169,8 +169,8 @@ uncertainty, competing hypotheses, model disagreement, transmission, lags,
 thresholds, feedback loops, scenarios/signposts and forecast/outcome
 calibration boundaries.
 
-The synthesis engine is **not implemented** and no new governed World State
-population is authorised. Migration Steps 3–5 now provide only a private,
+The synthesis engine is **not implemented** and broader governed World State
+population remains separately review-gated. Migration Steps 3–5 provide only a private,
 read-only adapter, a retained non-governed consistency proposal, and a
 separate explicit human review transaction at the cutoff
 `2026-09-27T04:39:04Z` under `data/world_state_audit/`. The proposal remains
@@ -179,18 +179,20 @@ non-governed; its review is `ACCEPTED` only for
 projection. It does not create actors, dimensions, hypotheses, transmission
 edges or other analytical judgments. Migration Step 6 now defines the adopted
 production history contract in
-`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`; no production population
-is admitted. Migration Step 7 is complete as the unpopulated contract
+`WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`; the first narrow internal
+component and snapshot are admitted, while broader population remains closed.
+Migration Step 7 is complete as the unpopulated contract
 implementation and pressure-test tranche: schemas, native validators,
 synthetic fixture, temporary-copy admission simulation, citation/allowlist
-checks and Canonical historical dependency checks are present. No production
-World State, Actor Registry or public projection was created. Migration Step
-8A has now constructed one narrow real-evidence `HEALTH_BIOSECURITY` candidate
-from the governed DRC Bundibugyo specimen. Its corrected successor remains
-`REVIEW_PENDING`; it uses a distinct unadmitted snapshot-candidate contract,
-retains fail-honest unavailable model provenance, and is only exercised through
-temporary-copy simulation. Migration Step 8B remains the separate
-human-reviewed first-component admission decision.
+checks and Canonical historical dependency checks are present. No Actor
+Registry or public projection was created. Migration Step 8A constructed one
+narrow real-evidence `HEALTH_BIOSECURITY` candidate from the
+governed DRC Bundibugyo specimen; its corrected successor remains retained as
+`REVIEW_PENDING` audit evidence. Migration Step 8B has now admitted exactly one
+internal first component and one compositional snapshot through separate human
+review and production-admission transactions. Confidence remains `LOW`; all
+other dimensions and downstream analytical populations remain unassessed and
+closed. The general synthesis engine and public projection remain unimplemented.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

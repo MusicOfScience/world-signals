@@ -1,16 +1,18 @@
 # World State production history contract — design decision record
 
-**Status:** adopted design; design-only Migration Step 6; no production World
-State population is admitted by this record.
+**Status:** adopted design; Migration Step 6 design and the first narrow Step 8B
+production admission are complete. This record does not authorise broader
+population or public projection.
 
 **Decision date:** 2026-09-27
 
 **Depends on:** `WORLD_STATE_SYNTHESIS_ENGINE_V1_DESIGN.md`, the retained Step 4
 consistency proposal and the Step 5 review transaction.
 
-**Next implementation boundary:** Migration Step 7 — implement and pressure-test
-the unpopulated contract, validators and admission simulation. A separate
-transaction is required before the first production component is admitted.
+**Next implementation boundary:** post-first-admission read/review and state
+evolution handling. The first component and compositional snapshot were
+admitted through separate human review and production-admission transactions;
+additional components still require their own review and admission.
 
 ## Decision summary
 
@@ -544,19 +546,21 @@ health-risk score or causal claim.
 schemas under `data/world_state/`, native validators in
 `src/world_signals/world_state_history.py`, the synthetic fixture under
 `tests/fixtures/world_state_production_v1/`, and the temporary-copy admission
-simulator are contract machinery only. No production World State or Actor
-Registry population was admitted, and no public projection was generated.
+simulator were the Step 7 contract machinery. Step 8B has since admitted one
+narrow production World State component and snapshot; no Actor Registry
+population or public projection was generated.
 
 **Step 8A status:** One narrow `HEALTH_BIOSECURITY` Dimension Assessment
 candidate has since been constructed from the governed DRC Bundibugyo
 observation/Signal specimen. It is retained under `data/world_state_audit/` as
-`REVIEW_PENDING`; its admission is simulated only in temporary copies. The
+`REVIEW_PENDING`; its admission was simulated only in temporary copies. The
 corrected successor uses a separate unadmitted snapshot-candidate validator,
 so no review-pending object carries production admission metadata, and it
-records unavailable model provenance explicitly. Step 8B must perform the
-separate human review and production-admission decision.
+records unavailable model provenance explicitly. Step 8B has now admitted the
+single narrow component and corresponding snapshot; the retained review and
+admission transactions preserve that decision and its lineage.
 
-Step 7 should implement, in a fresh bounded tranche:
+Migration Step 7 implemented, in a fresh bounded tranche:
 
 - unpopulated machine-readable schemas and native validators for the Actor
   Registry, component revisions, snapshots and production admission
@@ -571,11 +575,11 @@ Step 7 should implement, in a fresh bounded tranche:
 - a negative test for duplicate transmission semantics and a separate
   dependency check for Canonical historical selection.
 
-Step 7 must not admit the DRC pilot, create a broad Actor Registry, create
+Step 7 did not admit the DRC pilot, create a broad Actor Registry, create
 `data/world_state/state.json`, publish a World State page, alter existing
 governed populations, run a new OSINT sweep or implement synthesis reasoning.
-Step 8 is the later human-reviewed first-component admission decision after
-Step 7's executable contract is green.
+Step 8B is the separate human-reviewed first-component admission now recorded
+by the retained review and production-admission transactions.
 
 ## Required Step 7 test matrix
 
@@ -613,5 +617,6 @@ The first pilot remains conditional on Step 7. Canonical historical
 reconstruction remains a separate dependency. Relationships currently have a
 zero production population and may need a bounded schema extension for flow
 and chokepoint semantics; until then World State cannot admit a duplicate
-transmission graph. No production World State object exists as a result of
-this design record.
+transmission graph. One production World State component and one compositional
+snapshot now exist under `data/world_state/`; no Actor Registry population,
+broader component population or public projection exists.

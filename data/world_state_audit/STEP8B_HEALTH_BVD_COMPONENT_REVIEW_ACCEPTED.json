@@ -1,0 +1,65 @@
+{
+  "candidate_package": "data/world_state_audit/STEP8A_HEALTH_BVD_CANDIDATE_REVIEW_PENDING_CORRECTED.json",
+  "candidate_semantic_fingerprint": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+  "component": {
+    "component_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001",
+    "component_type": "DIMENSION_ASSESSMENT",
+    "object_sha256": "996f625c54e6a9717462b04ab339345504b0b481d6d3a9ef3679de0851210c3c",
+    "revision_id": "WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN-202609-001-R1"
+  },
+  "contract_version": "0.1",
+  "criterion_results": {
+    "authority_interpretation": {
+      "basis": "No actor assertion or authority claim is admitted.",
+      "status": "PASS"
+    },
+    "evidence_lineage": {
+      "basis": "Corrected candidate pins the reviewed Signal, observations, evidence and manifest.",
+      "status": "PASS"
+    },
+    "freshness": {
+      "basis": "The Signal is active and before its 2026-10-06 review deadline at transaction time.",
+      "status": "PASS"
+    },
+    "implementation_state": {
+      "basis": "No implementation claim is admitted.",
+      "status": "PASS"
+    },
+    "public_boundary": {
+      "basis": "INTERNAL_ONLY and public projection prohibited.",
+      "status": "PASS"
+    },
+    "scope_and_limitations": {
+      "basis": "Only reported Bundibugyo confirmed-case burden is admitted.",
+      "status": "PASS"
+    },
+    "uncertainty_and_shared_origin": {
+      "basis": "Partial corroboration, one independent observation and LOW confidence remain explicit.",
+      "status": "PASS"
+    }
+  },
+  "decision": "ACCEPTED",
+  "decision_scope": "FIRST_COMPONENT_PRODUCTION_ADMISSION",
+  "pending_snapshot_fingerprint": "42fbe92c8093a2c25d67debc8a2655f3ff06b6ce14aad464a5c69cd9301742c7",
+  "production_world_state_admitted": false,
+  "public_projection_permitted": false,
+  "review_basis": {
+    "freshness_gate_open": true,
+    "low_confidence_retained": true,
+    "narrow_reported_burden_proposition_supported": true,
+    "no_broad_or_causal_inference_permitted": true,
+    "no_contradiction_or_correction_in_eligible_lineage": true,
+    "shared_who_origin_limitation_retained": true
+  },
+  "review_transaction_fingerprint": "eba400c10c387298cb465dcfe926b1e4df939421166e4f514badd84e34027b6c",
+  "reviewed_at_utc": "2026-09-27T15:13:57Z",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "human-review"
+  },
+  "source_manifest_sha256": "4d16a6c02ed868000859461e6e71f96a1bff2e27b7d9cdaf9b2a022b01f54e8e",
+  "transaction_id": "WS-STEP8B-HEALTH-COD-BVD-REVIEW-20260927-001",
+  "transaction_type": "WORLD_STATE_COMPONENT_REVIEW",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": []
+}

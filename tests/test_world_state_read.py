@@ -247,7 +247,7 @@ class WorldStateReadAdapterTests(unittest.TestCase):
         world_state_dir = ROOT / "data/world_state"
         if world_state_dir.exists():
             self.assertFalse((world_state_dir / "state.json").exists())
-            self.assertTrue(all(path.name.endswith("_schema.json") or path.name == "README.md" for path in world_state_dir.iterdir()))
+            self.assertTrue(all(path.name.endswith("_schema.json") or path.name in {"README.md", "components.json", "snapshots.json", "admission_transactions.json"} for path in world_state_dir.iterdir()))
 
 
 if __name__ == "__main__":

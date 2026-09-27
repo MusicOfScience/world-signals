@@ -1,9 +1,11 @@
 # World State production contract schemas
 
-This directory contains unpopulated Migration Step 7 contract schemas only.
-It is not a production World State dataset and contains no admitted actors,
-components, snapshots or admission transactions.
+This directory contains the Migration Step 7 contract schemas and the first
+controlled Migration Step 8 production-history population. It contains exactly
+one admitted internal Dimension Assessment and one compositional snapshot; it
+does not contain a monolithic `state.json`, an Actor Registry population or a
+public projection.
 
-Production population remains closed until a later human-reviewed Step 8
-admission decision. Test data belongs under
+The production history is split across `components.json`, `snapshots.json` and
+`admission_transactions.json`. Test data belongs under
 `tests/fixtures/world_state_production_v1/` and must not be copied here.
