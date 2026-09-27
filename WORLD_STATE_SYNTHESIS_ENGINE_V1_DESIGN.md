@@ -531,14 +531,21 @@ The fixture is valid only as a contract test. It must not be copied into
    validators/as-of helpers and produce an ephemeral, hash-pinned proposal
    envelope. No `data/world_state/state.json`, production write, or public
    projection is created.
-4. **Run a current-repository consistency proposal.** Use the actual governed
-   inputs at an explicit as-of time, retain the manifest and show that empty
-   Relationship/Risk/Scenario/Outcome populations remain empty and Forecast
-   Evaluation remains `NO_SAMPLE`.
+4. **Run a current-repository consistency proposal.** Completed in this
+   tranche at the reproducible knowledge cutoff
+   `2026-09-27T04:39:04Z`, the verified PR #156 merge timestamp. The retained
+   non-governed package and review summary live under
+   `data/world_state_audit/` and are explicitly `REVIEW_PENDING`,
+   `NOT_PRODUCTION_WORLD_STATE` and `NO_WRITE_TARGETS`. The package retains the
+   request, selected results, full hash-pinned manifest, repository provenance,
+   semantic fingerprint and mutation proof. Relationships, Risks/Regimes,
+   Scenarios and Outcomes remain empty, and Forecast Evaluation remains
+   `NO_SAMPLE`.
 5. **Conduct a human review transaction.** Review authority interpretation,
    implementation-state classification, contradictions, negative-evidence
    scope, market rights, graph classes and forecast-cutoff integrity. The
-   transaction must have no write targets.
+   transaction must have no write targets. This remains the next unperformed
+   milestone; Step 4 did not accept or admit the retained proposal.
 6. **Only after a separate approval, define a production World State history
    contract.** That future milestone must decide actor identity governance,
    revision/admission semantics, public projection and retention before any
