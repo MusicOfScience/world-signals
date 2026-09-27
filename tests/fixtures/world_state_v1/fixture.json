@@ -1,0 +1,472 @@
+{
+  "fixture_id": "TEST_ONLY_WORLD_STATE_V1_SEMANTICS",
+  "contract_version": "0.1",
+  "test_only": true,
+  "production_population": false,
+  "production_write_targets": [],
+  "public_projection_permitted": false,
+  "description": "Synthetic contract fixture. It is not a governed observation, actor registry, analytical layer, or production World State dataset.",
+  "read_request": {
+    "contract_version": "0.1",
+    "as_of_utc": "2027-01-03T00:00:00Z",
+    "scope": {
+      "jurisdictions": ["TEST-JURISDICTION"],
+      "dimensions": ["TEST_INSTITUTIONAL_CHANGE", "TEST_FLOW_PRESSURE", "MARKETS_AS_SENSORS"],
+      "actor_ids": ["actor:individual-alpha", "actor:coordination-office"]
+    },
+    "include_negative_evidence": true,
+    "input_policy": "TEST_ONLY_SYNTHETIC"
+  },
+  "times": {
+    "t1": "2027-01-01T00:00:00Z",
+    "t2": "2027-01-02T00:00:00Z",
+    "forecast_issue": "2027-01-02T12:00:00Z",
+    "forecast_cutoff": "2027-01-02T11:00:00Z",
+    "t3": "2027-01-03T00:00:00Z",
+    "outcome_known": "2027-01-05T00:00:00Z",
+    "t4": "2027-01-06T00:00:00Z",
+    "t5": "2027-01-07T00:00:00Z"
+  },
+  "actors": [
+    {
+      "actor_ref": "actor:individual-alpha",
+      "canonical_label": "Director Alpha",
+      "aliases": ["Transition Office Lead"],
+      "actor_type": "INDIVIDUAL_POLITICAL_LEADER",
+      "role": "public spokesperson",
+      "jurisdiction": "TEST-JURISDICTION",
+      "authority_scope": {
+        "may": ["speak_for_self", "propose_a_policy"],
+        "does_not_include": ["institutional_decision", "institutional_authorisation", "implementation"]
+      },
+      "capabilities": [
+        {
+          "claim_id": "claim:alpha-communications-capability",
+          "property": "communication_channel_access",
+          "value": "public_statement",
+          "status": "SUPPORTED",
+          "support_refs": ["E-CAPABILITY-SUPPORT"],
+          "contradiction_refs": ["E-CAPABILITY-CONTRADICTION"],
+          "uncertainty_refs": ["U-PROVENANCE", "U-ACTOR-INTENT"]
+        }
+      ],
+      "constraints": [
+        {
+          "claim_id": "claim:alpha-authority-constraint",
+          "property": "institutional_authority",
+          "value": "cannot_authorise_institutional_implementation",
+          "status": "SUPPORTED",
+          "support_refs": ["E-AUTHORITY-CONSTRAINT"],
+          "contradiction_refs": [],
+          "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"]
+        }
+      ],
+      "unknown_claims": [],
+      "institutional_relationships": [
+        {
+          "relationship_ref": "rel:alpha-leads-office",
+          "target_actor_ref": "actor:coordination-office",
+          "relationship": "leads_public_communications",
+          "support_refs": ["E-CAPABILITY-SUPPORT"],
+          "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"]
+        }
+      ],
+      "support_refs": ["E-CAPABILITY-SUPPORT"],
+      "contradiction_refs": ["E-CAPABILITY-CONTRADICTION"],
+      "identity_uncertainty_refs": ["U-PROVENANCE"]
+    },
+    {
+      "actor_ref": "actor:coordination-office",
+      "canonical_label": "Transition Coordination Office",
+      "aliases": ["Transition Office"],
+      "actor_type": "INSTITUTION",
+      "role": "competent coordinating institution",
+      "jurisdiction": "TEST-JURISDICTION",
+      "authority_scope": {
+        "may": ["decide_coordination_protocol", "authorise_internal_pilot"],
+        "does_not_include": ["speak_as_individual_alpha"]
+      },
+      "capabilities": [
+        {
+          "claim_id": "claim:office-decision-capability",
+          "property": "decision_authority",
+          "value": "coordination_protocol",
+          "status": "SUPPORTED",
+          "support_refs": ["E-INSTITUTION-COMPETENCE"],
+          "contradiction_refs": [],
+          "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"]
+        }
+      ],
+      "constraints": [
+        {
+          "claim_id": "claim:office-capacity-constraint",
+          "property": "operational_capacity",
+          "value": "limited_pilot_capacity",
+          "status": "SUPPORTED",
+          "support_refs": ["E-CONSTRAINT-SUPPORT"],
+          "contradiction_refs": ["E-CONSTRAINT-CONTRADICTION"],
+          "uncertainty_refs": ["U-MEASUREMENT", "U-INTERPRETIVE"]
+        }
+      ],
+      "unknown_claims": [
+        {
+          "claim_id": "claim:office-national-authority",
+          "property": "authority_beyond_jurisdiction",
+          "status": "UNKNOWN",
+          "support_refs": [],
+          "contradiction_refs": [],
+          "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"]
+        }
+      ],
+      "institutional_relationships": [],
+      "support_refs": ["E-INSTITUTION-COMPETENCE"],
+      "contradiction_refs": [],
+      "identity_uncertainty_refs": ["U-PROVENANCE"]
+    }
+  ],
+  "implementation_claims": [
+    {
+      "claim_id": "IMPLEMENTATION-SAID",
+      "actor_ref": "actor:individual-alpha",
+      "proposition": "open a limited coordination pilot",
+      "state": "SAID",
+      "state_as_of": "2027-01-01T00:00:00Z",
+      "known_at_utc": "2027-01-01T00:00:00Z",
+      "effective_at": null,
+      "support_refs": ["E-SAID"],
+      "contradiction_refs": [],
+      "uncertainty_refs": ["U-ACTOR-INTENT"],
+      "review_status": "REVIEWED"
+    },
+    {
+      "claim_id": "IMPLEMENTATION-DECIDED",
+      "actor_ref": "actor:coordination-office",
+      "proposition": "open a limited coordination pilot",
+      "state": "DECIDED",
+      "state_as_of": "2027-01-02T00:00:00Z",
+      "known_at_utc": "2027-01-02T00:00:00Z",
+      "effective_at": "2027-01-03T00:00:00Z",
+      "support_refs": ["E-DECIDED"],
+      "contradiction_refs": [],
+      "uncertainty_refs": ["U-TEMPORAL"],
+      "review_status": "REVIEWED"
+    },
+    {
+      "claim_id": "IMPLEMENTATION-AUTHORISED",
+      "actor_ref": "actor:coordination-office",
+      "proposition": "authorise a limited coordination pilot",
+      "state": "AUTHORISED",
+      "state_as_of": "2027-01-03T00:00:00Z",
+      "known_at_utc": "2027-01-03T00:00:00Z",
+      "effective_at": "2027-01-04T00:00:00Z",
+      "support_refs": ["E-AUTHORISED"],
+      "contradiction_refs": [],
+      "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"],
+      "review_status": "REVIEWED"
+    },
+    {
+      "claim_id": "IMPLEMENTATION-IMPLEMENTED-NARROWED",
+      "actor_ref": "actor:coordination-office",
+      "proposition": "implement a smaller pilot for one site",
+      "state": "IMPLEMENTED",
+      "state_as_of": "2027-01-06T00:00:00Z",
+      "known_at_utc": "2027-01-06T00:00:00Z",
+      "effective_at": "2027-01-06T00:00:00Z",
+      "support_refs": ["E-IMPLEMENTED-NARROWED"],
+      "contradiction_refs": ["E-IMPLEMENTATION-DIVERGENCE"],
+      "uncertainty_refs": ["U-TEMPORAL", "U-INTERPRETIVE"],
+      "review_status": "REVIEWED",
+      "divergence": "NARROWED_FROM_STATED_PROPOSITION"
+    },
+    {
+      "claim_id": "IMPLEMENTATION-OBSERVED",
+      "actor_ref": "actor:coordination-office",
+      "proposition": "one-site pilot produced the expected coordination result",
+      "state": "OBSERVED",
+      "state_as_of": "2027-01-07T00:00:00Z",
+      "known_at_utc": "2027-01-07T00:00:00Z",
+      "effective_at": "2027-01-07T00:00:00Z",
+      "support_refs": ["E-OBSERVED-DIVERGENCE"],
+      "contradiction_refs": ["E-OBSERVED-FAILURE"],
+      "uncertainty_refs": ["U-MEASUREMENT"],
+      "review_status": "REVIEWED",
+      "divergence": "RESULT_NOT_ESTABLISHED"
+    }
+  ],
+  "dimensions": [
+    {
+      "dimension_id": "DIMENSION-INSTITUTIONAL-CHANGE",
+      "dimension": "TEST_INSTITUTIONAL_CHANGE",
+      "scope": "TEST-JURISDICTION",
+      "state_label": "UNRESOLVED_TRANSITION",
+      "as_of_utc": "2027-01-03T00:00:00Z",
+      "support_refs": ["E-DECIDED"],
+      "contradiction_refs": [],
+      "uncertainty_refs": ["U-INSTITUTIONAL-AUTHORITY"],
+      "baseline_ref": "BASELINE-OBSERVATION-WINDOW",
+      "review_status": "REVIEWED"
+    }
+  ],
+  "baselines": [
+    {
+      "baseline_id": "BASELINE-OBSERVATION-WINDOW",
+      "basis": "OBSERVATION_WINDOW",
+      "scope": "TEST-SITE-ALPHA",
+      "reference_window": {
+        "start": "2026-12-01T00:00:00Z",
+        "end": "2026-12-31T23:59:59Z"
+      },
+      "measurement_definition": "daily completed coordination handoffs",
+      "baseline_value_or_label": {"value": 10, "unit": "handoffs_per_day"},
+      "source_refs": ["E-BASELINE"],
+      "as_of_utc": "2027-01-01T00:00:00Z",
+      "limitations": ["synthetic window", "not a population estimate"]
+    }
+  ],
+  "thresholds": [
+    {
+      "threshold_id": "THRESHOLD-HANDOFF-ANOMALY",
+      "threshold_type": "MEASURED",
+      "value": 5,
+      "unit": "handoffs_per_day",
+      "condition": "observed daily change greater than five handoffs",
+      "provenance_refs": ["E-THRESHOLD"],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "anomalies": [
+    {
+      "anomaly_id": "ANOMALY-HANDOFF-SPIKE",
+      "subject_ref": "TEST-SITE-ALPHA",
+      "baseline_ref": "BASELINE-OBSERVATION-WINDOW",
+      "observed_ref": "E-ANOMALY",
+      "comparison_method": "observed_minus_baseline",
+      "threshold_ref": "THRESHOLD-HANDOFF-ANOMALY",
+      "result": {"value": 7, "unit": "handoffs_per_day", "classification": "ABOVE_THRESHOLD"},
+      "alternative_explanations": ["temporary staffing change"],
+      "uncertainty_refs": ["U-MEASUREMENT"],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "negative_evidence": [
+    {
+      "negative_evidence_id": "NEGATIVE-NO-FOLLOW-THROUGH",
+      "type": "NO_EVIDENCE_IN_SCOPED_SOURCES",
+      "proposition_or_subject_ref": "IMPLEMENTATION-SAID",
+      "search_scope": {
+        "source_ids": ["synthetic-bulletin-a", "synthetic-register-b"],
+        "query": "pilot authorisation or operating notice",
+        "window_start": "2027-01-01T00:00:00Z",
+        "window_end": "2027-01-02T23:59:59Z"
+      },
+      "expected_action_or_measure": "institutional authorisation notice",
+      "as_of_utc": "2027-01-02T23:59:59Z",
+      "source_coverage": {
+        "queried_source_ids": ["synthetic-bulletin-a", "synthetic-register-b"],
+        "coverage_assessment": "PARTIAL",
+        "source_failures": [],
+        "unqueried_source_ids": ["synthetic-local-notice-c"]
+      },
+      "support_refs": ["E-NEGATIVE-SEARCH-SCOPE"],
+      "limitations": ["does not establish that no authorisation exists", "local notice source was not queried"],
+      "uncertainty_refs": ["U-PROVENANCE", "U-TEMPORAL"],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "uncertainties": [
+    {"uncertainty_id": "U-PROVENANCE", "type": "PROVENANCE_SOURCE", "affected_ref": "actor:individual-alpha", "description": "synthetic source identity is bounded to this fixture", "basis_refs": ["E-CAPABILITY-SUPPORT"], "status": "UNRESOLVED"},
+    {"uncertainty_id": "U-MEASUREMENT", "type": "MEASUREMENT", "affected_ref": "ANOMALY-HANDOFF-SPIKE", "description": "synthetic count has no external measurement calibration", "basis_refs": ["E-ANOMALY"], "status": "UNRESOLVED"},
+    {"uncertainty_id": "U-TEMPORAL", "type": "TEMPORAL", "affected_ref": "IMPLEMENTATION-DECIDED", "description": "decision effective time is distinct from known-at time", "basis_refs": ["E-DECIDED"], "status": "CONDITIONALLY_BOUNDED"},
+    {"uncertainty_id": "U-INTERPRETIVE", "type": "INTERPRETIVE", "affected_ref": "claim:office-capacity-constraint", "description": "capacity evidence supports a constraint but not its cause", "basis_refs": ["E-CONSTRAINT-SUPPORT"], "status": "UNRESOLVED"},
+    {"uncertainty_id": "U-MODEL", "type": "MODEL", "affected_ref": "MODEL-DISAGREEMENT-01", "description": "lenses disagree about the dominant mechanism", "basis_refs": ["MODEL-OUTPUT-MACRO", "MODEL-OUTPUT-SECURITY"], "status": "UNRESOLVED"},
+    {"uncertainty_id": "U-ACTOR-INTENT", "type": "ACTOR_INTENT", "affected_ref": "IMPLEMENTATION-SAID", "description": "a statement does not establish intended follow-through", "basis_refs": ["E-SAID"], "status": "UNRESOLVED"},
+    {"uncertainty_id": "U-INSTITUTIONAL-AUTHORITY", "type": "INSTITUTIONAL_AUTHORITY", "affected_ref": "IMPLEMENTATION-AUTHORISED", "description": "authority is unresolved until competent institutional evidence appears", "basis_refs": ["E-AUTHORISED"], "status": "CONDITIONALLY_BOUNDED"}
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "HYPOTHESIS-CAPACITY-CONSTRAINT",
+      "subject_ref": "IMPLEMENTATION-DECIDED",
+      "proposition": "the office will narrow the pilot because capacity is binding",
+      "alternatives": [{"hypothesis_ref": "HYPOTHESIS-REPUTATIONAL-COMMITMENT", "relation": "COMPETING", "rationale": "same evidence permits a commitment explanation"}],
+      "support_refs": ["E-CONSTRAINT-SUPPORT", "E-DECIDED"],
+      "contradictory_refs": ["E-CONSTRAINT-CONTRADICTION"],
+      "assumptions": ["capacity constraint persists"],
+      "disposition": "UNRESOLVED",
+      "falsifiers": ["full pilot is implemented without added capacity"],
+      "uncertainty_refs": ["U-MODEL", "U-INTERPRETIVE"],
+      "review_status": "REVIEWED"
+    },
+    {
+      "hypothesis_id": "HYPOTHESIS-REPUTATIONAL-COMMITMENT",
+      "subject_ref": "IMPLEMENTATION-DECIDED",
+      "proposition": "the office will maintain the stated pilot to preserve credibility",
+      "alternatives": [{"hypothesis_ref": "HYPOTHESIS-CAPACITY-CONSTRAINT", "relation": "COMPETING", "rationale": "same evidence permits a capacity explanation"}],
+      "support_refs": ["E-COMMITMENT-INCENTIVE"],
+      "contradictory_refs": ["E-IMPLEMENTED-NARROWED"],
+      "assumptions": ["reputational incentive dominates capacity"],
+      "disposition": "UNRESOLVED",
+      "falsifiers": ["the office narrows the pilot without a public commitment explanation"],
+      "uncertainty_refs": ["U-ACTOR-INTENT", "U-MODEL"],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "model_disagreement": [
+    {
+      "model_disagreement_id": "MODEL-DISAGREEMENT-01",
+      "subject_ref": "IMPLEMENTATION-DECIDED",
+      "lenses": [
+        {"model_id": "macro-lens", "version": "test-1", "output_ref": "MODEL-OUTPUT-MACRO", "interpretation": "capacity constraint dominates"},
+        {"model_id": "security-lens", "version": "test-1", "output_ref": "MODEL-OUTPUT-SECURITY", "interpretation": "security precaution dominates"}
+      ],
+      "disagreement": "different mechanisms explain the same evidence",
+      "factual_source_refs": [],
+      "underlying_evidence_refs": ["E-CONSTRAINT-SUPPORT", "E-DECIDED"],
+      "uncertainty_refs": ["U-MODEL"],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "transmission_edges": [
+    {
+      "edge_id": "EDGE-SECURITY-TO-SHIPPING",
+      "source_ref": "TEST-SECURITY-DISRUPTION",
+      "target_ref": "TEST-SHIPPING-CONSTRAINT",
+      "class": "DEPENDENCY",
+      "epistemic_class": "REVIEWED_DEPENDENCY",
+      "directionality": "DIRECTED",
+      "mechanism": "security disruption restricts access to the synthetic route",
+      "lag": {"min": 6, "max": 48, "unit": "hours", "basis_refs": ["E-EDGE-REVIEWED"]},
+      "threshold": {"value": 2, "unit": "closures_per_day", "basis_refs": ["E-EDGE-THRESHOLD"]},
+      "support_refs": ["E-EDGE-REVIEWED"],
+      "contradiction_refs": [],
+      "alternative_explanations": ["weather closure"],
+      "review_status": "REVIEWED"
+    },
+    {
+      "edge_id": "EDGE-SHIPPING-TO-ENERGY",
+      "source_ref": "TEST-SHIPPING-CONSTRAINT",
+      "target_ref": "TEST-ENERGY-IMPORT-COST",
+      "class": "HYPOTHESISED_TRANSMISSION",
+      "epistemic_class": "HYPOTHESISED",
+      "directionality": "DIRECTED",
+      "mechanism": "shipping constraint may increase synthetic import cost",
+      "lag": {"min": 48, "max": 96, "unit": "hours", "basis_refs": ["E-EDGE-HYPOTHESISED"]},
+      "threshold": null,
+      "threshold_status": "NONE_DECLARED",
+      "support_refs": ["E-EDGE-HYPOTHESISED"],
+      "contradiction_refs": ["E-EDGE-ALTERNATIVE"],
+      "alternative_explanations": ["currency movement", "supplier repricing"],
+      "review_status": "UNDER_REVIEW"
+    }
+  ],
+  "feedback_relationships": [
+    {
+      "feedback_id": "FEEDBACK-01",
+      "source_ref": "TEST-SHIPPING-CONSTRAINT",
+      "target_ref": "TEST-SECURITY-DISRUPTION",
+      "class": "REFLEXIVE_EFFECT",
+      "mechanism": "the observed constraint may alter later security planning",
+      "support_refs": ["E-FEEDBACK"],
+      "review_status": "UNDER_REVIEW",
+      "inferred_automatically": false
+    }
+  ],
+  "market_sensors": [
+    {
+      "market_sensor_id": "MARKET-SENSOR-01",
+      "instrument_or_measure": "synthetic-route freight spread",
+      "venue_or_measurement_source": "TEST-VENUE",
+      "observed_at_utc": "2027-01-02T10:00:00Z",
+      "baseline_or_counterfactual": {"kind": "PRIOR_REVIEWED_STATE", "value": "synthetic seven-day median"},
+      "horizon": "next 72 hours",
+      "measurement_method": "venue close minus seven-day median",
+      "observed_change": {"value": 0.12, "unit": "index_points"},
+      "limitations": ["thin synthetic liquidity", "single venue", "session coverage only"],
+      "alternative_explanations": ["inventory rebalance", "currency hedge"],
+      "rights_evidence_refs": ["E-MARKET-RIGHTS"],
+      "evidence_refs": ["E-MARKET-OBSERVATION"],
+      "causal_inference": "NOT_ESTABLISHED",
+      "review_status": "REVIEWED"
+    }
+  ],
+  "scenario_signposts": [
+    {
+      "scenario_ref": "SCENARIO-CONTINUITY",
+      "scenario_set_ref": "SCENARIO-SET-01",
+      "conditional_assumptions": ["pilot remains institutionally authorised"],
+      "divergence_point": "authority expands beyond one site",
+      "signposts": [
+        {"signpost_id": "SIGNPOST-01", "observable_indicator": "second site receives an explicit notice", "effect": "MORE_COMPATIBLE", "evidence_refs": []},
+        {"signpost_id": "SIGNPOST-02", "observable_indicator": "pilot notice is withdrawn", "effect": "LESS_COMPATIBLE", "evidence_refs": []}
+      ],
+      "review_status": "REVIEWED"
+    }
+  ],
+  "forecast_references": [
+    {
+      "forecast_id": "FORECAST-01",
+      "issuance_id": "FORECAST-01-ISSUANCE-01",
+      "issue_time": "2027-01-02T12:00:00Z",
+      "information_cutoff": "2027-01-02T11:00:00Z",
+      "resolution_rule": "resolve from the reviewed one-site operating register at t4",
+      "evidence_refs": ["E-FORECAST-BASIS"],
+      "immutable_fields": ["question", "target", "resolution_rule", "information_cutoff"],
+      "question": "will the one-site pilot be operating at t4?"
+    }
+  ],
+  "outcome_references": [
+    {
+      "forecast_id": "FORECAST-01",
+      "outcome_revision_id": "OUTCOME-01-REVISION-01",
+      "known_at_utc": "2027-01-05T00:00:00Z",
+      "resolution_status": "RESOLVED",
+      "resolved_value": "NO",
+      "evidence_refs": ["E-OUTCOME-LATER"]
+    }
+  ],
+  "production_layer_populations": {
+    "relationships": [],
+    "risks": [],
+    "scenarios": [],
+    "outcomes": [],
+    "evaluation": {"sample_state": "NO_SAMPLE", "rows": []}
+  },
+  "unqueried_domains": ["HEALTH_BIOSECURITY"],
+  "review_transaction": {
+    "transaction_id": "TEST-REVIEW-01",
+    "transaction_type": "WORLD_STATE_SYNTHESIS_REVIEW",
+    "decision": "ACCEPTED",
+    "decision_basis": "synthetic contract test only",
+    "write_targets": [],
+    "public_projection_permitted": false
+  },
+  "source_manifest": [
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-SAID", "revision_id": "r1", "object_sha256": "da3b2d9cbee29d74b21f158422091d78b323a16fcc5de1e9363e3873d6de432e", "object": {"source_id": "synthetic-bulletin-a", "kind": "statement", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-DECIDED", "revision_id": "r1", "object_sha256": "01e94304900ea085a460f37a71cafb7d11590cfeb6d4fe02923e62072b313e77", "object": {"source_id": "synthetic-register-b", "kind": "decision", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-AUTHORISED", "revision_id": "r1", "object_sha256": "dd4da8900702e503bec77c87f704b2f59847713309b09a32a5a950aa03a8064d", "object": {"source_id": "synthetic-register-b", "kind": "authorisation", "known_at_utc": "2027-01-03T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-IMPLEMENTED-NARROWED", "revision_id": "r1", "object_sha256": "4caebaa21e691d2d3717932db1f07ccd491acfb79bf0474ba62f85e7235decd4", "object": {"source_id": "synthetic-register-b", "kind": "implementation", "known_at_utc": "2027-01-06T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-IMPLEMENTATION-DIVERGENCE", "revision_id": "r1", "object_sha256": "c5cecb9f4ec66ce7f3e330f3b6897940d52e5774fbe4a55ec0dadbee3cc4e253", "object": {"source_id": "synthetic-bulletin-a", "kind": "divergence", "known_at_utc": "2027-01-06T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-OBSERVED-DIVERGENCE", "revision_id": "r1", "object_sha256": "19c964b655cd8fa5410317a65a82a0ebc653746929c36f9a84a5cb3182c6283b", "object": {"source_id": "synthetic-register-b", "kind": "observation", "known_at_utc": "2027-01-07T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-OBSERVED-FAILURE", "revision_id": "r1", "object_sha256": "09d3fb6dfc109519d5b6315f2a9c73972b8890b5507530307d3782f1755ad061", "object": {"source_id": "synthetic-bulletin-a", "kind": "failure", "known_at_utc": "2027-01-06T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-CAPABILITY-SUPPORT", "revision_id": "r1", "object_sha256": "18242a834fa0718b2ab5ba6b6feb92be4f9c839fc0d0abe8b5b8514658a4a388", "object": {"source_id": "synthetic-bulletin-a", "kind": "capability", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-CAPABILITY-CONTRADICTION", "revision_id": "r1", "object_sha256": "7dfd5088fd7235cf84319f3ba1deb7c0965275fc3e8e383cbf3adaec51a41af3", "object": {"source_id": "synthetic-bulletin-a", "kind": "capability_limit", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-AUTHORITY-CONSTRAINT", "revision_id": "r1", "object_sha256": "5fca49ee5aec4485bafe420e4203a97147e52dd7b8f004e9ce16d9701a0a1c2e", "object": {"source_id": "synthetic-register-b", "kind": "authority_scope", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-INSTITUTION-COMPETENCE", "revision_id": "r1", "object_sha256": "5769328aa62d980d6b2667fbc2e23d72203e2bbe61bab0acb903aac1a86c33f0", "object": {"source_id": "synthetic-register-b", "kind": "institutional_competence", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-CONSTRAINT-SUPPORT", "revision_id": "r1", "object_sha256": "fb113837336bd0552fecdc9fc562145df32d1b4bd293e6102648bd2eb3dbe457", "object": {"source_id": "synthetic-register-b", "kind": "capacity", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-CONSTRAINT-CONTRADICTION", "revision_id": "r1", "object_sha256": "5998195872f42b35b94e02fa1b0122d9f20a2374cfe499c3d5c772111adfa9a4", "object": {"source_id": "synthetic-register-b", "kind": "capacity_exception", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-COMMITMENT-INCENTIVE", "revision_id": "r1", "object_sha256": "733d292f8731e19a7ed557f9aa2b20b88782e80ef07761912a8573bb428ce655", "object": {"source_id": "synthetic-bulletin-a", "kind": "incentive", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-BASELINE", "revision_id": "r1", "object_sha256": "05d710a76780ed610e4902ceb06638a3eff31dd438f5f3842c071fc61c44f609", "object": {"source_id": "synthetic-register-b", "kind": "baseline", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-THRESHOLD", "revision_id": "r1", "object_sha256": "125be52998b675342cce987ec5a131a3d41ed10d64a0226b4906747f534fbe15", "object": {"source_id": "synthetic-register-b", "kind": "threshold", "known_at_utc": "2027-01-01T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-ANOMALY", "revision_id": "r1", "object_sha256": "4412c90f64e15137e57604f8b4204856c1fbffcb4e14c44be93837e2eb65dd59", "object": {"source_id": "synthetic-register-b", "kind": "measurement", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-NEGATIVE-SEARCH-SCOPE", "revision_id": "r1", "object_sha256": "0e67b5a96989c98808c1a12281419a57f7f4885bfeaaad57c4c5567da25b6191", "object": {"source_id": "synthetic-bulletin-a", "kind": "scoped_search", "known_at_utc": "2027-01-02T23:59:59Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-EDGE-REVIEWED", "revision_id": "r1", "object_sha256": "b0311b55a0e58a99d95d86c88dd1bc8f66f6f6fa15aa90020ecf21f56e65c97f", "object": {"source_id": "synthetic-register-b", "kind": "dependency", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-EDGE-THRESHOLD", "revision_id": "r1", "object_sha256": "e827485f6d8860ee24f33478d4c1c6163c123d2fd8de967f9f7e4efc2bc3a4ff", "object": {"source_id": "synthetic-register-b", "kind": "edge_threshold", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-EDGE-HYPOTHESISED", "revision_id": "r1", "object_sha256": "ec42f4bde54700d6e042a5e334fa2af7b6c6f15e3f5e82561450f460e7851a42", "object": {"source_id": "synthetic-bulletin-a", "kind": "hypothesised_edge", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-EDGE-ALTERNATIVE", "revision_id": "r1", "object_sha256": "b4dd408fdb27f3befd413661c60ea257897a41c110679d060a394ee97472c8ff", "object": {"source_id": "synthetic-register-b", "kind": "edge_alternative", "known_at_utc": "2027-01-02T00:00:00Z"}},
+    {"layer": "TEST_ONLY_LIVE_INTELLIGENCE", "object_id": "E-FEEDBACK", "revision_id": "r1", "object_sha256": "836218cd386b9f4a867c7d4d9257569f64f2b26ea38ee1216446543c62ae03b4", "object": {"source_id": "synthetic-bulletin-a", "kind": "feedback", "known_at_utc": "2027-01-03T00:00:00Z"}},
+    {"layer": "TEST_ONLY_ANALYSIS", "object_id": "E-MARKET-OBSERVATION", "revision_id": "r1", "object_sha256": "f5b285d3ff87e2df6b9eee13aea4547acf0fc65c2813ca046c678b1e72a48aa2", "object": {"source_id": "synthetic-market-provider", "kind": "market_measurement", "known_at_utc": "2027-01-02T10:00:00Z"}},
+    {"layer": "TEST_ONLY_ANALYSIS", "object_id": "E-MARKET-RIGHTS", "revision_id": "r1", "object_sha256": "54d63179fe682bbc193804c9fa01bdf1a9edfde6611b02cee51e44659cb22a2b", "object": {"source_id": "synthetic-market-provider", "kind": "rights", "known_at_utc": "2027-01-02T09:00:00Z"}},
+    {"layer": "TEST_ONLY_FORECASTS", "object_id": "E-FORECAST-BASIS", "revision_id": "r1", "object_sha256": "17569fb1fbc40c83bb6a3ba630fe8bc5bc7f55c191e6dc3ff89fa7ced8a2547a", "object": {"source_id": "synthetic-register-b", "kind": "forecast_basis", "known_at_utc": "2027-01-02T10:30:00Z"}},
+    {"layer": "TEST_ONLY_FORECASTS", "object_id": "E-LATE-FORECAST", "revision_id": "r1", "object_sha256": "f01d14c0a1ee39fb6d2aa19f05ae156579ceffdcffb1154862ca8f7a718ad830", "object": {"source_id": "synthetic-register-b", "kind": "late_evidence", "known_at_utc": "2027-01-02T13:00:00Z"}},
+    {"layer": "TEST_ONLY_OUTCOMES", "object_id": "E-OUTCOME-LATER", "revision_id": "r1", "object_sha256": "4c2254112b239885e647f2fffa27006ffb457b80b0aece222b4bbcb0861f6ec7", "object": {"source_id": "synthetic-register-b", "kind": "outcome", "known_at_utc": "2027-01-05T00:00:00Z"}}
+  ]
+}
