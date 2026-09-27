@@ -17,7 +17,8 @@ from world_signals.osint_engine import load_json, run_once  # noqa: E402
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--once", action="store_true", help="run one bounded pass; this is the only supported mode")
-    parser.add_argument("--runtime-dir", type=Path, default=ROOT / ".world-signals-runtime/osint")
+    parser.add_argument("--runtime-dir", type=Path, default=ROOT / ".world-signals-runtime/osint",
+                        help="retained checkpoint directory (default: ignored durable runtime; use an explicit temporary path only for fixtures or exact-head execution)")
     args = parser.parse_args()
     if not args.once:
         parser.error("OSINT v1 has no implicit daemon; pass --once from a local scheduler")

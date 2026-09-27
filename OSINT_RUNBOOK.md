@@ -25,7 +25,8 @@ python scripts/run_osint_engine.py --once
 The engine has no implicit daemon. A local scheduler may invoke `--once` at
 the cadences recorded in `data/osint/source_cohort.json`. Runtime output is
 written to `.world-signals-runtime/osint/`, which is intentionally ignored by
-Git and is not a governed data store. A run records route attempts, HTTP state,
+Git and is not a governed data store. This is the normal retained checkpoint
+location and must survive ordinary reboots and `/tmp` cleanup. A run records route attempts, HTTP state,
 content type, payload hash, source publication timestamps, native IDs, parser
 versions, candidate evidence, clustering and review-queue reasons.
 
@@ -124,6 +125,47 @@ generated. Its operational metrics recorded 701 replayed source records,
 zero genuinely new records, zero revisions and zero promotions. This is a
 successful incremental no-change result, not evidence that the sources are
 empty or unavailable.
+
+## Retained checkpoint durability and migration
+
+The operational default is the repository-local ignored runtime directory:
+
+```text
+.world-signals-runtime/osint/latest.json
+.world-signals-runtime/osint/runs/
+```
+
+`latest.json` is the state consumed for novelty detection. It retains route
+checkpoints, source-native document identities, payload hashes, record hashes,
+parser/adapter provenance and candidate state needed to keep replayed material
+replayed. The current checkpoint shape is the incremental
+`osint-engine-0.2-incremental` shape; the migration validator rejects missing,
+unsupported or bootstrap state rather than guessing. `runs/` is operational
+history and should be retained with the checkpoint, although it is not
+governed production evidence.
+
+An exact-head worktree or other temporary execution directory is separate from
+retained state. It may be used with an explicit `--runtime-dir` override for a
+fixture or controlled execution, but it must not become the normal checkpoint
+location. In particular, do not infer retained state from a `/tmp` worktree.
+
+To migrate an existing retained incremental checkpoint safely, run the reviewed
+fail-closed procedure from the repository root:
+
+```bash
+python scripts/migrate_osint_checkpoint.py \
+  --from /tmp/world-signals-osint-final-head \
+  --to .world-signals-runtime/osint
+```
+
+The procedure validates the source, refuses to overwrite any existing target,
+stages and validates a byte-preserving copy, compares file and semantic
+fingerprints, then atomically activates the target. It never deletes the
+source. Keep the `/tmp` source as rollback evidence until multiple durable
+incremental sweeps have completed. If rollback is required, stop the normal
+runner and use the preserved source explicitly with
+`--runtime-dir /tmp/world-signals-osint-final-head`; do not reset or bootstrap
+the checkpoint merely to repair a path.
 
 ## First reviewed Signal disposition
 
