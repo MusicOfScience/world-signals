@@ -4,6 +4,7 @@ from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import hashlib
+import subprocess
 import sys
 import unittest
 
@@ -34,6 +35,20 @@ def governed_hashes() -> dict[str, str]:
 class WorldStateConsistencyProposalTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        try:
+            subprocess.check_call(
+                ["git", "rev-parse", "--verify", "main^{commit}"],
+                cwd=ROOT,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            cls.repository_ref = DEFAULT_REPOSITORY_REF
+        except subprocess.CalledProcessError:
+            # Hosted PR checkout is intentionally detached and may omit local
+            # base refs. The checked-out commit is still a valid reproducible
+            # snapshot for the semantic test; the retained production command
+            # remains strict and defaults to local main.
+            cls.repository_ref = "HEAD"
         cls.request = {
             "contract_version": "0.1",
             "as_of_utc": DEFAULT_AS_OF_UTC,
@@ -56,7 +71,7 @@ class WorldStateConsistencyProposalTests(unittest.TestCase):
             "include_negative_evidence": True,
             "input_policy": "ACCEPTED_REVIEWED_HEADS_ONLY",
         }
-        cls.package, cls.summary = build_package(cls.request, DEFAULT_REPOSITORY_REF)
+        cls.package, cls.summary = build_package(cls.request, cls.repository_ref)
 
     def test_package_is_explicitly_non_governed_and_review_pending(self):
         self.assertEqual(self.package["package_type"], "WORLD_STATE_CONSISTENCY_PROPOSAL")
@@ -73,7 +88,7 @@ class WorldStateConsistencyProposalTests(unittest.TestCase):
         self.assertEqual(len(self.package["repository_provenance"]["repository_sha"]), 40)
 
     def test_future_current_repository_cutoff_fails_closed(self):
-        provenance = repository_provenance(DEFAULT_REPOSITORY_REF)
+        provenance = repository_provenance(self.repository_ref)
         later = datetime.fromisoformat(provenance["knowledge_cutoff_utc"].replace("Z", "+00:00")) + timedelta(seconds=1)
         future = later.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         with self.assertRaises(ValueError):
@@ -103,7 +118,7 @@ class WorldStateConsistencyProposalTests(unittest.TestCase):
         self.assertTrue(all("object" not in row for row in self.package["source_manifest"]))
 
     def test_repeated_build_is_reproducible(self):
-        second, second_summary = build_package(self.request, DEFAULT_REPOSITORY_REF)
+        second, second_summary = build_package(self.request, self.repository_ref)
         self.assertEqual(self.package["source_manifest"], second["source_manifest"])
         self.assertEqual(self.package["source_manifest_sha256"], second["source_manifest_sha256"])
         self.assertEqual(self.package["semantic_proposal_fingerprint"], second["semantic_proposal_fingerprint"])
@@ -117,7 +132,7 @@ class WorldStateConsistencyProposalTests(unittest.TestCase):
 
     def test_governed_inputs_are_unchanged_and_no_production_state_exists(self):
         before = governed_hashes()
-        build_package(self.request, DEFAULT_REPOSITORY_REF)
+        build_package(self.request, self.repository_ref)
         after = governed_hashes()
         self.assertEqual(before, after)
         self.assertFalse((ROOT / "data/world_state/state.json").exists())
