@@ -27,31 +27,46 @@ WORLD SIGNALS is a platform-independent global political-economic intelligence s
 ## Layer contract
 
 ```text
-CANONICAL REGISTRY
-      |
-      +--> Calendar / Pages projections
+ACTORS + EVENTS
       |
       v
-SOURCE / CHANGE MONITOR
+OBSERVATIONS
       |
       v
-LIVE INTELLIGENCE
-      +--> existing reviewed Analysis bridge
+SIGNALS + ANOMALIES
       |
-      +--> SIGNALS (one reviewed production specimen; population closed by default)
-               |
-               +--> RELATIONSHIPS (contract only; production population closed)
-                        |
-                        +--> RISKS / REGIMES (contract only; production population closed)
-                                 |
-                                 +--> SCENARIOS (contract only; production population closed)
-                                          |
-                                          +--> FORECASTS (contract only; production population closed)
-                                                   |
-                                                   +--> OUTCOMES / RESOLUTION (contract only; production population closed)
+      v
+RELATIONSHIPS + FLOWS + DEPENDENCIES
+      |
+      v
+WORLD STATE (continuously updated, as-of, derived)
+      |
+      +--> COMPETING HYPOTHESES / REGIMES / TRANSMISSION
+      |          |
+      |          v
+      |     SCENARIOS + SIGNPOSTS
+      |          |
+      |          v
+      |     FORECASTS
+      |          |
+      |          v
+      |     OUTCOMES
+      |          |
+      |          v
+      |     EVALUATION / CALIBRATION / MODEL LEARNING
+      |          |
+      |          +------ feeds future WORLD STATE assessments
+      |
+      +--> WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+                           |
+                           v
+                        BRIEFING
 ```
 
-The layers remain deliberately distinct:
+Canonical Registry, Source / Change Monitor and the existing reviewed Analysis
+bridge remain governed inputs or parallel projections around this lifecycle;
+they do not turn World State into a terminal downstream layer. The contract
+inventory below is deliberately distinct from runtime dependency order:
 
 1. **Canonical Registry** — what the event is: stable identities, lifecycle, certainty, timing and provenance.
 2. **Calendar** — rebuildable human-facing projection from Canonical.
@@ -123,6 +138,49 @@ zones used by included timed events. Expected windows use
 claiming the whole interval as subscriber free/busy time.
 
 Google Calendar, GitHub Pages, retained Actions evidence and prose status documents are interfaces or derived evidence surfaces, not canonical databases.
+
+### World State direction
+
+The next product boundary is a derived **World State**, not a larger event
+calendar or an ungoverned news graph. World State will assemble reviewed
+evidence into as-of views of actor behaviour, implementation status,
+capabilities and constraints, conflict/military activity,
+strategic/geopolitical tension, political/institutional stability, flows,
+dependencies, chokepoints and market-sensed conditions. Its design must also
+retain baselines and anomalies, negative evidence, typed uncertainty,
+competing hypotheses, model disagreement, lags, thresholds, feedback loops and
+reflexivity.
+
+Actor statements must not be promoted directly into state policy. The required
+ladder is:
+
+`SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`
+
+Each step requires appropriate evidence and can remain disputed or diverge
+from the others. Conflict and military activity are first-class domains;
+markets are sensors with explicit timing, baseline and alternative-explanation
+metadata; transmission edges are typed rather than inferred from proximity.
+
+World State is the continuously updated synthesis hub, not a terminal stage
+after Forecast Evaluation or Model Learning. A system with observations,
+Signals, Relationships and state dimensions can still produce an as-of World
+State assessment when no Forecast or Outcome exists. Later Outcomes,
+Evaluation, calibration and Model Learning provide time-indexed feedback for
+subsequent World State assessments.
+
+The future World State Synthesis Engine v1 is not implemented by the current
+repository state. Its first milestone is a read-only, human-reviewed
+consistency fixture that consumes existing governed contracts without silently
+writing Canonical or other upstream stores. Scenarios/signposts remain
+conditional, Forecasts remain prospective and immutable, Outcomes and
+calibration remain governed by their own contracts, and the briefing remains a
+projection rather than a new database.
+
+The intended human product surface is:
+
+```text
+WORLD STATE | OUTLOOK | CALENDAR | MAP | RESEARCH
+```
 
 ## Local OSINT candidate engine
 

@@ -157,6 +157,25 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
+## Next milestone — World State Synthesis Engine v1 — design only
+
+The newly agreed direction is a derived World State synthesis over existing
+governed layers. The design must model actors and authority, capabilities and
+constraints, `SAID → DECIDED → AUTHORISED → IMPLEMENTED → OBSERVED`,
+conflict/military activity, strategic/geopolitical tension,
+political/institutional stability, flows/dependencies/chokepoints, markets as
+sensors, state memory, baselines/anomalies, negative evidence, typed
+uncertainty, competing hypotheses, model disagreement, transmission, lags,
+thresholds, feedback loops, scenarios/signposts and forecast/outcome
+calibration boundaries.
+
+The engine is **not implemented** and no new governed World State population is
+authorised. The next thread should begin with read contracts and a minimal
+human-reviewed consistency fixture, preserving provenance, public/private
+boundaries, prospective forecast cutoffs and no-silent-canonical-write rules.
+The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
+RESEARCH`; the briefing is a projection, not canonical truth.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.
