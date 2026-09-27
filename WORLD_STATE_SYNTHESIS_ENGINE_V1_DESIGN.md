@@ -561,8 +561,9 @@ The fixture is valid only as a contract test. It must not be copied into
    gates. No production population is admitted.
 7. **Implement and pressure-test the unpopulated production history contract.**
    Completed as schemas, validators, synthetic fixtures and a temporary-copy
-   admission simulator only. The first production component remains a
-   separate later admission decision.
+   admission simulator only. Step 8A now constructs and preflights one narrow
+   real-evidence health candidate without production admission. Step 8B remains
+   the separate later human admission decision.
 
 ## Deferred implementation questions
 
@@ -582,9 +583,10 @@ production state:
 4. **Model metadata availability:** Step 7 must define the minimum reproducible
    model record when a model version or prompt cannot be retained; missing
    provenance blocks model-derived admission rather than being guessed.
-5. **First pilot evidence:** the DRC health/biosecurity pilot remains a Step 8
-   admission decision and requires a fresh review of current upstream hashes,
-   contradiction and uncertainty, not a quota or automatic promotion.
+5. **First pilot evidence:** the DRC health/biosecurity pilot is now a Step 8A
+   review-pending candidate and requires Step 8B human admission review with
+   fresh upstream hashes, contradiction and uncertainty checks; this is not a
+   quota or automatic promotion.
 
 ## Consequences and limitations
 
