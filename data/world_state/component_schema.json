@@ -1,0 +1,71 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "WORLD_STATE_COMPONENT_HISTORY_SCHEMA",
+  "version": "0.1",
+  "population_state": "UNPOPULATED_CONTRACT_ONLY",
+  "component_types": [
+    "DIMENSION_ASSESSMENT",
+    "ACTOR_STATE_ASSERTION",
+    "IMPLEMENTATION_CLAIM",
+    "BASELINE",
+    "NEGATIVE_EVIDENCE",
+    "COMPETING_HYPOTHESIS",
+    "MODEL_DISAGREEMENT"
+  ],
+  "common_revision_fields": [
+    "component_type",
+    "component_id",
+    "revision_id",
+    "revision_number",
+    "previous_revision_id",
+    "revision_kind",
+    "review_state",
+    "lifecycle_state",
+    "effective_at",
+    "known_at_utc",
+    "reviewed_at_utc",
+    "admitted_at_utc",
+    "source_proposal_id",
+    "source_manifest_sha256",
+    "review_transaction_id",
+    "admission_transaction_id",
+    "projection_transaction_id",
+    "visibility",
+    "revision_reason",
+    "object_sha256"
+  ],
+  "revision_kinds": ["INITIAL", "UPDATE", "CORRECTION", "SUPERSESSION", "WITHDRAWAL", "EXPIRY"],
+  "review_states": ["CANDIDATE", "UNDER_REVIEW", "ACCEPTED", "REJECTED", "DEFERRED"],
+  "lifecycle_states": ["ACTIVE", "SUPERSEDED", "CORRECTED", "WITHDRAWN", "EXPIRED", "UNRESOLVED"],
+  "visibility_states": ["INTERNAL_ONLY", "PUBLIC_ELIGIBLE", "PUBLIC_PROJECTED"],
+  "uncertainty_types": [
+    "PROVENANCE_SOURCE",
+    "MEASUREMENT",
+    "TEMPORAL",
+    "INTERPRETIVE",
+    "MODEL",
+    "ACTOR_INTENT",
+    "INSTITUTIONAL_AUTHORITY"
+  ],
+  "implementation_states": ["SAID", "DECIDED", "AUTHORISED", "IMPLEMENTED", "OBSERVED"],
+  "dimensions": [
+    "CONFLICT_MILITARY_ACTIVITY",
+    "STRATEGIC_GEOPOLITICAL_TENSION",
+    "POLITICAL_INSTITUTIONAL_STABILITY",
+    "MACROECONOMIC_FINANCIAL_CONDITIONS",
+    "TRADE_CAPITAL_ENERGY_FOOD_FLOWS",
+    "DEPENDENCIES_CHOKEPOINTS",
+    "MARKETS_AS_SENSORS",
+    "CLIMATE_PHYSICAL_RISK",
+    "HEALTH_BIOSECURITY",
+    "TECHNOLOGY_CRITICAL_INFRASTRUCTURE"
+  ],
+  "production_transmission_component_allowed": false,
+  "universal_severity_score_allowed": false,
+  "history_policy": {
+    "revision_numbers_contiguous": true,
+    "accepted_revision_immutable": true,
+    "previous_revision_required": true,
+    "later_evidence_cannot_backdate_knowledge": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "WORLD_STATE_SNAPSHOT_HISTORY_SCHEMA",
+  "version": "0.1",
+  "population_state": "UNPOPULATED_CONTRACT_ONLY",
+  "required_fields": [
+    "snapshot_series_id",
+    "snapshot_revision_id",
+    "revision_number",
+    "previous_snapshot_revision_id",
+    "snapshot_kind",
+    "scope",
+    "knowledge_cutoff_utc",
+    "effective_as_of_utc",
+    "component_refs",
+    "upstream_refs",
+    "source_manifest_sha256",
+    "proposal_id",
+    "review_transaction_id",
+    "admission_transaction_id",
+    "limitations",
+    "empty_queried_domains",
+    "lifecycle_state",
+    "visibility",
+    "reviewer",
+    "admitted_at_utc",
+    "object_sha256"
+  ],
+  "query_modes": ["KNOWLEDGE_AS_OF", "EFFECTIVE_AS_OF"],
+  "empty_domain_states": ["UNQUERIED", "QUERIED_EMPTY", "UNSUPPORTED", "UNKNOWN"],
+  "snapshot_policy": {
+    "component_content_copied": false,
+    "exact_revision_refs_required": true,
+    "forecast_outcome_resolution_owned_here": false,
+    "production_transmission_owned_here": false
+  }
+}

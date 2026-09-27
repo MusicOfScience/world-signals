@@ -170,7 +170,10 @@ class WorldStateConsistencyReviewTests(unittest.TestCase):
 
     def test_no_production_store_or_public_projection_is_created(self):
         record = self.valid_record()
-        self.assertFalse((ROOT / "data/world_state").exists())
+        world_state_dir = ROOT / "data/world_state"
+        if world_state_dir.exists():
+            self.assertFalse((world_state_dir / "state.json").exists())
+            self.assertTrue(all(path.name.endswith("_schema.json") or path.name == "README.md" for path in world_state_dir.iterdir()))
         self.assertFalse((ROOT / "docs/world_state.json").exists())
         self.assertFalse(record["public_projection_permitted"])
         self.assertFalse(record["production_world_state_admitted"])

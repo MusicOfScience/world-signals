@@ -540,6 +540,13 @@ health-risk score or causal claim.
 
 ## 15. Exact Migration Step 7 boundary
 
+**Status:** Completed as an unpopulated, test-first contract tranche. The
+schemas under `data/world_state/`, native validators in
+`src/world_signals/world_state_history.py`, the synthetic fixture under
+`tests/fixtures/world_state_production_v1/`, and the temporary-copy admission
+simulator are contract machinery only. No production World State or Actor
+Registry population was admitted, and no public projection was generated.
+
 Step 7 should implement, in a fresh bounded tranche:
 
 - unpopulated machine-readable schemas and native validators for the Actor
