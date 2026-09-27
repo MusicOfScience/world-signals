@@ -518,7 +518,11 @@ constructed and preflighted one narrow real-evidence health candidate, with a
 retained successor correcting pre-admission snapshot semantics and making
 unavailable runtime model provenance explicit. Step 8B is complete for exactly
 one internal reported-burden component and one compositional snapshot; broader
-population and synthesis remain deferred.
+population and synthesis remain deferred. Migration Step 9A is complete for
+the internal read-only production-history path: explicit knowledge/effective
+selection, derived freshness, deterministic deltas, successor-review
+preflight and a structured briefing-read contract. No second component,
+successor revision or public projection was created.
 
 ## Permanent quarantine
 

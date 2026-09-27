@@ -1,9 +1,9 @@
-"""Migration Step 7 validators and temporary World State history simulator.
+"""World State history validators and temporary admission simulator.
 
-This module implements contract machinery only.  It does not load, create or
-write a production World State dataset.  Callers provide in-memory objects or
-test-only copies; production admission is represented by validation and a
-temporary-copy simulation.
+This module validates the immutable production history and its temporary
+admission machinery.  Read-only production-history selection is implemented
+in ``world_state_production``; this module remains the shared contract and
+selection primitive rather than a synthesis engine.
 """
 
 from __future__ import annotations

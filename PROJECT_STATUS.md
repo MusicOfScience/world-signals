@@ -157,7 +157,7 @@ Still closed unless a later reviewed architecture explicitly changes them:
 
 Calendar/Pages remain derived outputs. Melbourne remains a display/reference timezone, never a reason to rewrite canonical native/UTC timing.
 
-## Next milestone — World State Synthesis Engine v1 — first production component admitted / synthesis engine not implemented
+## Next milestone — World State Synthesis Engine v1 — Step 9A production read / synthesis engine not implemented
 
 The newly agreed direction is a derived World State synthesis over existing
 governed layers. The design must model actors and authority, capabilities and
@@ -192,7 +192,10 @@ governed DRC Bundibugyo specimen; its corrected successor remains retained as
 internal first component and one compositional snapshot through separate human
 review and production-admission transactions. Confidence remains `LOW`; all
 other dimensions and downstream analytical populations remain unassessed and
-closed. The general synthesis engine and public projection remain unimplemented.
+closed. Migration Step 9A now provides explicit read-only production-history
+selection, query-relative freshness, deterministic deltas, successor-review
+preflight and a structured internal briefing-read view. The general synthesis
+engine, successor admission and public projection remain unimplemented.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth.
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the unpopulated Migration Step 7 World State contracts.
+"""Validate the controlled World State production history contracts.
 
-This command is deliberately schema-only.  It does not read or write a
-production World State dataset and does not treat the synthetic test fixture as
-governed state.
+This command is read-only.  It validates the admitted component, snapshot and
+admission histories and does not select a latest state, write production data,
+or treat the synthetic test fixture as governed state.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ SCHEMAS = {
 def main() -> int:
     errors: list[str] = []
     if (SCHEMA_DIR / "state.json").exists():
-        errors.append("production data/world_state/state.json must not exist in Step 7")
+        errors.append("production data/world_state/state.json must not exist")
     for filename, expected_population_state in SCHEMAS.items():
         path = SCHEMA_DIR / filename
         if not path.exists():
@@ -61,7 +61,7 @@ def main() -> int:
         for error in errors:
             print(f"FAIL: {error}")
         return 1
-    print("PASS: World State production-history schemas and first controlled history are valid")
+    print("PASS: World State production-history schemas and admitted history are valid")
     print("PASS: no monolithic production World State dataset is present")
     print("PASS: Actor Registry remains empty and public projection remains closed")
     print("PASS: validator performed no writes")

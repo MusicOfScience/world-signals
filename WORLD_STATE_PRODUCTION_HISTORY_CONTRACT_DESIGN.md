@@ -581,6 +581,25 @@ governed populations, run a new OSINT sweep or implement synthesis reasoning.
 Step 8B is the separate human-reviewed first-component admission now recorded
 by the retained review and production-admission transactions.
 
+## Migration Step 9A — production read, freshness and delta boundary
+
+Step 9A is implemented as a read-only interpretation layer in
+`src/world_signals/world_state_production.py`. It reuses the shared
+`WorldStateHistoryQuery` validation and `select_component_revisions()` helper,
+then resolves exact component, snapshot and admission references without
+creating a second history store. Callers must declare `KNOWLEDGE_AS_OF` or
+`EFFECTIVE_AS_OF`; there is no implicit latest query.
+
+The read derives controlled query-relative freshness (`CURRENT`,
+`REVIEW_DUE_SOON`, `REVIEW_DUE`, `STALE_REVIEW_REQUIRED`,
+`NO_FRESHNESS_POLICY` or `UNKNOWN`) without mutating lifecycle or hashes. It
+also computes non-narrative knowledge/admission and effective-state deltas,
+keeps freshness transitions separate from content change, reports successor
+review preflight without creating a revision, and exposes a private structured
+briefing-read view that marks the nine unassessed dimensions and the narrow
+DRC scope honestly. No second component, successor revision, admission or
+public projection is created by Step 9A.
+
 ## Required Step 7 test matrix
 
 The implementation tranche must prove at least:
@@ -613,8 +632,9 @@ incremental, component-level progress and preserves honest emptiness. It adds
 the cost of an Actor Registry, component admission transactions and explicit
 projection allowlists before production convenience is available.
 
-The first pilot remains conditional on Step 7. Canonical historical
-reconstruction remains a separate dependency. Relationships currently have a
+The first pilot was admitted narrowly in Step 8B after the Step 7 gate;
+successor revisions remain review-gated. Canonical historical reconstruction
+remains a separate dependency. Relationships currently have a
 zero production population and may need a bounded schema extension for flow
 and chokepoint semantics; until then World State cannot admit a duplicate
 transmission graph. One production World State component and one compositional
