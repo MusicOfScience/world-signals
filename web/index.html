@@ -6,6 +6,7 @@
   <title>WORLD SIGNALS</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="outlook.css">
+  <link rel="stylesheet" href="briefing.css">
   <link rel="stylesheet" href="horizon.css">
   <link rel="stylesheet" href="native-calendar.css">
   <link rel="stylesheet" href="history.css">
@@ -40,6 +41,19 @@
   </header>
 
   <main id="main-content">
+    <section id="briefing" class="briefing-lead" aria-labelledby="briefingTitle">
+      <div class="briefing-heading">
+        <div>
+          <p class="eyebrow">THE BRIEF</p>
+          <h2 id="briefingTitle">What should I know now?</h2>
+        </div>
+        <p class="meta">A deterministic scan of what resolves next, what occurs next and what was reviewed most recently. Chronology and recency are not importance rankings.</p>
+      </div>
+      <div id="briefingLanes" class="briefing-lanes" aria-live="polite">
+        <p class="loading">Loading the Brief…</p>
+      </div>
+    </section>
+
     <section id="outlook" class="outlook-section" aria-labelledby="outlookTitle">
       <div class="outlook-heading">
         <div>
@@ -351,6 +365,7 @@
     <div id="detailBody"></div>
   </dialog>
   <script src="app.js"></script>
+  <script src="briefing.js"></script>
   <script src="horizon.js"></script>
   <script src="native-calendar.js"></script>
   <script src="history.js"></script>

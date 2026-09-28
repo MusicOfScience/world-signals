@@ -22,17 +22,20 @@ Current reconciled `main` state (27 September 2026):
 4. **Live Intelligence** — factual current-development observations that may be scheduled or unscheduled and may optionally reference Canonical occurrences.
 5. **Analysis** — reviewed interpretation of expectations, surprises, market observations, connections, noise, alternatives, second-order effects and falsifiers.
 6. **World State Synthesis** — future derived, continuously updated, as-of synthesis over governed evidence, actor state, world-state dimensions and transmission; not implemented by this tranche. It is a synthesis hub for scenarios and forecasts, not a terminal stage after model learning.
-7. **Briefing projections** — the public reader sequence is `OUTLOOK →
-   RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
+7. **Briefing projections** — the public reader sequence is `THE BRIEF →
+   OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
    `WORLD STATE | MAP` remain internal/future public surfaces. These views are
    projections, not additional governed stores. The Step 13A mobile editorial
-   pass makes this sequence scan-first on small screens: Outlook leads, the
-   Calendar is agenda-first, and System/audit views remain secondary. The
+   pass makes this sequence scan-first on small screens: the Brief and Outlook
+   lead, the Calendar is agenda-first, and System/audit views remain secondary. The
    four-series public Forecast allowlist is unchanged; World State and
    Relationship projection remain closed. Step 13B refines only the public
    paper-ground hierarchy: a modest low-glare paper tint, lighter editorial
    panels and quiet semantic hover surfaces; no content or governance contract
-   changes.
+   changes. Step 13C adds one deterministic three-lane Brief projection over
+   the existing public Outlook, Calendar and reviewed Analysis artifacts; it
+   does not create an importance score, new intelligence object or public
+   World State/Relationship exposure.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
@@ -529,8 +532,8 @@ transmission classification, competing-hypothesis selection, scenario
 signposts, production admission and any promotion into a public projection.
 The final briefing is a projection assembled from reviewed state and
 provenance; it is not canonical truth. The current public product leads with
-the bounded Outlook pilot, its Resolution Clock, reviewed Analysis, Calendar
-and Research. The
+the deterministic Brief, bounded Outlook pilot, Resolution Clock, reviewed
+Analysis, Calendar and Research. The
 intended full product surface is:
 
 ```text

@@ -319,6 +319,15 @@ warmer than the prior near-white substrate while `#f4f1eb` panels and
 and legacy white-surface audits are covered by focused tests. No public content,
 Forecast, Calendar, Analysis or World State data changed.
 
+Migration Step 13C adds the bounded public Brief projection before the full
+Outlook grid. Its three lanes use inspectable rules only: earliest open public
+Forecast resolution with same-date ties, next exact-date public Calendar
+occurrence selected at device display time, and latest `REVIEWED_SAMPLE`
+Analysis by `analysis_as_of_utc` with an Analysis-ID tie-break. The Brief carries
+source references and creates no importance/risk score, political ranking,
+World State or Relationship projection. Outlook, Calendar, Analysis and all
+governed data remain unchanged.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.

@@ -46,6 +46,7 @@ def validate_public_site(site_dir: Path) -> list[str]:
         "data/events.json",
         "data/public_status.json",
         "data/outlook.json",
+        "data/briefing.json",
     )
     for relative in required:
         path = site_dir / relative

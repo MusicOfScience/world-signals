@@ -53,6 +53,20 @@ class PublicSiteTests(unittest.TestCase):
         self.assertEqual(len(outlook["forecasts"]), 4)
         self.assertNotIn("WSDIM-HEALTH-COD-BVD-REPORTED-BURDEN", json.dumps(outlook))
 
+    def test_briefing_is_a_three_lane_projection_with_source_refs(self):
+        briefing = json.loads((ROOT / "docs/data/briefing.json").read_text())
+        self.assertEqual(briefing["metadata"]["projection_type"], "PUBLIC_BRIEFING_LEAD")
+        self.assertEqual(
+            set(briefing["metadata"]["selection_rules"]),
+            {"forecast_resolution", "calendar", "analysis"},
+        )
+        self.assertTrue(briefing["forecast_resolution"]["source_refs"])
+        self.assertTrue(briefing["calendar"]["source_refs"])
+        self.assertTrue(briefing["latest_reviewed_analysis"]["source_ref"])
+        self.assertIsNone(briefing["metadata"]["importance_score"])
+        self.assertEqual(briefing["metadata"]["world_state_projection"], "CLOSED")
+        self.assertEqual(briefing["metadata"]["relationship_projection"], "CLOSED")
+
     def test_public_html_uses_relative_assets_for_project_pages_base_path(self):
         html = (ROOT / "docs/index.html").read_text()
         self.assertIsNone(re.search(r"(?:href|src)=['\"]/(?!/)", html))
