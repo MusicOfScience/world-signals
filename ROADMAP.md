@@ -672,6 +672,14 @@ governed data, World State component, Relationship or public World State
 projection was changed. This is a presentation tranche, not a new intelligence
 or publication authority.
 
+## Stage 30 — paper-ground surface polish — IMPLEMENTED / BOUNDED
+
+Migration Step 13B selects a restrained `#ebe6dc` paper ground after rendered
+comparison against current, mid and stronger candidates. Lighter panel and
+raised-panel values remain distinct, hover/focus surfaces stay perceivable, and
+the public Outlook/Calendar/Analysis structure is unchanged. No content,
+governed data or publication authority changed.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

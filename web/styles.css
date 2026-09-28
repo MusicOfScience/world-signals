@@ -113,15 +113,16 @@ body{overflow-x:hidden}
 :root{
   --ink:#1d211f;
   --muted:#59605c;
-  --paper:#efede7;
+  --paper:#ebe6dc;
   --panel:#f4f1eb;
-  --panel-raised:#f1eee8;
+  --panel-raised:#f0ece4;
   --line:#cfc8bd;
   --accent:#6b3437;
   --accent-soft:#eadfda;
   --closed:#715523;
   --closed-soft:#eee5d4;
   --focus:#8a5c14;
+  --surface-hover:#e1dbd0;
 }
 body{background:var(--paper);color:var(--ink)}
 .hero{background:var(--paper)}
@@ -133,11 +134,17 @@ body{background:var(--paper);color:var(--ink)}
 .state-chip{color:var(--closed);background:var(--closed-soft);border-color:#d5c19d}
 .method-chain{background:var(--panel)}
 .method-chain span{background:var(--panel-raised)}
+.viewbar{background:var(--panel-raised);border-bottom-color:var(--line)}
+.controls{background:rgba(244,241,235,.96);border-bottom-color:var(--line)}
 .viewtabs button,.controls input,.controls select,.calendar-day,.day-agenda,.window-lane,
 .day-agenda-event,.window-event,.event,.monitor-safety,.monitor-route,.close,.empty{background:var(--panel)}
 .calendar-day.outside{background:var(--panel-raised)}
-.calendar-day:hover,.calendar-day:focus,.day-agenda-event:hover,.window-event:hover,.event:hover{background:#e9e4db}
+.weekday{background:var(--panel-raised)}
+.weekday.weekend{background:var(--panel)}
+.calendar-event{background:var(--panel-raised)}
+.calendar-event:hover,.calendar-day:hover,.calendar-day:focus,.day-agenda-event:hover,.window-event:hover,.event:hover{background:var(--surface-hover)}
 .viewtabs button{border-radius:4px}
+.viewtabs button[aria-pressed="true"],.toggle[aria-pressed="true"]{color:var(--panel)}
 .viewtabs button:focus-visible,.primary-nav a:focus-visible,.text-link:focus-visible,
 .theme-row:focus-visible,.source-row a:focus-visible{outline-color:var(--focus)}
 .horizon-shell{background:var(--panel)}

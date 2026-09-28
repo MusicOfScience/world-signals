@@ -312,6 +312,13 @@ preserved, the warm accessible visual language remains in place, and World
 State plus Relationship projection remain closed. No governed Forecast,
 Calendar, Analysis or World State data changed.
 
+Migration Step 13B refines the public surface palette without reopening the
+Step 13A information architecture. The selected `#ebe6dc` paper ground is
+warmer than the prior near-white substrate while `#f4f1eb` panels and
+`#f0ece4` raised surfaces remain lighter and distinct. Contrast, hover/focus,
+and legacy white-surface audits are covered by focused tests. No public content,
+Forecast, Calendar, Analysis or World State data changed.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.

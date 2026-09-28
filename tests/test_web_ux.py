@@ -7,9 +7,9 @@ class WebUXTests(unittest.TestCase):
     def test_public_surface_tokens_reduce_luminance_without_removing_contrast(self):
         css=(ROOT/"web/styles.css").read_text(encoding="utf-8")
         for token in (
-            "--paper:#efede7",
+            "--paper:#ebe6dc",
             "--panel:#f4f1eb",
-            "--panel-raised:#f1eee8",
+            "--panel-raised:#f0ece4",
             "--line:#cfc8bd",
             "--accent:#6b3437",
             "--focus:#8a5c14",

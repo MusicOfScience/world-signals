@@ -29,7 +29,10 @@ Current reconciled `main` state (27 September 2026):
    pass makes this sequence scan-first on small screens: Outlook leads, the
    Calendar is agenda-first, and System/audit views remain secondary. The
    four-series public Forecast allowlist is unchanged; World State and
-   Relationship projection remain closed.
+   Relationship projection remain closed. Step 13B refines only the public
+   paper-ground hierarchy: a modest low-glare paper tint, lighter editorial
+   panels and quiet semantic hover surfaces; no content or governance contract
+   changes.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
