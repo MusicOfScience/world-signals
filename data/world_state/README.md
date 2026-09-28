@@ -6,6 +6,12 @@ one admitted internal Dimension Assessment and one compositional snapshot; it
 does not contain a monolithic `state.json`, an Actor Registry population or a
 public projection.
 
+Step 11A adds a retained, non-governed RBNZ Analysis specimen under
+`data/world_state_audit/`. Its two narrow Dimension Assessment candidates and
+proposal-local central-bank identity remain review-pending. The executable
+`WORLD_STATE_ACTOR_IDENTITY_ADMISSION` boundary is identity-only and manual-
+review-gated; it does not open Actor Registry population or admit actor claims.
+
 The production history is split across `components.json`, `snapshots.json` and
 `admission_transactions.json`. Test data belongs under
 `tests/fixtures/world_state_production_v1/` and must not be copied here.
