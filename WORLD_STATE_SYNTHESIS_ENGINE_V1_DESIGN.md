@@ -686,6 +686,17 @@ cutoff is at or after its 28 September admission; this is
 transmission edge, new assessment, production snapshot or public projection
 is created.
 
+Migration Step 14A adds the first climate candidate package without opening
+production admission. It retains a standalone `BASELINE` candidate for the
+Bureau's official Australian-region cyclone climatology and a separate
+completed-season `CLIMATE_PHYSICAL_RISK` Dimension Assessment candidate. The
+Baseline preserves the source-native `since 1980–81` window and approximate
+“about 10” value without inventing exact UTC bounds. The Dimension candidate
+preserves the realised 11/7/2/4/2 measurements, `NOT_ESTABLISHED` surprise,
+completed historical semantics and `COMMON_DRIVER_CONTEXT` without causal
+claim. Hazard counts are not promoted into damage, impact, forecast, anomaly
+or attribution objects; both candidates remain internal and review-pending.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining

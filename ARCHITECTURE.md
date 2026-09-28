@@ -534,6 +534,10 @@ history design do not infer or admit substantive World State. Human review
 remains required for state transitions, actor authority interpretation,
 transmission classification, competing-hypothesis selection, scenario
 signposts, production admission and any promotion into a public projection.
+Migration Step 14A adds no production state: its first climate specimen is a
+review-pending official-reference Baseline plus a completed-season
+`CLIMATE_PHYSICAL_RISK` candidate, with source-native seasonal precision and no
+forecast-surprise, impact or attribution inference.
 The final briefing is a projection assembled from reviewed state and
 provenance; it is not canonical truth. The current public product leads with
 the deterministic Brief, bounded Outlook pilot, Resolution Clock, reviewed

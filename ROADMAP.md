@@ -700,6 +700,18 @@ behind a collapsed System/Audit disclosure. The public method chain is compact
 and explicitly does not assert that every layer is populated or public. No
 publication-governance or governed-data authority changed.
 
+## Stage 33 — climate physical-risk candidate / standalone Baseline — IMPLEMENTED / REVIEW-PENDING
+
+Migration Step 14A retains two separate non-production candidates from the
+reviewed Australian 2025–26 tropical-cyclone season Analysis: an
+`OFFICIAL_REFERENCE` Baseline preserving the source-native “since 1980–81”
+climatology, and a narrow completed-season `CLIMATE_PHYSICAL_RISK` Dimension
+Assessment preserving realised counts. Climatology is not a Forecast;
+hazard is not impact; common-driver context is not attribution; and 11 versus
+about 10 is not a forecast surprise. Both candidates remain internal,
+`REVIEW_PENDING`, and require explicit human disposition. Production World
+State, Baseline, downstream layers and public projection remain unchanged.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
