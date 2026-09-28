@@ -697,6 +697,19 @@ completed historical semantics and `COMMON_DRIVER_CONTEXT` without causal
 claim. Hazard counts are not promoted into damage, impact, forecast, anomaly
 or attribution objects; both candidates remain internal and review-pending.
 
+Migration Step 14B adds a read-only coverage-integrity boundary. Forecast
+projections must distinguish the exact target occurrence from the next
+scheduled occurrence in the same Canonical family and must not backfill an
+earlier event merely because it is now visible. The RBA 3 November pilot
+Forecast therefore carries an informational 29 September Calendar disclosure,
+while its prospective exclusion remains pinned to the original pilot audit.
+Step 14B also retains a `PROSPECTIVE_DISCOVERY_MISS` audit for the 2026
+Australian IGR, separate review-gated Treasury source candidates, a
+review-pending Canonical recovery candidate and a deterministic strategic
+publication discovery contract. IGR material is `OFFICIAL_PROJECTION`, not
+observed state; no production source, Canonical, World State, Forecast,
+Scenario or public IGR projection is created.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining

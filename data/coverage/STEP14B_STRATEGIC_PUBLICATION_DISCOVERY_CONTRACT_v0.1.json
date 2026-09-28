@@ -1,0 +1,42 @@
+{
+  "contract_id": "STEP14B_STRATEGIC_PUBLICATION_DISCOVERY_CONTRACT_v0.1",
+  "status": "DESIGN_AND_TEST_ONLY",
+  "automatic_canonical_admission": false,
+  "trigger": "FIRST_PARTY_SOURCE_EXPLICITLY_NAMES_A_MATERIAL_PUBLICATION_AND_A_FUTURE_RELEASE_DATE_OR_BOUNDED_WINDOW",
+  "exact_date_candidate": {
+    "candidate_class": "AUTHORITATIVE_FUTURE_PUBLICATION_ANNOUNCEMENT",
+    "required_fields": ["publication_identity", "release_date_or_window", "announcement_date", "source_provenance", "certainty:ANNOUNCED"],
+    "canonical_action": "REVIEW_CANDIDATE_ONLY"
+  },
+  "approximate_date_candidate": {
+    "candidate_class": "DISCOVERY_WATCH_CANDIDATE",
+    "example_wording": "in a few weeks",
+    "canonical_action": "NO_EXACT_DATE_OCCURRENCE"
+  },
+  "matching": {
+    "release_updates_pending_announcement": true,
+    "duplicate_announcement_or_release": false,
+    "announcement_and_release_share_one_publication_occurrence_history": true
+  },
+  "candidate_family_scope": [
+    "Intergenerational Report",
+    "Australian Budget",
+    "MYEFO",
+    "major Treasury strategy"
+  ],
+  "materiality_gate": [
+    "macro or fiscal projections",
+    "structural assumptions",
+    "demographics",
+    "systemic technology",
+    "energy",
+    "sovereign sustainability",
+    "regulatory or strategy framework"
+  ],
+  "prohibitions": [
+    "no date backdating",
+    "no media-as-authority substitution",
+    "no automatic Canonical write",
+    "no automatic World State, Forecast or Scenario intake"
+  ]
+}

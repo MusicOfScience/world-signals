@@ -538,6 +538,16 @@ Migration Step 14A adds no production state: its first climate specimen is a
 review-pending official-reference Baseline plus a completed-season
 `CLIMATE_PHYSICAL_RISK` candidate, with source-native seasonal precision and no
 forecast-surprise, impact or attribution inference.
+Migration Step 14B adds a generic Forecast-target chronology check. The public
+Outlook now distinguishes an exact Forecast target from the next scheduled
+Canonical occurrence in the same family; for the RBA pilot, the 29 September
+decision is disclosed in Calendar while the admitted Forecast remains for 3
+November. The existing prospective-pilot audit records why September was not
+backfilled. Step 14B also retains a review-gated Australian IGR coverage-gap
+audit, separate Treasury/Treasury Ministers source candidates and a Canonical
+recovery candidate. IGR material remains `OFFICIAL_PROJECTION`, not observed
+state, and no source-registry, Canonical, World State, Forecast or public IGR
+write is authorised.
 The final briefing is a projection assembled from reviewed state and
 provenance; it is not canonical truth. The current public product leads with
 the deterministic Brief, bounded Outlook pilot, Resolution Clock, reviewed
