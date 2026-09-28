@@ -303,6 +303,15 @@ Outcome state, while the Resolution Clock links only to exact reviewed
 Canonical occurrences. No Forecast, Outcome, Analysis or World State data was
 changed, and no public World State projection was opened.
 
+Migration Step 13A applies a bounded mobile editorial product pass to that
+public spine. The first viewport now reaches the allowlisted Outlook quickly;
+Forecast cards retain scan/understand/audit disclosure, the Calendar offers an
+agenda-first mobile view with Month as a secondary view, and System/audit
+controls remain secondary navigation. Shared search/filter controls are
+preserved, the warm accessible visual language remains in place, and World
+State plus Relationship projection remain closed. No governed Forecast,
+Calendar, Analysis or World State data changed.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.

@@ -43,5 +43,44 @@
 .analysis-preview-card h3{margin:.35rem 0 1rem;font-family:var(--display,Georgia,serif);font-size:1.25rem;font-weight:500;line-height:1.15}
 .analysis-preview-card dl{display:grid;gap:.8rem;margin:0}.analysis-preview-card dt{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}.analysis-preview-card dd{margin:0;line-height:1.45;font-size:.88rem}.analysis-preview-card details{margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}.analysis-preview-card summary{cursor:pointer;color:var(--accent);font-weight:650}.analysis-preview-card details p{margin:.55rem 0 0;line-height:1.45}
 @media(max-width:900px){.outlook-section,.clock-section,.analysis-preview-section{padding-left:5vw;padding-right:5vw}.outlook-heading{gap:2rem}.analysis-preview-grid{grid-template-columns:1fr 1fr}.clock-list{grid-template-columns:1fr}}
-@media(max-width:620px){.outlook-section,.clock-section,.analysis-preview-section{padding-top:3.5rem}.outlook-heading{grid-template-columns:1fr;gap:1.5rem}.outlook-asof{justify-self:start}.outlook-grid,.analysis-preview-grid{grid-template-columns:1fr}.forecast-card{padding-top:1.75rem}.clock-main{grid-template-columns:6.8rem minmax(0,1fr);gap:.65rem}.clock-item{grid-template-columns:1fr}.clock-calendar-link{margin-left:7.45rem}.forecast-disclosure dl{grid-template-columns:1fr;gap:.2rem}.forecast-disclosure dd{margin-bottom:.55rem}.probability-track{height:10px}}
+@media(max-width:680px){
+  .outlook-section,.clock-section,.analysis-preview-section{padding:1.8rem .9rem .9rem}
+  .outlook-heading{grid-template-columns:1fr;gap:.8rem;padding-bottom:1rem}
+  .outlook-heading h2,.clock-section h2,.analysis-preview-section h2{font-size:clamp(1.8rem,8vw,2.35rem);max-width:14ch}
+  .outlook-heading>div:first-child>p:last-child{font-size:.9rem;line-height:1.45}
+  .outlook-asof{justify-self:stretch;min-width:0;padding:.65rem 0 .65rem .8rem}
+  .outlook-asof strong{font-size:1.05rem}
+  .outlook-grid,.analysis-preview-grid{grid-template-columns:1fr}
+  .forecast-card{padding:1rem 0 1.2rem}
+  .forecast-card-head h3{font-size:1.15rem}
+  .forecast-state{font-size:.58rem}
+  .forecast-target{margin:.7rem 0 .8rem;font-size:1.08rem;line-height:1.2}
+  .probability-strip{gap:.45rem;margin:.8rem 0 1rem}
+  .probability-label{font-size:.82rem}
+  .probability-track{height:8px}
+  .forecast-numeric{margin:.85rem 0 1rem}
+  .forecast-numeric strong{font-size:3.2rem}
+  .forecast-when{margin:.8rem 0 .9rem;padding-left:.7rem;font-size:.86rem}
+  .forecast-when a,.clock-calendar-link{font-size:.78rem}
+  .forecast-lifecycle{display:none}
+  .forecast-disclosure{font-size:.82rem;padding-top:.65rem}
+  .forecast-disclosure dl{grid-template-columns:1fr;gap:.18rem;margin-top:.75rem}
+  .forecast-disclosure dd{margin-bottom:.45rem}
+  .clock-section{padding-top:2.2rem}
+  .forecast-chronology{overflow:visible;margin:.8rem 0 1rem;padding:.65rem 0}
+  .forecast-chronology .chronology-line{display:none}
+  .forecast-chronology ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;min-width:0}
+  .forecast-chronology li{padding:.5rem .45rem;border-bottom:1px solid var(--line)}
+  .forecast-chronology li:nth-child(odd){border-right:1px solid var(--line)}
+  .forecast-chronology time{font-size:.68rem}
+  .forecast-chronology span{font-size:.68rem}
+  .clock-main{grid-template-columns:5.8rem minmax(0,1fr);gap:.55rem}
+  .clock-item{grid-template-columns:1fr;gap:.35rem;padding:.8rem 0}
+  .clock-calendar-link{margin-left:0}
+  .analysis-preview-section{padding-top:2.2rem}
+  .analysis-preview-card{padding-top:.75rem}
+  .analysis-preview-card h3{font-size:1.05rem;margin:.25rem 0 .7rem}
+  .analysis-preview-card dl{gap:.5rem}
+  .analysis-preview-card dd{font-size:.82rem}
+}
 @media(prefers-reduced-motion:reduce){.clock-item,.forecast-card *{transition:none!important;animation:none!important}}

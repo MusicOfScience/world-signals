@@ -11,7 +11,7 @@
       link.href='risk.css';
       document.head.appendChild(link);
     }
-    const tabs=document.querySelector('.viewtabs');
+    const tabs=document.querySelector('.secondary-viewtabs')||document.querySelector('.viewtabs');
     if(tabs&&!document.querySelector('#riskTab')){
       tabs.insertAdjacentHTML('beforeend','<button id="riskTab" aria-pressed="false">Risk overlay</button>');
     }
@@ -189,7 +189,7 @@
     });
     document.querySelector('#riskView').hidden=false;
     document.querySelector('.controls').hidden=true;
-    document.querySelectorAll('.viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='riskTab')));
+    document.querySelectorAll('.viewtabs button,.secondary-viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='riskTab')));
     loadRisk();
   }
 
@@ -200,5 +200,5 @@
 
   ensureSurface();
   document.querySelector('#riskTab').addEventListener('click',showRisk);
-  document.querySelectorAll('.viewtabs button:not(#riskTab)').forEach(button=>button.addEventListener('click',hideRisk));
+  document.querySelectorAll('.viewtabs button:not(#riskTab),.secondary-viewtabs button:not(#riskTab)').forEach(button=>button.addEventListener('click',hideRisk));
 })();

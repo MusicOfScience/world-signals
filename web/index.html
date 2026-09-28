@@ -28,8 +28,8 @@
     <div class="hero-grid">
       <div>
         <p class="eyebrow">A PUBLIC INTELLIGENCE BRIEF</p>
-        <h1>What we expect next. What we are watching. What would change the view.</h1>
-        <p class="lede">A public brief built from governed forecasts, reviewed analysis and a source-native calendar — with uncertainty left visible.</p>
+        <h1>What we expect next.</h1>
+        <p class="lede">Forecasts with frozen cutoffs, a calendar of what is next, and reviewed analysis that keeps uncertainty visible.</p>
       </div>
       <div class="safety hero-boundary">
         <span class="hero-boundary-label">PUBLIC NOW</span>
@@ -90,12 +90,15 @@
         <div class="status-stack" id="publicStatus" aria-live="polite"><p class="loading">Loading publication status…</p></div>
       </div>
 
-      <div class="horizon-controls" aria-label="Horizon filters">
-        <input id="horizonSearch" type="search" placeholder="Search event, institution, jurisdiction…">
-        <select id="horizonDomain"><option value="">All domains</option></select>
-        <select id="horizonRegion"><option value="">All regions</option></select>
-        <select id="horizonJurisdiction"><option value="">All jurisdictions</option></select>
-      </div>
+      <details id="horizonFilterDisclosure" class="filter-disclosure" open>
+        <summary>Search &amp; filters <span>calendar horizon</span></summary>
+        <div class="horizon-controls" aria-label="Horizon filters">
+          <input id="horizonSearch" data-shared-filter="search" type="search" placeholder="Search event, institution, jurisdiction…">
+          <select id="horizonDomain"><option value="">All domains</option></select>
+          <select id="horizonRegion" data-shared-filter="region"><option value="">All regions</option></select>
+          <select id="horizonJurisdiction"><option value="">All jurisdictions</option></select>
+        </div>
+      </details>
 
       <div id="horizonSummary" class="horizon-summary" aria-live="polite">Loading public event horizon…</div>
 
@@ -146,20 +149,29 @@
       <div class="viewtabs">
         <button data-view="calendar" aria-pressed="true">Calendar</button>
         <button data-view="index" aria-pressed="false">Event index</button>
-        <button data-view="monitors" aria-pressed="false">Monitor routes</button>
-        <button id="operationsTab" aria-pressed="false">Operations</button>
-        <button id="historyTab" aria-pressed="false">Change history</button>
+        <button id="analysisTab" aria-pressed="false">Analysis</button>
       </div>
+      <details class="secondary-views">
+        <summary>System / audit</summary>
+        <div class="viewtabs secondary-viewtabs">
+          <button data-view="monitors" aria-pressed="false">Monitor routes</button>
+          <button id="operationsTab" aria-pressed="false">Operations</button>
+          <button id="historyTab" aria-pressed="false">Change history</button>
+        </div>
+      </details>
       <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
     </section>
 
-    <section class="controls" aria-label="Event filters">
-      <input id="search" type="search" placeholder="Search event, institution, jurisdiction…">
-      <select id="region"><option value="">All regions</option></select>
-      <select id="category"><option value="">All categories</option></select>
-      <select id="certainty"><option value="">All certainty</option></select>
-      <select id="visibility"><option value="">All visibility</option></select>
-    </section>
+    <details id="filterDisclosure" class="filter-disclosure" open>
+      <summary>Search &amp; filters <span>full calendar</span></summary>
+      <section class="controls" aria-label="Event filters">
+        <input id="search" data-shared-filter="search" type="search" placeholder="Search event, institution, jurisdiction…">
+        <select id="region" data-shared-filter="region"><option value="">All regions</option></select>
+        <select id="category"><option value="">All categories</option></select>
+        <select id="certainty"><option value="">All certainty</option></select>
+        <select id="visibility"><option value="">All visibility</option></select>
+      </section>
+    </details>
 
     <section id="calendarView" class="view-panel">
       <section id="calendarSubscribe" class="calendar-subscribe" aria-labelledby="calendarSubscribeTitle">
@@ -191,6 +203,10 @@
         <div>
           <h2 id="monthLabel"></h2>
           <span id="calendarResultCount" class="meta"></span>
+        </div>
+        <div class="calendar-view-toggle" role="group" aria-label="Calendar view">
+          <button id="calendarAgendaToggle" type="button" aria-pressed="false">Agenda</button>
+          <button id="calendarMonthToggle" type="button" aria-pressed="true">Month</button>
         </div>
       </div>
       <div id="calendarGrid" class="calendar-grid" aria-label="Monthly calendar"></div>

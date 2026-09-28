@@ -7,6 +7,8 @@ let OUTLOOK={metadata:{},forecasts:[]};
 let ANALYSIS={metadata:{},reviews:[]};
 let futureOnly = true;
 let activeView = 'calendar';
+let calendarViewMode = window.matchMedia?.('(max-width: 680px)').matches ? 'agenda' : 'month';
+let calendarViewModeTouched = false;
 let calendarCursor = new Date();
 calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
 let selectedDay = null;
@@ -449,7 +451,7 @@ function renderOutlook(){
       ${forecastValueMarkup(row)}
       <div class="forecast-lifecycle" aria-label="Forecast lifecycle"><span>ISSUED<br><strong>${esc(utcDateLabel(row.issued_at_utc))}</strong></span><i aria-hidden="true">━●━━━━━━━━○</i><span>RESOLVES<br><strong>${esc(utcDateLabel(resolution.window_start_at_utc))}</strong></span></div>
       <div class="forecast-when"><span>WHAT SETTLES THIS?</span><strong>${esc(resolution.source_label)}</strong><small>Outcome pending · Evaluation remains NO_SAMPLE</small>${calendar?`<a href="#event=${encodeURIComponent(calendar.occurrence_id)}">Open calendar event →</a>`:''}</div>
-      <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Question</dt><dd>${esc(row.question)}</dd><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd></dl></details>
+      <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Question</dt><dd>${esc(row.question)}</dd><dt>Issued</dt><dd>${esc(utcLabel(row.issued_at_utc))} UTC</dd><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Resolution source</dt><dd>${esc(resolution.source_label)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd>${calendar?`<dt>Calendar</dt><dd><a href="#event=${encodeURIComponent(calendar.occurrence_id)}">Open the resolution event →</a></dd>`:''}<dt>Outcome / evaluation</dt><dd>Outcome pending · Evaluation remains NO_SAMPLE</dd></dl></details>
     </article>`;
   }).join(''):'<p class="empty">No public Forecasts passed the allowlist.</p>';
 }
@@ -588,6 +590,25 @@ function renderCalendar(){
   $('#calendarWindows').innerHTML=windows.length?windows.map(e=>`<button class="window-event" data-event-id="${esc(e.occurrence_id)}"><span>${esc(windowLabel(e))}</span><strong>${esc(e.title)}</strong><small>${esc(e.certainty)} · ${esc(e.institution)}${isSeasonWindow(e)?' · month precision':''}</small></button>`).join(''):'<p class="empty">No month-precision or expected-window events overlap this month under the current filters.</p>';
   attachEventClicks($('#calendarWindows'));
   $('#calendarResultCount').textContent=`${[...byDay.values()].reduce((n,x)=>n+x.length,0)} exact-date events · ${windows.length} windows`;
+  applyCalendarViewMode();
+}
+function applyCalendarViewMode(){
+  const grid=$('#calendarGrid');
+  const agenda=document.querySelector('.day-agenda');
+  const agendaButton=$('#calendarAgendaToggle');
+  const monthButton=$('#calendarMonthToggle');
+  if(!grid || !agenda || !agendaButton || !monthButton) return;
+  const agendaMode=calendarViewMode==='agenda';
+  grid.hidden=agendaMode;
+  agenda.hidden=false;
+  agendaButton.setAttribute('aria-pressed',String(agendaMode));
+  monthButton.setAttribute('aria-pressed',String(!agendaMode));
+  document.querySelector('.calendar-view-toggle')?.setAttribute('data-active-view',calendarViewMode);
+}
+function setCalendarViewMode(mode, touched=true){
+  calendarViewMode=mode==='agenda'?'agenda':'month';
+  calendarViewModeTouched=touched;
+  applyCalendarViewMode();
 }
 function renderMonitors(){
   const routes=MONITORS.routes||[];
@@ -603,6 +624,7 @@ function setView(view){
   $('#indexView').hidden=view!=='index';
   $('#monitorsView').hidden=view!=='monitors';
   $('.controls').hidden=view==='monitors';
+  $('#filterDisclosure').hidden=view==='monitors';
   render();
 }
 function render(){
@@ -640,12 +662,18 @@ async function main(){
   options('#category',DATA.events.map(x=>x.category));
   options('#certainty',DATA.events.map(x=>x.certainty));
   options('#visibility',DATA.events.map(x=>x.visibility_tier));
-  document.querySelectorAll('.controls input,.controls select').forEach(x=>x.addEventListener('input',render));
+  document.querySelectorAll('.controls input,.controls select').forEach(x=>{
+    x.addEventListener('input',render);
+    x.addEventListener('change',render);
+  });
+  bindSharedFilterState();
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
   $('#futureOnly').addEventListener('click',()=>{futureOnly=!futureOnly;$('#futureOnly').setAttribute('aria-pressed',String(futureOnly));renderIndex();});
   $('#prevMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);selectedDay=null;renderCalendar();});
   $('#nextMonth').addEventListener('click',()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);selectedDay=null;renderCalendar();});
   $('#todayMonth').addEventListener('click',()=>{const n=new Date();calendarCursor=new Date(n.getFullYear(),n.getMonth(),1);selectedDay=localDateKey(n);renderCalendar();});
+  $('#calendarAgendaToggle').addEventListener('click',()=>setCalendarViewMode('agenda'));
+  $('#calendarMonthToggle').addEventListener('click',()=>setCalendarViewMode('month'));
   $('#copyCalendarUrl').addEventListener('click',copyCalendarUrl);
   $('#closeDetail').addEventListener('click',closeDetail);
   $('#detail').addEventListener('cancel',event=>{event.preventDefault();closeDetail();});
@@ -659,6 +687,34 @@ async function main(){
   });
   setView('calendar');
   openDetailFromLocation();
+}
+function bindSharedFilterState(){
+  const pairs=[['#search','#horizonSearch'],['#region','#horizonRegion']];
+  let syncing=false;
+  pairs.forEach(([leftSelector,rightSelector])=>{
+    const left=$(leftSelector), right=$(rightSelector);
+    if(!left || !right) return;
+    const sync=(source,target)=>{
+      if(syncing) return;
+      syncing=true;
+      target.value=source.value;
+      target.dispatchEvent(new Event(source.tagName==='INPUT'?'input':'change',{bubbles:true}));
+      syncing=false;
+    };
+    left.addEventListener('input',()=>sync(left,right));
+    left.addEventListener('change',()=>sync(left,right));
+    right.addEventListener('input',()=>sync(right,left));
+    right.addEventListener('change',()=>sync(right,left));
+  });
+  const mobile=window.matchMedia?.('(max-width: 680px)').matches;
+  ['#filterDisclosure','#horizonFilterDisclosure'].forEach(selector=>{
+    const disclosure=$(selector);
+    if(disclosure && mobile) disclosure.open=false;
+  });
+  const media=window.matchMedia?.('(max-width: 680px)');
+  media?.addEventListener?.('change',event=>{
+    if(!calendarViewModeTouched) setCalendarViewMode(event.matches?'agenda':'month',false);
+  });
 }
 main().catch(err=>{
   console.error(err);
