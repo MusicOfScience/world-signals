@@ -1,0 +1,53 @@
+{
+  "accepted_semantics": {
+    "causal_promotion": "NONE",
+    "confidence": "MEDIUM",
+    "current_active_transmission_claim": "NONE",
+    "directionality": "DIRECTED",
+    "lifecycle_state": "EXPIRED",
+    "relationship_class": "ASSOCIATION",
+    "temporal_scope_type": "HISTORICAL_PERIOD"
+  },
+  "candidate": {
+    "candidate_semantic_fingerprint": "398efdf39448a9676bdd099a38fc3f66ac47a69cac1001b3895f493601679221",
+    "proposal_id": "WS-STEP12A-RBNZ-RELATIONSHIP-202609",
+    "relationship_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001",
+    "revision_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001-R1",
+    "source_manifest_sha256": "a4ecd251fa4f6e57020f0fcf6f0e0427e0cdb8a1d392ed34068d2d73b13fabbe"
+  },
+  "contract_version": "0.2",
+  "decision": "ACCEPTED",
+  "decision_basis": "Accept the RBNZ association as a bounded historical relationship only; retain MEDIUM confidence, alternatives, confounders and falsifiers, and make no causal or current-active transmission claim.",
+  "decision_scope": "FIRST_RELATIONSHIP_PRODUCTION_ADMISSION",
+  "endpoint_refs": [
+    {
+      "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+      "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+    },
+    {
+      "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+      "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+    }
+  ],
+  "independence_assessment": {
+    "confidence_uplift_from_endpoint_coadmission": false,
+    "counts_as_independent_corroboration": false,
+    "same_world_state_admission_transaction": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+    "separately_reviewed_components": true,
+    "shared_analysis_or_evidence_lineage": true
+  },
+  "production_relationship_admitted": false,
+  "public_projection_permitted": false,
+  "reviewed_at_utc": "2026-09-28T09:04:33Z",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "HUMAN_REVIEWER"
+  },
+  "transaction_fingerprint": "62a016899e0dfab78334d78384e6a21692907ac1708c5f729076a197ea39419c",
+  "transaction_id": "WS-STEP12B-RBNZ-RELATIONSHIP-REVIEW-20260928-001",
+  "transaction_type": "RELATIONSHIP_REVIEW",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": []
+}

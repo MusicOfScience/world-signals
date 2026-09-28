@@ -569,7 +569,7 @@ currentness claim. Historical/effective reads remain available, current-use
 transitions remain separate from analytical deltas, and no production objects
 or public projection change.
 
-## Stage 26 — Relationship v0.2 / World State endpoint candidate — IMPLEMENTED / REVIEW-PENDING
+## Stage 26 — Relationship v0.2 / World State endpoint candidate — IMPLEMENTED / ADMITTED SPECIMEN
 
 Step 12A defines a versioned Relationship candidate contract `0.2` alongside
 the hash-pinned empty v0.1 production contract. Reviewed Signal revisions
@@ -581,11 +581,14 @@ nodes. Temporal scope supports source-reported windows without inventing exact
 market onset, and an explicit temporal dependency DAG rejects direct and
 multi-hop self-support cycles.
 
-The RBNZ Macro → Markets candidate is retained under
-`data/relationship_audit/` as a directed `ASSOCIATION`, not causal evidence or
-an active transmission channel. It remains `UNDER_REVIEW`/`UNRESOLVED` with
-no production write target. Production Relationships remain empty and public
-projection remains closed; Step 12B is the separate human review boundary.
+The RBNZ Macro → Markets candidate was reviewed and admitted as one controlled
+v0.2 production revision under `data/relationships/relationships_v0.2.json`.
+It remains a directed `ASSOCIATION`, not causal evidence or an active
+transmission channel, with lifecycle `EXPIRED` for its completed historical
+period. Same-transaction endpoint admission is explicitly not independent
+corroboration. The v0.1 empty checkpoint remains unchanged, active graph edges
+remain zero, general population remains closed and public projection remains
+closed.
 
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 

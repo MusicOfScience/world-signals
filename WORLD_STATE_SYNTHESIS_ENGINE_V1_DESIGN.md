@@ -53,7 +53,7 @@ by a new conceptual data model:
 | `data/live_intelligence/schema.json` v0.13 and `src/world_signals/live_intelligence.py` | Live Intelligence is the factual observation substrate. It keeps event, publication and system-observation time separate; allows unscheduled observations; preserves corrections/conflicts; prohibits causal interpretation and market attribution; and keeps automatic ingestion and public observation projection closed. |
 | `data/analysis/schema.json` v0.8 and `src/world_signals/analysis.py` | Analysis already separates what happened, expectations, surprise, movement, connection, noise, alternatives, second-order effects and falsifiers. Its market policy requires measurement and rights evidence for exact timestamp series. Its Live bridge uses explicit `observation_id` values, not story/latest selectors. |
 | `data/signals/schema.json` v0.1 and `src/world_signals/signals.py` | Signal revisions pin immutable observation snapshots, require an explicit qualitative baseline and preserve supporting versus contradictory evidence, alternatives, expiry and review provenance. `signal_state_as_of` reports a state without rewriting history. |
-| `data/relationships/schema_v0.2.json` and `src/world_signals/relationships.py` | Step 12A candidate endpoints are reviewed Signal revisions or exact immutable admitted World State component revisions. Directionality, temporal precision and epistemic class are explicit; Analysis/evidence remain support, composition views are prohibited as nodes, temporal dependency cycles fail closed, graph traversal cannot create edges, and causal classes require reviewed mechanism and evidence. The hash-pinned empty v0.1 production contract remains unchanged; production population and public projection are closed. |
+| `data/relationships/schema_v0.2.json`, `src/world_signals/relationships.py` and `src/world_signals/relationship_admission.py` | Step 12A/12B support reviewed Signal or exact immutable admitted World State component endpoints, explicit temporal precision and dependency-cycle checks. Analysis/evidence remain support, composition views are prohibited as nodes, and causal classes require reviewed mechanism/evidence. The v0.1 empty checkpoint remains unchanged; one controlled historical v0.2 specimen is admitted, while active graph and public projection remain closed. |
 | `data/risks/schema.json` v0.1 and `src/world_signals/risks.py` | Risk/Regime history is append-only, qualitative and as-of. Contradictory inputs remain separate, convergence is lineage-derived, thresholds require description and provenance, and unsupported numeric scores are prohibited. Production population is closed. |
 | `data/scenarios/schema.json` v0.1 and `src/world_signals/scenarios.py` | Scenario Sets require competing members, explicit divergence points, conditional assumptions and signposts. Probability, ranking and forecast fields are prohibited. Production population is closed. |
 | `data/forecasts/schema.json` v0.1, `src/world_signals/forecasts.py` and `data/forecasts/forecasts.json` | The four admitted pilot Forecast issuances pin information cutoffs, resolution rules, sources and vintage semantics. Later evidence may not be backdated into an issuance. |
@@ -634,7 +634,14 @@ its source-reported market window does not receive fabricated UTC onset or end
 times, and its alternative explanations, confounders and falsifiers remain
 explicit. A temporal dependency DAG rejects direct and multi-hop self-support
 cycles. The candidate is `UNDER_REVIEW`/`UNRESOLVED`, internal-only and has no
-production write target. Step 12B is the separate human Relationship review.
+production write target. Step 12B admits the exact candidate as one historical
+`ASSOCIATION` with `DIRECTED` ordering, `MEDIUM` confidence and `EXPIRED`
+lifecycle. `EXPIRED` means the source-reported historical period is complete,
+not that the evidence is false or withdrawn. The two endpoint components were
+separately reviewed but admitted in the same Step 11B transaction, so their
+co-admission is not independent corroboration. The v0.1 checkpoint remains
+unchanged, active graph edges remain empty, and public projection remains
+closed.
 
 ## Deferred implementation questions
 

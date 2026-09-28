@@ -1,0 +1,137 @@
+{
+  "automatic_ingestion_allowed": false,
+  "dataset": "REVIEWED_RELATIONSHIPS",
+  "general_population_open": false,
+  "manual_reviewed_admission_allowed": true,
+  "maximum_controlled_relationships": 1,
+  "population_state": "CONTROLLED_SINGLE_RELATIONSHIP_SPECIMEN",
+  "project": "WORLD SIGNALS",
+  "public_projection_permitted": false,
+  "relationships": [
+    {
+      "alternative_explanations": [
+        "Global oil and geopolitical shocks may have driven or contaminated longer-duration rates independently of the domestic decision.",
+        "A global bond-market sell-off may explain part of the market movement.",
+        "The NZD had already weakened before the decision, and no high-frequency reconstruction is available."
+      ],
+      "causal_basis": [],
+      "common_driver_signal_ids": [],
+      "confidence": "MEDIUM",
+      "confounders": [
+        "Simultaneous global rates repricing.",
+        "Oil/geopolitical inflation shock.",
+        "Pre-existing currency movement and source-reported rather than independently reconstructed event windows."
+      ],
+      "contextual_canonical_occurrence_ids": [],
+      "contradictory_evidence_refs": [],
+      "directionality": "DIRECTED",
+      "directionality_rationale": "The reviewed policy-path information precedes the source-reported market response window; direction is analytical ordering, not causal proof.",
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS",
+        "MARKETS_AS_SENSORS"
+      ],
+      "falsification_conditions": [
+        "High-frequency swap or FX data show the reported moves materially preceded the RBNZ release.",
+        "Later evidence shows the short-end move was primarily driven by a simultaneous global rates catalyst rather than the RBNZ path.",
+        "The market had priced an OCR path at or below the RBNZ projection immediately before the decision."
+      ],
+      "first_asserted_at_utc": "2026-09-28T07:22:06Z",
+      "jurisdictions": [
+        "New Zealand"
+      ],
+      "lifecycle_state": "EXPIRED",
+      "mechanism": "NOT_ASSERTED_AT_ASSOCIATION_CLASS",
+      "previous_revision_id": null,
+      "rationale": "The expected 25 basis-point hike is not the surprise. The reviewed proposition concerns a more gradual forward path than market pricing and source-reported lower two-year swap and NZD pricing in the immediate/same-session window.",
+      "relationship_class": "ASSOCIATION",
+      "relationship_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001",
+      "review_provenance": {
+        "created_at_utc": "2026-09-28T07:22:06Z",
+        "created_by": "world-state-step12a-rbnz-relationship-candidate-v1",
+        "decision_basis": "Accept the RBNZ association as a bounded historical relationship only; retain MEDIUM confidence, alternatives, confounders and falsifiers, and make no causal or current-active transmission claim.",
+        "reviewed_at_utc": "2026-09-28T09:04:33Z",
+        "reviewed_by": "operator-human-review"
+      },
+      "review_state": "ACCEPTED",
+      "revision_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001-R1",
+      "revision_number": 1,
+      "revision_reason": "First production revision: two separately reviewed World State component revisions were admitted in the same Step 11B transaction; shared lineage is not independent corroboration. Accepted as a historical association only; no causal promotion.",
+      "source_nodes": [
+        {
+          "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+          "admitted_at_utc": "2026-09-28T04:27:17Z",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "dimension": "MACROECONOMIC_FINANCIAL_CONDITIONS",
+          "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "node_type": "WORLD_STATE_COMPONENT",
+          "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "supporting_analysis_refs": [
+        {
+          "analysis_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1"
+        }
+      ],
+      "supporting_evidence_pins": [
+        {
+          "evidence_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da"
+        },
+        {
+          "evidence_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47"
+        },
+        {
+          "evidence_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e"
+        }
+      ],
+      "supporting_evidence_refs": [
+        "WSEV-NZ-OCR-RBNZ-20260902",
+        "WSEV-NZ-OCR-REUTERS-20260902",
+        "WSEV-NZ-OCR-BT-20260902"
+      ],
+      "supporting_node_revisions": [
+        {
+          "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "node_type": "WORLD_STATE_COMPONENT",
+          "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "node_type": "WORLD_STATE_COMPONENT",
+          "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "supporting_observation_ids": [],
+      "target_nodes": [
+        {
+          "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+          "admitted_at_utc": "2026-09-28T04:27:17Z",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "dimension": "MARKETS_AS_SENSORS",
+          "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "node_type": "WORLD_STATE_COMPONENT",
+          "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "temporal_scope": {
+        "anchor_at_utc": "2026-09-02T02:00:00Z",
+        "end_at_utc": null,
+        "end_date": "2026-09-02",
+        "notes": "The RBNZ release is the event anchor. Market-response onset and end remain unknown within the source-reported immediate/same-session window; no exact temporal onset is manufactured.",
+        "precision": "SOURCE_REPORTED_WINDOW",
+        "scope_type": "HISTORICAL_PERIOD",
+        "start_at_utc": null,
+        "start_date": "2026-09-02"
+      },
+      "title": "RBNZ forward-path information and reported market repricing"
+    }
+  ],
+  "version": "0.2"
+}
