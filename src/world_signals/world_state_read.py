@@ -27,7 +27,9 @@ from .live_intelligence import validate_live_intelligence
 from .outcomes import outcome_state_as_of, validate_outcomes
 from .relationships import (
     relationship_graph_edges_as_of,
+    relationship_production_history_as_of,
     relationship_state_as_of,
+    validate_relationship_production,
     validate_relationships,
 )
 from .risks import risk_state_as_of, validate_risk_states
@@ -74,8 +76,13 @@ DATA_PATHS = {
     "signals_schema": "data/signals/schema.json",
     "signals": "data/signals/signals.json",
     "signal_admission": "data/signals/signal_admission_transaction_v1.json",
-    "relationships_schema": "data/relationships/schema.json",
-    "relationships": "data/relationships/relationships.json",
+    "relationships_v01_schema": "data/relationships/schema.json",
+    "relationships_v01_legacy": "data/relationships/relationships.json",
+    "relationships_v02_schema": "data/relationships/schema_v0.2.json",
+    "relationships_v02_production": "data/relationships/relationships_v0.2.json",
+    "relationships_v02_admissions": "data/relationships/admission_transactions_v0.2.json",
+    "world_state_components": "data/world_state/components.json",
+    "world_state_admissions": "data/world_state/admission_transactions.json",
     "risks_schema": "data/risks/schema.json",
     "risks": "data/risks/states.json",
     "scenarios_schema": "data/scenarios/schema.json",
@@ -89,6 +96,20 @@ DATA_PATHS = {
     "evaluation_config": "data/evaluation/config.json",
     "evaluation": "data/evaluation/evaluation.json",
 }
+LEGACY_DATA_PATHS = {
+    key: DATA_PATHS[key]
+    for key in (
+        "canonical_schema", "canonical", "sources", "live_schema", "live_evidence", "live_observations",
+        "analysis_schema", "analysis_evidence", "analysis_reviews", "signals_schema", "signals",
+        "signal_admission", "risks_schema", "risks", "scenarios_schema", "scenarios", "forecasts_schema",
+        "forecasts", "forecast_admission", "outcomes_schema", "outcomes", "evaluation_schema",
+        "evaluation_config", "evaluation",
+    )
+}
+LEGACY_DATA_PATHS.update({
+    "relationships_schema": DATA_PATHS["relationships_v01_schema"],
+    "relationships": DATA_PATHS["relationships_v01_legacy"],
+})
 
 
 class WorldStateReadError(ValueError):
@@ -176,10 +197,22 @@ def _load_inputs() -> dict[str, Any]:
     return {key: load_json(ROOT / relative) for key, relative in DATA_PATHS.items()}
 
 
-def _input_file_hashes() -> dict[str, str]:
+def _merged_evidence(inputs: dict[str, Any]) -> dict[str, Any]:
+    """Build the deterministic evidence universe required by v0.2 Relationships."""
+    by_id: dict[str, dict[str, Any]] = {}
+    for source in (inputs["live_evidence"], inputs["analysis_evidence"]):
+        for row in source.get("evidence", []):
+            evidence_id = row.get("evidence_id")
+            if evidence_id in by_id and by_id[evidence_id] != row:
+                raise WorldStateReadError(f"conflicting evidence objects for {evidence_id}")
+            by_id[evidence_id] = row
+    return {"evidence": [by_id[key] for key in sorted(by_id)]}
+
+
+def _input_file_hashes(paths: dict[str, str] = DATA_PATHS) -> dict[str, str]:
     return {
         key: _file_sha256(ROOT / relative)
-        for key, relative in sorted(DATA_PATHS.items())
+        for key, relative in sorted(paths.items())
     }
 
 
@@ -213,21 +246,27 @@ def validate_governed_inputs(inputs: dict[str, Any]) -> None:
         inputs["signals_schema"], inputs["signals"], inputs["live_observations"],
         inputs["live_evidence"], inputs["signal_admission"],
     )))
-    errors.extend(_report_errors("Relationships", validate_relationships(
-        inputs["relationships_schema"], inputs["relationships"], inputs["signals"],
+    errors.extend(_report_errors("Relationships v0.1 legacy", validate_relationships(
+        inputs["relationships_v01_schema"], inputs["relationships_v01_legacy"], inputs["signals"],
         inputs["live_observations"], inputs["live_evidence"], inputs["canonical"],
     )))
+    errors.extend(_report_errors("Relationships v0.2 production", validate_relationship_production(
+        inputs["relationships_v02_schema"], inputs["relationships_v02_production"], inputs["signals"],
+        inputs["live_observations"], _merged_evidence(inputs), inputs["canonical"],
+        world_state_components=inputs["world_state_components"],
+        world_state_admissions=inputs["world_state_admissions"],
+    )))
     errors.extend(_report_errors("Risks / Regimes", validate_risk_states(
-        inputs["risks_schema"], inputs["risks"], inputs["signals"], inputs["relationships"],
+        inputs["risks_schema"], inputs["risks"], inputs["signals"], inputs["relationships_v01_legacy"],
         inputs["live_observations"], inputs["live_evidence"], inputs["canonical"],
     )))
     errors.extend(_report_errors("Scenarios", validate_scenarios(
         inputs["scenarios_schema"], inputs["scenarios"], inputs["risks"], inputs["signals"],
-        inputs["relationships"], inputs["live_observations"], inputs["live_evidence"], inputs["canonical"],
+        inputs["relationships_v01_legacy"], inputs["live_observations"], inputs["live_evidence"], inputs["canonical"],
     )))
     errors.extend(_report_errors("Forecasts", validate_forecasts(
         inputs["forecasts_schema"], inputs["forecasts"], inputs["scenarios"], inputs["risks"],
-        inputs["signals"], inputs["relationships"], inputs["live_observations"], inputs["live_evidence"],
+        inputs["signals"], inputs["relationships_v01_legacy"], inputs["live_observations"], inputs["live_evidence"],
         inputs["canonical"], inputs["sources"], inputs["forecast_admission"],
     )))
     errors.extend(_report_errors("Outcomes", validate_outcomes(
@@ -248,6 +287,16 @@ def _in_scope(row: dict[str, Any], jurisdictions: list[str], *, canonical: bool 
     if isinstance(values, str):
         values = [values]
     return bool(set(values or ()) & set(jurisdictions))
+
+
+def _matches_synthesis_scope(row: dict[str, Any], request: dict[str, Any]) -> bool:
+    jurisdictions = request["scope"]["jurisdictions"]
+    dimensions = request["scope"]["dimensions"]
+    if not _in_scope(row, jurisdictions):
+        return False
+    if "*" not in dimensions and not (set(row.get("domains", [])) & set(dimensions)):
+        return False
+    return True
 
 
 def _known_at(value: Any, as_of: datetime) -> bool:
@@ -358,28 +407,47 @@ def _select_revisions(inputs: dict[str, Any], request: dict[str, Any], manifest:
     selected_signals = []
     for state in sorted(signal_states.values(), key=lambda row: row["revision_id"]):
         row = signal_rows[state["revision_id"]]
-        if any(not _known_at(next((obs.get("observed_at_utc") for obs in live_observations if obs.get("observation_id") == oid), None), request["_as_of"]) for oid in row.get("observation_ids", [])):
+        if not _matches_synthesis_scope(row, request):
+            continue
+        if any(not _known_at(next((obs.get("observed_at_utc") for obs in inputs["live_observations"].get("observations", []) if obs.get("observation_id") == oid), None), request["_as_of"]) for oid in row.get("observation_ids", [])):
             raise WorldStateReadError(f"Signal {row['revision_id']} references evidence after the read cutoff")
         selected_signals.append(row)
         manifest.add("SIGNALS", row["signal_id"], row, row["revision_id"])
 
     relationship_states = relationship_state_as_of(
-        inputs["relationships_schema"], inputs["relationships"].get("relationships", []), inputs["signals"],
+        inputs["relationships_v01_schema"], inputs["relationships_v01_legacy"].get("relationships", []), inputs["signals"],
         inputs["live_observations"], inputs["live_evidence"], inputs["canonical"], at,
     )
-    relationship_rows = {row["revision_id"]: row for row in inputs["relationships"].get("relationships", [])}
+    relationship_rows = {row["revision_id"]: row for row in inputs["relationships_v01_legacy"].get("relationships", [])}
     selected_relationships = []
     for state in sorted(relationship_states.values(), key=lambda row: row["revision_id"]):
         row = relationship_rows[state["revision_id"]]
         selected_relationships.append(row)
         manifest.add("RELATIONSHIPS", row["relationship_id"], row, row["revision_id"])
     relationship_edges = relationship_graph_edges_as_of(
-        inputs["relationships_schema"], inputs["relationships"].get("relationships", []), inputs["signals"],
+        inputs["relationships_v01_schema"], inputs["relationships_v01_legacy"].get("relationships", []), inputs["signals"],
         inputs["live_observations"], inputs["live_evidence"], inputs["canonical"], at,
     )
+    production_relationships = relationship_production_history_as_of(
+        inputs["relationships_v02_schema"], inputs["relationships_v02_production"],
+        inputs["relationships_v02_admissions"], inputs["signals"], inputs["live_observations"],
+        _merged_evidence(inputs), inputs["canonical"], at,
+        world_state_components=inputs["world_state_components"],
+        world_state_admissions=inputs["world_state_admissions"],
+        scope=request["scope"],
+    )
+    relationship_production_available = any(
+        _parse_exact_utc(transaction.get("admitted_at_utc"), "Relationship admission admitted_at_utc") <= request["_as_of"]
+        for transaction in inputs["relationships_v02_admissions"].get("transactions", [])
+    )
+    for selected in production_relationships:
+        row = selected["relationship"]
+        admission = selected["admission"]
+        manifest.add("RELATIONSHIPS", row["relationship_id"], row, row["revision_id"])
+        manifest.add("RELATIONSHIP_ADMISSION", admission["transaction_id"], admission)
 
     risk_states = risk_state_as_of(
-        inputs["risks_schema"], inputs["risks"].get("states", []), inputs["signals"], inputs["relationships"],
+        inputs["risks_schema"], inputs["risks"].get("states", []), inputs["signals"], inputs["relationships_v01_legacy"],
         inputs["live_observations"], inputs["live_evidence"], inputs["canonical"], at,
     )
     risk_rows = {row["revision_id"]: row for row in inputs["risks"].get("states", [])}
@@ -391,7 +459,7 @@ def _select_revisions(inputs: dict[str, Any], request: dict[str, Any], manifest:
 
     scenario_states = scenario_state_as_of(
         inputs["scenarios_schema"], inputs["scenarios"].get("scenario_sets", []), inputs["scenarios"].get("scenarios", []),
-        inputs["risks"], inputs["signals"], inputs["relationships"], inputs["live_observations"], inputs["live_evidence"], inputs["canonical"], at,
+        inputs["risks"], inputs["signals"], inputs["relationships_v01_legacy"], inputs["live_observations"], inputs["live_evidence"], inputs["canonical"], at,
     )
     scenario_rows = {row["revision_id"]: row for row in inputs["scenarios"].get("scenarios", [])}
     selected_scenarios = []
@@ -402,7 +470,7 @@ def _select_revisions(inputs: dict[str, Any], request: dict[str, Any], manifest:
 
     forecast_states = forecast_state_as_of(
         inputs["forecasts_schema"], inputs["forecasts"].get("forecasts", []), inputs["scenarios"], inputs["risks"],
-        inputs["signals"], inputs["relationships"], inputs["live_observations"], inputs["live_evidence"],
+        inputs["signals"], inputs["relationships_v01_legacy"], inputs["live_observations"], inputs["live_evidence"],
         inputs["canonical"], inputs["sources"], at,
     )
     forecast_rows = {row["revision_id"]: row for row in inputs["forecasts"].get("forecasts", [])}
@@ -428,11 +496,40 @@ def _select_revisions(inputs: dict[str, Any], request: dict[str, Any], manifest:
         "signals": selected_signals,
         "relationships": selected_relationships,
         "relationship_edges": relationship_edges,
+        "relationship_history": production_relationships,
+        "relationship_production_available": relationship_production_available,
         "risks": selected_risks,
         "scenarios": selected_scenarios,
         "forecasts": selected_forecasts,
         "outcomes": selected_outcomes,
     }
+
+
+def _relationship_context_rows(revisions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Project admitted historical Relationships without turning them into edges."""
+    return [
+        {
+            "relationship_id": selected["relationship"]["relationship_id"],
+            "revision_id": selected["relationship"]["revision_id"],
+            "relationship_class": selected["relationship"]["relationship_class"],
+            "directionality": selected["relationship"]["directionality"],
+            "confidence": selected["relationship"]["confidence"],
+            "lifecycle_state": selected["relationship"]["lifecycle_state"],
+            "temporal_scope": deepcopy(selected["relationship"]["temporal_scope"]),
+            "source_nodes": deepcopy(selected["relationship"]["source_nodes"]),
+            "target_nodes": deepcopy(selected["relationship"]["target_nodes"]),
+            "reviewed_at_utc": selected["relationship"]["review_provenance"].get("reviewed_at_utc"),
+            "admitted_at_utc": selected["admission"]["admitted_at_utc"],
+            "admission_transaction_id": selected["admission"]["transaction_id"],
+            "admission_transaction_fingerprint": selected["admission"]["transaction_fingerprint"],
+            "current_active": False,
+            "historical_status": "HISTORICAL_ONLY",
+            "causal_basis": deepcopy(selected["relationship"].get("causal_basis", [])),
+            "visibility": selected["relationship"].get("visibility", "INTERNAL_ONLY"),
+            "public_projection_permitted": selected["relationship"].get("public_projection_permitted", False),
+        }
+        for selected in revisions
+    ]
 
 
 def _semantic_payload(proposal: dict[str, Any]) -> dict[str, Any]:
@@ -482,8 +579,13 @@ def read_world_state(
     normalized = validate_read_request(request)
     if generated_at_utc is not None:
         _parse_exact_utc(generated_at_utc, "generated_at_utc")
-    before = _input_file_hashes()
     inputs = _load_inputs()
+    production_relationship_available = any(
+        _parse_exact_utc(transaction.get("admitted_at_utc"), "Relationship admission admitted_at_utc") <= normalized["_as_of"]
+        for transaction in inputs["relationships_v02_admissions"].get("transactions", [])
+    )
+    hash_paths = DATA_PATHS if production_relationship_available else LEGACY_DATA_PATHS
+    before = _input_file_hashes(hash_paths)
     validate_governed_inputs(inputs)
     manifest = _Manifest()
     as_of = normalized["_as_of"]
@@ -568,7 +670,24 @@ def read_world_state(
             {"object_id": row[id_key], "revision_id": row.get("revision_id"), "manifest_key": _manifest_key(layer, row[id_key], row.get("revision_id"))}
             for row in rows
         ]
+    if revisions["relationship_production_available"]:
+        selected_inputs["relationship_history"] = [
+            {
+                "object_id": selected["relationship"]["relationship_id"],
+                "revision_id": selected["relationship"]["revision_id"],
+                "manifest_key": _manifest_key("RELATIONSHIPS", selected["relationship"]["relationship_id"], selected["relationship"]["revision_id"]),
+                "admission_transaction_id": selected["admission"]["transaction_id"],
+                "admission_manifest_key": _manifest_key("RELATIONSHIP_ADMISSION", selected["admission"]["transaction_id"]),
+                "admission_transaction_fingerprint": selected["admission"]["transaction_fingerprint"],
+            }
+            for selected in revisions["relationship_history"]
+        ]
 
+    mutation_check = {
+        "status": "PASS" if before == _input_file_hashes(hash_paths) else "FAIL",
+        "before": before,
+        "after": _input_file_hashes(hash_paths),
+    }
     proposal: dict[str, Any] = {
         "contract_version": CONTRACT_VERSION,
         "read_request": {key: value for key, value in normalized.items() if key != "_as_of"},
@@ -635,12 +754,20 @@ def read_world_state(
             "write_targets": [],
             "public_projection_permitted": False,
         },
-        "mutation_check": {
-            "status": "PASS" if before == _input_file_hashes() else "FAIL",
-            "before": before,
-            "after": _input_file_hashes(),
-        },
+        "mutation_check": mutation_check,
     }
+    if revisions["relationship_production_available"]:
+        proposal["relationship_history"] = _relationship_context_rows(revisions["relationship_history"])
+        proposal["relationship_context"] = {
+            "historical_accepted_relationships": _relationship_context_rows(revisions["relationship_history"]),
+            "current_active_relationships": deepcopy(revisions["relationship_edges"]),
+        }
+        proposal["production_populations"].update({
+            "relationships_v01_legacy": len(revisions["relationships"]),
+            "relationships_v02_production": len(inputs["relationships_v02_production"].get("relationships", [])),
+            "relationship_historical_accepted": len(revisions["relationship_history"]),
+            "relationship_current_active": len(revisions["relationship_edges"]),
+        })
     if production_query is not None:
         from .world_state_production import read_production_world_state
 
@@ -656,7 +783,7 @@ def read_world_state(
                 "code": "NO_ADMITTED_ASSESSMENT",
                 "detail": "The explicit production-history query selected no admitted World State assessment.",
             })
-    if proposal["mutation_check"]["status"] != "PASS":
+    if proposal["mutation_check"].get("status", "PASS") != "PASS":
         raise WorldStateReadError("governed input file hashes changed during read")
     proposal["semantic_fingerprint"] = semantic_fingerprint(proposal)
     proposal["proposal_id"] = f"WSWP-{proposal['semantic_fingerprint'][:16]}"
@@ -676,6 +803,14 @@ def proposal_summary(proposal: dict[str, Any]) -> dict[str, Any]:
         "semantic_fingerprint": proposal.get("semantic_fingerprint"),
         "source_manifest_sha256": proposal.get("source_manifest_sha256"),
         "selected_counts": {key: len(value) for key, value in selected.items()},
+        "relationship_counts": {
+            key: proposal.get("production_populations", {}).get(key, 0)
+            for key in (
+                "relationships_v01_legacy", "relationships_v02_production",
+                "relationship_historical_accepted", "relationship_current_active",
+            )
+            if key in proposal.get("production_populations", {})
+        },
         "empty_layers": [key for key, value in proposal.get("production_populations", {}).items() if value == 0],
         "evaluation_state": proposal.get("evaluation", {}).get("evaluation_state"),
         "limitation_codes": [row.get("code") for row in proposal.get("limitations", [])],

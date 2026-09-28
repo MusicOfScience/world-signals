@@ -832,6 +832,103 @@ def relationship_history_as_of(
     ]
 
 
+def _transaction_fingerprint(transaction: dict[str, Any]) -> str:
+    """Match the guarded v0.2 admission transaction fingerprint rule."""
+    core = {
+        key: value
+        for key, value in transaction.items()
+        if key != "transaction_fingerprint"
+    }
+    return _object_fingerprint(core)
+
+
+def relationship_production_history_as_of(
+    schema: dict[str, Any],
+    production_dataset: dict[str, Any],
+    admission_dataset: dict[str, Any],
+    signals_dataset: dict[str, Any],
+    observations_dataset: dict[str, Any],
+    evidence_registry: dict[str, Any],
+    canonical_registry: dict[str, Any],
+    at_utc: str,
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
+    scope: dict[str, list[str]] | None = None,
+) -> list[dict[str, Any]]:
+    """Return only v0.2 Relationships admitted by an explicit knowledge time.
+
+    ``relationship_history_as_of`` is intentionally an effective/review-time
+    helper for the Relationship contract.  World State production reads need a
+    stricter boundary: an accepted row is invisible until its separate
+    Relationship production admission transaction is itself accepted and
+    admitted.  This selector also applies the World State jurisdiction/domain
+    scope without inventing graph edges.
+    """
+    report = validate_relationship_production(
+        schema,
+        production_dataset,
+        signals_dataset,
+        observations_dataset,
+        evidence_registry,
+        canonical_registry,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    )
+    if not report.ok:
+        raise ValueError("invalid production Relationship history: " + "; ".join(report.errors))
+    at = _parse_exact_utc(at_utc)
+    if at is None:
+        raise ValueError("invalid production Relationship knowledge cutoff")
+    transactions = admission_dataset.get("transactions")
+    if not isinstance(transactions, list):
+        raise ValueError("Relationship admission dataset must contain transactions")
+    by_revision = {
+        (row.get("relationship_id"), row.get("revision_id")): row
+        for row in production_dataset.get("relationships", [])
+    }
+    selected: list[dict[str, Any]] = []
+    jurisdictions = set((scope or {}).get("jurisdictions", []))
+    dimensions = set((scope or {}).get("dimensions", []))
+    for row in production_dataset.get("relationships", []):
+        if row.get("review_state") != "ACCEPTED":
+            continue
+        transaction = next(
+            (
+                item for item in transactions
+                if item.get("relationship_id") == row.get("relationship_id")
+                and item.get("revision_id") == row.get("revision_id")
+            ),
+            None,
+        )
+        if transaction is None:
+            raise ValueError(f"missing Relationship admission for {row.get('revision_id')}")
+        if transaction.get("transaction_type") != "RELATIONSHIP_PRODUCTION_ADMISSION":
+            raise ValueError(f"invalid Relationship admission type for {row.get('revision_id')}")
+        if transaction.get("decision") != "ACCEPTED":
+            raise ValueError(f"Relationship admission is not accepted for {row.get('revision_id')}")
+        if transaction.get("production_relationship_fingerprint") != _object_fingerprint(row):
+            raise ValueError(f"Relationship admission fingerprint mismatch for {row.get('revision_id')}")
+        if transaction.get("transaction_fingerprint") != _transaction_fingerprint(transaction):
+            raise ValueError(f"Relationship admission transaction fingerprint mismatch for {row.get('revision_id')}")
+        admitted = _parse_exact_utc(transaction.get("admitted_at_utc"))
+        if admitted is None:
+            raise ValueError(f"Relationship admission has invalid admitted_at_utc for {row.get('revision_id')}")
+        if admitted > at:
+            continue
+        if jurisdictions and "*" not in jurisdictions and not (set(row.get("jurisdictions", [])) & jurisdictions):
+            continue
+        if dimensions and "*" not in dimensions and not (set(row.get("domains", [])) & dimensions):
+            continue
+        if by_revision.get((row.get("relationship_id"), row.get("revision_id"))) is not row:
+            raise ValueError("conflicting production Relationship identity")
+        selected.append({
+            "relationship": deepcopy(row),
+            "admission": deepcopy(transaction),
+        })
+    return sorted(selected, key=lambda item: (item["relationship"]["relationship_id"], item["relationship"]["revision_id"]))
+
+
 def active_relationship_graph_edges_as_of(
     schema: dict[str, Any],
     revisions: list[dict[str, Any]],

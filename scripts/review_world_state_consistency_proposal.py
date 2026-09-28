@@ -73,6 +73,10 @@ def _proposal_body(proposal: dict[str, Any]) -> dict[str, Any]:
     body = deepcopy(proposal)
     for key in ("source_manifest", "source_manifest_sha256", "semantic_fingerprint", "proposal_id"):
         body.pop(key, None)
+    # The retained Step 4 package predates the explicit PASS status field in
+    # the mutation proof.  Status is execution metadata; the before/after
+    # hashes remain the semantic proof and must compare exactly.
+    body.get("mutation_check", {}).pop("status", None)
     return body
 
 
@@ -88,7 +92,8 @@ def _fresh_read_matches(package: dict[str, Any]) -> list[str]:
     except (WorldStateReadError, OSError, json.JSONDecodeError) as exc:
         return [f"current governed read failed: {exc}"]
 
-    if _proposal_body(fresh) != package.get("proposal"):
+    retained_body = _proposal_body(package.get("proposal", {}))
+    if _proposal_body(fresh) != retained_body:
         errors.append("retained proposal body differs from the current governed read")
     if fresh.get("semantic_fingerprint") != EXPECTED_PROPOSAL_FINGERPRINT:
         errors.append("current governed read semantic fingerprint differs from expected")
