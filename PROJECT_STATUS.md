@@ -445,3 +445,18 @@ select the IGR. Existing public content is unchanged apart from dataset-version
 metadata in Analysis. World State stays 5 / 3 / 3 / 0; all upstream/downstream
 populations, Treasury manual holds and public UI are unchanged. Human decisions
 and exact pre/post hashes live in the two retained `STEP14F_AU_IGR_*` JSON records.
+
+## Migration Step 14G — IGR assumption signposts (candidate only)
+
+The retained Step 14G candidate maps 15 signposts to eight materially
+observable assumptions in the REVIEWED, INTERNAL_ONLY IGR Analysis. It uses
+only evidence already admitted with that Analysis as of the PR #186 merge
+snapshot; no fresh research, source automation, or production schema/population
+change was made. Current classifications remain bounded: productivity is
+AMBIGUOUS, migration is IN_TENSION_WITH_ASSUMPTION for one annual window, and
+the other six assumptions have insufficient evidence. All eight remain
+OBSERVE; this is not an IGR score, Forecast, falsification, or World State
+assessment. The independent historical backtest remains DEFERRED. Missing
+cohort, productivity decomposition, AI, energy-delivery, fiscal and health-cost
+coverage is explicit and does not create monitoring routes. See the retained
+JSON and review summary under `data/analysis/STEP14G_AU_IGR_ASSUMPTION_SIGNPOSTS_*`.
