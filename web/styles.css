@@ -150,6 +150,50 @@ body{background:var(--paper);color:var(--ink)}
 .horizon-shell{background:var(--panel)}
 dialog{background:var(--panel);color:var(--ink)}
 
+/* Step 13D: publication, research and system surfaces have distinct reading
+   roles. The audit console is reachable, but never competes with the brief. */
+.text-link-button{border:0;background:transparent;color:var(--accent);padding:0;font:inherit;cursor:pointer;text-align:left}
+.text-link-button:hover,.text-link-button:focus-visible{text-decoration:underline}
+.research-label{margin:1.25rem 0 .45rem;color:var(--muted);font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.research-method-note{max-width:72ch;color:var(--muted);font-size:.82rem;line-height:1.5;margin:.75rem 0 1.2rem}
+.research-public-status{margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--line)}
+.research-public-status .research-label{margin-top:0}
+.research-coverage{margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--line)}
+.research-coverage>.meta{margin:.1rem 0 .7rem}
+.research-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:.7rem}
+.research-stats .stat{padding:.85rem 1rem;background:var(--panel-raised)}
+.calendar-brief-meta .brief-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.calendar-brief-meta .brief-card:nth-child(3){border-right:0}
+.system-audit-disclosure{margin-top:2rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.system-audit-disclosure>summary{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1rem 0;cursor:pointer;list-style:none;color:var(--muted);font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.system-audit-disclosure>summary::-webkit-details-marker{display:none}
+.system-audit-disclosure>summary::before{content:'+';width:1rem;color:var(--accent)}
+.system-audit-disclosure[open]>summary::before{content:'−'}
+.system-audit-disclosure>summary small{font-size:.74rem;font-weight:400;letter-spacing:normal;text-transform:none}
+.system-audit-shell{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;margin:0;padding:1rem 0 1.25rem;border-top:1px solid var(--line);background:transparent}
+.system-audit-group{min-width:0;padding-right:1.25rem}
+.system-audit-group+.system-audit-group{padding-left:1.25rem;border-left:1px solid var(--line)}
+.system-audit-shell .research-label{margin-top:0}
+.system-audit-shell .viewtabs{flex-wrap:wrap}
+.system-audit-shell .viewtabs button{background:var(--panel);color:var(--ink)}
+.system-audit-shell .viewtabs button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.system-audit-shell>p{grid-column:1/-1;margin:.9rem 0 0;color:var(--muted);font-size:.76rem;line-height:1.45}
+.system-audit-disclosure:focus-within{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:680px){
+  .calendar-brief-meta .brief-grid{grid-template-columns:1fr}
+  .calendar-brief-meta .brief-card{border-right:0;border-bottom:1px solid var(--line);padding:.7rem 0}
+  .calendar-brief-meta .brief-card:last-child{border-bottom:0}
+  .research-stats{grid-template-columns:1fr 1fr}
+  .research-stats .stat:last-child{grid-column:1/-1}
+  .system-audit-disclosure>summary{align-items:flex-start;flex-direction:column;gap:.35rem}
+  .system-audit-shell{grid-template-columns:1fr;gap:1rem}
+  .system-audit-group{padding-right:0}
+  .system-audit-group+.system-audit-group{padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:1rem}
+  .system-audit-shell>p{grid-column:auto}
+  .calendar-secondary-viewtabs,.secondary-viewtabs{display:grid;grid-template-columns:1fr}
+  .calendar-secondary-viewtabs button,.secondary-viewtabs button{width:100%;min-height:2.75rem}
+}
+
 /* Progressive event detail: the panel carries depth without turning every row into a data table. */
 #detail{width:min(760px,calc(100vw - 2rem));max-width:none;max-height:min(88vh,900px);margin:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel);box-shadow:0 18px 55px rgba(31,29,25,.2);overflow:auto}
 #detail::backdrop{background:rgba(28,27,24,.58)}

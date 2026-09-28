@@ -11,7 +11,8 @@ class HorizonUXTests(unittest.TestCase):
         self.assertIn('id="horizon7"',html)
         self.assertIn('id="horizon30"',html)
         self.assertIn('id="horizonWindows"',html)
-        self.assertLess(html.index('id="horizon"'),html.index('class="viewbar"'))
+        self.assertLess(html.index('id="horizon"'),html.index('id="methods"'))
+        self.assertLess(html.index('id="methods"'),html.index('id="systemAuditDisclosure"'))
 
     def test_horizon_uses_existing_read_only_projections(self):
         js=(ROOT/"web/horizon.js").read_text(encoding="utf-8")

@@ -383,7 +383,7 @@ function options(id,values){
 }
 function renderStats(){
   const m=DATA.metadata;
-  $('#stats').innerHTML=`<div class="stat"><b>${m.record_count}</b><span>canonical occurrences</span></div><div class="stat"><b>${Object.keys(m.region_counts).length}</b><span>regions</span></div><div class="stat"><b>${Object.keys(m.category_counts).length}</b><span>categories</span></div><div class="stat"><b>${MONITORS.routes.length}</b><span>configured live monitor routes</span></div>`;
+  $('#stats').innerHTML=`<div class="stat"><b>${m.record_count}</b><span>calendar corpus</span></div><div class="stat"><b>${Object.keys(m.region_counts).length}</b><span>regions covered</span></div><div class="stat"><b>${Object.keys(m.category_counts).length}</b><span>categories covered</span></div>`;
 }
 function melbourneClock(){
   return new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Melbourne',dateStyle:'medium',timeStyle:'short'}).format(new Date());

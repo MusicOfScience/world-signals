@@ -328,6 +328,15 @@ source references and creates no importance/risk score, political ranking,
 World State or Relationship projection. Outlook, Calendar, Analysis and all
 governed data remain unchanged.
 
+Migration Step 13D separates the reader publication from Research and
+System/Audit surfaces. The Horizon now flows directly into the full Calendar;
+calendar metrics remain with that reader surface, while corpus and publication
+status metadata move to Research. Event Index, Monitor routes, Operations and
+Change History remain reachable behind a collapsed System/Audit disclosure.
+The method chain is a compact methodology description and does not imply that
+every layer is populated or public. No Forecast, Analysis, Calendar, World
+State, Relationship or governed data changed.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.
