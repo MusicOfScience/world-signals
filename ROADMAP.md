@@ -680,6 +680,16 @@ raised-panel values remain distinct, hover/focus surfaces stay perceivable, and
 the public Outlook/Calendar/Analysis structure is unchanged. No content,
 governed data or publication authority changed.
 
+## Stage 31 — deterministic public Brief lead — IMPLEMENTED / BOUNDED
+
+Migration Step 13C adds a generated `briefing.json` projection before the
+full Outlook grid. It selects the earliest open public Forecast resolution
+(preserving ties), the next exact-date public Calendar occurrence at runtime,
+and the latest reviewed public Analysis. The rules are chronology/recency
+selectors rather than importance ranking; no score, political prioritisation,
+new intelligence object, World State exposure or Relationship exposure was
+created. Outlook, Calendar, Analysis and governed data remain unchanged.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

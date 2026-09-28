@@ -119,7 +119,7 @@
     const canonical=review.canonical||{};
     const title=canonical.canonical_name||review.canonical_institution||review.analysis_id;
     const context=[canonical.region,canonical.category,canonical.event_type].filter(Boolean).map(human).join(' · ');
-    return `<article class="analysis-review">
+    return `<article id="analysis-${esc(review.analysis_id)}" class="analysis-review">
       <header class="analysis-review-head">
         <div><p class="eyebrow">${esc(review.analysis_id)}</p><h2>${esc(title)}</h2><p>${esc(review.scope)}</p><p class="meta"><code>${esc(review.canonical_occurrence_id)}</code> · ${esc(review.canonical_institution)}${context?` · ${esc(context)}`:''} · canonical timing: ${esc(canonicalTimingLabel(canonical))} · analysis as of ${esc(new Date(review.analysis_as_of_utc).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'}))}</p></div>
         <div class="analysis-grade"><span>${esc(human(review.review_state))}</span><strong>${esc(human(connection.causal_status))}</strong><small>${esc(human(connection.confidence))} confidence</small></div>
@@ -170,6 +170,8 @@
     document.querySelectorAll('.viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='analysisTab')));
     loadAnalysis();
   }
+
+  window.showAnalysisView = showAnalysis;
 
   function hideAnalysis(){
     document.querySelector('#analysisView').hidden=true;

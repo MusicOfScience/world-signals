@@ -63,7 +63,10 @@ authoritative specifications for their subjects.
   RESEARCH**. The briefing is the final projection, never a new canonical
   store.
 - The current public brief is intentionally reader-ordered:
-  `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
+  `THE BRIEF → OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR →
+  RESEARCH`. The three Brief lanes are deterministic projections of the next
+  Forecast resolution, next exact-date public Calendar occurrence and latest
+  reviewed public Analysis; chronology and recency are not importance ranking.
   Calendar counts and World State coverage belong to their supporting surfaces,
   not the opening intelligence narrative. The bounded Outlook projection may
   link to Calendar only through exact reviewed occurrence IDs.

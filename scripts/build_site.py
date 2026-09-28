@@ -17,6 +17,7 @@ from world_signals.analysis_revision_projection import public_analysis_projectio
 from world_signals.live_analysis_bridge import validate_live_analysis_bridge
 from world_signals.icalendar import write_icalendar
 from world_signals.public_forecast_projection import build_public_forecast_projection
+from world_signals.public_briefing import build_public_briefing, validate_public_briefing
 
 reg=load_json(ROOT/"data/canonical/registry.json")
 src=load_json(ROOT/"data/sources/registry.json")
@@ -54,7 +55,7 @@ docs=ROOT/"docs"
 if docs.exists():
     shutil.rmtree(docs)
 docs.mkdir(exist_ok=True)
-for name in ("index.html","app.js","styles.css","outlook.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
+for name in ("index.html","app.js","styles.css","outlook.css","briefing.js","briefing.css","horizon.js","horizon.css","native-calendar.js","native-calendar.css","history.js","history.css","operations.js","operations.css","analysis.js","analysis.css","risk.css"):
     shutil.copy2(ROOT/"web"/name, docs/name)
 
 # Keep source modules separate in the repository while shipping the existing
@@ -151,6 +152,24 @@ dump_json(docs/"data/analysis.json",analysis_projection)
 # closed; only the reviewed monetary-policy pilot is copied into Outlook.
 outlook_projection=build_public_forecast_projection(forecasts, reg)
 dump_json(docs/"data/outlook.json",outlook_projection)
+
+# The Brief is a bounded scan projection over already-public artifacts. It
+# carries deterministic lane selections and exact source references; it does
+# not copy a second Forecast, Calendar or Analysis authority into production.
+briefing_projection=build_public_briefing(
+    outlook_projection,
+    {"events": projection["events"]},
+    analysis_projection,
+)
+briefing_errors=validate_public_briefing(
+    briefing_projection,
+    outlook_projection,
+    {"events": projection["events"]},
+    analysis_projection,
+)
+if briefing_errors:
+    raise SystemExit("Public Brief validation failed: "+"; ".join(briefing_errors))
+dump_json(docs/"data/briefing.json",briefing_projection)
 
 risk_projection=public_risk_projection(reg)
 dump_json(docs/"data/risk_overlay.json",risk_projection)
