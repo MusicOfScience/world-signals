@@ -1,0 +1,202 @@
+{
+  "candidate_type": "RELATIONSHIP_REVIEW_CANDIDATE",
+  "contract_version": "0.2",
+  "proposal_id": "WS-STEP12A-RBNZ-RELATIONSHIP-202609",
+  "relationship": {
+    "relationship_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001",
+    "revision_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001-R1",
+    "revision_number": 1,
+    "previous_revision_id": null,
+    "title": "RBNZ forward-path information and reported market repricing",
+    "source_nodes": [
+      {
+        "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+        "node_type": "WORLD_STATE_COMPONENT",
+        "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1",
+        "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+        "component_type": "DIMENSION_ASSESSMENT",
+        "dimension": "MACROECONOMIC_FINANCIAL_CONDITIONS",
+        "admitted_at_utc": "2026-09-28T04:27:17Z",
+        "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001"
+      }
+    ],
+    "target_nodes": [
+      {
+        "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+        "node_type": "WORLD_STATE_COMPONENT",
+        "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1",
+        "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+        "component_type": "DIMENSION_ASSESSMENT",
+        "dimension": "MARKETS_AS_SENSORS",
+        "admitted_at_utc": "2026-09-28T04:27:17Z",
+        "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001"
+      }
+    ],
+    "supporting_node_revisions": [
+      {
+        "node_type": "WORLD_STATE_COMPONENT",
+        "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+        "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1",
+        "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89"
+      },
+      {
+        "node_type": "WORLD_STATE_COMPONENT",
+        "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+        "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1",
+        "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914"
+      }
+    ],
+    "supporting_analysis_refs": [
+      {
+        "analysis_id": "WSAN-NZ-OCR-20260902-001",
+        "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1"
+      }
+    ],
+    "supporting_observation_ids": [],
+    "supporting_evidence_refs": [
+      "WSEV-NZ-OCR-RBNZ-20260902",
+      "WSEV-NZ-OCR-REUTERS-20260902",
+      "WSEV-NZ-OCR-BT-20260902"
+    ],
+    "supporting_evidence_pins": [
+      {
+        "evidence_id": "WSEV-NZ-OCR-RBNZ-20260902",
+        "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da"
+      },
+      {
+        "evidence_id": "WSEV-NZ-OCR-REUTERS-20260902",
+        "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47"
+      },
+      {
+        "evidence_id": "WSEV-NZ-OCR-BT-20260902",
+        "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e"
+      }
+    ],
+    "contradictory_evidence_refs": [],
+    "contextual_canonical_occurrence_ids": [],
+    "relationship_class": "ASSOCIATION",
+    "directionality": "DIRECTED",
+    "directionality_rationale": "The reviewed policy-path information precedes the source-reported market response window; direction is analytical ordering, not causal proof.",
+    "domains": [
+      "MACROECONOMIC_FINANCIAL_CONDITIONS",
+      "MARKETS_AS_SENSORS"
+    ],
+    "jurisdictions": [
+      "New Zealand"
+    ],
+    "rationale": "The expected 25 basis-point hike is not the surprise. The reviewed proposition concerns a more gradual forward path than market pricing and source-reported lower two-year swap and NZD pricing in the immediate/same-session window.",
+    "mechanism": "NOT_ASSERTED_AT_ASSOCIATION_CLASS",
+    "alternative_explanations": [
+      "Global oil and geopolitical shocks may have driven or contaminated longer-duration rates independently of the domestic decision.",
+      "A global bond-market sell-off may explain part of the market movement.",
+      "The NZD had already weakened before the decision, and no high-frequency reconstruction is available."
+    ],
+    "confounders": [
+      "Simultaneous global rates repricing.",
+      "Oil/geopolitical inflation shock.",
+      "Pre-existing currency movement and source-reported rather than independently reconstructed event windows."
+    ],
+    "common_driver_signal_ids": [],
+    "causal_basis": [],
+    "confidence": "MEDIUM",
+    "temporal_scope": {
+      "scope_type": "HISTORICAL_PERIOD",
+      "precision": "SOURCE_REPORTED_WINDOW",
+      "anchor_at_utc": "2026-09-02T02:00:00Z",
+      "start_at_utc": null,
+      "end_at_utc": null,
+      "start_date": "2026-09-02",
+      "end_date": "2026-09-02",
+      "notes": "The RBNZ release is the event anchor. Market-response onset and end remain unknown within the source-reported immediate/same-session window; no exact temporal onset is manufactured."
+    },
+    "first_asserted_at_utc": "2026-09-28T07:22:06Z",
+    "review_state": "UNDER_REVIEW",
+    "lifecycle_state": "UNRESOLVED",
+    "falsification_conditions": [
+      "High-frequency swap or FX data show the reported moves materially preceded the RBNZ release.",
+      "Later evidence shows the short-end move was primarily driven by a simultaneous global rates catalyst rather than the RBNZ path.",
+      "The market had priced an OCR path at or below the RBNZ projection immediately before the decision."
+    ],
+    "review_provenance": {
+      "created_by": "world-state-step12a-rbnz-relationship-candidate-v1",
+      "created_at_utc": "2026-09-28T07:22:06Z",
+      "reviewed_by": null,
+      "reviewed_at_utc": null,
+      "decision_basis": null
+    },
+    "revision_reason": "Initial review-pending association candidate over two independently admitted World State component revisions; no production Relationship admission."
+  },
+  "source_manifest": [
+    {
+      "layer": "ANALYSIS",
+      "object_id": "WSAN-NZ-OCR-20260902-001",
+      "revision_id": null,
+      "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1"
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object_id": "WSEV-NZ-OCR-BT-20260902",
+      "revision_id": null,
+      "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e"
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+      "revision_id": null,
+      "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da"
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+      "revision_id": null,
+      "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47"
+    },
+    {
+      "layer": "WORLD_STATE",
+      "object_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1",
+      "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89"
+    },
+    {
+      "layer": "WORLD_STATE",
+      "object_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1",
+      "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914"
+    },
+    {
+      "layer": "WORLD_STATE_ADMISSION",
+      "object_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "revision_id": null,
+      "object_sha256": "14817491effc04ccd8b63ac467fa6afb9c29bc19e38848b3ee7973f9ae97ed79"
+    }
+  ],
+  "source_manifest_sha256": "a4ecd251fa4f6e57020f0fcf6f0e0427e0cdb8a1d392ed34068d2d73b13fabbe",
+  "endpoint_current_use": [
+    {
+      "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "status": "NO_CURRENTNESS_CLAIM"
+    },
+    {
+      "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "status": "NO_CURRENTNESS_CLAIM"
+    }
+  ],
+  "dependency_dag_check": {
+    "status": "PASS",
+    "production_write_targets": []
+  },
+  "review_state": "UNDER_REVIEW",
+  "lifecycle_state": "UNRESOLVED",
+  "visibility": "INTERNAL_ONLY",
+  "candidate_disposition": "READY_FOR_HUMAN_RELATIONSHIP_REVIEW",
+  "production_write_targets": [],
+  "public_projection_permitted": false,
+  "production_relationship_admitted": false,
+  "limitations": [
+    "Association is not causal evidence or a mechanistically supported transmission claim.",
+    "Analysis and evidence remain supporting lineage, never endpoint nodes.",
+    "Endpoint current-use status does not make this historical candidate a current transmission channel.",
+    "The production Relationship population remains closed pending Step 12B human review."
+  ],
+  "candidate_semantic_fingerprint": "398efdf39448a9676bdd099a38fc3f66ac47a69cac1001b3895f493601679221"
+}

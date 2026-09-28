@@ -569,6 +569,24 @@ currentness claim. Historical/effective reads remain available, current-use
 transitions remain separate from analytical deltas, and no production objects
 or public projection change.
 
+## Stage 26 — Relationship v0.2 / World State endpoint candidate — IMPLEMENTED / REVIEW-PENDING
+
+Step 12A defines a versioned Relationship candidate contract `0.2` alongside
+the hash-pinned empty v0.1 production contract. Reviewed Signal revisions
+remain valid endpoints, and already-admitted immutable World
+State component revisions may be pinned as typed endpoints with exact hashes,
+admission metadata and revision identity. Analysis/evidence remain supporting
+lineage; composition views, raw observations and Canonical records are not
+nodes. Temporal scope supports source-reported windows without inventing exact
+market onset, and an explicit temporal dependency DAG rejects direct and
+multi-hop self-support cycles.
+
+The RBNZ Macro → Markets candidate is retained under
+`data/relationship_audit/` as a directed `ASSOCIATION`, not causal evidence or
+an active transmission channel. It remains `UNDER_REVIEW`/`UNRESOLVED` with
+no production write target. Production Relationships remain empty and public
+projection remains closed; Step 12B is the separate human review boundary.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader
