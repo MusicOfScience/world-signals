@@ -1,0 +1,45 @@
+{
+  "candidate_components": [
+    {
+      "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "object_sha256": "e041de9aacd6d1bb0692e0895ffae44cd36ea5c50caccf5842229e233d3d064a",
+      "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+    },
+    {
+      "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "object_sha256": "0f89ae71e23146da67d0b385734ae56368e96cf86e124dc72992041e327d3240",
+      "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+    }
+  ],
+  "candidate_package": "data/world_state_audit/STEP11A1_RBNZ_CANDIDATE_REVIEW_PENDING_CORRECTED.json",
+  "candidate_semantic_fingerprint": "447954092a4825dd5a6b4a0253ed9cf8939d97df127632ae43e8121792f74571",
+  "component_decisions": {
+    "WSACT-RBNZ-202609-001": "DEFERRED",
+    "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001": "ACCEPTED",
+    "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001": "ACCEPTED"
+  },
+  "contract_version": "0.1",
+  "decision": "ACCEPTED",
+  "decision_basis": {
+    "actor": "DEFERRED / NOT_PART_OF_COMPONENT_ADMISSION: actor identity is not required by the accepted Dimension Assessments; identity admission remains separate.",
+    "macro": "Narrow policy-rate increase and more-gradual-than-market-pricing proposition accepted; no generic dovishness, future path, regime or broad macro claim.",
+    "markets": "Narrow source-reported swap and NZD sensor measurements accepted; MEDIUM confidence, null before-values, alternative explanations and OBSERVED_ASSOCIATION retained."
+  },
+  "decision_scope": "RBNZ_SECOND_SPECIMEN",
+  "pending_snapshot_fingerprint": "72e1de6ab61c30d8944c34410cddb62965f8af86701590e9ef2ab1c158164617",
+  "production_world_state_admitted": false,
+  "public_projection_permitted": false,
+  "review_transaction_fingerprint": "fdafae422565a014c7f181c0a2d34bfd5bb741cc26c2d7b85577dbffa56fdb13",
+  "reviewed_at_utc": "2026-09-28T04:27:16Z",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "human-review"
+  },
+  "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+  "transaction_id": "WS-STEP11B-RBNZ-COMPONENT-REVIEW-20260928-001",
+  "transaction_type": "WORLD_STATE_COMPONENT_REVIEW",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": []
+}

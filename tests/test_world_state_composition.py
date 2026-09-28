@@ -28,12 +28,12 @@ from world_signals.world_state_production import (  # noqa: E402
 )
 
 
-def query(knowledge: str = "2026-09-27T20:00:00Z", *, mode: str = "KNOWLEDGE_AS_OF", effective: str | None = None, jurisdictions: list[str] | None = None) -> dict:
+def query(knowledge: str = "2026-09-27T20:00:00Z", *, mode: str = "KNOWLEDGE_AS_OF", effective: str | None = None, jurisdictions: list[str] | None = None, dimensions: list[str] | None = None) -> dict:
     return {
         "query_mode": mode,
         "knowledge_cutoff_utc": knowledge,
         "effective_as_of_utc": effective,
-        "scope": {"dimensions": [], "jurisdictions": jurisdictions or [], "systems": [], "component_ids": []},
+        "scope": {"dimensions": dimensions or [], "jurisdictions": jurisdictions or [], "systems": [], "component_ids": []},
         "include_withdrawn_history": False,
     }
 
@@ -169,10 +169,10 @@ def synthetic_root() -> Path:
 
 class WorldStateCompositionTests(unittest.TestCase):
     def test_current_real_single_series_remains_unchanged(self):
-        view = read_production_world_state(query())
+        view = read_production_world_state(query(dimensions=["HEALTH_BIOSECURITY"]))
         self.assertIsNone(view["composition_view"])
         self.assertEqual(view["selected_snapshot"]["snapshot_series_id"], "WSSNAP-HEALTH-COD-BVD-202609")
-        self.assertEqual(view["production_counts"], {"actors": 0, "components": 1, "snapshots": 1, "admissions": 1})
+        self.assertEqual(view["production_counts"], {"actors": 0, "components": 3, "snapshots": 2, "admissions": 2})
 
     def test_two_independent_series_compose_read_only(self):
         root = synthetic_root()

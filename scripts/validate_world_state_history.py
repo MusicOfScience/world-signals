@@ -23,9 +23,9 @@ from world_signals.world_state_history import validate_actor_registry  # noqa: E
 
 SCHEMAS = {
     "actor_registry_schema.json": "UNPOPULATED_CONTRACT_ONLY",
-    "component_schema.json": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
-    "snapshot_schema.json": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
-    "admission_schema.json": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+    "component_schema.json": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
+    "snapshot_schema.json": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
+    "admission_schema.json": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
 }
 
 
@@ -49,12 +49,12 @@ def main() -> int:
             errors.append(f"{filename}: unexpected version")
     try:
         state = load_production_state(ROOT)
-        errors.extend(validate_production_state(ROOT))
+        errors.extend(validate_production_state(ROOT, enforce_first_population=False))
         actor_registry = ROOT / "data/world_state/actor_registry.json"
         if actor_registry.exists():
             errors.extend(validate_actor_registry(json.loads(actor_registry.read_text(encoding="utf-8"))))
         if len(state["actors"]) != 0:
-            errors.append("Actor Registry must remain empty for the first component tranche")
+            errors.append("Actor Registry must remain empty for the current componentized tranche")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         errors.append(f"production history validation failed: {exc}")
     if errors:

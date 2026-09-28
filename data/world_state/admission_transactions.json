@@ -1,6 +1,6 @@
 {
   "dataset": "WORLD_STATE_PRODUCTION_ADMISSION_HISTORY",
-  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "population_state": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
   "project": "WORLD SIGNALS",
   "public_projection_permitted": false,
   "transactions": [
@@ -57,6 +57,98 @@
         "data/world_state/components.json",
         "data/world_state/snapshots.json",
         "data/world_state/admission_transactions.json"
+      ]
+    },
+    {
+      "admitted_at_utc": "2026-09-28T04:27:17Z",
+      "candidate_component_fingerprints": [
+        {
+          "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "e041de9aacd6d1bb0692e0895ffae44cd36ea5c50caccf5842229e233d3d064a",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "0f89ae71e23146da67d0b385734ae56368e96cf86e124dc72992041e327d3240",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "candidate_package": "data/world_state_audit/STEP11A1_RBNZ_CANDIDATE_REVIEW_PENDING_CORRECTED.json",
+      "component_dispositions": [
+        {
+          "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "disposition": "ADMITTED",
+          "reason": "Explicit Step 11B human decision for the narrow reviewed RBNZ component.",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "disposition": "ADMITTED",
+          "reason": "Explicit Step 11B human decision for the narrow reviewed RBNZ component.",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "component_fingerprints": [
+        {
+          "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "contract_version": "0.1",
+      "decided_at_utc": "2026-09-28T04:27:16Z",
+      "decision": "ACCEPTED",
+      "deferred_dispositions": [
+        {
+          "actor_id": "WSACT-RBNZ-202609-001",
+          "disposition": "DEFERRED",
+          "reason": "Actor identity is not required by the accepted Dimension Assessments."
+        }
+      ],
+      "post_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "7345c8ac818691d39b5c3ece1f273a0bce462d6cece8a7ff6c969f521d048afa",
+        "snapshots": "167674cc605a80f67bb7fffd501ead20cdb4859781faef511b93d38c235409c6"
+      },
+      "pre_state_hashes": {
+        "actors": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "components": "9618ce822a6212b89e1cb06f260078300977be45ee2ed12a15a86e7ab34fed91",
+        "snapshots": "10c1bc7c5e4a6aff89d4ebfa62029625e5537da262f34651781a048375d6d930"
+      },
+      "proposal_id": "WS-STEP11A1-RBNZ-RBNZ-OCR-202609",
+      "proposal_semantic_fingerprint": "447954092a4825dd5a6b4a0253ed9cf8939d97df127632ae43e8121792f74571",
+      "public_projection_permitted": false,
+      "review_transaction_id": "WS-STEP11B-RBNZ-COMPONENT-REVIEW-20260928-001",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "human-review"
+      },
+      "snapshot_fingerprint": "6858942de4d9e6fc4f897a7ab3588b289c16538b3d9207421ab273ea15e76f7d",
+      "snapshot_revision_identity": {
+        "snapshot_revision_id": "WSSNAP-NZ-RBNZ-OCR-202609-R1",
+        "snapshot_series_id": "WSSNAP-NZ-RBNZ-OCR-202609"
+      },
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "transaction_fingerprint": "d4f2c20a8b0129880a7cf2a9ae8ac58f3688feb5ca1ce54e4b6b1622392ff834",
+      "transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "transaction_type": "WORLD_STATE_PRODUCTION_ADMISSION",
+      "validator_version": "world-state-rbnz-admission-v1",
+      "visibility_decision": "INTERNAL_ONLY",
+      "write_targets": [
+        "data/world_state/components.json",
+        "data/world_state/snapshots.json",
+        "data/world_state/admission_transactions.json",
+        "data/world_state_audit/STEP11B_RBNZ_COMPONENT_REVIEW_ACCEPTED.json",
+        "data/world_state_audit/STEP11B_RBNZ_COMPONENT_REVIEW_ACCEPTED.md"
       ]
     }
   ],
