@@ -1,9 +1,35 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_LAYER_SCHEMA",
-  "version": "0.8",
+  "version": "0.9",
   "reference_date": "2026-09-09",
   "architecture_position": "ANALYSIS",
+  "public_field_contract": {
+    "version": "0.1",
+    "policy": "EXPLICIT_ALLOWLIST_FAIL_CLOSED",
+    "classification_authority": "world_signals.analysis_publication.FIELD_CLASSIFICATIONS",
+    "classifications": ["PUBLIC", "INTERNAL_ONLY"],
+    "unknown_field_error": "UNCLASSIFIED_ANALYSIS_PUBLICATION_FIELD",
+    "nested_legacy_sections": "Existing public analytical spine; new internal structures require separately classified top-level fields.",
+    "live_and_revision_metadata": "INTERNAL_ONLY; no implicit publication gate opening"
+  },
+  "optional_extensions": {
+    "official_projection_review": {
+      "contract_version": "0.1",
+      "required": false,
+      "visibility": "INTERNAL_ONLY",
+      "public_projection_permitted": false,
+      "validator": "world_signals.official_projection_review.validate_official_projection_review",
+      "required_sections": ["projection_framework", "projection_outputs", "model_assumptions", "sensitivity_cases", "assumption_audit", "comparison_baseline", "limitations"],
+      "epistemic_classes": ["PUBLICATION_FACT", "OBSERVED_EVIDENCE", "MODEL_ASSUMPTION", "OFFICIAL_PROJECTION", "SENSITIVITY_CASE", "POLICY_CLAIM", "PRIOR_OFFICIAL_PROJECTION"],
+      "assumption_basis": ["EMPIRICAL_EXTRAPOLATION", "MAINTAINED_POLICY_SETTING", "TECHNICAL_CONVENTION", "CONDITIONAL_MODEL_MECHANISM"],
+      "audit_axes": ["historical_plausibility", "current_trajectory", "structural_break_risk", "implementation_dependency", "circularity_endogeneity", "sensitivity", "downside_alternative", "upside_alternative", "signposts", "revision_conditions"],
+      "comparability": ["DIRECTLY_COMPARABLE", "QUALIFIED_COMPARISON", "NOT_DIRECTLY_COMPARABLE"],
+      "method_compatibility": ["COMPATIBLE", "QUALIFIED", "INCOMPATIBLE", "NOT_ESTABLISHED"],
+      "dependency_classes": ["MODEL_DEFINED", "ASSUMED_MECHANISM", "SENSITIVITY_SUPPORTED", "EXTERNAL_EVIDENCE_SUPPORTED", "HYPOTHESISED"],
+      "population_authority": "NONE; schema validation is not review, admission or publication authority"
+    }
+  },
   "upstream_layers": [
     "CANONICAL_REGISTRY",
     "SOURCE_CHANGE_MONITOR",

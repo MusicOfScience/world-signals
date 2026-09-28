@@ -69,7 +69,7 @@ def assert_upstream_prestate(plan: dict[str, Any]) -> None:
     require(len(expectations.get("adapters", [])) >= pre["monitor_adapter_count"], "CG Monitor adapter population regressed below historical checkpoint")
     require(expectations.get("automatic_canonical_commit") is False, "CG descendant opened automatic Canonical commit")
     require(expectations.get("google_calendar_write") is False, "CG descendant opened Google Calendar write")
-    require(analysis_schema.get("version") == pre["analysis_schema_version"], "CG Analysis schema drift")
+    require(version_tuple(analysis_schema.get("version")) >= version_tuple(pre["analysis_schema_version"]), "CG Analysis schema regression")
     require(len(reviews.get("reviews", [])) == pre["analysis_review_count"], "CG Analysis review count drift")
     require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "CG Analysis evidence count drift")
     require(production_analysis_revision_count(reviews) == pre["production_analysis_revision_count"], "CG Analysis revision count drift")

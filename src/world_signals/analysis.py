@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from collections import Counter
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from .analysis_publication import publication_errors, public_review_fields
+from .official_projection_review import validate_official_projection_review
 
 
 @dataclass(frozen=True)
@@ -269,6 +272,17 @@ def validate_analysis(
 
     for review in reviews_dataset.get("reviews", []):
         analysis_id = review.get("analysis_id") or "<missing-analysis-id>"
+        errors.extend(f"{analysis_id}: {error}" for error in publication_errors(review))
+        if "official_projection_review" in review:
+            errors.extend(f"{analysis_id}: {error}" for error in
+                          validate_official_projection_review(review["official_projection_review"]))
+        for actual in (review.get("what_happened") or {}).get("actuals", []):
+            if not isinstance(actual, dict):
+                errors.append(f"{analysis_id}: actual must be a factual object")
+                continue
+            if any(actual.get(field) not in {None, "OBSERVED_EVIDENCE", "PUBLICATION_FACT"}
+                   for field in ("epistemic_class", "projection_class")) or actual.get("projection_id"):
+                errors.append(f"{analysis_id}: future projection/assumption cannot enter actuals")
         if analysis_id in seen_analysis_ids:
             errors.append(f"duplicate analysis_id {analysis_id}")
         seen_analysis_ids.add(analysis_id)
@@ -564,15 +578,15 @@ def public_analysis_projection(
             "title": row.get("title"),
             "url": row.get("url"),
             "published_at": row.get("published_at"),
-            "roles": row.get("roles", []),
+            "roles": deepcopy(row.get("roles", [])),
         }
         for row in evidence_registry.get("evidence", [])
     }
 
     reviews = []
     for row in reviews_dataset.get("reviews", []):
-        refs = sorted(_refs(row))
-        public_row = dict(row)
+        public_row = public_review_fields(row)
+        refs = sorted(_refs(public_row))
         public_row["canonical"] = _canonical_context(
             canonical_by_id[row["canonical_occurrence_id"]]
         )

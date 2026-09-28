@@ -254,6 +254,7 @@ def load_candidate_module(source: str) -> types.ModuleType:
     name = "_world_signals_analysis_ak_candidate"
     module = types.ModuleType(name)
     module.__file__ = str(ANALYSIS_IMPL_PATH)
+    module.__package__ = "world_signals"
     sys.modules[name] = module
     exec(compile(source, str(ANALYSIS_IMPL_PATH), "exec"), module.__dict__)
     return module

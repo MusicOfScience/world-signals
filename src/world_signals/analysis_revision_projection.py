@@ -4,7 +4,6 @@ from typing import Any
 
 from world_signals.analysis import public_analysis_projection
 from world_signals.analysis_revision import (
-    public_review_without_revision_metadata,
     validate_analysis_revisions,
 )
 
@@ -34,10 +33,8 @@ def public_analysis_projection_with_revision_contract(
         reviews_dataset,
         canonical_registry,
     )
-    projection["reviews"] = [
-        public_review_without_revision_metadata(analysis_schema, row)
-        for row in projection.get("reviews", [])
-    ]
+    # The core projector owns the single public allowlist, including the closed
+    # revision-metadata gate. Never maintain another field policy here.
     metadata = projection.setdefault("metadata", {})
     policy = analysis_schema.get("analysis_revision_policy") or {}
     metadata["analysis_revision_contract_present"] = isinstance(
