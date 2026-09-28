@@ -172,7 +172,7 @@ class WorldStateCompositionTests(unittest.TestCase):
         view = read_production_world_state(query(dimensions=["HEALTH_BIOSECURITY"]))
         self.assertIsNone(view["composition_view"])
         self.assertEqual(view["selected_snapshot"]["snapshot_series_id"], "WSSNAP-HEALTH-COD-BVD-202609")
-        self.assertEqual(view["production_counts"], {"actors": 0, "components": 3, "snapshots": 2, "admissions": 2})
+        self.assertEqual(view["production_counts"], {"actors": 0, "components": 5, "snapshots": 3, "admissions": 3})
 
     def test_two_independent_series_compose_read_only(self):
         root = synthetic_root()

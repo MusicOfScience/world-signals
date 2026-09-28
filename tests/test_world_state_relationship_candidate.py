@@ -215,9 +215,9 @@ class WorldStateRelationshipCandidateTests(unittest.TestCase):
         self.assertFalse(self.candidate["public_projection_permitted"])
         self.assertFalse(self.candidate["production_relationship_admitted"])
         self.assertEqual(self.candidate["production_write_targets"], [])
-        self.assertEqual(len(self.components["components"]), 3)
-        self.assertEqual(len(json.loads((ROOT / "data/world_state/snapshots.json").read_text())["snapshots"]), 2)
-        self.assertEqual(len(self.admissions["transactions"]), 2)
+        self.assertEqual(len(self.components["components"]), 5)
+        self.assertEqual(len(json.loads((ROOT / "data/world_state/snapshots.json").read_text())["snapshots"]), 3)
+        self.assertEqual(len(self.admissions["transactions"]), 3)
 
 
 if __name__ == "__main__":

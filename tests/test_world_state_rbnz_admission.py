@@ -37,6 +37,12 @@ from world_signals.world_state_rbnz_candidate import build_corrected_rbnz_candid
 REVIEWED_AT = "2026-09-28T04:27:16Z"
 ADMITTED_AT = "2026-09-28T04:27:17Z"
 ORIGINAL = ROOT / "data/world_state_audit/STEP11A_RBNZ_CANDIDATE_REVIEW_PENDING.json"
+STEP14C_COMPONENT_IDS = {
+    "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001",
+    "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+}
+STEP14C_SNAPSHOT_SERIES = "WSSNAP-CLIMATE-AU-TCSEASON-2025-26"
+STEP14C_ADMISSION_ID = "WS-ADMISSION-CLIMATE-AU-TCSEASON-20260929-001"
 
 
 def copy_data_tree() -> Path:
@@ -48,15 +54,24 @@ def copy_data_tree() -> Path:
     # retained Step 11B review artefacts from the temporary copy.
     components_path = temporary / "data/world_state/components.json"
     components = json.loads(components_path.read_text())
-    components["components"] = [row for row in components["components"] if row["component_id"] not in {MACRO_COMPONENT_ID, MARKET_COMPONENT_ID}]
+    components["components"] = [
+        row for row in components["components"]
+        if row["component_id"] not in {MACRO_COMPONENT_ID, MARKET_COMPONENT_ID} | STEP14C_COMPONENT_IDS
+    ]
     components_path.write_text(json.dumps(components, indent=2, sort_keys=True) + "\n")
     snapshots_path = temporary / "data/world_state/snapshots.json"
     snapshots = json.loads(snapshots_path.read_text())
-    snapshots["snapshots"] = [row for row in snapshots["snapshots"] if row.get("snapshot_series_id") != "WSSNAP-NZ-RBNZ-OCR-202609"]
+    snapshots["snapshots"] = [
+        row for row in snapshots["snapshots"]
+        if row.get("snapshot_series_id") not in {"WSSNAP-NZ-RBNZ-OCR-202609", STEP14C_SNAPSHOT_SERIES}
+    ]
     snapshots_path.write_text(json.dumps(snapshots, indent=2, sort_keys=True) + "\n")
     admissions_path = temporary / "data/world_state/admission_transactions.json"
     admissions = json.loads(admissions_path.read_text())
-    admissions["transactions"] = [row for row in admissions["transactions"] if row.get("transaction_id") != ADMISSION_TRANSACTION_ID]
+    admissions["transactions"] = [
+        row for row in admissions["transactions"]
+        if row.get("transaction_id") not in {ADMISSION_TRANSACTION_ID, STEP14C_ADMISSION_ID}
+    ]
     admissions_path.write_text(json.dumps(admissions, indent=2, sort_keys=True) + "\n")
     for relative in (
         "data/world_state_audit/STEP11B_RBNZ_COMPONENT_REVIEW_ACCEPTED.json",

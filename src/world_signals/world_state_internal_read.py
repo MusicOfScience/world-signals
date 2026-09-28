@@ -30,6 +30,7 @@ CURRENT_USE_STATUSES = {
 }
 REVIEW_REQUIRED_STATUS = "CURRENT_USE_REQUIRES_REVIEW"
 HISTORICAL_STATUS = "NO_CURRENTNESS_CLAIM"
+HISTORICAL_ONLY_STATUS = "HISTORICAL_ONLY"
 UNKNOWN_STATUS = "UNKNOWN"
 ENDPOINT_SELECTED = "SELECTED_IN_THIS_VIEW"
 ENDPOINT_OUTSIDE_SCOPE = "VALID_PRODUCTION_ENDPOINT_OUTSIDE_VIEW_SCOPE"
@@ -208,7 +209,7 @@ def partition_assessments(
             buckets["CURRENTLY_USABLE"].append(summary)
         elif status == REVIEW_REQUIRED_STATUS:
             buckets["REVIEW_REQUIRED"].append(summary)
-        elif status == HISTORICAL_STATUS:
+        elif status in {HISTORICAL_STATUS, HISTORICAL_ONLY_STATUS}:
             buckets["HISTORICAL_OR_NO_CURRENTNESS"].append(summary)
         else:
             buckets["UNKNOWN"].append(summary)

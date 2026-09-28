@@ -5,11 +5,11 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-27
+**Reference date:** 2026-09-29
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.04 / 258 sources**.
+- Canonical Registry: **v0.44 / 690 occurrences**; schema **v0.52**.
+- Source Registry: **v2.05 / 260 sources**.
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
@@ -728,3 +728,21 @@ created.
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
+
+## Stage 35 — controlled climate and IGR admissions — IMPLEMENTED / INTERNAL AND MANUAL-ONLY
+
+Migration Step 14C performs two separate guarded admissions. The climate
+transaction admits the Step 14A official-reference Baseline and narrow
+completed-season `CLIMATE_PHYSICAL_RISK` Dimension Assessment as historical
+internal components only. `EXPIRED` lifecycle and `HISTORICAL_ONLY` current-use
+semantics prevent a completed 2025–26 season from becoming a present-tense
+Australian risk claim.
+
+The second transaction admits two Treasury provenance sources for manual
+authoritative recheck and recovers one completed 2026 IGR Canonical occurrence
+with its 9 September announcement, 21 September publication date,
+first-discovery timestamp and main-report/fact-sheet/chart bundle. No
+recurrence, automation route, analytical promotion or public projection is
+created. Production now has five components, three independent snapshot series
+and three admissions; actors remain zero. Further climate/IGR successors remain
+separately review-gated.

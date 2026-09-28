@@ -219,6 +219,148 @@
         }
       ],
       "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-CLIMATE-AU-TCSEASON-20260929-001",
+      "admitted_at_utc": "2026-09-28T15:33:31Z",
+      "component_refs": [
+        {
+          "component_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001",
+          "component_type": "BASELINE",
+          "object_sha256": "60a7a5032a0832ac46f521f443b31e698a4e6296009981203584f39eb50bc737",
+          "revision_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001-R1"
+        },
+        {
+          "component_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "071408306dba797690660c764f91ecb8882eab026038b92eb3edc9bee1325f5f",
+          "revision_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001-R1"
+        }
+      ],
+      "effective_as_of_utc": null,
+      "effective_date": "2026-04-30",
+      "effective_time_basis": "Completed source-native 2025–26 season window; no UTC instant is manufactured.",
+      "effective_time_precision": "DAY_RANGE",
+      "empty_queried_domains": [
+        {
+          "domain": "ACTOR_STATE_ASSERTIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "IMPLEMENTATION_CLAIMS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "RELATIONSHIPS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "RISKS_REGIMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "SCENARIOS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "FORECASTS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "OUTCOMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "CANONICAL_HISTORICAL_AS_OF",
+          "state": "UNSUPPORTED"
+        }
+      ],
+      "knowledge_cutoff_utc": "2026-09-05T23:35:00Z",
+      "lifecycle_state": "EXPIRED",
+      "limitations": [
+        "Historical climate Baseline and completed-season Dimension only.",
+        "No current Australian cyclone-risk, impact, attribution, Relationship, Risk, Scenario, Forecast or Outcome claim.",
+        "Other World State dimensions remain unassessed or explicitly empty as recorded."
+      ],
+      "object_sha256": "06605d0f65e2e420ce0be98daa0e317d834f368c7a5bf0934719e8f60d61b5f3",
+      "previous_snapshot_revision_id": null,
+      "proposal_id": "WS-STEP14A-WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001+WS-STEP14A-WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+      "review_transaction_id": "WS-STEP14C-AU-TC-COMPONENT-REVIEW-20260929-001",
+      "reviewed_at_utc": "2026-09-28T15:33:30Z",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "human-review"
+      },
+      "revision_number": 1,
+      "scope": {
+        "jurisdictions": [
+          "Australia"
+        ],
+        "systems": [
+          "AUSTRALIAN_TROPICAL_CYCLONE_REGION"
+        ]
+      },
+      "snapshot_kind": "COMPOSITIONAL_INDEX",
+      "snapshot_revision_id": "WSSNAP-CLIMATE-AU-TCSEASON-2025-26-R1",
+      "snapshot_series_id": "WSSNAP-CLIMATE-AU-TCSEASON-2025-26",
+      "source_manifest_sha256": "672924298cedc998f243531e27e6bdb577220f357169c2959ecf26d74c02d8a7",
+      "upstream_refs": [
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-AU-TCSEASON-2025-26-001",
+          "object_sha256": "41451f16690a6ae58acb3444e01a67f3fc0cfca9bd3467ccf3fcec5a273398c1",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "factual_claim": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-NEWS-20260514",
+          "object_sha256": "6b4b9e851baacb1e69c772cc603c4e1560fc835ceec3641fa70ecad1c77b65ac",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "factual_claim": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "object_sha256": "f70c4d9d27addf564854056937ea7b4828e2ef7db47c389df0588e2b3704cd43",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "factual_claim": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+          "object_sha256": "57935bc0571d109a85c72ac4827ccfbe1c0c391440411bf08735ad01d563f83e",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "factual_claim": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+          "object_sha256": "600bf39c72d786cd1cc3abaa103d1c4d052902d90d0ee813ed082e38549e793c",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "factual_claim": true,
+          "layer": "CANONICAL",
+          "object_id": "WSO-RISK-AU-TC-2025-26",
+          "object_sha256": "18975e7558b0dc45fb0c33150b055056a5afb25b6cf6bce51f8649592af304ce",
+          "revision_id": null,
+          "role": "STEP14C_CLIMATE_LINEAGE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
     }
   ],
   "version": "0.1"

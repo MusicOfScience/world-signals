@@ -181,7 +181,7 @@ class WorldStateInternalReadTests(unittest.TestCase):
         self.assertFalse(view["review_state"]["successor_revision_created"])
         self.assertEqual(view["evidence_state"]["selected_counts"].get("relationship_history"), 1)
         self.assertEqual(view["production_state"]["component_count"], 3)
-        self.assertEqual(view["production_state"]["production_counts"], {"actors": 0, "components": 3, "snapshots": 2, "admissions": 2})
+        self.assertEqual(view["production_state"]["production_counts"], {"actors": 0, "components": 5, "snapshots": 3, "admissions": 3})
 
     def test_synthetic_review_required_and_unknown_partitions_are_explicit(self):
         components = [

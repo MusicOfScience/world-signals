@@ -1,0 +1,38 @@
+{
+  "candidate_package": "data/world_state_audit/STEP14A_AU_TROPICAL_CYCLONE_CANDIDATE_REVIEW_PENDING.json",
+  "candidate_semantic_fingerprint": "fe6a9f080037c753de5b64507789b1a70238201005ad5960a069d9aaf6a35687",
+  "component_decisions": [
+    {
+      "component_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001",
+      "decision": "ACCEPTED",
+      "impact_or_attribution_promotion": "NONE",
+      "revision_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001-R1"
+    },
+    {
+      "component_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+      "decision": "ACCEPTED",
+      "impact_or_attribution_promotion": "NONE",
+      "revision_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001-R1"
+    }
+  ],
+  "decision": "ACCEPTED",
+  "decision_scope": "HISTORICAL_CLIMATE_BASELINE_AND_DIMENSION_ONLY",
+  "historical_only_current_use": true,
+  "production_world_state_admitted": true,
+  "public_projection_permitted": false,
+  "review_fingerprint": "fbdc7f43540021411c1d48ba1a4e91cf861858528ef0f95cd109b5a549a558ae",
+  "reviewed_at_utc": "2026-09-28T15:33:30Z",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "human-review"
+  },
+  "source_manifest_sha256": "672924298cedc998f243531e27e6bdb577220f357169c2959ecf26d74c02d8a7",
+  "transaction_id": "WS-STEP14C-AU-TC-COMPONENT-REVIEW-20260929-001",
+  "transaction_type": "WORLD_STATE_COMPONENT_REVIEW",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": [
+    "data/world_state/components.json",
+    "data/world_state/snapshots.json",
+    "data/world_state/admission_transactions.json"
+  ]
+}

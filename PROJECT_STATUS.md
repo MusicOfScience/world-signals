@@ -5,11 +5,11 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-27
+**Reference date:** 2026-09-29
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.04 / 258 sources**.
+- Canonical Registry: **v0.44 / 690 occurrences**; schema **v0.52**.
+- Source Registry: **v2.05 / 260 sources**.
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
@@ -377,3 +377,20 @@ python scripts/build_site.py
 ```
 
 The derived-state checker must remain read-only in CI. Its explicit `--write` mode is restricted to the derived snapshot and the three marked documentation blocks and requires `WORLD_SIGNALS_WRITE_DERIVED_STATE=YES`. The cross-layer coverage audit is also read-only and writes only disposable artifacts under `artifacts/coverage/`.
+
+## Migration Step 14C — controlled climate and IGR admissions
+
+Step 14C performs two separate guarded transactions. The first admits the
+Step 14A official-reference Australian tropical-cyclone Baseline and narrow
+completed-season `CLIMATE_PHYSICAL_RISK` Dimension Assessment as historical
+internal World State components. Their lifecycle is `EXPIRED`; read-time
+current-use is `HISTORICAL_ONLY`, not a current-risk or review-required claim.
+
+The second admits two separate Treasury provenance sources and recovers one
+completed 2026 IGR Canonical occurrence at source-native civil-date precision.
+Both sources are manual-only with `MANUAL_AUTHORITATIVE_RECHECK` and
+`PRODUCTION_AUTOMATION_HOLD`; no monitor route, Analysis, Signal, World State,
+Forecast, Scenario, Risk, Relationship or public IGR projection is created.
+Production now contains five components, three independent snapshot series and
+three World State admissions; actors remain zero and public World State remains
+closed.

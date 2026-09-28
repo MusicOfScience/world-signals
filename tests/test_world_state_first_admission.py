@@ -76,9 +76,9 @@ class WorldStateFirstAdmissionTests(unittest.TestCase):
     def test_current_repository_has_exact_componentized_population(self):
         state = load_production_state(ROOT)
         self.assertEqual(len(state["actors"]), 0)
-        self.assertEqual(len(state["components"]), 3)
-        self.assertEqual(len(state["snapshots"]), 2)
-        self.assertEqual(len(state["admissions"]), 2)
+        self.assertEqual(len(state["components"]), 5)
+        self.assertEqual(len(state["snapshots"]), 3)
+        self.assertEqual(len(state["admissions"]), 3)
         self.assertEqual(validate_production_state(ROOT, enforce_first_population=False), [])
         self.assertFalse((ROOT / "data/world_state/state.json").exists())
         self.assertFalse((ROOT / "docs/world_state.json").exists())

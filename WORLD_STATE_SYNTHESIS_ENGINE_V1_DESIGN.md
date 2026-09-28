@@ -748,3 +748,21 @@ is selected by existing review/history contracts; actor and state semantics
 are explicit; market measurements retain their existing rights discipline;
 transmission remains separate from Relationship authority; and Forecasts,
 Outcomes and calibration remain prospective and cutoff-safe.
+
+## Migration Step 14C status
+
+Step 14C is the first bounded production admission of the Step 14A climate
+specimen and the first source/Canonical recovery from the Step 14B IGR
+coverage-gap audit. The climate Baseline and completed-season Dimension are
+separate immutable components in a new internal snapshot series. They are
+historical (`EXPIRED` / derived `HISTORICAL_ONLY`) and do not assert current
+Australian risk, impact, attribution, forecast, Relationship or public state.
+
+The separate source/Canonical transaction admits Treasury publication and
+Treasury Ministers announcement provenance as manual-only sources and recovers
+one completed IGR occurrence. The occurrence keeps its 21 September civil date,
+9 September first announcement, 28 September repository discovery time and
+main-report/fact-sheet/chart bundle; no recurrence or UTC precision is
+invented. No IGR Analysis, Signal, World State, Forecast, Scenario, Risk,
+Relationship or public projection is created. Step 14C does not reopen public
+World State or add another domain; future revisions remain human-review-gated.

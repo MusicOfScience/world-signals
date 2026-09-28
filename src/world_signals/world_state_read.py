@@ -632,10 +632,23 @@ def read_world_state(
     as_of = normalized["_as_of"]
     jurisdictions = normalized["scope"]["jurisdictions"]
 
-    canonical_context = [
-        row for row in inputs["canonical"].get("records", [])
-        if _in_scope(row, jurisdictions, canonical=True)
-    ]
+    canonical_context = []
+    for row in inputs["canonical"].get("records", []):
+        if not _in_scope(row, jurisdictions, canonical=True):
+            continue
+        # Canonical still has no general historical selector.  Where a newly
+        # recovered record carries an exact first-discovered UTC boundary, do
+        # not let a post-cutoff record contaminate an earlier read.  Records
+        # with only civil-date or absent discovery precision remain current
+        # context and the explicit historical limitation below still applies.
+        discovered_at = row.get("first_discovered_at")
+        if isinstance(discovered_at, str) and len(discovered_at) == 20 and discovered_at.endswith("Z"):
+            try:
+                if _parse_exact_utc(discovered_at, "Canonical first_discovered_at") > as_of:
+                    continue
+            except ValueError:
+                pass
+        canonical_context.append(row)
     canonical_context.sort(key=lambda row: row["occurrence_id"])
     canonical_refs = [
         {"object_id": row["occurrence_id"], "revision_id": None, "manifest_key": manifest.add("CANONICAL", row["occurrence_id"], row)}

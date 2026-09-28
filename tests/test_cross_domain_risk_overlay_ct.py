@@ -42,7 +42,8 @@ class CrossDomainRiskOverlayCTTests(unittest.TestCase):
         self.assertEqual(after, before)
 
         canonical = {row["occurrence_id"]: row for row in self.registry["records"]}
-        self.assertEqual(len(projection["events"]), len(canonical))
+        self.assertEqual(len(projection["events"]), len(canonical) - 1)
+        self.assertNotIn("WSO-FIS-AU-IGR-20260921", {event["occurrence_id"] for event in projection["events"]})
         for event in projection["events"]:
             source = canonical[event["occurrence_id"]]
             for field in (

@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "DERIVED_PROJECT_STATE_SNAPSHOT",
   "version": "0.1",
-  "reference_date": "2026-09-27",
+  "reference_date": "2026-09-29",
   "status": "DERIVED_NONCANONICAL_RECOVERY_SURFACE",
   "derivation_policy": {
     "governed_registries_and_contracts_remain_authoritative": true,
@@ -12,13 +12,13 @@
     "snapshot_may_not_mutate_upstream_layers": true
   },
   "canonical": {
-    "registry_version": "0.43",
-    "occurrence_count": 689,
+    "registry_version": "0.44",
+    "occurrence_count": 690,
     "schema_version": "0.52"
   },
   "sources": {
-    "registry_version": "2.04",
-    "source_count": 258
+    "registry_version": "2.05",
+    "source_count": 260
   },
   "change_ledger": {
     "version": "0.29",
@@ -27,8 +27,8 @@
   "coverage_overlays": {
     "biosecurity_overlay_version": "0.18",
     "biosecurity_canonical_checkpoint": {
-      "registry_version": "0.43",
-      "record_count": 689
+      "registry_version": "0.44",
+      "record_count": 690
     }
   },
   "monitor": {

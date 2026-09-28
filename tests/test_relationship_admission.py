@@ -237,9 +237,9 @@ class RelationshipAdmissionTests(unittest.TestCase):
         world_state = load(ROOT / "data/world_state/components.json")
         snapshots = load(ROOT / "data/world_state/snapshots.json")
         admissions = load(ROOT / "data/world_state/admission_transactions.json")
-        self.assertEqual(len(world_state["components"]), 3)
-        self.assertEqual(len(snapshots["snapshots"]), 2)
-        self.assertEqual(len(admissions["transactions"]), 2)
+        self.assertEqual(len(world_state["components"]), 5)
+        self.assertEqual(len(snapshots["snapshots"]), 3)
+        self.assertEqual(len(admissions["transactions"]), 3)
         actor_registry = ROOT / "data/world_state/actor_registry.json"
         self.assertEqual(len(load(actor_registry)["actors"]) if actor_registry.exists() else 0, 0)
 

@@ -40,6 +40,7 @@ CURRENT_USE_STATES = {
     "CURRENTLY_USABLE_WITHIN_SCOPE",
     "CURRENT_WITH_REVIEW_DUE_SOON",
     "CURRENT_USE_REQUIRES_REVIEW",
+    "HISTORICAL_ONLY",
     "NO_CURRENTNESS_CLAIM",
     "UNKNOWN",
 }
@@ -308,7 +309,10 @@ def derive_current_use(component: dict[str, Any], freshness: dict[str, Any]) -> 
     """Derive current applicability without changing lifecycle or history."""
     lifecycle = component.get("lifecycle_state")
     freshness_status = freshness.get("status")
-    if lifecycle != "ACTIVE":
+    if lifecycle == "EXPIRED":
+        status = "HISTORICAL_ONLY"
+        reason = "accepted historical/reference object; current-use is not authorized and lifecycle is not invalidated"
+    elif lifecycle != "ACTIVE":
         status = "CURRENT_USE_REQUIRES_REVIEW" if lifecycle else "UNKNOWN"
         reason = "inactive lifecycle cannot support a current-use claim" if lifecycle else "lifecycle state is unavailable"
     else:
