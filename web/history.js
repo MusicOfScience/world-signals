@@ -66,6 +66,7 @@
     document.querySelector('#monitorsView').hidden=true;
     document.querySelector('#historyView').hidden=false;
     document.querySelector('.controls').hidden=true;
+    document.querySelector('#filterDisclosure').hidden=true;
     document.querySelectorAll('.viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='historyTab')));
     loadHistory();
   }
@@ -73,6 +74,7 @@
   function hideHistory(){
     document.querySelector('#historyView').hidden=true;
     document.querySelector('#historyTab').setAttribute('aria-pressed','false');
+    document.querySelector('#filterDisclosure').hidden=false;
   }
 
   document.querySelector('#historyTab').addEventListener('click',showHistory);

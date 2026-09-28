@@ -18,6 +18,90 @@ main{max-width:var(--max);margin:0 auto;padding:0 1.25rem 4rem}main>section{scro
 @media(max-width:620px){.hero{padding-top:.8rem;padding-bottom:2.2rem}.topline-note{width:100%;order:3}.reference-clock{margin-left:0}.primary-nav{gap:.9rem}.hero-grid{padding-top:2.2rem}.hero h1{font-size:2.45rem}.lede{font-size:1rem}.brief-grid{grid-template-columns:repeat(2,1fr)}.brief-card:nth-child(2){border-right:0}.brief-card:nth-child(-n+2){border-bottom:1px solid var(--line)}.now-grid{gap:1.25rem}.theme-list,.method-notes,.source-row{grid-template-columns:1fr}.section-kicker,.section-heading{align-items:flex-start;flex-direction:column}.method-chain{align-items:flex-start}.method-chain i{display:none}.method-chain span{display:block}.source-row a{grid-column:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
+/* Step 13A mobile editorial pass: scan first, detail on demand, audit still reachable. */
+body{overflow-x:hidden}
+.filter-disclosure{margin:0 clamp(1rem,3vw,3rem);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.filter-disclosure summary{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;cursor:pointer;color:var(--ink);font-size:.82rem;font-weight:750;list-style:none}
+.filter-disclosure summary::-webkit-details-marker{display:none}
+.filter-disclosure summary::before{content:'+';display:inline-block;width:1rem;color:var(--accent)}
+.filter-disclosure[open] summary::before{content:'−'}
+.filter-disclosure summary span{color:var(--muted);font-weight:400;font-size:.75rem}
+.filter-disclosure .controls,.filter-disclosure .horizon-controls{margin-top:0}
+.secondary-views{position:relative}
+.secondary-views summary{padding:.55rem .7rem;border:1px solid var(--line);background:var(--panel);cursor:pointer;color:var(--muted);font-size:.78rem;font-weight:750;list-style:none}
+.secondary-views summary::-webkit-details-marker{display:none}
+.secondary-views summary::after{content:'+';margin-left:.35rem;color:var(--accent)}
+.secondary-views[open] summary::after{content:'−'}
+.secondary-viewtabs{padding-top:.55rem}
+.calendar-view-toggle{display:flex;gap:.35rem;flex-wrap:wrap}
+.calendar-view-toggle button{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:.45rem .65rem;border-radius:4px;cursor:pointer;font-size:.78rem}
+.calendar-view-toggle button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.calendar-view-toggle button:focus-visible,.filter-disclosure summary:focus-visible,.secondary-views summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#calendarGrid[hidden]{display:none}
+@media(max-width:680px){
+  .hero{padding:.75rem .75rem 1.3rem}
+  .topline{gap:.35rem .65rem;padding-bottom:.55rem}
+  .wordmark{font-size:.82rem}
+  .topline-note{width:auto;order:0;font-size:.7rem}
+  .reference-clock{width:100%;order:3;font-size:.68rem}
+  .primary-nav{justify-content:space-between;gap:.45rem;overflow:visible;padding:.55rem 0}
+  .primary-nav a{font-size:.67rem;letter-spacing:.055em}
+  .hero-grid{gap:.65rem;padding-top:1rem}
+  .hero h1{font-size:clamp(2rem,9vw,2.55rem);line-height:1.02;margin:.15rem 0 .55rem}
+  .lede{font-size:.86rem;line-height:1.4;margin:.35rem 0}
+  .hero-boundary{border-left:0;border-top:1px solid var(--line);padding:.65rem 0 0;gap:.25rem;font-size:.72rem}
+  .hero-boundary strong{font-size:.85rem}
+  .hero-boundary .text-link{font-size:.74rem}
+  .outlook-section{scroll-margin-top:.5rem}
+  .viewbar{margin-top:1.2rem;padding:.65rem .75rem;gap:.65rem}
+  .viewtabs{gap:.3rem}
+  .viewtabs button{min-height:2.65rem;padding:.5rem .55rem;font-size:.75rem}
+  .viewbar>p{font-size:.7rem;line-height:1.35}
+  .secondary-views{width:100%}
+  .secondary-viewtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .secondary-viewtabs button{min-width:0;font-size:.68rem}
+  .filter-disclosure{margin-left:.75rem;margin-right:.75rem}
+  .filter-disclosure[open] .controls,.filter-disclosure[open] .horizon-controls{padding-bottom:.7rem}
+  .controls{padding:.35rem 0 .7rem;grid-template-columns:1fr 1fr;gap:.45rem}
+  .controls input{grid-column:1/-1}
+  .controls input,.controls select,.horizon-controls input,.horizon-controls select{min-height:2.7rem;padding:.6rem .65rem;font-size:.82rem}
+  #calendarView{display:flex;flex-direction:column}
+  #calendarSubscribe{order:5}
+  .calendar-toolbar{order:1;display:grid;grid-template-columns:1fr auto;align-items:center;gap:.65rem;padding:.8rem .75rem}
+  .calendar-toolbar h2{font-size:1.25rem}
+  .calendar-toolbar .calendar-view-toggle{grid-column:1/-1;justify-content:flex-start}
+  #calendarGrid{order:4;margin-left:.5rem;margin-right:.5rem}
+  .day-agenda{order:2;margin:.75rem .5rem;padding:.9rem}
+  .window-lane{order:3;margin:.75rem .5rem;padding:.9rem}
+  .day-agenda-event,.window-event{grid-template-columns:minmax(4.4rem,.7fr) minmax(0,1.8fr) minmax(0,1fr);gap:.5rem;padding:.7rem .55rem}
+  .day-agenda-event strong,.window-event strong{font-size:.78rem;overflow-wrap:anywhere}
+  .day-agenda-event span,.window-event span,.day-agenda-event small,.window-event small{font-size:.68rem;overflow-wrap:anywhere}
+  .calendar-subscribe{margin:.75rem;padding:.9rem 0}
+  .calendar-subscribe-copy h2{font-size:1.2rem}
+  .calendar-subscribe-actions{display:grid;grid-template-columns:1fr;justify-content:stretch}
+  .subscribe-primary,.subscribe-secondary{min-height:2.75rem;text-align:center}
+  .brief-grid{gap:0}
+  .calendar-brief-meta{margin-left:.75rem;margin-right:.75rem;padding:.8rem 0}
+  .calendar-brief-meta .brief-card{min-height:5rem;padding:.55rem .6rem}
+  .calendar-brief-meta .brief-card strong{font-size:1.35rem;margin:.35rem 0 .1rem}
+  .calendar-brief-meta .brief-word{font-size:1rem!important}
+  .calendar-brief-meta .status-stack{padding-top:.65rem}
+  .calendar-context{padding:.9rem 0}
+  .calendar-context .theme-list{grid-template-columns:1fr}
+  dialog#detail{width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;border:0;border-radius:0;padding-bottom:env(safe-area-inset-bottom);overflow:auto}
+  dialog#detail .detail-head{padding-top:max(.7rem,env(safe-area-inset-top));}
+  dialog#detail .close{min-width:4rem;min-height:2.75rem}
+  .detail-actions .detail-copy{min-height:2.75rem}
+}
+@media(max-width:380px){
+  .primary-nav a{font-size:.62rem}
+  .secondary-viewtabs{grid-template-columns:1fr}
+  .calendar-toolbar{grid-template-columns:1fr}
+  .calendar-view-toggle{grid-column:auto!important}
+  .day-agenda-event,.window-event{grid-template-columns:1fr}
+  .day-agenda-event span,.window-event span{font-weight:650}
+}
+
 /* The calendar is supporting infrastructure: its counts live with the full horizon. */
 .calendar-brief-meta{display:grid;grid-template-columns:minmax(180px,.65fr) minmax(0,1.35fr);gap:1.25rem 2rem;margin:1.4rem clamp(1rem,3vw,3rem) 0;padding:1.25rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .calendar-metric-intro{display:grid;align-content:start;gap:.35rem}.calendar-metric-intro p{margin:0;color:var(--muted);line-height:1.45}.calendar-metric-intro .meta{margin-top:.35rem}

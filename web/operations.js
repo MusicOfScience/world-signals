@@ -260,6 +260,7 @@
     document.querySelector('#historyView').hidden=true;
     document.querySelector('#operationsView').hidden=false;
     document.querySelector('.controls').hidden=true;
+    document.querySelector('#filterDisclosure').hidden=true;
     document.querySelectorAll('.viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='operationsTab')));
     loadOperations();
   }
@@ -267,6 +268,7 @@
   function hideOperations(){
     document.querySelector('#operationsView').hidden=true;
     document.querySelector('#operationsTab').setAttribute('aria-pressed','false');
+    document.querySelector('#filterDisclosure').hidden=false;
   }
 
   document.querySelector('#operationsTab').addEventListener('click',showOperations);

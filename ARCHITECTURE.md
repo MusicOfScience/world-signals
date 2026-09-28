@@ -25,7 +25,11 @@ Current reconciled `main` state (27 September 2026):
 7. **Briefing projections** — the public reader sequence is `OUTLOOK →
    RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
    `WORLD STATE | MAP` remain internal/future public surfaces. These views are
-   projections, not additional governed stores.
+   projections, not additional governed stores. The Step 13A mobile editorial
+   pass makes this sequence scan-first on small screens: Outlook leads, the
+   Calendar is agenda-first, and System/audit views remain secondary. The
+   four-series public Forecast allowlist is unchanged; World State and
+   Relationship projection remain closed.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 

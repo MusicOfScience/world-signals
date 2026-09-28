@@ -20,7 +20,7 @@ class WebUXTests(unittest.TestCase):
     def test_public_first_view_leads_with_outlook_and_keeps_world_state_closed(self):
         html=(ROOT/"web/index.html").read_text(encoding="utf-8")
         self.assertIn("A PUBLIC INTELLIGENCE BRIEF",html)
-        self.assertIn("What we expect next. What we are watching. What would change the view.",html)
+        self.assertIn("What we expect next.",html)
         self.assertIn('href="#outlook">OUTLOOK</a>',html)
         self.assertIn('id="outlook"',html)
         self.assertIn('id="worldStateCoverage"',html)

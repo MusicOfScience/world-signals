@@ -166,6 +166,7 @@
     });
     document.querySelector('#analysisView').hidden=false;
     document.querySelector('.controls').hidden=true;
+    document.querySelector('#filterDisclosure').hidden=true;
     document.querySelectorAll('.viewtabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.id==='analysisTab')));
     loadAnalysis();
   }
@@ -173,6 +174,7 @@
   function hideAnalysis(){
     document.querySelector('#analysisView').hidden=true;
     document.querySelector('#analysisTab').setAttribute('aria-pressed','false');
+    document.querySelector('#filterDisclosure').hidden=false;
   }
 
   ensureSurface();

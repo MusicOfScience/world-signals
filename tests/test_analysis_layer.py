@@ -216,7 +216,7 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         self.assertIn('bundled source: web/analysis.js', build)
         self.assertIn('"analysis.css"', build)
         self.assertNotIn('id="analysisView"', html)
-        self.assertNotIn('id="analysisTab"', html)
+        self.assertIn('id="analysisTab"', html)
 
 
 if __name__ == "__main__":

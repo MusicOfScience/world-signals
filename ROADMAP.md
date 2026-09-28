@@ -660,6 +660,18 @@ Forecast-to-Canonical occurrence links remain visible without creating new
 intelligence. No Forecast, Outcome, World State component or public World State
 projection was created.
 
+## Stage 29 — mobile editorial product pass — IMPLEMENTED / BOUNDED
+
+Migration Step 13A keeps the public intelligence spine reader-first at mobile
+widths: Outlook leads the first viewport, Forecasts expose scan/understand/audit
+layers, the Calendar is agenda-first on small screens with Month retained as a
+secondary view, and System/audit surfaces move behind secondary navigation.
+The shared filtering, subscription and accessibility contracts remain intact.
+The public Forecast projection remains the same four-series allowlist; no
+governed data, World State component, Relationship or public World State
+projection was changed. This is a presentation tranche, not a new intelligence
+or publication authority.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.
