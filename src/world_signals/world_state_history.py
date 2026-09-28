@@ -438,7 +438,19 @@ def validate_actor_registry(dataset: Any) -> list[str]:
         by_revision.add(actor.get("identity_revision_id"))
         if not _hash(actor.get("object_sha256")) or actor.get("object_sha256") != fingerprint(actor, exclude={"object_sha256"}):
             errors.append(f"Actor Registry fingerprint mismatch for {actor.get('actor_id')}")
-        _utc(actor.get("effective_from"), "actor.effective_from", errors, required=True)
+        effective_from = actor.get("effective_from")
+        precision = actor.get("effective_from_precision")
+        if effective_from is None:
+            if precision != "UNKNOWN":
+                errors.append("actor.effective_from null requires effective_from_precision UNKNOWN")
+            if not _text(actor.get("identity_known_at_utc")):
+                errors.append("actor.identity_known_at_utc is required when effective_from is unknown")
+            else:
+                _utc(actor.get("identity_known_at_utc"), "actor.identity_known_at_utc", errors, required=True)
+        else:
+            _utc(effective_from, "actor.effective_from", errors, required=True)
+            if precision not in {None, "UTC_INSTANT"}:
+                errors.append("known actor.effective_from must use UTC_INSTANT precision")
         _utc(actor.get("effective_to"), "actor.effective_to", errors)
         if actor.get("review_state") not in {"CANDIDATE", "UNDER_REVIEW", "ACCEPTED", "REJECTED"}:
             errors.append("Actor Registry review_state is invalid")

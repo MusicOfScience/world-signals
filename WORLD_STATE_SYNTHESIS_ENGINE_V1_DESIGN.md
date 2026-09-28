@@ -594,6 +594,14 @@ is an explicit manual-review boundary with temporary simulation only; no Actor
 Registry population, World State admission or public projection is authorised
 by this step.
 
+Step 11A.1 corrected three temporal boundaries in the retained RBNZ specimen
+without changing its substantive analytical content: comparative Macro
+knowledge is not backdated to the official release, source-reported market
+windows do not receive an exact movement onset, and identity evidence does not
+become an institutional effective-from. The original package remains preserved
+as audit history; the corrected successor remains review-pending and does not
+admit an actor, component, snapshot or public projection.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining

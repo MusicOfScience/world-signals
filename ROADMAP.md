@@ -544,6 +544,14 @@ Registry remains unpopulated. No second World State component, snapshot,
 admission transaction or public projection exists; the next gate is explicit
 human review of the candidate package, not automatic admission.
 
+Step 11A.1 pressure-tested the specimen's temporal semantics. The original
+package is retained unchanged and a corrected successor now distinguishes the
+official decision's effective instant from the later known-at boundary for the
+comparative proposition, refuses exact onset for source-reported market
+windows, and permits explicit unknown institutional effective-from without
+fabrication. No production population or public projection changed; Step 11B
+remains the explicit human review/admission boundary.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader

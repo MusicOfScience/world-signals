@@ -336,7 +336,7 @@ def build_rbnz_candidate(root: Path, *, construction_cutoff_utc: str = CONSTRUCT
 
 def validate_rbnz_candidate_package(package: dict[str, Any]) -> list[str]:
     errors: list[str] = []
-    if package.get("package_type") != "WORLD_STATE_STEP11A_RBNZ_CANDIDATE":
+    if package.get("package_type") not in {"WORLD_STATE_STEP11A_RBNZ_CANDIDATE", "WORLD_STATE_STEP11A1_RBNZ_CANDIDATE"}:
         errors.append("invalid Step 11A package type")
     if package.get("status") != "REVIEW_PENDING" or package.get("preflight_classification") != "READY_FOR_HUMAN_COMPONENT_REVIEW":
         errors.append("package must remain review pending and ready for human component review")
@@ -371,4 +371,134 @@ def validate_rbnz_candidate_package(package: dict[str, Any]) -> list[str]:
         errors.append("Step 11A package must not create actor claims, implementation claims, relationships or forecasts")
     if package.get("production_state", {}).get("writes") != []:
         errors.append("Step 11A package must have no production write targets")
+    return errors
+
+
+def build_corrected_rbnz_candidate(root: Path) -> dict[str, Any]:
+    """Build the Step 11A.1 temporal successor without rewriting Step 11A."""
+    original = build_rbnz_candidate(root)
+    corrected = deepcopy(original)
+    corrected["package_type"] = "WORLD_STATE_STEP11A1_RBNZ_CANDIDATE"
+    corrected["correction_lineage"] = {
+        "corrects_package": "data/world_state_audit/STEP11A_RBNZ_CANDIDATE_REVIEW_PENDING.json",
+        "corrected_successor": "data/world_state_audit/STEP11A1_RBNZ_CANDIDATE_REVIEW_PENDING_CORRECTED.json",
+        "predecessor_candidate_fingerprint": original["candidate_semantic_fingerprint"],
+        "predecessor_source_manifest_sha256": original["source_manifest_sha256"],
+        "correction_type": "KNOWN_AT_AND_EFFECTIVE_TIME_PRECISION_AND_ACTOR_IDENTITY_BOUNDARY",
+        "human_review_dispositions": {
+            "MACROECONOMIC_FINANCIAL_CONDITIONS": "DEFER_TEMPORAL_CORRECTION",
+            "MARKETS_AS_SENSORS": "DEFER_TEMPORAL_CORRECTION",
+            "ACTOR_IDENTITY": "DEFER_IDENTITY_TEMPORAL_CONTRACT",
+        },
+        "reason": "The comparative policy-path proposition was not admissibly known at the official release instant; source-reported market windows do not establish an exact movement instant; identity evidence does not establish institutional founding time.",
+    }
+    candidates = {row["component_id"]: row for row in corrected["dimension_assessment_candidates"]}
+    macro = candidates[MACRO_COMPONENT_ID]
+    macro["known_at_utc"] = "2026-09-05T14:40:00Z"
+    macro["known_at_basis"] = "ANALYSIS_REVIEW_BOUNDARY_FOR_COMPARATIVE_FORWARD_PATH_PROPOSITION"
+    macro["proposition_parts"] = [
+        {
+            "part": "OFFICIAL_DECISION",
+            "label": "POLICY_RATE_INCREASED_TO_2_75_PERCENT",
+            "known_at_utc": "2026-09-02T02:00:00Z",
+            "basis": "PRIMARY_OFFICIAL_RBNZ_RELEASE",
+        },
+        {
+            "part": "COMPARATIVE_FORWARD_PATH",
+            "label": "MORE_GRADUAL_THAN_MARKET_PRICING",
+            "known_at_utc": "2026-09-05T14:40:00Z",
+            "basis": "REVIEWED_ANALYSIS_COMPARISON",
+        },
+    ]
+    macro["object_sha256"] = None
+    candidates[MACRO_COMPONENT_ID] = with_object_fingerprint(macro)
+    market = candidates[MARKET_COMPONENT_ID]
+    market["effective_at"] = None
+    market["effective_time_precision"] = "CIVIL_DATE"
+    market["effective_time_basis"] = "Source-reported immediate post-decision and same-session windows; civil date is the narrowest executable production-history precision and no movement onset is manufactured."
+    market["effective_window"] = {
+        "anchor_event_at_utc": "2026-09-02T02:00:00Z",
+        "description": "source-reported immediate post-decision / same-session movement",
+        "exact_start_at_utc": None,
+        "exact_end_at_utc": None,
+    }
+    market["object_sha256"] = None
+    candidates[MARKET_COMPONENT_ID] = with_object_fingerprint(market)
+    corrected["dimension_assessment_candidates"] = [candidates[MACRO_COMPONENT_ID], candidates[MARKET_COMPONENT_ID]]
+    actor = corrected["actor_identity_candidate"]
+    actor["effective_from"] = None
+    actor["effective_from_precision"] = "UNKNOWN"
+    actor["identity_known_at_utc"] = "2026-09-05T14:40:00Z"
+    actor["identity_known_at_basis"] = "ANALYSIS_REVIEW_BOUNDARY_FOR_IDENTITY_PROVENANCE"
+    actor["object_sha256"] = None
+    actor = with_object_fingerprint(actor)
+    corrected["actor_identity_candidate"] = actor
+    actor_transaction = build_actor_identity_admission_transaction(
+        actor,
+        reviewer_id="operator-human-review-required",
+        decided_at_utc=CONSTRUCTION_CUTOFF,
+        admitted_at_utc=CONSTRUCTION_CUTOFF,
+        pre_state_hashes={"actors": fingerprint({"actors": [], "relationships": []})},
+        post_state_hashes={"actors": fingerprint({"actors": [actor], "relationships": []})},
+        write_targets=["SIMULATION_ONLY:data/world_state/actor_registry.json"],
+    )
+    corrected["actor_identity_admission"] = {
+        "status": "REVIEW_PENDING_UNADMITTED",
+        "transaction": actor_transaction,
+        "simulation": simulate_actor_identity_admission(actor, actor_transaction),
+        "production_population_performed": False,
+    }
+    snapshot = corrected["proposed_snapshot"]["snapshot"]
+    snapshot["component_refs"] = [
+        {"component_type": row["component_type"], "component_id": row["component_id"], "revision_id": row["revision_id"], "object_sha256": row["object_sha256"]}
+        for row in corrected["dimension_assessment_candidates"]
+    ]
+    snapshot["effective_as_of_utc"] = None
+    snapshot["effective_date"] = "2026-09-02"
+    snapshot["effective_time_precision"] = "CIVIL_DATE"
+    snapshot["effective_time_basis"] = "The two candidates share a civil-date decision context, but the market movement window has no exact onset; this pending index does not claim a single effective instant."
+    snapshot["object_sha256"] = None
+    corrected["proposed_snapshot"]["snapshot"] = with_object_fingerprint(snapshot)
+    corrected["proposed_snapshot"]["snapshot_semantic_fingerprint"] = fingerprint(corrected["proposed_snapshot"]["snapshot"], exclude={"object_sha256"})
+    corrected["correction_review"] = {
+        "status": "REVIEW_PENDING",
+        "component_readiness": {
+            "MACROECONOMIC_FINANCIAL_CONDITIONS": "READY_FOR_HUMAN_COMPONENT_REVIEW",
+            "MARKETS_AS_SENSORS": "READY_FOR_HUMAN_COMPONENT_REVIEW",
+            "ACTOR_IDENTITY": "DEFER_IDENTITY_TEMPORAL_CONTRACT",
+        },
+        "production_admission_performed": False,
+        "write_targets": [],
+        "public_projection_permitted": False,
+    }
+    corrected["candidate_semantic_fingerprint"] = fingerprint({
+        "actor": actor,
+        "components": corrected["dimension_assessment_candidates"],
+        "snapshot": corrected["proposed_snapshot"]["snapshot"],
+        "source_manifest_sha256": corrected["source_manifest_sha256"],
+    }, exclude={"object_sha256"})
+    return corrected
+
+
+def validate_corrected_rbnz_candidate_package(package: dict[str, Any]) -> list[str]:
+    errors = validate_rbnz_candidate_package(package)
+    if package.get("package_type") != "WORLD_STATE_STEP11A1_RBNZ_CANDIDATE":
+        errors.append("corrected Step 11A.1 package type is required")
+    lineage = package.get("correction_lineage")
+    if not isinstance(lineage, dict) or lineage.get("predecessor_candidate_fingerprint") != "455ac3d2402ac7370fe6b4a4b5b69fbc666183dd57a191c3da23525a85b3dc39":
+        errors.append("original Step 11A fingerprint must be preserved in correction lineage")
+    candidates = {row.get("component_id"): row for row in package.get("dimension_assessment_candidates", [])}
+    macro = candidates.get(MACRO_COMPONENT_ID, {})
+    if macro.get("known_at_utc") != "2026-09-05T14:40:00Z":
+        errors.append("comparative Macro candidate must use the Analysis review boundary")
+    market = candidates.get(MARKET_COMPONENT_ID, {})
+    if market.get("effective_at") is not None or market.get("effective_time_precision") != "CIVIL_DATE":
+        errors.append("market candidate must use executable civil-date precision")
+    actor = package.get("actor_identity_candidate", {})
+    if actor.get("effective_from") is not None or actor.get("effective_from_precision") != "UNKNOWN":
+        errors.append("actor identity must retain unknown effective-from explicitly")
+    if actor.get("identity_known_at_utc") != "2026-09-05T14:40:00Z":
+        errors.append("actor identity known-at boundary is missing")
+    if package.get("source_manifest_sha256") != "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4":
+        errors.append("governed source manifest unexpectedly changed")
     return errors

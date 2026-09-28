@@ -76,8 +76,11 @@ def build_actor_identity_candidate(
     actor_type: str,
     aliases: list[str],
     jurisdiction: list[str],
-    effective_from: str,
+    effective_from: str | None,
     provenance_refs: list[dict[str, Any]],
+    effective_from_precision: str | None = None,
+    identity_known_at_utc: str | None = None,
+    identity_known_at_basis: str = "GOVERNED_IDENTITY_REVIEW_BOUNDARY",
 ) -> dict[str, Any]:
     """Construct identity-only, under-review actor data without admission fields."""
     if actor_type not in ACTOR_TYPES:
@@ -89,6 +92,15 @@ def build_actor_identity_candidate(
     if not provenance_refs:
         raise ActorIdentityAdmissionError("identity provenance is required")
     identity_provenance = [_citation(ref) for ref in provenance_refs]
+    if effective_from is None:
+        if effective_from_precision != "UNKNOWN":
+            raise ActorIdentityAdmissionError("unknown effective_from requires effective_from_precision=UNKNOWN")
+    elif effective_from_precision not in {None, "UTC_INSTANT"}:
+        raise ActorIdentityAdmissionError("known effective_from must be an exact UTC instant")
+    known_at = identity_known_at_utc or effective_from
+    if known_at is None:
+        raise ActorIdentityAdmissionError("identity_known_at_utc is required")
+    _utc(known_at, "identity_known_at_utc", required=True)
     candidate = {
         "actor_id": actor_id,
         "identity_revision_id": f"{actor_id}-R1",
@@ -97,13 +109,19 @@ def build_actor_identity_candidate(
         "actor_type": actor_type,
         "aliases": _normalise_aliases(canonical_label, aliases),
         "jurisdiction": jurisdiction,
-        "effective_from": _utc(effective_from, "effective_from", required=True),
+        "effective_from": _utc(effective_from, "effective_from"),
         "effective_to": None,
         "identity_provenance": identity_provenance,
         "review_state": "UNDER_REVIEW",
         "parent_actor_ids": [],
         "object_sha256": None,
     }
+    # Preserve the pre-Step-11A shape for legacy known-time candidates. New
+    # unknown-bound identities must carry the explicit temporal fields.
+    if effective_from is None or effective_from_precision is not None or identity_known_at_utc is not None:
+        candidate["effective_from_precision"] = effective_from_precision or "UTC_INSTANT"
+        candidate["identity_known_at_utc"] = known_at
+        candidate["identity_known_at_basis"] = identity_known_at_basis
     return with_object_fingerprint(candidate)
 
 
@@ -124,6 +142,15 @@ def validate_actor_identity_candidate(candidate: Any, *, existing_registry: dict
     errors.extend(validate_actor_registry({"actors": [candidate], "relationships": []}))
     if candidate.get("review_state") not in {"CANDIDATE", "UNDER_REVIEW"}:
         errors.append("actor identity candidate must remain under review")
+    if candidate.get("effective_from") is None and candidate.get("effective_from_precision") != "UNKNOWN":
+        errors.append("unknown effective_from requires explicit UNKNOWN precision")
+    if candidate.get("effective_from") is not None and candidate.get("effective_from_precision") not in {"UTC_INSTANT", None}:
+        errors.append("known effective_from must use UTC_INSTANT precision")
+    if candidate.get("effective_from") is None or "identity_known_at_utc" in candidate:
+        try:
+            _utc(candidate.get("identity_known_at_utc"), "identity_known_at_utc", required=True)
+        except ActorIdentityAdmissionError as exc:
+            errors.append(str(exc))
     if candidate.get("effective_to") is not None and not isinstance(candidate.get("effective_to"), str):
         errors.append("effective_to must be UTC text or null")
     if MUTABLE_ACTOR_FIELDS & set(candidate):
@@ -225,3 +252,19 @@ def simulate_actor_identity_admission(
 
 def actor_reference_admissible(actor_id: str, registry: dict[str, Any]) -> bool:
     return any(row.get("actor_id") == actor_id and row.get("review_state") == "ACCEPTED" for row in registry.get("actors", []))
+
+
+def actor_identity_known_as_of(actor: dict[str, Any], knowledge_cutoff_utc: str) -> bool:
+    """Return whether identity evidence was known by the explicit cutoff."""
+    known = _utc(actor.get("identity_known_at_utc"), "identity_known_at_utc", required=True)
+    cutoff = _utc(knowledge_cutoff_utc, "knowledge_cutoff_utc", required=True)
+    return known <= cutoff
+
+
+def actor_identity_effective_as_of(actor: dict[str, Any], effective_as_of_utc: str) -> bool:
+    """Fail closed when an identity's historical start bound is unknown."""
+    if actor.get("effective_from") is None or actor.get("effective_from_precision") == "UNKNOWN":
+        return False
+    effective = _utc(actor["effective_from"], "effective_from", required=True)
+    cutoff = _utc(effective_as_of_utc, "effective_as_of_utc", required=True)
+    return effective <= cutoff

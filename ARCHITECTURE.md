@@ -588,6 +588,15 @@ boundary validates identity-only, manual-review-gated candidates and temporary
 simulation while the Actor Registry remains empty. Production remains one
 component, snapshot and admission, and public projection remains closed.
 
+Step 11A.1 records a temporal-integrity correction to that specimen. Effective
+time is not knowledge time: the Macro candidate retains the official decision
+instant while the comparative proposition uses the reviewed Analysis boundary;
+the Markets candidate falls back to executable civil-date precision for its
+source-reported window; and the proposal-local actor identity carries an
+explicit unknown historical effective-from plus separate identity-known time.
+The original audit artifact remains immutable, all candidates remain pending,
+and no production or public state is changed.
+
 ### Implemented but needing extension
 
 The strongest reusable foundations are the stable Canonical identity/timing
