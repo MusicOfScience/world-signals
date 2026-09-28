@@ -690,6 +690,16 @@ selectors rather than importance ranking; no score, political prioritisation,
 new intelligence object, World State exposure or Relationship exposure was
 created. Outlook, Calendar, Analysis and governed data remain unchanged.
 
+## Stage 32 — reader / Research / System-Audit separation — IMPLEMENTED / BOUNDED
+
+Migration Step 13D makes the public reading journey continuous through the
+Calendar and moves repository-shaped metadata and controls out of the primary
+reader flow. Research now owns method, source and publication-boundary context;
+Event Index, Monitor routes, Operations and Change History remain accessible
+behind a collapsed System/Audit disclosure. The public method chain is compact
+and explicitly does not assert that every layer is populated or public. No
+publication-governance or governed-data authority changed.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

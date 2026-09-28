@@ -68,8 +68,11 @@ authoritative specifications for their subjects.
   Forecast resolution, next exact-date public Calendar occurrence and latest
   reviewed public Analysis; chronology and recency are not importance ranking.
   Calendar counts and World State coverage belong to their supporting surfaces,
-  not the opening intelligence narrative. The bounded Outlook projection may
-  link to Calendar only through exact reviewed occurrence IDs.
+  not the opening intelligence narrative. Research owns method, sources and
+  publication boundaries; System/Audit remains public but collapsed and
+  secondary for configuration, retained evidence, operations and history. The
+  bounded Outlook projection may link to Calendar only through exact reviewed
+  occurrence IDs.
 
 ## Working method
 

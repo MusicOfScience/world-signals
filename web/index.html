@@ -77,7 +77,7 @@
     <section id="analysisSection" class="analysis-preview-section" aria-labelledby="analysisPreviewTitle">
       <div class="section-heading"><div><p class="eyebrow">REVIEWED ANALYSIS</p><h2 id="analysisPreviewTitle">What has been reviewed?</h2></div><p class="meta">A small public sample; the full audit view remains available below.</p></div>
       <div id="analysisPreview" class="analysis-preview-grid"><p class="loading">Loading reviewed analysis…</p></div>
-      <a class="text-link" href="#analysisView">Open the full Analysis view →</a>
+      <button id="analysisTab" class="text-link text-link-button" type="button" aria-pressed="false">Open the full Analysis view →</button>
     </section>
 
     <section id="horizon" class="horizon-shell" aria-labelledby="horizonTitle">
@@ -99,9 +99,7 @@
           <article class="brief-card"><span class="brief-label">NEXT 24 HOURS</span><strong id="next24Count">—</strong><p>known occurrences</p></article>
           <article class="brief-card"><span class="brief-label">NEXT 7 DAYS</span><strong id="next7Count">—</strong><p>upcoming occurrences</p></article>
           <article class="brief-card"><span class="brief-label">NEXT 30 DAYS</span><strong id="next30Count">—</strong><p>calendar depth</p></article>
-          <article class="brief-card"><span class="brief-label">PUBLIC CALENDAR</span><strong class="brief-word">SUBSCRIBE</strong><p><a href="#calendarSubscribe">Add the calendar</a></p></article>
         </div>
-        <div class="status-stack" id="publicStatus" aria-live="polite"><p class="loading">Loading publication status…</p></div>
       </div>
 
       <details id="horizonFilterDisclosure" class="filter-disclosure" open>
@@ -155,25 +153,6 @@
         </div>
         <div id="nativeCalendarDates" class="native-date-list"></div>
       </section>
-    </section>
-
-    <section id="stats" class="stats" aria-live="polite"></section>
-
-    <section class="viewbar" aria-label="View selector">
-      <div class="viewtabs">
-        <button data-view="calendar" aria-pressed="true">Calendar</button>
-        <button data-view="index" aria-pressed="false">Event index</button>
-        <button id="analysisTab" aria-pressed="false">Analysis</button>
-      </div>
-      <details class="secondary-views">
-        <summary>System / audit</summary>
-        <div class="viewtabs secondary-viewtabs">
-          <button data-view="monitors" aria-pressed="false">Monitor routes</button>
-          <button id="operationsTab" aria-pressed="false">Operations</button>
-          <button id="historyTab" aria-pressed="false">Change history</button>
-        </div>
-      </details>
-      <p>Timed events display in your device timezone when a canonical UTC timestamp is available. Native source timezone is preserved.</p>
     </section>
 
     <details id="filterDisclosure" class="filter-disclosure" open>
@@ -338,23 +317,59 @@
     </section>
 
     <section id="methods" class="methods-section" aria-labelledby="methodsTitle">
-      <div class="section-heading"><div><p class="eyebrow">RESEARCH</p><h2 id="methodsTitle">How this brief was built</h2></div><p class="meta">Methods, sources and public boundaries.</p></div>
+      <div class="section-heading"><div><p class="eyebrow">RESEARCH</p><h2 id="methodsTitle">How this brief was built</h2></div><p class="meta">Method, sources and publication boundaries.</p></div>
+      <p class="research-label">METHOD</p>
       <div class="method-chain" aria-label="WORLD SIGNALS analytical chain">
-        <span>authoritative sources</span><i>→</i><span>observations</span><i>→</i><span>signals</span><i>→</i><span>relationships</span><i>→</i><span>risks</span><i>→</i><span>scenarios</span><i>→</i><span>forecasts</span><i>→</i><span>outcomes</span>
+        <span>sources</span><i>→</i><span>observations</span><i>→</i><span>signals</span><i>→</i><span>state + relationships</span><i>→</i><span>scenarios</span><i>→</i><span>forecasts</span><i>→</i><span>outcomes</span>
       </div>
+      <p class="research-method-note">This is the method, not a claim that every layer is populated or public. Forecasts and reviewed Analysis are currently public through bounded projections; deeper synthesis remains governed separately.</p>
+      <p class="research-label">BOUNDARIES</p>
       <div class="method-notes">
-        <p id="worldStateCoverage"><strong>World State coverage.</strong> Public World State synthesis is not yet open. One narrow internal governed assessment exists; broader multidomain coverage remains unassessed.</p>
+        <p id="worldStateCoverage"><strong>World State coverage.</strong> Public World State synthesis is not yet open. Governed World State exists internally in limited scoped coverage.</p>
+        <p id="relationshipCoverage"><strong>Relationship coverage.</strong> Relationship analysis exists internally; public Relationship projection remains closed.</p>
+        <p id="publicationBoundaries"><strong>Public boundary.</strong> Forecasts, Calendar and reviewed Analysis are public through allowlisted projections. Risks and Scenarios are not yet populated as applicable and are not presented as public output.</p>
         <p><strong>What we preserve.</strong> Source-native time, uncertainty, provenance, contradictory evidence and change history remain visible.</p>
         <p><strong>What we do not do.</strong> Monitoring can propose review work, but it cannot silently rewrite Canonical truth, promote candidates or publish private material.</p>
         <p><strong>What forecasts mean.</strong> Forecasts are frozen prospectively and evaluated only when authoritative outcomes resolve them. An unresolved claim is not a correct claim.</p>
       </div>
+      <div class="research-public-status">
+        <p class="research-label">PUBLIC STATUS</p>
+        <div class="status-stack" id="publicStatus" aria-live="polite"><p class="loading">Loading publication status…</p></div>
+      </div>
+      <div class="research-coverage">
+        <p class="research-label">COVERAGE</p>
+        <p class="meta">Descriptive corpus and coverage metadata, not intelligence headlines.</p>
+        <section id="stats" class="stats research-stats" aria-live="polite"></section>
+      </div>
     </section>
 
     <section id="sources" class="sources-section" aria-labelledby="sourcesTitle">
-      <div class="section-heading"><div><p class="eyebrow">SOURCES</p><h2 id="sourcesTitle">Governed sources, clearly distinguished from monitored routes</h2></div><p id="sourceSummary" class="meta">Loading source summary…</p></div>
+      <div class="section-heading"><div><p class="eyebrow">RESEARCH / SOURCES</p><h2 id="sourcesTitle">Governed sources, clearly distinguished from monitored routes</h2></div><p id="sourceSummary" class="meta">Loading source summary…</p></div>
       <p class="source-explainer">A governed source can support Canonical provenance without being an active automated route. This view shows publishable registry metadata only.</p>
       <div id="sourceList" class="source-list"><p class="loading">Loading source metadata…</p></div>
     </section>
+
+    <details id="systemAuditDisclosure" class="system-audit-disclosure">
+      <summary><span>SYSTEM / AUDIT</span><small>Configuration, retained evidence and review history</small></summary>
+      <div class="viewbar system-audit-shell" aria-label="Secondary system and calendar views">
+        <div class="secondary-views system-audit-group">
+          <p class="research-label">MORE CALENDAR VIEWS</p>
+          <div class="viewtabs calendar-secondary-viewtabs">
+            <button data-view="calendar" aria-pressed="true">Return to Calendar</button>
+            <button data-view="index" aria-pressed="false">Event index</button>
+          </div>
+        </div>
+        <div class="system-audit-group">
+          <p class="research-label">SYSTEM SURFACES</p>
+          <div class="viewtabs secondary-viewtabs">
+            <button data-view="monitors" aria-pressed="false">Monitor routes</button>
+            <button id="operationsTab" aria-pressed="false">Operations</button>
+            <button id="historyTab" aria-pressed="false">Change history</button>
+          </div>
+        </div>
+        <p>These surfaces describe configuration, retained evidence, governance and review history. They do not describe the world directly.</p>
+      </div>
+    </details>
   </main>
 
   <dialog id="detail" aria-labelledby="detailTitle" aria-describedby="detailSummary">

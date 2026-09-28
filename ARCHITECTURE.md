@@ -35,7 +35,11 @@ Current reconciled `main` state (27 September 2026):
    changes. Step 13C adds one deterministic three-lane Brief projection over
    the existing public Outlook, Calendar and reviewed Analysis artifacts; it
    does not create an importance score, new intelligence object or public
-   World State/Relationship exposure.
+   World State/Relationship exposure. Step 13D keeps the Horizon and full
+   Calendar as one reader surface, moves corpus/status metadata into Research,
+   and places Event Index, Monitor routes, Operations and Change History behind
+   a collapsed System/Audit disclosure. This changes hierarchy, not publication
+   authority or governed content.
 
 Supporting operational contracts include source governance, review-candidate state, reviewed Change Ledger, runtime evidence and noncanonical analytical/coverage overlays.
 
@@ -533,7 +537,9 @@ signposts, production admission and any promotion into a public projection.
 The final briefing is a projection assembled from reviewed state and
 provenance; it is not canonical truth. The current public product leads with
 the deterministic Brief, bounded Outlook pilot, Resolution Clock, reviewed
-Analysis, Calendar and Research. The
+Analysis, Calendar and Research. Research owns method, sources and public
+boundaries; System/Audit remains an accessible but secondary machinery view.
+The
 intended full product surface is:
 
 ```text

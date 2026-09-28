@@ -75,8 +75,8 @@ class MobileEditorialProductTests(unittest.TestCase):
         self.assertIn('id="horizonFilterDisclosure"', self.html)
 
     def test_system_and_audit_views_are_secondary(self):
-        self.assertIn("System / audit", self.html)
-        secondary = self.html[self.html.index('class="secondary-views"'):self.html.index('</details>', self.html.index('class="secondary-views"'))]
+        self.assertIn("SYSTEM / AUDIT", self.html)
+        secondary = self.html[self.html.index('id="systemAuditDisclosure"'):self.html.index('</details>', self.html.index('id="systemAuditDisclosure"'))]
         for label in ("Monitor routes", "Operations", "Change history"):
             self.assertIn(label, secondary)
         self.assertIn('id="analysisTab"', self.html)
