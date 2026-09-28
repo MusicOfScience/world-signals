@@ -522,6 +522,345 @@
         }
       ],
       "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-CLIMATE-AU-TCSEASON-20260929-001",
+      "admitted_at_utc": "2026-09-28T15:33:31Z",
+      "baseline_value_or_label": "about 10 Australian-region tropical cyclones per season",
+      "baseline_value_type": "APPROXIMATE_SOURCE_LABEL",
+      "basis": "OFFICIAL_REFERENCE",
+      "component_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001",
+      "component_type": "BASELINE",
+      "contradictory_citations": [],
+      "effective_at": null,
+      "effective_date": null,
+      "effective_time_basis": "Source-native reference window; no exact UTC boundary is manufactured.",
+      "effective_time_precision": "SOURCE_NATIVE_SEASON_SERIES",
+      "known_at_basis": "GOVERNED_ANALYSIS_REVIEW_BOUNDARY",
+      "known_at_utc": "2026-09-05T23:35:00Z",
+      "lifecycle_state": "EXPIRED",
+      "limitations": [
+        "climatological/reference guidance only",
+        "not a 2025–26 season-specific Forecast or probability distribution",
+        "not a severe-cyclone-count baseline",
+        "not a damage, loss or attribution baseline",
+        "does not define a normal-versus-abnormal threshold",
+        "typical 3–4 mainland landfalls remain comparison context, not a second Baseline component"
+      ],
+      "measurement_definition": {
+        "aggregation": "SEASONAL_COUNT",
+        "measure": "Australian-region tropical cyclone count per season",
+        "precision": "APPROXIMATE",
+        "unit": "cyclones_per_season"
+      },
+      "object_sha256": "60a7a5032a0832ac46f521f443b31e698a4e6296009981203584f39eb50bc737",
+      "previous_revision_id": null,
+      "projection_transaction_id": null,
+      "reference_window": {
+        "exact_end": null,
+        "exact_start": null,
+        "precision": "SOURCE_NATIVE_SEASON_SERIES",
+        "source_native_label": "since 1980–81"
+      },
+      "review_state": "ACCEPTED",
+      "review_transaction_id": "WS-STEP14C-AU-TC-COMPONENT-REVIEW-20260929-001",
+      "reviewed_at_utc": "2026-09-28T15:33:31Z",
+      "revision_id": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 14C human-admitted historical climate Baseline/Dimension; current use is HISTORICAL_ONLY and no impact or attribution claim is admitted.",
+      "scope": {
+        "geographic_scope": "Australian tropical cyclone region",
+        "jurisdictions": [
+          "Australia"
+        ],
+        "measure": "Australian-region tropical cyclone count per season"
+      },
+      "source_manifest_sha256": "672924298cedc998f243531e27e6bdb577220f357169c2959ecf26d74c02d8a7",
+      "source_proposal_id": "WS-STEP14A-WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "object_sha256": "f70c4d9d27addf564854056937ea7b4828e2ef7db47c389df0588e2b3704cd43",
+          "revision_id": null,
+          "role": "OFFICIAL_REFERENCE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-AU-TCSEASON-2025-26-001",
+          "object_sha256": "41451f16690a6ae58acb3444e01a67f3fc0cfca9bd3467ccf3fcec5a273398c1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        }
+      ],
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510"
+          ],
+          "description": "The source says about 10 and describes a climatological seasonal count; it is not an exact population mean or severe-count measure.",
+          "status": "BOUNDED",
+          "type": "MEASUREMENT"
+        },
+        {
+          "basis_refs": [
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510"
+          ],
+          "description": "The reference window is retained as since 1980–81 without invented UTC start or end instants.",
+          "status": "BOUNDED",
+          "type": "TEMPORAL"
+        },
+        {
+          "basis_refs": [
+            "WSAN-AU-TCSEASON-2025-26-001",
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510"
+          ],
+          "description": "The climatology is comparison context, not a 2025–26 forecast or an abnormality threshold.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-CLIMATE-AU-TCSEASON-20260929-001",
+      "admitted_at_utc": "2026-09-28T15:33:31Z",
+      "anomaly_refs": [],
+      "baseline_comparison": {
+        "cyclone_count_context": "11 versus about 10 climatological average",
+        "forecast_surprise": "NOT_ESTABLISHED",
+        "landfall_context": "4 versus typically 3–4 mainland landfalls",
+        "status": "DESCRIPTIVE_CONTEXT_ONLY"
+      },
+      "baseline_ref": "WSBASE-CLIMATE-AU-TC-CLIMATOLOGY-1980-81-001-R1",
+      "breadth": "REGIONAL_HAZARD_WINDOW",
+      "common_driver_context": {
+        "causal_status": "NOT_A_CAUSAL_CLAIM",
+        "interaction_type": "COMMON_DRIVER_CONTEXT",
+        "source_value": "retained from reviewed Analysis only"
+      },
+      "component_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "confidence_by_aspect": [
+        {
+          "aspect": "reported_realised_counts",
+          "assessment": "HIGH",
+          "basis": "official post-season measurements"
+        },
+        {
+          "aspect": "climatological_comparison",
+          "assessment": "NOT_ASSESSED",
+          "basis": "climatology is not a season-specific forecast"
+        },
+        {
+          "aspect": "damage_impact_attribution",
+          "assessment": "NOT_ASSESSED",
+          "basis": "not established by the governed Analysis"
+        }
+      ],
+      "contradictory_citations": [],
+      "dimension": "CLIMATE_PHYSICAL_RISK",
+      "direction": "NOT_ASSESSED",
+      "effective_at": null,
+      "effective_date": null,
+      "effective_period": {
+        "all_day_semantics": true,
+        "end_local": "2026-04-30",
+        "occurrence_id": "WSO-RISK-AU-TC-2025-26",
+        "series_id": "WSER-RISK-AU-TC",
+        "start_local": "2025-11-01",
+        "time_precision": "DAY"
+      },
+      "effective_time_basis": "Canonical completed seasonal window; no UTC instant is manufactured from source-native local dates.",
+      "effective_time_precision": "DAY_RANGE",
+      "known_at_basis": "GOVERNED_ANALYSIS_REVIEW_BOUNDARY",
+      "known_at_utc": "2026-09-05T23:35:00Z",
+      "lifecycle_state": "EXPIRED",
+      "limitations": [
+        "hazard intensity is not damage, exposure, loss, mortality, GDP or supply-chain impact",
+        "11 versus about 10 is not a forecast surprise or abnormality threshold",
+        "seven severe systems has no governed severe-count benchmark in this specimen",
+        "aggregate season is not a named-cyclone or physical-shock object",
+        "warm SST and climate context are not attribution to climate change, ENSO or another single driver",
+        "no current Australian cyclone-risk claim is made after the completed window",
+        "no current freshness policy is invented for this historical completed assessment",
+        "no Risk, Scenario, Forecast, Outcome, Actor or Relationship is created"
+      ],
+      "model_provenance": {
+        "analytical_lens": "narrow completed Australian tropical-cyclone season physical-risk assessment",
+        "configuration": "Step 14A deterministic climate candidate-construction procedure",
+        "execution_surface": "Codex",
+        "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+        "generated_at_utc": "2026-09-28T13:30:00Z",
+        "input_manifest_sha256": "672924298cedc998f243531e27e6bdb577220f357169c2959ecf26d74c02d8a7",
+        "model_identity": "UNAVAILABLE",
+        "model_version": "UNAVAILABLE",
+        "output_fingerprint": "2545d9767e14bd74934b9310c73e81df83b32b3e1e9bcea81749b948be82707a",
+        "procedure_version": "world-state-step14a-climate-candidate-v1",
+        "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+        "reasoning_configuration": "UNAVAILABLE",
+        "version": "UNAVAILABLE"
+      },
+      "object_sha256": "071408306dba797690660c764f91ecb8882eab026038b92eb3edc9bee1325f5f",
+      "persistence": "COMPLETED_HISTORICAL_WINDOW",
+      "previous_revision_id": null,
+      "prior_revision_ref": null,
+      "projection_transaction_id": null,
+      "qualitative_confidence": "NOT_ASSESSED",
+      "realised_measurements": [
+        {
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ],
+          "metric": "australian_region_tropical_cyclone_count",
+          "unit": "cyclones",
+          "value": 11
+        },
+        {
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ],
+          "metric": "severe_tropical_cyclone_count",
+          "unit": "cyclones_category_3_or_greater",
+          "value": 7
+        },
+        {
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+            "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+          ],
+          "metric": "category_5_tropical_cyclone_count",
+          "unit": "cyclones",
+          "value": 2
+        },
+        {
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ],
+          "metric": "mainland_landfall_count_at_tropical_cyclone_strength",
+          "unit": "cyclones",
+          "value": 4
+        },
+        {
+          "evidence_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514"
+          ],
+          "metric": "mainland_crossing_count_at_tropical_low_strength",
+          "unit": "systems",
+          "value": 2
+        }
+      ],
+      "review_state": "ACCEPTED",
+      "review_transaction_id": "WS-STEP14C-AU-TC-COMPONENT-REVIEW-20260929-001",
+      "reviewed_at_utc": "2026-09-28T15:33:31Z",
+      "revision_id": "WSDIM-CLIMATE-AU-TCSEASON-2025-26-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 14C human-admitted historical climate Baseline/Dimension; current use is HISTORICAL_ONLY and no impact or attribution claim is admitted.",
+      "scope": {
+        "boundaries": [
+          "completed 2025–26 seasonal physical-risk window",
+          "aggregate season context, not named-cyclone shock"
+        ],
+        "jurisdictions": [
+          "Australia"
+        ],
+        "systems": [
+          "AUSTRALIAN_TROPICAL_CYCLONE_REGION"
+        ]
+      },
+      "source_manifest_sha256": "672924298cedc998f243531e27e6bdb577220f357169c2959ecf26d74c02d8a7",
+      "source_proposal_id": "WS-STEP14A-WSDIM-CLIMATE-AU-TCSEASON-2025-26-001",
+      "state_label": "COMPLETED_AUSTRALIAN_REGION_CYCLONE_SEASON_REALISATION",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+          "object_sha256": "57935bc0571d109a85c72ac4827ccfbe1c0c391440411bf08735ad01d563f83e",
+          "revision_id": null,
+          "role": "REALISED_MEASUREMENT"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-NEWS-20260514",
+          "object_sha256": "6b4b9e851baacb1e69c772cc603c4e1560fc835ceec3641fa70ecad1c77b65ac",
+          "revision_id": null,
+          "role": "REALISED_MEASUREMENT"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+          "object_sha256": "f70c4d9d27addf564854056937ea7b4828e2ef7db47c389df0588e2b3704cd43",
+          "revision_id": null,
+          "role": "CONTEXT_OR_COMPARISON"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014",
+          "object_sha256": "600bf39c72d786cd1cc3abaa103d1c4d052902d90d0ee813ed082e38549e793c",
+          "revision_id": null,
+          "role": "CONTEXT_OR_COMPARISON"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-AU-TCSEASON-2025-26-001",
+          "object_sha256": "41451f16690a6ae58acb3444e01a67f3fc0cfca9bd3467ccf3fcec5a273398c1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        }
+      ],
+      "transition_type": "INITIAL",
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+            "WSEV-AU-TC-BOM-SEASON-NEWS-20260514",
+            "WSEV-AU-TC-BOM-SEASON-PLANNING-202510",
+            "WSEV-AU-TC-BOM-TROPICAL-UPDATE-20251014"
+          ],
+          "description": "The supporting Bureau publications belong to one institutional source family; repeated Bureau rows are not independent corroboration.",
+          "status": "BOUNDED",
+          "type": "PROVENANCE_SOURCE"
+        },
+        {
+          "basis_refs": [
+            "WSEV-AU-TC-BOM-SEASON-SUMMARY-20260514",
+            "WSEV-AU-TC-BOM-SEASON-NEWS-20260514"
+          ],
+          "description": "Cyclone count, severity and landfall measures do not measure damage, exposure, loss or economic effect.",
+          "status": "BOUNDED",
+          "type": "MEASUREMENT"
+        },
+        {
+          "basis_refs": [
+            "WSO-RISK-AU-TC-2025-26",
+            "WSAN-AU-TCSEASON-2025-26-001"
+          ],
+          "description": "The assessment concerns the completed source-native seasonal window; Analysis review time is distinct from the season period and publication dates.",
+          "status": "BOUNDED",
+          "type": "TEMPORAL"
+        },
+        {
+          "basis_refs": [
+            "WSAN-AU-TCSEASON-2025-26-001"
+          ],
+          "description": "The completed realised state is not a trend, forecast surprise, abnormality finding or present-tense current-risk claim.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY",
+      "what_surprised": "NOT_ESTABLISHED"
     }
   ],
   "dataset": "WORLD_STATE_COMPONENT_HISTORY",

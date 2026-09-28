@@ -125,9 +125,9 @@ class WorldStateClimateCandidateTests(unittest.TestCase):
         for field in ("actor_state_assertions", "implementation_claims", "relationships", "risks_regimes", "scenarios", "forecasts", "outcomes", "negative_evidence", "competing_hypotheses", "model_disagreements"):
             self.assertEqual(self.package[field], [])
         self.assertEqual(self.package["production_state"]["actors"], 0)
-        self.assertEqual(self.package["production_state"]["components"], 3)
-        self.assertEqual(self.package["production_state"]["snapshots"], 2)
-        self.assertEqual(self.package["production_state"]["admissions"], 2)
+        self.assertEqual(self.package["production_state"]["components"], 5)
+        self.assertEqual(self.package["production_state"]["snapshots"], 3)
+        self.assertEqual(self.package["production_state"]["admissions"], 3)
         self.assertEqual(self.package["production_state"]["baseline_components"], 0)
 
     def test_candidate_dependency_is_explicit_but_dispositions_are_independent(self):
@@ -192,7 +192,13 @@ class WorldStateClimateCandidateTests(unittest.TestCase):
     def test_retained_package_matches_builder_when_present(self):
         if PACKAGE_PATH.exists():
             retained = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
-            self.assertEqual(retained, self.package)
+            # The retained Step 14A artifact predates later Step 14C
+            # admissions.  Its candidate and lineage remain identical; the
+            # mutable repository population note is not candidate semantics.
+            retained.pop("production_state", None)
+            current = deepcopy(self.package)
+            current.pop("production_state", None)
+            self.assertEqual(retained, current)
 
 
 if __name__ == "__main__":

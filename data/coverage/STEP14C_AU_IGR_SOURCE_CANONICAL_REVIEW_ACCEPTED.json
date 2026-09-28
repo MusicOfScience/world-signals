@@ -1,0 +1,32 @@
+{
+  "candidate_id": "WSCAND-AU-IGR-20260921-001",
+  "candidate_source_ids": [
+    "WSSRC-FIS-030",
+    "WSSRC-FIS-031"
+  ],
+  "canonical_candidate_artifact": "data/coverage/STEP14B_AU_IGR_CANONICAL_RECOVERY_CANDIDATE_REVIEW_PENDING.json",
+  "coverage_gap_artifact": "data/coverage/STEP14B_AU_IGR_COVERAGE_GAP_AUDIT_v0.1.json",
+  "decision": "ACCEPTED",
+  "decision_scope": "MANUAL_AUTHORITATIVE_PROVENANCE_AND_CANONICAL_RECOVERY_ONLY",
+  "public_projection_permitted": false,
+  "review_basis": [
+    "Treasury authority and ministerial announcement roles remain separate.",
+    "Sources are manual-only; no automated monitoring, polling or route is admitted.",
+    "IGR is recovered as one completed official projection occurrence with a publication bundle and no recurrence.",
+    "No analytical intake or public projection is authorised."
+  ],
+  "review_fingerprint": "09136a330eeceb51d259841225c35d47b23c301a018359b03280148049711133",
+  "reviewed_at_utc": "2026-09-28T15:33:30Z",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "human-review"
+  },
+  "source_candidate_artifact": "data/coverage/STEP14B_AU_TREASURY_SOURCE_GOVERNANCE_CANDIDATES_v0.1.json",
+  "transaction_id": "WS-STEP14C-AU-IGR-SOURCES-CANONICAL-REVIEW-20260929-001",
+  "transaction_type": "WORLD_STATE_SOURCE_CANONICAL_REVIEW",
+  "world_state_write_permitted": false,
+  "write_targets": [
+    "data/sources/registry.json",
+    "data/canonical/registry.json"
+  ]
+}

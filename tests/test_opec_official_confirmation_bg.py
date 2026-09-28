@@ -70,7 +70,7 @@ class OPECOfficialConfirmationBGTests(unittest.TestCase):
         self.assertEqual(row["last_successful_assertion_id"], self.plan["provenance_basis"]["assertion_id"])
 
     def test_target_is_exactly_one_provenance_change_with_no_population_growth(self):
-        self.assertEqual(len(self.target["canonical"]["records"]), 689)
+        self.assertEqual(len(self.target["canonical"]["records"]), 690)
         # BG itself added no source population: its frozen plan/postcondition remains
         # exactly 246. Reviewed descendants may independently add later sources.
         if self.target["sources"]["version"] == "1.83":

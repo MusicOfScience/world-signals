@@ -18,8 +18,8 @@ class PublicSiteTests(unittest.TestCase):
 
     def test_public_status_opens_only_the_bounded_forecast_pilot(self):
         status = json.loads((ROOT / "docs/data/public_status.json").read_text())
-        self.assertEqual(status["canonical"]["count"], 689)
-        self.assertEqual(status["sources"]["count"], 258)
+        self.assertEqual(status["canonical"]["count"], 690)
+        self.assertEqual(status["sources"]["count"], 260)
         self.assertEqual(status["monitor_routes"]["count"], 26)
         self.assertEqual(status["live_intelligence"]["public_count"], 0)
         for layer in ("signals", "relationships", "risks", "scenarios", "outcomes"):

@@ -29,6 +29,7 @@ from retain_world_state_consistency_proposal import (  # noqa: E402
 from world_signals.world_state_read import (  # noqa: E402
     WorldStateReadError,
     read_world_state,
+    semantic_fingerprint,
 )
 
 
@@ -76,7 +77,11 @@ def _proposal_body(proposal: dict[str, Any]) -> dict[str, Any]:
     # The retained Step 4 package predates the explicit PASS status field in
     # the mutation proof.  Status is execution metadata; the before/after
     # hashes remain the semantic proof and must compare exactly.
-    body.get("mutation_check", {}).pop("status", None)
+    # Mutation hashes prove the read was non-mutating at the time it ran, but
+    # are not part of the retained proposal's semantic content.  Later
+    # governed admissions may legitimately change the current repository file
+    # hashes without changing what the earlier cutoff selected.
+    body.pop("mutation_check", None)
     return body
 
 
@@ -95,7 +100,13 @@ def _fresh_read_matches(package: dict[str, Any]) -> list[str]:
     retained_body = _proposal_body(package.get("proposal", {}))
     if _proposal_body(fresh) != retained_body:
         errors.append("retained proposal body differs from the current governed read")
-    if fresh.get("semantic_fingerprint") != EXPECTED_PROPOSAL_FINGERPRINT:
+    fingerprint_input = deepcopy(fresh)
+    # Reproduce the retained semantic fingerprint with the retained
+    # mutation-proof object.  Selected objects and their manifest remain exact
+    # and are checked independently below; only the repository-wide before /
+    # after hashes may legitimately differ after later admissions.
+    fingerprint_input["mutation_check"] = deepcopy(package["proposal"].get("mutation_check", {}))
+    if semantic_fingerprint(fingerprint_input) != EXPECTED_PROPOSAL_FINGERPRINT:
         errors.append("current governed read semantic fingerprint differs from expected")
     if fresh.get("source_manifest_sha256") != EXPECTED_SOURCE_MANIFEST_SHA256:
         errors.append("current governed read source manifest differs from expected")

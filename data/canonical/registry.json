@@ -1,9 +1,9 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "CANONICAL_OCCURRENCE_REGISTRY",
-  "version": "0.43",
-  "reference_date": "2026-09-10",
-  "record_count": 689,
+  "version": "0.44",
+  "reference_date": "2026-09-29",
+  "record_count": 690,
   "source": "Registry v0.16 + Regional Correction I (Kenya BPS / Morocco Finance Bill boundaries)",
   "records": [
     {
@@ -56755,6 +56755,112 @@
       "observed_market_response": null,
       "population_tranche": "BARMM_PARLIAMENTARY_ELECTION_BB",
       "notes": "Polling day is stored at source-native civil-date precision only. COMELEC is the Canonical date authority; OPAPRU peace-process material supports significance screening only. No polling-hour, UTC, result, market-response or causal claim is asserted in BB."
+    },
+    {
+      "activation_mode": "REVIEWED_HISTORICAL_RECOVERY",
+      "all_day_semantics": true,
+      "calendar_aggregation_policy": "STANDALONE",
+      "canonical_name": "2026 Intergenerational Report",
+      "category": "FISCAL_SOVEREIGN_FINANCE",
+      "certainty_status": "CONFIRMED",
+      "condition_description": null,
+      "condition_expression": null,
+      "condition_state": "NOT_REQUIRED",
+      "contingency_if_missed": null,
+      "date_earliest": null,
+      "date_latest": null,
+      "deadline_semantics": null,
+      "deadline_type": null,
+      "dependency_external_ids": [],
+      "dependency_occurrence_ids": [],
+      "derivation_sources": [
+        "WSSRC-FIS-030",
+        "WSSRC-FIS-031"
+      ],
+      "end_local": null,
+      "end_utc": null,
+      "event_type": "INFORMATION_RELEASE",
+      "expected_market_sensitivity": "MEDIUM",
+      "external_source_id": null,
+      "first_announced_at": "2026-09-09",
+      "first_discovered_at": "2026-09-28T14:17:45Z",
+      "geopolitical_sensitivity": "LOW",
+      "governing_instrument": null,
+      "institution": "Australian Treasury",
+      "intrinsic_importance": "HIGH",
+      "jurisdiction": "Australia",
+      "last_successful_assertion_id": "WSA-AU-IGR-TREASURY-20260921",
+      "last_verified_at": "2026-09-28T14:17:45Z",
+      "legal_basis_source_id": null,
+      "lifecycle_status": "COMPLETED",
+      "location": null,
+      "monitor_escalation_start": null,
+      "must_occur_by_date": null,
+      "next_verification_due": "SOURCE_SPECIFIC",
+      "notes": "Official projection only. Recovered after a coverage-gap audit; no World State, Analysis, Signal, Forecast, Scenario, Risk or Relationship intake is created. No recurrence is inferred.",
+      "observed_market_response": null,
+      "occurrence_id": "WSO-FIS-AU-IGR-20260921",
+      "parent_occurrence_id": null,
+      "population_tranche": "STEP14C_HISTORICAL_CANONICAL_RECOVERY",
+      "primary_source_assertion_id": "WSA-AU-IGR-TREASURY-20260921",
+      "publication_datetime": null,
+      "record_class": "OCCURRENCE",
+      "recurrence": null,
+      "reference_period": "2026 Intergenerational Report",
+      "region": "Oceania / Pacific",
+      "related_documents": [
+        {
+          "document_types": [
+            "MAIN_REPORT",
+            "FACT_SHEET",
+            "CHART_DATA"
+          ],
+          "role": "AUTHORITATIVE_MAIN_REPORT_BUNDLE",
+          "source_id": "WSSRC-FIS-030",
+          "source_locator": "https://treasury.gov.au/publication/2026-intergenerational-report"
+        },
+        {
+          "role": "FIRST_ANNOUNCEMENT_CONTEXT",
+          "source_id": "WSSRC-FIS-031",
+          "source_locator": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/media-releases/2026-intergenerational-report"
+        }
+      ],
+      "related_occurrence_ids": [],
+      "render_cluster_key": null,
+      "render_policy": "EXCLUDE",
+      "resolution_evidence_assertion_id": null,
+      "series_id": "WSER-FIS-AU-IGR",
+      "short_calendar_title": "2026 Intergenerational Report",
+      "source_id": "WSSRC-FIS-030",
+      "source_timezone": "Australia/Sydney",
+      "start_local": "2026-09-21",
+      "start_utc": null,
+      "status_history": [
+        {
+          "as_of": "2026-09-29",
+          "certainty_status": "CONFIRMED",
+          "change_reason": "Historical Canonical recovery accepted from official Treasury publication bundle; no recurring series inferred.",
+          "lifecycle_status": "COMPLETED",
+          "source_assertion_id": "WSA-AU-IGR-TREASURY-20260921"
+        }
+      ],
+      "subcategory": "strategic_fiscal_projection_publication",
+      "temporal_basis": "JURISDICTIONAL_CIVIL_DATE",
+      "time_basis": "Official Treasury publication date at source-native civil-date precision; no UTC instant is manufactured.",
+      "time_precision": "DAY",
+      "time_status": "CONFIRMED",
+      "timing_type": "CIVIL_DATE",
+      "transmission_channels": [
+        "fiscal_sustainability",
+        "demographics",
+        "productivity",
+        "public_finance"
+      ],
+      "trigger_assertion_id": null,
+      "trigger_source_id": null,
+      "trigger_verification_status": "NOT_APPLICABLE",
+      "triggered_at": null,
+      "visibility_tier": "INTERNAL_ONLY"
     }
   ]
 }

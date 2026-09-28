@@ -127,7 +127,7 @@ class PIFLeadersMeetingCKRepositoryStateTests(unittest.TestCase):
 
         self.assertEqual(row["lifecycle_status"], "COMPLETED")
         self.assertGreaterEqual(float(self.registry["version"]), 0.42)
-        self.assertEqual(self.registry["record_count"], 689)
+        self.assertEqual(self.registry["record_count"], 690)
         self.assertGreaterEqual(len(self.sources["sources"]), 258)
         self.assertGreaterEqual(len(self.ledger["changes"]), 63)
         self.assertIn(SUPPORT_SOURCE_ID, self.by_source)

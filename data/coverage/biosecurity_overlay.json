@@ -4,8 +4,8 @@
   "version": "0.18",
   "layer": "ANALYTICAL_COVERAGE_OVERLAY_NONCANONICAL",
   "canonical_checkpoint": {
-    "registry_version": "0.43",
-    "record_count": 689
+    "registry_version": "0.44",
+    "record_count": 690
   },
   "principles": {
     "non_exclusive": true,

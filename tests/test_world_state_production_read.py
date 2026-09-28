@@ -75,7 +75,7 @@ class WorldStateProductionReadTests(unittest.TestCase):
         self.assertEqual(view["status"], "ADMITTED_ASSESSMENT_AVAILABLE")
         self.assertEqual(view["selected_snapshot"]["snapshot_revision_id"], SNAPSHOT_ID)
         self.assertEqual(view["admission_refs"][0]["transaction_id"], ADMISSION_ID)
-        self.assertEqual(view["production_counts"], {"actors": 0, "components": 3, "snapshots": 2, "admissions": 2})
+        self.assertEqual(view["production_counts"], {"actors": 0, "components": 5, "snapshots": 3, "admissions": 3})
         self.assertIn("CANONICAL_HISTORICAL_AS_OF_UNSUPPORTED", view["limitations"])
 
     def test_explicit_query_contract_rejects_implicit_latest_and_missing_effective_cutoff(self):

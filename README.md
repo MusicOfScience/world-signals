@@ -9,11 +9,11 @@ WORLD SIGNALS is a platform-independent global political-economic intelligence s
 <!-- WORLD_SIGNALS_CURRENT_STATE_BEGIN -->
 ## Mechanically derived current state
 
-**Reference date:** 2026-09-27
+**Reference date:** 2026-09-29
 **Authority:** this block and `data/status/current_state.json` are derived recovery surfaces. Governed registries/contracts remain operational truth.
 
-- Canonical Registry: **v0.43 / 689 occurrences**; schema **v0.52**.
-- Source Registry: **v2.04 / 258 sources**.
+- Canonical Registry: **v0.44 / 690 occurrences**; schema **v0.52**.
+- Source Registry: **v2.05 / 260 sources**.
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.

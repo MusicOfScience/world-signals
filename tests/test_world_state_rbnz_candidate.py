@@ -107,7 +107,7 @@ class WorldStateRbnzCandidateTests(unittest.TestCase):
         build_rbnz_candidate(ROOT)
         self.assertEqual(self.protected_before, self._protected_hashes())
         production = json.loads((ROOT / "data/world_state/components.json").read_text())
-        self.assertEqual(len(production["components"]), 3)
+        self.assertEqual(len(production["components"]), 5)
 
     def test_package_mutation_is_detectable(self):
         changed = deepcopy(self.package)

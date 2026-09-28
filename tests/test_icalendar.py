@@ -49,7 +49,8 @@ class ICalendarProjectionTests(unittest.TestCase):
         self.assertGreater(len(self.build.included_occurrence_ids), 0)
         self.assertEqual(len(self.build.included_occurrence_ids), len(set(self.build.included_occurrence_ids)))
         self.assertEqual(665, len(self.build.included_occurrence_ids))
-        self.assertEqual(24, len(self.build.omitted))
+        self.assertEqual(25, len(self.build.omitted))
+        self.assertIn("WSO-FIS-AU-IGR-20260921", self.build.omitted)
         self.assertTrue(all(len(line.encode("utf-8")) <= 75 for line in self.text.split("\r\n") if line))
 
     def test_build_does_not_mutate_governed_inputs(self):

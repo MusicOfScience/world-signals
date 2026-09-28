@@ -795,4 +795,21 @@ Research / taxonomy / source governance                    [ONGOING]
 
 A generic guarded reviewed commit/rollback mechanism remains an architectural objective; existing controlled tranche transactions demonstrate the safety pattern but do not open blanket automation authority.
 
+### Migration Step 14C — two controlled admissions
+
+The first Step 14C transaction admits the Step 14A official-reference climate
+Baseline and completed-season Dimension Assessment into a new independent
+historical World State series. Both components remain `INTERNAL_ONLY` with
+`lifecycle_state: EXPIRED`; the read contract derives `HISTORICAL_ONLY`, so
+historical admission cannot be mistaken for current use or a review-required
+state. The second transaction admits two distinct Australian Treasury source
+roles and one recovered 2026 IGR Canonical occurrence. Its publication date is
+source-native `2026-09-21` at civil-date precision, with the 2026-09-09 first
+announcement, the 2026-09-28T14:17:45Z repository discovery boundary and one
+main-report/fact-sheet/chart bundle. These sources are manual-only and remain
+under `PRODUCTION_AUTOMATION_HOLD`; no analytical or public IGR projection is
+created. The transactions have separate review, admission, manifest and
+rollback boundaries; a failure in one is not allowed to partially apply the
+other.
+
 The automatic-canonical-commit gate remains closed. Before it can even be reconsidered, WORLD SIGNALS still requires real prospective evidence including a reschedule detected against a prior canonical snapshot and an explicit cancellation of an already-canonical occurrence, under the governed review process.

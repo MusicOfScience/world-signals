@@ -1,10 +1,12 @@
 # World State production contract schemas
 
 This directory contains the Migration Step 7 contract schemas and the
-componentized production-history population. It contains exactly three
-admitted internal Dimension Assessments across two independent snapshot
-series; it does not contain a monolithic `state.json`, an Actor Registry
-population or a public projection.
+componentized production-history population. It now contains five admitted
+internal components across three independent snapshot series: the original
+three Dimension Assessments, one historical climate `BASELINE`, and one
+completed-season `CLIMATE_PHYSICAL_RISK` Dimension Assessment. It does not
+contain a monolithic `state.json`, an Actor Registry population or a public
+projection.
 
 Step 11A adds a retained, non-governed RBNZ Analysis specimen under
 `data/world_state_audit/`. Its two narrow Dimension Assessment candidates and
@@ -29,6 +31,14 @@ Step 11C adds read-only current-applicability semantics. `ACTIVE` is lifecycle
 state, not present-tense truth. Health uses its governed freshness policy;
 components without such a policy, including the RBNZ assessments, return
 `NO_CURRENTNESS_CLAIM` rather than being treated as permanently current.
+
+Step 14C admits the climate Baseline and Dimension as historical internal
+state. Their immutable lifecycle is `EXPIRED`, and reads derive
+`HISTORICAL_ONLY`; this is distinct from `NO_CURRENTNESS_CLAIM` and is not a
+review-required or current-use claim. Step 14C also records the separate
+manual-only Treasury source admission and recovered IGR Canonical occurrence
+outside this directory. No IGR Analysis, Signal, Forecast, Scenario, Risk,
+Relationship or World State object is created by that recovery.
 
 The production history is split across `components.json`, `snapshots.json` and
 `admission_transactions.json`. Test data belongs under

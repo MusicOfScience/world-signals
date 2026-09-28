@@ -1,0 +1,50 @@
+{
+  "admitted_at_utc": "2026-09-28T15:33:31Z",
+  "analytical_promotion": false,
+  "automation_status": "PRODUCTION_AUTOMATION_HOLD",
+  "bundle_document_types": [
+    "MAIN_REPORT",
+    "FACT_SHEET",
+    "CHART_DATA"
+  ],
+  "candidate_id": "WSCAND-AU-IGR-20260921-001",
+  "canonical_occurrence_id": "WSO-FIS-AU-IGR-20260921",
+  "canonical_series_id": "WSER-FIS-AU-IGR",
+  "contract_version": "0.1",
+  "decided_at_utc": "2026-09-28T15:33:30Z",
+  "decision": "ACCEPTED",
+  "first_announced_at": "2026-09-09",
+  "first_discovered_at_utc": "2026-09-28T14:17:45Z",
+  "manual_only": true,
+  "post_state_hashes": {
+    "canonical": "32645a38df3c20f835a5ca2a526f95b5f0de9b160471b66ef5367d6a2f1fed8a",
+    "sources": "79ce5961217f7123d23c77badb6626695d8413a4cd049c7ce693ebc52096f6b7"
+  },
+  "pre_state_hashes": {
+    "data/canonical/registry.json": "c2867eeb39acdaf6709e08ed41addd184a981ef90ad562120e0d63ff290fdc80",
+    "data/sources/registry.json": "58e4bec7f4ded2d77a48fa9cd29be50b07355ad9a77c36fa6ede9b62666cfb7f"
+  },
+  "public_projection_permitted": false,
+  "publication_date": "2026-09-21",
+  "publication_time_precision": "DAY",
+  "recurrence": null,
+  "review_transaction_id": "WS-STEP14C-AU-IGR-SOURCES-CANONICAL-REVIEW-20260929-001",
+  "reviewer": {
+    "reviewer_id": "operator-human-review",
+    "role": "human-review"
+  },
+  "source_ids": [
+    "WSSRC-FIS-030",
+    "WSSRC-FIS-031"
+  ],
+  "transaction_fingerprint": "d7413f8cb06676b27159307a76d807f43a99fc1e2e14eb2553c9e45d553aaad1",
+  "transaction_id": "WS-ADMISSION-AU-TREASURY-IGR-20260929-001",
+  "transaction_type": "SOURCE_CANONICAL_CONTROLLED_ADMISSION",
+  "validator_version": "world-state-step14c-source-canonical-admission-v1",
+  "write_targets": [
+    "data/sources/registry.json",
+    "data/canonical/registry.json",
+    "data/coverage/STEP14C_AU_IGR_SOURCE_CANONICAL_REVIEW_ACCEPTED.json",
+    "data/coverage/STEP14C_AU_IGR_SOURCE_CANONICAL_ADMISSION_TRANSACTION.json"
+  ]
+}

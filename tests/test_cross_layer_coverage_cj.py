@@ -229,7 +229,7 @@ class CrossLayerCoverageCurrentStateTests(unittest.TestCase):
 
     def test_post_ci_layer_counts(self):
         totals = self.audit["totals"]
-        self.assertEqual(totals["canonical_occurrence_count"], 689)
+        self.assertEqual(totals["canonical_occurrence_count"], 690)
         self.assertEqual(totals["configured_monitor_adapter_count"], 26)
         self.assertEqual(totals["configured_monitor_scoped_occurrence_count"], 217)
         self.assertGreaterEqual(totals["live_observation_count"], 7)

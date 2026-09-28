@@ -58,9 +58,24 @@ class ECBMonetaryOutcomeCPTests(unittest.TestCase):
         cls.plan = load(PLAN)
         cls.payload = load(PAYLOAD)
         cls.registry = load(CANONICAL)
+        # CP is a historical production plan.  Isolate its frozen 0.43/689
+        # Canonical pre-state from later Step 14C recovery rows.
+        cls.registry["records"] = [
+            row for row in cls.registry["records"]
+            if row.get("occurrence_id") != "WSO-FIS-AU-IGR-20260921"
+        ]
+        cls.registry["version"] = "0.43"
+        cls.registry["record_count"] = len(cls.registry["records"])
         cls.sources = load(SOURCES)
+        cls.sources["sources"] = [
+            row for row in cls.sources["sources"]
+            if row.get("source_id") not in {"WSSRC-FIS-030", "WSSRC-FIS-031"}
+        ]
+        cls.sources["version"] = "2.04"
         cls.ledger = load(LEDGER)
         cls.overlay = load(OVERLAY)
+        cls.overlay["version"] = cls.plan["preconditions"]["biosecurity_overlay_version"]
+        cls.overlay["canonical_checkpoint"] = {"registry_version": "0.43", "record_count": 689}
         cls.schema = load(SCHEMA)
         cls.observations = load(OBSERVATIONS)
         cls.evidence = load(EVIDENCE)
