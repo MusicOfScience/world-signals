@@ -104,7 +104,7 @@ class MobileEditorialProductTests(unittest.TestCase):
             self.assertIn(token, self.html + self.app)
 
     def test_warm_palette_and_reduced_motion_remain_explicit(self):
-        for token in ("--paper:#efede7", "--panel:#f4f1eb", "--accent:#6b3437", "--focus:#8a5c14"):
+        for token in ("--paper:#ebe6dc", "--panel:#f4f1eb", "--accent:#6b3437", "--focus:#8a5c14"):
             self.assertIn(token, self.styles)
         self.assertIn("prefers-reduced-motion:reduce", self.styles + self.outlook)
 
