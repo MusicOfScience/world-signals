@@ -1,5 +1,28 @@
 # Executable architecture
 
+## Step 14F — internal Analysis admission / review-level publication
+
+Analysis v0.9 now holds 23 production reviews and 100 evidence rows (datasets
+v0.19), including the first INTERNAL_ONLY REVIEWED review, the 2026 Australian
+IGR. Its content cutoff remains 28 September 16:25 UTC; genuine human review
+and admission times are separately pinned in the Step 14F audit transaction.
+`event_reviews.json.publication_decisions` is the single object-publication
+authority: exactly one PUBLIC / INTERNAL_ONLY disposition per production review.
+Missing, invalid or dangling decisions fail closed. The 22 existing public
+reviews were explicitly migrated as PUBLIC; the IGR is INTERNAL_ONLY.
+Publication requires both a PUBLIC review decision and the Step 14E field
+allowlist. Public readiness and evidence are derived only from public reviews.
+
+The native official-projection inventory and ten-axis audit are accepted
+internally without filling unresolved trajectory coverage. Independent historical
+backtest acceptance remains DEFERRED; qualified specimens are SUPPORTING_ONLY
+and participation remains NOT_DIRECTLY_COMPARABLE with null error. Model
+dependencies remain internal model structure, not Relationships. Source assets,
+local assumption/output/sensitivity IDs and factual Analysis evidence remain
+distinct namespaces; the evidence reader pins the whole review without promoting
+model-local references to factual sources. No downstream population, monitoring
+activation, public IGR, or public extension projection is authorised.
+
 ## Step 14E — native official-projection Analysis / publication boundary
 
 Analysis schema 0.9 now natively validates the optional internal

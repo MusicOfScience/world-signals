@@ -295,7 +295,13 @@ class OfficialProjectionCandidateTests(unittest.TestCase):
                     validate_package(relink(p))
 
     def test_production_populations_do_not_contain_candidates(self):
-        for relative in ("data/analysis/event_reviews.json", "data/analysis/evidence_registry.json", "data/world_state/components.json", "data/forecasts/forecasts.json", "data/scenarios/scenarios.json", "data/risks/states.json", "data/relationships/relationships.json"):
+        production = json.loads((ROOT / "data/analysis/event_reviews.json").read_text())
+        admitted = [r for r in production["reviews"] if r["analysis_id"] == "WSAN-AU-IGR-20260921-001"]
+        self.assertEqual(len(admitted), 1)
+        self.assertEqual(admitted[0]["review_state"], "REVIEWED")
+        self.assertEqual(production["publication_decisions"][admitted[0]["analysis_id"]], "INTERNAL_ONLY")
+        self.assertNotIn("WSEV-CANDIDATE-", (ROOT / "data/analysis/evidence_registry.json").read_text())
+        for relative in ("data/world_state/components.json", "data/forecasts/forecasts.json", "data/scenarios/scenarios.json", "data/risks/states.json", "data/relationships/relationships.json"):
             text = (ROOT / relative).read_text()
             self.assertNotIn("WSAN-AU-IGR-20260921-001", text)
             self.assertNotIn("WSPROJ-AU-IGR-2026-", text)

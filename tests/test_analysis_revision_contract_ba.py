@@ -280,7 +280,7 @@ class AnalysisRevisionContractBATests(unittest.TestCase):
         self.assertFalse(metadata["public_revision_metadata_projection_allowed"])
         self.assertFalse(metadata["automatic_latest_analysis_selection_allowed"])
         self.assertFalse(metadata["derived_revision_head_projection_allowed"])
-        self.assertEqual(len(projection["reviews"]), len(self.reviews["reviews"]))
+        self.assertEqual(len(projection["reviews"]), list(self.reviews["publication_decisions"].values()).count("PUBLIC"))
 
     def test_read_only_simulation_protects_all_upstream_and_existing_population_paths(self):
         before = {path: stable_hash(ROOT / path) for path in self.plan["protected_paths"]}

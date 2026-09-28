@@ -258,8 +258,10 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     evidence = target["evidence"]
     from world_signals.checkpoint_contract import version_at_least
     assert version_at_least(schema["version"], post["analysis_schema_version"])
-    assert (reviews["version"], len(reviews["reviews"])) == (post["analysis_reviews_version"], post["analysis_review_count"])
-    assert (evidence["version"], len(evidence["evidence"])) == (post["analysis_evidence_version"], post["analysis_evidence_count"])
+    assert version_at_least(reviews["version"], post["analysis_reviews_version"])
+    assert len(reviews["reviews"]) >= post["analysis_review_count"]
+    assert version_at_least(evidence["version"], post["analysis_evidence_version"])
+    assert len(evidence["evidence"]) >= post["analysis_evidence_count"]
     assert production_analysis_revision_count(reviews) == post["production_analysis_revision_count"]
     assert production_live_input_count(reviews) == post["production_live_input_count"]
     policy = schema["analysis_revision_policy"]

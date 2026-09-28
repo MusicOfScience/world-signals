@@ -70,8 +70,8 @@ def assert_upstream_prestate(plan: dict[str, Any]) -> None:
     require(expectations.get("automatic_canonical_commit") is False, "CG descendant opened automatic Canonical commit")
     require(expectations.get("google_calendar_write") is False, "CG descendant opened Google Calendar write")
     require(version_tuple(analysis_schema.get("version")) >= version_tuple(pre["analysis_schema_version"]), "CG Analysis schema regression")
-    require(len(reviews.get("reviews", [])) == pre["analysis_review_count"], "CG Analysis review count drift")
-    require(len(analysis_evidence.get("evidence", [])) == pre["analysis_evidence_count"], "CG Analysis evidence count drift")
+    require(len(reviews.get("reviews", [])) >= pre["analysis_review_count"], "CG Analysis review count regression")
+    require(len(analysis_evidence.get("evidence", [])) >= pre["analysis_evidence_count"], "CG Analysis evidence count regression")
     require(production_analysis_revision_count(reviews) == pre["production_analysis_revision_count"], "CG Analysis revision count drift")
     require(production_live_input_count(reviews) == pre["production_live_input_count"], "CG production live_inputs drift")
 

@@ -26,6 +26,26 @@ FIELD_CLASSIFICATIONS = {
 }
 
 
+def review_publication_errors(dataset):
+    """One decision per review; no default publication, even for reviewed rows."""
+    decisions = dataset.get("publication_decisions")
+    if not isinstance(decisions, dict):
+        return ["UNCLASSIFIED_ANALYSIS_PUBLICATION_REVIEW: decision table required"]
+    ids = {row.get("analysis_id") for row in dataset.get("reviews", [])}
+    errors = ["UNCLASSIFIED_ANALYSIS_PUBLICATION_REVIEW: " + str(identity)
+              for identity in sorted(ids - decisions.keys(), key=str)]
+    errors += ["DANGLING_ANALYSIS_PUBLICATION_DECISION: " + str(identity)
+               for identity in sorted(decisions.keys() - ids, key=str)]
+    errors += ["INVALID_ANALYSIS_PUBLICATION_DECISION: " + str(identity)
+               for identity, decision in sorted(decisions.items())
+               if decision not in ("PUBLIC", "INTERNAL_ONLY")]
+    errors += ["DRAFT_ANALYSIS_PUBLICATION_PROHIBITED: " + str(row.get("analysis_id"))
+               for row in dataset.get("reviews", [])
+               if decisions.get(row.get("analysis_id")) == "PUBLIC"
+               and row.get("review_state") not in ("REVIEWED", "REVIEWED_SAMPLE")]
+    return errors
+
+
 def publication_errors(review):
     return [
         "UNCLASSIFIED_ANALYSIS_PUBLICATION_FIELD: " + field

@@ -1,9 +1,9 @@
 """Candidate-only official projection / assumption-audit validation.
 
-No retrieval, registry write, admission or public projection API. This contract
-does not extend production Analysis v0.8; its unknown fields would currently
-escape the native validator and public_analysis_projection copies review fields.
-An explicit schema AND publication decision is required before admission.
+No retrieval, registry write, admission or public projection API. These retained
+Step 14D artifacts remain candidates. Step 14E adopted their native v0.9 shape;
+Step 14F separately admitted an immutable-linked production copy internally.
+Neither native validation nor this inspector grants publication authority.
 """
 
 from __future__ import annotations

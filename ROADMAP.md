@@ -13,7 +13,7 @@ This roadmap is subordinate to `WORLD_SIGNALS_PROJECT_CHARTER.md`. Stages descri
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
-- Analysis: schema **v0.9**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- Analysis: schema **v0.9**; reviews **v0.19 / 23**; evidence **v0.19 / 100**; production Live inputs **1**; production revisions **1**.
 - Signals: schema **v0.1 / 1 admitted revision(s)**; population **CONTROLLED_REVIEWED_SIGNAL_SPECIMEN**; admission transaction required; maximum production population **1**; public projection **closed**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -765,3 +765,15 @@ Analysis, inventory, audit, historical backtest and dependency map separately.
 Analysis admission remains deferred. No automatic downstream promotion,
 new forecast, public IGR projection, monitor activation or World State update is
 opened by this candidate tranche.
+
+## Stage 37 — controlled internal IGR Analysis admission (Step 14F)
+
+Completed: owner-authorised REVIEWED IGR production Analysis, native internal
+projection inventory and assumption audit; explicit review-level publication
+decisions combined with the field allowlist. Production is 23 reviews / 100
+evidence; public remains 22, with no IGR/extension/evidence/Brief leakage.
+Independent backtest acceptance is still deferred; historical comparisons are
+supporting-only and model dependencies are not Relationships. No downstream or
+monitoring activation occurred. Next: separately scoped internal review of
+unresolved audit coverage and independent original-vintage backtest methodology;
+no automatic promotion or public official-projection surface is authorised.

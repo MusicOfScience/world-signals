@@ -190,8 +190,9 @@ class ECBMonetaryOutcomeCPTests(unittest.TestCase):
         analysis_evidence = load(ANALYSIS_EVIDENCE)
         self.assertEqual(len(self.sources["sources"]), 258)
         self.assertEqual(len(monitor["adapters"]), 26)
-        self.assertEqual(len(reviews["reviews"]), 22)
-        self.assertEqual(len(analysis_evidence["evidence"]), 97)
+        # CP's frozen checkpoint remains a floor, not a ban on later admission.
+        self.assertGreaterEqual(len(reviews["reviews"]), 22)
+        self.assertGreaterEqual(len(analysis_evidence["evidence"]), 97)
         self.assertFalse(monitor["automatic_canonical_commit"])
         self.assertFalse(monitor["google_calendar_write"])
         source = next(s for s in self.sources["sources"] if s["source_id"] == OUTCOME_SOURCE_ID)

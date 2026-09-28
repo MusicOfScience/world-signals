@@ -1,0 +1,33 @@
+{
+  "transaction_id": "WS-STEP14F-AU-IGR-ANALYSIS-REVIEW-20260929-001",
+  "transaction_type": "ANALYSIS_HUMAN_REVIEW",
+  "reviewer_role": "PROJECT_OWNER_EXPLICIT_HUMAN_DECISION",
+  "reviewed_at_utc": "2026-09-28T18:40:20Z",
+  "decision_basis": "Owner accepts the exact retained Step 14D material internally; unresolved coverage retained.",
+  "candidate_fingerprints": {
+    "analysis_candidate": "2d9756cdad4525e032de1876d5c7057cb7c0caa834ab9d1e6baca58932650e16",
+    "projection_inventory": "cc513bdee31bc2b49801a7b222e5972efc4e9b741462536de06b66b32143a1cc",
+    "assumption_audit": "1ff8dd0bbe6d88f81d99d61ff57acf0c1ea946bf9e511c330ab5a28d60006138",
+    "evidence_manifest": "66b9c667210e0dbdc026f47e9eb7d18f038ce3366db390ef6a6599a2bcf4b9a1",
+    "extension_candidate": "c76945773b613206ad58bf597cc6ed02a1e3f646d88fec63e6bce49297cd6c7c"
+  },
+  "package_fingerprint": "023bb1e0a7bdb9de0c67ab4c4d5203ab0e8d685679e7e75d60dbe1e99ed20da3",
+  "dispositions": {
+    "analysis": "ACCEPT_INTERNAL_PRODUCTION",
+    "official_projection_inventory": "ACCEPT_INTERNAL",
+    "assumption_audit": "ACCEPT_INTERNAL",
+    "independent_historical_backtest": "DEFER",
+    "qualified_historical_comparisons": "RETAIN_SUPPORTING_ONLY",
+    "dependency_map": "ACCEPT_INTERNAL_MODEL_STRUCTURE_ONLY",
+    "public_analysis": "NOT_AUTHORISED",
+    "relationship_promotion": "NOT_AUTHORISED",
+    "world_state_promotion": "NOT_AUTHORISED",
+    "forecast_promotion": "NOT_AUTHORISED",
+    "scenario_promotion": "NOT_AUTHORISED",
+    "risk_promotion": "NOT_AUTHORISED"
+  },
+  "visibility": "INTERNAL_ONLY",
+  "public_projection_permitted": false,
+  "downstream_write_targets": [],
+  "transaction_fingerprint": "8286162520a7daa2d5a55cbf507d80dd74ddf05cbda1898f743864423bb66cf9"
+}

@@ -33,6 +33,10 @@ if not bridge_report.ok:
         print(f"ERROR: {error}", file=sys.stderr)
     raise SystemExit(1)
 
+if any(row.get("analysis_id") == "WSAN-AU-IGR-20260921-001" for row in reviews.get("reviews", [])):
+    from world_signals.igr_analysis_admission import validate_admitted
+    validate_admitted(ROOT)
+
 print(
     f"Validated {len(reviews.get('reviews', []))} analytical review(s), "
     f"{len(evidence.get('evidence', []))} evidence record(s), "

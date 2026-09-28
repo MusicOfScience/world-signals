@@ -423,7 +423,10 @@ def _select_analysis(inputs: dict[str, Any], request: dict[str, Any], manifest: 
         reviews.append(row)
     reviews.sort(key=lambda row: row["analysis_id"])
     evidence_by_id = {row["evidence_id"]: row for row in inputs["analysis_evidence"].get("evidence", [])}
-    evidence_ids = sorted({ref for row in reviews for ref in _refs_in(row)})
+    # The native model extension has its own asset/local-ID namespace, validated
+    # by Analysis. Assumption/output/sensitivity refs are not factual evidence IDs.
+    evidence_ids = sorted({ref for row in reviews for ref in
+                           _refs_in({k: v for k, v in row.items() if k != "official_projection_review"})})
     missing = [ref for ref in evidence_ids if ref not in evidence_by_id]
     if missing:
         raise WorldStateReadError(f"eligible Analysis references unavailable evidence: {missing}")
