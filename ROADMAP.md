@@ -562,6 +562,13 @@ Relationship, Forecast, Outcome, Actor Registry identity or public World State
 projection is created. Multi-series composition is exercised only at read
 time and remains non-admitted.
 
+Step 11C adds read-time temporal applicability semantics. Lifecycle remains
+distinct from freshness and current use: Health can be current-use eligible
+under its governed policy, while RBNZ has no freshness policy and makes no
+currentness claim. Historical/effective reads remain available, current-use
+transitions remain separate from analytical deltas, and no production objects
+or public projection change.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader
@@ -577,9 +584,9 @@ The public Forecast surface is a separate allowlisted projection under
 issuances are eligible. Values, information cutoffs, resolution rules and
 units are copied without mutation; private review/model metadata, drafts,
 political/electoral Forecasts, Outcomes and evaluation claims are excluded.
-Evaluation remains `NO_SAMPLE`. World State remains internal with one
-component, one snapshot and one admission, and no public World State or Map
-projection exists.
+Evaluation remains `NO_SAMPLE`. World State remains internal with three
+scoped components across two independent snapshot series and no public World
+State or Map projection exists.
 
 ## Stage 25 — public intelligence spine — IMPLEMENTED / BOUNDED
 

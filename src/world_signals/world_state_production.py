@@ -36,6 +36,13 @@ FRESHNESS_STATES = {
     "NO_FRESHNESS_POLICY",
     "UNKNOWN",
 }
+CURRENT_USE_STATES = {
+    "CURRENTLY_USABLE_WITHIN_SCOPE",
+    "CURRENT_WITH_REVIEW_DUE_SOON",
+    "CURRENT_USE_REQUIRES_REVIEW",
+    "NO_CURRENTNESS_CLAIM",
+    "UNKNOWN",
+}
 REVIEW_DUE_SOON_WINDOW_DAYS = 7
 
 
@@ -271,8 +278,11 @@ def derive_freshness(component: dict[str, Any], at_utc: str) -> dict[str, Any]:
     latest_value = policy.get("latest_supporting_observed_at_utc")
     if not due_value or not latest_value:
         return {"status": "UNKNOWN", "at_utc": at_utc, "reason": "freshness policy is incomplete"}
-    due = _parse_utc(due_value, "freshness.stale_review_due_at_utc")
-    latest = _parse_utc(latest_value, "freshness.latest_supporting_observed_at_utc")
+    try:
+        due = _parse_utc(due_value, "freshness.stale_review_due_at_utc")
+        latest = _parse_utc(latest_value, "freshness.latest_supporting_observed_at_utc")
+    except WorldStateProductionReadError:
+        return {"status": "UNKNOWN", "at_utc": at_utc, "reason": "freshness policy contains an invalid UTC timestamp"}
     remaining = due - at
     if at > due:
         status = "STALE_REVIEW_REQUIRED"
@@ -294,8 +304,62 @@ def derive_freshness(component: dict[str, Any], at_utc: str) -> dict[str, Any]:
     }
 
 
-def build_internal_briefing_read(selected_components: list[dict[str, Any]], query: dict[str, Any], freshness: list[dict[str, Any]]) -> dict[str, Any]:
+def derive_current_use(component: dict[str, Any], freshness: dict[str, Any]) -> dict[str, Any]:
+    """Derive current applicability without changing lifecycle or history."""
+    lifecycle = component.get("lifecycle_state")
+    freshness_status = freshness.get("status")
+    if lifecycle != "ACTIVE":
+        status = "CURRENT_USE_REQUIRES_REVIEW" if lifecycle else "UNKNOWN"
+        reason = "inactive lifecycle cannot support a current-use claim" if lifecycle else "lifecycle state is unavailable"
+    else:
+        mapping = {
+            "CURRENT": "CURRENTLY_USABLE_WITHIN_SCOPE",
+            "REVIEW_DUE_SOON": "CURRENT_WITH_REVIEW_DUE_SOON",
+            "REVIEW_DUE": "CURRENT_USE_REQUIRES_REVIEW",
+            "STALE_REVIEW_REQUIRED": "CURRENT_USE_REQUIRES_REVIEW",
+            "NO_FRESHNESS_POLICY": "NO_CURRENTNESS_CLAIM",
+            "UNKNOWN": "UNKNOWN",
+        }
+        status = mapping.get(freshness_status, "UNKNOWN")
+        reason = {
+            "CURRENTLY_USABLE_WITHIN_SCOPE": "active revision has a governed freshness policy currently within scope",
+            "CURRENT_WITH_REVIEW_DUE_SOON": "active revision remains usable within scope but its governed review deadline is near",
+            "CURRENT_USE_REQUIRES_REVIEW": "active revision remains historical state but its governed review status requires review",
+            "NO_CURRENTNESS_CLAIM": "active revision has no governed freshness/currentness policy; historical use remains permitted",
+            "UNKNOWN": "current applicability cannot be established from the available lifecycle/freshness contract",
+        }[status]
+    return {
+        "component_id": component.get("component_id"),
+        "status": status,
+        "lifecycle_state": lifecycle,
+        "freshness_status": freshness_status,
+        "reason": reason,
+    }
+
+
+def current_use_summary(current_use: list[dict[str, Any]]) -> dict[str, int]:
+    """Summarise current-use states without averaging heterogeneous policy."""
+    statuses = [row.get("status") for row in current_use]
+    return {
+        "selected_components": len(statuses),
+        "currently_usable_components": sum(status in {"CURRENTLY_USABLE_WITHIN_SCOPE", "CURRENT_WITH_REVIEW_DUE_SOON"} for status in statuses),
+        "review_required_components": sum(status == "CURRENT_USE_REQUIRES_REVIEW" for status in statuses),
+        "no_currentness_claim_components": sum(status == "NO_CURRENTNESS_CLAIM" for status in statuses),
+        "unknown_current_use_components": sum(status == "UNKNOWN" for status in statuses),
+    }
+
+
+def build_internal_briefing_read(
+    selected_components: list[dict[str, Any]],
+    query: dict[str, Any],
+    freshness: list[dict[str, Any]],
+    current_use: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Build a non-narrative briefing view without collapsing scoped state."""
+    current_use = current_use or [
+        {"component_id": row.get("component_id"), "status": "UNKNOWN", "freshness_status": None, "lifecycle_state": row.get("lifecycle_state"), "reason": "current-use status was not supplied by the caller"}
+        for row in selected_components
+    ]
     queried = query["scope"]["dimensions"] or sorted(DIMENSIONS)
     by_dimension: dict[str, list[dict[str, Any]]] = {}
     for row in selected_components:
@@ -309,6 +373,7 @@ def build_internal_briefing_read(selected_components: list[dict[str, Any]], quer
         assessments = [{
             "component_id": row["component_id"],
             "revision_id": row["revision_id"],
+            "lifecycle_state": row.get("lifecycle_state"),
             "scope": deepcopy(row["scope"]),
             "state_label": row.get("state_label"),
             "direction": row.get("direction"),
@@ -318,6 +383,8 @@ def build_internal_briefing_read(selected_components: list[dict[str, Any]], quer
             "known_at_utc": row.get("known_at_utc"),
             "admitted_at_utc": row.get("admitted_at_utc"),
             "freshness": next((item for item in freshness if item.get("component_id") == row.get("component_id")), None),
+            "current_use": next((item for item in current_use if item.get("component_id") == row.get("component_id")), None),
+            "current_use_status": next((item.get("status") for item in current_use if item.get("component_id") == row.get("component_id")), "UNKNOWN"),
             "visibility": row.get("visibility"),
             "limitations": deepcopy(row.get("limitations", [])),
         } for row in rows]
@@ -359,14 +426,20 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
         selected_components_for_composition = [
             (snapshot, rows) for snapshot, rows in selected_series
         ]
+        composition_components = [row for _, rows in selected_components_for_composition for row in rows]
         composition_freshness = [
             {"component_id": row["component_id"], **derive_freshness(row, query["knowledge_cutoff_utc"])}
-            for _, rows in selected_components_for_composition for row in rows
+            for row in composition_components
+        ]
+        composition_current_use = [
+            derive_current_use(row, next(item for item in composition_freshness if item["component_id"] == row["component_id"]))
+            for row in composition_components
         ]
         composition_view = build_composition_view(
             query,
             selected_components_for_composition,
             freshness=composition_freshness,
+            current_use=composition_current_use,
             dimensions=sorted(DIMENSIONS),
         )
         snapshot = None
@@ -376,6 +449,10 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
         selected_components = []
     freshness = [
         {"component_id": row["component_id"], **derive_freshness(row, query["knowledge_cutoff_utc"])}
+        for row in selected_components
+    ]
+    current_use = [
+        derive_current_use(row, next(item for item in freshness if item["component_id"] == row["component_id"]))
         for row in selected_components
     ]
     query_scope = query["scope"]
@@ -417,13 +494,15 @@ def read_production_world_state(request: dict[str, Any], *, root: Path = ROOT) -
             for selected_snapshot, rows in selected_series
         ],
         "freshness": freshness,
+        "current_use": current_use,
+        "current_use_summary": current_use_summary(current_use),
         "composition_view": deepcopy(composition_view),
         "limitations": [
             "freshness is derived at query time and does not mutate lifecycle or history",
             "a scoped assessment is not a dimension-wide or global assessment",
             "unassessed and unqueried dimensions are not filled by inference",
         ],
-        "briefing_read": _briefing_view(selected_components, query, freshness),
+        "briefing_read": _briefing_view(selected_components, query, freshness, current_use),
         "production_file_mutation_check": {"before": before, "after": _file_hashes(root)},
     }
     if composition_view is not None:
@@ -460,6 +539,14 @@ def compare_production_world_state(from_view: dict[str, Any], to_view: dict[str,
         new = to_freshness[component_id].get("status")
         if old != new:
             freshness_transitions.append({"component_id": component_id, "from": old, "to": new})
+    current_use_transitions = []
+    from_current_use = {row.get("component_id"): row for row in from_view.get("current_use", [])}
+    to_current_use = {row.get("component_id"): row for row in to_view.get("current_use", [])}
+    for component_id in sorted(set(from_current_use) & set(to_current_use)):
+        old = from_current_use[component_id].get("status")
+        new = to_current_use[component_id].get("status")
+        if old != new:
+            current_use_transitions.append({"component_id": component_id, "from": old, "to": new})
     from_dims = set(from_view.get("dimensions_assessed", []))
     to_dims = set(to_view.get("dimensions_assessed", []))
     def series_state(view: dict[str, Any]) -> dict[str, str]:
@@ -511,11 +598,13 @@ def compare_production_world_state(from_view: dict[str, Any], to_view: dict[str,
         "dimensions_newly_assessed": sorted(to_dims - from_dims),
         "dimensions_no_longer_current": sorted(from_dims - to_dims),
         "freshness_transitions": freshness_transitions,
+        "current_use_transitions": current_use_transitions,
         "snapshot_transition": {"from": from_snapshot, "to": to_snapshot},
         "delta_class": delta_class,
         "knowledge_state_change": knowledge_change,
         "effective_state_change": effective_change,
         "freshness_only": bool(freshness_transitions) and not content_change,
+        "current_use_only": bool(current_use_transitions) and not content_change,
         "successor_revision_created": False,
     }
 
