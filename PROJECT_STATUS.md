@@ -13,7 +13,7 @@ This file is a human recovery surface subordinate to `WORLD_SIGNALS_PROJECT_CHAR
 - Change Ledger: **v0.29 / 64 entries**.
 - Monitor expectations: **v0.28 / 26 configured adapters / 25 unique monitor sources / 217 explicitly scoped Canonical occurrences**.
 - Live Intelligence: **v0.13 / 12 observations / 16 evidence rows / 4 Canonical-linked observations**; automatic ingestion and public observation projection remain closed.
-- Analysis: schema **v0.8**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
+- Analysis: schema **v0.9**; reviews **v0.18 / 22**; evidence **v0.18 / 97**; production Live inputs **1**; production revisions **1**.
 - Signals: schema **v0.1 / 1 admitted revision(s)**; population **CONTROLLED_REVIEWED_SIGNAL_SPECIMEN**; admission transaction required; maximum production population **1**; public projection **closed**.
 - NHC Atlantic pilot: **PILOT_ROUTE_VALIDATED_NO_AUTO_COMMIT**; registered in scheduled Monitor expectations: **true**.
 - Automatic Canonical commit: **OFF**. Google Calendar writes: **OFF**. Public Live and Live-input projection: **OFF**. Public Analysis revision metadata/latest-head collapse: **OFF**.
@@ -414,3 +414,15 @@ components / three snapshots / three admissions / zero actors. No Analysis,
 evidence, Forecast, Scenario, Risk, Relationship, Canonical or public population
 was changed. See `data/analysis/STEP14D_AU_IGR_REVIEW_SUMMARY.md`; five separate
 human ACCEPT/DEFER/REJECT decisions are still required.
+
+## Migration Step 14E — native contract only / public field allowlist
+
+Analysis schema 0.9 adds optional INTERNAL_ONLY `official_projection_review`;
+the exact Step 14D inventory/audit validates in memory without modifying any
+candidate or production review. Public Analysis now uses one explicit field
+allowlist in both ordinary and revision-aware paths, rejecting unknown fields
+and withholding the extension, audits, model dependencies and internal metadata.
+All 22 public analytical spines and evidence entries survive; version metadata
+changes and one already-prohibited Live-input linkage is removed. No IGR
+admission or human disposition is materialized. World State remains 5 / 3 / 3 / 0
+and public Brief is unchanged. See `OFFICIAL_PROJECTION_ANALYSIS_CONTRACT.md`.

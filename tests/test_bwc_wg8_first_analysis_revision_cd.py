@@ -22,6 +22,7 @@ from world_signals.analysis_revision_projection import (
     public_analysis_projection_with_revision_contract,
 )
 from world_signals.live_analysis_bridge import production_live_input_count
+from world_signals.checkpoint_contract import version_at_least
 
 
 FROZEN_PARENT_PAYLOAD_PATH = (
@@ -67,7 +68,7 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         evidence = load(apply_cd.ANALYSIS_EVIDENCE_PATH)
         post = cls.plan["target_state"]
         materialized = (
-            schema.get("version") == post["analysis_schema_version"]
+            version_at_least(schema.get("version"), post["analysis_schema_version"])
             and reviews.get("version") == post["analysis_reviews_version"]
             and len(reviews.get("reviews", [])) == post["analysis_review_count"]
             and evidence.get("version") == post["analysis_evidence_version"]
@@ -97,7 +98,7 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         schema = self.target["analysis_schema"]
         reviews = self.target["reviews"]
         evidence = self.target["evidence"]
-        self.assertEqual(schema["version"], "0.8")
+        self.assertTrue(version_at_least(schema["version"], "0.8"))
         self.assertEqual((reviews["version"], len(reviews["reviews"])), ("0.18", 22))
         self.assertEqual((evidence["version"], len(evidence["evidence"])), ("0.18", 97))
         self.assertEqual(production_analysis_revision_count(reviews), 1)
@@ -230,10 +231,10 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
             after = {p: stable_hash(ROOT / p) for p in self.plan["protected_paths"]}
             self.assertEqual(before, after)
         else:
-            self.assertEqual(
+            self.assertTrue(version_at_least(
                 current_schema["version"],
                 self.plan["target_state"]["analysis_schema_version"],
-            )
+            ))
             self.assertEqual(set(self.plan["protected_paths"]), set(BASE_PROTECTED_GIT_BLOBS))
             for path in self.plan["protected_paths"]:
                 if path.startswith("data/live_intelligence/") or path in {

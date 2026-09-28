@@ -256,7 +256,8 @@ def assert_target(plan: dict[str, Any], target: dict[str, Any]) -> None:
     schema = target["analysis_schema"]
     reviews = target["reviews"]
     evidence = target["evidence"]
-    assert schema["version"] == post["analysis_schema_version"]
+    from world_signals.checkpoint_contract import version_at_least
+    assert version_at_least(schema["version"], post["analysis_schema_version"])
     assert (reviews["version"], len(reviews["reviews"])) == (post["analysis_reviews_version"], post["analysis_review_count"])
     assert (evidence["version"], len(evidence["evidence"])) == (post["analysis_evidence_version"], post["analysis_evidence_count"])
     assert production_analysis_revision_count(reviews) == post["production_analysis_revision_count"]

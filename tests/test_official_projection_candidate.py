@@ -278,11 +278,13 @@ class OfficialProjectionCandidateTests(unittest.TestCase):
         self.assertEqual(questions["historical_backtest"]["recommended_disposition"], "DEFER")
         self.reject(lambda p: p["assumption_audit"]["human_review_questions"]["analysis"].update(decision="ACCEPT"), "automatic review")
 
-    def test_schema_extension_is_not_production_schema_or_admission(self):
+    def test_retained_extension_is_not_admission_despite_native_contract_adoption(self):
         ext = self.package["extension_candidate"]
         self.assertFalse(ext["production_schema_change"] or ext["production_admission_permitted"])
         schema = json.loads((ROOT / "data/analysis/schema.json").read_text())
-        self.assertNotIn("official_projection_review", json.dumps(schema))
+        native = schema["optional_extensions"]["official_projection_review"]
+        self.assertFalse(native["required"] or native["public_projection_permitted"])
+        self.assertEqual(native["visibility"], "INTERNAL_ONLY")
 
     def test_nonempty_write_target_public_flag_or_accepted_candidate_fail(self):
         for field, value in (("write_targets", ["data/analysis/event_reviews.json"]), ("public_projection_permitted", True), ("review_state", "ACCEPTED"), ("visibility", "PUBLIC_ELIGIBLE")):

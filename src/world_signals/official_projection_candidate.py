@@ -266,5 +266,10 @@ def inspect_step14d(root: Path) -> dict[str, Any]:
     candidate = package["analysis_candidate"]
     report = validate_analysis(load("data/analysis/schema.json"), {"evidence": candidate["candidate_local_evidence"]}, {"reviews": [candidate["review"]]}, canonical)
     _require(report.ok, "native Analysis validation: " + "; ".join(report.errors))
+    from world_signals.official_projection_review import step14d_native_extension
+    native_review = deepcopy(candidate["review"])
+    native_review["official_projection_review"] = step14d_native_extension(package)
+    extension_report = validate_analysis(load("data/analysis/schema.json"), {"evidence": candidate["candidate_local_evidence"]}, {"reviews": [native_review]}, canonical)
+    _require(extension_report.ok, "native official-projection extension: " + "; ".join(extension_report.errors))
     _require(protected_file_hashes(root) == before, "read mutated protected inputs")
-    return {**result, "mutation_check": "PASS", "native_analysis_candidate_check": "PASS", "protected_input_fingerprint": fingerprint(before), "historical_file_drift": sorted(p for p, digest in manifest["protected_input_hashes"].items() if before.get(p) != digest)}
+    return {**result, "mutation_check": "PASS", "native_analysis_candidate_check": "PASS", "native_official_projection_extension_check": "PASS", "protected_input_fingerprint": fingerprint(before), "historical_file_drift": sorted(p for p, digest in manifest["protected_input_hashes"].items() if before.get(p) != digest)}

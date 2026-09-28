@@ -1,5 +1,17 @@
 # Executable architecture
 
+## Step 14E — native official-projection Analysis / publication boundary
+
+Analysis schema 0.9 now natively validates the optional internal
+`official_projection_review` (generic institutional model publications).
+`OFFICIAL_PROJECTION_ANALYSIS_CONTRACT.md` defines the adopted contract:
+ten-axis unscored audits, source-native horizons, qualified comparisons,
+explicit model dependency classes and no downstream promotion. Both public
+Analysis paths use one fail-closed top-level allowlist; unknown fields block
+validation/build and the extension cannot be publicly projected. Existing
+public analytical content/evidence is preserved; the already-closed Live-input
+linkage metadata is excluded. Step 14D remains deferred, not admitted.
+
 ## Governing rule
 
 `WORLD_SIGNALS_PROJECT_CHARTER.md` is authoritative. The executable repository implements its layers as separate governed contracts rather than one blended event/news database.
@@ -817,8 +829,9 @@ other.
 The 2026 Australian IGR review is retained under `data/analysis/STEP14D_AU_IGR_*`
 as non-production audit material. A publication-only Analysis DRAFT keeps
 `actuals: []`, empty market movement and `NOT_ESTABLISHED` surprise/second-order
-effects. An optional `official_projection_review` extension is proposed, not
-installed in the production schema. Separate inventories distinguish observed
+effects. In Step 14D the optional `official_projection_review` extension was
+candidate-local; Step 14E now adopts its native internal contract without
+admitting this review. Separate inventories distinguish observed
 evidence, model assumptions, maintained policy settings, official projections,
 sensitivity cases and ministerial framing. The reusable ten-axis ASSUMPTION
 AUDIT preserves original vintages, comparability exclusions, uncertainty and
@@ -826,10 +839,10 @@ explicit model dependencies without scores or an aggregate issuer verdict.
 
 `official_projection_candidate.py` and its offline validation command enforce
 candidate boundaries and deterministic fingerprints; they retrieve nothing,
-admit nothing and publish nothing. Native Analysis validation is insufficient
-for projection-specific semantics, and its public projector currently copies
-review fields: a future native contract and deliberate public/private allowlist
-must be reviewed before any extension admission. Treasury sources remain
+admit nothing and publish nothing. Step 14E now validates the retained material
+in memory under the native contract and uses an explicit public field allowlist;
+the extension remains internal and Analysis admission remains deferred.
+Treasury sources remain
 manual-only under `PRODUCTION_AUTOMATION_HOLD`; no monitoring route or downstream
 promotion is authorised. See the retained Step 14D review summary for limitations
 and five separate human disposition questions.
