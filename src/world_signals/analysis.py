@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from .analysis_publication import publication_errors, public_review_fields
+from .analysis_publication import publication_errors, public_review_fields, review_publication_errors
 from .official_projection_review import validate_official_projection_review
 
 
@@ -206,6 +206,13 @@ def validate_analysis(
     canonical_registry: dict[str, Any],
 ) -> AnalysisValidationReport:
     errors: list[str] = []
+    # Draft/in-memory native-contract checks are not population or publication.
+    # Production containers with the current schema must classify every review.
+    if "publication_decisions" in reviews_dataset or (
+        schema.get("review_publication_contract") and
+        reviews_dataset.get("dataset") == "EVENT_ANALYSIS_REVIEWS"
+    ):
+        errors.extend(review_publication_errors(reviews_dataset))
     vocab = schema.get("controlled_vocabularies") or {}
     required_sections = schema.get("required_review_sections") or []
     population_policy = schema.get("population_readiness_policy") or {}
@@ -560,6 +567,9 @@ def public_analysis_projection(
     reviews_dataset: dict[str, Any],
     canonical_registry: dict[str, Any],
 ) -> dict[str, Any]:
+    publication_problems = review_publication_errors(reviews_dataset)
+    if publication_problems:
+        raise ValueError("; ".join(publication_problems))
     report = validate_analysis(schema, evidence_registry, reviews_dataset, canonical_registry)
     if not report.ok:
         raise ValueError("analysis validation failed: " + "; ".join(report.errors))
@@ -585,6 +595,8 @@ def public_analysis_projection(
 
     reviews = []
     for row in reviews_dataset.get("reviews", []):
+        if reviews_dataset["publication_decisions"][row["analysis_id"]] != "PUBLIC":
+            continue
         public_row = public_review_fields(row)
         refs = sorted(_refs(public_row))
         public_row["canonical"] = _canonical_context(
@@ -593,7 +605,9 @@ def public_analysis_projection(
         public_row["evidence"] = [evidence[ref] for ref in refs]
         reviews.append(public_row)
 
-    readiness = analysis_population_readiness(schema, reviews_dataset, canonical_registry)
+    public_dataset = {"reviews": [row for row in reviews_dataset.get("reviews", [])
+                                 if reviews_dataset["publication_decisions"][row["analysis_id"]] == "PUBLIC"]}
+    readiness = analysis_population_readiness(schema, public_dataset, canonical_registry)
 
     return {
         "metadata": {

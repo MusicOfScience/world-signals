@@ -1,7 +1,7 @@
 {
   "project": "WORLD SIGNALS",
   "dataset": "ANALYTICAL_EVIDENCE_REGISTRY",
-  "version": "0.18",
+  "version": "0.19",
   "reference_date": "2026-09-09",
   "scope_note": "Evidence here supports analytical interpretation only. It is not canonical event provenance and does not alter data/sources/registry.json.",
   "evidence": [
@@ -1950,6 +1950,45 @@
       "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
       "canonical_provenance_effect": "NONE",
       "distribution_note": "Primary document URL retained for provenance/navigation: https://docs-library.unoda.org/Biological_Weapons_Convention_-Working_Group_on_the_strengthening_of_the_ConventionNinth_session_(2026)/2026-08-27_BWC_WG_9_CRP1_Rev7.pdf . CD does not infer PDF-body semantics from this catalogue record."
+    },
+    {
+      "evidence_id": "WSEV-AU-IGR-TREASURY-20260921",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Treasury",
+      "title": "IGR2026-MAIN",
+      "url": "https://treasury.gov.au/sites/default/files/2026-09/p2026-797917.pdf",
+      "published_at": "2026-09-21",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "IGR2026-MAIN"
+    },
+    {
+      "evidence_id": "WSEV-AU-IGR-TREASURY-20230824",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Treasury",
+      "title": "IGR2023-MAIN",
+      "url": "https://treasury.gov.au/sites/default/files/2023-08/p2023-435150.pdf",
+      "published_at": "2023-08-24",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "IGR2023-MAIN"
+    },
+    {
+      "evidence_id": "WSEV-AU-IGR-MINISTERS-20260921",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Treasury Ministers",
+      "title": "MINISTER2026",
+      "url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/media-releases/2026-intergenerational-report",
+      "published_at": "2026-09-21",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "MINISTER2026"
     }
   ]
 }

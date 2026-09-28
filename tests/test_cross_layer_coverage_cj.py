@@ -234,7 +234,7 @@ class CrossLayerCoverageCurrentStateTests(unittest.TestCase):
         self.assertEqual(totals["configured_monitor_scoped_occurrence_count"], 217)
         self.assertGreaterEqual(totals["live_observation_count"], 7)
         self.assertGreaterEqual(totals["canonical_linked_live_observation_count"], 2)
-        self.assertEqual(totals["analysis_review_count"], 22)
+        self.assertEqual(totals["analysis_review_count"], 23)
         self.assertEqual(totals["production_live_input_count"], 1)
         self.assertEqual(totals["production_revision_count"], 1)
 

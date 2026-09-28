@@ -75,8 +75,9 @@ class OfficialProjectionAnalysisContractTests(unittest.TestCase):
 
     def test_legacy_reviews_evidence_and_optional_absence_validate(self):
         self.assertTrue(validate_analysis(self.schema, self.evidence, self.reviews, self.canonical).ok)
-        self.assertEqual((len(self.reviews["reviews"]), len(self.evidence["evidence"])), (22, 97))
-        self.assertTrue(all("official_projection_review" not in row for row in self.reviews["reviews"]))
+        legacy = [row for row in self.reviews["reviews"] if self.reviews["publication_decisions"][row["analysis_id"]] == "PUBLIC"]
+        self.assertEqual(len(legacy), 22)
+        self.assertTrue(all("official_projection_review" not in row for row in legacy))
 
     def test_generic_non_treasury_extension_valid(self):
         self.assertEqual(validate_official_projection_review(self.ext), ())
@@ -324,8 +325,8 @@ class OfficialProjectionAnalysisContractTests(unittest.TestCase):
         self.assertEqual(ext["audit_axes"], list(AUDIT_AXES))
         self.assertFalse(ext["required"] or ext["public_projection_permitted"])
 
-    def test_igr_not_production_and_world_state_counts_unchanged(self):
-        self.assertNotIn("WSAN-AU-IGR-20260921-001", json.dumps(self.reviews))
+    def test_igr_not_public_and_world_state_counts_unchanged(self):
+        self.assertNotIn("WSAN-AU-IGR-20260921-001", json.dumps(public_analysis_projection(self.schema, self.evidence, self.reviews, self.canonical)))
         state = load_production_state(ROOT)
         self.assertEqual({key: len(state[key]) for key in ("components", "snapshots", "admissions", "actors")},
                          {"components": 5, "snapshots": 3, "admissions": 3, "actors": 0})

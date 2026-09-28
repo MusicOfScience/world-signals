@@ -69,10 +69,10 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         post = cls.plan["target_state"]
         materialized = (
             version_at_least(schema.get("version"), post["analysis_schema_version"])
-            and reviews.get("version") == post["analysis_reviews_version"]
-            and len(reviews.get("reviews", [])) == post["analysis_review_count"]
-            and evidence.get("version") == post["analysis_evidence_version"]
-            and len(evidence.get("evidence", [])) == post["analysis_evidence_count"]
+            and version_at_least(reviews.get("version"), post["analysis_reviews_version"])
+            and len(reviews.get("reviews", [])) >= post["analysis_review_count"]
+            and version_at_least(evidence.get("version"), post["analysis_evidence_version"])
+            and len(evidence.get("evidence", [])) >= post["analysis_evidence_count"]
         )
         if materialized:
             cls.target = {
@@ -99,8 +99,10 @@ class BWCWG8FirstAnalysisRevisionCDTests(unittest.TestCase):
         reviews = self.target["reviews"]
         evidence = self.target["evidence"]
         self.assertTrue(version_at_least(schema["version"], "0.8"))
-        self.assertEqual((reviews["version"], len(reviews["reviews"])), ("0.18", 22))
-        self.assertEqual((evidence["version"], len(evidence["evidence"])), ("0.18", 97))
+        self.assertTrue(version_at_least(reviews["version"], "0.18"))
+        self.assertGreaterEqual(len(reviews["reviews"]), 22)
+        self.assertTrue(version_at_least(evidence["version"], "0.18"))
+        self.assertGreaterEqual(len(evidence["evidence"]), 97)
         self.assertEqual(production_analysis_revision_count(reviews), 1)
         self.assertEqual(production_live_input_count(reviews), 1)
         policy = schema["analysis_revision_policy"]

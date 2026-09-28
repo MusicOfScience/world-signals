@@ -1,5 +1,31 @@
 # Native official-projection Analysis contract — Step 14E
 
+## Step 14F adoption / object-publication gate
+
+The original contract-only tranche below is preserved as design history.
+Step 14F separately admits the owner-reviewed IGR copy internally under schema
+0.9; retained Step 14D artifacts remain immutable. The official inventory/audit
+is governed internal Analysis, not future actuals or a Forecast. The independent
+backtest is DEFERRED; qualified historical checks remain supporting only and
+dependency edges remain INTERNAL_MODEL_STRUCTURE, never Relationships.
+
+`event_reviews.json.publication_decisions` is the sole review-level publication
+authority. Every production review must have exactly one PUBLIC / INTERNAL_ONLY
+decision; absent, invalid or dangling entries block native production validation
+and public builds. Draft in-memory native-extension checks do not grant population
+or publication authority. Public projection always requires the decision table,
+including for in-memory inputs, and also applies the existing field allowlist.
+Public evidence and readiness use only public rows. The 22 legacy reviews remain
+PUBLIC; IGR remains INTERNAL_ONLY. Dataset versions advance to 0.19, not the
+schema. Human dispositions and pre/post hashes are separately retained in the
+Step 14F audit records. Production admission and publication are distinct acts.
+
+`scripts/admit_igr_internal_analysis.py --check` validates the retained admission
+read-only. Construction requires the explicit owner decision and genuine UTC
+review/admission times; `--write` uses the repository's staged bounded transaction
+primitive with temporary-copy preflight and rollback, not an automatic admission
+trigger. No retrieval, monitoring activation or downstream writes are available.
+
 Status: **adopted contract only**. Schema 0.9 adds optional
 `official_projection_review` contract 0.1. No IGR Analysis/evidence is admitted;
 Step 14D artifacts remain immutable DRAFT / REVIEW_PENDING / INTERNAL_ONLY.

@@ -189,7 +189,8 @@ class AnalyticalLayerFoundationTests(unittest.TestCase):
         self.assertFalse(projection["metadata"]["canonical_mutation_allowed"])
         self.assertFalse(projection["metadata"]["google_calendar_write"])
         self.assertTrue(projection["metadata"]["population_readiness_is_descriptive_not_population_authority"])
-        self.assertEqual(projection["metadata"]["review_count"], len(self.reviews["reviews"]))
+        self.assertEqual(projection["metadata"]["review_count"],
+                         list(self.reviews["publication_decisions"].values()).count("PUBLIC"))
         by_id = {row["analysis_id"]: row for row in projection["reviews"]}
         self.assertEqual(len(by_id["WSAN-AU-GDP-2026Q2-001"]["evidence"]), 2)
         self.assertEqual(len(by_id["WSAN-NZ-OCR-20260902-001"]["evidence"]), 3)

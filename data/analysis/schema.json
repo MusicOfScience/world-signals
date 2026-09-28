@@ -4,6 +4,14 @@
   "version": "0.9",
   "reference_date": "2026-09-09",
   "architecture_position": "ANALYSIS",
+  "review_publication_contract": {
+    "version": "0.1",
+    "authority": "event_reviews.json.publication_decisions",
+    "dispositions": ["PUBLIC", "INTERNAL_ONLY"],
+    "missing_decision": "FAIL_CLOSED",
+    "publication_requires_public_review_and_public_field": true,
+    "production_admission_is_not_publication": true
+  },
   "public_field_contract": {
     "version": "0.1",
     "policy": "EXPLICIT_ALLOWLIST_FAIL_CLOSED",
