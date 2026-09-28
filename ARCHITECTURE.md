@@ -1,5 +1,17 @@
 # Executable architecture
 
+## Step 14G — candidate-only IGR assumption signposts
+
+`STEP14G_AU_IGR_ASSUMPTION_SIGNPOSTS_REVIEW_PENDING.json` operationalises
+eight observable IGR assumptions in a deterministic, hash-pinned candidate;
+it does not add a production schema or monitoring route. Fifteen signposts
+separate present evidence from long-horizon assumption validity. Minimum
+persistence is domain-specific, short-run movement is not automatic
+falsification, and OBSERVE / REVIEW_DUE / STRUCTURAL_REASSESSMENT_REQUIRED are
+analyst-attention states only. Source coverage gaps remain explicit. The IGR
+historical backtest remains DEFERRED; no Analysis revision or downstream
+Forecast, Relationship, Scenario, Risk or World State promotion occurs.
+
 ## Step 14F — internal Analysis admission / review-level publication
 
 Analysis v0.9 now holds 23 production reviews and 100 evidence rows (datasets

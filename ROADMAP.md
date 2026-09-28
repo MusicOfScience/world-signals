@@ -777,3 +777,12 @@ supporting-only and model dependencies are not Relationships. No downstream or
 monitoring activation occurred. Next: separately scoped internal review of
 unresolved audit coverage and independent original-vintage backtest methodology;
 no automatic promotion or public official-projection surface is authorised.
+
+## Stage 38 — IGR assumption signposts (Step 14G, candidate only)
+
+Step 14G creates a deterministic review-pending signpost candidate for eight
+selected assumptions. Present evidence is not long-horizon falsification;
+domain-specific persistence gates and explicit source-coverage gaps guide
+human review only. No monitoring route, Analysis revision, Forecast, Scenario,
+Relationship, Risk, World State, or public output is created. Independent
+historical backtest acceptance remains DEFERRED.
