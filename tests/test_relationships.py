@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -21,7 +22,7 @@ from world_signals.relationships import (
 class RelationshipContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.schema = json.loads((ROOT / "data/relationships/schema.json").read_text())
+        cls.schema = json.loads((ROOT / "data/relationships/schema_v0.2.json").read_text())
         cls.signals_schema = json.loads((ROOT / "data/signals/schema.json").read_text())
         cls.production_signals = json.loads((ROOT / "data/signals/signals.json").read_text())
         cls.canonical = {"records": [{"occurrence_id": "CANON-1"}]}
@@ -81,9 +82,14 @@ class RelationshipContractTests(unittest.TestCase):
             "title": "Synthetic transmission relationship",
             "source_nodes": [{"node_id": "SIG-A", "node_type": "SIGNAL"}],
             "target_nodes": [{"node_id": "SIG-B", "node_type": "SIGNAL"}],
-            "supporting_signal_revisions": [
-                {"signal_id": "SIG-A", "revision_id": "SIG-A-R1"},
-                {"signal_id": "SIG-B", "revision_id": "SIG-B-R1"},
+            "supporting_node_revisions": [
+                {"node_type": "SIGNAL", "node_id": "SIG-A", "revision_id": "SIG-A-R1", "object_sha256": ""},
+                {"node_type": "SIGNAL", "node_id": "SIG-B", "revision_id": "SIG-B-R1", "object_sha256": ""},
+            ],
+            "supporting_analysis_refs": [],
+            "supporting_evidence_pins": [
+                {"evidence_id": "E-A", "object_sha256": ""},
+                {"evidence_id": "E-B", "object_sha256": ""},
             ],
             "supporting_observation_ids": ["OBS-A", "OBS-B"],
             "supporting_evidence_refs": ["E-A", "E-B"],
@@ -103,8 +109,12 @@ class RelationshipContractTests(unittest.TestCase):
             "confidence": "MEDIUM",
             "temporal_scope": {
                 "scope_type": "OBSERVED_PERIOD",
+                "precision": "UTC_RANGE",
+                "anchor_at_utc": None,
                 "start_at_utc": "2026-09-01T00:00:00Z",
                 "end_at_utc": "2026-09-03T00:00:00Z",
+                "start_date": None,
+                "end_date": None,
                 "notes": "Observed synthetic period; not a forecast horizon.",
             },
             "first_asserted_at_utc": "2026-09-04T00:00:00Z",
@@ -121,11 +131,24 @@ class RelationshipContractTests(unittest.TestCase):
             "revision_reason": "Initial synthetic relationship fixture.",
         }
         row.update(overrides)
+        signals, _, evidence = self.upstream()
+        signal_by_revision = {item["revision_id"]: item for item in signals["signals"]}
+        evidence_by_id = {item["evidence_id"]: item for item in evidence["evidence"]}
+        compact = lambda item: hashlib.sha256(json.dumps(item, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        for pin in row["supporting_node_revisions"]:
+            if pin["revision_id"] in signal_by_revision:
+                pin["object_sha256"] = compact(signal_by_revision[pin["revision_id"]])
+            elif pin["node_type"] == "SIGNAL" and pin["node_id"].startswith("SIG-"):
+                suffix = pin["node_id"].split("-", 1)[1]
+                pin["object_sha256"] = compact(self.signal(pin["node_id"], f"OBS-{suffix}", f"E-{suffix}"))
+        for pin in row["supporting_evidence_pins"]:
+            if pin["evidence_id"] in evidence_by_id:
+                pin["object_sha256"] = compact(evidence_by_id[pin["evidence_id"]])
         return row
 
     @staticmethod
     def dataset(rows):
-        return {"version": "0.1", "population_state": "CLOSED_NO_PRODUCTION_RELATIONSHIPS", "relationships": rows}
+        return {"version": "0.2", "population_state": "CLOSED_NO_PRODUCTION_RELATIONSHIPS", "relationships": rows}
 
     def validate(self, rows, *, signals=None, observations=None, evidence=None, canonical=None, previous=None):
         defaults = self.upstream()
@@ -148,6 +171,21 @@ class RelationshipContractTests(unittest.TestCase):
             },
         )
         row.update(overrides)
+        signals, _, evidence = self.upstream(include_c=True)
+        signal_by_revision = {item["revision_id"]: item for item in signals["signals"]}
+        evidence_by_id = {item["evidence_id"]: item for item in evidence["evidence"]}
+        compact = lambda item: hashlib.sha256(json.dumps(item, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        row["supporting_evidence_pins"] = [
+            {"evidence_id": evidence_id, "object_sha256": compact(evidence_by_id[evidence_id])}
+            for evidence_id in row["supporting_evidence_refs"]
+            if evidence_id in evidence_by_id
+        ]
+        for pin in row["supporting_node_revisions"]:
+            if pin["revision_id"] in signal_by_revision:
+                pin["object_sha256"] = compact(signal_by_revision[pin["revision_id"]])
+        for pin in row["supporting_evidence_pins"]:
+            if pin["evidence_id"] in evidence_by_id:
+                pin["object_sha256"] = compact(evidence_by_id[pin["evidence_id"]])
         return row
 
     def test_zero_production_relationships_is_valid(self):
@@ -171,12 +209,12 @@ class RelationshipContractTests(unittest.TestCase):
         self.assertIn("cannot masquerade", " ".join(self.validate([self.accepted()], signals=signals, observations=observations, evidence=evidence).errors))
 
     def test_duplicate_signal_refs_do_not_inflate_support(self):
-        row = self.relationship(supporting_signal_revisions=[
-            {"signal_id": "SIG-A", "revision_id": "SIG-A-R1"},
-            {"signal_id": "SIG-A", "revision_id": "SIG-A-R1"},
-            {"signal_id": "SIG-B", "revision_id": "SIG-B-R1"},
+        row = self.relationship(supporting_node_revisions=[
+            {"node_type": "SIGNAL", "node_id": "SIG-A", "revision_id": "SIG-A-R1", "object_sha256": ""},
+            {"node_type": "SIGNAL", "node_id": "SIG-A", "revision_id": "SIG-A-R1", "object_sha256": ""},
+            {"node_type": "SIGNAL", "node_id": "SIG-B", "revision_id": "SIG-B-R1", "object_sha256": ""},
         ])
-        self.assertIn("duplicate Signal revision pins", " ".join(self.validate([row]).errors))
+        self.assertIn("duplicate typed revision pins", " ".join(self.validate([row]).errors))
 
     def test_association_does_not_masquerade_as_causal(self):
         row = self.relationship(relationship_class="ASSOCIATION", mechanism="", causal_basis=[])
@@ -261,9 +299,9 @@ class RelationshipContractTests(unittest.TestCase):
             relationship_id="REL-2", revision_id="REL-2-R1", title="B to C",
             source_nodes=[{"node_id": "SIG-B", "node_type": "SIGNAL"}],
             target_nodes=[{"node_id": "SIG-C", "node_type": "SIGNAL"}],
-            supporting_signal_revisions=[
-                {"signal_id": "SIG-B", "revision_id": "SIG-B-R1"},
-                {"signal_id": "SIG-C", "revision_id": "SIG-C-R1"},
+            supporting_node_revisions=[
+                {"node_type": "SIGNAL", "node_id": "SIG-B", "revision_id": "SIG-B-R1", "object_sha256": ""},
+                {"node_type": "SIGNAL", "node_id": "SIG-C", "revision_id": "SIG-C-R1", "object_sha256": ""},
             ],
             supporting_observation_ids=["OBS-B", "OBS-C"], supporting_evidence_refs=["E-B", "E-C"],
         )

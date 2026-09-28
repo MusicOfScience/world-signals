@@ -1,9 +1,11 @@
-"""Closed, reviewed Relationship contract over Signals.
+"""Closed, reviewed Relationship contract over Signals and World State.
 
 Relationships describe reviewed analytical connections.  They do not mutate
 Signals, create transitive graph edges, score risk or forecast outcomes.  The
 production population is intentionally empty while this contract is tested
-with synthetic, read-only proposal histories.
+with synthetic and audit-only, read-only proposal histories. Schema 0.2 pins
+immutable endpoint revisions and keeps temporal dependency cycles separate from
+ordinary reviewed graph feedback semantics.
 """
 
 from __future__ import annotations
@@ -58,6 +60,8 @@ def _preflight(
     observations: Any,
     evidence: Any,
     canonical: Any,
+    world_state_components: Any | None = None,
+    world_state_admissions: Any | None = None,
 ) -> list[str]:
     errors: list[str] = []
     values = (schema, dataset, signals, observations, evidence, canonical)
@@ -68,7 +72,7 @@ def _preflight(
     except (TypeError, ValueError):
         return ["relationship inputs must contain finite JSON values"]
 
-    if schema.get("version") != "0.1":
+    if schema.get("version") not in {"0.1", "0.2"}:
         errors.append("unsupported Relationship schema version")
     for key in ("layer_boundary", "population_policy", "public_projection_policy", "controlled_vocabularies"):
         if not isinstance(schema.get(key), dict):
@@ -160,30 +164,75 @@ def _preflight(
                 errors.append(f"{key} must be a non-empty list")
                 continue
             for node in nodes:
-                if not isinstance(node, dict) or set(node) != {"node_id", "node_type"}:
-                    errors.append(f"{key} entries must contain only node_id and node_type")
+                node_type = node.get("node_type") if isinstance(node, dict) else None
+                expected = {"node_id", "node_type"} if node_type == "SIGNAL" else {
+                    "node_id", "node_type", "revision_id", "object_sha256", "component_type",
+                    "dimension", "admitted_at_utc", "admission_transaction_id",
+                }
+                if not isinstance(node, dict) or set(node) != expected:
+                    errors.append(f"{key} contains an invalid typed node identity")
                     continue
-                if not _text(node.get("node_id")) or node.get("node_type") not in vocab["node_type"]:
-                    errors.append(f"{key} contains an invalid Signal node")
-        pins = row.get("supporting_signal_revisions")
+                if not _text(node.get("node_id")) or node_type not in vocab["node_type"]:
+                    errors.append(f"{key} contains an invalid Relationship node")
+                if node_type == "WORLD_STATE_COMPONENT":
+                    for field in ("revision_id", "object_sha256", "component_type", "dimension", "admission_transaction_id"):
+                        if not _text(node.get(field)):
+                            errors.append(f"{key} World State node requires {field}")
+                    if _parse_exact_utc(node.get("admitted_at_utc")) is None:
+                        errors.append(f"{key} World State node requires exact admitted_at_utc")
+        node_types = {
+            node.get("node_type")
+            for key in ("source_nodes", "target_nodes")
+            for node in row.get(key, [])
+            if isinstance(node, dict)
+        }
+        if len(node_types) > 1:
+            errors.append("mixed node-type Relationships are prohibited in schema 0.2")
+        pins = row.get("supporting_node_revisions")
         if not isinstance(pins, list) or not pins:
-            errors.append("supporting_signal_revisions must be a non-empty list")
+            errors.append("supporting_node_revisions must be a non-empty list")
         else:
             for pin in pins:
-                if not isinstance(pin, dict) or set(pin) != {"signal_id", "revision_id"}:
-                    errors.append("supporting_signal_revisions entries must contain signal_id and revision_id")
+                if not isinstance(pin, dict) or set(pin) != {"node_type", "node_id", "revision_id", "object_sha256"}:
+                    errors.append("supporting_node_revisions entries must contain typed exact revision pins")
                     continue
-                if not _text(pin.get("signal_id")) or not _text(pin.get("revision_id")):
-                    errors.append("supporting_signal_revisions IDs must be non-empty text")
+                if any(not _text(pin.get(field)) for field in ("node_type", "node_id", "revision_id", "object_sha256")):
+                    errors.append("supporting_node_revisions pin fields must be non-empty text")
+                if pin.get("node_type") not in vocab["node_type"]:
+                    errors.append("supporting_node_revisions contains an unsupported node type")
+        for key, id_key in (("supporting_analysis_refs", "analysis_id"), ("supporting_evidence_pins", "evidence_id")):
+            refs = row.get(key)
+            if not isinstance(refs, list):
+                errors.append(f"{key} must be a list")
+                continue
+            for ref in refs:
+                if not isinstance(ref, dict) or set(ref) != {id_key, "object_sha256"}:
+                    errors.append(f"{key} entries must contain {id_key} and object_sha256")
+                elif not _text(ref.get(id_key)) or not _text(ref.get("object_sha256")):
+                    errors.append(f"{key} pin fields must be non-empty text")
         scope = row.get("temporal_scope")
-        scope_fields = {"scope_type", "start_at_utc", "end_at_utc", "notes"}
+        scope_fields = {"scope_type", "precision", "anchor_at_utc", "start_at_utc", "end_at_utc", "start_date", "end_date", "notes"}
         if not isinstance(scope, dict) or set(scope) != scope_fields:
             errors.append("temporal_scope has an invalid field set")
         else:
             if scope.get("scope_type") not in vocab["temporal_scope_type"]:
                 errors.append("invalid temporal scope type")
-            if _parse_exact_utc(scope.get("start_at_utc")) is None:
-                errors.append("temporal_scope.start_at_utc must be exact UTC")
+            if scope.get("precision") not in vocab["temporal_precision"]:
+                errors.append("invalid temporal precision")
+            for field in ("anchor_at_utc", "start_at_utc", "end_at_utc"):
+                if scope.get(field) is not None and _parse_exact_utc(scope.get(field)) is None:
+                    errors.append(f"temporal_scope.{field} must be exact UTC or null")
+            for field in ("start_date", "end_date"):
+                if scope.get(field) is not None and (not _text(scope.get(field)) or len(scope[field]) != 10):
+                    errors.append(f"temporal_scope.{field} must be an ISO civil date or null")
+            if scope.get("precision") == "UTC_INSTANT" and _parse_exact_utc(scope.get("start_at_utc")) is None:
+                errors.append("UTC_INSTANT temporal scope requires exact start_at_utc")
+            if scope.get("precision") == "UTC_RANGE" and (
+                _parse_exact_utc(scope.get("start_at_utc")) is None or _parse_exact_utc(scope.get("end_at_utc")) is None
+            ):
+                errors.append("UTC_RANGE temporal scope requires exact start and end UTC")
+            if scope.get("precision") == "CIVIL_DATE" and not _text(scope.get("start_date")):
+                errors.append("CIVIL_DATE temporal scope requires start_date")
             if scope.get("end_at_utc") is not None and _parse_exact_utc(scope.get("end_at_utc")) is None:
                 errors.append("temporal_scope.end_at_utc must be exact UTC or null")
             if not _text(scope.get("notes")):
@@ -206,12 +255,21 @@ def _preflight(
     return errors
 
 
-def _indexes(signals: dict[str, Any], observations: dict[str, Any], evidence: dict[str, Any], canonical: dict[str, Any]):
+def _indexes(
+    signals: dict[str, Any],
+    observations: dict[str, Any],
+    evidence: dict[str, Any],
+    canonical: dict[str, Any],
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
+):
     signal_by_revision = {}
     signal_revisions_by_id = {}
     observation_by_id = {}
     evidence_by_id = {}
     canonical_by_id = {}
+    world_state_by_revision = {}
+    admissions_by_id = {}
     for row in signals["signals"]:
         signal_by_revision[row["revision_id"]] = row
         signal_revisions_by_id.setdefault(row["signal_id"], []).append(row)
@@ -221,11 +279,15 @@ def _indexes(signals: dict[str, Any], observations: dict[str, Any], evidence: di
         evidence_by_id[row["evidence_id"]] = row
     for row in canonical["records"]:
         canonical_by_id[row["occurrence_id"]] = row
+    for row in (world_state_components or {}).get("components", []):
+        world_state_by_revision[(row.get("component_id"), row.get("revision_id"))] = row
+    for row in (world_state_admissions or {}).get("transactions", []):
+        admissions_by_id[row.get("transaction_id")] = row
     signal_heads = {
         signal_id: max(rows, key=lambda row: row["revision_number"])
         for signal_id, rows in signal_revisions_by_id.items()
     }
-    return signal_by_revision, signal_heads, observation_by_id, evidence_by_id, canonical_by_id
+    return signal_by_revision, signal_heads, observation_by_id, evidence_by_id, canonical_by_id, world_state_by_revision, admissions_by_id
 
 
 def _effective_time(row: dict[str, Any]) -> datetime:
@@ -254,30 +316,79 @@ def _evidence_time(row: dict[str, Any]) -> datetime | None:
     return None
 
 
-def _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_id, evidence_by_id, canonical_by_id, errors):
+def _object_fingerprint(value: Any) -> str:
+    import hashlib
+    return hashlib.sha256(
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    ).hexdigest()
+
+
+def _validate_row(
+    row,
+    schema,
+    signal_by_revision,
+    signal_heads,
+    observation_by_id,
+    evidence_by_id,
+    canonical_by_id,
+    world_state_by_revision,
+    admissions_by_id,
+    errors,
+):
     rid = row["relationship_id"]
     source_ids = [node["node_id"] for node in row["source_nodes"]]
     target_ids = [node["node_id"] for node in row["target_nodes"]]
     if len(source_ids) != len(set(source_ids)) or len(target_ids) != len(set(target_ids)):
-        errors.append(f"{rid}: duplicate endpoint Signal references")
+        errors.append(f"{rid}: duplicate endpoint references")
     if set(source_ids) & set(target_ids):
-        errors.append(f"{rid}: endpoint Signal cannot be both source and target")
-    pins = row["supporting_signal_revisions"]
-    pin_keys = [(pin["signal_id"], pin["revision_id"]) for pin in pins]
+        errors.append(f"{rid}: endpoint cannot be both source and target")
+    endpoint_nodes = row["source_nodes"] + row["target_nodes"]
+    endpoint_types = {node["node_type"] for node in endpoint_nodes}
+    if len(endpoint_types) > 1:
+        errors.append(f"{rid}: mixed node-type Relationships are prohibited in schema 0.2")
+    pins = row["supporting_node_revisions"]
+    pin_keys = [(pin["node_type"], pin["node_id"], pin["revision_id"]) for pin in pins]
     if len(pin_keys) != len(set(pin_keys)):
-        errors.append(f"{rid}: duplicate Signal revision pins cannot increase support")
-    referenced_signal_ids = set(source_ids) | set(target_ids) | set(row["common_driver_signal_ids"])
-    referenced_signal_ids |= {pin["signal_id"] for pin in pins}
-    for signal_id, revision_id in pin_keys:
-        signal = signal_by_revision.get(revision_id)
-        if signal is None or signal.get("signal_id") != signal_id:
-            errors.append(f"{rid}: unknown or mismatched Signal revision {signal_id}/{revision_id}")
-    for signal_id in sorted(referenced_signal_ids):
-        if signal_id not in signal_heads:
-            errors.append(f"{rid}: unknown Signal reference {signal_id}")
-    pinned_ids = {pin["signal_id"] for pin in pins}
-    if not (set(source_ids) | set(target_ids)) <= pinned_ids:
-        errors.append(f"{rid}: every endpoint Signal must have an explicit revision pin")
+        errors.append(f"{rid}: duplicate typed revision pins cannot increase support")
+    endpoint_keys = {(node["node_type"], node["node_id"]) for node in endpoint_nodes}
+    pinned_keys = {(pin["node_type"], pin["node_id"]) for pin in pins}
+    if not endpoint_keys <= pinned_keys:
+        errors.append(f"{rid}: every endpoint requires an explicit typed revision pin")
+    for pin in pins:
+        if pin["node_type"] == "SIGNAL":
+            signal = signal_by_revision.get(pin["revision_id"])
+            if signal is None or signal.get("signal_id") != pin["node_id"]:
+                errors.append(f"{rid}: unknown or mismatched Signal revision {pin['node_id']}/{pin['revision_id']}")
+            elif _object_fingerprint(signal) != pin["object_sha256"]:
+                errors.append(f"{rid}: Signal revision hash mismatch {pin['node_id']}/{pin['revision_id']}")
+        elif pin["node_type"] == "WORLD_STATE_COMPONENT":
+            component = world_state_by_revision.get((pin["node_id"], pin["revision_id"]))
+            if component is None:
+                errors.append(f"{rid}: unknown World State component revision {pin['node_id']}/{pin['revision_id']}")
+            elif component.get("object_sha256") != pin["object_sha256"]:
+                errors.append(f"{rid}: World State component hash mismatch {pin['node_id']}/{pin['revision_id']}")
+    for node in endpoint_nodes:
+        if node["node_type"] == "SIGNAL":
+            if node["node_id"] not in signal_heads:
+                errors.append(f"{rid}: unknown Signal reference {node['node_id']}")
+        elif node["node_type"] == "WORLD_STATE_COMPONENT":
+            component = world_state_by_revision.get((node["node_id"], node["revision_id"]))
+            if component is None:
+                errors.append(f"{rid}: endpoint World State component revision is unavailable")
+                continue
+            for field in ("component_type", "dimension", "admitted_at_utc", "admission_transaction_id"):
+                if node.get(field) != component.get(field):
+                    errors.append(f"{rid}: endpoint metadata mismatch for World State field {field}")
+            if component.get("review_state") != "ACCEPTED" or not component.get("admitted_at_utc"):
+                errors.append(f"{rid}: World State endpoint must be an admitted accepted revision")
+            if node["admission_transaction_id"] not in admissions_by_id:
+                errors.append(f"{rid}: endpoint admission transaction is unavailable")
+            created = _parse_exact_utc(row["review_provenance"].get("created_at_utc"))
+            admitted = _parse_exact_utc(component.get("admitted_at_utc"))
+            if created and admitted and admitted > created:
+                errors.append(f"{rid}: World State endpoint was not admitted before Relationship review")
+    referenced_signal_ids = {node["node_id"] for node in endpoint_nodes if node["node_type"] == "SIGNAL"}
+    referenced_signal_ids |= set(row["common_driver_signal_ids"])
 
     for observation_id in row["supporting_observation_ids"]:
         if observation_id not in observation_by_id:
@@ -291,6 +402,12 @@ def _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_
     for evidence_id in sorted(all_evidence_refs):
         if evidence_id not in evidence_by_id:
             errors.append(f"{rid}: unknown evidence reference {evidence_id}")
+    evidence_pins = {pin["evidence_id"]: pin["object_sha256"] for pin in row["supporting_evidence_pins"]}
+    if set(evidence_pins) != set(row["supporting_evidence_refs"]):
+        errors.append(f"{rid}: supporting evidence references and exact pins must match")
+    for evidence_id, object_sha256 in evidence_pins.items():
+        if evidence_id in evidence_by_id and _object_fingerprint(evidence_by_id[evidence_id]) != object_sha256:
+            errors.append(f"{rid}: supporting evidence hash mismatch for {evidence_id}")
     linked_evidence = {
         evidence_id
         for observation_id in row["supporting_observation_ids"]
@@ -298,11 +415,14 @@ def _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_
         for evidence_id in observation_by_id[observation_id].get("evidence_refs", [])
     }
     for pin in pins:
+        if pin["node_type"] != "SIGNAL":
+            continue
         signal = signal_by_revision.get(pin["revision_id"])
         if isinstance(signal, dict):
             linked_evidence.update(ref for ref in signal.get("evidence_refs", []) if isinstance(ref, str))
-    if not all_evidence_refs <= linked_evidence:
-        errors.append(f"{rid}: evidence must be traceable through supporting observations or Signals")
+    explicitly_pinned_evidence = set(evidence_pins)
+    if not all_evidence_refs <= linked_evidence | explicitly_pinned_evidence:
+        errors.append(f"{rid}: evidence must be traceable through supporting observations, Signals or exact evidence pins")
 
     scope = row["temporal_scope"]
     start = _parse_exact_utc(scope["start_at_utc"])
@@ -354,7 +474,9 @@ def _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_
     if row["relationship_class"] == "CAUSAL_EVIDENCE" and not row["confounders"]:
         errors.append(f"{rid}: CAUSAL_EVIDENCE requires explicit confounders or a reviewed none-found statement")
 
-    for signal_id, revision_id in pin_keys:
+    for node_type, signal_id, revision_id in pin_keys:
+        if node_type != "SIGNAL":
+            continue
         signal = signal_by_revision.get(revision_id)
         if not isinstance(signal, dict):
             continue
@@ -378,9 +500,28 @@ def _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_
             errors.append(f"{rid}: later evidence cannot support an earlier Relationship assessment")
 
 
-def _validate_history(schema, rows, signals, observations, evidence, canonical, *, previous_revisions=None):
+def _validate_history(
+    schema,
+    rows,
+    signals,
+    observations,
+    evidence,
+    canonical,
+    *,
+    previous_revisions=None,
+    world_state_components=None,
+    world_state_admissions=None,
+):
     errors: list[str] = []
-    signal_by_revision, signal_heads, observation_by_id, evidence_by_id, canonical_by_id = _indexes(signals, observations, evidence, canonical)
+    (
+        signal_by_revision,
+        signal_heads,
+        observation_by_id,
+        evidence_by_id,
+        canonical_by_id,
+        world_state_by_revision,
+        admissions_by_id,
+    ) = _indexes(signals, observations, evidence, canonical, world_state_components, world_state_admissions)
     relationships_by_id: dict[str, list[dict[str, Any]]] = {}
     revision_ids: set[str] = set()
     for row in rows:
@@ -388,7 +529,18 @@ def _validate_history(schema, rows, signals, observations, evidence, canonical, 
             errors.append(f"duplicate relationship revision_id {row['revision_id']}")
         revision_ids.add(row["revision_id"])
         relationships_by_id.setdefault(row["relationship_id"], []).append(row)
-        _validate_row(row, schema, signal_by_revision, signal_heads, observation_by_id, evidence_by_id, canonical_by_id, errors)
+        _validate_row(
+            row,
+            schema,
+            signal_by_revision,
+            signal_heads,
+            observation_by_id,
+            evidence_by_id,
+            canonical_by_id,
+            world_state_by_revision,
+            admissions_by_id,
+            errors,
+        )
 
     current_by_revision = {row["revision_id"]: row for row in rows}
     if previous_revisions is not None:
@@ -444,6 +596,8 @@ def validate_relationship_history(
     canonical_registry: dict[str, Any],
     *,
     previous_revisions: list[dict[str, Any]] | None = None,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
 ) -> RelationshipValidationReport:
     """Validate synthetic/proposed history without production storage authority."""
     dataset = {
@@ -451,12 +605,18 @@ def validate_relationship_history(
         "population_state": "CLOSED_NO_PRODUCTION_RELATIONSHIPS",
         "relationships": revisions,
     }
-    errors = _preflight(schema, dataset, signals_dataset, observations_dataset, evidence_registry, canonical_registry)
+    errors = _preflight(
+        schema, dataset, signals_dataset, observations_dataset, evidence_registry, canonical_registry,
+        world_state_components, world_state_admissions,
+    )
     if errors:
         return RelationshipValidationReport(tuple(errors))
     return _validate_history(
         schema, revisions, signals_dataset, observations_dataset, evidence_registry,
-        canonical_registry, previous_revisions=previous_revisions,
+        canonical_registry,
+        previous_revisions=previous_revisions,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
     )
 
 
@@ -509,10 +669,15 @@ def relationship_state_as_of(
     evidence_registry: dict[str, Any],
     canonical_registry: dict[str, Any],
     at_utc: str,
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Return the reviewed head effective at an explicit time without mutation."""
     report = validate_relationship_history(
         schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
     )
     at = _parse_exact_utc(at_utc)
     if not report.ok or at is None:
@@ -538,10 +703,21 @@ def relationship_graph_edges_as_of(
     evidence_registry: dict[str, Any],
     canonical_registry: dict[str, Any],
     at_utc: str,
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Expose exact reviewed edges only; never performs transitive closure."""
-    validate_relationship_history(schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry)
-    states = relationship_state_as_of(schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry, at_utc)
+    validate_relationship_history(
+        schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    )
+    states = relationship_state_as_of(
+        schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry, at_utc,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    )
     by_revision = {row["revision_id"]: row for row in revisions}
     edges = []
     for state in states.values():
@@ -581,3 +757,42 @@ def public_relationship_projection(
         },
         "relationships": [],
     }
+
+
+def validate_temporal_dependency_dag(edges: list[dict[str, Any]]) -> RelationshipValidationReport:
+    """Reject explicit revision-dependency cycles without inferring graph edges."""
+    errors: list[str] = []
+    adjacency: dict[tuple[str, str, str], set[tuple[str, str, str]]] = {}
+    for edge in edges:
+        if not isinstance(edge, dict) or set(edge) != {"source", "target"}:
+            errors.append("dependency edges require source and target typed revision identities")
+            continue
+        keys = []
+        for side in ("source", "target"):
+            node = edge[side]
+            if not isinstance(node, dict) or set(node) != {"node_type", "node_id", "revision_id"}:
+                errors.append("dependency edge identities must contain node_type, node_id and revision_id")
+                continue
+            if not all(_text(node.get(field)) for field in ("node_type", "node_id", "revision_id")):
+                errors.append("dependency edge identity fields must be non-empty")
+            keys.append((node["node_type"], node["node_id"], node["revision_id"]))
+        if len(keys) == 2:
+            adjacency.setdefault(keys[0], set()).add(keys[1])
+    visiting: set[tuple[str, str, str]] = set()
+    visited: set[tuple[str, str, str]] = set()
+
+    def visit(node: tuple[str, str, str]) -> None:
+        if node in visiting:
+            errors.append("temporal dependency cycle detected")
+            return
+        if node in visited:
+            return
+        visiting.add(node)
+        for child in sorted(adjacency.get(node, set())):
+            visit(child)
+        visiting.remove(node)
+        visited.add(node)
+
+    for node in sorted(adjacency):
+        visit(node)
+    return RelationshipValidationReport(tuple(dict.fromkeys(errors)))

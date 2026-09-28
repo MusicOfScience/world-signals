@@ -1,0 +1,114 @@
+{
+  "project": "WORLD SIGNALS",
+  "dataset": "REVIEWED_RELATIONSHIPS",
+  "version": "0.2",
+  "architecture_position": "RELATIONSHIPS",
+  "upstream_layers": ["SIGNALS", "WORLD_STATE", "ANALYSIS", "LIVE_INTELLIGENCE", "CANONICAL_REGISTRY"],
+  "layer_boundary": {
+    "canonical_mutation_allowed": false,
+    "observation_mutation_allowed": false,
+    "signal_mutation_allowed": false,
+    "risk_overlay_mutation_allowed": false,
+    "automatic_relationship_promotion_allowed": false,
+    "transitive_relationship_creation_allowed": false,
+    "forecast_fields_allowed": false,
+    "scenario_fields_allowed": false,
+    "public_relationship_projection_allowed": false
+  },
+  "required_relationship_fields": [
+    "relationship_id", "revision_id", "revision_number", "previous_revision_id", "title",
+    "source_nodes", "target_nodes", "supporting_node_revisions", "supporting_analysis_refs",
+    "supporting_evidence_pins", "supporting_observation_ids", "supporting_evidence_refs",
+    "contradictory_evidence_refs", "contextual_canonical_occurrence_ids", "relationship_class",
+    "directionality", "directionality_rationale", "domains", "jurisdictions", "rationale",
+    "mechanism", "alternative_explanations", "confounders", "common_driver_signal_ids",
+    "causal_basis", "confidence", "temporal_scope", "first_asserted_at_utc", "review_state",
+    "lifecycle_state", "falsification_conditions", "review_provenance", "revision_reason"
+  ],
+  "controlled_vocabularies": {
+    "relationship_class": ["CO_OCCURRENCE", "ASSOCIATION", "DEPENDENCY", "COMMON_DRIVER", "HYPOTHESISED_TRANSMISSION", "MECHANISTICALLY_SUPPORTED", "CAUSAL_EVIDENCE", "FEEDBACK_LOOP"],
+    "directionality": ["DIRECTED", "UNDIRECTED", "RECIPROCAL"],
+    "node_type": ["SIGNAL", "WORLD_STATE_COMPONENT"],
+    "confidence": ["LOW", "MEDIUM", "HIGH", "NOT_ASSESSED"],
+    "review_state": ["CANDIDATE", "UNDER_REVIEW", "ACCEPTED", "REJECTED"],
+    "lifecycle_state": ["UNRESOLVED", "ACTIVE", "WEAKENING", "EXPIRED", "WITHDRAWN", "SUPERSEDED"],
+    "temporal_scope_type": ["OBSERVED_PERIOD", "ONGOING_UNTIL_REVIEW", "HISTORICAL_PERIOD"],
+    "temporal_precision": ["UTC_INSTANT", "UTC_RANGE", "CIVIL_DATE", "SOURCE_REPORTED_WINDOW", "UNKNOWN"],
+    "causal_basis": ["ESTABLISHED_PHYSICAL_MECHANISM", "ESTABLISHED_ECONOMIC_MECHANISM", "LEGAL_OR_INSTITUTIONAL_DEPENDENCY", "PRIMARY_SOURCE_OPERATIONAL_LINKAGE", "EXPERIMENTAL_OR_QUASI_EXPERIMENTAL", "REVIEWED_LITERATURE", "STRONG_TEMPORAL_MECHANISTIC_EVIDENCE"]
+  },
+  "population_policy": {
+    "production_population_allowed": false,
+    "automatic_ingestion_allowed": false,
+    "candidate_relationship_storage_allowed": false,
+    "audit_candidate_storage_allowed": true,
+    "synthetic_production_population_allowed": false,
+    "public_relationship_projection_allowed": false
+  },
+  "public_projection_policy": {
+    "relationship_projection_allowed": false,
+    "internal_relationship_count_must_be_zero": true,
+    "runtime_or_review_material_allowed": false
+  },
+  "causal_gate": {
+    "strong_classes": ["MECHANISTICALLY_SUPPORTED", "CAUSAL_EVIDENCE"],
+    "strong_class_requires_accepted_review": true,
+    "strong_class_requires_causal_basis": true,
+    "strong_class_requires_mechanism": true,
+    "strong_class_requires_supporting_evidence": true,
+    "causal_evidence_requires_explicit_reviewed_basis": true,
+    "scores_do_not_promote_epistemic_class": true
+  },
+  "graph_policy": {
+    "visual_proximity_is_not_evidence": true,
+    "edge_weight_must_not_imply_causal_strength": true,
+    "graph_traversal_does_not_create_relationships": true,
+    "transitive_closure_requires_separate_review": true,
+    "cycles_are_valid_when_explicitly_reviewed": true,
+    "temporal_dependency_cycles_prohibited": true,
+    "composition_views_are_not_nodes": true,
+    "reciprocal_relationships_remain_explicit": true
+  },
+  "revision_policy": {
+    "relationship_id_is_stable_across_revisions": true,
+    "each_revision_is_immutable": true,
+    "previous_revision_must_remain_present": true,
+    "revision_numbers_are_contiguous": true,
+    "revision_time_must_strictly_advance": true,
+    "first_asserted_time_remains_stable": true,
+    "later_evidence_may_not_inflate_prior_assessment": true,
+    "direction_reversal_requires_reviewed_new_revision": true,
+    "as_of_requires_explicit_utc_input": true
+  },
+  "upstream_policy": {
+    "signal_nodes_are_supported": true,
+    "world_state_component_nodes_are_supported": true,
+    "only_reviewed_signal_or_world_state_nodes_are_relationship_endpoints": true,
+    "analysis_nodes_are_prohibited": true,
+    "composition_view_nodes_are_prohibited": true,
+    "world_state_nodes_require_exact_revision_pins": true,
+    "mixed_node_type_relationships_allowed": false,
+    "observations_and_evidence_are_supporting_lineage": true,
+    "canonical_occurrences_are_context_only": true,
+    "raw_monitor_candidates_are_not_nodes": true,
+    "rejected_or_withdrawn_signals_cannot_be_active_nodes": true
+  },
+  "forecast_boundary": {
+    "probability_prohibited": true,
+    "forecast_horizon_prohibited": true,
+    "scenario_probability_prohibited": true,
+    "target_date_prohibited": true,
+    "predicted_value_prohibited": true
+  },
+  "field_contract": {
+    "relationship_class": "Controlled epistemic class; plausible transmission is not mechanism or causal evidence.",
+    "source_nodes_target_nodes": "Signal or immutable admitted World State component revision nodes; endpoint direction is explicit and never inferred from graph proximity.",
+    "supporting_node_revisions": "Typed immutable Signal or World State component revision pins; duplicate pins do not increase support.",
+    "supporting_analysis_refs": "Reviewed Analysis is supporting interpretation only and can never be an endpoint.",
+    "supporting_evidence_pins": "Exact evidence object hashes are retained separately from endpoint identity.",
+    "supporting_observation_ids": "Optional immutable factual substrate references; later corrections require a new Relationship review.",
+    "causal_basis": "Explicit reviewed basis for strong mechanistic or causal classes; no numeric promotion score.",
+    "temporal_scope": "Observed or historical scope with explicit precision; source-reported windows must not be promoted to exact UTC onset.",
+    "review_provenance": "Creation and decision identity, UTC timestamps and decision basis.",
+    "history": "Retain every revision; proposal validation may receive a trusted previous snapshot for append-only comparison."
+  }
+}
