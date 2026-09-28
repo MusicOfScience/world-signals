@@ -152,7 +152,7 @@ def _scope_matches(row: dict[str, Any], scope: dict[str, list[str]]) -> bool:
     if scope["dimensions"] and row.get("dimension") not in scope["dimensions"]:
         return False
     row_scope = row.get("scope") if isinstance(row.get("scope"), dict) else {}
-    if scope["jurisdictions"]:
+    if scope["jurisdictions"] and "*" not in scope["jurisdictions"]:
         jurisdictions = set(row_scope.get("jurisdictions", []))
         if not jurisdictions.intersection(scope["jurisdictions"]):
             return False

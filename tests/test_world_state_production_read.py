@@ -269,7 +269,7 @@ class WorldStateProductionReadTests(unittest.TestCase):
             "include_negative_evidence": True,
             "input_policy": "ACCEPTED_REVIEWED_HEADS_ONLY",
         }
-        proposal = read_world_state(evidence_request, production_query=query("2026-09-27T16:00:00Z", dimensions=["HEALTH_BIOSECURITY"]))
+        proposal = read_world_state(evidence_request, production_query=query("2026-09-27T16:00:00Z", dimensions=sorted(DIMENSIONS)))
         self.assertEqual(proposal["production_world_state"]["status"], "ADMITTED_ASSESSMENT_AVAILABLE")
         self.assertEqual(proposal["production_world_state"]["component_count"], 1)
         self.assertNotIn("WORLD_STATE_ASSESSMENT_NOT_SYNTHESISED", {row["code"] for row in proposal["limitations"]})

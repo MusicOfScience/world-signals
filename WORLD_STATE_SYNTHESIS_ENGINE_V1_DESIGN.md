@@ -663,6 +663,29 @@ filtering excludes it from unrelated queries. The pre-admission v0.1 envelope
 remains reproducible for the retained Step 4 proposal, while post-admission
 reads report separate legacy, historical-accepted and active counts.
 
+Migration Step 12D adds the canonical internal intelligence read boundary.
+`WORLD_STATE_INTERNAL_INTELLIGENCE_VIEW` accepts one normalized request and
+derives both the Step 3 governed-evidence request and the admitted production
+World State query. The knowledge cutoff, jurisdiction scope and dimension
+scope must be identical across both derived reads; systems and component
+filters are deliberately absent from this integrated contract. The retained
+dual-request compatibility API now performs the same coherence checks and
+fails closed on mismatch.
+
+The internal view is structured and non-narrative. It partitions selected
+assessments into current-use, historical/no-currentness, review-required and
+unknown states, while coverage separately records queried dimensions,
+scoped assessments and not-assessed dimensions. The admitted RBNZ
+Relationship remains separate historical `ASSOCIATION` context with
+`NON_CAUSAL` status and exact component ID/revision/hash endpoint joins.
+Macro-only reads expose Markets as a valid production endpoint outside the
+requested scope without treating Markets as assessed. An effective-time read
+may expose the 2 September historical Relationship only when the knowledge
+cutoff is at or after its 28 September admission; this is
+`HISTORICAL_RELATIONSHIP_KNOWN_LATER`, not backdated knowledge. No successor,
+transmission edge, new assessment, production snapshot or public projection
+is created.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining
