@@ -337,6 +337,16 @@ The method chain is a compact methodology description and does not imply that
 every layer is populated or public. No Forecast, Analysis, Calendar, World
 State, Relationship or governed data changed.
 
+Migration Step 14A retains the first climate World State candidate package
+from reviewed Analysis `WSAN-AU-TCSEASON-2025-26-001`. It contains two
+independently reviewable, internal-only candidates: an official-reference
+Australian tropical-cyclone climatology `BASELINE` and a completed-season
+`CLIMATE_PHYSICAL_RISK` Dimension Assessment. The package preserves source-
+native seasonal precision, realised hazard measurements, `NOT_ESTABLISHED`
+surprise, and the boundaries between climatology, forecast, impact and
+attribution. No production admission, Baseline population, downstream layer,
+public projection or governed-data mutation occurred.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.
