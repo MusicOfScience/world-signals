@@ -643,6 +643,26 @@ co-admission is not independent corroboration. The v0.1 checkpoint remains
 unchanged, active graph edges remain empty, and public projection remains
 closed.
 
+Migration Step 12C adds a read-only dual-track bridge for the first admitted
+Relationship. The empty v0.1 checkpoint remains the compatibility input for
+Risk, Scenario and Forecast validators. World State synthesis separately
+validates the controlled v0.2 production store against the deterministic
+merged Live/Analysis evidence universe and selects only Relationships pinned
+by an accepted production-admission transaction whose `admitted_at_utc` is at
+or before the requested knowledge cutoff. Review time and admission time are
+therefore distinct; the RBNZ Relationship is absent at its assertion and
+review boundaries and first appears at admission.
+
+The synthesis proposal keeps active `relationships` and `transmission_edges`
+semantics unchanged and exposes accepted historical v0.2 Relationships in a
+separate `relationship_context`. The current RBNZ row remains an `EXPIRED`,
+`ASSOCIATION`, `DIRECTED`, `MEDIUM` historical record with empty causal basis;
+it is not a transmission edge, does not create a transitive edge, and does
+not refresh or require a successor revision for either endpoint. Scope
+filtering excludes it from unrelated queries. The pre-admission v0.1 envelope
+remains reproducible for the retained Step 4 proposal, while post-admission
+reads report separate legacy, historical-accepted and active counts.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining

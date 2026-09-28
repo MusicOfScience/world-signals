@@ -269,6 +269,18 @@ World State remains three components across two series, and public Relationship
 projection remains closed. No Risk, Scenario, Forecast, World State successor
 or causal promotion was created.
 
+Migration Step 12C now bridges the admitted v0.2 Relationship into the
+private World State synthesis read without reopening downstream populations.
+The reader validates the empty v0.1 checkpoint separately from the controlled
+v0.2 production store, uses the deterministic merged Live/Analysis evidence
+universe, and requires an accepted Relationship production-admission
+transaction before selection. The RBNZ Relationship is absent before
+`2026-09-28T09:04:34Z`, present after admission as historical `ASSOCIATION`
+context, and never becomes an active graph or transmission edge. Risk,
+Scenario and Forecast validators continue to receive v0.1; Forecast cutoffs
+remain frozen and no endpoint successor is created. Production data and
+public projection remain unchanged.
+
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.
 Calendar counts and concentration context live with the Calendar rather than

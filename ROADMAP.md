@@ -590,6 +590,27 @@ corroboration. The v0.1 empty checkpoint remains unchanged, active graph edges
 remain zero, general population remains closed and public projection remains
 closed.
 
+## Stage 27 — World State Relationship read bridge — IMPLEMENTED / READ-ONLY
+
+Migration Step 12C now keeps the deliberate v0.1 empty Relationship
+checkpoint as the compatibility input to Risk, Scenario and Forecast
+validators while the World State reader separately validates the controlled
+v0.2 production Relationship store. The v0.2 path uses the merged
+Live/Analysis evidence universe and an admission-aware selector: the RBNZ
+Relationship is absent before its `2026-09-28T09:04:34Z` production admission,
+including at assertion and review time, and is visible afterward only as
+historical `ASSOCIATION` context. Active graph edges and `transmission_edges`
+remain empty, the relationship is scope-filtered, and its admission and
+production hashes are manifest-pinned.
+
+The bridge does not create a successor component, refresh either endpoint,
+open Risk/Scenario/Forecast eligibility, modify Forecast cutoffs, or change
+public projection. The first retained pre-admission proposal remains
+reproducible; current production remains three World State components across
+two snapshot series and one controlled v0.2 Relationship. The next boundary
+is a separately reviewed synthesis/relationship evolution decision, not
+automatic graph or World State promotion.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader
