@@ -1,0 +1,55 @@
+{
+  "artifact_type": "COVERAGE_GAP_AUDIT",
+  "artifact_id": "STEP14B_AU_IGR_COVERAGE_GAP_AUDIT_v0.1",
+  "created_at_utc": "2026-09-28T14:17:45Z",
+  "review_state": "REVIEW_PENDING",
+  "failure_class": "PROSPECTIVE_DISCOVERY_MISS",
+  "subject": "2026 Intergenerational Report",
+  "knowability": {
+    "first_exact_date_announcement": {
+      "date": "2026-09-09",
+      "source_url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/speeches/address-super-members-council-smc-super-summit-parliament-house-canberra",
+      "assertion": "The Treasurer stated that the IGR would be released on Monday 21 September.",
+      "authority_role": "FIRST_PARTY_ADVANCE_ANNOUNCEMENT"
+    },
+    "publication": {
+      "date": "2026-09-21",
+      "timing_precision": "CIVIL_DATE",
+      "source_url": "https://treasury.gov.au/publication/2026-intergenerational-report",
+      "authority_role": "FIRST_PARTY_PUBLICATION"
+    },
+    "earlier_approximate_references": [
+      {
+        "date": "2026-09-02",
+        "source_url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/transcripts/interview-sarah-ferguson-730-abc-36",
+        "wording_class": "APPROXIMATE_FEW_WEEKS",
+        "exact_date_available": false
+      }
+    ],
+    "publicly_knowable_by": "2026-09-09",
+    "world_signals_first_discovered_at_utc": "2026-09-28T14:17:45Z",
+    "knowledge_time_not_backdated": true
+  },
+  "repository_gap": {
+    "source_registry_matches": 0,
+    "canonical_occurrence_matches": 0,
+    "analysis_matches": 0,
+    "world_state_matches": 0,
+    "forecast_matches": 0,
+    "absent_layers_are_not_negative_evidence": true
+  },
+  "remediation": {
+    "source_governance": "Review separate Treasury publication and Treasury Ministers announcement source candidates.",
+    "canonical_recovery": "Retain a review-gated Canonical recovery candidate; do not write production Canonical in Step 14B.",
+    "strategic_discovery": "Add a first-party exact-date announcement candidate contract for irregular strategic publications.",
+    "analytical_intake": "Classify IGR contents as OFFICIAL_PROJECTION and defer all World State, Forecast and Scenario intake.",
+    "coverage_regression": "Use the 9 September announcement as a prospective discovery regression fixture without altering historical repository knowledge time."
+  },
+  "production_writes": {
+    "canonical": false,
+    "source_registry": false,
+    "world_state": false,
+    "forecast": false,
+    "public_projection": false
+  }
+}

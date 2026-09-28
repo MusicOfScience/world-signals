@@ -10,8 +10,12 @@ Forecast.
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime
 from math import isfinite
 from typing import Any
+from zoneinfo import ZoneInfo
+
+from world_signals.coverage_integrity import detect_earlier_scheduled_occurrences
 
 
 PUBLIC_FORECAST_ALLOWLIST_VERSION = "world-signals-public-forecast-pilot-v1"
@@ -208,6 +212,29 @@ def _validate_calendar_links(canonical_registry: dict[str, Any]) -> None:
             )
 
 
+def _target_display_label(record: dict[str, Any]) -> str:
+    raw_date = str(record.get("start_local") or record.get("start_utc") or "")[:10]
+    try:
+        date_label = datetime.fromisoformat(raw_date).strftime("%d %b").lstrip("0").upper()
+    except ValueError:
+        date_label = raw_date.upper() or "DATE NOT RECORDED"
+    title = str(record.get("short_calendar_title") or "scheduled occurrence").upper()
+    kind = "DECISION" if record.get("event_type") == "DECISION" or "DECISION" in title else "SCHEDULED OCCURRENCE"
+    return f"FORECAST TARGET / {date_label} {kind}"
+
+
+def _local_display(row: dict[str, Any]) -> str:
+    raw = row.get("start_utc")
+    zone_name = row.get("source_timezone")
+    if not isinstance(raw, str) or not isinstance(zone_name, str):
+        return str(raw or "date not recorded")
+    try:
+        local = datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone(ZoneInfo(zone_name))
+    except (ValueError, KeyError):
+        return str(raw)
+    return f"{local.day} {local:%b} · {local:%H:%M} {local.tzname()}"
+
+
 def _public_row(row: dict[str, Any], calendar_registry: dict[str, Any] | None = None) -> dict[str, Any]:
     forecast_id = row["forecast_id"]
     resolution = row["resolution"]
@@ -248,6 +275,29 @@ def _public_row(row: dict[str, Any], calendar_registry: dict[str, Any] | None = 
             "occurrence_id": link["occurrence_id"],
             "title": record.get("short_calendar_title") or record.get("canonical_name"),
             "start_utc": record.get("start_utc"),
+        }
+        chronology = detect_earlier_scheduled_occurrences(
+            row,
+            calendar_registry,
+            target_occurrence_id=link["occurrence_id"],
+        )
+        public["forecast_target"] = {
+            "occurrence_id": link["occurrence_id"],
+            "series_id": record.get("series_id"),
+            "start_utc": record.get("start_utc"),
+            "display_label": _target_display_label(record),
+        }
+        public["chronology"] = {
+            "classification": chronology["classification"],
+            "earlier_scheduled_occurrences": [
+                {
+                    **earlier,
+                    "display_label": _local_display(earlier),
+                    "public_note": "Tracked in Calendar; no public Forecast was issued for this event.",
+                }
+                for earlier in chronology["earlier_occurrences"]
+            ],
+            "automatic_forecast_backfill": False,
         }
     return public
 

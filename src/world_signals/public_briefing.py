@@ -190,6 +190,7 @@ def build_public_briefing(
             "importance_score": None,
             "world_state_projection": "CLOSED",
             "relationship_projection": "CLOSED",
+            "forecast_target_semantics": "NEXT_TO_RESOLVE_IS_FORECAST_RESOLUTION;_CALENDAR_IS_SCHEDULED_EVENT_CHRONOLOGY",
         },
         "forecast_resolution": forecast,
         "calendar": {
@@ -208,6 +209,7 @@ def build_public_briefing(
         "latest_reviewed_analysis": latest_analysis,
         "limitations": [
             "The three lanes are chronological/recency projections, not an importance ranking.",
+            "NEXT TO RESOLVE identifies the earliest open public Forecast resolution; it is not a claim about the next scheduled event in every source family.",
             "No global score, political prioritisation or new analytical claim is created.",
             "The Calendar lane advances with explicit device display time; source timing remains in the event detail.",
         ],

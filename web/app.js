@@ -435,6 +435,13 @@ function forecastValueMarkup(row){
     return `<div class="probability-row" role="listitem"><div class="probability-label"><span>${esc(outcome.label)}</span><strong>${pct}%</strong></div><div class="probability-track" aria-hidden="true"><span style="width:${pct}%"></span></div></div>`;
   }).join('')}</div>`;
 }
+function forecastTargetMarkup(row){
+  const target=row.forecast_target;
+  if(!target) return '';
+  const earlier=(row.chronology?.earlier_scheduled_occurrences||[]);
+  if(!earlier.length) return `<div class="forecast-target-context"><span>FORECAST COVERAGE</span><strong>${esc(target.display_label)}</strong></div>`;
+  return `<div class="forecast-target-context"><span>FORECAST COVERAGE</span><strong>${esc(target.display_label)}</strong><div class="forecast-earlier-occurrence"><small>Earlier scheduled occurrence</small>${earlier.map(event=>`<a href="#event=${encodeURIComponent(event.occurrence_id)}">${esc(event.display_label)} · Calendar</a><em>${esc(event.public_note)}</em>`).join('')}</div></div>`;
+}
 function renderOutlook(){
   const rows=OUTLOOK.forecasts||[];
   const state=OUTLOOK.metadata?.information_cutoff_state;
@@ -446,9 +453,10 @@ function renderOutlook(){
     const anchor=`forecast-${row.forecast_id}`;
     const calendar=row.calendar_event;
     return `<article class="forecast-card">
-      <header class="forecast-card-head" id="${esc(anchor)}"><div><p class="eyebrow">${esc(row.institution)}</p><h3>${esc(utcDateLabel(resolution.window_start_at_utc))}</h3></div><span class="forecast-state">UNRESOLVED</span></header>
+      <header class="forecast-card-head" id="${esc(anchor)}"><div><p class="eyebrow">${esc(row.institution)}</p><h3>${esc(row.forecast_target?.display_label||`FORECAST TARGET / ${utcDateLabel(resolution.window_start_at_utc)}`)}</h3></div><span class="forecast-state">UNRESOLVED</span></header>
       <p class="forecast-target">${esc(row.target_label)}</p>
       ${forecastValueMarkup(row)}
+      ${forecastTargetMarkup(row)}
       <div class="forecast-lifecycle" aria-label="Forecast lifecycle"><span>ISSUED<br><strong>${esc(utcDateLabel(row.issued_at_utc))}</strong></span><i aria-hidden="true">━●━━━━━━━━○</i><span>RESOLVES<br><strong>${esc(utcDateLabel(resolution.window_start_at_utc))}</strong></span></div>
       <div class="forecast-when"><span>WHAT SETTLES THIS?</span><strong>${esc(resolution.source_label)}</strong><small>Outcome pending · Evaluation remains NO_SAMPLE</small>${calendar?`<a href="#event=${encodeURIComponent(calendar.occurrence_id)}">Open calendar event →</a>`:''}</div>
       <details class="forecast-disclosure"><summary>Understand this forecast</summary><dl><dt>Question</dt><dd>${esc(row.question)}</dd><dt>Issued</dt><dd>${esc(utcLabel(row.issued_at_utc))} UTC</dd><dt>Information cutoff</dt><dd>${esc(utcLabel(row.information_cutoff_at_utc))} UTC</dd><dt>Resolution rule</dt><dd>${esc(resolution.resolution_rule)}</dd><dt>Resolution source</dt><dd>${esc(resolution.source_label)}</dd><dt>Rationale</dt><dd>${esc(row.public_rationale)}</dd>${calendar?`<dt>Calendar</dt><dd><a href="#event=${encodeURIComponent(calendar.occurrence_id)}">Open the resolution event →</a></dd>`:''}<dt>Outcome / evaluation</dt><dd>Outcome pending · Evaluation remains NO_SAMPLE</dd></dl></details>

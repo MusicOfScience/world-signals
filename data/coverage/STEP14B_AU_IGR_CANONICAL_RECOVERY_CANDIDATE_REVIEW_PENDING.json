@@ -1,0 +1,50 @@
+{
+  "artifact_type": "CANONICAL_RECOVERY_CANDIDATE",
+  "candidate_id": "WSCAND-AU-IGR-20260921-001",
+  "review_state": "CANDIDATE_REVIEW_REQUIRED",
+  "identity": "2026 Intergenerational Report",
+  "institution": "Australian Treasury",
+  "jurisdiction": ["Australia"],
+  "category": "FISCAL_SOVEREIGN_FINANCE",
+  "event_type": "INFORMATION_RELEASE",
+  "record_class": "OCCURRENCE",
+  "publication": {
+    "date": "2026-09-21",
+    "timing_precision": "CIVIL_DATE",
+    "effective_utc": null,
+    "first_announced_at": "2026-09-09",
+    "first_discovered_at_utc": "2026-09-28T14:17:45Z",
+    "source_id_candidates": [
+      "WSSRC-CANDIDATE-AU-TREASURY-IGR-001",
+      "WSSRC-CANDIDATE-AU-TREASURY-MINISTERS-001"
+    ],
+    "publication_source_url": "https://treasury.gov.au/publication/2026-intergenerational-report",
+    "announcement_source_url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/speeches/address-super-members-council-smc-super-summit-parliament-house-canberra"
+  },
+  "series": {
+    "proposed_series_id": "WSSER-CANDIDATE-AU-TREASURY-STRATEGIC-PUBLICATION",
+    "series_status": "REVIEW_REQUIRED_NO_RECURRENCE_INVENTED",
+    "recurrence": null
+  },
+  "lifecycle_candidate": "COMPLETED",
+  "related_documents": [
+    {"document_type": "MAIN_REPORT", "calendar_occurrence_created": false},
+    {"document_type": "FACT_SHEET", "calendar_occurrence_created": false},
+    {"document_type": "CHART_DATA", "calendar_occurrence_created": false}
+  ],
+  "analytical_intake": {
+    "classification": "OFFICIAL_PROJECTION",
+    "world_state_intake": "OFFICIAL_PROJECTION_ONLY_NO_INTAKE",
+    "forecast_intake": "NO_AUTOMATIC_FORECAST",
+    "scenario_intake": "NO_AUTOMATIC_SCENARIO",
+    "planned_inventory_only": [
+      "baseline/current values",
+      "demographic/fiscal/productivity/AI/energy/geopolitical projections",
+      "alternative or sensitivity material",
+      "assumptions and benchmark definitions"
+    ]
+  },
+  "canonical_write_permitted": false,
+  "world_state_write_permitted": false,
+  "public_projection_permitted": false
+}

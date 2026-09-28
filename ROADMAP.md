@@ -712,6 +712,19 @@ about 10 is not a forecast surprise. Both candidates remain internal,
 `REVIEW_PENDING`, and require explicit human disposition. Production World
 State, Baseline, downstream layers and public projection remain unchanged.
 
+## Stage 34 — coverage integrity / RBA target chronology / IGR discovery — IMPLEMENTED / REVIEW-GATED
+
+Migration Step 14B adds a read-only chronology detector so public Forecasts
+cannot be mistaken for the next scheduled occurrence in their Canonical
+family. The RBA 3 November Forecast explicitly discloses the earlier 29
+September Calendar occurrence, while the original prospective-pilot exclusion
+remains authoritative and no September Forecast is backfilled. The tranche
+retains a `PROSPECTIVE_DISCOVERY_MISS` audit for the 2026 Australian IGR,
+separate Treasury source candidates, a review-pending Canonical recovery
+candidate and an exact-date strategic-publication discovery contract. IGR
+projections remain `OFFICIAL_PROJECTION`; no production or public IGR state is
+created.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

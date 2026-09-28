@@ -1,0 +1,50 @@
+{
+  "artifact_type": "SOURCE_GOVERNANCE_CANDIDATES",
+  "artifact_id": "STEP14B_AU_TREASURY_SOURCE_GOVERNANCE_CANDIDATES_v0.1",
+  "review_state": "CANDIDATE_REVIEW_REQUIRED",
+  "production_registry_write": false,
+  "candidates": [
+    {
+      "proposed_source_id": "WSSRC-CANDIDATE-AU-TREASURY-IGR-001",
+      "institution": "Australian Treasury",
+      "jurisdiction": "Australia",
+      "authority_role": "AUTHORITATIVE_PUBLICATION_REPORT",
+      "authoritative_url": "https://treasury.gov.au/publication/2026-intergenerational-report",
+      "stable_index_url": "https://treasury.gov.au/publication",
+      "source_type_candidate": "OFFICIAL_PUBLICATION",
+      "information_supplied": "Intergenerational Reports and related Treasury strategic publications",
+      "rights_evidence_url": "https://treasury.gov.au/copyright",
+      "rights_result": "CC_BY_4_GENERAL_CONTENT_WITH_THIRD_PARTY_AND_BRANDING_EXCEPTIONS",
+      "robots_result": "PUBLISHED_ROBOTS_200_PUBLICATION_PATH_NOT_DISALLOWED",
+      "feed_result": "NO_RSS_ROUTE_ESTABLISHED_IN_STEP14B; SITEMAP_INDEX_AVAILABLE",
+      "automated_monitoring_permission": "REVIEW_REQUIRED_NOT_INFERRED",
+      "redistribution_permission": "REVIEW_REQUIRED_FOR_EACH_ASSET_AND_THIRD_PARTY_CONTENT",
+      "canonical_provenance_use": "CANDIDATE_ONLY",
+      "automatic_admission": false
+    },
+    {
+      "proposed_source_id": "WSSRC-CANDIDATE-AU-TREASURY-MINISTERS-001",
+      "institution": "Treasury Ministers",
+      "jurisdiction": "Australia",
+      "authority_role": "AUTHORITATIVE_MINISTERIAL_ANNOUNCEMENT",
+      "authoritative_url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/media-releases/2026-intergenerational-report",
+      "stable_index_url": "https://ministers.treasury.gov.au/",
+      "source_type_candidate": "OFFICIAL_MINISTERIAL_RELEASE_AND_SPEECH",
+      "information_supplied": "Advance release announcements and ministerial publication context",
+      "rights_evidence_url": null,
+      "rights_result": "SOURCE_SPECIFIC_TERMS_NOT_ESTABLISHED; DO_NOT_INFER_FROM_PUBLIC_ACCESS",
+      "robots_result": "PUBLISHED_ROBOTS_200_PUBLICATION_PATH_NOT_DISALLOWED",
+      "feed_result": "NO_RSS_ROUTE_ESTABLISHED_IN_STEP14B; SITEMAP_INDEX_AVAILABLE",
+      "automated_monitoring_permission": "REVIEW_REQUIRED_NOT_INFERRED",
+      "redistribution_permission": "REVIEW_REQUIRED_NOT_INFERRED",
+      "canonical_provenance_use": "CANDIDATE_ONLY",
+      "automatic_admission": false
+    }
+  ],
+  "governance_notes": [
+    "Treasury publication authority and ministerial advance-date discovery remain separate source roles even within one portfolio.",
+    "Robots compatibility is operational crawler-policy evidence, not a licence or legal opinion.",
+    "A media report is not an authority substitute for either first-party source.",
+    "No live adapter, source registry entry or automatic polling route is created by this artifact."
+  ]
+}

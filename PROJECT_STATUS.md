@@ -347,6 +347,17 @@ surprise, and the boundaries between climatology, forecast, impact and
 attribution. No production admission, Baseline population, downstream layer,
 public projection or governed-data mutation occurred.
 
+Migration Step 14B records a prospective coverage-integrity correction. Public
+Forecast cards now identify their exact target occurrence and disclose an
+earlier same-family scheduled occurrence when one exists; the RBA 3 November
+Forecast therefore does not imply that 3 November is the next RBA decision.
+The 29 September occurrence remains Calendar-only because the prospective pilot
+audit deliberately excluded it at the 26 September cutoff. The tranche also
+retains a review-pending IGR coverage-gap audit, two non-admitted Treasury
+source-governance candidates, a Canonical recovery candidate and a bounded
+strategic-publication discovery contract. No production source, Canonical,
+World State, Forecast, Scenario or public IGR state was written.
+
 ## Recovery incident note — CH branch initialisation
 
 During the CH state-truth tranche, an empty `data/status/.gitkeep` was accidentally written directly to `main` before the feature branch existed. It touched no governed population or contract file. The file was immediately deleted in the next `main` commit, restoring the post-CG tree before CH implementation proceeded from a fresh branch. This operational mistake is retained rather than hidden; future branch initialisation must create the branch before any contents write.
