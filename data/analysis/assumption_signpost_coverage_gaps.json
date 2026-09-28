@@ -1,0 +1,60 @@
+{
+  "contract": "WORLD_SIGNALS_ASSUMPTION_SIGNPOST_COVERAGE_GAP",
+  "version": "0.1",
+  "definition_set_id": "WSASMDSET-AU-IGR-20260929-001",
+  "classification": "INTERNAL_ONLY",
+  "gaps": [
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Revision-stable multi-year decomposition of labour productivity, MFP, capital deepening, hours/output and service measurement.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Age-specific and mature-cohort completed-fertility series capable of distinguishing postponement from lower completed family size.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Several comparable annual NOM observations plus visa, age/skill and temporary/permanent composition and absorption context.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PARTICIPATION",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Comparable age-sex cohort participation linked to employment, average hours, underemployment and relevant constraints.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Representative business adoption, complementary investment and task/reallocation series linked to measured productivity.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Governed project-stage, grid connection, generation/storage/transmission, system cost and reliability observations from suitable first-party families.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-HEALTH_COST",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Comparable age-sex adjusted health program cost and non-demographic unit-cost series.",
+      "route_created": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "gap_code": "SOURCE_COVERAGE_GAP",
+      "needed": "Multi-year fiscal outturns and authoritative enacted-policy references distinguished from the maintained 24.2% convention.",
+      "route_created": false
+    }
+  ],
+  "gap_count": 8,
+  "route_created": false,
+  "monitoring_authorised": false,
+  "automated_retrieval_authorised": false
+}

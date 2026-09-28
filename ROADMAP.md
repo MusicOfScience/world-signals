@@ -786,3 +786,14 @@ domain-specific persistence gates and explicit source-coverage gaps guide
 human review only. No monitoring route, Analysis revision, Forecast, Scenario,
 Relationship, Risk, World State, or public output is created. Independent
 historical backtest acceptance remains DEFERRED.
+
+## Stage 39 — governed IGR signposts (Step 14H)
+
+Step 14H admits the reusable internal signpost-definition contract, the exact
+15 reviewed definitions and eight source-coverage gaps, plus one immutable
+assessment snapshot at the reviewed 28 September 2026 evidence cutoff. All
+eight workflow states remain `OBSERVE`; no monitoring/retrieval, Analysis
+revision, downstream population or public projection is authorised. The
+independent historical backtest remains `DEFERRED`. Future evidence must be
+recorded in a new snapshot and reviewed; it cannot rewrite this initial
+historical assessment.

@@ -1,0 +1,392 @@
+{
+  "contract": "WORLD_SIGNALS_ASSUMPTION_SIGNPOST",
+  "contract_version": "0.1",
+  "definition_set_id": "WSASMDSET-AU-IGR-20260929-001",
+  "analysis_id": "WSAN-AU-IGR-20260921-001",
+  "analysis_extension_sha256": "96a00e77f7f9d43a59dafb4988c89cac933ce5cacd703f37399782f0be238668",
+  "status": "ADMITTED",
+  "source_manifest_sha256": "2d5b7a6962cbfc4dfc404c7a37ebc002c714d4cf0d4a062f25d49ceb2a855186",
+  "visibility": "INTERNAL_ONLY",
+  "definitions": [
+    {
+      "signpost_id": "WSIGN-AU-IGR-01-PRODUCTIVITY-CYCLE",
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "metric_or_observation": "Annual labour productivity growth",
+      "source_family": "PC_USING_ABS",
+      "observation_type": "RATE",
+      "comparison_basis": "ABS/PC compatible annual national-accounts vintage",
+      "observation_frequency": "Quarterly; interpret annual growth as a noisy cycle measure",
+      "minimum_persistence": "One annual print is contextual only; seek at least 12 comparable quarters across three years before routine review",
+      "structural_break_condition": "A sustained three-year underlying divergence, or a material historical/method revision, triggers review; one quarter does not",
+      "review_trigger": "Request analyst review only if this condition is evidenced: A sustained three-year underlying divergence, or a material historical/method revision, triggers review; one quarter does not. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Revisions, cycle position, hours/output denominator differences, industry mix and services measurement",
+      "source_refs": [
+        {
+          "source_id": "PC-PRODUCTIVITY2026Q2",
+          "locator": "PC-PRODUCTIVITY2026Q2: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The admitted -0.2% year-to-June-2026 observation is one annual growth measure and does not test a 1.2% long-run convergence assumption.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-02-PRODUCTIVITY-UNDERLYING",
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "metric_or_observation": "Underlying labour productivity, MFP, capital deepening and hours/output revisions",
+      "source_family": "ABS_WITH_PRODUCTIVITY_COMMISSION_CONTEXT",
+      "observation_type": "TREND",
+      "comparison_basis": "Comparable national-accounts and productivity vintages; separate labour productivity, MFP and capital deepening",
+      "observation_frequency": "Annual, with quarterly releases retained as components",
+      "minimum_persistence": "At least three years of comparable revised observations; inspect hours/output and services methods separately",
+      "structural_break_condition": "Review if the multi-year underlying path remains materially away from the convergence path or official methods/vintage change",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if the multi-year underlying path remains materially away from the convergence path or official methods/vintage change. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Revisions, cyclical utilisation, capital quality, industry composition and service-output measurement",
+      "source_refs": [
+        {
+          "source_id": "PC-PRODUCTIVITY2026Q2",
+          "locator": "PC-PRODUCTIVITY2026Q2: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "Current admitted evidence lacks a sufficiently long, revision-stable decomposition of MFP, capital deepening and services measurement.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-03-PRODUCTIVITY-METHOD",
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "metric_or_observation": "Official productivity measurement or IGR model-vintage revision",
+      "source_family": "ABS_AND_AU_TREASURY",
+      "observation_type": "MODEL_REVISION",
+      "comparison_basis": "Compare published methodology and vintage notes; do not splice incompatible series",
+      "observation_frequency": "Release/event driven",
+      "minimum_persistence": "One confirmed material methodology or model-basis revision is sufficient for analyst review, not for a state conclusion",
+      "structural_break_condition": "Material revision to measurement, source series, or Treasury long-run productivity basis triggers reassessment",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Material revision to measurement, source series, or Treasury long-run productivity basis triggers reassessment. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Routine rebasing or benchmark revisions may change historical levels without changing the underlying mechanism",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "PC-PRODUCTIVITY2026Q2",
+          "locator": "PC-PRODUCTIVITY2026Q2: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No later admitted methodology or model-vintage revision is present in the bounded evidence.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-04-FERTILITY-PERIOD",
+      "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+      "metric_or_observation": "Registered-period TFR and age-specific fertility rates",
+      "source_family": "ABS",
+      "observation_type": "RATE",
+      "comparison_basis": "Distinguish registration-year TFR from occurrence-year and age-specific series; comparable ABS vintage",
+      "observation_frequency": "Annual",
+      "minimum_persistence": "At least three consecutive comparable annual observations can trigger review of period rates, not completed cohort fertility",
+      "structural_break_condition": "Review if low period fertility persists across multiple years and age-specific profiles show no timing catch-up",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if low period fertility persists across multiple years and age-specific profiles show no timing catch-up. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Birth registration lag, revisions, postponement and tempo effects",
+      "source_refs": [
+        {
+          "source_id": "ABS-BIRTHS2024",
+          "locator": "ABS-BIRTHS2024: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The admitted 2024 registered-birth TFR is 1.481 births per woman; it is not completed cohort fertility and does not resolve postponement.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-05-FERTILITY-COHORT",
+      "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+      "metric_or_observation": "Cohort completed fertility and later-age catch-up",
+      "source_family": "ABS",
+      "observation_type": "COMPOSITION",
+      "comparison_basis": "Cohort-by-age fertility profiles through sufficiently mature reproductive ages",
+      "observation_frequency": "Annual cohort updates; completed cohort comparison is slow-moving",
+      "minimum_persistence": "Require mature cohort evidence and age-specific catch-up analysis; a single period TFR cannot trigger structural reassessment",
+      "structural_break_condition": "Review only when cohort completion indicates persistently lower completed family size rather than delayed timing",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review only when cohort completion indicates persistently lower completed family size rather than delayed timing. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Cohort censoring, migration, registration and compositional effects",
+      "source_refs": [
+        {
+          "source_id": "ABS-BIRTHS2024",
+          "locator": "ABS-BIRTHS2024: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No admitted mature-cohort completed-fertility observation is pinned.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-06-MIGRATION-FLOW",
+      "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+      "metric_or_observation": "Annual net overseas migration (NOM)",
+      "source_family": "ABS",
+      "observation_type": "RATE",
+      "comparison_basis": "ABS annual NOM definition and revised moving annual totals; compare with 235,000/year technical convention without treating it as a forecast",
+      "observation_frequency": "Quarterly releases; annual flow assessment",
+      "minimum_persistence": "At least three annual observations under comparable definitions before treating a deviation as durable",
+      "structural_break_condition": "Persistent multi-year deviation or a verified statistical-definition break triggers review; one post-pandemic high year does not",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Persistent multi-year deviation or a verified statistical-definition break triggers review; one post-pandemic high year does not. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Moving annual totals, estimate revisions, temporary/permanent mix and policy changes",
+      "source_refs": [
+        {
+          "source_id": "ABS-POP2026Q1",
+          "locator": "ABS-POP2026Q1: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The admitted year-to-March-2026 NOM of 292,100 is above 235,000, but is one moving annual total and not evidence of a durable long-run regime.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-07-MIGRATION-COMPOSITION",
+      "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+      "metric_or_observation": "Visa composition, age/skill mix, temporary/permanent balance and absorption constraints",
+      "source_family": "ABS_AND_AU_TREASURY",
+      "observation_type": "COMPOSITION",
+      "comparison_basis": "Compare like visa and population categories; separately examine housing/infrastructure capacity evidence",
+      "observation_frequency": "Annual and policy-event driven",
+      "minimum_persistence": "Several annual comparable cohorts, unless a formal durable policy regime change is enacted",
+      "structural_break_condition": "A durable policy change or persistent composition shift with independently measured absorption constraints triggers review",
+      "review_trigger": "Request analyst review only if this condition is evidenced: A durable policy change or persistent composition shift with independently measured absorption constraints triggers review. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Category changes, visa processing, student flows and housing supply lags",
+      "source_refs": [
+        {
+          "source_id": "ABS-POP2026Q1",
+          "locator": "ABS-POP2026Q1: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The admitted NOM and population snapshots do not establish visa composition, skill mix or absorption constraints.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-08-PARTICIPATION-DELIVERY",
+      "assumption_id": "WSASM-AU-IGR-2026-PARTICIPATION",
+      "metric_or_observation": "Age-sex cohort participation, employment, average hours, underemployment and constraints",
+      "source_family": "ABS",
+      "observation_type": "COMPOSITION",
+      "comparison_basis": "Cohort/lifecycle series with employment and hours; separate caring, health/disability and older-worker channels where measured",
+      "observation_frequency": "Monthly releases as context; annual cohort and hours review",
+      "minimum_persistence": "At least four quarters for short-run context and three annual comparable observations for structural review",
+      "structural_break_condition": "Review if persistent cohort/hours delivery diverges after composition, underemployment and method are considered",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if persistent cohort/hours delivery diverges after composition, underemployment and method are considered. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Survey error, population weights, hours mix, underemployment and Supplementary Survey methodology",
+      "source_refs": [
+        {
+          "source_id": "ABS-LABOUR2026M8",
+          "locator": "ABS-LABOUR2026M8: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The admitted 67.0% trend participation rate for people 15+ is aggregate and explicitly not comparable to the IGR's structural cohort participation rule.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-09-AI-ADOPTION",
+      "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "metric_or_observation": "Business AI adoption, complementary capital, task exposure and organisational re-design",
+      "source_family": "ABS_OR_REVIEWED_FIRST_PARTY_SERIES_REQUIRED",
+      "observation_type": "COMPOSITION",
+      "comparison_basis": "Separate adoption, investment, exposure, substitution/reallocation and complementary organisational change",
+      "observation_frequency": "Annual where representative series exist",
+      "minimum_persistence": "At least three annual evidence sets; adoption alone never validates realised productivity gains",
+      "structural_break_condition": "Review when adoption and complementary investment are measurable and linked to later realised productivity evidence",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review when adoption and complementary investment are measurable and linked to later realised productivity evidence. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Selection bias, self-reporting, task exposure not equal use, displacement and sector composition",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No admitted representative AI adoption, investment or task-exposure time series is linked to the IGR claim.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-10-AI-REALISATION",
+      "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "metric_or_observation": "Measured productivity outcomes associated with AI diffusion",
+      "source_family": "ABS_WITH_REVIEWED_PRODUCTIVITY_EVIDENCE_REQUIRED",
+      "observation_type": "TREND",
+      "comparison_basis": "Link measured productivity to adoption/investment while accounting for sector, capital and labour reallocation",
+      "observation_frequency": "Annual productivity evidence; multi-year horizon",
+      "minimum_persistence": "Multiple years and explicit identification limits; adoption up alone is not evidence that 1.2% is achieved",
+      "structural_break_condition": "Review if sustained realised productivity evidence or a verified model-basis revision materially changes the productivity mechanism",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if sustained realised productivity evidence or a verified model-basis revision materially changes the productivity mechanism. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Attribution, lags, intangible investment, service output and survivor bias",
+      "source_refs": [
+        {
+          "source_id": "PC-PRODUCTIVITY2026Q2",
+          "locator": "PC-PRODUCTIVITY2026Q2: admitted IGR source/evidence"
+        },
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The single admitted productivity observation is not AI-attributed and cannot validate an AI contribution.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-11-ENERGY-DELIVERY",
+      "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "metric_or_observation": "Project commitment through approval, construction, connection and observed generation/storage/transmission",
+      "source_family": "AEMO_DCCEEW_GOVERNED_SERIES_GAP",
+      "observation_type": "IMPLEMENTATION_STATE",
+      "comparison_basis": "Keep SAID, DECIDED, AUTHORISED, IMPLEMENTED and OBSERVED distinct; connect project identifiers across stages",
+      "observation_frequency": "Quarterly project pipeline and annual observed system delivery",
+      "minimum_persistence": "A single announcement is not delivery; assess multiple project/system outcomes over several years",
+      "structural_break_condition": "Review if verified delivery or persistent delivery shortfall changes the model's implementation premise; formal policy/system redesign may trigger structural review",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if verified delivery or persistent delivery shortfall changes the model's implementation premise; formal policy/system redesign may trigger structural review. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Project cancellations, connection queues, capacity factors, curtailment and transmission bottlenecks",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No independently governed AEMO/DCCEEW project-to-observed-delivery series is pinned; no monitoring route is created.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-12-ENERGY-COST-RELIABILITY",
+      "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "metric_or_observation": "Observed generation mix, storage/transmission availability, system costs, reliability and transport-excise erosion",
+      "source_family": "AEMO_DCCEEW_GOVERNED_SERIES_GAP",
+      "observation_type": "LEVEL",
+      "comparison_basis": "Source-native operational and fiscal measures with consistent coverage; physical damages remain separately bounded",
+      "observation_frequency": "Quarterly operations; annual costs and fiscal measures",
+      "minimum_persistence": "Multiple annual outcomes or one verified structural system/policy change; commitments alone do not suffice",
+      "structural_break_condition": "Review if measured cost/reliability or excise-base changes materially alter the IGR pathway; physical climate damage requires its own observed series",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if measured cost/reliability or excise-base changes materially alter the IGR pathway; physical climate damage requires its own observed series. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Weather variability, fuel prices, outage mix, system boundaries and partial damage model",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No admitted independent operational cost/reliability/physical-damage panel is available for this candidate.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-13-FISCAL-POLICY",
+      "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "metric_or_observation": "Enacted tax settings and formal policy changes versus maintained 24.2% of GDP model convention",
+      "source_family": "AU_TREASURY_MANUAL_ONLY",
+      "observation_type": "POLICY_STATE",
+      "comparison_basis": "Distinguish technical closure from enacted law, annual Budget decisions and observed receipts",
+      "observation_frequency": "Budget/event driven",
+      "minimum_persistence": "A verified enacted material policy change can trigger immediate model-basis review; a Budget that merely retains the cap does not validate it",
+      "structural_break_condition": "Structural reassessment if tax-cap basis changes or enacted settings invalidate the maintained convention",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Structural reassessment if tax-cap basis changes or enacted settings invalidate the maintained convention. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Announcements versus legislation, future offset discretion and cyclical denominator effects",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "The 24.2% ceiling is a maintained policy setting, not perpetual law; no independent current receipts/policy panel is admitted here.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-14-FISCAL-OUTCOMES",
+      "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "metric_or_observation": "Observed tax receipts/GDP, spending, debt and interest-cost paths",
+      "source_family": "AU_TREASURY_MANUAL_ONLY",
+      "observation_type": "TREND",
+      "comparison_basis": "Use audited/official fiscal outturns and consistent denominators; separate model convention from realised outcome",
+      "observation_frequency": "Annual Budget/outturn; quarterly where authoritative",
+      "minimum_persistence": "Several annual outturns before trend review; explicit law or accounting-basis revision can trigger immediate review",
+      "structural_break_condition": "Review on persistent outturn divergence or model-basis change; no inference from one Budget holding a convention",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review on persistent outturn divergence or model-basis change; no inference from one Budget holding a convention. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Nominal GDP revisions, one-off receipts, policy offsets and accounting changes",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No independent multi-year fiscal outturn panel is pinned to this candidate.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    },
+    {
+      "signpost_id": "WSIGN-AU-IGR-15-HEALTH-COST",
+      "assumption_id": "WSASM-AU-IGR-2026-HEALTH_COST",
+      "metric_or_observation": "Age-sex adjusted program health spending and non-demographic unit-cost growth",
+      "source_family": "AIHW_GOVERNED_SERIES_GAP",
+      "observation_type": "TREND",
+      "comparison_basis": "Separate demographic volume, service mix, price/unit cost and program coverage; compare definitions to IGR method",
+      "observation_frequency": "Annual",
+      "minimum_persistence": "At least three comparable annual age-adjusted releases; no inference from aggregate spending alone",
+      "structural_break_condition": "Review if persistent comparable unit-cost divergence or model/method revision materially changes extrapolation",
+      "review_trigger": "Request analyst review only if this condition is evidenced: Review if persistent comparable unit-cost divergence or model/method revision materially changes extrapolation. It cannot itself falsify the long-horizon assumption or promote another layer.",
+      "false_positive_risks": "Coverage/rebate changes, program transfer, service mix, demographics and price deflators",
+      "source_refs": [
+        {
+          "source_id": "IGR2026-MAIN",
+          "locator": "IGR2026-MAIN: admitted IGR source/evidence"
+        }
+      ],
+      "limitations": [
+        "No independent, age-sex adjusted health-cost panel is included in admitted evidence; AIHW source coverage is a gap, not a route.",
+        "No probability, score, ranking, or automatic disposition is produced."
+      ]
+    }
+  ],
+  "definition_count": 15,
+  "revision_policy": "IMMUTABLE; explicit future revision/supersession transaction required",
+  "definition_set_sha256": "4474b28f08c50381cf3942cecdd95f1f96e7fd255f3654985b8645508bf4cc20"
+}

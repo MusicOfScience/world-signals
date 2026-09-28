@@ -1,0 +1,319 @@
+{
+  "version": "0.1",
+  "classification": "INTERNAL_ONLY",
+  "snapshots": [
+    {
+      "snapshot_id": "WSASMSNAP-AU-IGR-20260928-001",
+      "snapshot_revision": 1,
+      "contract": "WORLD_SIGNALS_ASSUMPTION_SIGNPOST_ASSESSMENT_SNAPSHOT",
+      "contract_version": "0.1",
+      "definition_set_id": "WSASMDSET-AU-IGR-20260929-001",
+      "analysis_id": "WSAN-AU-IGR-20260921-001",
+      "candidate_semantic_fingerprint": "0d6fc09c1dd84dd8f009a39d01795a26efa9b580d9716160f47370a3db4f2f5b",
+      "source_manifest_sha256": "2d5b7a6962cbfc4dfc404c7a37ebc002c714d4cf0d4a062f25d49ceb2a855186",
+      "analysis_sha256": "9e108606a6354ef8862f186db3418207155ff85f65e828079aeec616b8ee3ed0",
+      "analysis_extension_sha256": "96a00e77f7f9d43a59dafb4988c89cac933ce5cacd703f37399782f0be238668",
+      "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+      "analysis_content_as_of_utc": "2026-09-28T16:25:00Z",
+      "review_id": "WS-STEP14H-AU-IGR-SIGNPOST-REVIEW-20260929-001",
+      "admission_transaction_id": "WS-ASSUMPTION-SIGNPOST-ADMISSION-AU-IGR-20260929-001",
+      "reviewed_at_utc": "2026-09-28T22:15:04Z",
+      "admitted_at_utc": "2026-09-28T22:15:04Z",
+      "assessment_count": 8,
+      "assessments": [
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [],
+          "why": "No representative adoption/complementary-capital series or AI-attributed realised productivity evidence is admitted. Adoption alone would not validate productivity.",
+          "minimum_evidence_to_change_state": "Multiple annual adoption/investment observations plus later realised productivity evidence with explicit attribution limits.",
+          "next_useful_observation": "Business AI adoption, complementary capital, task exposure and organisational re-design",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [],
+          "why": "No independently governed project-to-implementation/observed-delivery and cost/reliability series is pinned. Announcements are not implementation or delivered generation.",
+          "minimum_evidence_to_change_state": "Linked project stages and multiple years of observed system outcomes; material formal policy/system redesign may trigger review.",
+          "next_useful_observation": "Project commitment through approval, construction, connection and observed generation/storage/transmission",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [
+            "WSOBAUD-TFR2024"
+          ],
+          "why": "The admitted 2024 registered-period TFR is 1.481 births per woman versus the IGR assumption value 1.34; this numerical difference is not a like-for-like test without aligning period/cohort basis and vintage, and no mature-cohort evidence is admitted.",
+          "minimum_evidence_to_change_state": "Multiple annual age-specific observations plus mature cohort completion/catch-up evidence.",
+          "next_useful_observation": "Registered-period TFR and age-specific fertility rates",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-HEALTH_COST",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [],
+          "why": "The IGR describes an age-sex adjusted cost method, but no independent comparable current cost panel is in the admitted evidence.",
+          "minimum_evidence_to_change_state": "At least three comparable annual age-adjusted unit-cost observations.",
+          "next_useful_observation": "Age-sex adjusted program health spending and non-demographic unit-cost growth",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+          "present_evidence_state": "IN_TENSION_WITH_ASSUMPTION",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [
+            "WSOBAUD-NOM2026Q1",
+            "WSOBAUD-POP2026Q1"
+          ],
+          "why": "Annual NOM of 292,100 to March 2026 is above the 235,000/year technical convention for this window, but one moving annual total is not a durable long-run regime shift.",
+          "minimum_evidence_to_change_state": "At least three annual comparable observations or a verified durable policy/definition regime change.",
+          "next_useful_observation": "Annual net overseas migration (NOM)",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-PARTICIPATION",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [
+            "WSOBAUD-LF2026M8"
+          ],
+          "why": "The 67.0% trend aggregate for age 15+ is not the IGR's cohort/lifecycle structural rule; hours, age-sex cohorts and underemployment are not fully linked.",
+          "minimum_evidence_to_change_state": "Four quarters for context and three annual comparable cohort/hours observations for structural review.",
+          "next_useful_observation": "Age-sex cohort participation, employment, average hours, underemployment and constraints",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+          "present_evidence_state": "AMBIGUOUS",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [
+            "WSOBAUD-PRODUCTIVITY2026Q2"
+          ],
+          "why": "The admitted -0.2% annual labour-productivity growth observation for the year to June 2026 is one cyclical/revisable print, not evidence against or confirmation of the 1.2% underlying long-run convention.",
+          "minimum_evidence_to_change_state": "At least 12 comparable quarters across three years for routine structural review; a confirmed material measurement/model revision can trigger earlier review.",
+          "next_useful_observation": "Annual labour productivity growth",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        },
+        {
+          "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+          "present_evidence_state": "NOT_ENOUGH_EVIDENCE",
+          "workflow_state": "OBSERVE",
+          "evidence_refs": [],
+          "why": "The 24.2% of GDP ceiling is a maintained model policy setting, not enacted perpetual law. No independent multi-year fiscal outturn panel is pinned.",
+          "minimum_evidence_to_change_state": "A verified enacted policy/model-basis change can trigger review immediately; otherwise multiple annual outturns.",
+          "next_useful_observation": "Enacted tax settings and formal policy changes versus maintained 24.2% of GDP model convention",
+          "limitations": [
+            "Present evidence relationship only; not a probability, Forecast, falsification, or World State assessment."
+          ]
+        }
+      ],
+      "signpost_assessments": [
+        {
+          "signpost_id": "WSIGN-AU-IGR-01-PRODUCTIVITY-CYCLE",
+          "evidence_relationship": "AMBIGUOUS",
+          "evidence_refs": [
+            "WSOBAUD-PRODUCTIVITY2026Q2"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The admitted -0.2% year-to-June-2026 observation is one annual growth measure and does not test a 1.2% long-run convergence assumption.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-02-PRODUCTIVITY-UNDERLYING",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [
+            "WSOBAUD-PRODUCTIVITY2026Q2"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "Current admitted evidence lacks a sufficiently long, revision-stable decomposition of MFP, capital deepening and services measurement.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-03-PRODUCTIVITY-METHOD",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [
+            "WSOBAUD-PRODUCTIVITY2026Q2"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No later admitted methodology or model-vintage revision is present in the bounded evidence.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-04-FERTILITY-PERIOD",
+          "evidence_relationship": "AMBIGUOUS",
+          "evidence_refs": [
+            "WSOBAUD-TFR2024"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The admitted 2024 registered-birth TFR is 1.481 births per woman; it is not completed cohort fertility and does not resolve postponement.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-05-FERTILITY-COHORT",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [
+            "WSOBAUD-TFR2024"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No admitted mature-cohort completed-fertility observation is pinned.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-06-MIGRATION-FLOW",
+          "evidence_relationship": "IN_TENSION_WITH_ASSUMPTION",
+          "evidence_refs": [
+            "WSOBAUD-NOM2026Q1",
+            "WSOBAUD-POP2026Q1"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The admitted year-to-March-2026 NOM of 292,100 is above 235,000, but is one moving annual total and not evidence of a durable long-run regime.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-07-MIGRATION-COMPOSITION",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [
+            "WSOBAUD-NOM2026Q1",
+            "WSOBAUD-POP2026Q1"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The admitted NOM and population snapshots do not establish visa composition, skill mix or absorption constraints.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-08-PARTICIPATION-DELIVERY",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [
+            "WSOBAUD-LF2026M8"
+          ],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The admitted 67.0% trend participation rate for people 15+ is aggregate and explicitly not comparable to the IGR's structural cohort participation rule.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-09-AI-ADOPTION",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No admitted representative AI adoption, investment or task-exposure time series is linked to the IGR claim.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-10-AI-REALISATION",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The single admitted productivity observation is not AI-attributed and cannot validate an AI contribution.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-11-ENERGY-DELIVERY",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No independently governed AEMO/DCCEEW project-to-observed-delivery series is pinned; no monitoring route is created.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-12-ENERGY-COST-RELIABILITY",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No admitted independent operational cost/reliability/physical-damage panel is available for this candidate.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-13-FISCAL-POLICY",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "The 24.2% ceiling is a maintained policy setting, not perpetual law; no independent current receipts/policy panel is admitted here.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-14-FISCAL-OUTCOMES",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No independent multi-year fiscal outturn panel is pinned to this candidate.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        },
+        {
+          "signpost_id": "WSIGN-AU-IGR-15-HEALTH-COST",
+          "evidence_relationship": "NOT_COMPARABLE",
+          "evidence_refs": [],
+          "evidence_as_of_utc": "2026-09-28T20:32:40Z",
+          "limitations": [
+            "No independent, age-sex adjusted health-cost panel is included in admitted evidence; AIHW source coverage is a gap, not a route.",
+            "No probability, score, ranking, or automatic disposition is produced."
+          ]
+        }
+      ],
+      "workflow_state_counts": {
+        "OBSERVE": 8,
+        "REVIEW_DUE": 0,
+        "STRUCTURAL_REASSESSMENT_REQUIRED": 0
+      },
+      "historical_backtest_disposition": "DEFERRED",
+      "visibility": "INTERNAL_ONLY",
+      "public_projection_permitted": false,
+      "immutable": true,
+      "limitations": [
+        "Assessment is strictly as of the evidence cutoff; later evidence requires a new immutable snapshot and human review.",
+        "Workflow states direct analyst attention only and are not probability, confidence, severity, risk or truth labels.",
+        "Coverage gaps do not create source routes, monitoring, polling or automated retrieval.",
+        "No Analysis revision or downstream analytical promotion is authorised."
+      ],
+      "snapshot_sha256": "475de60287c54f48295408f743990bc6f33fa26dd62c9c4afee71763a5ac3a30",
+      "human_review_fingerprint": "50739865a5f5577a5a6488832662614026efa29b52c25e3096ba6b088d5ae4f5"
+    }
+  ]
+}

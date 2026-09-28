@@ -1,5 +1,19 @@
 # Executable architecture
 
+## Step 14H — governed internal IGR assumption signposts
+
+`WORLD_SIGNALS_ASSUMPTION_SIGNPOST` is a subordinate, generic Analysis
+contract. Immutable definitions describe review rules; a separate assessment
+snapshot records evidence relationships and analyst workflow at an explicit
+cutoff. The first admitted set contains 15 definitions for eight IGR
+assumptions, eight explicit source-coverage gaps (`route_created: false`), and
+one immutable snapshot. All eight workflow states are `OBSERVE`; this is not an
+automatic evaluator, source route, Analysis revision or downstream assessment.
+Evidence cutoff, Analysis content cutoff, human review and admission times are
+distinct. Knowledge-as-of selection is gated by admission time. The historical
+backtest remains `DEFERRED`; all signpost records remain `INTERNAL_ONLY` and
+public projection is prohibited.
+
 ## Step 14G — candidate-only IGR assumption signposts
 
 `STEP14G_AU_IGR_ASSUMPTION_SIGNPOSTS_REVIEW_PENDING.json` operationalises

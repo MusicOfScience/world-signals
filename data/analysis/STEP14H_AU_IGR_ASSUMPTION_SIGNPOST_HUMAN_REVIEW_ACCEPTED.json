@@ -1,0 +1,78 @@
+{
+  "review_id": "WS-STEP14H-AU-IGR-SIGNPOST-REVIEW-20260929-001",
+  "record_type": "ASSUMPTION_SIGNPOST_HUMAN_REVIEW",
+  "reviewer_role": "PROJECT_OWNER_EXPLICIT_HUMAN_DECISION",
+  "reviewed_at_utc": "2026-09-28T22:15:04Z",
+  "decision_basis": "Accept the exact Step 14G signpost contract, selected scope and as-of assessment for internal governed production; no downstream or public authority.",
+  "step14g_semantic_fingerprint": "0d6fc09c1dd84dd8f009a39d01795a26efa9b580d9716160f47370a3db4f2f5b",
+  "source_manifest_fingerprint": "2d5b7a6962cbfc4dfc404c7a37ebc002c714d4cf0d4a062f25d49ceb2a855186",
+  "analysis_id": "WSAN-AU-IGR-20260921-001",
+  "analysis_sha256": "9e108606a6354ef8862f186db3418207155ff85f65e828079aeec616b8ee3ed0",
+  "official_projection_extension_sha256": "96a00e77f7f9d43a59dafb4988c89cac933ce5cacd703f37399782f0be238668",
+  "dispositions": {
+    "signpost_contract": "ACCEPT_INTERNAL",
+    "operationalised_scope": "ACCEPT_OPERATIONALISED_SCOPE",
+    "definition_set": "ACCEPT_INTERNAL",
+    "minimum_persistence": "ACCEPT",
+    "source_coverage_gaps": "ACCEPT_AS_GAPS_ONLY",
+    "assessment_snapshot": "ACCEPT_AS_OF",
+    "workflow_states": {
+      "AI_DIFFUSION": "OBSERVE",
+      "ENERGY_TRANSITION": "OBSERVE",
+      "FERTILITY": "OBSERVE",
+      "HEALTH_COST": "OBSERVE",
+      "MIGRATION": "OBSERVE",
+      "PARTICIPATION": "OBSERVE",
+      "PRODUCTIVITY": "OBSERVE",
+      "TAX_CEILING": "OBSERVE"
+    },
+    "historical_backtest": "DEFERRED",
+    "monitoring": "NOT_AUTHORISED",
+    "automated_retrieval": "NOT_AUTHORISED",
+    "analysis_revision": "NOT_AUTHORISED",
+    "world_state": "NOT_AUTHORISED",
+    "relationship": "NOT_AUTHORISED",
+    "forecast": "NOT_AUTHORISED",
+    "scenario": "NOT_AUTHORISED",
+    "risk": "NOT_AUTHORISED",
+    "public_projection": "NOT_AUTHORISED"
+  },
+  "omitted_assumptions": [
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MORTALITY",
+      "reason": "No linked current age-sex mortality/life-table observation is included; the candidate does not create a new demographic monitoring series."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-INFLATION",
+      "reason": "A short-run inflation series is not operationalised as a signpost for the IGR's maintained long-run target-midpoint convention in this tranche; existing monetary Forecasts remain separate."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-COMMODITY_PRICES",
+      "reason": "The long-run real-price anchor is a technical convention and no IGR-linked commodity-price observation/vintage comparison is included in the admitted evidence package."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-DEBT_YIELDS",
+      "reason": "The debt-yield closure is internally coupled and the candidate has no matched current yield path/model comparison suitable for this operational layer."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AGED_CARE_COST",
+      "reason": "No independent age-sex adjusted aged-care cost/service-use panel is pinned; keep distinct from broader health cost rather than infer it."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-NDIS_REFORMS",
+      "reason": "This is a maintained policy/model setting with unresolved implementation and short scheme history; no linked reviewed NDIS outturn series is included."
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-RETIREMENT",
+      "reason": "The microsimulation assumption needs cohort/wealth/means-testing evidence not represented in the admitted observed-evidence set."
+    }
+  ],
+  "visibility": "INTERNAL_ONLY",
+  "public_projection_permitted": false,
+  "write_targets": [
+    "data/analysis/assumption_signpost_definitions.json",
+    "data/analysis/assumption_signpost_coverage_gaps.json",
+    "data/analysis/assumption_signpost_assessment_snapshots.json"
+  ],
+  "review_fingerprint": "50739865a5f5577a5a6488832662614026efa29b52c25e3096ba6b088d5ae4f5"
+}
