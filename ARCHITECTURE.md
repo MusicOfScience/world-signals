@@ -812,4 +812,26 @@ created. The transactions have separate review, admission, manifest and
 rollback boundaries; a failure in one is not allowed to partially apply the
 other.
 
+### Migration Step 14D — official projections and assumption audit (candidate only)
+
+The 2026 Australian IGR review is retained under `data/analysis/STEP14D_AU_IGR_*`
+as non-production audit material. A publication-only Analysis DRAFT keeps
+`actuals: []`, empty market movement and `NOT_ESTABLISHED` surprise/second-order
+effects. An optional `official_projection_review` extension is proposed, not
+installed in the production schema. Separate inventories distinguish observed
+evidence, model assumptions, maintained policy settings, official projections,
+sensitivity cases and ministerial framing. The reusable ten-axis ASSUMPTION
+AUDIT preserves original vintages, comparability exclusions, uncertainty and
+explicit model dependencies without scores or an aggregate issuer verdict.
+
+`official_projection_candidate.py` and its offline validation command enforce
+candidate boundaries and deterministic fingerprints; they retrieve nothing,
+admit nothing and publish nothing. Native Analysis validation is insufficient
+for projection-specific semantics, and its public projector currently copies
+review fields: a future native contract and deliberate public/private allowlist
+must be reviewed before any extension admission. Treasury sources remain
+manual-only under `PRODUCTION_AUTOMATION_HOLD`; no monitoring route or downstream
+promotion is authorised. See the retained Step 14D review summary for limitations
+and five separate human disposition questions.
+
 The automatic-canonical-commit gate remains closed. Before it can even be reconsidered, WORLD SIGNALS still requires real prospective evidence including a reschedule detected against a prior canonical snapshot and an explicit cancellation of an already-canonical occurrence, under the governed review process.

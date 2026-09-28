@@ -1,7 +1,7 @@
 # World State Synthesis Engine v1 — design decision record
 
 **Status:** read/proposal design plus adopted production-history contract;
-three narrow internal production components across two independent snapshot
+five narrow internal production components across three independent snapshot
 series are admitted, but no general World State engine or broad production
 population is implemented by this record. The adopted history contract is specified in
 `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`.
@@ -766,3 +766,15 @@ main-report/fact-sheet/chart bundle; no recurrence or UTC precision is
 invented. No IGR Analysis, Signal, World State, Forecast, Scenario, Risk,
 Relationship or public projection is created. Step 14C does not reopen public
 World State or add another domain; future revisions remain human-review-gated.
+
+## Migration Step 14D status — projection audit candidate only
+
+The IGR publication now has a separate review-pending Analysis-supporting package,
+not an admitted assessment. Its optional `official_projection_review` extension
+and reusable ten-axis ASSUMPTION AUDIT distinguish observations from assumptions,
+official paths, sensitivities and policy framing. Future projection values never
+become Analysis actuals or present World State. Original/observed vintages and
+comparability limits remain explicit; model dependencies remain non-production.
+No native schema, governed population or public projection changed. Separate
+human review and a native validation/public-private contract decision are required
+before any later analytical admission; see the retained Step 14D review summary.

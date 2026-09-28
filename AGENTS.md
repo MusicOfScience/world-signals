@@ -33,8 +33,8 @@ authoritative specifications for their subjects.
 - Treat **World State** as a derived, review-governed synthesis of governed
   observations, Signals, Relationships, Risks/Regimes, Scenarios, market
   observations and Forecast/Outcome evidence. It is not a replacement for
-  Canonical, Live Intelligence or Analysis. Three narrow internal production
-  components across two independent snapshot series now exist; lifecycle,
+  Canonical, Live Intelligence or Analysis. Five narrow internal production
+  components across three independent snapshot series now exist; lifecycle,
   freshness and current applicability remain separate read-time semantics.
   The general synthesis engine, broad population and public World State
   projection remain unimplemented. The current public brief may expose only

@@ -746,3 +746,20 @@ recurrence, automation route, analytical promotion or public projection is
 created. Production now has five components, three independent snapshot series
 and three admissions; actors remain zero. Further climate/IGR successors remain
 separately review-gated.
+
+## Stage 36 — official projection inventory / assumption audit — CANDIDATE ONLY
+
+Migration Step 14D pressure-tests the Analysis boundary with the 2026 Australian
+IGR. The publication fact stays in the native event-review spine; future values,
+model assumptions and sensitivities live in separate candidate inventories.
+The proposed optional `official_projection_review` and reusable ten-axis
+ASSUMPTION AUDIT retain locatable evidence, original vintages, comparability
+limits, implementation dependencies, signposts and revision conditions. Model
+dependencies are not production Relationships; errors are not issuer dishonesty;
+repeated Treasury assets and dependent outputs are not independent corroboration.
+
+Next: human disposition of Analysis, inventory, audit, historical backtest and
+dependency map separately. Resolve native schema validation and a public/private
+allowlist before any later Analysis admission. No automatic downstream promotion,
+new forecast, public IGR projection, monitor activation or World State update is
+opened by this candidate tranche.
