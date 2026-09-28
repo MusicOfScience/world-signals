@@ -581,8 +581,10 @@ The fixture is valid only as a contract test. It must not be copied into
    independent admitted snapshot series. It preserves per-series provenance,
    marks `INDEPENDENT_ADMISSIONS`, deduplicates only identical component
    references, fails closed on conflicting heads and does not materialise a
-   composition dataset. The real repository remains one component and one
-   snapshot series; no second admission or public projection was created.
+   composition dataset. Before Step 11B the real repository remained one
+   component and one snapshot series; Step 11B now adds a separate two-
+   component RBNZ series without materialising a global composition or
+   opening public projection.
 
 Migration Step 11A now retains a second, non-governed review specimen from
 `WSAN-NZ-OCR-20260902-001`. Its two narrow candidates preserve the distinction
@@ -601,6 +603,15 @@ windows do not receive an exact movement onset, and identity evidence does not
 become an institutional effective-from. The original package remains preserved
 as audit history; the corrected successor remains review-pending and does not
 admit an actor, component, snapshot or public projection.
+
+Migration Step 11B admits the corrected RBNZ Macro and Markets candidates as
+two narrow internal Dimension Assessment revisions plus an independent RBNZ
+snapshot. The human component review accepts only those two assessments and
+explicitly defers the actor identity. Admission preserves the separate
+effective/known/review/admitted times, mixed UTC/civil-date precision, shared
+source and market-sensor limitations, and exact lineage. It does not create a
+Relationship, Forecast, Outcome, Actor Registry identity, global snapshot or
+public projection; broader synthesis remains unimplemented.
 
 ## Deferred implementation questions
 

@@ -531,9 +531,10 @@ successor revision or public projection was created.
 Migration Step 9C now defines a read-only `WORLD_STATE_COMPOSITION_VIEW` for
 multiple independent snapshot series, with explicit
 `INDEPENDENT_ADMISSIONS` atomicity, exact per-series provenance,
-deterministic component union and fail-closed component head conflicts. The
-real repository remains one series/one component; no second component,
-successor revision, materialised composition or public projection was created.
+deterministic component union and fail-closed component head conflicts. Before
+Step 11B the real repository remained one series/one component. Step 11B now
+adds a separate two-component RBNZ series; no successor revision, materialised
+global composition or public projection was created.
 
 Migration Step 11A retains a second review-pending specimen from the governed
 RBNZ post-event Analysis review. It is intentionally split into narrow
@@ -551,6 +552,15 @@ comparative proposition, refuses exact onset for source-reported market
 windows, and permits explicit unknown institutional effective-from without
 fabrication. No production population or public projection changed; Step 11B
 remains the explicit human review/admission boundary.
+
+Step 11B admits the corrected Macro and Markets RBNZ assessments as two narrow
+internal production components and one independent RBNZ snapshot series. The
+human transaction explicitly accepts Macro and Markets and defers the actor;
+the admission preserves mixed temporal precision, the market sensor's
+non-causal `OBSERVED_ASSOCIATION`, and the existing Health history. No
+Relationship, Forecast, Outcome, Actor Registry identity or public World State
+projection is created. Multi-series composition is exercised only at read
+time and remains non-admitted.
 
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 

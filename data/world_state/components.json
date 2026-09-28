@@ -163,10 +163,369 @@
         }
       ],
       "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "admitted_at_utc": "2026-09-28T04:27:17Z",
+      "anomaly_refs": [],
+      "baseline_ref": null,
+      "breadth": "NOT_ASSESSED",
+      "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "contradictory_citations": [],
+      "dimension": "MACROECONOMIC_FINANCIAL_CONDITIONS",
+      "direction": "UPWARD",
+      "effective_at": "2026-09-02T02:00:00Z",
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "RBNZ canonical decision release time; market reaction remains source-reported, not independently reconstructed.",
+      "effective_time_precision": "UTC_INSTANT",
+      "expectation_baselines": [
+        {
+          "baseline_id": "WS-STEP11A-RBNZ-ECONOMIST-CONSENSUS",
+          "basis": "OFFICIAL_REFERENCE",
+          "label": "27 of 31 economists expected 25bp to 2.75 percent",
+          "reference_ids": [
+            "WSEV-NZ-OCR-BT-20260902"
+          ],
+          "used_for": "headline decision comparison"
+        },
+        {
+          "baseline_id": "WS-STEP11A-RBNZ-MARKET-PATH",
+          "basis": "MARKET_MEASUREMENT",
+          "label": "market pricing of faster tightening and approximately 3.5 percent peak",
+          "limitations": [
+            "not a reconstructed pre-event curve"
+          ],
+          "reference_ids": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "used_for": "forward-path comparison"
+        }
+      ],
+      "known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_COMPARATIVE_FORWARD_PATH_PROPOSITION",
+      "known_at_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "ACTIVE",
+      "limitations": [
+        "The 25bp increase to 2.75 percent was expected; the candidate does not present it as a surprise.",
+        "The forward-path comparison is bounded to the reviewed RBNZ-versus-market-pricing proposition.",
+        "No actor assertion, implementation claim, forecast or global macro assessment is created."
+      ],
+      "model_provenance": {
+        "analytical_lens": "narrow monetary-policy and market-sensor assessment",
+        "configuration": "Step 11A deterministic RBNZ candidate-construction procedure",
+        "execution_surface": "Codex",
+        "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+        "generated_at_utc": "2026-09-28T00:00:00Z",
+        "input_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+        "model_identity": "UNAVAILABLE",
+        "model_version": "UNAVAILABLE",
+        "output_fingerprint": "d27cf612089e3bb593b9c6a6ede5f110789bdc18d52c6f1fa9e703e912310f79",
+        "procedure_version": "world-state-step11a-rbnz-candidate-v1",
+        "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+        "reasoning_configuration": "UNAVAILABLE",
+        "version": "UNAVAILABLE"
+      },
+      "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+      "persistence": "NOT_ASSESSED",
+      "previous_revision_id": null,
+      "prior_revision_ref": null,
+      "projection_transaction_id": null,
+      "proposition_parts": [
+        {
+          "basis": "PRIMARY_OFFICIAL_RBNZ_RELEASE",
+          "known_at_utc": "2026-09-02T02:00:00Z",
+          "label": "POLICY_RATE_INCREASED_TO_2_75_PERCENT",
+          "part": "OFFICIAL_DECISION"
+        },
+        {
+          "basis": "REVIEWED_ANALYSIS_COMPARISON",
+          "known_at_utc": "2026-09-05T14:40:00Z",
+          "label": "MORE_GRADUAL_THAN_MARKET_PRICING",
+          "part": "COMPARATIVE_FORWARD_PATH"
+        }
+      ],
+      "qualitative_confidence": "MEDIUM",
+      "review_state": "ACCEPTED",
+      "review_transaction_id": "WS-STEP11B-RBNZ-COMPONENT-REVIEW-20260928-001",
+      "reviewed_at_utc": "2026-09-28T04:27:16Z",
+      "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 11B human-admitted narrow RBNZ specimen; no actor, relationship, forecast or broader macro/market inference permitted.",
+      "scope": {
+        "boundaries": [
+          "2 September 2026 decision and stated forward path only"
+        ],
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "RBNZ_OFFICIAL_CASH_RATE_DECISION"
+        ]
+      },
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "source_proposal_id": "WS-STEP11A-WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "state_label": "POLICY_RATE_INCREASED_WITH_MORE_GRADUAL_FORWARD_PATH",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "expectation_not_fact": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e",
+          "revision_id": null,
+          "role": "EXPECTATION_BENCHMARK"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        }
+      ],
+      "transition_type": "INITIAL",
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The OCR level and change are supported by the official RBNZ release; benchmark and forward-path interpretation use distinct analytical sources.",
+          "status": "BOUNDED",
+          "type": "PROVENANCE_SOURCE"
+        },
+        {
+          "basis_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902"
+          ],
+          "description": "The official release supports what the RBNZ Committee decided and communicated; it does not prove later implementation or an actor-intent claim.",
+          "status": "BOUNDED",
+          "type": "INSTITUTIONAL_AUTHORITY"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The headline hike matched consensus; the more-gradual-than-market-pricing classification is a reviewed interpretation, not an independently measured causal fact.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "admitted_at_utc": "2026-09-28T04:27:17Z",
+      "analytical_association": {
+        "alternative_explanations": [
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The global oil and bond-market shock could dominate or contaminate longer-duration New Zealand yield moves independently of the domestic policy decision."
+          },
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The New Zealand dollar had already fallen overnight, so same-session currency weakness cannot be assigned wholly to the RBNZ announcement without a higher-frequency reconstruction."
+          }
+        ],
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "interaction_type": "TRANSMISSION_CHANNEL",
+        "relationship_ownership": "ANALYSIS_SUBSTRATE_NOT_WORLD_STATE_RELATIONSHIP"
+      },
+      "anomaly_refs": [],
+      "baseline_ref": null,
+      "breadth": "NOT_ASSESSED",
+      "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "contradictory_citations": [],
+      "dimension": "MARKETS_AS_SENSORS",
+      "direction": "DOWNWARD",
+      "effective_at": null,
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "Source-reported immediate post-decision and same-session windows; civil date is the narrowest executable production-history precision and no movement onset is manufactured.",
+      "effective_time_precision": "CIVIL_DATE",
+      "effective_window": {
+        "anchor_event_at_utc": "2026-09-02T02:00:00Z",
+        "description": "source-reported immediate post-decision / same-session movement",
+        "exact_end_at_utc": null,
+        "exact_start_at_utc": null
+      },
+      "known_at_basis": "GOVERNED_ANALYSIS_OR_OFFICIAL_RELEASE_BOUNDARY",
+      "known_at_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "ACTIVE",
+      "limitations": [
+        "The market records are sensors of expectations and positioning, not automatic causal proof.",
+        "Before values are unavailable; reported endpoints and changes are preserved without reconstruction.",
+        "The observed association remains in the Analysis substrate; no production Relationship or transmission edge is created."
+      ],
+      "market_measurements": [
+        {
+          "after_value": 3.7001,
+          "before_value": null,
+          "change": -3,
+          "change_unit": "basis_points",
+          "direction": "LOWER",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "independently_reconstructed": false,
+          "instrument_or_measure": "New Zealand two-year swap rate",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "measurement_window": "source-reported immediate post-decision reaction on 2026-09-02",
+          "movement_id": "WSMV-NZ-OCR-20260902-SWAP2Y",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "movement_type": "SWAP_RATE",
+          "unit": "percent"
+        },
+        {
+          "after_value": 0.5893,
+          "before_value": null,
+          "change": -0.7,
+          "change_unit": "percent",
+          "direction": "NZD_LOWER",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "independently_reconstructed": false,
+          "instrument_or_measure": "New Zealand dollar versus US dollar",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "measurement_window": "source-reported same-session move after the RBNZ decision on 2026-09-02",
+          "movement_id": "WSMV-NZ-OCR-20260902-NZDUSD",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "movement_type": "FX_SPOT",
+          "unit": "USD_per_NZD"
+        }
+      ],
+      "model_provenance": {
+        "analytical_lens": "narrow monetary-policy and market-sensor assessment",
+        "configuration": "Step 11A deterministic RBNZ candidate-construction procedure",
+        "execution_surface": "Codex",
+        "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+        "generated_at_utc": "2026-09-28T00:00:00Z",
+        "input_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+        "model_identity": "UNAVAILABLE",
+        "model_version": "UNAVAILABLE",
+        "output_fingerprint": "269249d271e4cfcb4bd9ea1b63837fc721024c482382cc58b0c6033cc73bab4e",
+        "procedure_version": "world-state-step11a-rbnz-candidate-v1",
+        "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+        "reasoning_configuration": "UNAVAILABLE",
+        "version": "UNAVAILABLE"
+      },
+      "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+      "persistence": "NOT_ASSESSED",
+      "previous_revision_id": null,
+      "prior_revision_ref": null,
+      "projection_transaction_id": null,
+      "qualitative_confidence": "MEDIUM",
+      "review_state": "ACCEPTED",
+      "review_transaction_id": "WS-STEP11B-RBNZ-COMPONENT-REVIEW-20260928-001",
+      "reviewed_at_utc": "2026-09-28T04:27:16Z",
+      "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 11B human-admitted narrow RBNZ specimen; no actor, relationship, forecast or broader macro/market inference permitted.",
+      "scope": {
+        "boundaries": [
+          "source-reported immediate/same-session response; no independently reconstructed before values"
+        ],
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "TWO_YEAR_SWAP_RATE",
+          "NZD_USD_SPOT"
+        ]
+      },
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "source_proposal_id": "WS-STEP11A-WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "state_label": "SHORT_RATE_AND_FX_PRICING_REPRICED_LOWER_AFTER_POLICY_PATH_SURPRISE",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        }
+      ],
+      "transition_type": "INITIAL",
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "Movements are source-reported change-and-endpoint measurements with null before values and no independent reconstruction.",
+          "status": "BOUNDED",
+          "type": "MEASUREMENT"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The measurement windows are immediate post-decision or same-session, not a high-frequency event study.",
+          "status": "BOUNDED",
+          "type": "TEMPORAL"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "Global oil and bond-market shocks and pre-existing NZD weakness remain alternative explanations; no causal Relationship is created.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
     }
   ],
   "dataset": "WORLD_STATE_COMPONENT_HISTORY",
-  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "population_state": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
   "project": "WORLD SIGNALS",
   "public_projection_permitted": false,
   "version": "0.1"

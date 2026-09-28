@@ -1,6 +1,6 @@
 {
   "dataset": "WORLD_STATE_SNAPSHOT_HISTORY",
-  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "population_state": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
   "project": "WORLD SIGNALS",
   "public_projection_permitted": false,
   "snapshots": [
@@ -87,6 +87,135 @@
           "object_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001",
           "object_sha256": "bf842fb4aa31b76c3180358b0e883cb3534306cc9b19bc0dc6c6c31e6d8efd8b",
           "revision_id": "WSSIG-HEALTH-COD-BVD-BURDEN-202609-001-R1"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "admitted_at_utc": "2026-09-28T04:27:17Z",
+      "component_refs": [
+        {
+          "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "effective_as_of_utc": null,
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "The two candidates share a civil-date decision context, but the market movement window has no exact onset; this pending index does not claim a single effective instant.",
+      "effective_time_precision": "CIVIL_DATE",
+      "empty_queried_domains": [
+        {
+          "domain": "OTHER_WORLD_STATE_DIMENSIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "ACTOR_STATE_ASSERTIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "IMPLEMENTATION_CLAIMS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "RELATIONSHIPS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "RISKS_REGIMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "SCENARIOS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "FORECASTS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "OUTCOMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "CANONICAL_HISTORICAL_AS_OF",
+          "state": "UNSUPPORTED"
+        }
+      ],
+      "knowledge_cutoff_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "ACTIVE",
+      "limitations": [
+        "Independent RBNZ Macro and Markets assessments; not a global World State snapshot.",
+        "Mixed temporal precision is preserved: Macro UTC_INSTANT and Markets CIVIL_DATE.",
+        "Market measurements remain sensors with OBSERVED_ASSOCIATION and no production Relationship.",
+        "Actor identity was explicitly deferred and is not required by either component."
+      ],
+      "object_sha256": "6858942de4d9e6fc4f897a7ab3588b289c16538b3d9207421ab273ea15e76f7d",
+      "previous_snapshot_revision_id": null,
+      "proposal_id": "WS-STEP11A-RBNZ-WSAN-NZ-OCR-20260902-001",
+      "review_transaction_id": "WS-STEP11B-RBNZ-COMPONENT-REVIEW-20260928-001",
+      "reviewed_at_utc": "2026-09-28T04:27:16Z",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "human-review"
+      },
+      "revision_number": 1,
+      "scope": {
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "RBNZ_OFFICIAL_CASH_RATE_DECISION",
+          "TWO_YEAR_SWAP_RATE",
+          "NZD_USD_SPOT"
+        ]
+      },
+      "snapshot_kind": "COMPOSITIONAL_INDEX",
+      "snapshot_revision_id": "WSSNAP-NZ-RBNZ-OCR-202609-R1",
+      "snapshot_series_id": "WSSNAP-NZ-RBNZ-OCR-202609",
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "upstream_refs": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "expectation_not_fact": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e",
+          "revision_id": null,
+          "role": "EXPECTATION_BENCHMARK"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
         }
       ],
       "visibility": "INTERNAL_ONLY"

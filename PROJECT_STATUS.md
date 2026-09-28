@@ -208,9 +208,10 @@ Migration Step 9C now provides an explicit read-time
 The view preserves per-series admission provenance, uses
 `INDEPENDENT_ADMISSIONS` rather than implying joint atomicity, deduplicates
 only identical component references, fails closed on conflicting component
-heads, and keeps coverage/freshness scoped. The real repository remains one
-series, one component, one snapshot and one admission; no composition is
-materialised or public.
+heads, and keeps coverage/freshness scoped. Before Step 11B the real
+repository remained one series, one component, one snapshot and one admission;
+Step 11B now adds a separate two-component RBNZ series without materialising a
+global production composition or public projection.
 The intended projections are `WORLD STATE | OUTLOOK | CALENDAR | MAP |
 RESEARCH`; the briefing is a projection, not canonical truth. Migration Step
 10A now makes **OUTLOOK** the first substantive public brief surface through a
@@ -237,6 +238,15 @@ civil-date precision for source-reported market windows, and represents the
 RBNZ identity's historical effective-from as explicitly unknown with a separate
 identity-known boundary. All candidates remain review-pending, the Actor
 Registry remains empty, and Step 11B remains a separate human admission gate.
+
+Migration Step 11B now admits exactly two corrected RBNZ Dimension Assessment
+revisions—one narrow monetary-policy assessment and one narrow market-sensor
+assessment—under separate human review and production-admission transactions.
+The RBNZ actor identity is explicitly deferred; no Actor Registry, Relationship,
+Forecast, Outcome or public projection is created. Production now contains
+three scoped components across two independent snapshot series; read-time
+composition remains `INDEPENDENT_ADMISSIONS`, and the existing Health history
+is preserved byte-for-byte.
 
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.

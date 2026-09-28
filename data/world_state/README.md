@@ -18,6 +18,13 @@ effective-from is explicit and separate from identity-known-at; source-reported
 market windows use the existing civil-date read precision rather than an
 invented exact movement timestamp.
 
+Step 11B admits two corrected RBNZ Dimension Assessment rows and an independent
+RBNZ snapshot under separate retained human-review and production-admission
+transactions. The actor identity remains deferred and the Actor Registry stays
+empty. The existing Health history is preserved; mixed temporal precision and
+the market sensor's non-causal association remain explicit. No public projection
+or global World State snapshot is created.
+
 The production history is split across `components.json`, `snapshots.json` and
 `admission_transactions.json`. Test data belongs under
 `tests/fixtures/world_state_production_v1/` and must not be copied here.

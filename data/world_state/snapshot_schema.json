@@ -2,7 +2,7 @@
   "project": "WORLD SIGNALS",
   "dataset": "WORLD_STATE_SNAPSHOT_HISTORY_SCHEMA",
   "version": "0.1",
-  "population_state": "CONTROLLED_FIRST_COMPONENT_PRODUCTION_HISTORY",
+  "population_state": "CONTROLLED_COMPONENTIZED_PRODUCTION_HISTORY",
   "public_projection_permitted": false,
   "required_fields": [
     "snapshot_series_id",
