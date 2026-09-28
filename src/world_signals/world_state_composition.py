@@ -93,6 +93,7 @@ def build_composition_view(
     selected_series: list[tuple[dict[str, Any], list[dict[str, Any]]]],
     *,
     freshness: list[dict[str, Any]],
+    current_use: list[dict[str, Any]] | None = None,
     dimensions: list[str],
 ) -> dict[str, Any]:
     """Build a deterministic view from already validated series selections."""
@@ -146,6 +147,18 @@ def build_composition_view(
         row["composition_sources"] = sorted(component_sources[component_id], key=lambda item: (item["snapshot_series_id"], item["snapshot_revision_id"]))
         selected_components.append(row)
     coverage = _coverage(selected_components, dimensions)
+    current_use_rows = deepcopy(current_use if current_use is not None else [
+        {"component_id": row.get("component_id"), "status": row.get("current_use_status", "UNKNOWN")}
+        for row in selected_components
+    ])
+    current_use_statuses = [row.get("status") for row in current_use_rows]
+    current_use_summary = {
+        "selected_components": len(current_use_statuses),
+        "currently_usable_components": sum(status in {"CURRENTLY_USABLE_WITHIN_SCOPE", "CURRENT_WITH_REVIEW_DUE_SOON"} for status in current_use_statuses),
+        "review_required_components": sum(status == "CURRENT_USE_REQUIRES_REVIEW" for status in current_use_statuses),
+        "no_currentness_claim_components": sum(status == "NO_CURRENTNESS_CLAIM" for status in current_use_statuses),
+        "unknown_current_use_components": sum(status == "UNKNOWN" for status in current_use_statuses),
+    }
     semantic = {
         "query": deepcopy(query),
         "selected_series": series_refs,
@@ -154,6 +167,8 @@ def build_composition_view(
             for row in selected_components
         ],
         "coverage": coverage,
+        "current_use": current_use_rows,
+        "current_use_summary": current_use_summary,
         "composition_atomicity": COMPOSITION_ATOMICITY,
         "limitations": [
             "This is a read-time composition of independently admitted snapshot series, not a jointly reviewed or atomically admitted World State snapshot.",
@@ -172,6 +187,8 @@ def build_composition_view(
         "selected_component_count": len(selected_components),
         "coverage": coverage,
         "freshness": deepcopy(freshness),
+        "current_use": current_use_rows,
+        "current_use_summary": current_use_summary,
         "admission_transaction_id": None,
         "production_snapshot_revision_id": None,
         "public_projection_permitted": False,

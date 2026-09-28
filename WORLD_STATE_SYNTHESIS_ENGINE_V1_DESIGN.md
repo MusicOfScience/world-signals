@@ -1,9 +1,9 @@
 # World State Synthesis Engine v1 — design decision record
 
 **Status:** read/proposal design plus adopted production-history contract;
-one narrow internal production component and snapshot are admitted, but no
-general World State engine or broad production population is implemented by
-this record. The adopted history contract is specified in
+three narrow internal production components across two independent snapshot
+series are admitted, but no general World State engine or broad production
+population is implemented by this record. The adopted history contract is specified in
 `WORLD_STATE_PRODUCTION_HISTORY_CONTRACT_DESIGN.md`.
 
 **Decision date:** 2026-09-27
@@ -612,6 +612,14 @@ effective/known/review/admitted times, mixed UTC/civil-date precision, shared
 source and market-sensor limitations, and exact lineage. It does not create a
 Relationship, Forecast, Outcome, Actor Registry identity, global snapshot or
 public projection; broader synthesis remains unimplemented.
+
+Migration Step 11C adds read-time current-applicability semantics without
+rewriting the three admitted components, snapshots or admission transactions.
+`ACTIVE` remains lifecycle state only. Health maps its governed freshness state
+to current-use status; the RBNZ components have no invented freshness policy
+and therefore make `NO_CURRENTNESS_CLAIM`. Historical and effective-as-of
+selection remains available, no freshness is averaged across independent
+series, and public World State remains closed.
 
 ## Deferred implementation questions
 

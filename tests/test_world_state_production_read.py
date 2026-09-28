@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from world_signals.world_state_production import (  # noqa: E402
     WorldStateProductionReadError,
     compare_production_world_state,
+    derive_freshness,
     read_production_world_state,
     successor_preflight,
     validate_production_read_request,
@@ -132,7 +133,38 @@ class WorldStateProductionReadTests(unittest.TestCase):
         view = read_production_world_state(query("2026-09-28T04:28:00Z"))
         self.assertEqual(view["dimensions_assessed"], ["HEALTH_BIOSECURITY", "MACROECONOMIC_FINANCIAL_CONDITIONS", "MARKETS_AS_SENSORS"])
         self.assertEqual(set(view["dimensions_unassessed"]), DIMENSIONS - {"HEALTH_BIOSECURITY", "MACROECONOMIC_FINANCIAL_CONDITIONS", "MARKETS_AS_SENSORS"})
+        self.assertEqual(view["current_use_summary"], {"selected_components": 3, "currently_usable_components": 1, "review_required_components": 0, "no_currentness_claim_components": 2, "unknown_current_use_components": 0})
+        self.assertEqual(view["composition_view"]["composition_atomicity"], "INDEPENDENT_ADMISSIONS")
         self.assertEqual(view["briefing_read"]["narrative_generated"], False)
+
+    def test_active_without_freshness_policy_makes_no_currentness_claim(self):
+        view = read_production_world_state(query("2026-09-28T04:28:00Z"))
+        current_use = {row["component_id"]: row for row in view["current_use"]}
+        for component_id in ("WSDIM-MACRO-NZ-RBNZ-OCR-202609-001", "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001"):
+            self.assertEqual(current_use[component_id]["lifecycle_state"], "ACTIVE")
+            self.assertEqual(current_use[component_id]["freshness_status"], "NO_FRESHNESS_POLICY")
+            self.assertEqual(current_use[component_id]["status"], "NO_CURRENTNESS_CLAIM")
+
+    def test_health_current_use_follows_governed_freshness(self):
+        current = read_production_world_state(query("2026-09-27T16:00:00Z", dimensions=["HEALTH_BIOSECURITY"]))
+        due_soon = read_production_world_state(query("2026-10-01T00:00:00Z", dimensions=["HEALTH_BIOSECURITY"]))
+        stale = read_production_world_state(query("2026-10-06T07:41:01Z", dimensions=["HEALTH_BIOSECURITY"]))
+        self.assertEqual(current["current_use"][0]["status"], "CURRENTLY_USABLE_WITHIN_SCOPE")
+        self.assertEqual(due_soon["current_use"][0]["status"], "CURRENT_WITH_REVIEW_DUE_SOON")
+        self.assertEqual(stale["current_use"][0]["status"], "CURRENT_USE_REQUIRES_REVIEW")
+        self.assertEqual(stale["selected_components"][0]["lifecycle_state"], "ACTIVE")
+
+    def test_incomplete_or_invalid_freshness_fails_closed_to_unknown(self):
+        component = {
+            "component_id": "SYNTHETIC",
+            "lifecycle_state": "ACTIVE",
+            "freshness": {
+                "stale_review_due_at_utc": "not-utc",
+                "latest_supporting_observed_at_utc": "2026-09-27T01:00:00Z",
+            },
+        }
+        result = derive_freshness(component, "2026-09-28T00:00:00Z")
+        self.assertEqual(result["status"], "UNKNOWN")
 
     def test_freshness_is_current_before_review_window(self):
         view = read_production_world_state(query("2026-09-27T16:00:00Z", dimensions=["HEALTH_BIOSECURITY"]))
@@ -183,6 +215,9 @@ class WorldStateProductionReadTests(unittest.TestCase):
         self.assertTrue(delta["freshness_only"])
         self.assertEqual(delta["freshness_transitions"][0]["from"], "CURRENT")
         self.assertEqual(delta["freshness_transitions"][0]["to"], "REVIEW_DUE_SOON")
+        self.assertEqual(delta["current_use_transitions"][0]["from"], "CURRENTLY_USABLE_WITHIN_SCOPE")
+        self.assertEqual(delta["current_use_transitions"][0]["to"], "CURRENT_WITH_REVIEW_DUE_SOON")
+        self.assertTrue(delta["current_use_only"])
 
     def test_effective_delta_is_distinguished(self):
         before = read_production_world_state(query(mode="EFFECTIVE_AS_OF", effective="2026-08-29T23:59:59Z", dimensions=["HEALTH_BIOSECURITY"]))
@@ -199,6 +234,15 @@ class WorldStateProductionReadTests(unittest.TestCase):
         self.assertFalse(result["successor_revision_created"])
         self.assertFalse(result["production_write_performed"])
 
+    def test_rbnz_time_passing_is_no_analytical_delta_and_no_successor(self):
+        first = read_production_world_state(query("2026-09-28T04:28:00Z", dimensions=["MACROECONOMIC_FINANCIAL_CONDITIONS", "MARKETS_AS_SENSORS"]))
+        second = read_production_world_state(query("2026-10-07T00:00:00Z", dimensions=["MACROECONOMIC_FINANCIAL_CONDITIONS", "MARKETS_AS_SENSORS"]))
+        delta = compare_production_world_state(first, second)
+        self.assertEqual(delta["delta_class"], "NO_CHANGE")
+        self.assertEqual(delta["current_use_transitions"], [])
+        self.assertEqual({row["status"] for row in second["current_use"]}, {"NO_CURRENTNESS_CLAIM"})
+        self.assertEqual(successor_preflight(second)["result"], "NO_SUCCESSOR_NEEDED_YET")
+
     def test_successor_preflight_distinguishes_evidence_and_correction(self):
         view = read_production_world_state(query(dimensions=["HEALTH_BIOSECURITY"]))
         self.assertEqual(successor_preflight(view, new_governed_evidence=True)["result"], "NEW_GOVERNED_EVIDENCE_AVAILABLE")
@@ -211,6 +255,9 @@ class WorldStateProductionReadTests(unittest.TestCase):
         self.assertEqual(health["coverage"], "SCOPED_ASSESSMENT_AVAILABLE")
         self.assertEqual(health["assessment"]["qualitative_confidence"], "LOW")
         self.assertEqual(health["assessment"]["visibility"], "INTERNAL_ONLY")
+        self.assertEqual(health["assessment"]["lifecycle_state"], "ACTIVE")
+        self.assertEqual(health["assessment"]["current_use_status"], "CURRENTLY_USABLE_WITHIN_SCOPE")
+        self.assertEqual(health["assessment"]["freshness"]["status"], "CURRENT")
         self.assertFalse(briefing["public_projection_permitted"])
         self.assertEqual(briefing["narrative_generated"], False)
 
@@ -268,6 +315,13 @@ class WorldStateProductionReadTests(unittest.TestCase):
         self.assertEqual(len(view["selected_components"]), 1)
         self.assertFalse((ROOT / "data" / "world_state" / "state.json").exists())
         self.assertFalse(view["briefing_read"]["public_projection_permitted"])
+
+    def test_production_hashes_remain_unchanged_across_heterogeneous_reads(self):
+        before = production_file_hashes()
+        read_production_world_state(query("2026-09-28T04:28:00Z"))
+        read_production_world_state(query("2026-10-07T00:00:00Z"))
+        after = production_file_hashes()
+        self.assertEqual(before, after)
 
     def test_health_series_read_remains_one_component_snapshot_and_admission(self):
         view = read_production_world_state(query(dimensions=["HEALTH_BIOSECURITY"]))

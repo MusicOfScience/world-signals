@@ -218,8 +218,9 @@ RESEARCH`; the briefing is a projection, not canonical truth. Migration Step
 dedicated allowlisted projection of the four reviewed monetary-policy pilot
 Forecasts. Forecast values remain unresolved and Evaluation remains
 `NO_SAMPLE`; political/electoral Forecasts, private metadata and Outcomes are
-not projected. World State remains internal: no second component, public World
-State projection or public briefing narrative was created.
+not projected. World State remains internal: three scoped components across two
+independent series are not publicly projected, and no public briefing narrative
+was created.
 
 Migration Step 11A now retains a second, non-governed RBNZ Analysis specimen at
 `data/world_state_audit/STEP11A_RBNZ_CANDIDATE_REVIEW_PENDING.json`. It carries
@@ -247,6 +248,14 @@ Forecast, Outcome or public projection is created. Production now contains
 three scoped components across two independent snapshot series; read-time
 composition remains `INDEPENDENT_ADMISSIONS`, and the existing Health history
 is preserved byte-for-byte.
+
+Migration Step 11C now derives current applicability at read time without
+rewriting production history. `ACTIVE` is not present-tense truth; Health maps
+its governed freshness policy to current-use status, while the RBNZ Macro and
+Markets components have `NO_FRESHNESS_POLICY` and therefore
+`NO_CURRENTNESS_CLAIM`. Composition exposes per-component current-use counts
+without averaging heterogeneous freshness, and the public World State boundary
+remains closed.
 
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.

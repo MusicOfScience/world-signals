@@ -33,11 +33,12 @@ authoritative specifications for their subjects.
 - Treat **World State** as a derived, review-governed synthesis of governed
   observations, Signals, Relationships, Risks/Regimes, Scenarios, market
   observations and Forecast/Outcome evidence. It is not a replacement for
-  Canonical, Live Intelligence or Analysis. One narrow internal production
-  component and compositional snapshot now exist; the general synthesis
-  engine, broad population and public World State projection remain
-  unimplemented. The current public brief may expose only the separately
-  allowlisted four-series Outlook Forecast pilot.
+  Canonical, Live Intelligence or Analysis. Three narrow internal production
+  components across two independent snapshot series now exist; lifecycle,
+  freshness and current applicability remain separate read-time semantics.
+  The general synthesis engine, broad population and public World State
+  projection remain unimplemented. The current public brief may expose only
+  the separately allowlisted four-series Outlook Forecast pilot.
 - Model actors explicitly: identity, role, jurisdiction, authority,
   capabilities, constraints, incentives, commitments, channels and internal
   institutional relationships. A public utterance is evidence of what an

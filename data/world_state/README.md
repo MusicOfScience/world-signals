@@ -1,10 +1,10 @@
 # World State production contract schemas
 
-This directory contains the Migration Step 7 contract schemas and the first
-controlled Migration Step 8 production-history population. It contains exactly
-one admitted internal Dimension Assessment and one compositional snapshot; it
-does not contain a monolithic `state.json`, an Actor Registry population or a
-public projection.
+This directory contains the Migration Step 7 contract schemas and the
+componentized production-history population. It contains exactly three
+admitted internal Dimension Assessments across two independent snapshot
+series; it does not contain a monolithic `state.json`, an Actor Registry
+population or a public projection.
 
 Step 11A adds a retained, non-governed RBNZ Analysis specimen under
 `data/world_state_audit/`. Its two narrow Dimension Assessment candidates and
@@ -24,6 +24,11 @@ transactions. The actor identity remains deferred and the Actor Registry stays
 empty. The existing Health history is preserved; mixed temporal precision and
 the market sensor's non-causal association remain explicit. No public projection
 or global World State snapshot is created.
+
+Step 11C adds read-only current-applicability semantics. `ACTIVE` is lifecycle
+state, not present-tense truth. Health uses its governed freshness policy;
+components without such a policy, including the RBNZ assessments, return
+`NO_CURRENTNESS_CLAIM` rather than being treated as permanently current.
 
 The production history is split across `components.json`, `snapshots.json` and
 `admission_transactions.json`. Test data belongs under
