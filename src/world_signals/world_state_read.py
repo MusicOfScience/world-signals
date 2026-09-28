@@ -559,7 +559,7 @@ def _relationship_context_rows(revisions: list[dict[str, Any]]) -> list[dict[str
             "admitted_at_utc": selected["admission"]["admitted_at_utc"],
             "admission_transaction_id": selected["admission"]["transaction_id"],
             "admission_transaction_fingerprint": selected["admission"]["transaction_fingerprint"],
-            "production_relationship_fingerprint": selected["relationship"].get("object_sha256"),
+            "production_relationship_fingerprint": selected["admission"].get("production_relationship_fingerprint"),
             "current_active": False,
             "historical_status": "HISTORICAL_ONLY",
             "causal_basis": deepcopy(selected["relationship"].get("causal_basis", [])),
