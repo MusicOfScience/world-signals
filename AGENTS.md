@@ -61,6 +61,11 @@ authoritative specifications for their subjects.
 - The intended human projection is **WORLD STATE | OUTLOOK | CALENDAR | MAP |
   RESEARCH**. The briefing is the final projection, never a new canonical
   store.
+- The current public brief is intentionally reader-ordered:
+  `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → CALENDAR → RESEARCH`.
+  Calendar counts and World State coverage belong to their supporting surfaces,
+  not the opening intelligence narrative. The bounded Outlook projection may
+  link to Calendar only through exact reviewed occurrence IDs.
 
 ## Working method
 
@@ -108,3 +113,7 @@ authoritative specifications for their subjects.
   runner admission failures and account/billing issues using direct evidence.
   Report local validation with its exact head, runtimes, commands, results and
   skips. Never claim an unavailable hosted check passed.
+- A Pages deployment rejected solely because a feature branch is not allowed
+  by the GitHub Pages environment is a branch-policy condition, not a build
+  success. Report it separately; post-merge deployment from `main` remains
+  required.

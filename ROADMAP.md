@@ -554,6 +554,17 @@ Evaluation remains `NO_SAMPLE`. World State remains internal with one
 component, one snapshot and one admission, and no public World State or Map
 projection exists.
 
+## Stage 25 — public intelligence spine — IMPLEMENTED / BOUNDED
+
+Migration Step 10B refines the public brief into one reader-facing sequence:
+Outlook, Resolution Clock, Reviewed Analysis, the full governed Calendar
+horizon and Research/audit. Calendar metrics are retained with the Calendar;
+World State coverage is a quiet Research boundary. Forecast lifecycle,
+per-Forecast information cutoffs, pending Outcome state and explicit
+Forecast-to-Canonical occurrence links remain visible without creating new
+intelligence. No Forecast, Outcome, World State component or public World State
+projection was created.
+
 ## Permanent quarantine
 
 PR #113 / CE OPEC is not a roadmap stage or backlog item. It is quarantined historical evidence. Future OPEC work must start from then-current `main`, inspect `OPEC_QUARANTINE.md`, PR #113 and the preserved CE branch, and use a fresh bounded design.

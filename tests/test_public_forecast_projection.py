@@ -20,6 +20,7 @@ class PublicForecastProjectionTests(unittest.TestCase):
     def setUpClass(cls):
         cls.path = ROOT / "data/forecasts/forecasts.json"
         cls.dataset = json.loads(cls.path.read_text(encoding="utf-8"))
+        cls.registry = json.loads((ROOT / "data/canonical/registry.json").read_text(encoding="utf-8"))
 
     def test_exact_reviewed_open_allowlist_projects(self):
         projection = build_public_forecast_projection(self.dataset)
@@ -31,7 +32,7 @@ class PublicForecastProjectionTests(unittest.TestCase):
         self.assertEqual(validate_public_forecast_projection(projection), [])
 
     def test_values_cutoffs_and_resolution_contracts_are_preserved(self):
-        projection = build_public_forecast_projection(self.dataset)
+        projection = build_public_forecast_projection(self.dataset, self.registry)
         rows = {row["forecast_id"]: row for row in projection["forecasts"]}
         self.assertEqual(rows["WS-FP-RBA-20261103"]["forecast_value"]["estimate"], 4.35)
         self.assertEqual(rows["WS-FP-BOC-20261028"]["forecast_value"]["estimate"], 2.25)
@@ -41,6 +42,8 @@ class PublicForecastProjectionTests(unittest.TestCase):
             self.assertEqual(row["information_cutoff_at_utc"], "2026-09-26T17:00:00Z")
             self.assertEqual(row["resolution"]["window_start_at_utc"], row["resolution"]["window_end_at_utc"])
             self.assertTrue(row["resolution"]["resolution_rule"])
+            self.assertIn("calendar_event", row)
+        self.assertEqual(projection["metadata"]["information_cutoff_state"], "SHARED")
 
     def test_categorical_probabilities_sum_and_numeric_units_remain_typed(self):
         projection = build_public_forecast_projection(self.dataset)
@@ -61,6 +64,28 @@ class PublicForecastProjectionTests(unittest.TestCase):
         self.assertEqual(projection["metadata"]["evaluation_state"], "NO_SAMPLE")
         self.assertEqual(projection["metadata"]["outcome_projection"], "NONE_AVAILABLE")
         self.assertTrue(all(row["resolution_status"] == "UNRESOLVED" for row in projection["forecasts"]))
+
+    def test_divergent_information_cutoffs_are_explicitly_reported(self):
+        dataset = copy.deepcopy(self.dataset)
+        dataset["forecasts"][0]["information_cutoff_at_utc"] = "2026-09-25T17:00:00Z"
+        projection = build_public_forecast_projection(dataset)
+        self.assertEqual(projection["metadata"]["information_cutoff_state"], "VARIES")
+        self.assertIsNone(projection["metadata"]["shared_information_cutoff_at_utc"])
+        self.assertIn(
+            "2026-09-26T17:00:00Z",
+            {row["information_cutoff_at_utc"] for row in projection["forecasts"]},
+        )
+
+    def test_calendar_linkage_is_exact_and_not_fuzzy(self):
+        projection = build_public_forecast_projection(self.dataset, self.registry)
+        rows = {row["forecast_id"]: row for row in projection["forecasts"]}
+        self.assertEqual(rows["WS-FP-FED-20261028"]["calendar_event"]["occurrence_id"], "WSO-4e25032b0df35d00")
+        registry = copy.deepcopy(self.registry)
+        for record in registry["records"]:
+            if record.get("occurrence_id") == "WSO-4e25032b0df35d00":
+                record["start_utc"] = "2026-10-28T18:01:00Z"
+        with self.assertRaises(PublicForecastProjectionError):
+            build_public_forecast_projection(self.dataset, registry)
 
     def test_political_or_electoral_forecast_fails_closed(self):
         dataset = copy.deepcopy(self.dataset)
