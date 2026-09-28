@@ -5,7 +5,8 @@ Files here are not the governed `data/relationships/relationships.json`
 population and cannot be emitted by public projection.
 
 Step 12A retains the RBNZ Macro → Markets candidate as an
-`ASSOCIATION` over exact admitted World State component revisions. It remains
-`UNDER_REVIEW`/`UNRESOLVED`, has no production write target and requires the
-separate Step 12B human Relationship review before any production admission
-could be considered.
+`ASSOCIATION` over exact admitted World State component revisions. Step 12B's
+accepted human review remains retained here as audit evidence; the accepted
+revision and guarded admission transaction live under the separate versioned
+v0.2 production namespace. The v0.1 checkpoint remains unchanged and public
+projection remains closed.

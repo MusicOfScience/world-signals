@@ -1,15 +1,16 @@
 """Closed, reviewed Relationship contract over Signals and World State.
 
-Relationships describe reviewed analytical connections.  They do not mutate
-Signals, create transitive graph edges, score risk or forecast outcomes.  The
-production population is intentionally empty while this contract is tested
-with synthetic and audit-only, read-only proposal histories. Schema 0.2 pins
+Relationships describe reviewed analytical connections. They do not mutate
+Signals, create transitive graph edges, score risk or forecast outcomes. The
+hash-pinned v0.1 production checkpoint remains empty; schema 0.2 also supports
+one separately validated, human-admitted historical specimen. Schema 0.2 pins
 immutable endpoint revisions and keeps temporal dependency cycles separate from
 ordinary reviewed graph feedback semantics.
 """
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -661,6 +662,75 @@ def validate_relationships(
     return RelationshipValidationReport(tuple(errors))
 
 
+def validate_relationship_production(
+    schema: dict[str, Any],
+    relationships_dataset: dict[str, Any],
+    signals_dataset: dict[str, Any],
+    observations_dataset: dict[str, Any],
+    evidence_registry: dict[str, Any],
+    canonical_registry: dict[str, Any],
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
+) -> RelationshipValidationReport:
+    """Validate the narrowly controlled v0.2 production Relationship store.
+
+    The legacy v0.1 checkpoint remains validated by ``validate_relationships``.
+    This path is deliberately separate so opening one human-admitted specimen
+    cannot silently reopen the general Relationship population.
+    """
+    errors = _preflight(
+        schema, relationships_dataset, signals_dataset, observations_dataset,
+        evidence_registry, canonical_registry, world_state_components,
+        world_state_admissions,
+    )
+    if errors:
+        return RelationshipValidationReport(tuple(errors))
+    if schema.get("version") != "0.2":
+        errors.append("controlled production Relationship store requires schema 0.2")
+    policy = schema.get("population_policy") or {}
+    if policy.get("manual_reviewed_admission_allowed") is not True:
+        errors.append("manual_reviewed_admission_allowed must be true")
+    if policy.get("automatic_ingestion_allowed") is not False:
+        errors.append("automatic_ingestion_allowed must remain false")
+    if policy.get("general_population_open") is not False:
+        errors.append("general_population_open must remain false")
+    if policy.get("maximum_controlled_relationships") != 1:
+        errors.append("maximum_controlled_relationships must remain 1")
+    if policy.get("public_relationship_projection_allowed") is not False:
+        errors.append("public Relationship projection must remain false")
+    if relationships_dataset.get("version") != "0.2":
+        errors.append("controlled production dataset must be version 0.2")
+    if relationships_dataset.get("population_state") != "CONTROLLED_SINGLE_RELATIONSHIP_SPECIMEN":
+        errors.append("production population state is not the controlled single specimen")
+    if relationships_dataset.get("public_projection_permitted") is not False:
+        errors.append("production Relationship public projection must remain false")
+    rows = relationships_dataset.get("relationships")
+    if not isinstance(rows, list) or len(rows) != 1:
+        errors.append("controlled production store must contain exactly one Relationship revision")
+    else:
+        row = rows[0]
+        if row.get("review_state") != "ACCEPTED":
+            errors.append("production Relationship must be accepted")
+        if row.get("lifecycle_state") != "EXPIRED":
+            errors.append("historical production Relationship must be EXPIRED")
+        if row.get("relationship_class") != "ASSOCIATION":
+            errors.append("first production Relationship must remain ASSOCIATION")
+        if row.get("causal_basis") != []:
+            errors.append("first production Relationship must have empty causal_basis")
+    errors.extend(validate_relationship_history(
+        schema,
+        rows if isinstance(rows, list) else [],
+        signals_dataset,
+        observations_dataset,
+        evidence_registry,
+        canonical_registry,
+        world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    ).errors)
+    return RelationshipValidationReport(tuple(errors))
+
+
 def relationship_state_as_of(
     schema: dict[str, Any],
     revisions: list[dict[str, Any]],
@@ -708,11 +778,13 @@ def relationship_graph_edges_as_of(
     world_state_admissions: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Expose exact reviewed edges only; never performs transitive closure."""
-    validate_relationship_history(
+    report = validate_relationship_history(
         schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry,
         world_state_components=world_state_components,
         world_state_admissions=world_state_admissions,
     )
+    if not report.ok:
+        raise ValueError("invalid Relationship history: " + "; ".join(report.errors))
     states = relationship_state_as_of(
         schema, revisions, signals_dataset, observations_dataset, evidence_registry, canonical_registry, at_utc,
         world_state_components=world_state_components,
@@ -732,6 +804,52 @@ def relationship_graph_edges_as_of(
                 "relationship_class": row["relationship_class"],
             })
     return sorted(edges, key=lambda edge: edge["relationship_id"])
+
+
+def relationship_history_as_of(
+    schema: dict[str, Any],
+    revisions: list[dict[str, Any]],
+    signals_dataset: dict[str, Any],
+    observations_dataset: dict[str, Any],
+    evidence_registry: dict[str, Any],
+    canonical_registry: dict[str, Any],
+    at_utc: str,
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Return accepted historical revisions available at an explicit UTC time."""
+    states = relationship_state_as_of(
+        schema, revisions, signals_dataset, observations_dataset, evidence_registry,
+        canonical_registry, at_utc, world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    )
+    by_revision = {row["revision_id"]: row for row in revisions}
+    return [
+        deepcopy(by_revision[state["revision_id"]])
+        for state in sorted(states.values(), key=lambda item: item["revision_id"])
+        if state["review_state"] == "ACCEPTED"
+    ]
+
+
+def active_relationship_graph_edges_as_of(
+    schema: dict[str, Any],
+    revisions: list[dict[str, Any]],
+    signals_dataset: dict[str, Any],
+    observations_dataset: dict[str, Any],
+    evidence_registry: dict[str, Any],
+    canonical_registry: dict[str, Any],
+    at_utc: str,
+    *,
+    world_state_components: dict[str, Any] | None = None,
+    world_state_admissions: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Return only accepted ACTIVE/WEAKENING edges, never historical EXPIRED ones."""
+    return relationship_graph_edges_as_of(
+        schema, revisions, signals_dataset, observations_dataset, evidence_registry,
+        canonical_registry, at_utc, world_state_components=world_state_components,
+        world_state_admissions=world_state_admissions,
+    )
 
 
 def public_relationship_projection(

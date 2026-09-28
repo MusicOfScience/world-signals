@@ -1,0 +1,85 @@
+{
+  "dataset": "RELATIONSHIP_ADMISSION_TRANSACTIONS",
+  "project": "WORLD SIGNALS",
+  "transactions": [
+    {
+      "admitted_at_utc": "2026-09-28T09:04:34Z",
+      "candidate_proposal_id": "WS-STEP12A-RBNZ-RELATIONSHIP-202609",
+      "candidate_semantic_fingerprint": "398efdf39448a9676bdd099a38fc3f66ac47a69cac1001b3895f493601679221",
+      "component_admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+      "contract_version": "0.2",
+      "decision": "ACCEPTED",
+      "endpoint_fingerprints": [
+        {
+          "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+          "node_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "object_sha256": "646ceafdba6324c421c2dceb9285d8fa4c0ecdec9df5558e369d05c261699e89",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "admission_transaction_id": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+          "node_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "object_sha256": "a209a5958635dc1d95dd45214eec29d6a0ba76d1d8eefa252f16406dad673914",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "independence_assessment": {
+        "confidence_uplift_from_endpoint_coadmission": false,
+        "counts_as_independent_corroboration": false,
+        "same_world_state_admission_transaction": "WS-ADMISSION-NZ-RBNZ-OCR-20260928-001",
+        "separately_reviewed_components": true,
+        "shared_analysis_or_evidence_lineage": true
+      },
+      "lifecycle_state": "EXPIRED",
+      "post_state_hashes": {
+        "admission_transactions_v0.2": "2c84857ac190c9107fe85bd3a3e316da63ded537a508e1605b7ff4dce5a1565f",
+        "relationships_v0.2": "0b18807c5ab10595f45d95fb5b31d75942a4af02d742d1ad3f0d5f42fba6659a"
+      },
+      "pre_state_hashes": {
+        "admission_transactions_v0.2": "08b6a0bc6906cd596f1458be5ac2911c478709b27e4f3c52e8edd0293e2f4c56",
+        "relationships_v0.2": "08b6a0bc6906cd596f1458be5ac2911c478709b27e4f3c52e8edd0293e2f4c56"
+      },
+      "production_relationship_fingerprint": "778c99b558cdffc1a91d57f506426d73f580a1e16925358b97f736a982062e44",
+      "public_projection_permitted": false,
+      "relationship_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001",
+      "review_transaction_id": "WS-STEP12B-RBNZ-RELATIONSHIP-REVIEW-20260928-001",
+      "reviewed_at_utc": "2026-09-28T09:04:33Z",
+      "reviewer": {
+        "reviewer_id": "operator-human-review",
+        "role": "HUMAN_REVIEWER"
+      },
+      "revision_id": "WSREL-NZ-RBNZ-OCR-MARKET-REPRICING-202609-001-R1",
+      "source_manifest_sha256": "a4ecd251fa4f6e57020f0fcf6f0e0427e0cdb8a1d392ed34068d2d73b13fabbe",
+      "supporting_analysis_refs": [
+        {
+          "analysis_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1"
+        }
+      ],
+      "supporting_evidence_pins": [
+        {
+          "evidence_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da"
+        },
+        {
+          "evidence_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47"
+        },
+        {
+          "evidence_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e"
+        }
+      ],
+      "transaction_fingerprint": "f1a48a1a9429ccb3055ba7c776408f9cb07227a30aeb1df664be444bdfd49666",
+      "transaction_id": "WS-REL-ADMISSION-NZ-RBNZ-20260928-001",
+      "transaction_type": "RELATIONSHIP_PRODUCTION_ADMISSION",
+      "validator_version": "relationship-admission-v0.2",
+      "visibility": "INTERNAL_ONLY",
+      "write_targets": [
+        "data/relationships/relationships_v0.2.json",
+        "data/relationships/admission_transactions_v0.2.json"
+      ]
+    }
+  ],
+  "version": "0.2"
+}

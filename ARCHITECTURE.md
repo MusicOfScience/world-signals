@@ -231,7 +231,7 @@ forecast/scenario fields and unknown fields are rejected, while disguised
 forecasts in free prose still require human review. The production Signal count
 remains zero; synthetic fixtures are confined to tests.
 
-## Reviewed Relationship contract — population closed
+## Reviewed Relationship contract — controlled historical specimen
 
 The generic Relationship layer is now defined as a separate, executable,
 zero-population contract in `data/relationships/` and
@@ -244,7 +244,9 @@ endpoint nodes. Live observations, Analysis, evidence and Canonical
 occurrences remain supporting/contextual lineage only; Analysis and
 `WORLD_STATE_COMPOSITION_VIEW` are never endpoint nodes. Raw monitor
 candidates, unreviewed Signals and private runtime records are not eligible
-nodes, and no Relationship is stored in production by this tranche.
+nodes. Step 12B admits exactly one historical RBNZ specimen in the separate
+v0.2 controlled store; the v0.1 checkpoint remains empty and public
+Relationship projection remains closed.
 
 Relationship classes distinguish co-occurrence, association, dependency,
 common-driver context, hypothesised transmission, mechanistic support, causal
@@ -573,7 +575,7 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Source registry / health | `data/sources/registry.json`, monitor expectations/adapters, runtime source-health summaries and review candidates | Already implemented and sound, but source health remains runtime evidence rather than event truth. |
 | Observations | `data/live_intelligence/` and `src/world_signals/live_intelligence.py` provide reviewed factual observations, evidence, timing separation and correction/revision controls | Implemented but needing extension. This is a bounded Live Intelligence layer, not yet a general observation store or public feed. |
 | Signals | `data/signals/`, `src/world_signals/signals.py` and `src/world_signals/signal_admission.py` define a reviewed Signal over immutable Live observations, with revision, corroboration, contradiction, lifecycle, admission-transaction and public-projection guards | Contract implemented and pressure-tested; one controlled reviewed specimen is admitted, general population remains closed by default and public projection remains closed. |
-| Relationships / causal layer | `data/relationships/schema.json` retains the hash-pinned empty v0.1 production contract; `data/relationships/schema_v0.2.json`, `src/world_signals/relationships.py`, `src/world_signals/world_state_relationship_candidate.py` and `scripts/validate_relationships.py` define the v0.2 candidate extension with reviewed Signal or immutable World State component endpoint revisions, exact lineage pins and causal gates | Contract implemented and pressure-tested; one RBNZ association candidate is retained under `data/relationship_audit/` for human review, while production population and public projection remain closed. |
+| Relationships / causal layer | `data/relationships/schema.json` retains the hash-pinned empty v0.1 checkpoint; `data/relationships/schema_v0.2.json`, `src/world_signals/relationships.py`, `src/world_signals/world_state_relationship_candidate.py` and `src/world_signals/relationship_admission.py` define typed endpoints, exact lineage pins, historical reads and guarded admission | One RBNZ `ASSOCIATION` is admitted in the controlled v0.2 store with `EXPIRED` historical lifecycle; active graph edges and public projection remain zero/closed. |
 | Risks / regime detection | `src/world_signals/risk_projection.py` remains the existing Canonical-derived presentation lens; `data/risks/`, `src/world_signals/risks.py` and `scripts/validate_risks.py` add a reviewed zero-population Risk/Regime history contract | Contract implemented and pressure-tested; production population and public projection remain closed. The existing overlay remains non-authoritative and unchanged. |
 | Scenarios | `data/scenarios/`, `src/world_signals/scenarios.py` and `scripts/validate_scenarios.py` define reviewed Scenario Sets and conditional competing pathways | Contract implemented and pressure-tested; production population and public projection remain closed. It is not a forecast engine and does not infer scenarios from risk-overlay windows. |
 | Forecasts | `data/forecasts/`, `src/world_signals/forecasts.py`, `src/world_signals/forecast_admission.py` and `scripts/validate_forecasts.py` define immutable, resolvable Forecast issuances with explicit information cutoffs, resolution sources and revision semantics | Contract implemented and pressure-tested; a bounded four-series prospective pilot is admitted only through an explicit transaction with pre/post hashes. `src/world_signals/forecast_operations.py` provides a read-only watch, while `src/world_signals/public_forecast_projection.py` exposes a separate four-series public Outlook allowlist. Outcome resolution, scoring, broader population and private metadata projection remain closed. |
@@ -626,8 +628,13 @@ may now be endpoint nodes. Analysis/evidence remain supporting lineage and
 composition views are prohibited as nodes. The retained RBNZ candidate is a
 directed `ASSOCIATION` with source-reported temporal precision, not causal
 evidence or an active transmission channel. An explicit temporal dependency
-DAG rejects direct and multi-hop self-support cycles. Production Relationships
-remain empty and public projection remains closed pending Step 12B human review.
+DAG rejects direct and multi-hop self-support cycles. Step 12B admits one
+RBNZ Macro → Markets Relationship as a historical `ASSOCIATION` with
+`DIRECTED` ordering, `MEDIUM` confidence and `EXPIRED` lifecycle. `EXPIRED`
+means the event-bounded observation period is complete, not that the evidence
+is false or withdrawn. The two endpoint components were separately reviewed
+but admitted in the same Step 11B transaction and are not independent
+corroboration. Active current graph edges and public projection remain zero.
 
 ### Implemented but needing extension
 

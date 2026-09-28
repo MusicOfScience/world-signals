@@ -257,16 +257,17 @@ Markets components have `NO_FRESHNESS_POLICY` and therefore
 without averaging heterogeneous freshness, and the public World State boundary
 remains closed.
 
-Migration Step 12A now pressure-tests the versioned Relationship candidate
-schema `0.2` while preserving the hash-pinned empty v0.1 production contract.
-It supports Signal endpoints and exact immutable admitted World State component endpoints,
-while keeping Analysis/evidence as supporting lineage and composition views
-out of the graph. The retained RBNZ candidate is a historical directed
-`ASSOCIATION` with source-reported temporal precision, explicit alternatives,
-confounders and falsifiers. It remains `UNDER_REVIEW`/`UNRESOLVED`; production
-Relationships remain zero, World State remains three components across two
-series, and no public Relationship projection exists. Step 12B remains the
-human Relationship review boundary.
+Migration Step 12A pressure-tested the versioned Relationship candidate schema
+`0.2` while preserving the hash-pinned empty v0.1 checkpoint. Step 12B now
+records the first human-approved production Relationship in the separate
+controlled v0.2 store: one RBNZ Macro → Markets historical `ASSOCIATION`,
+`DIRECTED`, `MEDIUM`, with source-reported temporal precision and lifecycle
+`EXPIRED`. The endpoint components were separately reviewed but admitted in
+the same Step 11B transaction; their co-admission is not independent
+corroboration and did not increase confidence. Active graph edges remain zero,
+World State remains three components across two series, and public Relationship
+projection remains closed. No Risk, Scenario, Forecast, World State successor
+or causal promotion was created.
 
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.

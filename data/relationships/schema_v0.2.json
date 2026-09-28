@@ -38,7 +38,10 @@
   },
   "population_policy": {
     "production_population_allowed": false,
+    "manual_reviewed_admission_allowed": true,
     "automatic_ingestion_allowed": false,
+    "general_population_open": false,
+    "maximum_controlled_relationships": 1,
     "candidate_relationship_storage_allowed": false,
     "audit_candidate_storage_allowed": true,
     "synthetic_production_population_allowed": false,
