@@ -394,3 +394,23 @@ Forecast, Scenario, Risk, Relationship or public IGR projection is created.
 Production now contains five components, three independent snapshot series and
 three World State admissions; actors remain zero and public World State remains
 closed.
+
+## Migration Step 14D — IGR projection inventory / assumption audit candidate
+
+Step 14D retains a publication-only DRAFT Analysis candidate
+`WSAN-AU-IGR-20260921-001`, 25 official projection outputs, 15 assumptions,
+eight sensitivity cases and a reusable ten-axis assumption audit. Its optional
+projection-review contract is candidate-local; production Analysis schema and
+populations remain unchanged. Five 2023/2026 comparisons match the 2062–63
+horizon; real-dollar terminal levels are excluded from direct subtraction.
+The bounded historical check inspects three 2002 variables, retains two qualified
+source-reported comparisons and excludes participation from error calculation.
+Original-vintage/observed-vintage reconstruction remains a review limitation.
+
+All five candidate artifacts remain `REVIEW_PENDING`, `INTERNAL_ONLY`, with no
+write targets or public projection. Eleven typed model-dependency edges remain
+non-production. Treasury sources remain manual-only; World State remains five
+components / three snapshots / three admissions / zero actors. No Analysis,
+evidence, Forecast, Scenario, Risk, Relationship, Canonical or public population
+was changed. See `data/analysis/STEP14D_AU_IGR_REVIEW_SUMMARY.md`; five separate
+human ACCEPT/DEFER/REJECT decisions are still required.

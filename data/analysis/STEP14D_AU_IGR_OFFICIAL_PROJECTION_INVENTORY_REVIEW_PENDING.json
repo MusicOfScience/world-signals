@@ -1,0 +1,1608 @@
+{
+  "contract_version": "0.1-candidate",
+  "review_state": "REVIEW_PENDING",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": [],
+  "public_projection_permitted": false,
+  "artifact_type": "OFFICIAL_PROJECTION_INVENTORY_CANDIDATE",
+  "projection_framework": {
+    "institution": "Australian Treasury",
+    "report_vintage": "2026",
+    "publication_date": "2026-09-21",
+    "projection_horizon": "2065-66",
+    "central_path": "Conditional population/participation/productivity macro model plus consistent fiscal aggregation/debt/program models; not WORLD SIGNALS forecast.",
+    "publication_fact": {
+      "epistemic_class": "PUBLICATION_FACT",
+      "statement": "Seventh IGR published; model extends economy and Commonwealth budget to 2065-66."
+    },
+    "source_refs": [
+      {
+        "asset_id": "IGR2026-MAIN",
+        "locator": "Cover, executive summary, A3 pp301-322"
+      }
+    ],
+    "ministerial_framing": {
+      "epistemic_class": "POLICY_CLAIM",
+      "claim_summary": "Minister attributes fiscal improvement to government reforms and describes Australia as well prepared. Attribution and comparative praise are not adopted as independently established outcomes.",
+      "source_refs": [
+        {
+          "asset_id": "MINISTER2026",
+          "locator": "21 September release opening and fiscal paragraphs"
+        }
+      ]
+    }
+  },
+  "projection_outputs": [
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-POPULATION",
+      "revision_id": "WSPROJ-AU-IGR-2026-POPULATION-C1",
+      "metric": "Population",
+      "value": 39.3,
+      "unit": "million persons",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-WORKING_AGE",
+      "revision_id": "WSPROJ-AU-IGR-2026-WORKING_AGE-C1",
+      "metric": "Population aged 15-64",
+      "value": 24.3,
+      "unit": "million persons",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-DEPENDENCY_RATIO",
+      "revision_id": "WSPROJ-AU-IGR-2026-DEPENDENCY_RATIO-C1",
+      "metric": "People aged 65+ per 100 aged 15-64",
+      "value": 40.2,
+      "unit": "persons per 100 working-age persons",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-LIFE_MALE",
+      "revision_id": "WSPROJ-AU-IGR-2026-LIFE_MALE-C1",
+      "metric": "Period life expectancy at birth male",
+      "value": 86.1,
+      "unit": "years",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-MORTALITY"
+      ],
+      "sensitivity_refs": [],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-LIFE_FEMALE",
+      "revision_id": "WSPROJ-AU-IGR-2026-LIFE_FEMALE-C1",
+      "metric": "Period life expectancy at birth female",
+      "value": 89.5,
+      "unit": "years",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-MORTALITY"
+      ],
+      "sensitivity_refs": [],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-POPULATION_GROWTH",
+      "revision_id": "WSPROJ-AU-IGR-2026-POPULATION_GROWTH-C1",
+      "metric": "Annual population growth",
+      "value": 0.6,
+      "unit": "percent",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.1 p297"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+      "revision_id": "WSPROJ-AU-IGR-2026-GDP_GROWTH-C1",
+      "metric": "Annual real GDP growth",
+      "value": 1.6,
+      "unit": "percent",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-PARTICIPATION",
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION",
+        "WSSENS-AU-IGR-2026-PARTICIPATION",
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-GDP_PER_PERSON",
+      "revision_id": "WSPROJ-AU-IGR-2026-GDP_PER_PERSON-C1",
+      "metric": "Real GDP per person",
+      "value": 157300,
+      "unit": "AUD, report real-price convention",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-PARTICIPATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PARTICIPATION",
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-GNI_PER_PERSON",
+      "revision_id": "WSPROJ-AU-IGR-2026-GNI_PER_PERSON-C1",
+      "metric": "Real GNI per person",
+      "value": 149500,
+      "unit": "AUD, report real-price convention",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-PARTICIPATION",
+        "WSASM-AU-IGR-2026-COMMODITY_PRICES"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PARTICIPATION",
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-PARTICIPATION",
+      "revision_id": "WSPROJ-AU-IGR-2026-PARTICIPATION-C1",
+      "metric": "Structural participation 15+",
+      "value": 64.7,
+      "unit": "percent",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PARTICIPATION",
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION",
+        "WSSENS-AU-IGR-2026-PARTICIPATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-UCB",
+      "revision_id": "WSPROJ-AU-IGR-2026-UCB-C1",
+      "metric": "Underlying cash balance",
+      "value": -1.8,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-TAX_CEILING",
+        "WSASM-AU-IGR-2026-HEALTH_COST",
+        "WSASM-AU-IGR-2026-AGED_CARE_COST",
+        "WSASM-AU-IGR-2026-NDIS_REFORMS",
+        "WSASM-AU-IGR-2026-DEBT_YIELDS"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-TAX",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-YIELDS",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+      "revision_id": "WSPROJ-AU-IGR-2026-GROSS_DEBT-C1",
+      "metric": "Gross AGS debt",
+      "value": 27.4,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-TAX_CEILING",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-DEBT_YIELDS",
+        "WSASM-AU-IGR-2026-HEALTH_COST",
+        "WSASM-AU-IGR-2026-NDIS_REFORMS"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-TAX",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-YIELDS",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-NET_DEBT",
+      "revision_id": "WSPROJ-AU-IGR-2026-NET_DEBT-C1",
+      "metric": "Net debt",
+      "value": 18.1,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.2 p298"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-TAX_CEILING",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-DEBT_YIELDS"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-TAX",
+        "WSSENS-AU-IGR-2026-YIELDS",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-HEALTH",
+      "revision_id": "WSPROJ-AU-IGR-2026-HEALTH-C1",
+      "metric": "Commonwealth health spending",
+      "value": 6.2,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-HEALTH_COST",
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION",
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-AGED_CARE",
+      "revision_id": "WSPROJ-AU-IGR-2026-AGED_CARE-C1",
+      "metric": "Commonwealth aged care",
+      "value": 2.3,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-AGED_CARE_COST",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-NDIS",
+      "revision_id": "WSPROJ-AU-IGR-2026-NDIS-C1",
+      "metric": "Commonwealth NDIS spending, not total scheme cost",
+      "value": 1.5,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-NDIS_REFORMS",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-DEFENCE",
+      "revision_id": "WSPROJ-AU-IGR-2026-DEFENCE-C1",
+      "metric": "Defence spending",
+      "value": 2.5,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-INFLATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-PENSIONS",
+      "revision_id": "WSPROJ-AU-IGR-2026-PENSIONS-C1",
+      "metric": "Age and Service Pensions",
+      "value": 1.8,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-RETIREMENT",
+        "WSASM-AU-IGR-2026-MORTALITY",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-PAYMENTS",
+      "revision_id": "WSPROJ-AU-IGR-2026-PAYMENTS-C1",
+      "metric": "Total Commonwealth payments",
+      "value": 27.7,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Table A2.3 p299"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-HEALTH_COST",
+        "WSASM-AU-IGR-2026-AGED_CARE_COST",
+        "WSASM-AU-IGR-2026-NDIS_REFORMS",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-DEBT_YIELDS"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-SPENDING",
+        "WSSENS-AU-IGR-2026-YIELDS",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-RECEIPTS",
+      "revision_id": "WSPROJ-AU-IGR-2026-RECEIPTS-C1",
+      "metric": "Total Commonwealth receipts",
+      "value": 25.9,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter11 p214 / Chart11.3"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-TAX_CEILING",
+        "WSASM-AU-IGR-2026-COMMODITY_PRICES",
+        "WSASM-AU-IGR-2026-DEBT_YIELDS"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-TAX",
+        "WSSENS-AU-IGR-2026-YIELDS"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-INTEREST",
+      "revision_id": "WSPROJ-AU-IGR-2026-INTEREST-C1",
+      "metric": "Interest payments including AGS and other borrowing",
+      "value": 1.2,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box11.3 p223"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-DEBT_YIELDS",
+        "WSASM-AU-IGR-2026-TAX_CEILING",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-TAX",
+        "WSSENS-AU-IGR-2026-YIELDS",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-SUPER_CONCESSIONS",
+      "revision_id": "WSPROJ-AU-IGR-2026-SUPER_CONCESSIONS-C1",
+      "metric": "Superannuation tax concessions, revenue forgone",
+      "value": 2.7,
+      "unit": "percent GDP",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter12 p246"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-RETIREMENT",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-ECONOMY_SIZE",
+      "revision_id": "WSPROJ-AU-IGR-2026-ECONOMY_SIZE-C1",
+      "metric": "Real economy relative to starting size",
+      "value": "more than twice",
+      "unit": "ratio statement, no fabricated exact multiple",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Executive summary p xv; Chapter7 p141"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY",
+        "WSASM-AU-IGR-2026-PARTICIPATION",
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-POPULATION",
+        "WSSENS-AU-IGR-2026-PARTICIPATION",
+        "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+        "WSSENS-AU-IGR-2026-AI"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-HOURS",
+      "revision_id": "WSPROJ-AU-IGR-2026-HOURS-C1",
+      "metric": "Average hours contribution to annual real GDP/person growth",
+      "value": -0.1,
+      "unit": "percentage points per year",
+      "horizon": "next 40 years",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter7 Chart7.2 p148"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PARTICIPATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PARTICIPATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    },
+    {
+      "projection_id": "WSPROJ-AU-IGR-2026-WEEKLY_HOURS",
+      "revision_id": "WSPROJ-AU-IGR-2026-WEEKLY_HOURS-C1",
+      "metric": "Average weekly hours per employed person",
+      "value": 30.6,
+      "unit": "hours per week",
+      "horizon": "2065-66",
+      "reference_year": "2025-26",
+      "projection_class": "OFFICIAL_PROJECTION",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter9 p177"
+        }
+      ],
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PARTICIPATION"
+      ],
+      "sensitivity_refs": [
+        "WSSENS-AU-IGR-2026-PARTICIPATION"
+      ],
+      "limitations": [
+        "Treasury conditional central path; not a realised outcome or WORLD SIGNALS Forecast."
+      ]
+    }
+  ],
+  "model_assumptions": [
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+      "revision_id": "WSASM-AU-IGR-2026-FERTILITY-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "DEMOGRAPHY",
+      "statement": "Birth-order/cohort method captures delayed births and catch-up; ANU long-run judgement lowers the terminal rate from 1.62.",
+      "assumption_type": "DEMOGRAPHIC_ASSUMPTION",
+      "basis_kind": "EMPIRICAL_EXTRAPOLATION",
+      "value_or_rule": 1.34,
+      "unit": "births per woman",
+      "reference_period": "2065-66",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Birth-order/cohort method captures delayed births and catch-up; ANU long-run judgement lowers the terminal rate from 1.62.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 pp301-302; Table A2.1 p297"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-POPULATION",
+        "WSPROJ-AU-IGR-2026-WORKING_AGE",
+        "WSPROJ-AU-IGR-2026-DEPENDENCY_RATIO",
+        "WSPROJ-AU-IGR-2026-POPULATION_GROWTH",
+        "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+        "WSPROJ-AU-IGR-2026-PARTICIPATION",
+        "WSPROJ-AU-IGR-2026-HEALTH",
+        "WSPROJ-AU-IGR-2026-ECONOMY_SIZE"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MORTALITY",
+      "revision_id": "WSASM-AU-IGR-2026-MORTALITY-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "DEMOGRAPHY",
+      "statement": "AGA reduces improvement rates because gains of 1930-1950 birth cohorts are not assumed to continue.",
+      "assumption_type": "DEMOGRAPHIC_ASSUMPTION",
+      "basis_kind": "EMPIRICAL_EXTRAPOLATION",
+      "value_or_rule": "ABS age-sex life tables plus revised AGA improvement factors; COVID adjustments through 2027-28",
+      "unit": "mortality-rate rule",
+      "reference_period": "2025-26 onward",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "AGA reduces improvement rates because gains of 1930-1950 birth cohorts are not assumed to continue.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p302"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-POPULATION",
+        "WSPROJ-AU-IGR-2026-WORKING_AGE",
+        "WSPROJ-AU-IGR-2026-DEPENDENCY_RATIO",
+        "WSPROJ-AU-IGR-2026-LIFE_MALE",
+        "WSPROJ-AU-IGR-2026-LIFE_FEMALE",
+        "WSPROJ-AU-IGR-2026-POPULATION_GROWTH",
+        "WSPROJ-AU-IGR-2026-PARTICIPATION",
+        "WSPROJ-AU-IGR-2026-HEALTH",
+        "WSPROJ-AU-IGR-2026-AGED_CARE",
+        "WSPROJ-AU-IGR-2026-PENSIONS"
+      ],
+      "sensitivity_material_available": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+      "revision_id": "WSASM-AU-IGR-2026-MIGRATION-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "DEMOGRAPHY",
+      "statement": "Long-run technical level matches 2021/2023 IGR and the Budget, close to a 20-year average; policy and foreign/domestic conditions remain dependencies.",
+      "assumption_type": "MIGRATION_ASSUMPTION",
+      "basis_kind": "TECHNICAL_CONVENTION",
+      "value_or_rule": 235000,
+      "unit": "persons per year",
+      "reference_period": "after forward estimates",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Long-run technical level matches 2021/2023 IGR and the Budget, close to a 20-year average; policy and foreign/domestic conditions remain dependencies.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p302"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-POPULATION",
+        "WSPROJ-AU-IGR-2026-WORKING_AGE",
+        "WSPROJ-AU-IGR-2026-DEPENDENCY_RATIO",
+        "WSPROJ-AU-IGR-2026-POPULATION_GROWTH",
+        "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+        "WSPROJ-AU-IGR-2026-PARTICIPATION",
+        "WSPROJ-AU-IGR-2026-ECONOMY_SIZE"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PARTICIPATION",
+      "revision_id": "WSASM-AU-IGR-2026-PARTICIPATION-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "LABOUR",
+      "statement": "Historical generational differences persist for future cohorts; composition and age-specific rates are separately modelled.",
+      "assumption_type": "PARTICIPATION_ASSUMPTION",
+      "basis_kind": "EMPIRICAL_EXTRAPOLATION",
+      "value_or_rule": "Cohort/lifecycle/age model retains historical generational differences",
+      "unit": "cohort participation rule",
+      "reference_period": "long run",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Historical generational differences persist for future cohorts; composition and age-specific rates are separately modelled.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p302; Chapter9 pp173-176"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+        "WSPROJ-AU-IGR-2026-GDP_PER_PERSON",
+        "WSPROJ-AU-IGR-2026-GNI_PER_PERSON",
+        "WSPROJ-AU-IGR-2026-PARTICIPATION",
+        "WSPROJ-AU-IGR-2026-ECONOMY_SIZE",
+        "WSPROJ-AU-IGR-2026-HOURS",
+        "WSPROJ-AU-IGR-2026-WEEKLY_HOURS"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "revision_id": "WSASM-AU-IGR-2026-PRODUCTIVITY-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "OUTPUT",
+      "statement": "Underlying labour productivity converges to a technical long-run rate unchanged from 2023; diffusion, capital deepening and reform are not guaranteed.",
+      "assumption_type": "PRODUCTIVITY_ASSUMPTION",
+      "basis_kind": "TECHNICAL_CONVENTION",
+      "value_or_rule": 1.2,
+      "unit": "percent annual labour-productivity growth",
+      "reference_period": "convergence over around five years then long run",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Underlying labour productivity converges to a technical long-run rate unchanged from 2023; diffusion, capital deepening and reform are not guaranteed.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p303; Chapter10 pp194-195"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+        "WSPROJ-AU-IGR-2026-GDP_PER_PERSON",
+        "WSPROJ-AU-IGR-2026-GNI_PER_PERSON",
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+        "WSPROJ-AU-IGR-2026-NET_DEBT",
+        "WSPROJ-AU-IGR-2026-HEALTH",
+        "WSPROJ-AU-IGR-2026-AGED_CARE",
+        "WSPROJ-AU-IGR-2026-NDIS",
+        "WSPROJ-AU-IGR-2026-DEFENCE",
+        "WSPROJ-AU-IGR-2026-PENSIONS",
+        "WSPROJ-AU-IGR-2026-PAYMENTS",
+        "WSPROJ-AU-IGR-2026-INTEREST",
+        "WSPROJ-AU-IGR-2026-SUPER_CONCESSIONS",
+        "WSPROJ-AU-IGR-2026-ECONOMY_SIZE"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-INFLATION",
+      "revision_id": "WSASM-AU-IGR-2026-INFLATION-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "PRICES",
+      "statement": "Domestic inflation stays at the RBA target midpoint; wages converge to 3.7% consistently with inflation and productivity.",
+      "assumption_type": "INFLATION_ASSUMPTION",
+      "basis_kind": "TECHNICAL_CONVENTION",
+      "value_or_rule": 2.5,
+      "unit": "percent annual inflation",
+      "reference_period": "long-term projection period",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Domestic inflation stays at the RBA target midpoint; wages converge to 3.7% consistently with inflation and productivity.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 pp301,303"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-DEFENCE"
+      ],
+      "sensitivity_material_available": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-COMMODITY_PRICES",
+      "revision_id": "WSASM-AU-IGR-2026-COMMODITY_PRICES-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "PRICES",
+      "statement": "Long-run anchor is a maintained price convention rather than a predicted sequence of future commodity shocks.",
+      "assumption_type": "OTHER_MODEL_ASSUMPTION",
+      "basis_kind": "TECHNICAL_CONVENTION",
+      "value_or_rule": "Bulk commodity prices decline to Budget anchors and then remain constant in real terms; terms of trade stay near 2027-28 level",
+      "unit": "price-path rule",
+      "reference_period": "2027-28 onward",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Long-run anchor is a maintained price convention rather than a predicted sequence of future commodity shocks.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p303"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-GNI_PER_PERSON",
+        "WSPROJ-AU-IGR-2026-RECEIPTS"
+      ],
+      "sensitivity_material_available": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-DEBT_YIELDS",
+      "revision_id": "WSASM-AU-IGR-2026-DEBT_YIELDS-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "FINANCE",
+      "statement": "Debt simulator and fiscal aggregation are internally coupled; long-run bond pricing is a technical closure.",
+      "assumption_type": "INTEREST_RATE_ASSUMPTION",
+      "basis_kind": "TECHNICAL_CONVENTION",
+      "value_or_rule": "Observed yield snapshot during forward estimates; 10-year AGS yield converges over 15 years to nominal GDP growth; tenors converge to historical relativities",
+      "unit": "yield-path rule",
+      "reference_period": "from end of forward estimates",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Debt simulator and fiscal aggregation are internally coupled; long-run bond pricing is a technical closure.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.2 p305; Box11.3 pp223-224"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+        "WSPROJ-AU-IGR-2026-NET_DEBT",
+        "WSPROJ-AU-IGR-2026-PAYMENTS",
+        "WSPROJ-AU-IGR-2026-RECEIPTS",
+        "WSPROJ-AU-IGR-2026-INTEREST"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "revision_id": "WSASM-AU-IGR-2026-TAX_CEILING-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "FISCAL",
+      "statement": "Tax receipts do not exceed the historical high; implicit future policy offsets nominal-threshold bracket creep. This is not a legislated perpetual ceiling.",
+      "assumption_type": "FISCAL_POLICY_SETTING",
+      "basis_kind": "MAINTAINED_POLICY_SETTING",
+      "value_or_rule": 24.2,
+      "unit": "percent GDP",
+      "reference_period": "2032-33 onward",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Tax receipts do not exceed the historical high; implicit future policy offsets nominal-threshold bracket creep. This is not a legislated perpetual ceiling.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.3 pp305-306; Box13.2 p266"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+        "WSPROJ-AU-IGR-2026-NET_DEBT",
+        "WSPROJ-AU-IGR-2026-RECEIPTS",
+        "WSPROJ-AU-IGR-2026-INTEREST"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-HEALTH_COST",
+      "revision_id": "WSASM-AU-IGR-2026-HEALTH_COST-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "CARE",
+      "statement": "Hospital/medical/pharmaceutical cost trends are estimated using a Tornqvist index and log-linear regression; coverage rebate differs.",
+      "assumption_type": "HEALTH_COST_ASSUMPTION",
+      "basis_kind": "EMPIRICAL_EXTRAPOLATION",
+      "value_or_rule": "Program-specific historical age-sex adjusted non-demographic cost-growth estimates; other health converges to historical GDP share then grows with health",
+      "unit": "program cost-growth rule",
+      "reference_period": "post forward estimates",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Hospital/medical/pharmaceutical cost trends are estimated using a Tornqvist index and log-linear regression; coverage rebate differs.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.4 pp306-307"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+        "WSPROJ-AU-IGR-2026-HEALTH",
+        "WSPROJ-AU-IGR-2026-PAYMENTS"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AGED_CARE_COST",
+      "revision_id": "WSASM-AU-IGR-2026-AGED_CARE_COST-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "CARE",
+      "statement": "Updated service-use modelling separates cost pressures; demographic and non-demographic drivers both matter.",
+      "assumption_type": "CARE_COST_ASSUMPTION",
+      "basis_kind": "EMPIRICAL_EXTRAPOLATION",
+      "value_or_rule": "Separate residential/home care age-sex service models; historical exponential residential cost trend begins 2037-38",
+      "unit": "care-cost rule",
+      "reference_period": "2037-38 onward",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Updated service-use modelling separates cost pressures; demographic and non-demographic drivers both matter.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.4 p308"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-AGED_CARE",
+        "WSPROJ-AU-IGR-2026-PAYMENTS"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-NDIS_REFORMS",
+      "revision_id": "WSASM-AU-IGR-2026-NDIS_REFORMS-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "CARE",
+      "statement": "Updated methodology and recent spending inform new participant/cost models; short scheme history limits extrapolation.",
+      "assumption_type": "FISCAL_POLICY_SETTING",
+      "basis_kind": "MAINTAINED_POLICY_SETTING",
+      "value_or_rule": "Budget reforms shape actuarial participant entries/exits; costs transition over five years to weekly earnings growth after medium term",
+      "unit": "participant/cost policy rule",
+      "reference_period": "post medium term",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Updated methodology and recent spending inform new participant/cost models; short scheme history limits extrapolation.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.4 pp308-309"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-UCB",
+        "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+        "WSPROJ-AU-IGR-2026-NDIS",
+        "WSPROJ-AU-IGR-2026-PAYMENTS"
+      ],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-RETIREMENT",
+      "revision_id": "WSASM-AU-IGR-2026-RETIREMENT-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "RETIREMENT",
+      "statement": "Administrative base 2019-20 plus HILDA/SIH; accumulation and means-testing lower pension share while concessions grow.",
+      "assumption_type": "OTHER_MODEL_ASSUMPTION",
+      "basis_kind": "CONDITIONAL_MODEL_MECHANISM",
+      "value_or_rule": "MARIA simulates assets/income and means-tested pensions; home/non-super savings imputed at retirement",
+      "unit": "microsimulation rule",
+      "reference_period": "40-year horizon",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Administrative base 2019-20 plus HILDA/SIH; accumulation and means-testing lower pension share while concessions grow.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+        }
+      ],
+      "output_dependencies": [
+        "WSPROJ-AU-IGR-2026-PENSIONS",
+        "WSPROJ-AU-IGR-2026-SUPER_CONCESSIONS"
+      ],
+      "sensitivity_material_available": false
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "revision_id": "WSASM-AU-IGR-2026-AI_DIFFUSION-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "TECHNOLOGY",
+      "statement": "Adoption, complementary capital and reorganisation influence gains; task substitution and income distribution may offset fiscal effects.",
+      "assumption_type": "AI_STRUCTURAL_ASSUMPTION",
+      "basis_kind": "CONDITIONAL_MODEL_MECHANISM",
+      "value_or_rule": "AI benefits inform the 1.2% productivity path; no separately identified central AI add-on",
+      "unit": "conditional mechanism, no additive coefficient",
+      "reference_period": "40-year horizon",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Adoption, complementary capital and reorganisation influence gains; task substitution and income distribution may offset fiscal effects.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box1.3 pp14-15; Box11.1 p213"
+        }
+      ],
+      "output_dependencies": [],
+      "sensitivity_material_available": true
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "revision_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION-C1",
+      "epistemic_class": "MODEL_ASSUMPTION",
+      "domain": "ENERGY",
+      "statement": "Energy buildout and adaptation depend on investment and delivery; four-damage climate model is explicitly partial.",
+      "assumption_type": "ENERGY_TRANSITION_ASSUMPTION",
+      "basis_kind": "CONDITIONAL_MODEL_MECHANISM",
+      "value_or_rule": "Transport decarbonisation changes excise base; partial physical-damage paths are conditional comparisons, not full welfare estimates",
+      "unit": "conditional pathway rule",
+      "reference_period": "2066 / 2065-66",
+      "projection_horizon": "2065-66",
+      "issuer_rationale": "Energy buildout and adaptation depend on investment and delivery; four-damage climate model is explicitly partial.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+        }
+      ],
+      "output_dependencies": [],
+      "sensitivity_material_available": true
+    }
+  ],
+  "sensitivity_cases": [
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-POPULATION",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-FERTILITY",
+        "WSASM-AU-IGR-2026-MIGRATION"
+      ],
+      "shock": {
+        "lower": {
+          "fertility": 1.24,
+          "NOM": 185000
+        },
+        "higher": {
+          "fertility": 1.44,
+          "NOM": 285000
+        },
+        "units": {
+          "fertility": "births per woman",
+          "NOM": "persons/year"
+        }
+      },
+      "results": {
+        "GDP_per_person_AUD": {
+          "lower": 156900,
+          "higher": 157400
+        },
+        "UCB_percent_GDP": {
+          "lower": -2.4,
+          "higher": -1.3
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Tables A4.1-A4.2 pp323-324; Box8.1 p167"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-PARTICIPATION",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PARTICIPATION"
+      ],
+      "shock": {
+        "lower": 62.7,
+        "higher": 66.7,
+        "unit": "percent participation 15+"
+      },
+      "results": {
+        "GDP_per_person_AUD": {
+          "lower": 152500,
+          "higher": 162100
+        },
+        "UCB_percent_GDP": {
+          "lower": -2.6,
+          "higher": -1.0
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Tables A4.1-A4.2 pp323-324"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-PRODUCTIVITY",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "shock": {
+        "lower": 0.8,
+        "higher": 1.6,
+        "unit": "percent annual labour-productivity growth"
+      },
+      "results": {
+        "GDP_per_person_AUD": {
+          "lower": 136600,
+          "higher": 181000
+        },
+        "gross_debt_percent_GDP": {
+          "lower": 55.9,
+          "higher": 2.4
+        },
+        "UCB_percent_GDP": {
+          "lower": -4.2,
+          "higher": 0.5
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Tables A4.1-A4.2 pp323-324"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-TAX",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-TAX_CEILING"
+      ],
+      "shock": {
+        "lower": 23.2,
+        "higher": 25.2,
+        "unit": "percent GDP tax ceiling"
+      },
+      "results": {
+        "UCB_delta_pp_GDP": {
+          "lower": -2.4,
+          "higher": 2.3
+        },
+        "gross_debt_delta_pp_GDP": {
+          "lower": 34.0,
+          "higher": -26.8
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box13.2 p266"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-SPENDING",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-HEALTH_COST",
+        "WSASM-AU-IGR-2026-AGED_CARE_COST",
+        "WSASM-AU-IGR-2026-NDIS_REFORMS"
+      ],
+      "shock": {
+        "lower": -1,
+        "higher": 1,
+        "unit": "percentage point GDP aggregate spending, phased in"
+      },
+      "results": {
+        "UCB_delta_pp_GDP": {
+          "lower": 2.3,
+          "higher": -2.4
+        },
+        "gross_debt_delta_pp_GDP": {
+          "lower": -26.8,
+          "higher": 34.6
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box12.1 p228"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-YIELDS",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-DEBT_YIELDS"
+      ],
+      "shock": {
+        "lower": -100,
+        "higher": 100,
+        "unit": "basis points relative to nominal GDP growth"
+      },
+      "results": {
+        "UCB_delta_pp_GDP": {
+          "lower": 0.4,
+          "higher": -0.5
+        },
+        "gross_debt_delta_pp_GDP": {
+          "lower": -5.0,
+          "higher": 6.6
+        }
+      },
+      "horizon": "2065-66",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box11.3 pp223-224"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-AI",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-AI_DIFFUSION",
+        "WSASM-AU-IGR-2026-PRODUCTIVITY"
+      ],
+      "shock": {
+        "upside": [
+          1.5,
+          2.0
+        ],
+        "unit": "percent annual labour-productivity growth; stylised range",
+        "downside": "below baseline; no precise rate supplied in Box1.3"
+      },
+      "results": {
+        "fiscal_illustration": "Additional 0.1ppt growth from 2030-31: +0.07ppt UCB/GDP and -0.3ppt debt/GDP by decade end, subject to offsets; not a 40-year elasticity."
+      },
+      "horizon": "40-year productivity discussion; fiscal illustration to decade end only",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box1.3 pp14-15; Box11.1 p213"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    },
+    {
+      "sensitivity_id": "WSSENS-AU-IGR-2026-CLIMATE",
+      "epistemic_class": "SENSITIVITY_CASE",
+      "assumption_refs": [
+        "WSASM-AU-IGR-2026-ENERGY_TRANSITION"
+      ],
+      "shock": {
+        "cases": [
+          "Exceeding 3C",
+          "Paris-aligned"
+        ],
+        "counterfactual": "no temperature change"
+      },
+      "results": {
+        "crop_yield_delta_percent_2066": {
+          "Exceeding 3C": -3.6,
+          "Paris-aligned": -1.2
+        }
+      },
+      "horizon": "2066",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter3 p69"
+        }
+      ],
+      "limitations": [
+        "Conditional model exercise, not a WORLD SIGNALS Scenario, probability or Forecast; shocks must not be combined without rerunning the model."
+      ]
+    }
+  ],
+  "observed_evidence": [
+    {
+      "observation_candidate_id": "WSOBAUD-TFR2024",
+      "epistemic_class": "OBSERVED_EVIDENCE",
+      "metric": "Registered-birth total fertility rate",
+      "value": 1.481,
+      "unit": "births/woman",
+      "reference_period": "calendar 2024",
+      "source_refs": [
+        {
+          "asset_id": "ABS-BIRTHS2024",
+          "locator": "Key statistics and Methodology"
+        }
+      ],
+      "limitations": [
+        "Registration year differs from occurrence/cohort fertility; processing changes matter. Not terminal cohort fertility."
+      ]
+    },
+    {
+      "observation_candidate_id": "WSOBAUD-POP2026Q1",
+      "epistemic_class": "OBSERVED_EVIDENCE",
+      "metric": "Estimated resident population",
+      "value": 27921150,
+      "unit": "persons",
+      "reference_period": "31 March 2026",
+      "source_refs": [
+        {
+          "asset_id": "ABS-POP2026Q1",
+          "locator": "Key statistics"
+        }
+      ],
+      "limitations": [
+        "Quarter-end stock and revisions differ from annual IGR projections; no terminal population test."
+      ]
+    },
+    {
+      "observation_candidate_id": "WSOBAUD-NOM2026Q1",
+      "epistemic_class": "OBSERVED_EVIDENCE",
+      "metric": "Annual net overseas migration",
+      "value": 292100,
+      "unit": "persons",
+      "reference_period": "year to 31 March 2026",
+      "source_refs": [
+        {
+          "asset_id": "ABS-POP2026Q1",
+          "locator": "Key statistics"
+        }
+      ],
+      "limitations": [
+        "A realised moving annual total is not the long-run technical level."
+      ]
+    },
+    {
+      "observation_candidate_id": "WSOBAUD-LF2026M8",
+      "epistemic_class": "OBSERVED_EVIDENCE",
+      "metric": "Trend participation 15+",
+      "value": 67.0,
+      "unit": "percent",
+      "reference_period": "August 2026",
+      "source_refs": [
+        {
+          "asset_id": "ABS-LABOUR2026M8",
+          "locator": "Main features, trend table"
+        }
+      ],
+      "limitations": [
+        "Trend is not Treasury annual structural rate; new Supplementary Survey methodology caveat retained."
+      ]
+    },
+    {
+      "observation_candidate_id": "WSOBAUD-PRODUCTIVITY2026Q2",
+      "epistemic_class": "OBSERVED_EVIDENCE",
+      "metric": "Whole-economy labour-productivity annual growth",
+      "value": -0.2,
+      "unit": "percent",
+      "reference_period": "year to June 2026",
+      "source_refs": [
+        {
+          "asset_id": "PC-PRODUCTIVITY2026Q2",
+          "locator": "Opening paragraphs / ABS provenance"
+        }
+      ],
+      "limitations": [
+        "PC uses ABS; cyclicality and revisions preclude treating one year as 40-year falsification. Page hours-growth discrepancy retained."
+      ]
+    }
+  ],
+  "major_transitions": [
+    {
+      "transition": "ARTIFICIAL_INTELLIGENCE",
+      "treatment": "CONDITIONAL_QUANTITATIVE_AND_QUALITATIVE",
+      "detail": "Productivity scenarios and bounded fiscal illustration; labour/task, capital/investment and distribution channels mostly conditional. No separate additive AI coefficient.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter1 pp13-15; Box11.1 p213"
+        }
+      ]
+    },
+    {
+      "transition": "GEOPOLITICAL_FRAGMENTATION",
+      "treatment": "QUALITATIVE_CONTEXT",
+      "detail": "Trade/investment/security pathways and historical indicators, not a single central-path fragmentation coefficient.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter2 pp33-56"
+        }
+      ]
+    },
+    {
+      "transition": "ENERGY_TRANSITION",
+      "treatment": "CONDITIONAL_QUANTITATIVE_AND_QUALITATIVE",
+      "detail": "Quantitative partial climate-damage cases and excise path; energy resilience/reform framing is not an observed implementation outcome.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter3 pp57-78"
+        }
+      ]
+    },
+    {
+      "transition": "AGEING_CARE",
+      "treatment": "QUANTITATIVE_MODEL_AND_POLICY_CONTEXT",
+      "detail": "Demographic, participation and program-cost models; policy reform assumptions differ from empirical cost trends.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter4; A2/A3 pp297-310"
+        }
+      ]
+    },
+    {
+      "transition": "INDUSTRIAL_TRANSFORMATION",
+      "treatment": "QUANTITATIVE_MODEL_AND_POLICY_CONTEXT",
+      "detail": "Sectoral composition projections/context; no standalone universal industrial-transformation shock.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter5 pp99-118"
+        }
+      ]
+    },
+    {
+      "transition": "INTERGENERATIONAL_EQUITY",
+      "treatment": "DESCRIPTIVE_AND_POLICY_CONTEXT",
+      "detail": "Distribution, housing, taxes and trust discussion; no aggregate intergenerational equity score extracted.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter6 pp119-138"
+        }
+      ]
+    }
+  ],
+  "comparison_baseline": {
+    "vintage": "2023",
+    "epistemic_class": "PRIOR_OFFICIAL_PROJECTION",
+    "horizon": "2062-63",
+    "source_refs": [
+      {
+        "asset_id": "IGR2023-MAIN",
+        "locator": "A1 pp220-223; A3 pp227-251"
+      }
+    ]
+  },
+  "limitations": [
+    "Terminal fertility is retained as a model input, not duplicated as an observed outcome.",
+    "Productivity rate and tax ceiling are inputs, not independent output confirmations.",
+    "Employment level not separately extracted; labour-force size is not employment. Hours retained as the documented growth contribution and weekly employed-person measure.",
+    "No unsupported global/regional state or fiscal risk score.",
+    "Real GDP/GNI per-person units follow report conventions; do not directly subtract 2023 and 2026 real-dollar levels without a verified common price basis."
+  ],
+  "semantic_fingerprint": "cc513bdee31bc2b49801a7b222e5972efc4e9b741462536de06b66b32143a1cc"
+}

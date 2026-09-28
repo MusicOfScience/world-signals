@@ -1,0 +1,58 @@
+{
+  "contract_version": "0.1-candidate",
+  "review_state": "REVIEW_PENDING",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": [],
+  "public_projection_permitted": false,
+  "artifact_type": "ANALYSIS_SCHEMA_EXTENSION_CANDIDATE",
+  "field_name": "official_projection_review",
+  "production_schema_change": false,
+  "production_admission_permitted": false,
+  "production_schema_base": "data/analysis/schema.json v0.8",
+  "required_sections": [
+    "projection_framework",
+    "projection_outputs",
+    "model_assumptions",
+    "sensitivity_cases",
+    "assumption_audit",
+    "comparison_baseline",
+    "limitations"
+  ],
+  "representation": "Candidate-local immutable rows and hash-pinned references; production event-review spine unchanged. Optional extension proposed only for official model publications.",
+  "epistemic_classes": [
+    "MODEL_ASSUMPTION",
+    "OBSERVED_EVIDENCE",
+    "OFFICIAL_PROJECTION",
+    "POLICY_CLAIM",
+    "PRIOR_OFFICIAL_PROJECTION",
+    "PUBLICATION_FACT",
+    "SENSITIVITY_CASE"
+  ],
+  "audit_axes": [
+    "historical_plausibility",
+    "current_trajectory",
+    "structural_break_risk",
+    "implementation_dependency",
+    "circularity_endogeneity",
+    "sensitivity",
+    "downside_alternative",
+    "upside_alternative",
+    "signposts",
+    "revision_conditions"
+  ],
+  "rules": [
+    "Future projected values never become what_happened.actuals.",
+    "Maintained policy setting must be distinguished from empirical extrapolation.",
+    "Sensitivities have shocks, units and horizons, never automatic Scenario/Forecast identity.",
+    "Unquantified alternatives remain unquantified; source count is not confidence.",
+    "Model comparison requires matching horizons, price bases, methods and original vintages.",
+    "Every row/edge/audit finding has an asset plus table/page/chart locator.",
+    "Separate human dispositions; schema acceptance is not Analysis admission or publication authority."
+  ],
+  "production_gap": "Native Analysis v0.8 permits empty actuals/benchmarks and DRAFT. It does not validate projection-specific row classes or audits; public_analysis_projection copies entire review objects. Therefore no extension may enter event_reviews until native validation and a public/private allowlist are separately adopted.",
+  "limitations": [
+    "Candidate validation verifies internal structure and pins, not factual correctness or analyst judgement.",
+    "Immutable candidate revisions require successor artifacts rather than silent hash refresh."
+  ],
+  "semantic_fingerprint": "c76945773b613206ad58bf597cc6ed02a1e3f646d88fec63e6bce49297cd6c7c"
+}

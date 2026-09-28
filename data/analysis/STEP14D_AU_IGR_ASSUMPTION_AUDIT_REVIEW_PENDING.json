@@ -1,0 +1,2439 @@
+{
+  "contract_version": "0.1-candidate",
+  "review_state": "REVIEW_PENDING",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": [],
+  "public_projection_permitted": false,
+  "artifact_type": "ASSUMPTION_AUDIT_CANDIDATE",
+  "audit_contract": "REUSABLE_OFFICIAL_MODEL_ASSUMPTION_AUDIT_v0.1-candidate",
+  "inventory_fingerprint": "cc513bdee31bc2b49801a7b222e5972efc4e9b741462536de06b66b32143a1cc",
+  "assumption_audit": [
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-FERTILITY",
+      "historical_plausibility": {
+        "finding": "2023 long-run 1.62 is revised to 1.34 with birth-order/cohort methods; historical decline motivates but does not establish a terminal value.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "ABS registered-birth TFR 1.481 in 2024 lies below prior 1.62; registration and timing are not completed cohort fertility.",
+        "source_refs": [
+          {
+            "asset_id": "ABS-BIRTHS2024",
+            "locator": "Key statistics / opening productivity findings"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Delayed childbearing, recovery at later ages and changing family preferences can separate period TFR from lifetime births.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Housing, care access and parental support may affect choices; no automatic policy-to-birth elasticity admitted.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Fertility feeds age structure and participation; behavioural labour/family feedback is plausible, not demonstrated circular calibration.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "A4 population case jointly varies fertility and migration; cannot attribute its GDP/debt effects to fertility alone.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Treasury lower joint case terminal TFR 1.24, with lower migration; no independent probability assigned.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Treasury higher joint case TFR 1.44, with higher migration; cohort catch-up is an alternative mechanism, not assumed success.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track ABS age-specific/occurrence/cohort fertility and late-age catch-up alongside registered births.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Revise use if sustained age-specific/cohort evidence fails assumed recovery or terminal path; never from one registration-year fluctuation.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301-302; Table A2.1 p297"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MORTALITY",
+      "historical_plausibility": {
+        "finding": "AGA has already reduced improvement rates relative to 2023; period life expectancy and cohort expectations must not be conflated.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent fresh age-sex mortality extraction in this bounded audit; trajectory judgement remains unresolved.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Medical progress, chronic disease, pandemics and unequal access can break smooth mortality improvements.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Health delivery and prevention affect outcomes; retained improvements are not evidence that services will succeed.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Mortality changes care demand; no demonstrated reverse health-budget feedback in the demographic projection extracted here.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "Population sensitivities vary fertility/migration, not a clean mortality perturbation; mortality elasticity unavailable.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Slower improvement than revised factors is a plausible stress mechanism, without invented numerical path.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Faster healthy-life improvement may reduce some demand; longevity alone does not imply lower costs.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track ABS age-sex deaths/life tables and AGA revisions; distinguish health-adjusted longevity.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review when persistent cohort mortality differs from revised factors or new epidemic evidence changes age patterns.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-MIGRATION",
+      "historical_plausibility": {
+        "finding": "235,000 repeats 2021/2023 technical assumptions; earlier IGRs used much lower levels. Policy regimes are not stationary.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "ABS annual NOM 292,100 to March2026 exceeds 235,000; a normalisation convention is not refuted by a short-run overshoot.",
+        "source_refs": [
+          {
+            "asset_id": "ABS-POP2026Q1",
+            "locator": "Key statistics / opening productivity findings"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Border shocks, visa rules, foreign labour demand and student flows can shift regime and age mix.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Successive governments set policy; housing/infrastructure absorption and qualification recognition affect delivered capacity.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Migration contributes labour supply and growth; capacity constraints may alter policy/flows, but no calibrated endogenous loop verified.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "A4 uses 185,000/285,000 jointly with fertility from 2036-37; cannot identify migration-only elasticity.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Lower Treasury population case combines NOM185,000 and TFR1.24; assess skilled composition separately.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Higher case NOM285,000 and TFR1.44; more people is not automatically higher per-person welfare.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track ABS arrivals/departures, age/visa mix and sustained NOM alongside governed policy changes.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review if a durable visa/border regime or multi-year measured flows invalidate convergence, not from one quarterly release.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PARTICIPATION",
+      "historical_plausibility": {
+        "finding": "2023 terminal 63.8% at2062-63 becomes 65.3% at that same horizon; cohort model upgrades differ from cyclical labour strength.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "ABS August2026 trend67.0% offers starting-context support only; not directly comparable to annual structural participation.",
+        "source_refs": [
+          {
+            "asset_id": "ABS-LABOUR2026M8",
+            "locator": "Key statistics / opening productivity findings"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Caring patterns, disability, healthy ageing and work flexibility may change generational persistence.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Care availability, skills and employer flexibility must materialise; announced reforms are not delivered hours.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Fertility and participation interact; common cohort drivers mean co-movement is not independent validation.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "A4 terminal±2ppt participation moves UCB to -2.6/-1.0 and GDP/person to152,500/162,100.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "62.7% lower Treasury case; labour exits/care constraints can offset assumed female/older gains.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "66.7% higher case; sustained cohort engagement can exceed baseline without guaranteed hours/productivity gains.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track ABS age-sex trend rates, hours, underemployment and care barriers, not headline participation alone.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review after sustained cohort-pattern departures or structural survey/model changes; preserve original comparison vintage.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p302; Chapter9 pp173-176"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "historical_plausibility": {
+        "finding": "1.2% is unchanged from2023; the 2002 comparison records original 20-year projected1.8% versus realised1.2%. These are different vintages/windows.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "PC reports -0.2% whole-economy growth through June2026; current evidence does not yet establish convergence to1.2%.",
+        "source_refs": [
+          {
+            "asset_id": "PC-PRODUCTIVITY2026Q2",
+            "locator": "Key statistics / opening productivity findings"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "AI diffusion may lift growth; services measurement, fragmentation and capital shallowing may offset gains.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Capital, skills, reorganisation and regulatory delivery are complements; intentions alone do not establish productivity gains.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Productivity expands income and fiscal base; debt/yield closure feeds financing costs. This is model dependency, not independent corroboration.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "A4±0.4ppt growth yields GDP/person136,600/181,000 and debt55.9/2.4%GDP in2065-66; not independent probabilities.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "0.8% Treasury lower sensitivity offers a documented stress case; no extra unsupported low-growth forecast.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "1.6% higher sensitivity; stylised AI1.5-2.0% is separately conditional, not additive to the baseline.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track revised ABS output/hour, capital deepening, multi-factor productivity, adoption and measured service outputs.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review if multi-year underlying estimates fail the stated transition or revisions alter trend; a single weak quarter is not a 40-year falsifier.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303; Chapter10 pp194-195"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-INFLATION",
+      "historical_plausibility": {
+        "finding": "Target-midpoint closure is conventional, not the empirical mean of all future regimes.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent current inflation extraction here; this is a long-run assumption audit, not a near-term inflation call.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Supply shocks, policy-regime shifts and energy costs may change price persistence.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Requires credible institutions and policy maintaining target framework; cannot infer implementation from the target statement.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Wages combine inflation/productivity; using wages to confirm either input would be endogenous.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "No isolated inflation sensitivity extracted; nominal versus real fiscal paths must not be mixed.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Persistently higher inflation could raise nominal revenue and spending differently; no net fiscal sign asserted.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Stable target inflation could support real adjustment; lower inflation is not automatically better nominal-debt arithmetic.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track official inflation measures and target/framework revisions with wages/prices measured separately.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review on formal target/regime change or sustained evidence requiring a new long-run closure, not ordinary cyclical volatility.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 pp301,303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-COMMODITY_PRICES",
+      "historical_plausibility": {
+        "finding": "2023 and2026 both use long-run anchors; repeated conventions do not verify future commodity prices.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent live price feed or event-window movement introduced; current-price judgement unresolved.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Fragmentation, demand substitution and energy transition may shift terms of trade beyond anchors.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Trade arrangements and energy deployment affect demand; maintained openness is not assured implementation.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Export prices feed nominal income and taxes; fiscal strength cannot independently verify the assumed prices.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "No commodity-only numerical sensitivity extracted; do not borrow productivity elasticity.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Lower export demand/prices is a defensible mechanism, with unknown magnitude.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Higher demand or scarcity may support income but raise input costs; no net welfare conclusion.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track official trade unit-value/terms-of-trade series and production, respecting measurement coverage.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review if durable demand/market structure invalidates the real-price anchors.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.1 p303"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-DEBT_YIELDS",
+      "historical_plausibility": {
+        "finding": "Convergence to nominalGDP is a technical convention; risk premia need not follow growth mechanically.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No new market feed; observed yield snapshot is report-owned starting context, not continuing current evidence.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Risk premia, global financing and term structure can depart from historical relativities.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Fiscal/monetary credibility and financing practice matter; no guaranteed market response to policy.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Explicit PDI Sim feedback: deficits/financing produce debt and interest, which return to fiscal aggregation. Preserve the loop.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "±100bp yields move UCB +0.4/-0.5ppt and debt -5.0/+6.6pptGDP in2065-66.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Higher-yield Treasury case raises financing pressure; not a predicted future market rate.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Lower-yield case eases financing; does not by itself prove stronger growth.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track governed AGS yield data, refinancing and maturity mix if rights later permit.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review if observed financing/risk-premium regimes materially invalidate the long-run closure.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.2 p305; Box11.3 pp223-224"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "historical_plausibility": {
+        "finding": "24.2% is historical-high convention versus2023 24.4%; it presumes policy response to bracket creep, not a hard legal limit.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent current receipts extraction; output convergence follows the imposed cap and is not empirical validation.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "AI income distribution, excise erosion and tax-base changes can alter required offsets.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Future tax changes must maintain aggregate ceiling; no SAID-to-IMPLEMENTED inference from current reform framing.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Receipts are constrained relative to modelledGDP; fiscal results cannot establish the appropriateness of the imposed cap.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "23.2/25.2% cases yield UCB -2.4/+2.3ppt and debt +34.0/-26.8pptGDP changes.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Lower receipts ceiling stresses fiscal balance; no automatic deterioration claim in current World State.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Higher ceiling improves modelled balance; distribution/behaviour costs are not captured as free benefits.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track enacted tax settings, tax mix and realised receipts/GDP with cycle and vintage controls.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review when enacted settings or sustained tax-base change invalidate maintained ceiling or compensating-policy assumptions.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.3 pp305-306; Box13.2 p266"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-HEALTH_COST",
+      "historical_plausibility": {
+        "finding": "Age-sex adjusted historical program regressions are better bounded than an unadjusted total-growth extrapolation; cost trend still uncertain.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent current health-cost panel was extracted; do not imply fresh validation by citing Treasury again.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Technology, morbidity, service demand and workforce costs may shift non-demographic growth.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Funding and service efficiency affect costs; report reform intentions do not establish savings.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Health costs and ageing share demographic inputs; repeated spending outputs do not independently corroborate those inputs.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "A4 productivity cases shift health/GDP to7.1/5.5; that is not a direct cost-growth elasticity. Aggregate±1ppt case is separate.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Higher unit costs or demand can increase spending; no invented precise health-cost stress path.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Efficiency and prevention may moderate growth, subject to quality/access and implementation.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track comparable Commonwealth program spending per age-sex cohort and real unit costs; do not substitute total all-government health spend.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review on persistent adjusted cost divergence, accounting change or morbidity shift affecting program models.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp306-307"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AGED_CARE_COST",
+      "historical_plausibility": {
+        "finding": "New separate residential/home models differ from2023; a lower projection need not reflect realised savings.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent current age-adjusted care cost extraction; current trend remains unresolved.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Care preferences, disability and labour shortages may break historical exponential residential trend.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Service reforms, workforce and funding must operate; intentions do not establish improved sustainability.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Care utilisation and population-age structure are joint drivers, not independent validations.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "Productivity cases yield agedcare/GDP2.6/2.0; no clean isolated residential cost elasticity extracted.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Higher usage/costs can raise spending; no unsupported numerical alternative.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Effective home care or efficiency may reduce residential demand, without presumed quality gain.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track service-use rates and age-sex adjusted cost growth separately for home/residential care.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review when model segmentation, reforms or observed usage/cost trends materially depart.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 p308"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-NDIS_REFORMS",
+      "historical_plausibility": {
+        "finding": "Short scheme history and changed2026 Budget methods weaken naive extrapolation from2023 spending paths.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "Current experience informs Treasury baseline but no independent new actuarial extraction here; validation remains bounded.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Disability mix, entrants/exits and support intensity may change faster than model.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Reforms and state contributions are maintained policy premises, not independently established future execution.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Participant counts and cost per participant create total cost; scheme affordability is not evidence for either input.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "Commonwealth share1.5%GDP baseline; A4 productivity cases1.5/1.4 are not scheme-specific reform sensitivities.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Entrants or support intensity above actuarial path raise costs; distinguish Commonwealth from total scheme.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Effective reform/service provision may contain growth; do not presume reduced expenditure equals better outcomes.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track governed actuarial participant flows, cost/participant, implementation and Commonwealth/state funding shares.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review on actuarial revision, reform reversal/non-delivery or material mix/cost departures.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp308-309"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-RETIREMENT",
+      "historical_plausibility": {
+        "finding": "MARIA uses2019-20 base data; imputed housing/non-super savings constrain extrapolation under changing inequality.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent current retirement panel extracted; Treasury projected pension/concession shares remain conditional.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Housing tenure, returns, wages and longevity may alter accumulation and means-test eligibility.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Means testing, contribution/tax settings and implementation must persist; no permanent policy guarantee.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Accumulation feeds pension eligibility and concessions; opposite fiscal trends are coupled outputs, not corroboration.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "No isolated retirement-return sensitivity extracted; productivity effects are indirect and conditional.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Lower accumulation or home ownership may raise pension needs; no numeric unsupported rate.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Higher accumulation may lower pensions but raise tax concessions; fiscal direction is not simply positive.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track official pension coverage, retirement assets/tenure by cohort and tax settings.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review on policy/asset-distribution change invalidating base or imputation assumptions.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "A3.4 pp309-310; Chapter12 pp245-246"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "historical_plausibility": {
+        "finding": "General-purpose technology lags are a reference, not proof that AI follows the same diffusion curve.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "PC weak productivity does not yet demonstrate aggregate AI uplift; task gains and adoption are not economy-wide realised gains.",
+        "source_refs": [
+          {
+            "asset_id": "PC-PRODUCTIVITY2026Q2",
+            "locator": "Key statistics / opening productivity findings"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Capability, task bottlenecks and diffusion could exceed or undershoot historical experience.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Complementary capital, skills, energy and reorganisation are prerequisites, not achievements established by announcements.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "AI expectations inform baseline productivity; using the unchanged1.2% projection to validate AI is circular inference.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "Box1.3 upside1.5-2.0% is stylised; Box11.1 fiscal illustration has a decade horizon and offsets. No isolated central AI coefficient.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Slow diffusion/limited automation can leave growth below baseline; no fabricated numerical AI contribution.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Broader automation/innovation can exceed baseline; not independent evidence or an assigned probability.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track adoption, complementary investment, job/task composition, firm dynamics and measured productivity jointly.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review when measured gains or labour/distribution effects materially diverge from assumed diffusion/complementary channels.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Box1.3 pp14-15; Box11.1 p213"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    },
+    {
+      "assumption_id": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "historical_plausibility": {
+        "finding": "Physical-damage and excise models isolate selected channels; past deployment does not verify all40-year infrastructure plans.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          },
+          {
+            "asset_id": "IGR2023-MAIN",
+            "locator": "A1/A3; A6 p274, model vintage preserved"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "current_trajectory": {
+        "finding": "No independent AEMO delivery/cost extraction in this bounded package; do not claim current transition success.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "structural_break_risk": {
+        "finding": "Supply chains, climate damage, technology costs and resilience requirements can change pathways.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "implementation_dependency": {
+        "finding": "Permits, networks, capital, skills and adaptation delivery matter; policy targets are not IMPLEMENTED status.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "circularity_endogeneity": {
+        "finding": "Energy investment and productivity can interact; no verified full endogenous loop extracted from the partial cases.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "sensitivity": {
+        "finding": "Crop yield impacts -3.6/-1.2% in2066 compare selected warming paths with no temperature change; not total climate/GDP damage.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "downside_alternative": {
+        "finding": "Delayed transition/adaptation can worsen selected costs; no invented aggregate fiscal/energy-price forecast.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "upside_alternative": {
+        "finding": "Faster efficient deployment/adaptation may reduce exposure; no assumed guaranteed savings.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "signposts": {
+        "finding": "Track official network/deployment/cost milestones, transport fuel consumption and physical damage observations.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      },
+      "revision_conditions": {
+        "finding": "Review on persistent delivery/cost divergence or new damage-model evidence; do not replace assumptions with aspirational targets.",
+        "source_refs": [
+          {
+            "asset_id": "IGR2026-MAIN",
+            "locator": "Chapter3 pp68-70; Chapter13 pp261-262"
+          }
+        ],
+        "limitations": [
+          "Candidate analyst interpretation. No probability, score or production claim; unquantified alternatives remain unquantified."
+        ]
+      }
+    }
+  ],
+  "projection_comparison": [
+    {
+      "metric": "Population",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": 40.5,
+      "current_value": 38.6,
+      "unit": "million persons",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2062-63",
+      "difference": -1.9,
+      "comparability": "MATCHED_HORIZON_MODEL_REVISION",
+      "method_basis": "Same horizon; prior values checked against original2023 A1. Rounded chart values; methods/policy differ so difference is model revision, not clean assumption-only causal effect.",
+      "identified_driver": "Lower fertility and mortality assumptions; migration convention unchanged.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-CHARTS",
+          "locator": "IGR-2026-Chapter-08.xlsx / B80:C80"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1 pp220-222"
+        }
+      ]
+    },
+    {
+      "metric": "Structural participation15+",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": 63.8,
+      "current_value": 65.3,
+      "unit": "percent",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2062-63",
+      "difference": 1.5,
+      "comparability": "MATCHED_HORIZON_MODEL_REVISION",
+      "method_basis": "Same horizon; prior values checked against original2023 A1. Rounded chart values; methods/policy differ so difference is model revision, not clean assumption-only causal effect.",
+      "identified_driver": "Updated cohort/lifecycle participation paths; not a labour-market release surprise.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-CHARTS",
+          "locator": "IGR-2026-Chapter-09.xlsx / H79:I79"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1 pp220-222"
+        }
+      ],
+      "limitations": [
+        "Report prose gives a 1.4ppt upgrade; rounded chart cells give 65.3 minus 63.8 = 1.5ppt. Retain both presentations rather than silently treating rounded arithmetic as an unrounded model estimate."
+      ]
+    },
+    {
+      "metric": "Underlying cash balance",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": -2.6,
+      "current_value": -1.4,
+      "unit": "percent GDP",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2062-63",
+      "difference": 1.2,
+      "comparability": "MATCHED_HORIZON_MODEL_REVISION",
+      "method_basis": "Same horizon; prior values checked against original2023 A1. Rounded chart values; methods/policy differ so difference is model revision, not clean assumption-only causal effect.",
+      "identified_driver": "Revised payments and maintained tax/yield assumptions; government attribution is not independently verified.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-CHARTS",
+          "locator": "IGR-2026-Chapter-11.xlsx / H79:I79"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1 pp220-222"
+        }
+      ]
+    },
+    {
+      "metric": "Gross debt",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": 32.1,
+      "current_value": 24.9,
+      "unit": "percent GDP",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2062-63",
+      "difference": -7.2,
+      "comparability": "MATCHED_HORIZON_MODEL_REVISION",
+      "method_basis": "Same horizon; prior values checked against original2023 A1. Rounded chart values; methods/policy differ so difference is model revision, not clean assumption-only causal effect.",
+      "identified_driver": "Financing-task/yield revisions and lower projected program payments.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-CHARTS",
+          "locator": "IGR-2026-Chapter-11.xlsx / B79:C79"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1 pp220-222"
+        }
+      ]
+    },
+    {
+      "metric": "Total payments",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": 28.6,
+      "current_value": 27.3,
+      "unit": "percent GDP",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2062-63",
+      "difference": -1.3,
+      "comparability": "MATCHED_HORIZON_MODEL_REVISION",
+      "method_basis": "Same horizon; prior values checked against original2023 A1. Rounded chart values; methods/policy differ so difference is model revision, not clean assumption-only causal effect.",
+      "identified_driver": "Changed NDIS/aged-care models and maintained reform settings.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-CHARTS",
+          "locator": "IGR-2026-Chapter-12.xlsx / G79:H79"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1 pp220-222"
+        }
+      ]
+    },
+    {
+      "metric": "RealGDP/person terminal level",
+      "prior_vintage": "2023",
+      "current_vintage": "2026",
+      "prior_value": 131815,
+      "current_value": 157300,
+      "unit": "report-vintage real AUD",
+      "prior_horizon": "2062-63",
+      "current_horizon": "2065-66",
+      "difference": null,
+      "comparability": "NOT_DIRECTLY_COMPARABLE",
+      "method_basis": "Terminal years and price bases differ; no subtraction/rebasing without common-year real-price series.",
+      "identified_driver": "Unresolved decomposition of horizon/price/method/evidence changes.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A2.2 p298"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A1.2 p221"
+        }
+      ]
+    }
+  ],
+  "historical_backtest": [
+    {
+      "metric": "Population",
+      "original_vintage": "2002",
+      "observed_vintage": "2023 IGR publication of2021-22 actuals, ABS/Treasury",
+      "reference_period": "2021-22 /2022",
+      "original_projected_value": 23.2,
+      "observed_value": 26.0,
+      "unit": "million persons",
+      "comparability": "SOURCE_REPORTED_COMPARISON",
+      "error": 2.8,
+      "method_basis": "Original2002 Table3 gives2022 23.2m;2023 A6.1 aligns it to2021-22 outcome26.0m. Later ABS vintage is explicitly the2023 published comparison, not current revised ERP.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2002-MAIN",
+          "locator": "Table3 p22 / PDF28"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A6 TableA6.1 p274"
+        }
+      ],
+      "limitations": [
+        "Source-reported bounded comparison, not an independent full-vintage model rerun. Error does not establish bias or bad faith."
+      ]
+    },
+    {
+      "metric": "Labour productivity",
+      "original_vintage": "2002",
+      "observed_vintage": "2023 IGR publication of2021-22 actuals, ABS/Treasury",
+      "reference_period": "2001-02 to2021-22",
+      "original_projected_value": 1.8,
+      "observed_value": 1.2,
+      "unit": "percent annual growth,20-year average",
+      "comparability": "SOURCE_REPORTED_COMPARISON",
+      "error": -0.6,
+      "method_basis": "2023 A6.1 reconstructs original2001-02 to2021-22 average1.8% and observed1.2%. Original2002 p25 long-run assumption is about1.75% after transition;1.8 is source-reported whole-window rounded reconstruction, not substitution of2023 assumptions.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2002-MAIN",
+          "locator": "Productivity p25 / PDF31"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A6 TableA6.1 p274"
+        }
+      ],
+      "limitations": [
+        "Source-reported bounded comparison, not an independent full-vintage model rerun. Error does not establish bias or bad faith."
+      ]
+    },
+    {
+      "metric": "Participation15+",
+      "original_vintage": "2002",
+      "observed_vintage": "2023 IGR publication of2021-22 actuals, ABS/Treasury",
+      "reference_period": "2021-22 /2022",
+      "original_projected_value": 60.2,
+      "observed_value": 66.0,
+      "unit": "percent",
+      "comparability": "NOT_DIRECTLY_COMPARABLE",
+      "error": null,
+      "method_basis": "2023 A6.1 reports60.2 versus66.0, but exact original2021-22 point is chart-only and historical trend/actual averaging alignment not independently reconstructed. Retain numbers for inspection, exclude error rather than infer chart precision.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2002-MAIN",
+          "locator": "Employment pp26-30; AppendixB pp71-76"
+        },
+        {
+          "asset_id": "IGR2023-MAIN",
+          "locator": "A6 TableA6.1 p274"
+        }
+      ],
+      "limitations": [
+        "Source-reported bounded comparison, not an independent full-vintage model rerun. Error does not establish bias or bad faith."
+      ]
+    }
+  ],
+  "dependency_map": [
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-DEMOGRAPHY",
+      "from_ref": "WSASM-AU-IGR-2026-FERTILITY",
+      "to_ref": "WSPROJ-AU-IGR-2026-POPULATION",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "Cohort births feed population age structure.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 pp301-302"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-MIGRATION",
+      "from_ref": "WSASM-AU-IGR-2026-MIGRATION",
+      "to_ref": "WSPROJ-AU-IGR-2026-WORKING_AGE",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "Age-sex migration assumptions feed working-age population.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 p302"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-PARTICIPATION",
+      "from_ref": "WSASM-AU-IGR-2026-PARTICIPATION",
+      "to_ref": "WSPROJ-AU-IGR-2026-GDP_GROWTH",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "Age/cohort labour supply enters potentialGDP model.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.1 pp301-303"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-PRODUCTIVITY",
+      "from_ref": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "to_ref": "WSPROJ-AU-IGR-2026-GDP_PER_PERSON",
+      "epistemic_class": "SENSITIVITY_SUPPORTED",
+      "mechanism": "Treasury±0.4ppt changes realGDP/person.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A4 pp323-324"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-FISCAL",
+      "from_ref": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "to_ref": "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+      "epistemic_class": "SENSITIVITY_SUPPORTED",
+      "mechanism": "Growth changes denominator/financing within fiscal aggregation.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A4 pp323-324"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-AI",
+      "from_ref": "WSASM-AU-IGR-2026-AI_DIFFUSION",
+      "to_ref": "WSASM-AU-IGR-2026-PRODUCTIVITY",
+      "epistemic_class": "ASSUMED_MECHANISM",
+      "mechanism": "Adoption/complementary capital may support growth; no central additive uplift.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box1.3 pp14-15"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-CARE",
+      "from_ref": "WSASM-AU-IGR-2026-MORTALITY",
+      "to_ref": "WSPROJ-AU-IGR-2026-HEALTH",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "Population cohorts applied to per-person health spending.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.4 pp306-307"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-TAX",
+      "from_ref": "WSASM-AU-IGR-2026-TAX_CEILING",
+      "to_ref": "WSPROJ-AU-IGR-2026-UCB",
+      "epistemic_class": "SENSITIVITY_SUPPORTED",
+      "mechanism": "Maintained receipts cap changes fiscal balance in tax sensitivities.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Box13.2 p266"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-ENERGY",
+      "from_ref": "WSASM-AU-IGR-2026-ENERGY_TRANSITION",
+      "to_ref": "WSPROJ-AU-IGR-2026-RECEIPTS",
+      "epistemic_class": "ASSUMED_MECHANISM",
+      "mechanism": "Transport decarbonisation reduces fuel-excise base.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter13 pp261-262"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-INTEREST",
+      "from_ref": "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+      "to_ref": "WSPROJ-AU-IGR-2026-INTEREST",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "AGS stock and financing enter PDI Sim.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.2 p305"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    },
+    {
+      "edge_id": "WSDEP-AU-IGR-2026-FINANCING",
+      "from_ref": "WSPROJ-AU-IGR-2026-INTEREST",
+      "to_ref": "WSPROJ-AU-IGR-2026-GROSS_DEBT",
+      "epistemic_class": "MODEL_DEFINED",
+      "mechanism": "Interest returns to fiscal aggregation and financing task; explicit loop, not inferred transitive edge.",
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A3.2 pp304-305"
+        }
+      ],
+      "production_relationship": false,
+      "limitations": [
+        "Model conditional dependency; outputs sharing an input cannot confirm that input independently."
+      ]
+    }
+  ],
+  "corroboration_policy": "SAME_ORIGIN_ASSETS_AND_DEPENDENT_OUTPUTS_NOT_INDEPENDENT_CONFIRMATIONS",
+  "error_interpretation": "MODEL_ERROR_IS_NOT_EVIDENCE_OF_BAD_FAITH",
+  "dimension_mapping_candidates": [
+    {
+      "dimension": "MACROECONOMIC_FINANCIAL_CONDITIONS",
+      "report_use": "Conditional macro/fiscal baseline only; not current assessment.",
+      "current_state_claim": false,
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "A2/A3 pp297-305"
+        }
+      ]
+    },
+    {
+      "dimension": "TRADE_CAPITAL_ENERGY_FOOD_FLOWS",
+      "report_use": "Energy/trade pathway context; no admitted flow graph.",
+      "current_state_claim": false,
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapters2-3"
+        }
+      ]
+    },
+    {
+      "dimension": "TECHNOLOGY_CRITICAL_INFRASTRUCTURE",
+      "report_use": "AI capital/adoption prerequisites; no implementation assertion.",
+      "current_state_claim": false,
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter1"
+        }
+      ]
+    },
+    {
+      "dimension": "CLIMATE_PHYSICAL_RISK",
+      "report_use": "Partial future-damage model; not observed current physical risk.",
+      "current_state_claim": false,
+      "source_refs": [
+        {
+          "asset_id": "IGR2026-MAIN",
+          "locator": "Chapter3 pp68-70"
+        }
+      ]
+    }
+  ],
+  "human_review_questions": {
+    "analysis": {
+      "question": "Does the publication-only candidate keep future paths out of actuals and observed second-order consequences?",
+      "decision": null,
+      "permitted_decisions": [
+        "ACCEPT",
+        "DEFER",
+        "REJECT"
+      ],
+      "recommended_disposition": "REVIEW_BEFORE_ACCEPTANCE"
+    },
+    "projection_inventory": {
+      "question": "Are horizon, units, technical source locators, assumptions and sensitivity paths correctly separated?",
+      "decision": null,
+      "permitted_decisions": [
+        "ACCEPT",
+        "DEFER",
+        "REJECT"
+      ],
+      "recommended_disposition": "REVIEW_BEFORE_ACCEPTANCE"
+    },
+    "assumption_audit": {
+      "question": "Does each audit interrogate the supplied premise without unsupported replacement assumptions or aggregate grading?",
+      "decision": null,
+      "permitted_decisions": [
+        "ACCEPT",
+        "DEFER",
+        "REJECT"
+      ],
+      "recommended_disposition": "REVIEW_BEFORE_ACCEPTANCE"
+    },
+    "historical_backtest": {
+      "question": "Accept the qualified source-reported population/productivity comparisons, or defer for original chart/ABS-vintage reconstruction? Participation is excluded from error.",
+      "decision": null,
+      "permitted_decisions": [
+        "ACCEPT",
+        "DEFER",
+        "REJECT"
+      ],
+      "recommended_disposition": "DEFER"
+    },
+    "dependency_map": {
+      "question": "Are model-defined, assumed and sensitivity-supported chains distinguished from production causal Relationships?",
+      "decision": null,
+      "permitted_decisions": [
+        "ACCEPT",
+        "DEFER",
+        "REJECT"
+      ],
+      "recommended_disposition": "REVIEW_BEFORE_ACCEPTANCE"
+    }
+  },
+  "limitations": [
+    "Independent observed audits are bounded to ABS demographic/labour and PC productivity evidence; no fresh independent care, fiscal, energy or geopolitical panel extracted. Those trajectory axes remain unresolved.",
+    "Three backtest variables inspected; only two source-reported numeric comparisons retained. Participation is explicitly not directly comparable.",
+    "No full vintage reconstruction, no causal attribution of forecast misses, no Treasury overall verdict.",
+    "No production evidence ingestion, Analysis admission, graph edge or World State dimension update."
+  ],
+  "semantic_fingerprint": "1ff8dd0bbe6d88f81d99d61ff57acf0c1ea946bf9e511c330ab5a28d60006138"
+}

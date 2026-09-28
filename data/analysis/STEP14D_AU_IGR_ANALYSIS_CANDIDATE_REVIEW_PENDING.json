@@ -1,0 +1,197 @@
+{
+  "contract_version": "0.1-candidate",
+  "review_state": "REVIEW_PENDING",
+  "visibility": "INTERNAL_ONLY",
+  "write_targets": [],
+  "public_projection_permitted": false,
+  "artifact_type": "ANALYSIS_REVIEW_CANDIDATE_NOT_PRODUCTION",
+  "review": {
+    "analysis_id": "WSAN-AU-IGR-20260921-001",
+    "review_state": "DRAFT",
+    "review_phase": "POST_EVENT",
+    "analysis_as_of_utc": "2026-09-28T16:25:00Z",
+    "canonical_occurrence_id": "WSO-FIS-AU-IGR-20260921",
+    "canonical_series_id": "WSER-FIS-AU-IGR",
+    "canonical_event_type": "INFORMATION_RELEASE",
+    "canonical_institution": "Australian Treasury",
+    "canonical_release_utc": null,
+    "scope": "Australian Treasury 2026 IGR publication and conditional official projection model; no current-state/Forecast admission.",
+    "what_happened": {
+      "summary": "Treasury published its seventh IGR on21 September2026, extending the economic and Commonwealth budget projection to2065-66 with structural-transition and intergenerational-equity chapters.",
+      "actuals": [],
+      "evidence_refs": [
+        "WSEV-CANDIDATE-IGR2026-MAIN"
+      ]
+    },
+    "what_was_expected": {
+      "summary": "2023 is a prior official projection baseline, not a market pre-release expectation. No clean pre-publication benchmark established.",
+      "benchmarks": [],
+      "evidence_refs": [
+        "WSEV-CANDIDATE-IGR2023-MAIN"
+      ]
+    },
+    "what_surprised": {
+      "status": "NOT_ESTABLISHED",
+      "summary": "Model and horizon revisions belong to projection comparison, not an event surprise.",
+      "comparisons": []
+    },
+    "what_moved": [],
+    "what_appears_connected": {
+      "interaction_type": "POLICY_RESPONSE_CONTEXT",
+      "causal_status": "NOT_A_CAUSAL_CLAIM",
+      "confidence": "LOW",
+      "summary": "Treasury model dependencies and policy premises are conditional; ministerial reform attribution is framing, not independently proven causal magnitude.",
+      "evidence_refs": [
+        "WSEV-CANDIDATE-IGR2026-MAIN"
+      ]
+    },
+    "what_may_be_noise": {
+      "summary": "Promotional government framing, cyclical fluctuations extrapolated40years, maintained policy confused with implementation, and central headlines stripped of sensitivities.",
+      "evidence_refs": [
+        "WSEV-CANDIDATE-MINISTER2026"
+      ]
+    },
+    "alternative_explanations": [
+      {
+        "summary": "Lower projected payments may reflect changed methods and maintained reform premises, not already realised efficiency."
+      },
+      {
+        "summary": "Weak measured productivity can reflect cyclical capital/measurement effects, not necessarily permanent failure of the long-run rate."
+      },
+      {
+        "summary": "Period fertility decline may partly reflect delay, not equivalent completed-cohort decline."
+      }
+    ],
+    "second_order_effects": {
+      "status": "NOT_ESTABLISHED",
+      "summary": "Projected fiscal/distribution/sector effects are not observed outcomes.",
+      "evidence_refs": []
+    },
+    "falsifiers": [
+      {
+        "summary": "Review if multi-year underlying estimates fail the stated transition or revisions alter trend; a single weak quarter is not a 40-year falsifier.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Revise use if sustained age-specific/cohort evidence fails assumed recovery or terminal path; never from one registration-year fluctuation.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review if a durable visa/border regime or multi-year measured flows invalidate convergence, not from one quarterly release.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review after sustained cohort-pattern departures or structural survey/model changes; preserve original comparison vintage.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review when measured gains or labour/distribution effects materially diverge from assumed diffusion/complementary channels.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review on persistent delivery/cost divergence or new damage-model evidence; do not replace assumptions with aspirational targets.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review on persistent adjusted cost divergence, accounting change or morbidity shift affecting program models.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review on actuarial revision, reform reversal/non-delivery or material mix/cost departures.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      },
+      {
+        "summary": "Review when enacted settings or sustained tax-base change invalidate maintained ceiling or compensating-policy assumptions.",
+        "evidence_refs": [
+          "WSEV-CANDIDATE-IGR2026-MAIN"
+        ]
+      }
+    ],
+    "canonical_mutation_prohibited": true,
+    "google_calendar_write": false
+  },
+  "candidate_local_evidence": [
+    {
+      "evidence_id": "WSEV-CANDIDATE-IGR2026-MAIN",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Treasury",
+      "title": "IGR2026-MAIN",
+      "url": "https://treasury.gov.au/sites/default/files/2026-09/p2026-797917.pdf",
+      "published_at": "2026-09-21",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "IGR2026-MAIN"
+    },
+    {
+      "evidence_id": "WSEV-CANDIDATE-IGR2023-MAIN",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Australian Treasury",
+      "title": "IGR2023-MAIN",
+      "url": "https://treasury.gov.au/sites/default/files/2023-08/p2023-435150.pdf",
+      "published_at": "2023-08-24",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "IGR2023-MAIN"
+    },
+    {
+      "evidence_id": "WSEV-CANDIDATE-MINISTER2026",
+      "evidence_class": "PRIMARY_OFFICIAL",
+      "provider": "Treasury Ministers",
+      "title": "MINISTER2026",
+      "url": "https://ministers.treasury.gov.au/ministers/jim-chalmers-2022/media-releases/2026-intergenerational-report",
+      "published_at": "2026-09-21",
+      "roles": [
+        "CONTEXT_OR_ALTERNATIVE"
+      ],
+      "canonical_provenance_effect": "NONE",
+      "asset_id": "MINISTER2026"
+    }
+  ],
+  "official_projection_review": {
+    "inventory_fingerprint": "cc513bdee31bc2b49801a7b222e5972efc4e9b741462536de06b66b32143a1cc",
+    "audit_fingerprint": "1ff8dd0bbe6d88f81d99d61ff57acf0c1ea946bf9e511c330ab5a28d60006138",
+    "evidence_manifest_fingerprint": "66b9c667210e0dbdc026f47e9eb7d18f038ce3366db390ef6a6599a2bcf4b9a1",
+    "extension_fingerprint": "c76945773b613206ad58bf597cc6ed02a1e3f646d88fec63e6bce49297cd6c7c",
+    "contract_parts": {
+      "projection_framework": "projection_inventory.projection_framework",
+      "projection_outputs": "projection_inventory.projection_outputs",
+      "model_assumptions": "projection_inventory.model_assumptions",
+      "sensitivity_cases": "projection_inventory.sensitivity_cases",
+      "assumption_audit": "assumption_audit.assumption_audit",
+      "comparison_baseline": "projection_inventory.comparison_baseline",
+      "limitations": "all candidate limitations"
+    }
+  },
+  "model_provenance": {
+    "execution_surface": "Codex",
+    "model_identity": "UNAVAILABLE",
+    "model_version": "UNAVAILABLE",
+    "reasoning_configuration": "UNAVAILABLE",
+    "procedure_version": "step14d-official-projection-assumption-audit-v1",
+    "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION"
+  },
+  "limitations": [
+    "DRAFT native event-review spine plus separate extension candidate; production admission and public projection prohibited."
+  ],
+  "semantic_fingerprint": "2d9756cdad4525e032de1876d5c7057cb7c0caa834ab9d1e6baca58932650e16"
+}
