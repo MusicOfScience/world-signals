@@ -193,6 +193,43 @@ def validate_read_request(request: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _validate_legacy_production_query_coherence(
+    normalized_request: dict[str, Any],
+    production_query: dict[str, Any],
+) -> dict[str, Any]:
+    """Validate the legacy dual-request bridge before combining its results.
+
+    The separate request form remains for compatibility, but it cannot be a
+    second source of scope or time truth.  The internal intelligence view
+    derives both requests from one normalized contract instead.
+    """
+    from .world_state_production import (
+        WorldStateProductionReadError,
+        validate_production_read_request,
+    )
+
+    try:
+        normalized_production = validate_production_read_request(production_query)
+    except WorldStateProductionReadError as exc:
+        raise WorldStateReadError(f"QUERY_COHERENCE_CHECK: invalid production query: {exc}") from exc
+    synthesis_scope = normalized_request["scope"]
+    production_scope = normalized_production["scope"]
+    if normalized_production["knowledge_cutoff_utc"] != normalized_request["as_of_utc"]:
+        raise WorldStateReadError("QUERY_COHERENCE_CHECK: knowledge cutoff differs from synthesis as_of_utc")
+    def semantic_jurisdictions(values: list[str]) -> set[str]:
+        return {"*"} if not values or "*" in values else set(values)
+
+    if semantic_jurisdictions(production_scope["jurisdictions"]) != semantic_jurisdictions(synthesis_scope["jurisdictions"]):
+        raise WorldStateReadError("QUERY_COHERENCE_CHECK: jurisdiction scope differs")
+    if set(production_scope["dimensions"]) != set(synthesis_scope["dimensions"]):
+        raise WorldStateReadError("QUERY_COHERENCE_CHECK: dimension scope differs")
+    if production_scope["systems"] or production_scope["component_ids"]:
+        raise WorldStateReadError("QUERY_COHERENCE_CHECK: systems and component filters are not allowed")
+    if normalized_production["query_mode"] == "KNOWLEDGE_AS_OF" and normalized_production["effective_as_of_utc"] is not None:
+        raise WorldStateReadError("QUERY_COHERENCE_CHECK: knowledge reads require null effective_as_of_utc")
+    return normalized_production
+
+
 def _load_inputs() -> dict[str, Any]:
     return {key: load_json(ROOT / relative) for key, relative in DATA_PATHS.items()}
 
@@ -522,6 +559,7 @@ def _relationship_context_rows(revisions: list[dict[str, Any]]) -> list[dict[str
             "admitted_at_utc": selected["admission"]["admitted_at_utc"],
             "admission_transaction_id": selected["admission"]["transaction_id"],
             "admission_transaction_fingerprint": selected["admission"]["transaction_fingerprint"],
+            "production_relationship_fingerprint": selected["relationship"].get("object_sha256"),
             "current_active": False,
             "historical_status": "HISTORICAL_ONLY",
             "causal_basis": deepcopy(selected["relationship"].get("causal_basis", [])),
@@ -577,6 +615,9 @@ def read_world_state(
     is optional execution metadata and is excluded from the semantic fingerprint.
     """
     normalized = validate_read_request(request)
+    normalized_production_query = None
+    if production_query is not None:
+        normalized_production_query = _validate_legacy_production_query_coherence(normalized, production_query)
     if generated_at_utc is not None:
         _parse_exact_utc(generated_at_utc, "generated_at_utc")
     inputs = _load_inputs()
@@ -768,10 +809,10 @@ def read_world_state(
             "relationship_historical_accepted": len(revisions["relationship_history"]),
             "relationship_current_active": len(revisions["relationship_edges"]),
         })
-    if production_query is not None:
+    if normalized_production_query is not None:
         from .world_state_production import read_production_world_state
 
-        production_world_state = read_production_world_state(production_query)
+        production_world_state = read_production_world_state(normalized_production_query)
         proposal["production_world_state"] = production_world_state
         if production_world_state["status"] == "ADMITTED_ASSESSMENT_AVAILABLE":
             proposal["limitations"] = [

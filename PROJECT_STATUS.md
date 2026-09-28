@@ -281,6 +281,19 @@ Scenario and Forecast validators continue to receive v0.1; Forecast cutoffs
 remain frozen and no endpoint successor is created. Production data and
 public projection remain unchanged.
 
+Migration Step 12D now provides the canonical internal intelligence read
+request. One normalized request derives both the evidence read and admitted
+production-state query, with strict knowledge-cutoff, jurisdiction and
+dimension coherence; the legacy dual-request bridge now fails closed on
+mismatch and rejects systems/component filters. The internal view partitions
+current-use, historical/no-currentness, review-required and unknown state,
+keeps the RBNZ Relationship as historical non-causal `ASSOCIATION` context,
+and joins endpoints only by exact component identity and hash. Effective-time
+reads preserve retrospective knowledge semantics: a 2 September Relationship
+is absent before its 28 September admission and may be visible afterward as
+`HISTORICAL_RELATIONSHIP_KNOWN_LATER`. No successor, production object,
+Relationship, Risk, Scenario, Forecast or public projection is created.
+
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.
 Calendar counts and concentration context live with the Calendar rather than

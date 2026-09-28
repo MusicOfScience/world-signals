@@ -611,6 +611,25 @@ two snapshot series and one controlled v0.2 Relationship. The next boundary
 is a separately reviewed synthesis/relationship evolution decision, not
 automatic graph or World State promotion.
 
+## Stage 28 — query-coherent internal intelligence view — IMPLEMENTED / READ-ONLY
+
+Migration Step 12D introduces one `WORLD_STATE_INTERNAL_INTELLIGENCE_VIEW`
+request as the source of truth for both the governed evidence read and the
+admitted World State production read. Knowledge cutoff, jurisdiction scope and
+dimension scope are derived identically; `EFFECTIVE_AS_OF` additionally
+requires an effective time no later than the knowledge cutoff. The old
+`read_world_state(..., production_query=...)` compatibility path remains but
+now rejects mismatched cutoffs/scopes and non-empty systems or component
+filters.
+
+The view keeps current-use, historical/no-currentness, review-required and
+unknown partitions separate. The Health component is current-use eligible at
+the recorded cutoff; the RBNZ Macro and Markets components remain historical
+with `NO_CURRENTNESS_CLAIM`. The admitted RBNZ Relationship is separately
+represented as historical non-causal `ASSOCIATION` context, with exact endpoint
+identity/hash joins and explicit partial-scope endpoint status. It creates no
+transmission edge, successor, production object or public projection.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader
