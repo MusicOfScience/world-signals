@@ -28,6 +28,8 @@ jobs:
       - run: python scripts/validate_outcomes.py
       - run: python scripts/validate_evaluation.py
       - run: python scripts/validate_analysis.py
+      - run: python scripts/validate_assumption_signposts.py
+      - run: python -m py_compile src/world_signals/assumption_signposts.py scripts/admit_igr_assumption_signposts.py scripts/validate_assumption_signposts.py
       - run: python scripts/project_state_snapshot.py --check
       # The full test suite includes explicit integration checks for the
       # disposable public and local operator projections. Build those outputs

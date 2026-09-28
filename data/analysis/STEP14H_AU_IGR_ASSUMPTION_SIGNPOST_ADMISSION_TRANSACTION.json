@@ -1,0 +1,67 @@
+{
+  "transaction_id": "WS-ASSUMPTION-SIGNPOST-ADMISSION-AU-IGR-20260929-001",
+  "transaction_type": "ASSUMPTION_SIGNPOST_PRODUCTION_ADMISSION",
+  "contract_version": "0.1",
+  "review_id": "WS-STEP14H-AU-IGR-SIGNPOST-REVIEW-20260929-001",
+  "review_fingerprint": "50739865a5f5577a5a6488832662614026efa29b52c25e3096ba6b088d5ae4f5",
+  "step14g_semantic_fingerprint": "0d6fc09c1dd84dd8f009a39d01795a26efa9b580d9716160f47370a3db4f2f5b",
+  "source_manifest_fingerprint": "2d5b7a6962cbfc4dfc404c7a37ebc002c714d4cf0d4a062f25d49ceb2a855186",
+  "analysis_id": "WSAN-AU-IGR-20260921-001",
+  "analysis_sha256": "9e108606a6354ef8862f186db3418207155ff85f65e828079aeec616b8ee3ed0",
+  "official_projection_extension_sha256": "96a00e77f7f9d43a59dafb4988c89cac933ce5cacd703f37399782f0be238668",
+  "definition_set_id": "WSASMDSET-AU-IGR-20260929-001",
+  "definition_set_sha256": "4474b28f08c50381cf3942cecdd95f1f96e7fd255f3654985b8645508bf4cc20",
+  "signpost_count": 15,
+  "coverage_gap_set_sha256": "d8865163b127eded84f80226b9594037f44d5af3e55344ea1add2a33f16c693f",
+  "assessment_snapshot_id": "WSASMSNAP-AU-IGR-20260928-001",
+  "assessment_snapshot_sha256": "475de60287c54f48295408f743990bc6f33fa26dd62c9c4afee71763a5ac3a30",
+  "reviewed_at_utc": "2026-09-28T22:15:04Z",
+  "admitted_at_utc": "2026-09-28T22:15:04Z",
+  "pre_state_hashes": {
+    "governed_data_groups": {
+      "analysis_preexisting": "1c6d9f336ea765b822c17d687da0b76eb04bb1ece971d1883d805d1da86ab1b8",
+      "canonical": "4d2faa0a3379da099528d4a2865589b6b040cc7d3a5994dd903075f11d1564bb",
+      "sources": "3db29c6e50a3f401803c12a30d6091ba013596ca02c8ff9d2c1cbce9db40062f",
+      "live_intelligence": "deb0ad0521e0eb92325fd18c3d272fd6462f9977a10590bd4e33dce86317fc1d",
+      "signals": "b9f20b409f48fd44124a676fe4c281bd3501b192a3d3f54d2a8af7b484245af7",
+      "world_state": "ff98e47593ef8b806e615e7a54b34016b9b36a341e1c3c504dd0e8e629cf2a66",
+      "relationships": "e94c21b8339471a7403ce5d4664ceb4bdffe734f40595a266e6c53732f676ae6",
+      "forecasts": "d2ff38165faa77f881befc0784929c03d5dacba025c6f37a6f6e408fa7860d71",
+      "scenarios": "0b0560d688146983a31e2d92772ef4c8fa93182b4f33a65c5d51baea5ac5285d",
+      "risks": "da1ed1d2bd4685819e97e8b7f4c811d62f710ba1e38293611a4941190305efce",
+      "outcomes": "dfad04aed98d3758698f1fbb7e89191f0e444c89451c6e32ddbfb09f182397d3",
+      "monitor": "1a8e7af9066362d800a270b186565b3d9221f395dab7864bf79a5bae115b5029",
+      "web": "9f10afbe07eb1cacf24210de8a3310e3146ddbcfb4b811d67a8f2350692bf01b"
+    },
+    "new_targets_absent": {
+      "data/analysis/assumption_signposts_schema.json": null,
+      "data/analysis/assumption_signpost_definitions.json": null,
+      "data/analysis/assumption_signpost_coverage_gaps.json": null,
+      "data/analysis/assumption_signpost_assessment_snapshots.json": null,
+      "data/analysis/STEP14H_AU_IGR_ASSUMPTION_SIGNPOST_HUMAN_REVIEW_ACCEPTED.json": null,
+      "data/analysis/STEP14H_AU_IGR_ASSUMPTION_SIGNPOST_ADMISSION_TRANSACTION.json": null
+    }
+  },
+  "post_state_hashes": {
+    "data/analysis/assumption_signposts_schema.json": "f56b10a57d5209d8d68210f97fd4e3085eb2417aa26d9879cadb94fb33dba10b",
+    "data/analysis/assumption_signpost_definitions.json": "4088a4b1fca4cd8b9e4607d881ffb6bb632796d6e0c47806d7b2e32406367f0a",
+    "data/analysis/assumption_signpost_coverage_gaps.json": "6bb6b781e7f48ad6da273ca5b6fe2206284d7897d8f3f361b6310ae91d2c5a6e",
+    "data/analysis/assumption_signpost_assessment_snapshots.json": "730456110874badebf5310b58e7f2c37d3f3059bc5d8897f1428909ec46d14dd",
+    "data/analysis/STEP14H_AU_IGR_ASSUMPTION_SIGNPOST_HUMAN_REVIEW_ACCEPTED.json": "0bd36f9f4abdd50354301d7ed45258f4003b4cadb707f869a44076d1fa2a30c8"
+  },
+  "write_targets": [
+    "data/analysis/assumption_signposts_schema.json",
+    "data/analysis/assumption_signpost_definitions.json",
+    "data/analysis/assumption_signpost_coverage_gaps.json",
+    "data/analysis/assumption_signpost_assessment_snapshots.json",
+    "data/analysis/STEP14H_AU_IGR_ASSUMPTION_SIGNPOST_HUMAN_REVIEW_ACCEPTED.json",
+    "data/analysis/STEP14H_AU_IGR_ASSUMPTION_SIGNPOST_ADMISSION_TRANSACTION.json"
+  ],
+  "visibility": "INTERNAL_ONLY",
+  "public_projection_permitted": false,
+  "monitoring_routes_created": 0,
+  "automated_retrieval_authorised": false,
+  "analysis_revision_created": false,
+  "downstream_write_targets": [],
+  "transaction_fingerprint": "16805c06b503af86f526debe05401f068ff907f25c88a32c6fc8bcfa1c633efb"
+}

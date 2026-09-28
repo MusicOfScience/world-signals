@@ -460,3 +460,17 @@ assessment. The independent historical backtest remains DEFERRED. Missing
 cohort, productivity decomposition, AI, energy-delivery, fiscal and health-cost
 coverage is explicit and does not create monitoring routes. See the retained
 JSON and review summary under `data/analysis/STEP14G_AU_IGR_ASSUMPTION_SIGNPOSTS_*`.
+
+## Migration Step 14H — governed internal signpost admission
+
+Step 14H admits the generic `WORLD_SIGNALS_ASSUMPTION_SIGNPOST` subordinate
+Analysis contract, 15 immutable definitions for eight IGR assumptions, eight
+source-coverage gaps, and one immutable assessment snapshot as of
+`2026-09-28T20:32:40Z`. All eight analyst workflow states are `OBSERVE`;
+productivity remains `AMBIGUOUS`, migration remains `IN_TENSION_WITH_ASSUMPTION`,
+and the other six remain `NOT_ENOUGH_EVIDENCE`. Source gaps remain gaps only:
+no monitoring routes, source automation or retrieval were authorised. The IGR
+historical backtest remains `DEFERRED`. No Analysis revision, World State,
+Relationship, Forecast, Scenario, Risk, Outcome or public promotion is created.
+Definitions and snapshots are separate, with future evidence requiring a new
+snapshot; knowledge-as-of selection is gated by genuine admission time.

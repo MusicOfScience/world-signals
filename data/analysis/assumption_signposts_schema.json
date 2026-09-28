@@ -1,0 +1,48 @@
+{
+  "contract": "WORLD_SIGNALS_ASSUMPTION_SIGNPOST",
+  "version": "0.1",
+  "classification": "INTERNAL_ONLY",
+  "definition_is_not_observation_or_promotion": true,
+  "automatic_evaluation": false,
+  "automatic_analysis_revision": false,
+  "automatic_world_state_mutation": false,
+  "automated_retrieval": false,
+  "observation_types": [
+    "COMPOSITION",
+    "IMPLEMENTATION_STATE",
+    "LEVEL",
+    "MODEL_REVISION",
+    "POLICY_STATE",
+    "RATE",
+    "STRUCTURAL_BREAK_INDICATOR",
+    "TREND"
+  ],
+  "evidence_directions": [
+    "AMBIGUOUS",
+    "CONSISTENT_WITH_ASSUMPTION",
+    "IN_TENSION_WITH_ASSUMPTION",
+    "NOT_COMPARABLE"
+  ],
+  "assessment_present_states": [
+    "AMBIGUOUS",
+    "CONSISTENT_WITH_ASSUMPTION",
+    "IN_TENSION_WITH_ASSUMPTION",
+    "NOT_COMPARABLE",
+    "NOT_ENOUGH_EVIDENCE"
+  ],
+  "workflow_states": [
+    "OBSERVE",
+    "REVIEW_DUE",
+    "STRUCTURAL_REASSESSMENT_REQUIRED"
+  ],
+  "prohibited_fields": [
+    "score",
+    "grade",
+    "rating",
+    "probability",
+    "pass_fail"
+  ],
+  "snapshot_immutability": "APPEND_ONLY; future evidence creates a new snapshot",
+  "knowledge_visibility": "snapshot visible only when admitted_at_utc <= knowledge_cutoff_utc",
+  "public_projection_permitted": false
+}
