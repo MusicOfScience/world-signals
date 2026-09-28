@@ -535,6 +535,15 @@ deterministic component union and fail-closed component head conflicts. The
 real repository remains one series/one component; no second component,
 successor revision, materialised composition or public projection was created.
 
+Migration Step 11A retains a second review-pending specimen from the governed
+RBNZ post-event Analysis review. It is intentionally split into narrow
+`MACROECONOMIC_FINANCIAL_CONDITIONS` and `MARKETS_AS_SENSORS` candidates, with
+distinct known-at boundaries and no causal Relationship. A separate executable
+identity-only actor-admission gate is tested and simulated but the Actor
+Registry remains unpopulated. No second World State component, snapshot,
+admission transaction or public projection exists; the next gate is explicit
+human review of the candidate package, not automatic admission.
+
 ## Stage 24 — public intelligence brief / Outlook pilot — IMPLEMENTED / BOUNDED
 
 Migration Step 10A reshapes the public landing surface around reader

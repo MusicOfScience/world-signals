@@ -4,6 +4,7 @@
   "version": "0.1",
   "population_state": "UNPOPULATED_CONTRACT_ONLY",
   "identity_only": true,
+  "identity_admission_transaction_type": "WORLD_STATE_ACTOR_IDENTITY_ADMISSION",
   "actor_types": [
     "PERSON",
     "OFFICE",
@@ -47,7 +48,9 @@
   ],
   "population_policy": {
     "production_population_allowed": false,
+    "manual_reviewed_admission_allowed": true,
     "automatic_identity_merge_allowed": false,
+    "general_population_open": false,
     "synthetic_production_population_allowed": false
   }
 }

@@ -37,7 +37,10 @@
   },
   "population_policy": {
     "production_population_allowed": false,
+    "manual_reviewed_admission_allowed": true,
     "automatic_admission_allowed": false,
+    "general_population_open": false,
     "synthetic_production_population_allowed": false
-  }
+  },
+  "actor_identity_admission_is_separate": true
 }

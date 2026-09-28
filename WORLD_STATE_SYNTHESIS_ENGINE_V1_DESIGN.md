@@ -584,6 +584,16 @@ The fixture is valid only as a contract test. It must not be copied into
    composition dataset. The real repository remains one component and one
    snapshot series; no second admission or public projection was created.
 
+Migration Step 11A now retains a second, non-governed review specimen from
+`WSAN-NZ-OCR-20260902-001`. Its two narrow candidates preserve the distinction
+between policy conditions and market sensing, use exact Analysis/evidence
+lineage, retain separate known-at boundaries, and do not create causal
+transmission. The proposal-local Reserve Bank of New Zealand identity is
+identity-only and remains unadmitted. `WORLD_STATE_ACTOR_IDENTITY_ADMISSION`
+is an explicit manual-review boundary with temporary simulation only; no Actor
+Registry population, World State admission or public projection is authorised
+by this step.
+
 ## Deferred implementation questions
 
 Migration Step 6 resolves the architectural questions above. The remaining

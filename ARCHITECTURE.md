@@ -577,6 +577,17 @@ Outcomes or Model Learning must exist before World State can be assessed.
 | Human review | Monitor candidates, retained review state, review decisions, controlled transactions and protected-layer tests are present | Already implemented and sound for current layers; extension is needed so future signal/scenario/forecast promotion remains review-governed. |
 | Public/private boundaries | Canonical, runtime, review, Live, Analysis and static projections are separated; Pages publishes `docs/` only | Already implemented and sound for current layers. The ICS feed is now an additional deliberately publishable projection and excludes runtime/review-only material. |
 
+Migration Step 11A adds a retained RBNZ Analysis specimen as review evidence,
+not production state. The package contains two scoped Dimension Assessment
+candidates: a narrow monetary-policy condition and a market-sensor reading. It
+preserves separate economist-consensus and market-pricing comparison bases,
+source-reported market endpoints and alternative explanations. The observed
+association remains Analysis-owned; World State creates no Relationship or
+transmission edge. The separate `WORLD_STATE_ACTOR_IDENTITY_ADMISSION`
+boundary validates identity-only, manual-review-gated candidates and temporary
+simulation while the Actor Registry remains empty. Production remains one
+component, snapshot and admission, and public projection remains closed.
+
 ### Implemented but needing extension
 
 The strongest reusable foundations are the stable Canonical identity/timing

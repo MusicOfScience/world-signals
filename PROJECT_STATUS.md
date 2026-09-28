@@ -220,6 +220,16 @@ Forecasts. Forecast values remain unresolved and Evaluation remains
 not projected. World State remains internal: no second component, public World
 State projection or public briefing narrative was created.
 
+Migration Step 11A now retains a second, non-governed RBNZ Analysis specimen at
+`data/world_state_audit/STEP11A_RBNZ_CANDIDATE_REVIEW_PENDING.json`. It carries
+two narrow review-pending Dimension Assessment candidates—monetary-policy
+conditions and markets as sensors—and a proposal-local identity-only RBNZ
+candidate. The actor identity admission contract is executable in temporary
+simulation but remains unpopulated; no ActorStateAssertion, ImplementationClaim,
+Relationship, Forecast, second component, snapshot or production admission was
+created. Production remains one component, one snapshot and one admission;
+public projection remains closed.
+
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.
 Calendar counts and concentration context live with the Calendar rather than
