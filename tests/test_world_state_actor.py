@@ -9,6 +9,8 @@ from world_signals.world_state_actor import (
     build_actor_identity_admission_transaction,
     build_actor_identity_candidate,
     simulate_actor_identity_admission,
+    actor_identity_effective_as_of,
+    actor_identity_known_as_of,
     validate_actor_identity_candidate,
 )
 from world_signals.world_state_history import fingerprint
@@ -76,3 +78,14 @@ class WorldStateActorIdentityTests(unittest.TestCase):
         with self.assertRaises(ActorIdentityAdmissionError):
             simulate_actor_identity_admission(candidate, {"transaction_type": ACTOR_IDENTITY_ADMISSION_TRANSACTION_TYPE, "decision": "ACCEPTED", "candidate_fingerprint": "wrong"})
         self.assertEqual(candidate, before)
+
+    def test_unknown_historical_start_is_explicit_and_fails_closed_for_effective_queries(self):
+        candidate = self.candidate(
+            effective_from=None,
+            effective_from_precision="UNKNOWN",
+            identity_known_at_utc="2026-09-05T14:40:00Z",
+        )
+        self.assertEqual(validate_actor_identity_candidate(candidate), [])
+        self.assertTrue(actor_identity_known_as_of(candidate, "2026-09-06T00:00:00Z"))
+        self.assertFalse(actor_identity_effective_as_of(candidate, "1900-01-01T00:00:00Z"))
+        self.assertFalse(actor_identity_effective_as_of(candidate, "2026-09-06T00:00:00Z"))

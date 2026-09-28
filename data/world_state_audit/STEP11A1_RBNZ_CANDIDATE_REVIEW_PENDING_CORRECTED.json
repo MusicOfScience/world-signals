@@ -1,0 +1,1154 @@
+{
+  "actor_identity_admission": {
+    "production_population_performed": false,
+    "simulation": {
+      "after": {
+        "actors": [
+          {
+            "actor_id": "WSACT-RBNZ-202609-001",
+            "actor_type": "CENTRAL_BANK",
+            "aliases": [
+              "Reserve Bank of New Zealand",
+              "RBNZ",
+              "Te Pūtea Matua"
+            ],
+            "canonical_label": "Reserve Bank of New Zealand",
+            "effective_from": null,
+            "effective_from_precision": "UNKNOWN",
+            "effective_to": null,
+            "identity_admission_transaction_id": "WS-ACTOR-IDENTITY-SIMULATION-WSACT-RBNZ-202609-001",
+            "identity_admitted_at_utc": "2026-09-28T00:00:00Z",
+            "identity_known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_IDENTITY_PROVENANCE",
+            "identity_known_at_utc": "2026-09-05T14:40:00Z",
+            "identity_provenance": [
+              {
+                "layer": "ANALYSIS_EVIDENCE",
+                "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+                "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+                "revision_id": null
+              }
+            ],
+            "identity_revision_id": "WSACT-RBNZ-202609-001-R1",
+            "identity_revision_number": 1,
+            "jurisdiction": [
+              "New Zealand"
+            ],
+            "object_sha256": "f63f202c18fb73ba9c03643fb525cff0880b2e200d987cdbe97a41d14e03627f",
+            "parent_actor_ids": [],
+            "review_state": "ACCEPTED"
+          }
+        ],
+        "relationships": []
+      },
+      "before": {
+        "actors": [],
+        "relationships": []
+      },
+      "candidate": {
+        "actor_id": "WSACT-RBNZ-202609-001",
+        "actor_type": "CENTRAL_BANK",
+        "aliases": [
+          "Reserve Bank of New Zealand",
+          "RBNZ",
+          "Te Pūtea Matua"
+        ],
+        "canonical_label": "Reserve Bank of New Zealand",
+        "effective_from": null,
+        "effective_from_precision": "UNKNOWN",
+        "effective_to": null,
+        "identity_known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_IDENTITY_PROVENANCE",
+        "identity_known_at_utc": "2026-09-05T14:40:00Z",
+        "identity_provenance": [
+          {
+            "layer": "ANALYSIS_EVIDENCE",
+            "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+            "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+            "revision_id": null
+          }
+        ],
+        "identity_revision_id": "WSACT-RBNZ-202609-001-R1",
+        "identity_revision_number": 1,
+        "jurisdiction": [
+          "New Zealand"
+        ],
+        "object_sha256": "9d7718cd3102c2e67d4bf40762369d46af33a62222230ed64a71ce9fd35c0f7a",
+        "parent_actor_ids": [],
+        "review_state": "UNDER_REVIEW"
+      },
+      "limitations": [
+        "Simulation is temporary and is not a production Actor Registry admission.",
+        "Actor identity remains separate from actor state, capability, intent and implementation claims."
+      ],
+      "production_write_performed": false,
+      "simulated_admitted_actor": {
+        "actor_id": "WSACT-RBNZ-202609-001",
+        "actor_type": "CENTRAL_BANK",
+        "aliases": [
+          "Reserve Bank of New Zealand",
+          "RBNZ",
+          "Te Pūtea Matua"
+        ],
+        "canonical_label": "Reserve Bank of New Zealand",
+        "effective_from": null,
+        "effective_from_precision": "UNKNOWN",
+        "effective_to": null,
+        "identity_admission_transaction_id": "WS-ACTOR-IDENTITY-SIMULATION-WSACT-RBNZ-202609-001",
+        "identity_admitted_at_utc": "2026-09-28T00:00:00Z",
+        "identity_known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_IDENTITY_PROVENANCE",
+        "identity_known_at_utc": "2026-09-05T14:40:00Z",
+        "identity_provenance": [
+          {
+            "layer": "ANALYSIS_EVIDENCE",
+            "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+            "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+            "revision_id": null
+          }
+        ],
+        "identity_revision_id": "WSACT-RBNZ-202609-001-R1",
+        "identity_revision_number": 1,
+        "jurisdiction": [
+          "New Zealand"
+        ],
+        "object_sha256": "f63f202c18fb73ba9c03643fb525cff0880b2e200d987cdbe97a41d14e03627f",
+        "parent_actor_ids": [],
+        "review_state": "ACCEPTED"
+      },
+      "status": "PASS"
+    },
+    "status": "REVIEW_PENDING_UNADMITTED",
+    "transaction": {
+      "admitted_at_utc": "2026-09-28T00:00:00Z",
+      "candidate_actor_id": "WSACT-RBNZ-202609-001",
+      "candidate_fingerprint": "9d7718cd3102c2e67d4bf40762369d46af33a62222230ed64a71ce9fd35c0f7a",
+      "candidate_identity_revision_id": "WSACT-RBNZ-202609-001-R1",
+      "contract_version": "0.1",
+      "decided_at_utc": "2026-09-28T00:00:00Z",
+      "decision": "ACCEPTED",
+      "post_state_hashes": {
+        "actors": "cf36de4768cf1124e9872ef2047616f12628bda559ea0b4d69826575b91f2d63"
+      },
+      "pre_state_hashes": {
+        "actors": "2b84e01069db5c42daf40cb6e910fdc2bbc72734511cafb0de9b3694769efde6"
+      },
+      "production_write_performed": false,
+      "reviewer": {
+        "reviewer_id": "operator-human-review-required",
+        "role": "human-review-required"
+      },
+      "transaction_fingerprint": "e5dc6beca80a8c112687bb1cc20f3106a595050a47fbf30682e8004e451b3a6d",
+      "transaction_id": "WS-ACTOR-IDENTITY-SIMULATION-WSACT-RBNZ-202609-001",
+      "transaction_type": "WORLD_STATE_ACTOR_IDENTITY_ADMISSION",
+      "validator_version": "world-state-actor-identity-v1",
+      "write_targets": [
+        "SIMULATION_ONLY:data/world_state/actor_registry.json"
+      ]
+    }
+  },
+  "actor_identity_candidate": {
+    "actor_id": "WSACT-RBNZ-202609-001",
+    "actor_type": "CENTRAL_BANK",
+    "aliases": [
+      "Reserve Bank of New Zealand",
+      "RBNZ",
+      "Te Pūtea Matua"
+    ],
+    "canonical_label": "Reserve Bank of New Zealand",
+    "effective_from": null,
+    "effective_from_precision": "UNKNOWN",
+    "effective_to": null,
+    "identity_known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_IDENTITY_PROVENANCE",
+    "identity_known_at_utc": "2026-09-05T14:40:00Z",
+    "identity_provenance": [
+      {
+        "layer": "ANALYSIS_EVIDENCE",
+        "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+        "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+        "revision_id": null
+      }
+    ],
+    "identity_revision_id": "WSACT-RBNZ-202609-001-R1",
+    "identity_revision_number": 1,
+    "jurisdiction": [
+      "New Zealand"
+    ],
+    "object_sha256": "9d7718cd3102c2e67d4bf40762369d46af33a62222230ed64a71ce9fd35c0f7a",
+    "parent_actor_ids": [],
+    "review_state": "UNDER_REVIEW"
+  },
+  "actor_state_assertions": [],
+  "analysis_id": "WSAN-NZ-OCR-20260902-001",
+  "analysis_review_as_of_utc": "2026-09-05T14:40:00Z",
+  "baseline_treatment": {
+    "reason": "The economist consensus and market path are different comparison bases; no standalone baseline is admitted or invented.",
+    "standalone_baseline_candidates": [],
+    "status": "EMBEDDED_ANALYSIS_BENCHMARKS_RETAINED_SEPARATELY"
+  },
+  "candidate_semantic_fingerprint": "447954092a4825dd5a6b4a0253ed9cf8939d97df127632ae43e8121792f74571",
+  "constructed_at_utc": "2026-09-28T00:00:00Z",
+  "correction_lineage": {
+    "corrected_successor": "data/world_state_audit/STEP11A1_RBNZ_CANDIDATE_REVIEW_PENDING_CORRECTED.json",
+    "correction_type": "KNOWN_AT_AND_EFFECTIVE_TIME_PRECISION_AND_ACTOR_IDENTITY_BOUNDARY",
+    "corrects_package": "data/world_state_audit/STEP11A_RBNZ_CANDIDATE_REVIEW_PENDING.json",
+    "human_review_dispositions": {
+      "ACTOR_IDENTITY": "DEFER_IDENTITY_TEMPORAL_CONTRACT",
+      "MACROECONOMIC_FINANCIAL_CONDITIONS": "DEFER_TEMPORAL_CORRECTION",
+      "MARKETS_AS_SENSORS": "DEFER_TEMPORAL_CORRECTION"
+    },
+    "predecessor_candidate_fingerprint": "455ac3d2402ac7370fe6b4a4b5b69fbc666183dd57a191c3da23525a85b3dc39",
+    "predecessor_source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+    "reason": "The comparative policy-path proposition was not admissibly known at the official release instant; source-reported market windows do not establish an exact movement instant; identity evidence does not establish institutional founding time."
+  },
+  "correction_review": {
+    "component_readiness": {
+      "ACTOR_IDENTITY": "DEFER_IDENTITY_TEMPORAL_CONTRACT",
+      "MACROECONOMIC_FINANCIAL_CONDITIONS": "READY_FOR_HUMAN_COMPONENT_REVIEW",
+      "MARKETS_AS_SENSORS": "READY_FOR_HUMAN_COMPONENT_REVIEW"
+    },
+    "production_admission_performed": false,
+    "public_projection_permitted": false,
+    "status": "REVIEW_PENDING",
+    "write_targets": []
+  },
+  "dimension_assessment_candidates": [
+    {
+      "admission_transaction_id": null,
+      "admitted_at_utc": null,
+      "anomaly_refs": [],
+      "baseline_ref": null,
+      "breadth": "NOT_ASSESSED",
+      "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "contradictory_citations": [],
+      "dimension": "MACROECONOMIC_FINANCIAL_CONDITIONS",
+      "direction": "UPWARD",
+      "effective_at": "2026-09-02T02:00:00Z",
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "RBNZ canonical decision release time; market reaction remains source-reported, not independently reconstructed.",
+      "effective_time_precision": "UTC_INSTANT",
+      "expectation_baselines": [
+        {
+          "baseline_id": "WS-STEP11A-RBNZ-ECONOMIST-CONSENSUS",
+          "basis": "OFFICIAL_REFERENCE",
+          "label": "27 of 31 economists expected 25bp to 2.75 percent",
+          "reference_ids": [
+            "WSEV-NZ-OCR-BT-20260902"
+          ],
+          "used_for": "headline decision comparison"
+        },
+        {
+          "baseline_id": "WS-STEP11A-RBNZ-MARKET-PATH",
+          "basis": "MARKET_MEASUREMENT",
+          "label": "market pricing of faster tightening and approximately 3.5 percent peak",
+          "limitations": [
+            "not a reconstructed pre-event curve"
+          ],
+          "reference_ids": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "used_for": "forward-path comparison"
+        }
+      ],
+      "known_at_basis": "ANALYSIS_REVIEW_BOUNDARY_FOR_COMPARATIVE_FORWARD_PATH_PROPOSITION",
+      "known_at_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "UNRESOLVED",
+      "limitations": [
+        "The 25bp increase to 2.75 percent was expected; the candidate does not present it as a surprise.",
+        "The forward-path comparison is bounded to the reviewed RBNZ-versus-market-pricing proposition.",
+        "No actor assertion, implementation claim, forecast or global macro assessment is created."
+      ],
+      "model_provenance": {
+        "analytical_lens": "narrow monetary-policy and market-sensor assessment",
+        "configuration": "Step 11A deterministic RBNZ candidate-construction procedure",
+        "execution_surface": "Codex",
+        "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+        "generated_at_utc": "2026-09-28T00:00:00Z",
+        "input_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+        "model_identity": "UNAVAILABLE",
+        "model_version": "UNAVAILABLE",
+        "output_fingerprint": "d27cf612089e3bb593b9c6a6ede5f110789bdc18d52c6f1fa9e703e912310f79",
+        "procedure_version": "world-state-step11a-rbnz-candidate-v1",
+        "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+        "reasoning_configuration": "UNAVAILABLE",
+        "version": "UNAVAILABLE"
+      },
+      "object_sha256": "e041de9aacd6d1bb0692e0895ffae44cd36ea5c50caccf5842229e233d3d064a",
+      "persistence": "NOT_ASSESSED",
+      "previous_revision_id": null,
+      "prior_revision_ref": null,
+      "projection_transaction_id": null,
+      "proposition_parts": [
+        {
+          "basis": "PRIMARY_OFFICIAL_RBNZ_RELEASE",
+          "known_at_utc": "2026-09-02T02:00:00Z",
+          "label": "POLICY_RATE_INCREASED_TO_2_75_PERCENT",
+          "part": "OFFICIAL_DECISION"
+        },
+        {
+          "basis": "REVIEWED_ANALYSIS_COMPARISON",
+          "known_at_utc": "2026-09-05T14:40:00Z",
+          "label": "MORE_GRADUAL_THAN_MARKET_PRICING",
+          "part": "COMPARATIVE_FORWARD_PATH"
+        }
+      ],
+      "qualitative_confidence": "MEDIUM",
+      "review_state": "UNDER_REVIEW",
+      "review_transaction_id": null,
+      "reviewed_at_utc": null,
+      "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 11A review-pending specimen; no production admission or public projection.",
+      "scope": {
+        "boundaries": [
+          "2 September 2026 decision and stated forward path only"
+        ],
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "RBNZ_OFFICIAL_CASH_RATE_DECISION"
+        ]
+      },
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "source_proposal_id": "WS-STEP11A-WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+      "state_label": "POLICY_RATE_INCREASED_WITH_MORE_GRADUAL_FORWARD_PATH",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "expectation_not_fact": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e",
+          "revision_id": null,
+          "role": "EXPECTATION_BENCHMARK"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        }
+      ],
+      "transition_type": "INITIAL",
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The OCR level and change are supported by the official RBNZ release; benchmark and forward-path interpretation use distinct analytical sources.",
+          "status": "BOUNDED",
+          "type": "PROVENANCE_SOURCE"
+        },
+        {
+          "basis_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902"
+          ],
+          "description": "The official release supports what the RBNZ Committee decided and communicated; it does not prove later implementation or an actor-intent claim.",
+          "status": "BOUNDED",
+          "type": "INSTITUTIONAL_AUTHORITY"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The headline hike matched consensus; the more-gradual-than-market-pricing classification is a reviewed interpretation, not an independently measured causal fact.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    {
+      "admission_transaction_id": null,
+      "admitted_at_utc": null,
+      "analytical_association": {
+        "alternative_explanations": [
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The global oil and bond-market shock could dominate or contaminate longer-duration New Zealand yield moves independently of the domestic policy decision."
+          },
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The New Zealand dollar had already fallen overnight, so same-session currency weakness cannot be assigned wholly to the RBNZ announcement without a higher-frequency reconstruction."
+          }
+        ],
+        "causal_status": "OBSERVED_ASSOCIATION",
+        "interaction_type": "TRANSMISSION_CHANNEL",
+        "relationship_ownership": "ANALYSIS_SUBSTRATE_NOT_WORLD_STATE_RELATIONSHIP"
+      },
+      "anomaly_refs": [],
+      "baseline_ref": null,
+      "breadth": "NOT_ASSESSED",
+      "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "component_type": "DIMENSION_ASSESSMENT",
+      "contradictory_citations": [],
+      "dimension": "MARKETS_AS_SENSORS",
+      "direction": "DOWNWARD",
+      "effective_at": null,
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "Source-reported immediate post-decision and same-session windows; civil date is the narrowest executable production-history precision and no movement onset is manufactured.",
+      "effective_time_precision": "CIVIL_DATE",
+      "effective_window": {
+        "anchor_event_at_utc": "2026-09-02T02:00:00Z",
+        "description": "source-reported immediate post-decision / same-session movement",
+        "exact_end_at_utc": null,
+        "exact_start_at_utc": null
+      },
+      "known_at_basis": "GOVERNED_ANALYSIS_OR_OFFICIAL_RELEASE_BOUNDARY",
+      "known_at_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "UNRESOLVED",
+      "limitations": [
+        "The market records are sensors of expectations and positioning, not automatic causal proof.",
+        "Before values are unavailable; reported endpoints and changes are preserved without reconstruction.",
+        "The observed association remains in the Analysis substrate; no production Relationship or transmission edge is created."
+      ],
+      "market_measurements": [
+        {
+          "after_value": 3.7001,
+          "before_value": null,
+          "change": -3,
+          "change_unit": "basis_points",
+          "direction": "LOWER",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "independently_reconstructed": false,
+          "instrument_or_measure": "New Zealand two-year swap rate",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "measurement_window": "source-reported immediate post-decision reaction on 2026-09-02",
+          "movement_id": "WSMV-NZ-OCR-20260902-SWAP2Y",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "movement_type": "SWAP_RATE",
+          "unit": "percent"
+        },
+        {
+          "after_value": 0.5893,
+          "before_value": null,
+          "change": -0.7,
+          "change_unit": "percent",
+          "direction": "NZD_LOWER",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "independently_reconstructed": false,
+          "instrument_or_measure": "New Zealand dollar versus US dollar",
+          "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+          "measurement_window": "source-reported same-session move after the RBNZ decision on 2026-09-02",
+          "movement_id": "WSMV-NZ-OCR-20260902-NZDUSD",
+          "movement_representation": "CHANGE_AND_ENDPOINT",
+          "movement_type": "FX_SPOT",
+          "unit": "USD_per_NZD"
+        }
+      ],
+      "model_provenance": {
+        "analytical_lens": "narrow monetary-policy and market-sensor assessment",
+        "configuration": "Step 11A deterministic RBNZ candidate-construction procedure",
+        "execution_surface": "Codex",
+        "factual_evidence_status": "MODEL_OUTPUT_IS_NOT_FACTUAL_CORROBORATION",
+        "generated_at_utc": "2026-09-28T00:00:00Z",
+        "input_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+        "model_identity": "UNAVAILABLE",
+        "model_version": "UNAVAILABLE",
+        "output_fingerprint": "269249d271e4cfcb4bd9ea1b63837fc721024c482382cc58b0c6033cc73bab4e",
+        "procedure_version": "world-state-step11a-rbnz-candidate-v1",
+        "provenance_status": "RUNTIME_METADATA_UNAVAILABLE",
+        "reasoning_configuration": "UNAVAILABLE",
+        "version": "UNAVAILABLE"
+      },
+      "object_sha256": "0f89ae71e23146da67d0b385734ae56368e96cf86e124dc72992041e327d3240",
+      "persistence": "NOT_ASSESSED",
+      "previous_revision_id": null,
+      "prior_revision_ref": null,
+      "projection_transaction_id": null,
+      "qualitative_confidence": "MEDIUM",
+      "review_state": "UNDER_REVIEW",
+      "review_transaction_id": null,
+      "reviewed_at_utc": null,
+      "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1",
+      "revision_kind": "INITIAL",
+      "revision_number": 1,
+      "revision_reason": "Step 11A review-pending specimen; no production admission or public projection.",
+      "scope": {
+        "boundaries": [
+          "source-reported immediate/same-session response; no independently reconstructed before values"
+        ],
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "TWO_YEAR_SWAP_RATE",
+          "NZD_USD_SPOT"
+        ]
+      },
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "source_proposal_id": "WS-STEP11A-WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+      "state_label": "SHORT_RATE_AND_FX_PRICING_REPRICED_LOWER_AFTER_POLICY_PATH_SURPRISE",
+      "supporting_citations": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        }
+      ],
+      "transition_type": "INITIAL",
+      "uncertainties": [
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "Movements are source-reported change-and-endpoint measurements with null before values and no independent reconstruction.",
+          "status": "BOUNDED",
+          "type": "MEASUREMENT"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "The measurement windows are immediate post-decision or same-session, not a high-frequency event study.",
+          "status": "BOUNDED",
+          "type": "TEMPORAL"
+        },
+        {
+          "basis_refs": [
+            "WSAN-NZ-OCR-20260902-001",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "description": "Global oil and bond-market shocks and pre-existing NZD weakness remain alternative explanations; no causal Relationship is created.",
+          "status": "BOUNDED",
+          "type": "INTERPRETIVE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    }
+  ],
+  "forecasts": [],
+  "gates": {
+    "actor_identity_only_and_unadmitted": {
+      "status": "PASS"
+    },
+    "analysis_reviewed_and_hash_pinned": {
+      "status": "PASS"
+    },
+    "human_component_review": {
+      "basis": "Step 11A constructs review-pending candidates only.",
+      "status": "DEFER"
+    },
+    "implementation_and_actor_claims": {
+      "basis": "No governed Actor Registry admission; no claims are created.",
+      "status": "DEFER"
+    },
+    "market_noncausal_boundary": {
+      "status": "PASS"
+    },
+    "narrow_component_scopes": {
+      "status": "PASS"
+    },
+    "production_admission": {
+      "basis": "No Step 11B admission is performed.",
+      "status": "DEFER"
+    }
+  },
+  "implementation_claims": [],
+  "knowledge_cutoff_utc": "2026-09-05T14:40:00Z",
+  "known_empty_or_unsupported_domains": [
+    {
+      "domain": "OTHER_WORLD_STATE_DIMENSIONS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "ACTOR_STATE_ASSERTIONS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "IMPLEMENTATION_CLAIMS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "RELATIONSHIPS",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "RISKS_REGIMES",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "SCENARIOS",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "FORECASTS",
+      "state": "UNQUERIED"
+    },
+    {
+      "domain": "OUTCOMES",
+      "state": "QUERIED_EMPTY"
+    },
+    {
+      "domain": "CANONICAL_HISTORICAL_AS_OF",
+      "state": "UNSUPPORTED"
+    }
+  ],
+  "limitations": [
+    "This package is a review-pending second specimen, not production World State.",
+    "Actor identity admission is a separate human-reviewed gate and remains unpopulated.",
+    "No implementation claim is created because the actor is not admitted and the analysis does not establish implementation state.",
+    "The Analysis review's observed association is not a production Relationship or transmission edge.",
+    "No global macroeconomic or market assessment is asserted."
+  ],
+  "market_sensor_treatment": {
+    "alternative_explanations_preserved": true,
+    "before_values_invented": false,
+    "causal_relationship_created": false,
+    "status": "PRESERVED_AS_MEASURED_SENSORS"
+  },
+  "package_type": "WORLD_STATE_STEP11A1_RBNZ_CANDIDATE",
+  "package_version": "0.1",
+  "preflight_classification": "READY_FOR_HUMAN_COMPONENT_REVIEW",
+  "production_state": {
+    "actors": 0,
+    "admissions": 1,
+    "components": 1,
+    "snapshots": 1,
+    "writes": []
+  },
+  "proposed_snapshot": {
+    "snapshot": {
+      "admission_transaction_id": null,
+      "admitted_at_utc": null,
+      "candidate_review_id": "WS-STEP11A-RBNZ-CANDIDATE-REVIEW",
+      "component_refs": [
+        {
+          "component_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "e041de9aacd6d1bb0692e0895ffae44cd36ea5c50caccf5842229e233d3d064a",
+          "revision_id": "WSDIM-MACRO-NZ-RBNZ-OCR-202609-001-R1"
+        },
+        {
+          "component_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001",
+          "component_type": "DIMENSION_ASSESSMENT",
+          "object_sha256": "0f89ae71e23146da67d0b385734ae56368e96cf86e124dc72992041e327d3240",
+          "revision_id": "WSDIM-MARKETS-NZ-RBNZ-OCR-202609-001-R1"
+        }
+      ],
+      "effective_as_of_utc": null,
+      "effective_date": "2026-09-02",
+      "effective_time_basis": "The two candidates share a civil-date decision context, but the market movement window has no exact onset; this pending index does not claim a single effective instant.",
+      "effective_time_precision": "CIVIL_DATE",
+      "empty_queried_domains": [
+        {
+          "domain": "OTHER_WORLD_STATE_DIMENSIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "ACTOR_STATE_ASSERTIONS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "IMPLEMENTATION_CLAIMS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "RELATIONSHIPS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "RISKS_REGIMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "SCENARIOS",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "FORECASTS",
+          "state": "UNQUERIED"
+        },
+        {
+          "domain": "OUTCOMES",
+          "state": "QUERIED_EMPTY"
+        },
+        {
+          "domain": "CANONICAL_HISTORICAL_AS_OF",
+          "state": "UNSUPPORTED"
+        }
+      ],
+      "knowledge_cutoff_utc": "2026-09-05T14:40:00Z",
+      "lifecycle_state": "UNRESOLVED",
+      "limitations": [
+        "Review-pending candidate only; not a production snapshot.",
+        "Independent component candidates remain unadmitted and are not public.",
+        "Market observations remain sensors and do not create causal transmission edges.",
+        "Actor identity candidate is separate and remains unadmitted."
+      ],
+      "object_sha256": "72e1de6ab61c30d8944c34410cddb62965f8af86701590e9ef2ab1c158164617",
+      "previous_snapshot_revision_id": null,
+      "proposal_id": "WS-STEP11A-RBNZ-WSAN-NZ-OCR-20260902-001",
+      "review_state": "CANDIDATE",
+      "review_transaction_id": null,
+      "reviewer": {
+        "reviewer_id": "STEP11A-CANDIDATE",
+        "role": "review-pending"
+      },
+      "revision_number": 1,
+      "scope": {
+        "jurisdictions": [
+          "New Zealand"
+        ],
+        "systems": [
+          "RBNZ_OFFICIAL_CASH_RATE_DECISION",
+          "TWO_YEAR_SWAP_RATE",
+          "NZD_USD_SPOT"
+        ]
+      },
+      "snapshot_kind": "COMPOSITIONAL_INDEX",
+      "snapshot_revision_id": "WSSNAP-NZ-RBNZ-OCR-202609-R1",
+      "snapshot_series_id": "WSSNAP-NZ-RBNZ-OCR-202609",
+      "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+      "upstream_refs": [
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+          "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+          "revision_id": null,
+          "role": "OFFICIAL_DECISION"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "expectation_not_fact": true,
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-BT-20260902",
+          "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e",
+          "revision_id": null,
+          "role": "EXPECTATION_BENCHMARK"
+        },
+        {
+          "epistemic_class": "FACTUAL_SOURCE",
+          "layer": "ANALYSIS_EVIDENCE",
+          "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+          "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+          "revision_id": null,
+          "role": "MARKET_OBSERVATION_AND_ALTERNATIVE"
+        },
+        {
+          "epistemic_class": "HYPOTHESIS",
+          "factual_claim": false,
+          "layer": "ANALYSIS",
+          "object_id": "WSAN-NZ-OCR-20260902-001",
+          "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+          "revision_id": null,
+          "role": "REVIEWED_ANALYSIS_SUBSTRATE"
+        }
+      ],
+      "visibility": "INTERNAL_ONLY"
+    },
+    "snapshot_semantic_fingerprint": "72e1de6ab61c30d8944c34410cddb62965f8af86701590e9ef2ab1c158164617",
+    "status": "REVIEW_PENDING_CANDIDATE_ONLY"
+  },
+  "public_projection_permitted": false,
+  "relationships": [],
+  "source_manifest": [
+    {
+      "layer": "ANALYSIS",
+      "object": {
+        "alternative_explanations": [
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The global oil and bond-market shock could dominate or contaminate longer-duration New Zealand yield moves independently of the domestic policy decision."
+          },
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "The New Zealand dollar had already fallen overnight, so same-session currency weakness cannot be assigned wholly to the RBNZ announcement without a higher-frequency reconstruction."
+          }
+        ],
+        "analysis_as_of_utc": "2026-09-05T14:40:00Z",
+        "analysis_id": "WSAN-NZ-OCR-20260902-001",
+        "analytical_conclusion": "The RBNZ delivered the expected 25 basis point hike, but the package was less hawkish than markets had priced because its projected tightening path was more gradual. Short-rate and currency moves are consistent with that interpretation, while the global oil-driven bond sell-off remains a material competing explanation for longer-duration rates. No second-order consequence is established.",
+        "canonical_event_type": "DECISION",
+        "canonical_institution": "Reserve Bank of New Zealand",
+        "canonical_mutation_prohibited": true,
+        "canonical_occurrence_id": "WSO-8df73c7804d45880",
+        "canonical_release_utc": "2026-09-02T02:00:00Z",
+        "canonical_series_id": "WS.CB.RBNZ.OCR_DECISION",
+        "falsifiers": [
+          "If high-frequency swap or FX data show the reported moves materially preceded the RBNZ release, the decision-specific association should be weakened.",
+          "If later evidence shows the short-end move was primarily driven by a simultaneous global rates catalyst rather than the RBNZ path, connection confidence should be reduced.",
+          "If the market had in fact priced an OCR path at or below the RBNZ projection immediately before the decision, the 'more gradual than priced' surprise classification would need revision."
+        ],
+        "google_calendar_write": false,
+        "review_phase": "POST_EVENT",
+        "review_state": "REVIEWED_SAMPLE",
+        "scope": "2 September 2026 RBNZ OCR decision, forward policy-path signal and immediately reported New Zealand dollar and two-year swap response",
+        "second_order_effects": {
+          "status": "NOT_ESTABLISHED",
+          "summary": "The RBNZ's projected gradual tightening path is forward guidance, not an observed second-order outcome. No later mortgage, growth, political or capital-flow consequence is promoted in this sample."
+        },
+        "what_appears_connected": {
+          "causal_status": "OBSERVED_ASSOCIATION",
+          "confidence": "MEDIUM",
+          "evidence_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "interaction_type": "TRANSMISSION_CHANNEL",
+          "summary": "The immediate fall in two-year swap rates and the New Zealand dollar is directionally consistent with the forward OCR path being less aggressive than markets had priced. Reuters explicitly linked the currency and short-rate reaction to the RBNZ's gradual guidance, but this packet does not treat the entire New Zealand bond-market session as a clean decision-only experiment."
+        },
+        "what_happened": {
+          "actuals": [
+            {
+              "evidence_refs": [
+                "WSEV-NZ-OCR-RBNZ-20260902"
+              ],
+              "metric": "ocr_level",
+              "unit": "percent",
+              "value": 2.75
+            },
+            {
+              "evidence_refs": [
+                "WSEV-NZ-OCR-RBNZ-20260902"
+              ],
+              "metric": "ocr_change",
+              "unit": "basis_points",
+              "value": 25
+            }
+          ],
+          "evidence_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902"
+          ],
+          "summary": "The Reserve Bank of New Zealand increased the Official Cash Rate by 25 basis points to 2.75 percent by consensus. The Committee said further increases could be required but the future path was not pre-determined."
+        },
+        "what_may_be_noise": [
+          {
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "summary": "Longer-term New Zealand yields were rising in a global bond sell-off as renewed Gulf fighting lifted oil prices and inflation concerns. Those long-end moves should not be attributed mechanically to the RBNZ decision."
+          }
+        ],
+        "what_moved": [
+          {
+            "after_value": 3.7001,
+            "before_value": null,
+            "change": -3,
+            "change_unit": "basis_points",
+            "direction": "LOWER",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "independently_reconstructed": false,
+            "instrument_or_measure": "New Zealand two-year swap rate",
+            "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+            "measurement_window": "source-reported immediate post-decision reaction on 2026-09-02",
+            "movement_id": "WSMV-NZ-OCR-20260902-SWAP2Y",
+            "movement_representation": "CHANGE_AND_ENDPOINT",
+            "movement_type": "SWAP_RATE",
+            "unit": "percent"
+          },
+          {
+            "after_value": 0.5893,
+            "before_value": null,
+            "change": -0.7,
+            "change_unit": "percent",
+            "direction": "NZD_LOWER",
+            "evidence_refs": [
+              "WSEV-NZ-OCR-REUTERS-20260902"
+            ],
+            "independently_reconstructed": false,
+            "instrument_or_measure": "New Zealand dollar versus US dollar",
+            "measurement_precision": "SOURCE_REPORTED_CHANGE_AND_ENDPOINT",
+            "measurement_window": "source-reported same-session move after the RBNZ decision on 2026-09-02",
+            "movement_id": "WSMV-NZ-OCR-20260902-NZDUSD",
+            "movement_representation": "CHANGE_AND_ENDPOINT",
+            "movement_type": "FX_SPOT",
+            "unit": "USD_per_NZD"
+          }
+        ],
+        "what_surprised": {
+          "comparisons": [
+            {
+              "actual": 2.75,
+              "comparison_kind": "QUANTITATIVE",
+              "difference_percentage_points": 0.0,
+              "expected": 2.75,
+              "metric": "ocr_level"
+            },
+            {
+              "actual": "RBNZ projected the OCR at 2.81 percent by December 2026 and 3.15 percent at end-2027",
+              "comparison_kind": "QUALITATIVE",
+              "direction": "MORE_GRADUAL_THAN_MARKET_PRICING",
+              "expected": "Markets had priced a faster pace of tightening and a peak around 3.5 percent",
+              "metric": "forward_policy_path"
+            }
+          ],
+          "evidence_refs": [
+            "WSEV-NZ-OCR-RBNZ-20260902",
+            "WSEV-NZ-OCR-BT-20260902",
+            "WSEV-NZ-OCR-REUTERS-20260902"
+          ],
+          "status": "MIXED",
+          "summary": "The 25 basis point hike itself matched consensus. The surprise was in the policy path: Reuters reported that the RBNZ projected a more gradual and limited tightening path than markets had priced, making the package slightly dovish relative to expectations despite the hike."
+        },
+        "what_was_expected": {
+          "benchmarks": [
+            {
+              "benchmark_type": "MARKET_CONSENSUS_DECISION",
+              "evidence_refs": [
+                "WSEV-NZ-OCR-BT-20260902"
+              ],
+              "metric": "ocr_level",
+              "unit": "percent",
+              "value": 2.75
+            },
+            {
+              "benchmark_type": "MARKET_CONSENSUS_DECISION",
+              "evidence_refs": [
+                "WSEV-NZ-OCR-BT-20260902"
+              ],
+              "metric": "ocr_change",
+              "unit": "basis_points",
+              "value": 25
+            }
+          ],
+          "evidence_refs": [
+            "WSEV-NZ-OCR-BT-20260902"
+          ],
+          "summary": "The headline increase was widely expected. The Business Times reported that 27 of 31 economists in a Reuters poll expected a 25 basis point hike to 2.75 percent."
+        }
+      },
+      "object_id": "WSAN-NZ-OCR-20260902-001",
+      "object_sha256": "26dd13a0b120c18995355705512f6c1fae2cbe65d93b2211a2613fe5cb6780d1",
+      "revision_id": null
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object": {
+        "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+        "canonical_provenance_effect": "NONE",
+        "distribution_note": "This evidence record is used only to preserve the reported pre-decision Reuters poll benchmark. It does not establish canonical timing or source authority.",
+        "evidence_class": "REPUTABLE_MEDIA",
+        "evidence_id": "WSEV-NZ-OCR-BT-20260902",
+        "host_or_distribution": "The Business Times",
+        "provider": "The Business Times",
+        "published_at": "2026-09-02T11:26:00+08:00",
+        "roles": [
+          "EXPECTATION_BENCHMARK"
+        ],
+        "supports": [
+          "The article reports that 27 of 31 economists polled by Reuters expected a 25 basis point increase to 2.75 percent.",
+          "The headline policy action was therefore widely expected before the decision."
+        ],
+        "title": "New Zealand central bank raises rates by 25 bps, flags gradual tightening path",
+        "url": "https://www.businesstimes.com.sg/companies-markets/banking-finance/new-zealand-central-bank-raises-rates-25-bps-flags-gradual-tightening-path"
+      },
+      "object_id": "WSEV-NZ-OCR-BT-20260902",
+      "object_sha256": "0b7614e5e21dae7117969f24c62d2799162dc9bd807e6290523b8f902580648e",
+      "revision_id": null
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object": {
+        "analytical_use": "FACTUAL_METADATA_AND_SHORT_PARAPHRASE",
+        "canonical_provenance_effect": "NONE",
+        "evidence_class": "PRIMARY_OFFICIAL",
+        "evidence_id": "WSEV-NZ-OCR-RBNZ-20260902",
+        "host_or_distribution": "Reserve Bank of New Zealand – Te Pūtea Matua",
+        "provider": "Reserve Bank of New Zealand – Te Pūtea Matua",
+        "published_at": "2026-09-02T14:00:00+12:00",
+        "roles": [
+          "OFFICIAL_OUTCOME"
+        ],
+        "supports": [
+          "The Monetary Policy Committee increased the Official Cash Rate by 25 basis points to 2.75 percent.",
+          "The decision was made by consensus.",
+          "The Committee said future policy would depend on the balance of risks to medium-term inflation and did not pre-determine the future OCR path."
+        ],
+        "title": "OCR increased by 25 basis points to 2.75%",
+        "url": "https://www.rbnz.govt.nz/news-and-events/news/2026/09/ocr-increased-by-25-basis-points-to-2-75"
+      },
+      "object_id": "WSEV-NZ-OCR-RBNZ-20260902",
+      "object_sha256": "60b2a70362a6412cba8be7a91735fa99d5c614da082fa64283baeb84ea1900da",
+      "revision_id": null
+    },
+    {
+      "layer": "ANALYSIS_EVIDENCE",
+      "object": {
+        "analytical_use": "LINK_AND_FACTUAL_PARAPHRASE_ONLY",
+        "canonical_provenance_effect": "NONE",
+        "distribution_note": "The Business Recorder page identifies Reuters as the source. WORLD SIGNALS uses it as analytical evidence only and does not treat it as canonical RBNZ provenance.",
+        "evidence_class": "REPUTABLE_NEWSWIRE",
+        "evidence_id": "WSEV-NZ-OCR-REUTERS-20260902",
+        "host_or_distribution": "Business Recorder syndication",
+        "provider": "Reuters",
+        "published_at": "2026-09-02T11:09:00+05:00",
+        "roles": [
+          "EXPECTATION_BENCHMARK",
+          "MARKET_OBSERVATION",
+          "CONTEXT_OR_ALTERNATIVE"
+        ],
+        "supports": [
+          "Reuters described the 25 basis point increase to 2.75 percent as expected, while characterising the projected future tightening path as more gradual and limited than markets had priced.",
+          "The RBNZ projected the OCR at 2.81 percent by December 2026 and 3.15 percent at the end of 2027, while markets had priced a faster pace and a peak around 3.5 percent.",
+          "Two-year swap rates fell 3 basis points to 3.7001 percent after the decision.",
+          "The New Zealand dollar fell 0.7 percent to US$0.5893.",
+          "Longer-term bond yields were simultaneously being lifted by a global sell-off associated with renewed Gulf fighting, higher oil prices and inflation concerns."
+        ],
+        "title": "NZ dollar skids as RBNZ flags gradual hikes, Aussie supported",
+        "url": "https://www.brecorder.com/news/amp/40437554"
+      },
+      "object_id": "WSEV-NZ-OCR-REUTERS-20260902",
+      "object_sha256": "a8458f7c845a32c97a2f1e359f3bb413f6a078466210f11154098b30c639fd47",
+      "revision_id": null
+    },
+    {
+      "layer": "CANONICAL",
+      "object": {
+        "activation_mode": "EXPLICITLY_SCHEDULED",
+        "all_day_semantics": false,
+        "canonical_name": "RBNZ OCR decision — 2026-09-02",
+        "canonicality_state": "STAGED_VERIFIED",
+        "category": "MONETARY_FINANCIAL_POLICY",
+        "certainty_status": "CONFIRMED",
+        "condition_description": null,
+        "condition_state": "NOT_REQUIRED",
+        "date_earliest": null,
+        "date_latest": null,
+        "end_local": null,
+        "end_utc": null,
+        "event_type": "DECISION",
+        "expected_market_sensitivity": "UNRATED_PENDING_CALIBRATION",
+        "external_source_id": null,
+        "first_announced_at": null,
+        "first_discovered_at": "2026-09-02",
+        "geopolitical_sensitivity": "UNRATED_PENDING_CALIBRATION",
+        "institution": "Reserve Bank of New Zealand",
+        "intrinsic_importance": "UNRATED_PENDING_CALIBRATION",
+        "jurisdiction": [
+          "New Zealand"
+        ],
+        "last_successful_assertion_id": "WSA-d4b0361ae88f680d",
+        "last_verified_at": "2026-09-03",
+        "lifecycle_status": "COMPLETED",
+        "location": null,
+        "next_verification_due": "2026-09-09",
+        "notes": "Decision occurrence only. Meeting window, press conference, projections/reports and minutes/accounts are separate linked series to be populated subsequently.",
+        "occurrence_id": "WSO-8df73c7804d45880",
+        "parent_occurrence_id": null,
+        "population_tranche": "MONETARY_POLICY_A",
+        "primary_source_assertion_id": "WSA-d4b0361ae88f680d",
+        "publication_datetime": "2026-09-02T14:00:00",
+        "record_class": "OCCURRENCE",
+        "reference_period": null,
+        "region": "Oceania / Pacific",
+        "regular_meeting_ordinal": 5,
+        "related_documents": [
+          {
+            "calendar_occurrence_created": false,
+            "document_type": "MONETARY_POLICY_STATEMENT",
+            "notes": null,
+            "timing_relationship": "CONCURRENT"
+          }
+        ],
+        "related_occurrence_ids": [],
+        "render_policy": "INCLUDE_TIER1",
+        "series_id": "WS.CB.RBNZ.OCR_DECISION",
+        "short_calendar_title": "RBNZ OCR decision",
+        "source_id": "WSSRC-CB-007",
+        "source_timezone": "Pacific/Auckland",
+        "start_local": "2026-09-02T14:00:00",
+        "start_utc": "2026-09-02T02:00:00Z",
+        "status_history": [
+          {
+            "as_of": "2026-09-02",
+            "basis": "Authoritative issuing-institution schedule verified in controlled Tier-1 population pass.",
+            "certainty_status": "CONFIRMED",
+            "lifecycle_status": "PLANNED"
+          },
+          {
+            "as_of": "2026-09-03T03:50:00+10:00",
+            "certainty_status": "CONFIRMED",
+            "change_reason": "Authoritative post-event decision/result published.",
+            "lifecycle_status": "COMPLETED",
+            "source_assertion_id": "WSA-MON-d0c2b48d65a0eb8224"
+          }
+        ],
+        "subcategory": "MONETARY_POLICY_DECISION",
+        "time_basis": "AUTHORITATIVE_STANDARD_PUBLICATION_RULE",
+        "time_precision": "MINUTE",
+        "time_status": "CONFIRMED",
+        "timing_type": "LOCAL_DATETIME",
+        "transmission_channels": [
+          "policy_rates",
+          "yield_curves",
+          "currencies",
+          "equities",
+          "credit"
+        ],
+        "trigger_assertion_id": null,
+        "trigger_source_id": null,
+        "trigger_verification_status": "NOT_APPLICABLE",
+        "triggered_at": null,
+        "visibility_tier": "ESSENTIAL"
+      },
+      "object_id": "WSO-8df73c7804d45880",
+      "object_sha256": "0247413b3d734c62b5f7ca549555edbd540dcbdd710ce53cbbeec1497d3e744c",
+      "revision_id": null
+    }
+  ],
+  "source_manifest_sha256": "b5eecfedcc9b0d6ae6572e52b394e9157116ced7d8d8393c9e8189b6300ba8d4",
+  "status": "REVIEW_PENDING",
+  "transmission_edges": [],
+  "visibility": "INTERNAL_ONLY"
+}

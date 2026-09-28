@@ -230,6 +230,14 @@ Relationship, Forecast, second component, snapshot or production admission was
 created. Production remains one component, one snapshot and one admission;
 public projection remains closed.
 
+Step 11A.1 records a human temporal-integrity correction without admitting
+anything. The original RBNZ specimen remains preserved; its corrected
+successor separates effective time from comparative knowledge time, uses
+civil-date precision for source-reported market windows, and represents the
+RBNZ identity's historical effective-from as explicitly unknown with a separate
+identity-known boundary. All candidates remain review-pending, the Actor
+Registry remains empty, and Step 11B remains a separate human admission gate.
+
 Migration Step 10B now tightens this into one public intelligence spine:
 `OUTLOOK → RESOLUTION CLOCK → REVIEWED ANALYSIS → FULL HORIZON → RESEARCH`.
 Calendar counts and concentration context live with the Calendar rather than
