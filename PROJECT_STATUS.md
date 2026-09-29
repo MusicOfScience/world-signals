@@ -494,3 +494,24 @@ sentinel, neither activated. Its fixture-only, non-public mobile prototype uses
 progressive disclosure (NOW, NEXT, compact OUTLOOK, one LATEST ANALYSIS item,
 then destination links) instead of reproducing the whole publication on the
 homepage. Production web assets and generated public data remain unchanged.
+
+## Step 15B — RBA decision-publication sentinel candidate
+
+The first bounded live RSS check observed the exact 29 September RBA Monetary
+Policy Decision item in the official Media Releases feed. This confirms T3
+publication discovery, not production observation or event completion. The
+existing schedule sentinel remains unchanged. A separate candidate source and
+adapter contract specifies exact-title classification, same-series/date
+Canonical matching, bounded no-redirect page retrieval, controlled cash-rate
+extraction, and review-only output. Robots rules did not disallow the RSS or
+media-release paths; RBA RSS documentation also discloses WAF protection.
+Content-reuse terms do not constitute endpoint-specific automated-retrieval
+approval, so source and route governance remain pending and no route is active.
+
+The one linked-page request was not captured by the local output pipeline, so
+its status, resolved URL and transport hash are unavailable. The official RBA
+indexed release independently confirms 4.60%, +25 basis points and unanimity,
+but the real T4 candidate was deliberately not generated without the required
+retained page response. Offline fixtures test the parser and candidate
+builder. No Canonical, Live, Analysis, Forecast, Outcome, monitor or public
+state changed. See the retained Step 15B audit and route review candidate.

@@ -815,3 +815,17 @@ Brief clock selection is load-time only, public datasets are not refetched by an
 open page, and no public-data build timestamp exists. Future clock re-rendering
 and version-aware refresh require explicit bounded contracts. No production
 UI/data, monitoring route, or downstream population changed in Step 15A.
+
+### Step 15B — bounded RBA publication detection (candidate only)
+
+The live-fire follow-up observed the exact 29 September decision item in the
+official RBA Media Releases RSS feed, establishing the T3 detection boundary.
+It defines—but does not activate—a separate endpoint-governance candidate and
+an exact-title, bounded result parser. The real T4 review candidate was not
+generated because the single linked-release response was not retained with
+validated response metadata and transport hash. Offline fixtures validate the
+candidate builder only. The immediate next step is a clean, explicitly bounded
+end-to-end probe that captures robots, feed and linked-page response metadata
+and hashes; only after that should a human review endpoint/route authority and
+consider separate Canonical-completion or Live-fact transactions. No
+production or public state changed in Step 15B.
