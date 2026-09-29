@@ -102,6 +102,33 @@ async function renderAt(initialTime, advanceTo) {
 
 
 class Step15AMobilePrototypeTests(unittest.TestCase):
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for the prototype-state fixture")
+    def test_rendered_states_never_promote_elapsed_time_to_result(self):
+        harness = r"""
+const fs=require('fs'),vm=require('vm');
+const source=fs.readFileSync('prototypes/step15a-mobile-home/app.js','utf8');
+let state='PRE_EVENT', changeHandler, html='';
+const select={get value(){return state},addEventListener(name,fn){if(name==='change')changeHandler=fn}};
+const content={set innerHTML(value){html=value},get innerHTML(){return html}};
+const clock={set dateTime(value){},set textContent(value){}};
+const document={querySelector(s){return s==='#prototype-state'?select:s==='#now-content'?content:clock}};
+const sandbox={document,Date,Intl};
+vm.runInNewContext(source,sandbox);
+const renderAt=s=>{state=s;changeHandler();return html};
+const out={pre:html,awaiting:renderAt('EVENT_TIME_PASSED_AWAITING_CONFIRMATION'),confirmed:renderAt('CONFIRMED_OUTCOME'),analysis:renderAt('CONFIRMED_OUTCOME_WITH_ANALYSIS')};
+process.stdout.write(JSON.stringify(out));
+"""
+        result = subprocess.run(
+            ["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True
+        )
+        states = json.loads(result.stdout)
+        self.assertNotIn("4.60%", states["pre"])
+        self.assertNotIn("4.60%", states["awaiting"])
+        self.assertIn("Awaiting confirmed outcome", states["awaiting"])
+        self.assertIn("RESERVE BANK OF AUSTRALIA", states["confirmed"])
+        self.assertIn("FIXTURE ONLY", states["confirmed"])
+        self.assertIn("Read analysis", states["analysis"])
+
     def test_prototype_is_outside_explicit_public_build_allowlist(self):
         builder = (ROOT / "scripts/build_site.py").read_text(encoding="utf-8")
         self.assertNotIn("prototypes/step15a-mobile-home", builder)
