@@ -897,3 +897,24 @@ promotion is authorised. See the retained Step 14D review summary for limitation
 and five separate human disposition questions.
 
 The automatic-canonical-commit gate remains closed. Before it can even be reconsidered, WORLD SIGNALS still requires real prospective evidence including a reschedule detected against a prior canonical snapshot and an explicit cancellation of an already-canonical occurrence, under the governed review process.
+
+### Step 15A — RBA live-fire and mobile-home design
+
+The first post-event audit found that the RBA calendar monitor remains a
+schedule-change sentinel, not an outcome detector. Its `NO_COMPLETION_INFERENCE`
+and `automatic_commit_allowed: false` policies are correct; the missing boundary
+is official-publication detection and governed result extraction. The public
+Brief's next-event lane is device-clock-derived at render time, but an already
+open page does not re-evaluate or refetch when the clock crosses an event time.
+Device time is not public-data freshness: the public dataset currently carries
+no governed build timestamp. Elapsed scheduled time must only produce an
+awaiting-confirmation state, never a confirmed outcome.
+
+The non-public Step 15A prototype tests a smaller mobile front page ordered
+NOW → NEXT → OUTLOOK → LATEST ANALYSIS → EXPLORE. It uses fixture states only;
+there was no production outcome admission, monitor activation, public data/UI
+change, or deployment. The design principle is progressive disclosure rather
+than appending the full forecast, resolution, analysis and 30-day corpus to the
+home reading flow. A bounded RBA publication-sentinel/review tranche is the
+recommended next production step, contingent on endpoint, rights and operations
+review; public state should be projected only after governed admission.

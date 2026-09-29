@@ -797,3 +797,21 @@ revision, downstream population or public projection is authorised. The
 independent historical backtest remains `DEFERRED`. Future evidence must be
 recorded in a new snapshot and reviewed; it cannot rewrite this initial
 historical assessment.
+
+## Stage 40 — live-fire event resolution and mobile home (Step 15A)
+
+Step 15A establishes the first live event boundary: the RBA schedule sentinel
+correctly detects schedule state but does not detect the decision publication or
+extract the result. The 29 September outcome was verified from the official RBA
+release for audit only; Canonical remains planned and public outcome data is
+unchanged. The next production tranche should evaluate one bounded RBA decision
+publication sentinel, followed by internal review and separately authorised
+admission; no automatic completion or publication is implied.
+
+A fixture-only non-public mobile prototype places one NOW result/state and one
+NEXT event before compact Outlook and a single recent Analysis item. The full
+Calendar, full Analysis, Research and System/Audit remain destinations. Public
+Brief clock selection is load-time only, public datasets are not refetched by an
+open page, and no public-data build timestamp exists. Future clock re-rendering
+and version-aware refresh require explicit bounded contracts. No production
+UI/data, monitoring route, or downstream population changed in Step 15A.
