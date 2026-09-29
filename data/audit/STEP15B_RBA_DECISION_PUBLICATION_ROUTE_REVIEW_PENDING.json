@@ -1,0 +1,106 @@
+{
+  "semantic_fingerprint": "dff2c0b1ada804322e63463b1dd2486d5e4525bf3b769a4f3788e4ffa2e0a88a",
+  "artifact_id": "WS-STEP15B-RBA-MPB-DECISION-PUBLICATION-ROUTE-REVIEW-20260929-001",
+  "artifact_type": "MONITOR_ROUTE_GOVERNANCE_CANDIDATE",
+  "status": "REVIEW_PENDING",
+  "candidate_source": {
+    "candidate_source_id": "WSSRC-CANDIDATE-CB-RBA-MEDIA-RELEASES-RSS-001",
+    "institution": "Reserve Bank of Australia",
+    "source_family": "OFFICIAL_RBA_MEDIA_RELEASES",
+    "endpoint": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml",
+    "content_surface": "RBA Media Releases RSS",
+    "production_source_id_allocated": false,
+    "endpoint_specific_automated_retrieval_decision": "REVIEW_REQUIRED",
+    "content_reuse_and_automated_retrieval_are_separate_reviews": true,
+    "rights_note": "RBA copyright terms permit attributed use of applicable Cash Rate Materials subject to conditions, including no implied endorsement; this is not endpoint-specific automated-retrieval clearance or legal advice."
+  },
+  "candidate_route": {
+    "adapter_id": "RBA_MPB_DECISION_PUBLICATION_RSS",
+    "semantic_role": "OFFICIAL_POLICY_DECISION_PUBLICATION_SENTINEL",
+    "route_activation": false,
+    "automatic_commit_allowed": false,
+    "canonical_series_id": "WS.CB.RBA.MONETARY_POLICY_DECISION",
+    "candidate_occurrence_scope": ["WSO-d2a7c4e4416b505b"],
+    "title_rule": {
+      "classification": "EXACT_TITLE",
+      "accepted_title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "near_match": "REVIEW_UNCLASSIFIED",
+      "unrelated_release": "NOT_A_MONETARY_POLICY_DECISION"
+    },
+    "request_budget": {
+      "robots_policy": 1,
+      "media_release_feed_per_check": 1,
+      "linked_decision_page_after_unique_match": 1,
+      "redirects_followed": 0,
+      "maximum_response_bytes": 2000000,
+      "retry_policy": "NO_RAPID_RETRY; HTTP 403/429/WAF/transport failure is SOURCE_HEALTH_ONLY"
+    },
+    "candidate_cadence": {
+      "outside_scheduled_decision_window": "NO_POLLING",
+      "decision_window": "one check at the scheduled publication time; if absent, at most two further feed-only checks after bounded waits within 15 minutes; stop on exact detection",
+      "page_fetch": "at most one linked statement fetch after a unique exact-title item and unique Canonical match"
+    },
+    "matching": "exact decision series plus source publication civil date against existing scheduled Canonical occurrences; zero or multiple matches fail to review",
+    "absence_and_failure_policy": "NO_COMPLETION_DELAY_CANCELLATION_OR_OUTCOME_INFERENCE",
+    "candidate_output_only": true,
+    "downstream_actions": []
+  },
+  "endpoint_review": {
+    "first_party": "RBA-owned host and RBA RSS directory link",
+    "rss_directory": "Media Releases feed is described as including Statements on Monetary Policy Decision",
+    "rss_qa": "RBA describes RSS as an automated software/feed-reader format and states feeds are protected by WAF controls",
+    "robots": {
+      "source": "https://www.rba.gov.au/robots.txt",
+      "retrieved_via": "official web reader",
+      "finding": "User-agent * disallows /assets/, one historical PDF, /media/senior-rba-executives.html, /media/image-library/, /search/ and /s/; /rss/ and /media-releases/ are not disallowed"
+    },
+    "live_endpoint_check": {
+      "http_status": 200,
+      "content_type": "text/xml",
+      "feed_format": "RDF/RSS 1.0",
+      "body_bytes": 2093,
+      "server_date": "2026-09-29T10:33:33Z",
+      "last_modified": "2026-09-29T04:09:43Z",
+      "redirected": false,
+      "waf_observed": false,
+      "transport_sha256": null,
+      "transport_hash_note": "The direct feed response was displayed but its bytes were not captured into the local hash recorder; no transport hash is claimed."
+    },
+    "observed_feed_window": {
+      "rdf_sequence_items": 1,
+      "guid_present": false,
+      "identity_fallback": "official linked URL + source publication timestamp",
+      "historical_depth": "NOT_ESTABLISHED; the one live response exposed only the current release item",
+      "link_stability": "NOT_ESTABLISHED beyond the current RSS/page pairing",
+      "cache_control": "max-age=30 seconds",
+      "rate_sensitivity": "NOT_TESTED; no repeat request made"
+    },
+    "rolling_feed": {
+      "item_found": true,
+      "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "link": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+      "publication_timestamp": "2026-09-29T14:30:00+10:00",
+      "description": "At its meeting today, the Board decided to increase the cash rate target by 25 basis points to 4.60 per cent.",
+      "semantic_item_sha256": "9b4a98f5b084f4e354e3fb1a8e363550f1ef4183260d015315ee9776a4acfa0f"
+    },
+    "linked_page_capture": {
+      "request_budget_used": 1,
+      "response_metadata_captured": false,
+      "reason": "The local body-processing pipeline invoked unavailable `python` instead of `python3`; curl reported a broken output pipe. No HTTP status, content type, resolved URL, or body hash was retained. The request is not retried under the one-linked-page budget.",
+      "official_page_independently_verified": "RBA official indexed page returned the exact release title/date and states 4.60 per cent, +25 basis points, unanimous",
+      "candidate_generation_permitted": false
+    }
+  },
+  "source_identity_recommendation": "Use a separate media-release RSS source candidate rather than extending WSSRC-CB-002, whose approved endpoint/scope is schedule-specific. WSSRC-FIN-001 is a separate FSR publication precedent, not permission for this feed.",
+  "human_review_questions": {
+    "source": "Is endpoint-specific bounded automated retrieval acceptable?",
+    "route": "Is the event-window cadence and request budget acceptable?",
+    "matching": "Does an exact-title/date item bind uniquely to WSO-d2a7c4e4416b505b?",
+    "result": "Are these controlled extracted facts accepted after a captured linked-page response is validated?",
+    "canonical": "Does publication evidence warrant a later governed lifecycle transition from PLANNED to COMPLETED?",
+    "live_fact": "Should a later transaction admit a bounded factual observation?",
+    "public": "No public projection is authorised by Step 15B."
+  },
+  "production_write_targets": [],
+  "public_projection_permitted": false
+}

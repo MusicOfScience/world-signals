@@ -918,3 +918,22 @@ than appending the full forecast, resolution, analysis and 30-day corpus to the
 home reading flow. A bounded RBA publication-sentinel/review tranche is the
 recommended next production step, contingent on endpoint, rights and operations
 review; public state should be projected only after governed admission.
+
+### Step 15B — decision-publication candidate boundary
+
+Step 15B distinguishes the schedule sentinel from a publication sentinel. Its
+candidate-only RSS parser targets the RBA Media Releases feed, with a separate
+unallocated source identity, exact decision-title classification, unique
+existing-occurrence matching, bounded linked-page retrieval, and a review-only
+result candidate contract. `RBA_MPB_CALENDAR` remains schedule-specific and
+unchanged. RBA RSS/WAF documentation supports considering the feed for a
+bounded machine-consumption route, but does not itself grant WORLD SIGNALS
+endpoint-specific retrieval clearance.
+
+The live feed item for 29 September was observed. Because the linked-page
+response metadata and transport hash were not retained after a local output
+pipeline error, the real result candidate was not produced; parser fixtures
+are not a substitute for that live proof. The source/route remain unapproved,
+and no Canonical completion, Live observation, Analysis, Forecast resolution,
+Outcome, monitor activation or public projection occurred. Elapsed time and
+publication detection remain distinct from governed event completion.

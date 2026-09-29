@@ -1,0 +1,161 @@
+{
+  "parser_semantic_contract_fingerprint": "cfe9778b55a2fe3524869a0a32072cf5f8ffb50bd9496a21aa1403cd4a77b658",
+  "source_manifest_semantic_fingerprint": "e337045af3dbf01deab0886a477575644b7e83dc53ffbdcc540ca34327971f30",
+  "route_candidate_semantic_fingerprint": "dff2c0b1ada804322e63463b1dd2486d5e4525bf3b769a4f3788e4ffa2e0a88a",
+  "route_candidate_artifact": "data/audit/STEP15B_RBA_DECISION_PUBLICATION_ROUTE_REVIEW_PENDING.json",
+  "parser_semantic_contract": {
+    "parser_version": "rba-mpb-decision-rss-v1",
+    "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+    "formats": ["RDF/RSS 1.0 item", "source-native date timestamp"],
+    "controlled_outputs": ["cash_rate_target_percent", "decision_direction", "change_basis_points", "decision_unanimous", "decision_date"],
+    "page_requirements": ["exact official host", "media-release path", "exact title", "release number agrees with URL", "date agrees with feed", "no redirects"],
+    "limitations": ["ISSUER_STATED_RATIONALE", "no causality", "no automatic Canonical/Live/Analysis/Forecast/Outcome promotion"]
+  },
+  "source_manifest_semantics": {
+    "sources": ["https://www.rba.gov.au/robots.txt", "https://www.rba.gov.au/rss/", "https://www.rba.gov.au/qa/rss.html", "https://www.rba.gov.au/copyright/", "https://www.rba.gov.au/rss/rss-cb-media-releases.xml", "https://www.rba.gov.au/media-releases/2026/mr-26-27.html"],
+    "rss_item_semantic_sha256": "9b4a98f5b084f4e354e3fb1a8e363550f1ef4183260d015315ee9776a4acfa0f",
+    "release_facts": {
+      "method": "RBA official indexed search result for exact URL",
+      "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "release_number": "2026-27",
+      "date": "2026-09-29",
+      "cash_rate_target_percent": 4.60,
+      "decision_direction": "INCREASE",
+      "change_basis_points": 25,
+      "decision_unanimous": true,
+      "rationale_classification": "ISSUER_STATED_RATIONALE",
+      "primary_source_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html"
+    },
+    "raw_transport_hashes_captured": false
+  },
+  "audit_id": "WS-STEP15B-RBA-DECISION-PUBLICATION-AUDIT-20260929-001",
+  "audit_type": "LIVE_SOURCE_AND_CANDIDATE_PIPELINE_AUDIT",
+  "status": "T3_OBSERVED_T4_NOT_PROVEN",
+  "starting_main_sha": "a84eef13c38254a75a4cd2e0fdf04333986ba7de",
+  "prerequisite": {
+    "pr_number": 189,
+    "merged_closed": true,
+    "merge_sha": "a84eef13c38254a75a4cd2e0fdf04333986ba7de",
+    "validate_run": "GREEN",
+    "pages_run": "GREEN"
+  },
+  "canonical_specimen": {
+    "occurrence_id": "WSO-d2a7c4e4416b505b",
+    "series_id": "WS.CB.RBA.MONETARY_POLICY_DECISION",
+    "scheduled_local": "2026-09-29T14:30:00",
+    "timezone": "Australia/Sydney",
+    "scheduled_utc": "2026-09-29T04:30:00Z",
+    "pre_audit_lifecycle": "PLANNED"
+  },
+  "existing_schedule_monitor": {
+    "adapter_id": "RBA_MPB_CALENDAR",
+    "source_id": "WSSRC-CB-002",
+    "role": "RBA_MPB_AUTHORITATIVE_SCHEDULE_CHANGE_SENTINEL",
+    "scope": "RBA schedules-events calendar and Board schedule only",
+    "elapsed_time_policy": "NO_COMPLETION_INFERENCE",
+    "automatic_commit_allowed": false,
+    "changed": false
+  },
+  "publication_route_candidate": {
+    "source_candidate_id": "WSSRC-CANDIDATE-CB-RBA-MEDIA-RELEASES-RSS-001",
+    "adapter_id": "RBA_MPB_DECISION_PUBLICATION_RSS",
+    "feed_url": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml",
+    "route_activation": false,
+    "endpoint_governance": "CANDIDATE_ONLY_REVIEW_REQUIRED",
+    "rss_directory_says_feed_includes_decision_statements": true,
+    "rss_qa_describes_automated_feed_use": true,
+    "copyright_reuse_is_not_automated_retrieval_authority": true,
+    "robots_allows_rss_and_media_release_paths": true,
+    "waf_protection_disclosed_by_rba": true,
+    "live_waf_error_observed": false,
+    "maximum_request_design": "robots + one feed check + at most one linked decision page after unique match; bounded later feed-only retries are candidate policy only"
+  },
+  "live_feed_observation": {
+    "http_status": 200,
+    "content_type": "text/xml",
+    "feed_format": "RDF/RSS 1.0",
+    "body_bytes": 2093,
+    "server_date_utc": "2026-09-29T10:33:33Z",
+    "last_modified_utc": "2026-09-29T04:09:43Z",
+    "redirected": false,
+    "transport_sha256": null,
+    "transport_hash_limitation": "Not captured by the bounded command output; do not substitute a reconstructed fixture hash.",
+    "semantic_hash_basis": "The deterministic item hash is computed over the normalized fields reproduced from the live response text; it is not a transport hash and does not prove byte identity.",
+    "item": {
+      "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "link": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+      "guid": null,
+      "published_at": "2026-09-29T14:30:00+10:00",
+      "description": "At its meeting today, the Board decided to increase the cash rate target by 25 basis points to 4.60 per cent.",
+      "semantic_item_sha256": "9b4a98f5b084f4e354e3fb1a8e363550f1ef4183260d015315ee9776a4acfa0f"
+    },
+    "item_classification": "EXACT_TITLE",
+    "detector_runtime_timestamp_captured": false
+  },
+  "feed_window_and_operations": {
+    "rdf_sequence_items_observed": 1,
+    "item_guid": null,
+    "identity_basis": "official linked URL plus source publication timestamp",
+    "historical_depth": "NOT_ESTABLISHED; only the current item was in the bounded live response",
+    "link_stability": "NOT_ESTABLISHED beyond this live pairing",
+    "cache_control": "max-age=30 seconds",
+    "rate_sensitivity": "NOT_TESTED; no repeat request was made",
+    "waf_failure_observed": false
+  },
+  "linked_release": {
+    "url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+    "one_bounded_request_attempted": true,
+    "http_status": "UNKNOWN_NOT_RETAINED",
+    "content_type": "UNKNOWN_NOT_RETAINED",
+    "resolved_url": "UNKNOWN_NOT_RETAINED",
+    "transport_sha256": null,
+    "local_capture_error": "The body-pipe consumer called unavailable `python` rather than `python3`; curl reported a failed write. No linked response metadata was retained and no retry was made.",
+    "independent_official_page_check": {
+      "method": "RBA official indexed search result for exact URL",
+      "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "release_number": "2026-27",
+      "date": "2026-09-29",
+      "cash_rate_target_percent": 4.60,
+      "decision_direction": "INCREASE",
+      "change_basis_points": 25,
+      "decision_unanimous": true,
+      "rationale_classification": "ISSUER_STATED_RATIONALE",
+      "primary_source_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html"
+    }
+  },
+  "candidate_generation": {
+    "real_result_candidate_created": false,
+    "candidate_id": null,
+    "reason": "Fail closed: candidate construction requires retained successful linked-page response metadata and transport hashes. The RSS item is present, but T4 is not proven by the retained live run.",
+    "offline_fixture_candidate_builder_tested": true,
+    "canonical_lifecycle_changed": false,
+    "live_observation_written": false,
+    "analysis_created": false,
+    "forecast_resolved": false,
+    "public_projection_changed": false
+  },
+  "pipeline_boundary": {
+    "t0_canonical_scheduled_occurrence": "IMPLEMENTED",
+    "t1_scheduled_time_arrives": "CLOCK_ONLY_NO_COMPLETION_INFERENCE",
+    "t2_official_publication_exists": "OFFICIAL_SOURCE_VERIFIED",
+    "t3_publication_detected": "YES_RSS_ITEM_OBSERVED_IN_BOUNDED_LIVE_CHECK",
+    "t4_review_candidate_generated": "NOT_PROVEN_FOR_REAL_RUN; SYNTHETIC FIXTURE BUILDER TESTED",
+    "t5_human_review": "FUTURE_NOT_PERFORMED",
+    "t6_canonical_completion_admitted": "NOT_AUTHORISED_NOT_PERFORMED",
+    "t7_result_fact_admitted": "NOT_AUTHORISED_NOT_PERFORMED",
+    "t8_public_projection_rebuilt": "NOT_PERFORMED",
+    "t9_pages_deployed": "NOT_PERFORMED",
+    "t10_open_client_refresh": "STEP15A DIAGNOSTIC ONLY; NO CHANGE",
+    "t11_reader_sees_confirmed_public_outcome": "NOT_PERFORMED"
+  },
+  "november_forecast_vintage_implication": "The frozen 3 November RBA Forecast remains unchanged. A compact public view should disclose its frozen 26 September information cutoff if a later governed event materially changes the starting rate; no public UI change is made here.",
+  "production_write_targets": [],
+  "public_write_targets": [],
+  "limitations": [
+    "The feed transport hash was not captured.",
+    "The one linked-page request did not produce retained response metadata due a local shell command error; no second request was made under the budget.",
+    "No real REVIEW_PENDING outcome candidate was generated.",
+    "Endpoint-specific source-governance and operating approval remain open.",
+    "Official issuer rationale is not a WORLD SIGNALS causal conclusion."
+  ]
+}
