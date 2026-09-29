@@ -35,7 +35,7 @@ The offline parser and candidate builder are exercised against source-shaped
 RSS/HTML fixtures, including the 11 August unchanged decision. Those tests
 prove the bounded code path, not the live T3→T4 transaction. The proposed
 route, exact match rules, request budget and human review questions are in
-`data/monitor/STEP15B_RBA_DECISION_PUBLICATION_ROUTE_REVIEW_PENDING.json`.
+`data/audit/STEP15B_RBA_DECISION_PUBLICATION_ROUTE_REVIEW_PENDING.json`.
 
 No Canonical completion, Live observation, Analysis, Forecast resolution,
 Outcome, public projection, or monitor activation occurred. The November RBA

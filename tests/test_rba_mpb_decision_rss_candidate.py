@@ -135,11 +135,12 @@ class RbaDecisionPublicationCandidateTests(unittest.TestCase):
         page = f'''<html><body><h1>{RBA_DECISION_TITLE}</h1>
         <p>Number 2025-22</p><p>Date 12 August 2025</p>
         <p>At its meeting today, the Board decided to lower the cash rate target by 25 basis points to 3.60 per cent.</p>
-        <p>Today’s policy decision was unanimous.</p></body></html>'''
+        </body></html>'''
         parsed = parse_decision_page(page, item=item, resolved_url=item.link)
         self.assertEqual(parsed["cash_rate_target_percent"], 3.6)
         self.assertEqual(parsed["decision_direction"], "DECREASE")
         self.assertEqual(parsed["change_basis_points"], -25)
+        self.assertEqual(parsed["decision_unanimous"], "NOT_STATED")
 
     def test_page_identity_date_and_redirect_mismatches_fail(self):
         item = parse_decision_rss(RSS)[0]
