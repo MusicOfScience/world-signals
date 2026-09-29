@@ -474,3 +474,23 @@ historical backtest remains `DEFERRED`. No Analysis revision, World State,
 Relationship, Forecast, Scenario, Risk, Outcome or public promotion is created.
 Definitions and snapshots are separate, with future evidence requiring a new
 snapshot; knowledge-as-of selection is gated by genuine admission time.
+
+## Step 15A — live-fire systems audit and mobile-home prototype
+
+The first scheduled-event live-fire audit used the 29 September 2026 RBA
+decision. Clock-driven calendar selection advances after scheduled time, but
+neither elapsed time nor the existing RBA schedule-only sentinel establishes
+the published outcome. A bounded official-source check verified the RBA's
+4.60% cash-rate target (+25 bp from 4.35%) and unanimous decision; it was audit
+evidence only. The exact missing boundary is outcome-publication detection and
+review-candidate generation. No production outcome or downstream analysis was
+admitted.
+
+The public Brief calculates its next event at page load and does not refresh an
+open tab on event boundaries. Public files expose no governed build timestamp,
+so local/device time cannot truthfully label data freshness. Step 15A records a
+future bounded refresh/freshness contract and a candidate RBA publication
+sentinel, neither activated. Its fixture-only, non-public mobile prototype uses
+progressive disclosure (NOW, NEXT, compact OUTLOOK, one LATEST ANALYSIS item,
+then destination links) instead of reproducing the whole publication on the
+homepage. Production web assets and generated public data remain unchanged.

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>WORLD SIGNALS — Step 15A mobile-home prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#home">Skip to prototype home</a>
+  <main id="home" class="page-shell">
+    <header class="masthead">
+      <a class="wordmark" href="#home">WORLD SIGNALS</a>
+      <span class="prototype-tag">DESIGN PROTOTYPE · FIXTURE DATA</span>
+    </header>
+
+    <section class="freshness" aria-label="Clock and edition freshness">
+      <p><span class="label">YOUR DEVICE TIME</span><time id="device-time">Loading local time…</time></p>
+      <p><span class="label">PUBLIC INTELLIGENCE</span><strong>No build timestamp published</strong><span class="freshness-note">Freshness cannot be verified from the current public-data contract.</span></p>
+    </section>
+
+    <div class="state-control">
+      <label for="prototype-state">Prototype state</label>
+      <select id="prototype-state" aria-label="Choose a prototype state">
+        <option value="PRE_EVENT">Before event</option>
+        <option value="EVENT_TIME_PASSED_AWAITING_CONFIRMATION">Time passed · awaiting confirmation</option>
+        <option value="CONFIRMED_OUTCOME" selected>Confirmed outcome fixture</option>
+        <option value="CONFIRMED_OUTCOME_WITH_ANALYSIS">Outcome + analysis fixture</option>
+      </select>
+    </div>
+
+    <section class="now-section" aria-labelledby="now-heading">
+      <div class="section-head"><h1 class="eyebrow" id="now-heading">NOW</h1><p class="fixture-mark">ILLUSTRATIVE STATE</p></div>
+      <div id="now-content" class="now-content" aria-live="polite"></div>
+    </section>
+
+    <section class="next-section" aria-labelledby="next-heading">
+      <div class="section-head"><h2 class="eyebrow" id="next-heading">NEXT</h2><a class="plain-link" href="#calendar-note">Full Calendar →</a></div>
+      <a class="next-event" href="#calendar-note">
+        <span class="next-date">30 SEP <small>11:30 am AEST</small></span>
+        <span><strong>Australia CPI</strong><small>August 2026 · Australian Bureau of Statistics</small></span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+      <p id="calendar-note" class="destination-note">Searchable dates and the full horizon live in Calendar.</p>
+    </section>
+
+    <section class="outlook-section" aria-labelledby="outlook-heading">
+      <div class="section-head"><h2 class="eyebrow" id="outlook-heading">OUTLOOK</h2><a class="plain-link" href="#forecasts-destination">See forecasts →</a></div>
+      <p class="section-note">Four open monetary-policy forecasts · all unresolved</p>
+      <ul class="forecast-list" id="forecasts-destination">
+        <li><time datetime="2026-10-28">28 OCT</time><span>Bank of Canada</span><strong>2.25%</strong><small>overnight target forecast</small></li>
+        <li><time datetime="2026-10-28">28 OCT</time><span>Federal Reserve</span><strong>Unchanged · 65%</strong><small>target range direction</small></li>
+        <li><time datetime="2026-10-29">29 OCT</time><span>European Central Bank</span><strong>Unchanged · 55%</strong><small>three key rates, joint direction</small></li>
+        <li><time datetime="2026-11-03">03 NOV</time><span>Reserve Bank of Australia</span><strong>4.35%</strong><small>cash rate target forecast</small></li>
+      </ul>
+      <p class="epistemic-note">Forecast targets are issuer-date labels. Full resolution rules and information cutoffs are in Outlook.</p>
+    </section>
+
+    <section class="analysis-section" aria-labelledby="analysis-heading">
+      <div class="section-head"><h2 class="eyebrow" id="analysis-heading">LATEST ANALYSIS</h2><a class="plain-link" href="#analysis-destination">Read analysis →</a></div>
+      <article id="analysis-destination" class="analysis-item">
+        <p class="analysis-source">Biological Weapons Convention · 9 September</p>
+        <h2>Negotiating text advanced; substantive agreement was not established</h2>
+        <p>The reviewed record distinguishes procedural consensus from adoption of the substantive strengthening package. Later institutional follow-through is assessed separately.</p>
+      </article>
+    </section>
+
+    <footer class="explore" aria-label="Explore WORLD SIGNALS">
+      <h2 class="eyebrow">EXPLORE</h2>
+      <nav><a href="#calendar-note">Calendar</a><a href="#analysis-destination">Analysis</a><a href="#research-destination">Research</a></nav>
+      <p id="research-destination" class="footer-note">Method and publication boundaries →</p>
+    </footer>
+    <p class="fixture-disclaimer">Step 15A non-public prototype. The RBA result is a fixture only and is not admitted production data.</p>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

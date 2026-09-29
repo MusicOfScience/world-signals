@@ -1,0 +1,254 @@
+{
+  "project": "WORLD SIGNALS",
+  "artifact": "STEP15A_RBA_LIVE_FIRE_SYSTEM_AUDIT",
+  "version": "0.1",
+  "status": "DIAGNOSTIC_DESIGN_ONLY",
+  "public_projection": false,
+  "production_mutation_permitted": false,
+  "repository": {
+    "starting_main_sha": "95cdd4a10571096bb746968a0e409813695488e4",
+    "pr_188": {
+      "number": 188,
+      "state": "MERGED",
+      "merge_commit": "95cdd4a10571096bb746968a0e409813695488e4",
+      "validate_run_id": 36493018744,
+      "validate_conclusion": "success",
+      "pages_run_id": 36493018738,
+      "pages_conclusion": "success"
+    },
+    "branch": "codex/rba-live-fire-mobile-home-audit"
+  },
+  "rba_occurrence": {
+    "occurrence_id": "WSO-d2a7c4e4416b505b",
+    "series_id": "WS.CB.RBA.MONETARY_POLICY_DECISION",
+    "canonical_state_at_audit": "PLANNED",
+    "scheduled_local": "2026-09-29T14:30:00",
+    "source_timezone": "Australia/Sydney",
+    "aest_offset": "+10:00",
+    "scheduled_utc": "2026-09-29T04:30:00Z",
+    "canonical_source_id": "WSSRC-CB-009",
+    "monitor_schedule_source_id": "WSSRC-CB-002",
+    "source_time_is_exact": true
+  },
+  "official_outcome_audit_fixture": {
+    "source_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+    "release_number": "2026-27",
+    "release_date": "2026-09-29",
+    "publication_availability_timestamp": "UNKNOWN",
+    "cash_rate_target_prior_percent": 4.35,
+    "cash_rate_target_new_percent": 4.6,
+    "change_basis_points": 25,
+    "decision_unanimous": true,
+    "issuer_stated_rationale": [
+      "The RBA stated that inflation remained elevated and some previously flagged upside risks were materialising.",
+      "These are attributed statements by the issuer, not independent WORLD SIGNALS causal findings."
+    ],
+    "production_admission": false,
+    "observation_created": false,
+    "analysis_created": false,
+    "forecast_resolved": false
+  },
+  "clock_dynamism": {
+    "implementation": "web/briefing.js computes nextCalendarEvent during one render after load().",
+    "selection_rule": "eligible exact-date event timestamp >= Date.now(), sorted by timestamp then occurrence_id.",
+    "fixtures": [
+      {
+        "melbourne_time": "2026-09-29T14:29:00+10:00",
+        "selected_occurrence_id": "WSO-d2a7c4e4416b505b",
+        "result": "PASS_RBA_IS_NEXT"
+      },
+      {
+        "melbourne_time": "2026-09-29T14:30:00+10:00",
+        "selected_occurrence_id": "WSO-d2a7c4e4416b505b",
+        "result": "PASS_INCLUSIVE_BOUNDARY"
+      },
+      {
+        "melbourne_time": "2026-09-29T14:31:00+10:00",
+        "selected_occurrence_id": "WSO-90410e15e0eb58f9",
+        "result": "PASS_NEXT_SCHEDULED_ITEM; NO_COMPLETION_INFERENCE"
+      },
+      {
+        "melbourne_time": "2026-09-29T19:13:00+10:00",
+        "selected_occurrence_id": "WSO-MAC-A-0013",
+        "selected_title": "Australia CPI — August 2026",
+        "result": "PASS_CHRONOLOGY_ONLY"
+      }
+    ],
+    "open_page": {
+      "initial_brief_fetches": 4,
+      "brief_recalculation_triggers": ["initial load only"],
+      "clock_timer": false,
+      "visibility_or_focus_refresh": false,
+      "result": "CLIENT_CLOCK_REEVALUATION_GAP"
+    }
+  },
+  "public_data_refresh": {
+    "brief_fetches": [
+      "data/briefing.json",
+      "data/outlook.json",
+      "data/events.json",
+      "data/analysis.json"
+    ],
+    "fetch_occurs": "once when briefing.js loads",
+    "browser_refetch_on_focus_or_visibility": false,
+    "service_worker_found": false,
+    "deployed_http_headers_observed": {
+      "status": 200,
+      "cache_control": "max-age=600",
+      "etag_present": true,
+      "last_modified": "2026-09-28T22:33:08Z",
+      "source": "HEAD https://musicofscience.github.io/world-signals/data/public_status.json",
+      "interpretation": "HTTP artifact/cache metadata, not a governed claim that the underlying intelligence was reviewed at this time"
+    },
+    "application_freshness_contract": "ABSENT",
+    "stale_open_tab_duration": "UNBOUNDED_UNTIL_RELOAD_OR_DOCUMENT_REPLACEMENT"
+  },
+  "monitor_route": {
+    "adapter_id": "RBA_MPB_CALENDAR",
+    "source_id": "WSSRC-CB-002",
+    "role": "RBA_MPB_AUTHORITATIVE_SCHEDULE_CHANGE_SENTINEL",
+    "configured_cadence": "DAILY",
+    "request_budget_per_run": 3,
+    "request_sequence": [
+      "RBA robots.txt",
+      "MPB topic calendar",
+      "Board meeting schedule"
+    ],
+    "monitored_surfaces": [
+      "https://www.rba.gov.au/robots.txt",
+      "https://www.rba.gov.au/schedules-events/calendar/?topics=monetary-policy-board",
+      "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html"
+    ],
+    "canonical_scope_includes_occurrence": true,
+    "elapsed_time_policy": "NO_COMPLETION_INFERENCE",
+    "automatic_commit_allowed": false,
+    "schedule_path_robots_check": "ALLOWED_AT_RUN_TIME",
+    "execution_note": "The GitHub live-monitor workflow is workflow_dispatch only; repository workflow comments state routine monitoring is via a guarded local scheduler. The local scheduler's actual timing was not inspected."
+  },
+  "bounded_live_monitor_run": {
+    "run_at_utc": "2026-09-29T09:34:00Z",
+    "method": "Invoked the existing RBA adapter fetch/parse/alignment and rba_mpb_schedule_review_candidates functions only; no all-source runner or artifact-writing script was run.",
+    "source_health": [
+      {"surface": "robots.txt", "http_status": 200, "body_sha256": "34db55399446178564cb2ded56d9829eb0d6c204ab3a6731d161392d218efcb5"},
+      {"surface": "MPB topic calendar", "http_status": 200, "event_count": 55, "body_sha256": "f4350e17771b873634b2b4e13e2b418095c3f4a3f03c0835c7f8301be9242025"},
+      {"surface": "Board meeting schedule", "http_status": 200, "meeting_window_count": 16, "body_sha256": "268cdf2979abef9d4bd1ed51bf8fa3be7f08b71aa4b2e27e62755fe600c51ed9"}
+    ],
+    "schedule_semantic_sha256": "9f7fb82c263b67c69fffe4af184c519e42b030cd30182ad6a5d57f8232f48da2",
+    "target_occurrence_observation": "RBA_MPB_CALENDAR_EVENT_NO_CHANGE",
+    "target_occurrence_candidates": [],
+    "decision_publication_checked": false,
+    "rate_or_unanimity_extracted": false,
+    "outcome_detection": "NO",
+    "production_write": false
+  },
+  "detection_classification": {
+    "schedule_sentinel": "WORKING_AS_DESIGNED_FOR_SCHEDULE_STATE",
+    "publication_sentinel": "NOT_IMPLEMENTED",
+    "result_extractor": "NOT_IMPLEMENTED",
+    "coverage_gap": "OUTCOME_DETECTION_COVERAGE_GAP",
+    "first_missing_boundary": "T3: WORLD SIGNALS does not detect the official decision publication."
+  },
+  "resolution_chain": [
+    {"stage": "T0_CANONICAL_SCHEDULED_OCCURRENCE", "state": "IMPLEMENTED", "evidence": "PLANNED Canonical occurrence exists and projects publicly."},
+    {"stage": "T1_SCHEDULED_TIME_ARRIVES", "state": "CLOCK_ONLY", "evidence": "Client chronology changes on a render; no event-state mutation."},
+    {"stage": "T2_OFFICIAL_PUBLICATION", "state": "EXTERNAL_FACT", "evidence": "RBA release exists; not in a governed WORLD SIGNALS observation."},
+    {"stage": "T3_PUBLICATION_DETECTED", "state": "MISSING", "evidence": "Current RBA route only reads schedule surfaces."},
+    {"stage": "T4_REVIEW_CANDIDATE", "state": "NOT_AVAILABLE_FOR_OUTCOME", "evidence": "No publication/result candidate produced."},
+    {"stage": "T5_HUMAN_GOVERNED_REVIEW", "state": "AVAILABLE_PATTERN_NOT_EXERCISED", "evidence": "Existing review/admission patterns exist; no candidate entered them."},
+    {"stage": "T6_CANONICAL_COMPLETION_ADMITTED", "state": "NOT_PERFORMED", "evidence": "Occurrence remains PLANNED; manual governed update path exists, but this audit did not invoke it."},
+    {"stage": "T7_RESULT_OBSERVATION_ADMITTED", "state": "MISSING_FOR_THIS_EVENT", "evidence": "No RBA outcome Live observation was created."},
+    {"stage": "T8_PUBLIC_PROJECTION_REBUILT", "state": "IMPLEMENTED_MANUALLY", "evidence": "Static projection is generated by scripts/build_site.py."},
+    {"stage": "T9_PAGES_DEPLOYED", "state": "IMPLEMENTED_ON_GOVERNED_BUILD", "evidence": "Pages workflow builds/deploys on main push or completed live-monitor workflow; not an outcome detector."},
+    {"stage": "T10_OPEN_CLIENT_REFRESHES", "state": "MISSING_AUTOMATIC_REFRESH", "evidence": "No public version check, focus refresh or timer in Brief."},
+    {"stage": "T11_READER_SEES_CONFIRMED_OUTCOME", "state": "MISSING", "evidence": "No governed outcome projection exists for this occurrence."}
+  ],
+  "latency": {
+    "scheduled_publication_time": "2026-09-29T14:30:00+10:00 (officially scheduled)",
+    "actual_source_publication_latency": "UNKNOWN; release content is dated 29 September but no precise availability timestamp was verified.",
+    "configured_schedule_monitor_cadence": "DAILY",
+    "actual_local_scheduler_execution_interval": "UNKNOWN",
+    "publication_detection_latency": "UNAVAILABLE_WITH_CURRENT_ROUTE",
+    "candidate_review_latency": "UNAVAILABLE_FOR_OUTCOME; would be human-governed if a candidate existed",
+    "admission_to_site_build_latency": "UNKNOWN; no outcome admission occurred",
+    "hosted_build_deployment_latency": "NO_STEP15A_EVENT_SAMPLE",
+    "open_client_refresh_latency": "UNBOUNDED_UNTIL_RELOAD; public response cache max-age observed as 600 seconds"
+  },
+  "publication_sentinel_recommendation": {
+    "candidate_route_id": "RBA_MPB_DECISION_PUBLICATION_SENTINEL",
+    "activate_now": false,
+    "preferred_surface": "First-party RBA Media Releases RSS feed; direct linked endpoint https://www.rba.gov.au/rss/rss-cb-media-releases.xml, with the official Media Releases index as human verification fallback.",
+    "matching": "Match official decision-statement title/date to an explicit allowlisted Canonical occurrence and date window; verify the linked release page before candidate extraction. Never guess release URLs or infer event completion from feed absence.",
+    "rights_and_robots": "RBA RSS page explicitly describes software/feed-reader use; current robots rules do not disallow /rss/. Existing source permission for WSSRC-CB-002 is explicitly limited to bounded /schedules-events/ schedule paths, so a separate source/endpoint operational and rights review is required before activation. RBA general CC BY terms have Cash Rate-specific restrictions and attribution/non-endorsement requirements; this is an operational classification, not legal advice.",
+    "stability": "Official RSS link is a better candidate than guessed serial URLs; feed schema/retention/latency and firewall behaviour still require direct adapter preflight.",
+    "false_positive_controls": ["explicit release title family", "publication date matched to allowlisted occurrence", "one occurrence identity only", "no inference from feed absence", "linked official statement verification", "duplicate/update handling"],
+    "candidate_only_result": "A review candidate may carry rate, change and unanimity as attributed release facts; it may not mutate Canonical or promote to Live/Analysis automatically."
+  },
+  "target_event_state_machine": [
+    {"state": "UPCOMING", "trigger": "scheduled time is future", "reader_copy": "RBA decision · Today, 2:30 pm AEST"},
+    {"state": "AWAITING_CONFIRMATION", "trigger": "scheduled time elapsed without governed outcome", "reader_copy": "Decision time passed · Awaiting confirmed outcome"},
+    {"state": "SOURCE_CHECK_UNAVAILABLE", "trigger": "a governed check status explicitly reports failure", "reader_copy": "Source check unavailable · no completion inferred"},
+    {"state": "DETECTED_REVIEW_PENDING_INTERNAL", "trigger": "candidate exists, not admitted", "reader_copy": "Not public; internal review only"},
+    {"state": "CONFIRMED_OUTCOME", "trigger": "result fact admitted and public eligibility separately granted", "reader_copy": "RBA raised cash rate to 4.60% · +25 bp"},
+    {"state": "ANALYSIS_AVAILABLE", "trigger": "a public Analysis explicitly linked and published", "reader_copy": "Read analysis →"}
+  ],
+  "now_projection_decision": {
+    "recommended_basis": "Reviewed/admitted Live Intelligence observation explicitly linked to the Canonical occurrence; Canonical lifecycle separately records completion; a bounded allowlisted public event-resolution projection joins those existing layers.",
+    "analysis_is_not_required_for_result_fact": true,
+    "forecast_outcome_is_not_generic_event_result_store": true,
+    "importance_ranking": "NONE; explicit publication eligibility then chronology and stable occurrence-ID tie-break only."
+  },
+  "mobile_home_design": {
+    "principle": "PROGRESSIVE_DISCLOSURE_NOT_PROGRESSIVE_ACCUMULATION",
+    "prototype_location": "prototypes/step15a-mobile-home/",
+    "states": ["PRE_EVENT", "EVENT_TIME_PASSED_AWAITING_CONFIRMATION", "CONFIRMED_OUTCOME", "CONFIRMED_OUTCOME_WITH_ANALYSIS"],
+    "home_order": ["NOW", "NEXT", "OUTLOOK", "LATEST ANALYSIS", "EXPLORE"],
+    "resolution_clock": "REMOVE_FROM_HOME; resolution dates/rules remain in Outlook.",
+    "horizon": "Do not render 30-day list on home; show one next event and Calendar link.",
+    "analysis": "One headline/short abstract on home; full reviews live in Analysis.",
+    "outlook": "Four compact rows retain target/value, unresolved status and issuer date; exact cutoffs/distributions live in Outlook.",
+    "freshness": "Separate device clock from public-build data freshness; no build timestamp currently exists in the public JSON contract.",
+    "importance_ranking": "None."
+  },
+  "human_task_heuristic": {
+    "method": "Content and semantic inspection only; no participants or timed user study.",
+    "what_just_happened": "OBVIOUS: NOW is first and distinguishes scheduled, awaiting-confirmation and fixture-only governed-result states.",
+    "what_happens_next": "OBVIOUS: NEXT presents one governed event and a Full Calendar link.",
+    "what_is_forecast": "OBVIOUS: compact Outlook rows show all four pilot values/targets and unresolved status.",
+    "where_is_analysis": "OBVIOUS: one latest-analysis item has a Read analysis link.",
+    "how_fresh_is_page": "OBVIOUSLY_UNAVAILABLE: device time is separate and the public build timestamp is explicitly absent.",
+    "visual_capture": "VISUAL_CAPTURE_UNAVAILABLE; local prototype navigation was blocked by browser URL security policy and no workaround was attempted."
+  },
+  "production_state_impact": {
+    "canonical_changed": false,
+    "monitor_expectations_changed": false,
+    "monitor_routes_created": 0,
+    "automated_retrieval_activated": false,
+    "live_observations_created": 0,
+    "analysis_created_or_revised": false,
+    "forecast_resolved": false,
+    "world_state_changed": false,
+    "relationship_changed": false,
+    "scenario_risk_outcome_changed": false,
+    "public_production_inputs_changed": false
+  },
+  "fingerprint_baseline": {
+    "method": "SHA-256 over sorted tracked-file paths and bytes within each listed path, recorded before edits on starting main.",
+    "groups": {
+      "canonical": "3bffa7f10273b9f3921be4145f72378465ae8e744b5ca4af2a3d6d96bfb7499d",
+      "sources": "c205ed48b5b0e9bb61b2cf7e3825c31cea5935f08bf741403cdebe993719f453",
+      "monitor": "0855ca25f5a13ae5e2ae1a3408b1a0c2ced303255f899614e681f4b98a38a6ff",
+      "live_intelligence": "c19917fc2337e8bab2744c150ea586651fe5b19d98e42e5243dc498e632481bb",
+      "analysis": "73a79329cef357ed818218fe1898f3936bc7868647adc2f9c4bec7cfb807f8a0",
+      "signals": "10bd1e98163bf9964df79007e8c83582ebe591721a250d41e529eac61f5c8865",
+      "world_state": "f5f5b9894e318ef482dc16cf22507c2946783c45a600ca5faf6577ef919e458c",
+      "relationships": "a79717d49725244a865868141fe8ac280b40ceef5003575d1dc099006f7878a6",
+      "forecasts": "d4055313c4819d1aa9c166369d0cc2fad2b131d768bf510f341def5b7d7850bc",
+      "scenarios": "8cbe474d181e233a76fcfe285daca36a2aefbe1fa6902164e34f37b48a7aeb6c",
+      "risks": "459e3e9ef18d932bf9bd76dd7145ce732b41c73f553bd7020c72f0af0f842ee2",
+      "outcomes": "4d1659209ff2528ed8c8cadb0313d2480aab8a66b514cbfceb669141795a5f8b",
+      "public_generated_data": "7dbf1e37305c04e62887f44b920068b5f15c5fe86b1b8d284cfb709f5c068405",
+      "public_html": "2e45c6a0bf68f0faef40459b761bb0a77b591cb418dd5cf5dddc33d0c7db7594",
+      "web_source": "b10d0c31721e6c37d23c48eab73b75295fe396ac662752b034310932e9bec13d"
+    }
+  }
+}
