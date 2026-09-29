@@ -1,0 +1,68 @@
+{
+  "automatic_actions": [],
+  "candidate_id": "WSOUTCAND-AU-RBA-MPB-20260929-001",
+  "candidate_type": "OFFICIAL_EVENT_OUTCOME_REVIEW_CANDIDATE",
+  "detected_at_utc": "2026-09-29T11:17:08.765213Z",
+  "institution": "Reserve Bank of Australia",
+  "jurisdiction": "Australia",
+  "known_at_utc": "2026-09-29T11:17:08.765213Z",
+  "limitations": [
+    "Candidate only; not a production Outcome, Live observation or Canonical lifecycle change.",
+    "Issuer rationale is attributed and is not an independently established causal conclusion.",
+    "Human review and separately authorised admission are required."
+  ],
+  "recommended_governed_actions": [
+    "CANONICAL_COMPLETION_REVIEW",
+    "OPTIONAL_BOUNDED_LIVE_FACT_REVIEW"
+  ],
+  "semantic_content": {
+    "canonical_occurrence_id": "WSO-d2a7c4e4416b505b",
+    "canonical_series_id": "WS.CB.RBA.MONETARY_POLICY_DECISION",
+    "outcome": {
+      "cash_rate_target_percent": 4.6,
+      "change_basis_points": 25,
+      "decision_date": "2026-09-29",
+      "decision_direction": "INCREASE",
+      "decision_unanimous": true,
+      "rationale_classification": "ISSUER_STATED_RATIONALE"
+    },
+    "parser_version": "rba-mpb-decision-rss-v1",
+    "publication_identity": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+    "publication_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+    "published_at": "2026-09-29T14:30:00+10:00",
+    "rss_item_semantic_sha256": "9b4a98f5b084f4e354e3fb1a8e363550f1ef4183260d015315ee9776a4acfa0f"
+  },
+  "semantic_fingerprint": "a42a8c260d1a9e1e0d2f22b5a3d3e8ce1188f4f3a260a07235224d01ff571d81",
+  "source_candidate_id": "WSSRC-CANDIDATE-CB-RBA-MEDIA-RELEASES-RSS-001",
+  "source_transport_hashes": {
+    "page_transport_sha256": "d8a127214816397b86ae6756095b4fa0580f4f793bb93ad78b38f30f750cc875",
+    "rss_transport_sha256": "09bbd6f6739ac44f7c2183a50ef6a3d725afdc8450b184d8d5c262962b441555"
+  },
+  "status": "REVIEW_PENDING",
+  "live_capture": {
+    "probe": "committed scripts/probe_rba_decision_publication_candidate.py",
+    "probe_completed_at_utc": "2026-09-29T11:17:08.765213Z",
+    "requests": [
+      {
+        "role": "MEDIA_RELEASE_RSS",
+        "requested_url": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml",
+        "status": 200,
+        "content_type": "text/xml",
+        "resolved_url": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml",
+        "body_bytes": 2093,
+        "body_sha256": "09bbd6f6739ac44f7c2183a50ef6a3d725afdc8450b184d8d5c262962b441555"
+      },
+      {
+        "role": "LINKED_DECISION_STATEMENT",
+        "requested_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "resolved_url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+        "body_bytes": 27651,
+        "body_sha256": "d8a127214816397b86ae6756095b4fa0580f4f793bb93ad78b38f30f750cc875"
+      }
+    ],
+    "raw_response_payloads_retained": false,
+    "retention_note": "The committed probe parsed each response in memory and retained byte counts and transport hashes. Full RSS/page payload copies were not persisted; another fetch is not authorized in this corrective run."
+  }
+}

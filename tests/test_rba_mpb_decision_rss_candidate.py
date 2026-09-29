@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from world_signals.adapters.base import AdapterError
 from world_signals.adapters.rba_mpb_decision_rss import (
+    DecisionRSSItem,
     PARSER_VERSION,
     RBA_DECISION_SERIES,
     RBA_DECISION_TITLE,
@@ -208,7 +209,7 @@ class RbaDecisionPublicationCandidateTests(unittest.TestCase):
         self.assertIs(route["automatic_commit_allowed"], False)
         self.assertNotIn("RBA_MPB_DECISION_PUBLICATION_RSS", json.dumps(monitor))
 
-    def test_retained_audit_hashes_and_fail_closed_live_status(self):
+    def test_retained_audit_hashes_and_live_candidate_status(self):
         def fingerprint(value):
             encoded = json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
             return sha256(encoded.encode()).hexdigest()
@@ -220,10 +221,57 @@ class RbaDecisionPublicationCandidateTests(unittest.TestCase):
         self.assertEqual(audit["route_candidate_semantic_fingerprint"], route["semantic_fingerprint"])
         self.assertEqual(audit["parser_semantic_contract_fingerprint"], fingerprint(audit["parser_semantic_contract"]))
         self.assertEqual(audit["source_manifest_semantic_fingerprint"], fingerprint(audit["source_manifest_semantics"]))
-        self.assertEqual(audit["candidate_generation"]["real_result_candidate_created"], False)
-        self.assertEqual(audit["status"], "T3_OBSERVED_T4_NOT_PROVEN")
+        self.assertEqual(audit["candidate_generation"]["real_result_candidate_created"], True)
+        self.assertEqual(audit["status"], "T3_T4_PROVEN_REVIEW_PENDING")
         self.assertEqual(audit["production_write_targets"], [])
         self.assertEqual(audit["public_write_targets"], [])
+
+    def test_retained_live_candidate_identity_capture_and_semantic_determinism(self):
+        candidate = json.loads((ROOT / "data/audit/STEP15B_RBA_20260929_DECISION_RESULT_CANDIDATE_REVIEW_PENDING.json").read_text())
+        semantic = candidate["semantic_content"]
+        fingerprint = sha256(json.dumps(semantic, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
+        self.assertEqual(candidate["candidate_id"], "WSOUTCAND-AU-RBA-MPB-20260929-001")
+        self.assertEqual(candidate["status"], "REVIEW_PENDING")
+        self.assertEqual(candidate["semantic_fingerprint"], fingerprint)
+        self.assertEqual(semantic["canonical_occurrence_id"], OCCURRENCE["occurrence_id"])
+        self.assertEqual(semantic["outcome"]["cash_rate_target_percent"], 4.6)
+        self.assertEqual(semantic["outcome"]["decision_direction"], "INCREASE")
+        self.assertEqual(semantic["outcome"]["change_basis_points"], 25)
+        self.assertIs(semantic["outcome"]["decision_unanimous"], True)
+        from datetime import datetime
+        detected = datetime.fromisoformat(candidate["detected_at_utc"].replace("Z", "+00:00"))
+        published = datetime.fromisoformat(semantic["published_at"])
+        self.assertGreaterEqual(detected, published)
+        capture = candidate["live_capture"]
+        requests = {entry["role"]: entry for entry in capture["requests"]}
+        self.assertEqual(requests["MEDIA_RELEASE_RSS"]["status"], 200)
+        self.assertEqual(requests["MEDIA_RELEASE_RSS"]["body_sha256"], candidate["source_transport_hashes"]["rss_transport_sha256"])
+        self.assertEqual(requests["LINKED_DECISION_STATEMENT"]["status"], 200)
+        self.assertEqual(requests["LINKED_DECISION_STATEMENT"]["content_type"], "text/html; charset=UTF-8")
+        self.assertEqual(requests["LINKED_DECISION_STATEMENT"]["resolved_url"], semantic["publication_url"])
+        self.assertEqual(requests["LINKED_DECISION_STATEMENT"]["body_sha256"], candidate["source_transport_hashes"]["page_transport_sha256"])
+        self.assertFalse(capture["raw_response_payloads_retained"])
+        item = DecisionRSSItem(
+            title=RBA_DECISION_TITLE,
+            link=semantic["publication_url"],
+            guid=None,
+            published_raw="2026-09-29T14:30:00+10:00",
+            published_at=semantic["published_at"],
+            description="At its meeting today, the Board decided to increase the cash rate target by 25 basis points to 4.60 per cent.",
+            semantic_item_sha256=semantic["rss_item_semantic_sha256"],
+        )
+        canonical = json.loads((ROOT / "data/canonical/registry.json").read_text())
+        records = canonical.get("records", canonical.get("occurrences", []))
+        occurrence = next(row for row in records if row.get("occurrence_id") == OCCURRENCE["occurrence_id"])
+        rebuilt = build_result_candidate(
+            item=item,
+            outcome=semantic["outcome"],
+            occurrence=occurrence,
+            feed_transport_sha256=candidate["source_transport_hashes"]["rss_transport_sha256"],
+            page_transport_sha256=candidate["source_transport_hashes"]["page_transport_sha256"],
+            detected_at_utc=candidate["detected_at_utc"],
+        )
+        self.assertEqual(rebuilt, {key: value for key, value in candidate.items() if key != "live_capture"})
 
 
 if __name__ == "__main__":
