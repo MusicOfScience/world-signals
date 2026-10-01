@@ -1,0 +1,481 @@
+{
+  "project": "WORLD SIGNALS",
+  "package_type": "WORLD_STATE_STEP16A_AU_MACRO_TRANSMISSION_CANDIDATE",
+  "package_version": "0.1",
+  "status": "REVIEW_PENDING",
+  "preflight_classification": "READY_FOR_HUMAN_TRANSMISSION_REVIEW",
+  "constructed_at_utc": "2026-10-01T06:51:00Z",
+  "knowledge_cutoff_utc": "2026-10-01T06:31:00Z",
+  "scope": {
+    "jurisdictions": [
+      "Australia"
+    ],
+    "levels": [
+      "GLOBAL_STATE",
+      "JURISDICTION_STATE"
+    ],
+    "network_state": "DEFERRED_INSUFFICIENT_REVIEWED_CROSS_BORDER_PATH"
+  },
+  "transmission_grammar": [
+    "SHOCK",
+    "EXPOSURE",
+    "TRANSMISSION",
+    "BUFFER",
+    "BEHAVIOURAL_RESPONSE",
+    "FEEDBACK",
+    "OUTCOME"
+  ],
+  "governance": {
+    "visibility": "INTERNAL_ONLY",
+    "public_projection_permitted": false,
+    "production_write_targets": [],
+    "canonical_mutation_allowed": false,
+    "live_intelligence_mutation_allowed": false,
+    "signal_mutation_allowed": false,
+    "relationship_mutation_allowed": false,
+    "risk_regime_mutation_allowed": false,
+    "scenario_mutation_allowed": false,
+    "automatic_promotion_allowed": false
+  },
+  "source_policy": {
+    "primary_source_preferred": true,
+    "secondary_discovery_allowed": true,
+    "secondary_source_production_support_allowed": false,
+    "market_commentary_is_context_not_causal_proof": true,
+    "later_admission_requires_existing_layer_contracts": true
+  },
+  "sources": [
+    {
+      "source_id": "STEP16A-SRC-RBA-MPB-20260929",
+      "source_class": "PRIMARY_OFFICIAL",
+      "publisher": "Reserve Bank of Australia",
+      "title": "Statement by the Monetary Policy Board: Monetary Policy Decision",
+      "published_date": "2026-09-29",
+      "url": "https://www.rba.gov.au/media-releases/2026/mr-26-27.html",
+      "production_support_eligible": true
+    },
+    {
+      "source_id": "STEP16A-SRC-RBA-FSR-GLOBAL-202610",
+      "source_class": "PRIMARY_OFFICIAL",
+      "publisher": "Reserve Bank of Australia",
+      "title": "Financial Stability Review October 2026: The Global Macro-financial Environment",
+      "published_date": "2026-10-01",
+      "url": "https://www.rba.gov.au/publications/fsr/2026/oct/the-global-macro-financial-environment.html",
+      "production_support_eligible": true
+    },
+    {
+      "source_id": "STEP16A-SRC-RBA-FSR-HH-202610",
+      "source_class": "PRIMARY_OFFICIAL",
+      "publisher": "Reserve Bank of Australia",
+      "title": "Financial Stability Review October 2026: Resilience of Australian Households and Businesses",
+      "published_date": "2026-10-01",
+      "url": "https://www.rba.gov.au/publications/fsr/2026/oct/resilience-of-australian-households-and-businesses.html",
+      "production_support_eligible": true
+    },
+    {
+      "source_id": "STEP16A-SRC-ABS-JV-202608",
+      "source_class": "PRIMARY_OFFICIAL",
+      "publisher": "Australian Bureau of Statistics",
+      "title": "Job Vacancies, Australia, August 2026",
+      "published_date": "2026-10-01",
+      "url": "https://www.abs.gov.au/statistics/labour/jobs/job-vacancies-australia/aug-2026",
+      "production_support_eligible": true
+    },
+    {
+      "source_id": "STEP16A-SRC-ABC-MARKETS-20261001",
+      "source_class": "SECONDARY_DISCOVERY",
+      "publisher": "ABC News",
+      "title": "ASX markets and business live updates, 1 October 2026",
+      "published_date": "2026-10-01",
+      "url": "https://www.abc.net.au/news/2026-10-01/asx-markets-business-news-live-updates-thursday-1-october/107204216",
+      "production_support_eligible": false
+    }
+  ],
+  "observation_candidates": [
+    {
+      "candidate_id": "STEP16A-OBS-GLOBAL-ENERGY-INFLATION-001",
+      "level": "GLOBAL_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "TRADE_CAPITAL_ENERGY_FOOD_FLOWS",
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "Middle East conflict and oil-supply disruption are maintaining materially higher global energy prices and adding to Australian inflation pressure.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-MPB-20260929",
+        "STEP16A-SRC-RBA-FSR-GLOBAL-202610"
+      ],
+      "counter_evidence": [
+        "Supply-chain adaptation and inventories have absorbed part of recent disruption; duration remains unresolved."
+      ],
+      "notes": "Candidate observation only; it does not establish the full downstream transmission path."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-GLOBAL-FINANCIAL-CONDITIONS-002",
+      "level": "GLOBAL_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS",
+        "MARKETS_AS_SENSORS"
+      ],
+      "proposition": "Global sovereign-bond vulnerabilities and higher yields can tighten Australian financing conditions through international financial-market spillovers.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-FSR-GLOBAL-202610"
+      ],
+      "counter_evidence": [
+        "Major markets remain orderly; a severe Australian funding spillover is not established here."
+      ],
+      "notes": "Global exposure candidate; no domestic-yield attribution is asserted."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-AU-POLICY-CONSTRAINT-003",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "The RBA raised the cash-rate target by 25 basis points to 4.60 per cent on 29 September 2026 and retained the option of further tightening if needed.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-MPB-20260929"
+      ],
+      "counter_evidence": [
+        "Output growth has slowed and policy remains data-dependent."
+      ],
+      "notes": "Observed policy state, not a forecast."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-AU-HOUSING-WEAKNESS-004",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "The RBA reports housing prices have fallen in most capital cities and new housing loans have declined noticeably.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-MPB-20260929",
+        "STEP16A-SRC-RBA-FSR-HH-202610"
+      ],
+      "counter_evidence": [
+        "Falling prices alone do not establish forced selling or systemic balance-sheet stress."
+      ],
+      "notes": "Secondary Cotality monthly figures remain discovery context until separately governed."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-AU-HOUSEHOLD-CASHFLOW-005",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "The RBA estimates around 2 per cent of variable-rate owner-occupier borrowers have insufficient income to cover scheduled mortgage payments and essential expenses.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-FSR-HH-202610"
+      ],
+      "counter_evidence": [
+        "The affected share remains small in aggregate and arrears remain low."
+      ],
+      "notes": "Supports early Stage 2 compression, not systemic default."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-AU-HOUSEHOLD-BUFFERS-006",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "DISCONFIRMING_BUFFER",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "Current Stage 3 evidence is limited: arrears remain low, less than 1 per cent of borrowers are in negative equity, and the median mortgagor can cover over a year of scheduled payments from offset/redraw buffers.",
+      "source_refs": [
+        "STEP16A-SRC-RBA-FSR-HH-202610"
+      ],
+      "counter_evidence": [
+        "Buffers are uneven and could weaken if labour-market conditions deteriorate."
+      ],
+      "notes": "Explicit counter-signal against crisis overreach."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-AU-LABOUR-DEMAND-007",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "PRIMARY_SUPPORT",
+      "production_support_eligible": true,
+      "domains": [
+        "MACROECONOMIC_FINANCIAL_CONDITIONS"
+      ],
+      "proposition": "ABS vacancies fell 0.9 per cent to 325,000 in August 2026; private vacancies fell 2.0 per cent, public vacancies rose 7.8 per cent, and total vacancies were 31.2 per cent below the May 2022 peak.",
+      "source_refs": [
+        "STEP16A-SRC-ABS-JV-202608"
+      ],
+      "counter_evidence": [
+        "Vacancies alone do not establish rising unemployment or recession."
+      ],
+      "notes": "Prospective transition variable for housing stress."
+    },
+    {
+      "candidate_id": "STEP16A-OBS-MARKET-SENSORS-008",
+      "level": "JURISDICTION_STATE",
+      "evidence_role": "SECONDARY_CONTEXT",
+      "production_support_eligible": false,
+      "domains": [
+        "MARKETS_AS_SENSORS"
+      ],
+      "proposition": "The ABC live blog reported a roughly 2 per cent ASX 200 fall, elevated Australian long-bond yields and stressed oil pricing; these remain contextual market sensors.",
+      "source_refs": [
+        "STEP16A-SRC-ABC-MARKETS-20261001"
+      ],
+      "counter_evidence": [
+        "A single session is noisy and the market observations were not independently reconstructed for this packet."
+      ],
+      "notes": "Context only; cannot independently promote a governed downstream object."
+    }
+  ],
+  "relationship_candidates": [
+    {
+      "candidate_id": "STEP16A-REL-ENERGY-INFLATION-POLICY-001",
+      "title": "Global energy shock to Australian inflation and monetary-policy constraint",
+      "review_state": "CANDIDATE",
+      "relationship_class_candidate": "MECHANISTICALLY_SUPPORTED",
+      "causal_basis_candidate": [
+        "ESTABLISHED_ECONOMIC_MECHANISM",
+        "PRIMARY_SOURCE_OPERATIONAL_LINKAGE"
+      ],
+      "path": [
+        "GLOBAL_ENERGY_SHOCK",
+        "AU_INFLATION_PRESSURE",
+        "AU_MONETARY_POLICY_CONSTRAINT"
+      ],
+      "supporting_observation_candidate_ids": [
+        "STEP16A-OBS-GLOBAL-ENERGY-INFLATION-001",
+        "STEP16A-OBS-AU-POLICY-CONSTRAINT-003"
+      ],
+      "mechanism_candidate": "The RBA explicitly linked higher global energy prices and fuel pass-through to its inflation assessment and September tightening decision.",
+      "alternative_explanations": [
+        "Domestic capacity pressure and stronger inflation also contributed."
+      ],
+      "falsification_conditions": [
+        "Primary evidence later shows materially weaker energy pass-through or the policy constraint changes as inflation normalises."
+      ]
+    },
+    {
+      "candidate_id": "STEP16A-REL-RATES-HOUSING-CASHFLOW-002",
+      "title": "Restrictive financial conditions to housing and household cash-flow compression",
+      "review_state": "CANDIDATE",
+      "relationship_class_candidate": "HYPOTHESISED_TRANSMISSION",
+      "causal_basis_candidate": [],
+      "path": [
+        "AU_MONETARY_AND_MARKET_RATE_RESTRICTION",
+        "BORROWING_CAPACITY_AND_MORTGAGE_SERVICE",
+        "HOUSING_WEAKNESS",
+        "HOUSEHOLD_CASHFLOW_COMPRESSION"
+      ],
+      "supporting_observation_candidate_ids": [
+        "STEP16A-OBS-AU-POLICY-CONSTRAINT-003",
+        "STEP16A-OBS-AU-HOUSING-WEAKNESS-004",
+        "STEP16A-OBS-AU-HOUSEHOLD-CASHFLOW-005",
+        "STEP16A-OBS-AU-HOUSEHOLD-BUFFERS-006"
+      ],
+      "mechanism_candidate": "Candidate chain only; the full chain has not met the production Relationship standard.",
+      "alternative_explanations": [
+        "Housing supply, tax settings, migration, credit standards and household income may alter the path."
+      ],
+      "falsification_conditions": [
+        "Housing and household stress stabilise despite continued restrictive conditions."
+      ]
+    },
+    {
+      "candidate_id": "STEP16A-REL-HOUSING-LABOUR-FEEDBACK-003",
+      "title": "Housing weakness to labour and balance-sheet feedback",
+      "review_state": "CANDIDATE",
+      "relationship_class_candidate": "HYPOTHESISED_TRANSMISSION",
+      "causal_basis_candidate": [],
+      "path": [
+        "HOUSING_WEAKNESS",
+        "CONSUMPTION_AND_CONSTRUCTION_WEAKNESS",
+        "LABOUR_DEMAND_WEAKNESS",
+        "HOUSEHOLD_STRESS",
+        "FORCED_SALES_AND_FURTHER_HOUSING_WEAKNESS"
+      ],
+      "supporting_observation_candidate_ids": [
+        "STEP16A-OBS-AU-HOUSING-WEAKNESS-004",
+        "STEP16A-OBS-AU-HOUSEHOLD-CASHFLOW-005",
+        "STEP16A-OBS-AU-HOUSEHOLD-BUFFERS-006",
+        "STEP16A-OBS-AU-LABOUR-DEMAND-007"
+      ],
+      "mechanism_candidate": "Prospective feedback hypothesis; labour deterioration is the principal transition variable into broad balance-sheet stress.",
+      "alternative_explanations": [
+        "Buffers, income growth, refinancing or policy support may interrupt the feedback."
+      ],
+      "falsification_conditions": [
+        "Employment and hours remain resilient while arrears and forced-sale indicators remain contained."
+      ]
+    }
+  ],
+  "risk_state_candidate": {
+    "candidate_id": "STEP16A-RISK-AU-MONETARY-HOUSING-COMPRESSION-001",
+    "title": "Australian monetary-housing compression",
+    "review_state": "CANDIDATE",
+    "state_class_candidate": "RISK_STATE",
+    "current_state_candidate": "EMERGING",
+    "materiality_candidate": "MODERATE",
+    "confidence_candidate": "MEDIUM",
+    "stages": [
+      {
+        "stage": 1,
+        "label": "AFFORDABILITY_AND_MARKET_DETERIORATION",
+        "assessment": "ACTIVE",
+        "basis": "Housing prices and new housing lending have weakened while policy remains restrictive."
+      },
+      {
+        "stage": 2,
+        "label": "HOUSEHOLD_CASHFLOW_COMPRESSION",
+        "assessment": "EMERGING",
+        "basis": "Mortgage cash-flow pressure is visible for a minority while aggregate arrears remain low."
+      },
+      {
+        "stage": 3,
+        "label": "BALANCE_SHEET_AND_FORCED_SALE_FEEDBACK",
+        "assessment": "NOT_ESTABLISHED",
+        "basis": "Negative equity is rare and household liquidity buffers remain substantial."
+      }
+    ],
+    "supporting_observation_candidate_ids": [
+      "STEP16A-OBS-AU-POLICY-CONSTRAINT-003",
+      "STEP16A-OBS-AU-HOUSING-WEAKNESS-004",
+      "STEP16A-OBS-AU-HOUSEHOLD-CASHFLOW-005",
+      "STEP16A-OBS-AU-LABOUR-DEMAND-007"
+    ],
+    "disconfirming_observation_candidate_ids": [
+      "STEP16A-OBS-AU-HOUSEHOLD-BUFFERS-006"
+    ],
+    "threshold_basis_candidate": {
+      "type": "ANALYST_HEURISTIC",
+      "description": "Stage 3 requires reviewed broad balance-sheet, forced-sale or comparable feedback evidence; falling prices alone are insufficient."
+    },
+    "falsification_conditions": [
+      "Housing and arrears stabilise; labour remains resilient; or inflation pressure recedes enough to relax the policy constraint."
+    ]
+  },
+  "scenario_set_candidate": {
+    "scenario_set_id": "STEP16A-SCENARIO-SET-AU-MACRO-001",
+    "review_state": "DRAFT",
+    "scope": "Australia macro-financial transmission from the 1 October 2026 knowledge cutoff",
+    "shared_starting_condition": "Stage 1 active; Stage 2 emerging; Stage 3 not established.",
+    "divergence_points": [
+      "Energy-shock duration",
+      "Financial-condition persistence",
+      "Labour-market resilience",
+      "Household-buffer durability"
+    ]
+  },
+  "scenario_candidates": [
+    {
+      "scenario_id": "STEP16A-SCENARIO-CONTROLLED-ADJUSTMENT-001",
+      "scenario_set_id": "STEP16A-SCENARIO-SET-AU-MACRO-001",
+      "title": "Controlled adjustment",
+      "review_state": "DRAFT",
+      "description": "Energy and inflation pressure recede, labour remains resilient and housing stabilises before Stage 3 develops.",
+      "enabling_conditions": [
+        "Energy normalises",
+        "Inflation expectations remain contained",
+        "Employment and income remain resilient"
+      ],
+      "inhibiting_conditions": [
+        "Persistent energy shock",
+        "Material labour deterioration",
+        "Accelerating arrears"
+      ],
+      "signposts": [
+        "Easing energy pressure",
+        "Stable private labour demand",
+        "Stabilising housing turnover and arrears"
+      ],
+      "disconfirming_signposts": [
+        "Private labour demand keeps weakening",
+        "Arrears or forced sales rise",
+        "Inflation continues to constrain relief"
+      ]
+    },
+    {
+      "scenario_id": "STEP16A-SCENARIO-STAGFLATIONARY-SQUEEZE-002",
+      "scenario_set_id": "STEP16A-SCENARIO-SET-AU-MACRO-001",
+      "title": "Stagflationary squeeze",
+      "review_state": "DRAFT",
+      "description": "External energy inflation constrains monetary relief while housing and interest-sensitive domestic demand weaken.",
+      "enabling_conditions": [
+        "Persistent energy/input inflation",
+        "RBA remains constrained",
+        "Housing and cash-flow pressure continue"
+      ],
+      "inhibiting_conditions": [
+        "Rapid disinflation",
+        "Strong income/productivity gains",
+        "Clear housing stabilisation"
+      ],
+      "signposts": [
+        "Persistent fuel pass-through",
+        "Weak consumption or construction",
+        "Restrictive policy alongside housing weakness"
+      ],
+      "disconfirming_signposts": [
+        "Inflation normalises rapidly",
+        "Housing and consumption recover",
+        "Employment and income strengthen buffers"
+      ]
+    },
+    {
+      "scenario_id": "STEP16A-SCENARIO-EMPLOYMENT-HOUSING-FEEDBACK-003",
+      "scenario_set_id": "STEP16A-SCENARIO-SET-AU-MACRO-001",
+      "title": "Employment-triggered housing feedback",
+      "review_state": "DRAFT",
+      "description": "Labour deterioration weakens debt service, lifting arrears/forced sales and feeding back into housing and demand.",
+      "enabling_conditions": [
+        "Private labour demand deteriorates",
+        "Unemployment or hours weaken materially",
+        "Arrears and forced listings rise"
+      ],
+      "inhibiting_conditions": [
+        "Employment remains resilient",
+        "Buffers absorb pressure",
+        "Housing stabilises first"
+      ],
+      "signposts": [
+        "Persistent private-vacancy declines",
+        "Higher unemployment or lower hours",
+        "Accelerating arrears",
+        "Rising distressed listings",
+        "Worse housing-credit asset quality"
+      ],
+      "disconfirming_signposts": [
+        "Labour indicators stabilise",
+        "Arrears remain contained",
+        "Forced listings do not rise",
+        "Real household income improves"
+      ]
+    }
+  ],
+  "prospective_assessment": {
+    "as_of_date": "2026-10-01",
+    "statement": "Evidence supports active Stage 1 housing deterioration and emerging Stage 2 household cash-flow compression. Stage 3 balance-sheet and forced-sale feedback is not established. Labour-market deterioration is the principal prospective transition variable.",
+    "hindsight_control": "Later evidence may revise the candidate but must not rewrite this as-of interpretation."
+  },
+  "expected_counts": {
+    "sources": 5,
+    "observation_candidates": 8,
+    "relationship_candidates": 3,
+    "risk_state_candidates": 1,
+    "scenario_candidates": 3
+  },
+  "known_limitations": [
+    "Review material only; governed production layers remain unchanged.",
+    "ABC market material is context only and is not production-support eligible.",
+    "No governed primary-source national housing-price series is added here.",
+    "Network State remains deferred.",
+    "No scenario is ranked, scored or assigned a future-outcome probability.",
+    "No transitive Relationship is inferred.",
+    "Risk/Regime and Scenario production gates remain closed."
+  ]
+}
